@@ -410,7 +410,7 @@ const std::vector<std::string> RuleMissionScript::getRegions(const size_t month)
  * @param type			- type of thing to generate; region, mission or race
  * @return, string-id of the it generated
  */
-const std::string RuleMissionScript::generate(
+const std::string RuleMissionScript::genMissionDatum(
 		const size_t monthsPassed,
 		const GenerationType type) const
 {

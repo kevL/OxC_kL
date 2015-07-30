@@ -1242,12 +1242,14 @@ void Ruleset::loadFile(const std::string& file) // protected.
 		if (fart == false)
 		{
 			if (rule == NULL)
+			{
 				rule = new RuleMissionScript(type);
+				_missionScripts.push_back(std::make_pair(
+														type,
+														rule));
+			}
 
 			rule->load(*i);
-			_missionScripts.push_back(std::make_pair(
-													type,
-													rule));
 		}
 	}
 

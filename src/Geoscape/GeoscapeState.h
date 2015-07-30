@@ -164,7 +164,7 @@ private:
 //	/// Handle land mission generation.
 //	void setupLandMission();
 	/// Process each individual mission script command.
-	bool processCommand(RuleMissionScript* command);
+	bool processCommand(RuleMissionScript* const missionCommand);
 
 	/// Handler for clicking the timer button.
 	void btnTimerPress(Action* action);

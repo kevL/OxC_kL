@@ -113,7 +113,7 @@ void AlienStrategy::load(const YAML::Node& node)
 											options.release()));
 	}
 
-	_missionLocations = node["missionLocations"].as<std::map<std::string, std::vector<std::pair<std::string, int> > > >(_missionLocations);
+	_missionLocations = node["missionLocations"].as<std::map<std::string, std::vector<std::pair<std::string, size_t> > > >(_missionLocations);
 	_missionRuns = node["missionsRun"].as<std::map<std::string, int> >(_missionRuns);
 }
 
@@ -252,7 +252,7 @@ void AlienStrategy::addMissionRun(const std::string& id)
 void AlienStrategy::addMissionLocation(
 		const std::string& id,
 		const std::string& region,
-		int zone,
+		size_t zone,
 		size_t track)
 {
 	if (track == 0)
@@ -276,11 +276,11 @@ void AlienStrategy::addMissionLocation(
 bool AlienStrategy::validMissionLocation(
 		const std::string& id,
 		const std::string& region,
-		int zone)
+		size_t zone)
 {
 	if (_missionLocations.find(id) != _missionLocations.end())
 	{
-		for (std::vector<std::pair<std::string, int> >::const_iterator
+		for (std::vector<std::pair<std::string, size_t> >::const_iterator
 				i = _missionLocations[id].begin();
 				i != _missionLocations[id].end();
 				++i)

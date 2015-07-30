@@ -4488,7 +4488,7 @@
 1431626587 f:\git\openxcom\src\geoscape\buildnewbasestate.h
 	"../Engine/State.h"
 
-1438157239 f:\git\openxcom\src\geoscape\geoscapestate.h
+1438232031 f:\git\openxcom\src\geoscape\geoscapestate.h
 	"../Engine/State.h"
 
 1430149550 f:\git\openxcom\src\menu\errormessagestate.h
@@ -4960,7 +4960,7 @@
 	"../Savegame/BaseFacility.h"
 	"../Savegame/SavedGame.h"
 
-1438164370 source:f:\git\openxcom\src\basescape\placeliftstate.cpp
+1438206426 source:f:\git\openxcom\src\basescape\placeliftstate.cpp
 	"PlaceLiftState.h"
 	"BasescapeState.h"
 	"BaseView.h"
@@ -5770,7 +5770,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1438166604 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
+1438206610 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
 	"DebriefingState.h"
 	"CannotReequipState.h"
 	"CommendationDeadState.h"
@@ -6873,7 +6873,7 @@
 1437509221 f:\git\openxcom\src\geoscape\dogfightstate.h
 	"../Engine/State.h"
 
-1438208986 f:\git\openxcom\src\savegame\alienstrategy.h
+1438235003 f:\git\openxcom\src\savegame\alienstrategy.h
 	"WeightedOptions.h"
 
 1438169685 source:f:\git\openxcom\src\geoscape\fundingstate.cpp
@@ -6916,7 +6916,7 @@
 1432346700 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1438169807 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1438237518 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	"AlienBaseState.h"
 	"BaseDefenseState.h"
@@ -8239,7 +8239,7 @@
 1432579417 source:f:\git\openxcom\src\ruleset\ruleresearch.cpp
 	"RuleResearch.h"
 
-1438172164 source:f:\git\openxcom\src\ruleset\ruleset.cpp
+1438208394 source:f:\git\openxcom\src\ruleset\ruleset.cpp
 	"Ruleset.h"
 	"AlienRace.h"
 	"AlienDeployment.h"
@@ -8318,7 +8318,7 @@
 	"../Engine/Language.h"
 	"../Geoscape/Globe.h"
 
-1438172274 source:f:\git\openxcom\src\savegame\alienmission.cpp
+1438208613 source:f:\git\openxcom\src\savegame\alienmission.cpp
 	"AlienMission.h"
 	"AlienBase.h"
 	"Base.h"
@@ -8342,7 +8342,7 @@
 	"../Ruleset/RuleUfo.h"
 	"../Ruleset/UfoTrajectory.h"
 
-1438208977 source:f:\git\openxcom\src\savegame\alienstrategy.cpp
+1438235035 source:f:\git\openxcom\src\savegame\alienstrategy.cpp
 	"AlienStrategy.h"
 	"WeightedOptions.h"
 	"../Ruleset/RuleRegion.h"
@@ -11188,9 +11188,9 @@
 1437432833 f:\git\openxcom\src\ufopaedia\extraalieninfostate.h
 	"../Engine/State.h"
 
-1438152509 f:\git\openxcom\src\ruleset\rulemissionscript.h
+1438231900 f:\git\openxcom\src\ruleset\rulemissionscript.h
 	"../Savegame/WeightedOptions.h"
 
-1438152333 source:f:\git\openxcom\src\ruleset\rulemissionscript.cpp
+1438231896 source:f:\git\openxcom\src\ruleset\rulemissionscript.cpp
 	"RuleMissionScript.h"
 

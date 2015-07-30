@@ -136,7 +136,7 @@ private:
 		const bool usesTable() const;
 
 		/// Generates either a region, a mission, or a race based on the month.
-		const std::string generate(
+		const std::string genMissionDatum(
 				const size_t monthsPassed,
 				const GenerationType type) const;
 
