@@ -2894,7 +2894,7 @@ int Base::getDefenseResult() const
  * Sets the current row for all of this Base's soldier lists.
  * @param row - current row
  */
-void Base::setCurrentSoldier(const size_t row)
+void Base::setCurrentSoldierSlot(const size_t row)
 {
 	_curSoldier = row;
 }
@@ -2903,7 +2903,7 @@ void Base::setCurrentSoldier(const size_t row)
  * Gets the current row for any of this Base's soldier lists.
  * @return, current row
  */
-size_t Base::getCurrentSoldier() const
+size_t Base::getCurrentSoldierSlot() const
 {
 	return _curSoldier;
 }

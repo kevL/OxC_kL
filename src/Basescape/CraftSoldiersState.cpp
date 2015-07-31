@@ -69,18 +69,18 @@ CraftSoldiersState::CraftSoldiersState(
 	_txtCost		= new Text(150, 9, 24, -10);
 
 	_txtTitle		= new Text(300, 17, 16, 8);
-	_txtBaseLabel	= new Text(80, 9, 224, 8);
+	_txtBaseLabel	= new Text( 80, 9, 224, 8);
 
-	_txtSpace		= new Text(110, 9, 16, 24);
+	_txtSpace		= new Text(110, 9,  16, 24);
 	_txtLoad		= new Text(110, 9, 171, 24);
 
-	_txtName		= new Text(116, 9, 16, 33);
-	_txtRank		= new Text(93, 9, 140, 33);
-	_txtCraft		= new Text(71, 9, 225, 33);
+	_txtName		= new Text(116, 9,  16, 33);
+	_txtRank		= new Text( 93, 9, 140, 33);
+	_txtCraft		= new Text( 71, 9, 225, 33);
 
 	_lstSoldiers	= new TextList(285, 129, 16, 42);
 
-	_btnUnload		= new TextButton(94, 16, 16, 177);
+	_btnUnload		= new TextButton(94, 16,  16, 177);
 	_btnInventory	= new TextButton(94, 16, 113, 177);
 	_btnOk			= new TextButton(94, 16, 210, 177);
 
@@ -145,36 +145,6 @@ CraftSoldiersState::~CraftSoldiersState()
 {}
 
 /**
- * Returns to the previous screen.
- * @param action - pointer to an Action
- */
-void CraftSoldiersState::btnOkClick(Action*)
-{
-	_base->setCurrentSoldier(_lstSoldiers->getScroll());
-	_game->popState();
-}
-
-/**
- * Unloads all soldiers from current transport craft.
- * @param action - pointer to an Action
- */
-void CraftSoldiersState::btnUnloadClick(Action*)
-{
-	for (std::vector<Soldier*>::const_iterator
-			i = _base->getSoldiers()->begin();
-			i != _base->getSoldiers()->end();
-			++i)
-	{
-		if ((*i)->getCraft() == _craft)
-			(*i)->setCraft(NULL);
-	}
-
-	_base->setCurrentSoldier(_lstSoldiers->getScroll());
-
-	init();
-}
-
-/**
  * Shows the soldiers in a list.
  */
 void CraftSoldiersState::init()
@@ -182,8 +152,7 @@ void CraftSoldiersState::init()
 	State::init();
 
 	// Reset stuff when coming back from pre-battle Inventory.
-	SavedBattleGame* battleSave = _game->getSavedGame()->getSavedBattle();
-	if (battleSave != NULL)
+	if (_game->getSavedGame()->getSavedBattle() != NULL)
 	{
 		_game->getSavedGame()->setBattleGame(NULL);
 		_craft->setInBattlescape(false);
@@ -238,7 +207,7 @@ void CraftSoldiersState::init()
 		}
 	}
 
-	_lstSoldiers->scrollTo(_base->getCurrentSoldier());
+	_lstSoldiers->scrollTo(_base->getCurrentSoldierSlot());
 	_lstSoldiers->draw();
 
 	_btnInventory->setVisible(
@@ -257,13 +226,43 @@ void CraftSoldiersState::init()
 }
 
 /**
+ * Returns to the previous screen.
+ * @param action - pointer to an Action
+ */
+void CraftSoldiersState::btnOkClick(Action*)
+{
+	_base->setCurrentSoldierSlot(_lstSoldiers->getScroll());
+	_game->popState();
+}
+
+/**
+ * Unloads all soldiers from current transport craft.
+ * @param action - pointer to an Action
+ */
+void CraftSoldiersState::btnUnloadClick(Action*)
+{
+	for (std::vector<Soldier*>::const_iterator
+			i = _base->getSoldiers()->begin();
+			i != _base->getSoldiers()->end();
+			++i)
+	{
+		if ((*i)->getCraft() == _craft)
+			(*i)->setCraft(NULL);
+	}
+
+	_base->setCurrentSoldierSlot(_lstSoldiers->getScroll());
+
+	init();
+}
+
+/**
  * LMB assigns and de-assigns soldiers from a craft. RMB shows soldier info.
  * @param action - pointer to an Action
  */
 void CraftSoldiersState::lstSoldiersPress(Action* action)
 {
 	const double mx = action->getAbsoluteXMouse();
-	if (   mx >= static_cast<double>(_lstSoldiers->getArrowsLeftEdge())
+	if (mx >= static_cast<double>(_lstSoldiers->getArrowsLeftEdge())
 		&& mx < static_cast<double>(_lstSoldiers->getArrowsRightEdge()))
 	{
 		return;
@@ -329,7 +328,7 @@ void CraftSoldiersState::lstSoldiersPress(Action* action)
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
-		_base->setCurrentSoldier(_lstSoldiers->getScroll());
+		_base->setCurrentSoldierSlot(_lstSoldiers->getScroll());
 		_game->pushState(new SoldierInfoState(
 											_base,
 											row));
@@ -343,7 +342,7 @@ void CraftSoldiersState::lstSoldiersPress(Action* action)
  */
 void CraftSoldiersState::lstLeftArrowClick(Action* action)
 {
-	_base->setCurrentSoldier(_lstSoldiers->getScroll());
+	_base->setCurrentSoldierSlot(_lstSoldiers->getScroll());
 
 	const size_t row = _lstSoldiers->getSelectedRow();
 	if (row > 0)
@@ -364,13 +363,13 @@ void CraftSoldiersState::lstLeftArrowClick(Action* action)
 			}
 			else
 			{
-				_base->setCurrentSoldier(_lstSoldiers->getScroll() - 1);
+				_base->setCurrentSoldierSlot(_lstSoldiers->getScroll() - 1);
 				_lstSoldiers->scrollUp(false);
 			}
 		}
 		else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 		{
-			_base->setCurrentSoldier(_lstSoldiers->getScroll() + 1);
+			_base->setCurrentSoldierSlot(_lstSoldiers->getScroll() + 1);
 
 			_base->getSoldiers()->erase(_base->getSoldiers()->begin() + row);
 			_base->getSoldiers()->insert(
@@ -388,7 +387,7 @@ void CraftSoldiersState::lstLeftArrowClick(Action* action)
  */
 void CraftSoldiersState::lstRightArrowClick(Action* action)
 {
-	_base->setCurrentSoldier(_lstSoldiers->getScroll());
+	_base->setCurrentSoldierSlot(_lstSoldiers->getScroll());
 
 	const size_t
 		qtySoldiers = _base->getSoldiers()->size(),
@@ -413,7 +412,7 @@ void CraftSoldiersState::lstRightArrowClick(Action* action)
 			}
 			else
 			{
-				_base->setCurrentSoldier(_lstSoldiers->getScroll() + 1);
+				_base->setCurrentSoldierSlot(_lstSoldiers->getScroll() + 1);
 				_lstSoldiers->scrollDown(false);
 			}
 		}
@@ -435,7 +434,7 @@ void CraftSoldiersState::lstRightArrowClick(Action* action)
 */
 void CraftSoldiersState::btnInventoryClick(Action*)
 {
-	_base->setCurrentSoldier(_lstSoldiers->getScroll());
+	_base->setCurrentSoldierSlot(_lstSoldiers->getScroll());
 
 	SavedBattleGame* const battle = new SavedBattleGame();
 	_game->getSavedGame()->setBattleGame(battle);

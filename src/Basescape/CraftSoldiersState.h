@@ -73,13 +73,13 @@ private:
 		/// Cleans up the Craft Soldiers state.
 		~CraftSoldiersState();
 
+		/// Updates the soldiers list.
+		void init();
+
 		/// Handler for clicking the OK button.
 		void btnOkClick(Action* action);
 		/// Handler for clicking the Unload button.
 		void btnUnloadClick(Action* action);
-
-		/// Updates the soldiers list.
-		void init();
 
 		/// Handler for clicking the Soldiers list.
 		void lstSoldiersPress(Action* action);

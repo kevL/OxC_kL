@@ -732,8 +732,8 @@ void CraftEquipmentState::btnClearClick(Action*)
 */
 void CraftEquipmentState::btnInventoryClick(Action*)
 {
-	SavedBattleGame* const battle = new SavedBattleGame();
-	_game->getSavedGame()->setBattleGame(battle);
+	SavedBattleGame* const battleSave = new SavedBattleGame();
+	_game->getSavedGame()->setBattleGame(battleSave);
 	BattlescapeGenerator bgen = BattlescapeGenerator(_game);
 
 	bgen.runInventory(

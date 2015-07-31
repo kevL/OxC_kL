@@ -218,7 +218,7 @@ void Transfer::setItems(
  * @param lang - pointer to a Language to get strings from
  * @return, name string
  */
-std::wstring Transfer::getName(Language* lang) const
+std::wstring Transfer::getName(Language* const lang) const
 {
 	if (_soldier != NULL)
 		return _soldier->getName();
@@ -294,7 +294,9 @@ void Transfer::advance(Base* base)
 	if (_hours == 0)
 	{
 		if (_soldier != NULL)
-			base->getSoldiers()->push_back(_soldier);
+			base->getSoldiers()->insert(
+									base->getSoldiers()->begin(),
+									_soldier);
 		else if (_craft != NULL)
 		{
 			base->getCrafts()->push_back(_craft);

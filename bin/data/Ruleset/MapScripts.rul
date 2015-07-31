@@ -144,12 +144,12 @@ mapScripts:
       executionChances: 50
       direction: horizontal
       rects:
-        - [1,1,1,3] #Terrain Pack removes this
+        - [1,1,1,4] #Terrain Pack removes this
     - type: addLine
       conditionals: [-1,-2]
       direction: both
       rects:
-        - [1,1,3,3] #Terrain Pack adds this
+        - [1,1,4,4] #Terrain Pack adds this
 #        - [1,0,4,5]
     - type: addBlock
       size: 2

@@ -64,10 +64,11 @@ CraftArmorState::CraftArmorState(
 		_craftID(craftID)
 {
 	_window			= new Window(this, 320, 200);
-	_txtTitle		= new Text(300, 17, 11, 10);
-	_txtBaseLabel	= new Text(80, 9, 224, 10);
 
-	_txtName		= new Text(90, 9, 16, 31);
+	_txtTitle		= new Text(300, 17,  11, 10);
+	_txtBaseLabel	= new Text( 80,  9, 224, 10);
+
+	_txtName		= new Text(90, 9,  16, 31);
 	_txtArmor		= new Text(50, 9, 106, 31);
 	_txtCraft		= new Text(50, 9, 226, 31);
 
@@ -186,7 +187,7 @@ void CraftArmorState::init()
 		}
 	}
 
-	_lstSoldiers->scrollTo(_base->getCurrentSoldier());
+	_lstSoldiers->scrollTo(_base->getCurrentSoldierSlot());
 	_lstSoldiers->draw();
 }
 
@@ -196,7 +197,7 @@ void CraftArmorState::init()
  */
 void CraftArmorState::btnOkClick(Action*)
 {
-	_base->setCurrentSoldier(_base->getCurrentSoldier());
+	_base->setCurrentSoldierSlot(_lstSoldiers->getScroll());
 	_game->popState();
 }
 
@@ -208,13 +209,13 @@ void CraftArmorState::btnOkClick(Action*)
 void CraftArmorState::lstSoldiersPress(Action* action)
 {
 	const double mx = action->getAbsoluteXMouse();
-	if (   mx >= static_cast<double>(_lstSoldiers->getArrowsLeftEdge())
+	if (mx >= static_cast<double>(_lstSoldiers->getArrowsLeftEdge())
 		&& mx < static_cast<double>(_lstSoldiers->getArrowsRightEdge()))
 	{
 		return;
 	}
 
-	_base->setCurrentSoldier(_lstSoldiers->getScroll());
+	_base->setCurrentSoldierSlot(_lstSoldiers->getScroll());
 
 	size_t soldierId = _lstSoldiers->getSelectedRow();
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
@@ -272,7 +273,7 @@ void CraftArmorState::lstSoldiersPress(Action* action)
  */
 void CraftArmorState::lstLeftArrowClick(Action* action)
 {
-	_base->setCurrentSoldier(_lstSoldiers->getScroll());
+	_base->setCurrentSoldierSlot(_lstSoldiers->getScroll());
 
 	const size_t row = _lstSoldiers->getSelectedRow();
 	if (row > 0)
@@ -293,13 +294,13 @@ void CraftArmorState::lstLeftArrowClick(Action* action)
 			}
 			else
 			{
-				_base->setCurrentSoldier(_lstSoldiers->getScroll() - 1);
+				_base->setCurrentSoldierSlot(_lstSoldiers->getScroll() - 1);
 				_lstSoldiers->scrollUp(false);
 			}
 		}
 		else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 		{
-			_base->setCurrentSoldier(_lstSoldiers->getScroll() + 1);
+			_base->setCurrentSoldierSlot(_lstSoldiers->getScroll() + 1);
 
 			_base->getSoldiers()->erase(_base->getSoldiers()->begin() + row);
 			_base->getSoldiers()->insert(
@@ -317,7 +318,7 @@ void CraftArmorState::lstLeftArrowClick(Action* action)
  */
 void CraftArmorState::lstRightArrowClick(Action* action)
 {
-	_base->setCurrentSoldier(_lstSoldiers->getScroll());
+	_base->setCurrentSoldierSlot(_lstSoldiers->getScroll());
 
 	const size_t
 		qtySoldiers = _base->getSoldiers()->size(),
@@ -342,7 +343,7 @@ void CraftArmorState::lstRightArrowClick(Action* action)
 			}
 			else
 			{
-				_base->setCurrentSoldier(_lstSoldiers->getScroll() + 1);
+				_base->setCurrentSoldierSlot(_lstSoldiers->getScroll() + 1);
 				_lstSoldiers->scrollDown(false);
 			}
 		}

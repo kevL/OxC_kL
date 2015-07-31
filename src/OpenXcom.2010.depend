@@ -4387,7 +4387,7 @@
 
 1433391317 f:\git\openxcom\src\resource\resourcepack.h
 
-1436388161 f:\git\openxcom\src\savegame\base.h
+1438339338 f:\git\openxcom\src\savegame\base.h
 	"Target.h"
 
 1433212243 f:\git\openxcom\src\savegame\target.h
@@ -4595,7 +4595,7 @@
 1436739187 f:\git\openxcom\src\ruleset\ruleitem.h
 	"../Battlescape/BattlescapeGame.h"
 
-1438162942 source:f:\git\openxcom\src\basescape\craftequipmentstate.cpp
+1438341335 source:f:\git\openxcom\src\basescape\craftequipmentstate.cpp
 	"CraftEquipmentState.h"
 	"../Battlescape/BattlescapeGenerator.h"
 	"../Battlescape/InventoryState.h"
@@ -4675,7 +4675,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1433651002 f:\git\openxcom\src\basescape\craftsoldiersstate.h
+1438341095 f:\git\openxcom\src\basescape\craftsoldiersstate.h
 	"../Engine/State.h"
 
 1430149549 f:\git\openxcom\src\basescape\craftweaponsstate.h
@@ -5020,7 +5020,7 @@
 	<limits>
 	<cmath>
 
-1431470699 f:\git\openxcom\src\savegame\transfer.h
+1438339645 f:\git\openxcom\src\savegame\transfer.h
 
 1438164592 source:f:\git\openxcom\src\basescape\researchinfostate.cpp
 	"ResearchInfoState.h"
@@ -8348,7 +8348,7 @@
 	"../Ruleset/RuleRegion.h"
 	"../Ruleset/Ruleset.h"
 
-1436385640 source:f:\git\openxcom\src\savegame\base.cpp
+1438339338 source:f:\git\openxcom\src\savegame\base.cpp
 	"Base.h"
 	"BaseFacility.h"
 	"Craft.h"
@@ -8584,7 +8584,7 @@
 	"../Ruleset/RuleArmor.h"
 	"../Savegame/SavedBattleGame.h"
 
-1430149550 source:f:\git\openxcom\src\savegame\transfer.cpp
+1438340035 source:f:\git\openxcom\src\savegame\transfer.cpp
 	"Transfer.h"
 	"Base.h"
 	"Craft.h"

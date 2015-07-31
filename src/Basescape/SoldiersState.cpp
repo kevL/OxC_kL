@@ -161,8 +161,7 @@ void SoldiersState::init()
 	State::init();
 
 	// Reset stuff when coming back from pre-battle Inventory.
-	SavedBattleGame* battleSave = _game->getSavedGame()->getSavedBattle();
-	if (battleSave != NULL)
+	if (_game->getSavedGame()->getSavedBattle() != NULL)
 	{
 		_game->getSavedGame()->setBattleGame(NULL);
 		_base->setInBattlescape(false);
@@ -215,7 +214,7 @@ void SoldiersState::init()
 		}
 	}
 
-	_lstSoldiers->scrollTo(_base->getCurrentSoldier());
+	_lstSoldiers->scrollTo(_base->getCurrentSoldierSlot());
 	_lstSoldiers->draw();
 }
 
@@ -225,7 +224,7 @@ void SoldiersState::init()
  */
 void SoldiersState::btnOkClick(Action*)
 {
-	_base->setCurrentSoldier(_lstSoldiers->getScroll());
+	_base->setCurrentSoldierSlot(_lstSoldiers->getScroll());
 	_game->popState();
 }
 
@@ -235,7 +234,7 @@ void SoldiersState::btnOkClick(Action*)
  */
 void SoldiersState::btnArmorClick(Action*)
 {
-	_base->setCurrentSoldier(_lstSoldiers->getScroll());
+	_base->setCurrentSoldierSlot(_lstSoldiers->getScroll());
 	_game->pushState(new CraftArmorState(
 										_base,
 										0));
@@ -247,7 +246,7 @@ void SoldiersState::btnArmorClick(Action*)
  */
 void SoldiersState::btnEquipClick(Action*)
 {
-	_base->setCurrentSoldier(_lstSoldiers->getScroll());
+	_base->setCurrentSoldierSlot(_lstSoldiers->getScroll());
 
 	SavedBattleGame* battle = new SavedBattleGame();
 	_game->getSavedGame()->setBattleGame(battle);
@@ -267,7 +266,7 @@ void SoldiersState::btnEquipClick(Action*)
  */
 void SoldiersState::btnPsiTrainingClick(Action*)
 {
-	_base->setCurrentSoldier(_lstSoldiers->getScroll());
+	_base->setCurrentSoldierSlot(_lstSoldiers->getScroll());
 	_game->pushState(new AllocatePsiTrainingState(_base));
 }
 
@@ -343,16 +342,16 @@ void SoldiersState::btnSortClick(Action*)
 void SoldiersState::lstSoldiersPress(Action* action)
 {
 	const double mx = action->getAbsoluteXMouse();
-	if (   mx >= _lstSoldiers->getArrowsLeftEdge()
+	if (mx >= _lstSoldiers->getArrowsLeftEdge()
 		&& mx < _lstSoldiers->getArrowsRightEdge())
 	{
 		return;
 	}
 
-	if (   action->getDetails()->button.button == SDL_BUTTON_LEFT
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT
 		|| action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
-		_base->setCurrentSoldier(_lstSoldiers->getScroll());
+		_base->setCurrentSoldierSlot(_lstSoldiers->getScroll());
 		_game->pushState(new SoldierInfoState(
 											_base,
 											_lstSoldiers->getSelectedRow()));
@@ -366,7 +365,7 @@ void SoldiersState::lstSoldiersPress(Action* action)
  */
 void SoldiersState::lstLeftArrowClick(Action* action)
 {
-	_base->setCurrentSoldier(_lstSoldiers->getScroll());
+	_base->setCurrentSoldierSlot(_lstSoldiers->getScroll());
 
 	const size_t row = _lstSoldiers->getSelectedRow();
 	if (row > 0)
@@ -387,13 +386,13 @@ void SoldiersState::lstLeftArrowClick(Action* action)
 			}
 			else
 			{
-				_base->setCurrentSoldier(_lstSoldiers->getScroll() - 1);
+				_base->setCurrentSoldierSlot(_lstSoldiers->getScroll() - 1);
 				_lstSoldiers->scrollUp(false);
 			}
 		}
 		else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 		{
-			_base->setCurrentSoldier(_lstSoldiers->getScroll() + 1);
+			_base->setCurrentSoldierSlot(_lstSoldiers->getScroll() + 1);
 
 			_base->getSoldiers()->erase(_base->getSoldiers()->begin() + row);
 			_base->getSoldiers()->insert(
@@ -411,7 +410,7 @@ void SoldiersState::lstLeftArrowClick(Action* action)
  */
 void SoldiersState::lstRightArrowClick(Action* action)
 {
-	_base->setCurrentSoldier(_lstSoldiers->getScroll());
+	_base->setCurrentSoldierSlot(_lstSoldiers->getScroll());
 
 	const size_t
 		qtySoldiers = _base->getSoldiers()->size(),
@@ -436,7 +435,7 @@ void SoldiersState::lstRightArrowClick(Action* action)
 			}
 			else
 			{
-				_base->setCurrentSoldier(_lstSoldiers->getScroll() + 1);
+				_base->setCurrentSoldierSlot(_lstSoldiers->getScroll() + 1);
 				_lstSoldiers->scrollDown(false);
 			}
 		}

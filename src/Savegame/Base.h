@@ -307,9 +307,9 @@ private:
 		int getDefenseResult() const;
 
 		/// Sets the current row of Soldiers list.
-		void setCurrentSoldier(const size_t row);
+		void setCurrentSoldierSlot(const size_t row);
 		/// Gets the current row of Soldiers list.
-		size_t getCurrentSoldier() const;
+		size_t getCurrentSoldierSlot() const;
 
 		/// Calculates the bonus cost for soldiers by rank.
 		int calcSoldierBonuses(const Craft* const craft = NULL) const;
