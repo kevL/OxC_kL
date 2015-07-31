@@ -74,11 +74,13 @@ enum MapScriptCommand
 	MSC_RESIZE			//  8
 };
 
-
 class MapBlock;
 class RuleTerrain;
 
 
+/**
+ * A class for handling battlefield designs.
+ */
 class MapScript
 {
 

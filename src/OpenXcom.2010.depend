@@ -4554,13 +4554,13 @@
 1430262701 f:\git\openxcom\src\interface\window.h
 	"../Engine/Surface.h"
 
-1438308933 f:\git\openxcom\src\ruleset\ruleset.h
+1438343784 f:\git\openxcom\src\ruleset\ruleset.h
 	"../Ruleset/RuleAlienMission.h"
 	"../Savegame/GameTime.h"
 
 1431493222 f:\git\openxcom\src\savegame\gametime.h
 
-1438162733 source:f:\git\openxcom\src\basescape\craftarmorstate.cpp
+1438341822 source:f:\git\openxcom\src\basescape\craftarmorstate.cpp
 	"CraftArmorState.h"
 	"SoldierArmorState.h"
 	"SoldierInfoState.h"
@@ -4691,7 +4691,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1438163184 source:f:\git\openxcom\src\basescape\craftsoldiersstate.cpp
+1438341830 source:f:\git\openxcom\src\basescape\craftsoldiersstate.cpp
 	"CraftSoldiersState.h"
 	"SoldierInfoState.h"
 	"../Battlescape/BattlescapeGenerator.h"
@@ -5193,7 +5193,7 @@
 1431492838 f:\git\openxcom\src\savegame\soldierdeath.h
 	"GameTime.h"
 
-1438165406 source:f:\git\openxcom\src\basescape\soldiersstate.cpp
+1438341813 source:f:\git\openxcom\src\basescape\soldiersstate.cpp
 	"SoldiersState.h"
 	"CraftArmorState.h"
 	"SoldierInfoState.h"
@@ -6621,7 +6621,7 @@
 1432347198 f:\git\openxcom\src\geoscape\interceptstate.h
 	"../Engine/State.h"
 
-1438168942 source:f:\git\openxcom\src\geoscape\allocatepsitrainingstate.cpp
+1438341741 source:f:\git\openxcom\src\geoscape\allocatepsitrainingstate.cpp
 	"AllocatePsiTrainingState.h"
 	"PsiTrainingState.h"
 	"../Basescape/SoldierInfoState.h"
@@ -8239,7 +8239,7 @@
 1432579417 source:f:\git\openxcom\src\ruleset\ruleresearch.cpp
 	"RuleResearch.h"
 
-1438308960 source:f:\git\openxcom\src\ruleset\ruleset.cpp
+1438345162 source:f:\git\openxcom\src\ruleset\ruleset.cpp
 	"Ruleset.h"
 	"AlienRace.h"
 	"AlienDeployment.h"
@@ -8584,7 +8584,7 @@
 	"../Ruleset/RuleArmor.h"
 	"../Savegame/SavedBattleGame.h"
 
-1438340035 source:f:\git\openxcom\src\savegame\transfer.cpp
+1438341859 source:f:\git\openxcom\src\savegame\transfer.cpp
 	"Transfer.h"
 	"Base.h"
 	"Craft.h"
@@ -10828,7 +10828,7 @@
 
 1430345621 f:\git\openxcom\src\battlescape\particle.h
 
-1430493153 f:\git\openxcom\src\ruleset\mapscript.h
+1438344786 f:\git\openxcom\src\ruleset\mapscript.h
 
 1438172098 source:f:\git\openxcom\src\ruleset\mapscript.cpp
 	"MapScript.h"

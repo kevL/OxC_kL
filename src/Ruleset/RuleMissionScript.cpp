@@ -49,7 +49,6 @@ RuleMissionScript::RuleMissionScript(const std::string type)
 /**
  * Destructor.
  * @note Cleans up the mess Warboy left in RAM. oh yah ->
- * TODO: delete RuleMissionScripts in Ruleset dTor ......
  */
 RuleMissionScript::~RuleMissionScript()
 {

@@ -402,7 +402,13 @@ Ruleset::~Ruleset()
 		}
 	}
 
-	// TODO: delete RuleMissionScripts
+	for (std::map<std::string, RuleMissionScript*>::const_iterator
+			i = _missionScripts.begin();
+			i != _missionScripts.end();
+			++i)
+	{
+		delete i->second;
+	}
 
 	for (std::map<std::string, RuleVideo*>::const_iterator
 			i = _videos.begin();
@@ -441,7 +447,7 @@ void Ruleset::reloadCountryLines() const
 		const std::string type = (*i)["type"].as<std::string>();
 		RuleCountry* const j = getCountry(type);
 
-		const std::vector<std::vector<double> > areas = (*i)["areas"].as<std::vector<std::vector<double> > >(areas);
+		const std::vector<std::vector<double> > areas = (*i)["areas"].as<std::vector<std::vector<double> > >();
 		for (size_t
 				k = 0;
 				k != areas.size();
@@ -456,7 +462,7 @@ void Ruleset::reloadCountryLines() const
 }
 
 /**
- * Checks to ensure that Mission scripts don't buttfuck reapers w/out using ky.
+ * Checks to ensure that Mission scripts don't buttfuck reapers w/out ky.
  */
 void Ruleset::validateMissionScripts() const
 {
@@ -700,7 +706,7 @@ void Ruleset::loadFile(const std::string& file) // protected.
 	{
 		const std::string type = (*i)["type"].as<std::string>();
 
-		std::auto_ptr<RuleMusic> ruleMusic (new RuleMusic());
+		std::auto_ptr<RuleMusic> ruleMusic (new RuleMusic()); // init.
 		ruleMusic->load(*i);
 
 		_music.push_back(std::make_pair(
@@ -846,14 +852,6 @@ void Ruleset::loadFile(const std::string& file) // protected.
 					case UFOPAEDIA_TYPE_TEXTIMAGE:			articleRule = new ArticleDefinitionTextImage();		break;
 					case UFOPAEDIA_TYPE_TEXT:				articleRule = new ArticleDefinitionText();			break;
 					case UFOPAEDIA_TYPE_UFO:				articleRule = new ArticleDefinitionUfo();			break;
-/*					case UFOPAEDIA_TYPE_TFTD:
-					case UFOPAEDIA_TYPE_TFTD_CRAFT:
-					case UFOPAEDIA_TYPE_TFTD_CRAFT_WEAPON:
-					case UFOPAEDIA_TYPE_TFTD_VEHICLE:
-					case UFOPAEDIA_TYPE_TFTD_ITEM:
-					case UFOPAEDIA_TYPE_TFTD_ARMOR:
-					case UFOPAEDIA_TYPE_TFTD_BASE_FACILITY:
-					case UFOPAEDIA_TYPE_TFTD_USO:			articleRule = new ArticleDefinitionTFTD();			break; */
 					case UFOPAEDIA_TYPE_AWARD:				articleRule = new ArticleDefinitionAward();			break;
 
 					default:
@@ -888,7 +886,7 @@ void Ruleset::loadFile(const std::string& file) // protected.
 		}
 	}
 
-	// Bases can't be copied, so for savegame purposes we store the node instead
+	// Bases can't be copied so for savegame purposes store the node instead
 	const YAML::Node base = doc["startingBase"];
 	if (base != 0)
 	{
@@ -989,7 +987,7 @@ void Ruleset::loadFile(const std::string& file) // protected.
 			++i)
 	{
 		const std::string type = (*i)["type"].as<std::string>();
-		std::auto_ptr<ExtraSounds> extraSounds (new ExtraSounds());
+		std::auto_ptr<ExtraSounds> extraSounds (new ExtraSounds()); // init.
 		extraSounds->load(
 						*i,
 						_modIndex);
@@ -1025,7 +1023,7 @@ void Ruleset::loadFile(const std::string& file) // protected.
 			_extraStrings[type]->load(*i);
 		else
 		{
-			std::auto_ptr<ExtraStrings> extraStrings (new ExtraStrings());
+			std::auto_ptr<ExtraStrings> extraStrings (new ExtraStrings()); // init.
 			extraStrings->load(*i);
 
 			_extraStrings[type] = extraStrings.release();
@@ -1041,7 +1039,7 @@ void Ruleset::loadFile(const std::string& file) // protected.
 	{
 		const std::string type = (*i)["type"].as<std::string>();
 
-		std::auto_ptr<RuleCommendations> commendations (new RuleCommendations());
+		std::auto_ptr<RuleCommendations> commendations (new RuleCommendations()); // init.
 		commendations->load(*i);
 
 		_commendations[type] = commendations.release();
@@ -1226,39 +1224,6 @@ void Ruleset::loadFile(const std::string& file) // protected.
 											"type");
 		if (rule != NULL)
 			rule->load(*i);
-
-/*		std::string type = (*i)["type"].as<std::string>();
-		const bool fart = (*i)["delete"].as<bool>(false);
-		RuleMissionScript* rule = NULL;
-		for (std::vector<std::pair<std::string, RuleMissionScript*> >::const_iterator
-				j = _missionScripts.begin();
-				j != _missionScripts.end();
-				++j)
-		{
-			if ((*j).first == type)
-			{
-				if (fart == true)
-				{
-					delete (*j).second;
-					_missionScripts.erase(j);
-				}
-				else
-					rule = (*j).second;
-
-				break;
-			}
-		}
-		if (fart == false)
-		{
-			if (rule == NULL)
-			{
-				rule = new RuleMissionScript(type);
-				_missionScripts.push_back(std::make_pair(
-														type,
-														rule));
-			}
-			rule->load(*i);
-		} */
 	}
 
 	for (std::vector<std::string>::const_iterator // refresh _psiRequirements for psiStrengthEval

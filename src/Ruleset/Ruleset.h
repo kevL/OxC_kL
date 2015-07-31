@@ -165,6 +165,7 @@ protected:
 	std::map<std::string, RuleInventory*>		_invs;
 	std::map<std::string, RuleItem*>			_items;
 	std::map<std::string, RuleManufacture*>		_manufacture;
+	std::map<std::string, RuleMissionScript*>	_missionScripts;
 	std::map<std::string, RuleRegion*>			_regions;
 	std::map<std::string, RuleResearch*>		_research;
 	std::map<std::string, RuleSoldier*>			_soldiers;
@@ -176,12 +177,11 @@ protected:
 	std::map<std::string, RuleUnit*>			_units;
 
 	std::map<std::string, std::vector<MapScript*> >	_mapScripts;
-	std::map<std::string, RuleMissionScript*>		_missionScripts;
 
-//	std::vector<std::pair<std::string, ExtraMusic*> >			_extraMusic; // sza_ExtraMusic
-	std::vector<std::pair<std::string, ExtraSounds*> >			_extraSounds;
-	std::vector<std::pair<std::string, ExtraSprites*> >			_extraSprites;
-	std::vector<std::pair<std::string, RuleMusic*> >			_music; // sza_MusicRules
+//	std::vector<std::pair<std::string, ExtraMusic*> >	_extraMusic; // sza_ExtraMusic
+	std::vector<std::pair<std::string, ExtraSounds*> >	_extraSounds;
+	std::vector<std::pair<std::string, ExtraSprites*> >	_extraSprites;
+	std::vector<std::pair<std::string, RuleMusic*> >	_music; // sza_MusicRules
 
 //	std::vector<SDL_Color> _transparencies;
 
