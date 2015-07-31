@@ -470,7 +470,7 @@ void Ruleset::validateMissionScripts() const
 	// short of knowing the results of calls to the RNG before they're determined.
 	// the best solution i can come up with is to disallow it, as there are other ways to acheive what this would amount to anyway,
 	// and they don't require time travel. - Warboy
-	for (std::vector<std::pair<std::string, RuleMissionScript*> >::const_iterator
+	for (std::map<std::string, RuleMissionScript*>::const_iterator
 			i = _missionScripts.begin();
 			i != _missionScripts.end();
 			++i)
@@ -1186,7 +1186,11 @@ void Ruleset::loadFile(const std::string& file) // protected.
 			i != doc["mapScripts"].end();
 			++i)
 	{
-		const std::string type = (*i)["type"].as<std::string>();
+		std::string type = (*i)["type"].as<std::string>();
+
+		if ((*i)["delete"])
+			type = (*i)["delete"].as<std::string>(type);
+
 		if (_mapScripts.find(type) != _mapScripts.end())
 		{
 			for (std::vector<MapScript*>::const_iterator
@@ -1215,11 +1219,17 @@ void Ruleset::loadFile(const std::string& file) // protected.
 			i != doc["missionScripts"].end();
 			++i)
 	{
-		std::string type = (*i)["type"].as<std::string>();
+		RuleMissionScript* const rule = loadRule(
+											*i,
+											&_missionScripts,
+											&_missionScriptIndex,
+											"type");
+		if (rule != NULL)
+			rule->load(*i);
+
+/*		std::string type = (*i)["type"].as<std::string>();
 		const bool fart = (*i)["delete"].as<bool>(false);
-
 		RuleMissionScript* rule = NULL;
-
 		for (std::vector<std::pair<std::string, RuleMissionScript*> >::const_iterator
 				j = _missionScripts.begin();
 				j != _missionScripts.end();
@@ -1238,7 +1248,6 @@ void Ruleset::loadFile(const std::string& file) // protected.
 				break;
 			}
 		}
-
 		if (fart == false)
 		{
 			if (rule == NULL)
@@ -1248,9 +1257,8 @@ void Ruleset::loadFile(const std::string& file) // protected.
 														type,
 														rule));
 			}
-
 			rule->load(*i);
-		}
+		} */
 	}
 
 	for (std::vector<std::string>::const_iterator // refresh _psiRequirements for psiStrengthEval
@@ -2534,9 +2542,21 @@ const std::map<std::string, RuleVideo*>* Ruleset::getVideos() const
  * Gets the mission scripts.
  * @return, pointer to a vector of pairs of strings & pointers to RuleMissionScripts
  */
-const std::vector<std::pair<std::string, RuleMissionScript*> >* Ruleset::getMissionScripts() const
+const std::vector<std::string>* Ruleset::getMissionScriptList() const
 {
-	return &_missionScripts;
+	return &_missionScriptIndex;
+}
+
+/**
+ *
+ */
+RuleMissionScript* Ruleset::getMissionScript(const std::string& id) const
+{
+	std::map<std::string, RuleMissionScript*>::const_iterator i = _missionScripts.find(id);
+	if (i != _missionScripts.end())
+		return i->second;
+
+	return NULL;
 }
 
 /**

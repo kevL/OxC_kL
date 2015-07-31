@@ -132,6 +132,7 @@ protected:
 		_itemsIndex,
 		_manufactureIndex,
 		_MCDPatchesIndex,
+		_missionScriptIndex,
 		_musicIndex, // sza_MusicRules
 		_regionsIndex,
 		_researchIndex,
@@ -174,12 +175,12 @@ protected:
 	std::map<std::string, UfoTrajectory*>		_ufoTrajectories;
 	std::map<std::string, RuleUnit*>			_units;
 
-	std::map<std::string, std::vector<MapScript*> > _mapScripts;
+	std::map<std::string, std::vector<MapScript*> >	_mapScripts;
+	std::map<std::string, RuleMissionScript*>		_missionScripts;
 
 //	std::vector<std::pair<std::string, ExtraMusic*> >			_extraMusic; // sza_ExtraMusic
 	std::vector<std::pair<std::string, ExtraSounds*> >			_extraSounds;
 	std::vector<std::pair<std::string, ExtraSprites*> >			_extraSprites;
-	std::vector<std::pair<std::string, RuleMissionScript*> >	_missionScripts;
 	std::vector<std::pair<std::string, RuleMusic*> >			_music; // sza_MusicRules
 
 //	std::vector<SDL_Color> _transparencies;
@@ -402,7 +403,9 @@ protected:
 		const std::map<std::string, RuleVideo*>* getVideos() const;
 
 		/// Gets the list of mission scripts.
-		const std::vector<std::pair<std::string, RuleMissionScript*> >* getMissionScripts() const;
+		const std::vector<std::string>* getMissionScriptList() const;
+		/// Gets a mission script.
+		RuleMissionScript* getMissionScript(const std::string& id) const;
 
 		/// Gets the current Game.
 		const Game* const getGame() const;
