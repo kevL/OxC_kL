@@ -85,12 +85,12 @@ State::~State()
  * Sets interface data from the ruleset - also sets the palette for the state.
  * @param category		- reference the name of the interface from the Interfaces ruleset
  * @param alterPal		- true to swap out the backpal colors (default false)
- * @param battlescape	- true to use battlescape palette (applies only to options screens) (default false)
+ * @param battle	- true to use battlescape palette (applies only to options screens) (default false)
  */
 void State::setInterface(
 		const std::string& category,
 		bool alterPal,
-		bool battlescape)
+		bool battle)
 {
 	int backPal = -1;
 	std::string pal = "PAL_GEOSCAPE";
@@ -111,19 +111,22 @@ void State::setInterface(
 				pal = _ruleInterfaceParent->getPalette();
 		}
 
-		if (element != NULL)
+		if (element != NULL
+			&& battle == false)
 		{
-			const int color = alterPal ? element->color2 : element->color;
+			int color;
+			if (alterPal == true)
+				color = element->color2;
+			else
+				color = element->color;
+
 			if (color != std::numeric_limits<int>::max())
 				backPal = color;
 		}
 	}
 
-	if (battlescape == true)
-	{
+	if (battle == true)
 		pal = "PAL_BATTLESCAPE";
-		backPal = -1;
-	}
 	else if (pal.empty() == true)
 		pal = "PAL_GEOSCAPE";
 

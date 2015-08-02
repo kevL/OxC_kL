@@ -1809,6 +1809,7 @@ std::vector<BattleUnit*> TileEngine::getSpottingUnits(const BattleUnit* const un
 			&& (*i)->getFaction() != FACTION_NEUTRAL
 			&& (*i)->isOut_t() == false)
 //			&& (*i)->isOut(true, true) == false)
+//			&& (*i)->getSpawnUnit().empty() == true)
 		{
 			if ((((*i)->getFaction() == FACTION_HOSTILE							// Mc'd xCom units will RF on loyal xCom units
 						&& (*i)->getOriginalFaction() != FACTION_PLAYER)		// but Mc'd aLiens won't RF on other aLiens ...

@@ -1529,8 +1529,7 @@ void BattlescapeGame::checkForCasualties(
 					i != attackUnit->getUnitSpotters()->end();
 					++i)
 			{
-//				if ((*i)->getHealth() != 0
-//					&& (*i)->getHealth() > (*i)->getStun())
+//				if ((*i)->getHealth() != 0 && (*i)->getHealth() > (*i)->getStun())
 				if ((*i)->isOut_t(OUT_HLTH_STUN) == false)
 				{
 					attackUnit->setExposed(); // defender has been spotted on Player turn.
@@ -3076,7 +3075,6 @@ BattleUnit* BattlescapeGame::convertUnit(
 											_battleSave->getUnits()->back()->getId() + 1,
 											getRuleset()->getArmor(armorType.str()),
 											difficulty,
-//											getDepth(),
 											month,
 											this);
 

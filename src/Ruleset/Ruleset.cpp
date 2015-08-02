@@ -1321,7 +1321,9 @@ SavedGame* Ruleset::newSave() const
 			i != _countriesIndex.end();
 			++i)
 	{
-		gameSave->getCountries()->push_back(new Country(getCountry(*i)));
+		RuleCountry* const country = getCountry(*i);
+		if (country->getLonMin().empty() == false) // safety.
+			gameSave->getCountries()->push_back(new Country(country));
 	}
 
 	// Adjust funding to total $6M
@@ -1347,7 +1349,9 @@ SavedGame* Ruleset::newSave() const
 			i != _regionsIndex.end();
 			++i)
 	{
-		gameSave->getRegions()->push_back(new Region(getRegion(*i)));
+		RuleRegion* const region = getRegion(*i);
+		if (region->getLonMin().empty() == false)
+			gameSave->getRegions()->push_back(new Region(region));
 	}
 
 	// Set up starting base
@@ -1855,25 +1859,28 @@ const std::vector<std::string>& Ruleset::getManufactureList() const
 
 /**
  * Generates and returns a list of facilities for custom bases.
- * The list contains all the facilities that are listed in the 'startingBase'
- * part of the ruleset.
+ * @note The list contains all the facilities that are listed in the
+ * 'startingBase' part of the ruleset.
  * @return, vector of pointers to RuleBaseFacility as the list of facilities for custom bases
  */
-std::vector<OpenXcom::RuleBaseFacility*> Ruleset::getCustomBaseFacilities() const
+std::vector<RuleBaseFacility*> Ruleset::getCustomBaseFacilities() const
 {
-	std::vector<OpenXcom::RuleBaseFacility*> PlaceList;
+	std::vector<RuleBaseFacility*> placeList;
+	std::string type;
+	RuleBaseFacility* fac;
 
 	for (YAML::const_iterator
 			i = _startingBase["facilities"].begin();
 			i != _startingBase["facilities"].end();
 			++i)
 	{
-		const std::string type = (*i)["type"].as<std::string>();
-		if (type != "STR_ACCESS_LIFT")
-			PlaceList.push_back(getBaseFacility(type));
+		type = (*i)["type"].as<std::string>();
+		fac = getBaseFacility(type);
+		if (fac->isLift() == false)
+			placeList.push_back(fac);
 	}
 
-	return PlaceList;
+	return placeList;
 }
 
 /**

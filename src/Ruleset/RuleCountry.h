@@ -84,7 +84,6 @@ private:
 //		const std::vector<double>& getLonMax() const {return _lonMax;}
 //		const std::vector<double>& getLatMin() const {return _latMin;}
 //		const std::vector<double>& getLatMax() const {return _latMax;}
-
 		// kL: for reloading country lines
 		std::vector<double>& getLonMin() {return _lonMin;}
 		std::vector<double>& getLonMax() {return _lonMax;}

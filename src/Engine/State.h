@@ -77,7 +77,7 @@ protected:
 		void setInterface(
 				const std::string& category,
 				bool alterPal = false,
-				bool battlescape = false);
+				bool battle = false);
 
 		/// Adds a child element to the state.
 		void add(Surface* surface);

@@ -128,11 +128,11 @@ interfaces:
       - id: palette
         color: 0     # brown
       - id: window
-        color: 133   # minty green
+        color: 239   # bright green, was # 133 minty green
       - id: text
-        color: 133   # minty green
+        color: 239   # minty green, was # 133 minty green
       - id: button
-        color: 133   # minty green
+        color: 239   # minty green, was # 133 minty green
   - type: errorMessages
     elements:
       - id: geoscapePalette

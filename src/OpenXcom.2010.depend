@@ -23,7 +23,7 @@
 1434623915 f:\git\openxcom\src\basescape\baseinfostate.h
 	"../Engine/State.h"
 
-1433336868 f:\git\openxcom\src\engine\state.h
+1438500294 f:\git\openxcom\src\engine\state.h
 	"../Ruleset/Ruleset.h"
 	"../Ruleset/RuleInterface.h"
 
@@ -5439,7 +5439,7 @@
 1432984133 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1438165931 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1438408125 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	"AlienBAIState.h"
 	"BattlescapeState.h"
@@ -5826,7 +5826,7 @@
 1433864080 f:\git\openxcom\src\menu\mainmenustate.h
 	"../Engine/State.h"
 
-1433535945 f:\git\openxcom\src\ruleset\rulecountry.h
+1438499300 f:\git\openxcom\src\ruleset\rulecountry.h
 
 1438148578 f:\git\openxcom\src\savegame\alienmission.h
 
@@ -6535,7 +6535,7 @@
 
 1433206982 f:\git\openxcom\src\engine\soundset.h
 
-1438168749 source:f:\git\openxcom\src\engine\state.cpp
+1438500299 source:f:\git\openxcom\src\engine\state.cpp
 	"State.h"
 	"Game.h"
 	"InteractiveSurface.h"
@@ -8239,7 +8239,7 @@
 1432579417 source:f:\git\openxcom\src\ruleset\ruleresearch.cpp
 	"RuleResearch.h"
 
-1438345162 source:f:\git\openxcom\src\ruleset\ruleset.cpp
+1438500872 source:f:\git\openxcom\src\ruleset\ruleset.cpp
 	"Ruleset.h"
 	"AlienRace.h"
 	"AlienDeployment.h"
@@ -11191,6 +11191,6 @@
 1438231900 f:\git\openxcom\src\ruleset\rulemissionscript.h
 	"../Savegame/WeightedOptions.h"
 
-1438231896 source:f:\git\openxcom\src\ruleset\rulemissionscript.cpp
+1438345767 source:f:\git\openxcom\src\ruleset\rulemissionscript.cpp
 	"RuleMissionScript.h"
 
