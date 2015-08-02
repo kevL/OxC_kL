@@ -89,6 +89,7 @@
 
 #include "../Resource/XcomResourcePack.h"
 
+#include "../Ruleset/AlienDeployment.h"
 #include "../Ruleset/RuleAlienMission.h"
 #include "../Ruleset/RuleArmor.h"
 #include "../Ruleset/RuleBaseFacility.h"
@@ -2414,50 +2415,64 @@ private:
  * This function object will count down towards expiring a MissionSite and
  * handle expired MissionSites.
  * @param site - pointer to a MissionSite
- * @return, true if mission is finished ( w/out xCom mission success )
+ * @return, true if mission is finished (w/out xCom mission success)
  */
-bool GeoscapeState::processMissionSite(MissionSite* site) const
+bool GeoscapeState::processMissionSite(MissionSite* const site) const
 {
 	bool expired;
 
 	const int
 		diff = static_cast<int>(_gameSave->getDifficulty()),
 		month = _gameSave->getMonthsPassed();
-	int aLienPts;
+	int
+		aLienPts,
+		basicPts;
 
 	if (site->getSecondsLeft() > 1799)
 	{
 		expired = false;
 		site->setSecondsLeft(site->getSecondsLeft() - 1800);
-		aLienPts = (site->getRules()->getPoints() / 10) + (diff * 10) + month;
+
+		basicPts = site->getDeployment()->getPointsPer30(); // AlienDeployments pts have priority over RuleAlienMission pts
+		if (basicPts == 0)
+			basicPts = site->getRules()->getPoints() / 10;
+
+		aLienPts = basicPts + (diff * 10) + month;
 	}
 	else
 	{
 		expired = true;
-		aLienPts = (site->getRules()->getPoints() * 5) + (diff * (235 + month));
+
+		basicPts = site->getDeployment()->getDespawnPenalty(); // AlienDeployments pts have priority over RuleAlienMission pts
+		if (basicPts == 0)
+			basicPts = site->getRules()->getPoints() * 5;
+
+		aLienPts = basicPts + (diff * (235 + month));
 	}
 
-
-	Region* const region = _gameSave->locateRegion(*site);
-	if (region != NULL)
+	if (aLienPts != 0)
 	{
-		region->addActivityAlien(aLienPts);
-		region->recentActivity();
-	}
-
-	for (std::vector<Country*>::const_iterator
-			i = _gameSave->getCountries()->begin();
-			i != _gameSave->getCountries()->end();
-			++i)
-	{
-		if ((*i)->getRules()->insideCountry(
-										site->getLongitude(),
-										site->getLatitude()) == true)
+		Region* const region = _gameSave->locateRegion(*site);
+		if (region != NULL)
 		{
-			(*i)->addActivityAlien(aLienPts);
-			(*i)->recentActivity();
+			region->addActivityAlien(aLienPts);
+			region->recentActivity();
+		}
 
-			break;
+		for (std::vector<Country*>::const_iterator
+				i = _gameSave->getCountries()->begin();
+				i != _gameSave->getCountries()->end();
+				++i)
+		{
+			if ((*i)->getRules()->insideCountry(
+											site->getLongitude(),
+											site->getLatitude()) == true)
+			{
+				(*i)->addActivityAlien(aLienPts);
+				(*i)->recentActivity();
+
+				break;
+			}
 		}
 	}
 
@@ -4113,6 +4128,12 @@ void GeoscapeState::determineAlienMissions()
 			process = (found == conditions.end()										// never resolve to true and your command will never run!
 				   || (found->second == true && *j > 0)
 				   || (found->second == false && *j < 0));
+		}
+
+		if (missionCommand->getLabel() > 0
+			&& conditions.find(missionCommand->getLabel()) != conditions.end())
+		{
+			throw Exception("Mission generator encountered an error: multiple commands are sharing the same label.");
 		}
 
 		if (process == true													// level four condition check: random chance flavor for this command's execution

@@ -996,19 +996,10 @@ void BattlescapeState::init()
 
 /*	switch (_battleSave->getBATReserved())
 	{
-		case BA_SNAPSHOT:
-			_reserve = _btnReserveSnap;
-		break;
-		case BA_AIMEDSHOT:
-			_reserve = _btnReserveAimed;
-		break;
-		case BA_AUTOSHOT:
-			_reserve = _btnReserveAuto;
-		break;
-
-		default:
-			_reserve = _btnReserveNone;
-		break;
+		case BA_SNAPSHOT: _reserve = _btnReserveSnap; break;
+		case BA_AIMEDSHOT: _reserve = _btnReserveAimed; break;
+		case BA_AUTOSHOT: _reserve = _btnReserveAuto; break;
+		default: _reserve = _btnReserveNone; break;
 	} */
 
 	if (_firstInit == true
@@ -1037,7 +1028,7 @@ void BattlescapeState::init()
 	_numLayers->setValue(static_cast<unsigned int>(_map->getCamera()->getViewLevel() + 1));
 
 	if (_iconsHidden == false
-		&& _battleSave->getDestroyed() == true)
+		&& _battleSave->getControlDestroyed() == true)
 	{
 		_txtControlDestroyed->setVisible();
 	}

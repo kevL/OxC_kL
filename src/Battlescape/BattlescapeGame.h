@@ -66,7 +66,9 @@ enum BattleActionType
 	BA_PSICOURAGE	// 17 increases morale of ally
 };
 
-
+/**
+ *
+ */
 struct BattleAction
 {
 	bool
@@ -239,8 +241,6 @@ private:
 				BattleUnit* attacker = NULL,
 				bool hiddenExpl = false,
 				bool terrainExpl = false);
-		/// Checks if a unit panics.
-//		void checkForPanic(BattleUnit *unit);
 		/// Checks reserved tu.
 		bool checkReservedTU(
 				BattleUnit* bu,
@@ -342,9 +342,6 @@ private:
 		/// Cleans up all the deleted states. [Delete all battlestates that are queued for deletion.]
 		void cleanupDeleted();
 
-		/// Gets the depth of the battlescape.
-//		const int getDepth() const;
-
 		/// Gets the BattlescapeState.
 		BattlescapeState* getBattlescapeState() const;
 
@@ -352,6 +349,9 @@ private:
 		BattleItem* getFist() const;
 		/// Gets the alienPsi weapon.
 		BattleItem* getAlienPsi() const;
+
+		/// Sets up a mission complete notification.
+		void objectiveDone();
 };
 
 }

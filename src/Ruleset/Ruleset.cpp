@@ -1350,7 +1350,7 @@ SavedGame* Ruleset::newSave() const
 			++i)
 	{
 		RuleRegion* const region = getRegion(*i);
-		if (region->getLonMin().empty() == false)
+		if (region->getLonMin().empty() == false) // safety.
 			gameSave->getRegions()->push_back(new Region(region));
 	}
 

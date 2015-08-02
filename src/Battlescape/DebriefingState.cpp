@@ -692,6 +692,33 @@ void DebriefingState::prepareDebriefing() // private.
 		}
 	}
 
+	std::string
+		objectiveCompleteText,
+		objectiveFailedText;
+	int
+		objectiveCompleteScore = 0,	// dang vc++ compiler warnings.
+		objectiveFailedScore = 0;	// dang vc++ compiler warnings.
+
+	SavedBattleGame* const battleSave = _gameSave->getSavedBattle();
+	AlienDeployment* const deployRule = _rules->getDeployment(battleSave->getMissionType());
+
+	if (deployRule != NULL)
+	{
+		if (deployRule->getObjectiveCompleteInfo(
+											objectiveCompleteText,
+											objectiveCompleteScore) == true)
+		{
+			_stats.push_back(new DebriefingStat(objectiveCompleteText));
+		}
+
+		if (deployRule->getObjectiveFailedInfo(
+											objectiveFailedText,
+											objectiveFailedScore) == false)
+		{
+			_stats.push_back(new DebriefingStat(objectiveFailedText));
+		}
+	}
+
 	_stats.push_back(new DebriefingStat("STR_ALIENS_KILLED"));
 	_stats.push_back(new DebriefingStat("STR_ALIEN_CORPSES_RECOVERED"));
 	_stats.push_back(new DebriefingStat("STR_LIVE_ALIENS_RECOVERED"));
@@ -729,8 +756,6 @@ void DebriefingState::prepareDebriefing() // private.
 	_stats.push_back(new DebriefingStat(
 									_rules->getAlienFuelType(),
 									true));
-
-	SavedBattleGame* const battleSave = _gameSave->getSavedBattle();
 
 	const bool aborted = battleSave->isAborted();
 	bool missionAccomplished = !aborted;
@@ -809,7 +834,7 @@ void DebriefingState::prepareDebriefing() // private.
 				ptrCraft = j;
 
 				_craft->returnToBase();
-				_craft->setMissionComplete(true);
+				_craft->setMissionReturn(true);
 				_craft->setInBattlescape(false);
 			}
 			else if ((*j)->getDestination() != NULL)
@@ -1037,33 +1062,25 @@ void DebriefingState::prepareDebriefing() // private.
 
 				missionAccomplished = true; // True unless a nav-console is found below_
 
-				if (_rules->getDeployment(battleSave->getMissionType())->getNextStage().empty() == false)
+				if (deployRule->getNextStage().empty() == false)
 					missionAccomplished = false;
 				else if (aborted == true
 					|| soldierLive == 0)
 				{
-					for (size_t
-							i = 0;
-							i != battleSave->getMapSizeXYZ();
-							++i)
-					{
-						if (battleSave->getTiles()[i]->getMapData(O_OBJECT) != NULL
-							&& battleSave->getTiles()[i]->getMapData(O_OBJECT)->getSpecialType() == UFO_NAVIGATION)
-						{
-							missionAccomplished = false;
-							break;
-						}
-					}
+					if (battleSave->allObjectivesDestroyed() == false)
+						missionAccomplished = false;
 				}
 
 				if (missionAccomplished == true)
 				{
-					const int pts = std::max(
-										50,
-										500 - (_diff * 50));
-					addStat(
-						"STR_ALIEN_BASE_CONTROL_DESTROYED",
-						pts);
+					objectiveCompleteScore = std::max(
+												50,
+												objectiveCompleteScore - (_diff * 50));
+
+					if (objectiveCompleteText.empty() == false)
+						addStat(
+							objectiveCompleteText,
+							objectiveCompleteScore);
 
 					// Take care to remove supply missions for the aLien base.
 					std::for_each(
@@ -1424,6 +1441,10 @@ void DebriefingState::prepareDebriefing() // private.
 		}
 		_txtTitle->setText(tr(tacResult));
 
+		if (objectiveCompleteText.empty() == false)
+			addStat(
+				objectiveCompleteText,
+				objectiveCompleteScore);
 
 		if (aborted == false)
 		{
@@ -1493,6 +1514,10 @@ void DebriefingState::prepareDebriefing() // private.
 		}
 		_txtTitle->setText(tr(tacResult));
 
+		if (objectiveFailedText.empty() == false)
+			addStat(
+				objectiveFailedText,
+				objectiveFailedScore);
 
 		if (soldierLive > 0
 			&& _destroyXCOMBase == false)

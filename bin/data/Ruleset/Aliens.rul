@@ -863,6 +863,7 @@ alienDeployments:
       music: GEO_BRIEF_TERRORSITE
     markerName: STR_TERROR_SITE
     duration: [4,10]
+    despawnPenalty: 1000
   - type: STR_PORT_ATTACK
     data:
       - alienRank: 6 #terrorist1
@@ -1016,6 +1017,7 @@ alienDeployments:
       music: GEO_BRIEF_TERRORSITE
     markerName: STR_TERROR_SITE
     duration: [4,10]
+    despawnPenalty: 1000
   - type: STR_ALIEN_BASE_ASSAULT
     script: ALIENBASE
     data:
@@ -1174,6 +1176,9 @@ alienDeployments:
     briefing:
       music: GEO_BRIEF_BASEASSAULT
       background: BACK01.SCR
+    objectiveType: 3
+    objectiveComplete: [STR_ALIEN_BASE_CONTROL_DESTROYED, 500]
+    objectivePopup: STR_ALIEN_BASE_CONTROL_DESTROYED
   - type: STR_BASE_DEFENSE
     data:
       - alienRank: 6 #terrorist1
@@ -1607,6 +1612,8 @@ alienDeployments:
 #      showTargetText: false
 #      showCraftText: false
 #      textOffset: -16
+    objectiveType: 14
+    objectivesRequired: 4
 #Alien Tech Level, http://openxcom.org/forum/index.php?topic=1356.0
 #kaiser_bill,
 #this links into the alien equipment loadouts specified under the UFO crew loadout section

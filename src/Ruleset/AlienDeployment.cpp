@@ -148,11 +148,13 @@ AlienDeployment::AlienDeployment(const std::string& type)
 		_finalMission(false),
 		_markerIcon(-1),
 		_durationMin(0),
-		_durationMax(0)
-//		_minDepth(0),
-//		_maxDepth(0),
-//		_minSiteDepth(0),
-//		_maxSiteDepth(0)
+		_durationMax(0),
+		_objectiveType(0),
+		_objectivesRequired(0),
+		_objectiveCompleteScore(0),
+		_objectiveFailedScore(0),
+		_despawnPenalty(0),
+		_pointsPer30(0)
 {}
 
 /**
@@ -186,17 +188,6 @@ void AlienDeployment::load(const YAML::Node& node)
 	_markerName			= node["markerName"]		.as<std::string>(_markerName);
 	_markerIcon			= node["markerIcon"]		.as<int>(_markerIcon);
 
-/*	if (node["depth"])
-	{
-		_minDepth = node["depth"][0].as<int>(_minDepth);
-		_maxDepth = node["depth"][1].as<int>(_maxDepth);
-	}
-	if (node["siteDepth"])
-	{
-		_minSiteDepth = node["siteDepth"][0].as<int>(_minSiteDepth);
-		_maxSiteDepth = node["siteDepth"][1].as<int>(_maxSiteDepth);
-	} */
-
 	if (node["duration"])
 	{
 		_durationMin = node["duration"][0].as<int>(_durationMin);
@@ -209,6 +200,24 @@ void AlienDeployment::load(const YAML::Node& node)
 			++i)
 	{
 		_musics.push_back((*i).as<std::string>(""));
+	}
+
+	_objectiveType		= node["objectiveType"]		.as<int>(_objectiveType);
+	_objectivesRequired	= node["objectivesRequired"].as<int>(_objectivesRequired);
+	_objectivePopup		= node["objectivePopup"]	.as<std::string>(_objectivePopup);
+	_despawnPenalty		= node["despawnPenalty"]	.as<int>(_despawnPenalty);
+	_pointsPer30		= node["pointsPer30"]		.as<int>(_pointsPer30);
+
+	if (node["objectiveComplete"])
+	{
+		_objectiveCompleteText	= node["objectiveComplete"][0].as<std::string>(_objectiveCompleteText);
+		_objectiveCompleteScore	= node["objectiveComplete"][1].as<int>(_objectiveCompleteScore);
+	}
+
+	if (node["objectiveFailed"])
+	{
+		_objectiveFailedText	= node["objectiveFailed"][0].as<std::string>(_objectiveFailedText);
+		_objectiveFailedScore	= node["objectiveFailed"][1].as<int>(_objectiveFailedScore);
 	}
 }
 
@@ -392,39 +401,83 @@ const std::vector<std::string>& AlienDeployment::getMusic()
 }
 
 /**
- * Gets the minimum depth for this deployment.
- * @return, the minimum depth
+ * Gets the objective type for this mission (eg alien control consoles).
+ * @return, objective type
  */
-/* int AlienDeployment::getMinDepth() const
+int AlienDeployment::getObjectiveType() const
 {
-	return _minDepth;
-} */
+	return _objectiveType;
+}
 
 /**
- * Gets the maximum depth for this deployment.
- * @return, the maximum depth
+ * Gets the number of objectives required by this mission.
+ * @return, number of objectives
  */
-/* int AlienDeployment::getMaxDepth() const
+int AlienDeployment::getObjectivesRequired() const
 {
-	return _maxDepth;
-} */
+	return _objectivesRequired;
+}
 
 /**
- * Gets the minimum depth for this deployment's mission site.
- * @return, the minimum depth
+ * Gets the string name for the popup to splash when the objective conditions
+ * are met.
+ * @return, string to pop
  */
-/* int AlienDeployment::getMinSiteDepth() const
+std::string AlienDeployment::getObjectivePopup() const
 {
-	return _minSiteDepth;
-} */
+	return _objectivePopup;
+}
 
 /**
- * Gets the maximum depth for this deployment's mission site.
- * @return, the maximum depth
+ * Fills out the variables associated with mission success and returns if those
+ * variables actually contain anything.
+ * @param text	- reference to the text to alter
+ * @param score	- reference to the score to alter
+ * @return, true if anything worthwhile happened
  */
-/* int AlienDeployment::getMaxSiteDepth() const
+bool AlienDeployment::getObjectiveCompleteInfo(
+		std::string& text,
+		int& score) const
 {
-	return _maxSiteDepth;
-} */
+	text = _objectiveCompleteText;
+	score = _objectiveCompleteScore;
+
+	return text.empty() == false;
+}
+
+/**
+ * Fills out the variables associated with mission failure and returns if those
+ * variables actually contain anything.
+ * @param text	- reference to the text to alter
+ * @param score	- reference to the score to alter
+ * @return, true if anything worthwhile happened
+ */
+bool AlienDeployment::getObjectiveFailedInfo(
+		std::string& text,
+		int& score) const
+{
+	text = _objectiveFailedText;
+	score = _objectiveFailedScore;
+
+	return text.empty() == false;
+}
+
+/**
+ * Gets the score penalty XCom receives for letting a mission despawn.
+ * @return, penalty
+ */
+const int AlienDeployment::getDespawnPenalty() const
+{
+	return _despawnPenalty;
+}
+
+/**
+ * Gets the half-hourly score penalty against XCom for this site existing.
+ * @return, points for aLiens per 30 mins
+ */
+const int AlienDeployment::getPointsPer30() const
+{
+	return _pointsPer30;
+}
 
 }

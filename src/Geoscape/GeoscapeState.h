@@ -303,7 +303,7 @@ private:
 				Ufo* ufo);
 
 		/// Process a mission site
-		bool processMissionSite(MissionSite* site) const; // OoO
+		bool processMissionSite(MissionSite* const site) const; // OoO
 
 		/// Update the resolution settings, the window was resized.
 		void resize(

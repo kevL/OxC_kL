@@ -47,23 +47,17 @@ namespace OpenXcom
  * @param height	- height in pixels
  * @param x			- X position in pixels
  * @param y			- Y position in pixels
-// * @param helmet	- true if unit is wearing a helmet (TFTD)
-// * @param moveType	- the MovementType (MapData.h)
  */
 UnitSprite::UnitSprite(
 		int width,
 		int height,
 		int x,
 		int y)
-//		bool helmet)
-//		MovementType moveType)
 	:
 		Surface(
 			width,
 			height,
 			x,y),
-//		_helmet(helmet),
-//		_moveType(moveType),
 		_unit(NULL),
 		_itemA(NULL),
 		_itemB(NULL),
@@ -249,17 +243,6 @@ void UnitSprite::draw()
 		&UnitSprite::drawRoutine9,
 		&UnitSprite::drawRoutine0
 	};
-/*		&UnitSprite::drawRoutine11,
-		&UnitSprite::drawRoutine12,
-		&UnitSprite::drawRoutine0,
-		&UnitSprite::drawRoutine0,
-		&UnitSprite::drawRoutine0,
-		&UnitSprite::drawRoutine12,
-		&UnitSprite::drawRoutine4,
-		&UnitSprite::drawRoutine4,
-		&UnitSprite::drawRoutine19,
-		&UnitSprite::drawRoutine20,
-		&UnitSprite::drawRoutine21}; */
 
 	(this->*(routines[_drawingRoutine]))(); // Call the matching routine.
 }
@@ -288,64 +271,6 @@ void UnitSprite::drawRoutine0()
 
 	// magic numbers
 	int torsoHandsWeaponY = 0; // kL
-/*	const int legsStand = 16, legsKneel = 24;
-	int maleTorso, femaleTorso, die, rarm1H, larm2H, rarm2H, rarmShoot, legsFloat, torsoHandsWeaponY = 0;
-	if (_drawingRoutine <= 10)
-	{
-		die = 264; // ufo:eu death frame
-		maleTorso = 32;
-		femaleTorso = 267;
-		rarm1H = 232;
-		larm2H = 240;
-		rarm2H = 248;
-		rarmShoot = 256;
-		legsFloat = 275;
-	}
-	else if (_drawingRoutine == 13)
-	{ */
-/*		if (_helmet)
-		{
-			die = 259; // aquanaut underwater death frame
-			maleTorso = 32; // aquanaut underwater ion armour torso
-			if (_unit->getArmor()->getForcedTorso() == TORSO_USE_GENDER)
-			{
-				femaleTorso = 32; // aquanaut underwater plastic aqua armour torso
-			}
-			else
-			{
-				femaleTorso = 286; // aquanaut underwater magnetic ion armour torso
-			}
-			rarm1H = 248;
-			larm2H = 232;
-			rarm2H = rarmShoot = 240;
-			legsFloat = 294;
-		}*/
-//		else
-/*		{
-			die = 256; // aquanaut land death frame
-			// aquanaut land torso
-			maleTorso = 270;
-			femaleTorso = 262;
-			rarm1H = 248;
-			larm2H = 232;
-			rarm2H = rarmShoot = 240;
-			legsFloat = 294;
-		}
-	}
-	else
-	{
-		die = 256; // tftd unit death frame
-		// tftd unit torso
-		maleTorso = 32;
-		femaleTorso = 262;
-		rarm1H = 248;
-		larm2H = 232;
-		rarm2H = rarmShoot = 240;
-		legsFloat = 294;
-	}
-	const int larmStand = 0, rarmStand = 8;
-*/
-// pre-TFTD:
 	const int
 		maleTorso	=  32,
 		femaleTorso	= 267,
@@ -406,7 +331,6 @@ void UnitSprite::drawRoutine0()
 	}
 
 	if (_drawingRoutine == 0)
-//		|| _helmet == true)
 	{
 		if (_unit->getArmor()->getForcedTorso() == TORSO_ALWAYS_FEMALE // STR_FLYING_SUIT_UC, the mod Colored Armors might muck w/ these.
 			|| (_unit->getGender() == GENDER_FEMALE
@@ -1125,36 +1049,19 @@ void UnitSprite::drawRoutine4()
 		* itemA	= NULL,
 		* itemB	= NULL;
 
-//	int stand = 0, walk = 8, die = 72; // TFTD
 	const int
 		stand	= 0,
 		walk	= 8,
 		die		= 72,
 
-		offX[8]			= { 8, 10,  7,  4, -9,-11, -7, -3 }, // for the weapons
-		offY[8]			= {-6, -3,  0,  2,  0, -4, -7, -9 }, // for the weapons
-		offX2[8]		= {-8,  3,  5, 12,  6, -1, -5,-13 }, // for the weapons
-		offY2[8]		= { 1, -4, -2,  0,  3,  3,  5,  0 }, // for the weapons
-		offX3[8]		= { 0,  6,  6, 12, -4, -5, -5,-13 }, // for the left handed rifles
-		offY3[8]		= {-4, -4, -1,  0,  5,  0,  1,  0 }, // for the left handed rifles
-//		standConvert[8]	= { 3,  2,  1,  0,  7,  6,  5,  4 }, // array for converting stand frames for some TFTD civilians
+		offX[8]		= { 8, 10,  7,  4, -9,-11, -7, -3 }, // for the weapons
+		offY[8]		= {-6, -3,  0,  2,  0, -4, -7, -9 }, // for the weapons
+		offX2[8]	= {-8,  3,  5, 12,  6, -1, -5,-13 }, // for the weapons
+		offY2[8]	= { 1, -4, -2,  0,  3,  3,  5,  0 }, // for the weapons
+		offX3[8]	= { 0,  6,  6, 12, -4, -5, -5,-13 }, // for the left handed rifles
+		offY3[8]	= {-4, -4, -1,  0,  5,  0,  1,  0 }, // for the left handed rifles
 
 		offXAiming = 16;
-
-/*TFTD
-		unitDir = _unit->getDirection();
-
-	if (_drawingRoutine == 17) // tftd civilian - first set
-	{
-		stand = 64;
-		walk = 0;
-	}
-	else if (_drawingRoutine == 18) // tftd civilian - second set
-	{
-		stand = 140;
-		walk = 76;
-		die = 148;
-	} */
 
 	if (_unit->getStatus() == STATUS_COLLAPSING)
 	{
@@ -1164,20 +1071,14 @@ void UnitSprite::drawRoutine4()
 		return;
 	}
 	else if (_unit->getStatus() == STATUS_WALKING
-		&& _unit->getRaceString() != "STR_ETHEREAL") // kL
+		&& _unit->getRaceString() != "STR_ETHEREAL")
 	{
 		srf = _unitSurface->getFrame(walk + (8 * _unit->getDirection()) + _unit->getWalkPhase());
 	}
-	else // if (_drawingRoutine != 17) // TFTD
+	else
 	{
 		srf = _unitSurface->getFrame(stand + _unit->getDirection());
 	}
-/*TFTD
-	else
-	{
-		srf = _unitSurface->getFrame(stand + standConvert[unitDir]);
-	} */
-
 
 	sortRifles();
 
@@ -1267,12 +1168,11 @@ void UnitSprite::drawRoutine4()
 			itemB ? itemB->blit(this) : void();
 		break;
 		case 5:
-//kL	case 6:
 			itemA ? itemA->blit(this) : void();
 			drawRecolored(srf);
 			itemB ? itemB->blit(this) : void();
 		break;
-		case 6: // kL
+		case 6:
 		case 7:
 			itemA ? itemA->blit(this) : void();
 			itemB ? itemB->blit(this) : void();
@@ -1747,141 +1647,6 @@ void UnitSprite::drawRoutine9()
 
 	drawRecolored(torso);
 }
-
-// kL_note: TFTD down to sortRifles()
-/**
- * Drawing routine for tftd tanks.
- */
-/* void UnitSprite::drawRoutine11()
-{
-	if (_unit->isOut() == true)
-		return; // unit is drawn as an item (ie. floorob)
-
-	const int
-		offTurretX[8] = { -2,  -6,  -5,   0,   5,   6,   2,   0},
-		offTurretY[8] = {-12, -13, -16, -16, -16, -13, -12, -12};
-
-	int
-		body,
-		animFrame;
-	if (_unit->getMoveTypeUnit() == MT_FLY)
-	{
-		body = 128;
-		animFrame = _animationFrame % 4;
-	}
-	else
-	{
-		body = 0;
-		animFrame = _unit->getWalkPhase() % 4;
-	}
-
-	Surface* srf = _unitSurface->getFrame(body + (_part * 4) + 16 * _unit->getDirection() + animFrame);
-	srf->setY(4);
-	drawRecolored(srf);
-
-	if (_part == 3 // draw the turret, overlapping all 4 parts
-		&& _unit->getFloorAbove() == false)
-	{
-		const int turret = _unit->getTurretType();
-		if (turret != -1)
-		{
-			srf = _unitSurface->getFrame(256 + (turret * 8) + _unit->getTurretDirection());
-			srf->setX(offTurretX[static_cast<size_t>(_unit->getDirection())]);
-			srf->setY(offTurretY[static_cast<size_t>(_unit->getDirection())]);
-			drawRecolored(srf);
-		}
-	}
-} */
-
-/**
- * Drawing routine for hallucinoids (routine 12) and biodrones (routine 16).
- */
-/* void UnitSprite::drawRoutine12()
-{
-	if (_unit->isOut() == true)
-		return; // unit is drawn as an item
-
-	const int die = 8;
-
-	Surface* srf = _unitSurface->getFrame((_part * 8) + _animationFrame);
-	_redraw = true;
-
-	if (_unit->getStatus() == STATUS_COLLAPSING && _drawingRoutine == 16)
-	{
-		// biodrone death frames
-		srf = _unitSurface->getFrame(die + _unit->getFallingPhase());
-		drawRecolored(srf);
-
-		return;
-	}
-
-	drawRecolored(srf);
-} */
-
-/**
- * Drawing routine for tentaculats.
- */
-/* void UnitSprite::drawRoutine19()
-{
-	if (_unit->isOut() == true)
-		return; // unit is drawn as an item
-
-	Surface* srf;
-	// magic numbers
-	const int
-		stand = 0,
-		move = 8,
-		die = 16;
-
-	if (_unit->getStatus() == STATUS_COLLAPSING)
-	{
-		srf = _unitSurface->getFrame(die + _unit->getFallingPhase());
-		drawRecolored(srf);
-
-		return;
-	}
-
-	if (_unit->getStatus() == STATUS_WALKING)
-		srf = _unitSurface->getFrame(move + _unit->getDirection());
-	else
-		srf = _unitSurface->getFrame(stand + _unit->getDirection());
-
-	drawRecolored(srf);
-} */
-
-/**
- * Drawing routine for triscenes.
- */
-/* void UnitSprite::drawRoutine20()
-{
-	if (_unit->isOut() == true)
-		return; // unit is drawn as an item
-
-	Surface* srf;
-
-	if (_unit->getStatus() == STATUS_WALKING)
-		srf = _unitSurface->getFrame((_unit->getWalkPhase() / 2 % 4) + 5 * (_part + 4 * _unit->getDirection()));
-	else
-		srf = _unitSurface->getFrame(5 * (_part + 4 * _unit->getDirection()));
-
-	drawRecolored(srf);
-} */
-
-/**
- * Drawing routine for xarquids.
- */
-/* void UnitSprite::drawRoutine21()
-{
-	if (_unit->isOut() == true)
-		return; // unit is drawn as an item
-
-	Surface* srf;
-
-	srf = _unitSurface->getFrame((_part * 4) + (_unit->getDirection() * 16) + (_animationFrame %4));
-	_redraw = true;
-
-	drawRecolored(srf);
-} */
 
 /**
  * Determines which weapons to display in the case of two-handed weapons.

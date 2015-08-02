@@ -34,8 +34,8 @@ class SurfaceSet;
 
 
 /**
- * A class that renders a specific unit, given its render
- * rules combining the right frames from the surfaceset.
+ * A class that renders a specific unit, given its render rules combining the
+ * right frames from the surfaceset.
  */
 class UnitSprite
 	:
@@ -43,7 +43,6 @@ class UnitSprite
 {
 
 private:
-//	bool _helmet;
 	int
 		_animationFrame,
 		_colorSize,
@@ -59,14 +58,10 @@ private:
 		* _itemSurfaceB,
 		* _unitSurface;
 
-//	MovementType _moveType;
-
 	const std::pair<Uint8, Uint8>* _color;
 
 	/// Drawing routine for XCom soldiers in overalls, sectoids (routine 0),
-	/// mutons (routine 10),
-	/// aquanauts (routine 13),
-	/// aquatoids, calcinites, deep ones, gill men, lobster men, tasoths (routine 14).
+	/// mutons (routine 10).
 	void drawRoutine0();
 	/// Drawing routine for floaters.
 	void drawRoutine1();
@@ -74,8 +69,7 @@ private:
 	void drawRoutine2();
 	/// Drawing routine for cyberdiscs.
 	void drawRoutine3();
-	/// Drawing routine for civilians, ethereals, zombies (routine 4),
-	/// tftd civilians, tftd zombies (routine 16), more tftd civilians (routine 17).
+	/// Drawing routine for civilians, ethereals, zombies (routine 4).
 	void drawRoutine4();
 	/// Drawing routine for sectopods and reapers.
 	void drawRoutine5();
@@ -87,17 +81,6 @@ private:
 	void drawRoutine8();
 	/// Drawing routine for celatids.
 	void drawRoutine9();
-
-	/// Drawing routine for TFTD tanks.
-//	void drawRoutine11();
-	/// Drawing routine for hallucinoids (routine 12) and biodrones (routine 15).
-//	void drawRoutine12();
-	/// Drawing routine for tentaculats.
-//	void drawRoutine19();
-	/// Drawing routine for triscenes.
-//	void drawRoutine20();
-	/// Drawing routine for xarquids.
-//	void drawRoutine21();
 
 	/// sort two handed sprites out.
 	void sortRifles();
@@ -112,8 +95,6 @@ private:
 				int height,
 				int x,
 				int y);
-//				bool helmet);
-//				MovementType moveType);
 		/// Cleans up the UnitSprite.
 		~UnitSprite();
 

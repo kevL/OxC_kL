@@ -80,8 +80,6 @@ private:
 		_kneelReserved,
 		_unitsFalling;
 	int
-//		_ambience,
-//		_depth,
 		_globalShade,
 		_groundLevel,
 		_itemId,
@@ -90,6 +88,7 @@ private:
 		_mapsize_z,
 		_objectivesDestroyed,
 		_objectivesNeeded,
+		_objectiveType,
 		_turn;
 	size_t _mapSize;
 
@@ -297,7 +296,7 @@ private:
 		bool isAborted() const;
 
 		/// Sets how many objectives need to be destroyed.
-		void addToObjectiveCount();
+		void setObjectiveCount(int var);
 		/// Increments the objectives-destroyed counter.
 		void addDestroyedObjective();
 		/// Checks if all the objectives are destroyed.
@@ -445,9 +444,9 @@ private:
 		const std::wstring& getOperation() const;
 
 		/// Tells player that an aLienBase control has been destroyed.
-		void setDestroyed();
+//		void setControlDestroyed();
 		/// Gets if an aLienBase control has been destroyed.
-		bool getDestroyed() const;
+		bool getControlDestroyed() const;
 
 		/// Get the name of the music track.
 //		std::string& getMusic();
@@ -457,6 +456,11 @@ private:
 		void calibrateMusic(
 				std::string& music,
 				std::string& terrain) const;
+
+		/// Sets the objective type for this mission.
+		void setObjectiveType(int type);
+		/// Gets the objective type of this mission.
+		SpecialTileType getObjectiveType() const;
 };
 
 }

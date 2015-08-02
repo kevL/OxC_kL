@@ -182,9 +182,9 @@ private:
 		void setLowFuel(const bool low);
 
 		/// Gets whether the craft has just finished a mission.
-		bool getMissionComplete() const;
+		bool getMissionReturn() const;
 		/// Sets whether the craft has just finished a mission.
-		void setMissionComplete(const bool mission);
+		void setMissionReturn(const bool mission);
 
 		/// Gets the craft's distance from its base.
 		double getDistanceFromBase() const;

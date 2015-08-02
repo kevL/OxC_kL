@@ -188,7 +188,9 @@ void Tile::loadBinary(
 	_fire		= unserializeInt(&buffer, serKey._fire);
 	_animOffset	= unserializeInt(&buffer, serKey._animOffset);
 
-	const int boolFields = unserializeInt(&buffer, serKey.boolFields);
+	const int boolFields = unserializeInt(
+										&buffer,
+										serKey.boolFields);
 
 	_discovered[0] = (boolFields & 0x01) ? true : false;
 	_discovered[1] = (boolFields & 0x02) ? true : false;
@@ -447,7 +449,7 @@ int Tile::getFootstepSound(const Tile* const tileBelow) const
 {
 	int sound = -1;
 
-	if (   _objects[static_cast<size_t>(O_OBJECT)] != NULL
+	if (_objects[static_cast<size_t>(O_OBJECT)] != NULL
 		&& _objects[static_cast<size_t>(O_OBJECT)]->getBigWall() < BIGWALL_NESW // ie. None or Block
 		&& _objects[static_cast<size_t>(O_OBJECT)]->getFootstepSound() > 0) // > -1
 	{
@@ -661,9 +663,12 @@ int Tile::getShade() const
  * the destroyed part is an explosive set the tile's explosive value which will
  * trigger a chained explosion.
  * @param part - this Tile's part for destruction
+ * @param type - SpecialTileType
  * @return, true if an 'objective' was destroyed
  */
-bool Tile::destroy(int part)
+bool Tile::destroy(
+		int part,
+		SpecialTileType type)
 {
 	const size_t i = static_cast<size_t>(part);
 
@@ -677,7 +682,7 @@ bool Tile::destroy(int part)
 			return false;
 		}
 
-		objective = (_objects[i]->getSpecialType() == MUST_DESTROY);
+		objective = (_objects[i]->getSpecialType() == type);
 
 		const MapData* const origPart = _objects[i];
 		const int origMapDataSetID = _mapDataSetID[i];
@@ -705,7 +710,7 @@ bool Tile::destroy(int part)
 
 	if (part == O_FLOOR // check if the floor on the lowest level is gone
 		&& getPosition().z == 0
-		&& _objects[O_FLOOR] == 0)
+		&& _objects[O_FLOOR] == NULL)
 	{
 		setMapData( // replace with scorched earth
 				MapDataSet::getScorchedEarthTile(),
@@ -720,17 +725,21 @@ bool Tile::destroy(int part)
  * Damages terrain (check against terrain-part armor/hitpoints/constitution)
  * @param part	- part of tile to check
  * @param power	- power of the damage
+ * @param type	- SpecialTileType
  * @return, true if an objective was destroyed
  */
 bool Tile::damage(
 		int part,
-		int power)
+		int power,
+		SpecialTileType type)
 {
 	//Log(LOG_INFO) << "Tile::damage() vs part = " << part << ", hp = " << _objects[part]->getArmor();
 	bool objectiveDestroyed = false;
 
 	if (power >= _objects[static_cast<size_t>(part)]->getArmor())
-		objectiveDestroyed = destroy(part);
+		objectiveDestroyed = destroy(
+									part,
+									type);
 
 	return objectiveDestroyed;
 }
@@ -1008,28 +1017,28 @@ int Tile::getSmoke() const
 	return _smoke;
 }
 
-/**
+/*
  * Gets the smoke overlap value of this Tile.
  * @return, smoke overlaps
- */
-/*int Tile::getOverlapsSK() const
+ *
+int Tile::getOverlapsSK() const
 {
 	return _overlapsSMK;
 } */
 
-/**
+/*
  * Gets the fire overlap value of this Tile.
  * @return, fire overlaps
- */
-/*int Tile::getOverlapsIN() const
+ *
+int Tile::getOverlapsIN() const
 {
 	return _overlapsINC;
 } */
 
-/**
+/*
  * New turn preparations. Average out any smoke added by the number of overlaps.
- */
-/* void Tile::resolveOverlaps()
+ *
+void Tile::resolveOverlaps()
 {
 	Log(LOG_INFO) << "pos " << _pos << " s = " << _smoke << " | " << _overlapsSMK;
 	if (_smoke != 0
@@ -1631,20 +1640,20 @@ bool Tile::getDangerous() const
 	return _danger;
 }
 
-/**
+/*
  * Adds a particle to this tile's internal storage buffer.
  * @param particle - pointer to a particle to add
- */
-/* void Tile::addParticle(Particle* particle)
+ *
+void Tile::addParticle(Particle* particle)
 {
 	_particles.push_back(particle);
 } */
 
-/**
+/*
  * Gets a pointer to this tile's particle array.
  * @return, pointer to the internal array of particles
- */
-/* std::list<Particle*>* Tile::getParticleCloud()
+ *
+std::list<Particle*>* Tile::getParticleCloud()
 {
 	return &_particles;
 } */

@@ -76,15 +76,14 @@ SavedBattleGame::SavedBattleGame(const std::vector<OperationPool*>* titles)
 		_debugMode(false),
 		_aborted(false),
 		_itemId(0),
+		_objectiveType(-1),
 		_objectivesDestroyed(0),
 		_objectivesNeeded(0),
 		_unitsFalling(false),
 		_cheatAI(false),
 		_batReserved(BA_NONE),
-//		_depth(0),
 		_kneelReserved(false),
 		_invBattle(NULL),
-//		_ambience(-1),
 		_groundLevel(-1),
 		_tacType(TCT_DEFAULT),
 		_controlDestroyed(false),
@@ -543,6 +542,7 @@ void SavedBattleGame::load(
 	}
 
 	Log(LOG_INFO) << ". set some vars";
+	_objectiveType			= node["objectiveType"]							.as<int>(_objectiveType);
 	_objectivesDestroyed	= node["objectivesDestroyed"]					.as<int>(_objectivesDestroyed);
 	_objectivesNeeded		= node["objectivesNeeded"]						.as<int>(_objectivesNeeded);
 	_batReserved			= (BattleActionType)node["batReserved"]			.as<int>(_batReserved);
@@ -636,6 +636,7 @@ YAML::Node SavedBattleGame::save() const
 
 	if (_objectivesNeeded > 0)
 	{
+		node["objectiveType"]		= _objectiveType;
 		node["objectivesDestroyed"]	= _objectivesDestroyed;
 		node["objectivesNeeded"]	= _objectivesNeeded;
 	}
@@ -1164,7 +1165,8 @@ BattleUnit* SavedBattleGame::selectUnit(const Position& pos)
 	BattleUnit* const bu = getTile(pos)->getUnit();
 
 	if (bu == NULL
-		|| bu->isOut(true, true) == true)
+		|| bu->isOut_t(OUT_STAT) == true)
+//		|| bu->isOut(true, true) == true)
 	{
 		return NULL;
 	}
@@ -1511,7 +1513,8 @@ void SavedBattleGame::resetUnitTiles()
 			i != _units.end();
 			++i)
 	{
-		if ((*i)->isOut() == false)
+//		if ((*i)->isOut() == false)
+		if ((*i)->isOut_t(OUT_STAT) == false)
 		{
 			const int unitSize = (*i)->getArmor()->getSize() - 1;
 
@@ -1686,27 +1689,40 @@ bool SavedBattleGame::isAborted() const
 }
 
 /**
- * Increments the objectives-needed counter.
- * @note 'Objectives' are tile-parts marked w/ MUST_DESTROY in their MCD.
+ * Changes the objectives-needed count.
+ * @note Objectives were tile-parts marked w/ MUST_DESTROY in their MCD but now
+ * can be any specially marked tile. See elsewhere.
  */
-void SavedBattleGame::addToObjectiveCount()
+void SavedBattleGame::setObjectiveCount(int var)
 {
-	++_objectivesNeeded;
+	_objectivesNeeded = var;
 }
 
 /**
- * Increments the objectives-destroyed counter.
+ * Increments the objectives-destroyed count.
  */
 void SavedBattleGame::addDestroyedObjective()
 {
-	++_objectivesDestroyed;
-/*	if (Options::battleAutoEnd == true
-		&& allObjectivesDestroyed() == true)
+	if (allObjectivesDestroyed() == false)
 	{
-		_selectedUnit = NULL;
-		_battleState->getBattleGame()->cancelCurrentAction(true);
-		_battleState->getBattleGame()->requestEndTurn();
-	} */
+		++_objectivesDestroyed;
+
+		if (allObjectivesDestroyed() == true)
+		{
+			_controlDestroyed = true;
+/*			if (getObjectiveType() == MUST_DESTROY)
+			{
+				if (Options::battleAutoEnd == true)
+				{
+					setSelectedUnit(NULL);
+					_battleState->getBattleGame()->cancelCurrentAction(true);
+					_battleState->getBattleGame()->requestEndTurn();
+				}
+			}
+			else */
+			_battleState->getBattleGame()->objectiveDone();
+		}
+	}
 }
 
 /**
@@ -2066,11 +2082,19 @@ void SavedBattleGame::tileVolatiles()
 				if ((*i)->getMapData(O_OBJECT)->getFlammable() != 255
 					&& (*i)->getMapData(O_OBJECT)->getArmor() != 255)
 				{
-					if ((*i)->destroy(O_OBJECT) == true)
+					if ((*i)->destroy(
+									O_OBJECT,
+									getObjectiveType()) == true)
+					{
 						addDestroyedObjective();
+					}
 
-					if ((*i)->destroy(O_FLOOR) == true)
+					if ((*i)->destroy(
+									O_FLOOR,
+									getObjectiveType()) == true)
+					{
 						addDestroyedObjective();
+					}
 				}
 			}
 			else if ((*i)->getMapData(O_FLOOR) != NULL)
@@ -2078,8 +2102,12 @@ void SavedBattleGame::tileVolatiles()
 				if ((*i)->getMapData(O_FLOOR)->getFlammable() != 255
 					&& (*i)->getMapData(O_FLOOR)->getArmor() != 255)
 				{
-					if ((*i)->destroy(O_FLOOR) == true)
+					if ((*i)->destroy(
+									O_FLOOR,
+									getObjectiveType()) == true)
+					{
 						addDestroyedObjective();
+					}
 				}
 			}
 
@@ -2986,16 +3014,16 @@ const std::wstring& SavedBattleGame::getOperation() const
 /**
  * Tells player that an aLienBase control has been destroyed.
  */
-void SavedBattleGame::setDestroyed()
+/* void SavedBattleGame::setControlDestroyed()
 {
 	_controlDestroyed = true;
-}
+} */
 
 /**
  * Gets if an aLienBase control has been destroyed.
  * @return, true if destroyed
  */
-bool SavedBattleGame::getDestroyed() const
+bool SavedBattleGame::getControlDestroyed() const
 {
 	return _controlDestroyed;
 }
@@ -3054,6 +3082,24 @@ void SavedBattleGame::calibrateMusic(
 		music = OpenXcom::res_MUSIC_TAC_BATTLE_MARS2;
 	else
 		music = OpenXcom::res_MUSIC_TAC_BATTLE; // default/ safety.
+}
+
+/**
+ * Sets the objective type for the current battle.
+ * @param type - the objective type
+ */
+void SavedBattleGame::setObjectiveType(int type)
+{
+	_objectiveType = type;
+}
+
+/**
+ * Gets the objective type for the current battle.
+ * @return, the objective type
+ */
+SpecialTileType SavedBattleGame::getObjectiveType() const
+{
+	return static_cast<SpecialTileType>(_objectiveType);
 }
 
 }

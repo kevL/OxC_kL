@@ -32,22 +32,9 @@
 namespace OpenXcom
 {
 
-class Base;
-class BattleItem;
-class BattleUnit;
-class Country;
-class Craft;
-class Region;
-class RuleItem;
-class Ruleset;
-class SavedGame;
-class Soldier;
-class Text;
-class TextButton;
-class TextList;
-class Window;
-
-
+/**
+ *
+ */
 struct DebriefingStat
 {
 	bool recover;
@@ -68,7 +55,9 @@ struct DebriefingStat
 	{};
 };
 
-
+/**
+ *
+ */
 struct ReequipStat
 {
 	std::string type;
@@ -76,13 +65,30 @@ struct ReequipStat
 	std::wstring craft;
 };
 
-
+/**
+ *
+ */
 struct SpecialType
 {
 	std::string type;
 	int value;
 };
 
+
+class Base;
+class BattleItem;
+class BattleUnit;
+class Country;
+class Craft;
+class Region;
+class RuleItem;
+class Ruleset;
+class SavedGame;
+class Soldier;
+class Text;
+class TextButton;
+class TextList;
+class Window;
 
 /**
  * Debriefing screen shown after a Battlescape mission that displays the results.

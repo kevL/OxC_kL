@@ -178,7 +178,7 @@ GeoscapeCraftState::GeoscapeCraftState(
 	std::wstring status;
 	const bool
 		lowFuel = _craft->getLowFuel(),
-		missionComplete = _craft->getMissionComplete();
+		missionComplete = _craft->getMissionReturn();
 	int speed = _craft->getSpeed();
 
 	// note: Could add "DAMAGED - Return to Base" around here.

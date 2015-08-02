@@ -679,8 +679,8 @@ void Craft::setFuel(const int fuel)
 }
 
 /**
- * Gets the ratio between the amount of fuel currently
- * contained in this craft and the total it can carry.
+ * Gets the ratio between the amount of fuel currently contained in this craft
+ * and the total it can carry.
  * @return, fuel remaining as percent
  */
 int Craft::getFuelPercentage() const
@@ -712,8 +712,8 @@ void Craft::setDamage(const int damage)
 }
 
 /**
- * Gets the ratio between the amount of damage this craft
- * has taken and the total it can take before it's destroyed.
+ * Gets the ratio between the amount of damage this craft has taken and the
+ * total it can take before it's destroyed.
  * @return, damage taken as percent
  */
 int Craft::getDamagePercent() const
@@ -723,8 +723,8 @@ int Craft::getDamagePercent() const
 }
 
 /**
- * Gets whether the craft is currently low on fuel -
- * only has enough to get back to base.
+ * Gets whether the craft is currently low on fuel - only has enough to get
+ * back to base.
  * @return, true if fuel is low
  */
 bool Craft::getLowFuel() const
@@ -733,8 +733,8 @@ bool Craft::getLowFuel() const
 }
 
 /**
- * Sets whether this craft is currently low on fuel -
- * only has enough to get back to its Base.
+ * Sets whether this craft is currently low on fuel - only has enough to get
+ * back to its Base.
  * @param low - true if fuel is low
  */
 void Craft::setLowFuel(const bool low)
@@ -743,21 +743,21 @@ void Craft::setLowFuel(const bool low)
 }
 
 /**
- * Gets whether this craft has just done a ground mission
- * and is forced to return to its Base.
+ * Gets whether this craft has just done a ground mission and is forced to
+ * return to its Base.
  * @return, true if this craft needs to return to base
  */
-bool Craft::getMissionComplete() const
+bool Craft::getMissionReturn() const
 {
 	return _mission;
 }
 
 /**
- * Sets whether this craft has just done a ground mission
- * and is forced to return to its Base.
+ * Sets whether this craft has just done a ground mission and is forced to
+ * return to its Base.
  * @param mission - true if this craft needs to return to base
  */
-void Craft::setMissionComplete(const bool mission)
+void Craft::setMissionReturn(const bool mission)
 {
 	_mission = mission;
 }

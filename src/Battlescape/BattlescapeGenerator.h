@@ -56,7 +56,8 @@ class Vehicle;
 
 /**
  * A utility class that generates the initial battlescape data.
- * Taking into account mission type, craft and ufo involved, terrain type,...
+ * @note Taking into account mission type, craft and ufo involved, terrain type
+ * ... etc.
  */
 class BattlescapeGenerator
 {
@@ -259,6 +260,9 @@ private:
 				Craft* craft,
 				Base* base = NULL,
 				size_t selUnit = 0);
+
+		/// Sets up the objectives for the map.
+		void setupObjectives(AlienDeployment* const deployRule);
 };
 
 }

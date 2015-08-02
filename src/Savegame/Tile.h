@@ -208,11 +208,14 @@ protected:
 		int getShade() const;
 
 		/// Destroys a tile part.
-		bool destroy(int part);
+		bool destroy(
+				int part,
+				SpecialTileType type);
 		/// Damages a tile part.
 		bool damage(
 				int part,
-				int power);
+				int power,
+				SpecialTileType type);
 
 		/// Sets a virtual explosive on this tile to detonate later.
 		void setExplosive(

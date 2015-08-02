@@ -30,16 +30,17 @@
 namespace OpenXcom
 {
 
-class Ruleset;
-class RuleTerrain;
-
-
+/**
+ *
+ */
 struct ItemSet
 {
 	std::vector<std::string> items;
 };
 
-
+/**
+ *
+ */
 struct DeploymentData
 {
 	int
@@ -53,7 +54,9 @@ struct DeploymentData
 	std::vector<ItemSet> itemSets;
 };
 
-
+/**
+ *
+ */
 struct BriefingData
 {
 	bool
@@ -80,6 +83,9 @@ struct BriefingData
 };
 
 
+class Ruleset;
+class RuleTerrain;
+
 /**
  * Represents a specific type of Alien Deployment.
  * Contains constant info about an Alien Deployment like the number of aliens
@@ -100,15 +106,17 @@ private:
 		_noRetreat;
 	int
 		_civilians,
+		_despawnPenalty,
 		_durationMax,
 		_durationMin,
 		_height,
 		_length,
 		_markerIcon,
-//		_maxDepth,
-//		_minDepth,
-//		_maxSiteDepth,
-//		_minSiteDepth,
+		_objectiveCompleteScore,
+		_objectiveFailedScore,
+		_objectivesRequired,
+		_objectiveType,
+		_pointsPer30,
 		_shade,
 		_width;
 
@@ -116,6 +124,9 @@ private:
 		_alert,
 		_markerName,
 		_nextStage,
+		_objectiveCompleteText,
+		_objectiveFailedText,
+		_objectivePopup,
 		_race,
 		_script,
 		_type;
@@ -191,15 +202,25 @@ private:
 		/// Gets the list of music to pick from.
 		const std::vector<std::string>& getMusic();
 
-		/// Gets the minimum depth.
-//		int getMinDepth() const;
-		/// Gets the maximum depth.
-//		int getMaxDepth() const;
+		/// Gets the objective type for this mission.
+		int getObjectiveType() const;
+		/// Gets a fixed number of objectives required if any.
+		int getObjectivesRequired() const;
+		/// Gets the string to pop up when the mission objectives are complete.
+		std::string getObjectivePopup() const;
+		/// Fills out the objective complete info.
+		bool getObjectiveCompleteInfo(
+				std::string& text,
+				int& score) const;
+		/// Fills out the objective failed info.
+		bool getObjectiveFailedInfo(
+				std::string& text,
+				int& score) const;
 
-		/// Gets the minimum site depth.
-//		int getMinSiteDepth() const;
-		/// Gets the maximum site depth.
-//		int getMaxSiteDepth() const;
+		/// Gets the score penalty xCom receives for ignoring a site.
+		const int getDespawnPenalty() const;
+		/// Gets the half-hourly score penalty xCom receives for a site existing.
+		const int getPointsPer30() const;
 };
 
 }

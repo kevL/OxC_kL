@@ -2215,22 +2215,26 @@ BattleUnit* TileEngine::hit(
 			}
 			//Log(LOG_INFO) << ". . power by Type = " << power;
 
-			if (_battleSave->getTacticalType() == TCT_BASEDEFENSE
-				&& part == VOXEL_OBJECT
-				&& tile->getMapData(VOXEL_OBJECT)->isBaseModule() == true
-				&& power >= tile->getMapData(O_OBJECT)->getArmor())
+			if (power > 0)
 			{
-				//Log(LOG_INFO) << ". . . vs Object hp  = " << tile->getMapData(O_OBJECT)->getArmor();
-				_battleSave->getModuleMap()
-									[(targetPos_voxel.x / 16) / 10]
-									[(targetPos_voxel.y / 16) / 10].second--;
-			}
+				if (part == VOXEL_OBJECT
+					&& _battleSave->getTacticalType() == TCT_BASEDEFENSE
+					&& tile->getMapData(O_OBJECT)->isBaseModule() == true
+					&& tile->getMapData(O_OBJECT)->getArmor() <= power)
+				{
+					//Log(LOG_INFO) << ". . . vs Object hp  = " << tile->getMapData(O_OBJECT)->getArmor();
+					_battleSave->getModuleMap()
+										[(targetPos_voxel.x / 16) / 10]
+										[(targetPos_voxel.y / 16) / 10].second--;
+				}
 
-			if (tile->damage(
-						part,
-						power) == true)
-			{
-				_battleSave->addDestroyedObjective();
+				if (tile->damage(
+							part,
+							power,
+							_battleSave->getObjectiveType()) == true)
+				{
+					_battleSave->addDestroyedObjective();
+				}
 			}
 		}
 		else if (part == VOXEL_UNIT) // battleunit part HIT SUCCESS.
@@ -4513,8 +4517,12 @@ bool TileEngine::detonate(Tile* const tile)
 			else
 				partTemp = part;
 
-			if (tiles[i]->destroy(part) == true) // DESTROY HERE <-|
+			if (tiles[i]->destroy( // DESTROY HERE <-|
+								part,
+								_battleSave->getObjectiveType()) == true)
+			{
 				objectiveDestroyed = true;
+			}
 
 			part = partTemp;
 //			if (tiles[i]->getMapData(part) != NULL) // update values

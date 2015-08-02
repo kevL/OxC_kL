@@ -55,6 +55,7 @@
 
 #include "../Resource/ResourcePack.h"
 
+#include "../Ruleset/AlienDeployment.h"
 #include "../Ruleset/RuleArmor.h"
 #include "../Ruleset/RuleInventory.h"
 #include "../Ruleset/RuleItem.h"
@@ -1444,7 +1445,8 @@ void BattlescapeGame::endTurnPhase() // private.
 								liveAliens,
 								liveSoldiers);
 
-	if (_battleSave->allObjectivesDestroyed() == true) // brain death.
+	if (_battleSave->allObjectivesDestroyed() == true // brain death.
+		&& _battleSave->getObjectiveType() == MUST_DESTROY)
 	{
 		_parentState->finishBattle(
 								false,
@@ -1919,8 +1921,8 @@ void BattlescapeGame::checkForCasualties(
 				_parentState->showPsiButton(false);
 		}
 
-		if (_battleSave->getTacticalType() == TCT_BASEASSAULT
-			&& _battleSave->getDestroyed() == false)
+/*		if (_battleSave->getTacticalType() == TCT_BASEASSAULT // do this in SavedBattleGame::addDestroyedObjective()
+			&& _battleSave->getControlDestroyed() == false)
 		{
 			bool controlDestroyed = true;
 			for (size_t
@@ -1938,12 +1940,12 @@ void BattlescapeGame::checkForCasualties(
 
 			if (controlDestroyed == true)
 			{
-				_battleSave->setDestroyed();
+				_battleSave->setControlDestroyed();
 
 				Game* const game = _parentState->getGame();
 				game->pushState(new InfoboxOKState(game->getLanguage()->getString("STR_ALIEN_BASE_CONTROL_DESTROYED")));
 			}
-		}
+		} */
 	}
 }
 
@@ -3741,15 +3743,6 @@ void BattlescapeGame::cleanupDeleted()
 }
 
 /**
- * Gets the depth of the battlescape.
- * @return, the depth of the battlescape
- */
-/* const int BattlescapeGame::getDepth() const
-{
-	return _battleSave->getDepth();
-} */
-
-/**
  * Gets the BattlescapeState.
  * @note For turning on/off the visUnits indicators from UnitWalk/TurnBStates.
  * @return, pointer to BattlescapeState
@@ -3775,6 +3768,21 @@ BattleItem* BattlescapeGame::getFist() const
 BattleItem* BattlescapeGame::getAlienPsi() const
 {
 	return _alienPsi;
+}
+
+/**
+ * Sets up a mission complete notification.
+ */
+void BattlescapeGame::objectiveDone()
+{
+	const Game* const game = _parentState->getGame();
+	const AlienDeployment* const deployRule = game->getRuleset()->getDeployment(_battleSave->getMissionType());
+	if (deployRule != NULL)
+	{
+		const std::string messagePop = deployRule->getObjectivePopup();
+		if (messagePop.empty() == false)
+			_infoboxQueue.push_back(new InfoboxOKState(game->getLanguage()->getString(messagePop)));
+	}
 }
 
 }
