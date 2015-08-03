@@ -4478,7 +4478,7 @@ void BattlescapeGenerator::setupObjectives(AlienDeployment* const deployRule)
 	if (targetType > -1)
 	{
 		int
-			reqd = deployRule->getObjectivesRequired(),
+			reqd = deployRule->getObjectivesReqd(),
 			actual = 0;
 
 		for (size_t

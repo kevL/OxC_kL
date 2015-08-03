@@ -114,7 +114,7 @@ private:
 		_markerIcon,
 		_objectiveCompleteScore,
 		_objectiveFailedScore,
-		_objectivesRequired,
+		_objectivesReqd,
 		_objectiveType,
 		_pointsPer30,
 		_shade,
@@ -205,7 +205,7 @@ private:
 		/// Gets the objective type for this mission.
 		int getObjectiveType() const;
 		/// Gets a fixed number of objectives required if any.
-		int getObjectivesRequired() const;
+		int getObjectivesReqd() const;
 		/// Gets the string to pop up when the mission objectives are complete.
 		std::string getObjectivePopup() const;
 		/// Fills out the objective complete info.

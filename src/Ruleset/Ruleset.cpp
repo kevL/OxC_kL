@@ -1107,7 +1107,7 @@ void Ruleset::loadFile(const std::string& file) // protected.
 			for (YAML::const_iterator
 					j = (*i)["maleScream"].begin();
 					j != (*i)["maleScream"].end()
-						&& k < 3;
+						&& k != 3;
 					++j,
 						++k)
 			{
@@ -1121,7 +1121,7 @@ void Ruleset::loadFile(const std::string& file) // protected.
 			for (YAML::const_iterator
 					j = (*i)["femaleScream"].begin();
 					j != (*i)["femaleScream"].end()
-						&& k < 3;
+						&& k != 3;
 					++j,
 						++k)
 			{
@@ -1136,7 +1136,7 @@ void Ruleset::loadFile(const std::string& file) // protected.
 			for (YAML::const_iterator
 					j = (*i)["windowPopup"].begin();
 					j != (*i)["windowPopup"].end()
-						&& k < 3;
+						&& k != 3;
 					++j,
 						++k)
 			{

@@ -1074,7 +1074,7 @@ void DebriefingState::prepareDebriefing() // private.
 				if (missionAccomplished == true)
 				{
 					objectiveCompleteScore = std::max(
-												50,
+												(objectiveCompleteScore + 9) / 10,
 												objectiveCompleteScore - (_diff * 50));
 
 					if (objectiveCompleteText.empty() == false)

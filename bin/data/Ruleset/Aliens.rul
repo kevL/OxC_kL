@@ -1613,7 +1613,7 @@ alienDeployments:
 #      showCraftText: false
 #      textOffset: -16
     objectiveType: 14
-    objectivesRequired: 4
+    objectivesReqd: 4
 #Alien Tech Level, http://openxcom.org/forum/index.php?topic=1356.0
 #kaiser_bill,
 #this links into the alien equipment loadouts specified under the UFO crew loadout section

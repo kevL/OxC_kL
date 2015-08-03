@@ -150,7 +150,7 @@ AlienDeployment::AlienDeployment(const std::string& type)
 		_durationMin(0),
 		_durationMax(0),
 		_objectiveType(0),
-		_objectivesRequired(0),
+		_objectivesReqd(0),
 		_objectiveCompleteScore(0),
 		_objectiveFailedScore(0),
 		_despawnPenalty(0),
@@ -202,11 +202,11 @@ void AlienDeployment::load(const YAML::Node& node)
 		_musics.push_back((*i).as<std::string>(""));
 	}
 
-	_objectiveType		= node["objectiveType"]		.as<int>(_objectiveType);
-	_objectivesRequired	= node["objectivesRequired"].as<int>(_objectivesRequired);
-	_objectivePopup		= node["objectivePopup"]	.as<std::string>(_objectivePopup);
-	_despawnPenalty		= node["despawnPenalty"]	.as<int>(_despawnPenalty);
-	_pointsPer30		= node["pointsPer30"]		.as<int>(_pointsPer30);
+	_objectiveType	= node["objectiveType"]	.as<int>(_objectiveType);
+	_objectivesReqd	= node["objectivesReqd"].as<int>(_objectivesReqd);
+	_objectivePopup	= node["objectivePopup"].as<std::string>(_objectivePopup);
+	_despawnPenalty	= node["despawnPenalty"].as<int>(_despawnPenalty);
+	_pointsPer30	= node["pointsPer30"]	.as<int>(_pointsPer30);
 
 	if (node["objectiveComplete"])
 	{
@@ -413,9 +413,9 @@ int AlienDeployment::getObjectiveType() const
  * Gets the number of objectives required by this mission.
  * @return, number of objectives
  */
-int AlienDeployment::getObjectivesRequired() const
+int AlienDeployment::getObjectivesReqd() const
 {
-	return _objectivesRequired;
+	return _objectivesReqd;
 }
 
 /**

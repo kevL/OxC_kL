@@ -283,22 +283,33 @@ void ExplosionBState::init()
 	{
 		_hit = _pistolWhip
 			|| _item->getRules()->getBattleType() == BT_MELEE
-			|| _item->getRules()->getBattleType() == BT_PSIAMP;	// includes aLien psi-weapon.
-																// They took this out and use 'bool psi' instead ....
-																// supposedly to correct some cursor-stuff that was broke for them.
+			|| _item->getRules()->getBattleType() == BT_PSIAMP;
+
 		int
-			startFrame = _item->getRules()->getHitAnimation(),
+			result,
+			start,
 			sound = _item->getRules()->getHitSound();
 
 //		if (_cosmetic == true)
 		if (_hit == true)
 		{
-			startFrame = _item->getRules()->getMeleeAnimation();
+			if (_hitSuccess == true
+				|| _item->getRules()->getBattleType() == BT_PSIAMP)
+			{
+				result = 1;
+			}
+			else
+				result = -1;
+
+			start = _item->getRules()->getMeleeAnimation();
 
 			if (_item->getRules()->getBattleType() != BT_PSIAMP)
-				sound = -1; // kL, done in ProjectileFlyBState for melee hits.
-
-//			sound = _item->getRules()->getMeleeHitSound(); // this would mute Psi-hit sound.
+				sound = -1;
+		}
+		else
+		{
+			result = 0;
+			start = _item->getRules()->getHitAnimation();
 		}
 
 		if (sound != -1)
@@ -309,36 +320,20 @@ void ExplosionBState::init()
 											-1,
 											_parent->getMap()->getSoundAngle(targetPos));
 
-//		if (_hitSuccess
-//			|| _hit == false)	// note: This would prevent map-reveal on aLien melee attacks.
-								// Because reveal depends if Explosions are queued ....
-//		{
-		int hitResult;
-		if (_hit == true)
+		if (start != -1)
 		{
-			if (_hitSuccess == true
-				|| _item->getRules()->getBattleType() == BT_PSIAMP)
-			{
-				hitResult = 1;
-			}
-			else
-				hitResult = -1;
+			Explosion* const explosion = new Explosion(
+													_center,
+													start,
+													0,
+													false,
+													result); // --> _cosmetic effect bleh.
+			_parent->getMap()->getExplosions()->push_back(explosion);
+
+			_parent->setStateInterval(std::max(
+											1,
+											((BattlescapeState::DEFAULT_ANIM_SPEED * 5 / 7) - (_item->getRules()->getExplosionSpeed() * 10))));
 		}
-		else
-			hitResult = 0;
-
-		Explosion* const explosion = new Explosion( // animation.
-												_center,
-												startFrame,
-												0,
-												false,
-												hitResult); // --> _cosmetic effect bleh.
-		_parent->getMap()->getExplosions()->push_back(explosion);
-
-		_parent->setStateInterval(std::max(
-										1,
-										((BattlescapeState::DEFAULT_ANIM_SPEED * 5 / 7) - (_item->getRules()->getExplosionSpeed() * 10))));
-//		}
 
 		Camera* const exploCam = _parent->getMap()->getCamera(); // -> apply more cosmetics
 		if (_forceCamera == true
@@ -380,7 +375,7 @@ void ExplosionBState::think()
 	}
 
 	if (_parent->getMap()->getExplosions()->empty() == true)
-		--_extend; // not working as intended; needs to go to Explosion class, so that explosions-vector doesn't 'empty' so fast.
+		--_extend; // not working as intended; needs to go to Explosion class so that explosions-vector doesn't 'empty' so fast.
 
 	if (_extend < 1)
 		explode(); */
@@ -388,6 +383,9 @@ void ExplosionBState::think()
 
 //	if (_parent->getMap()->getBlastFlash() == false)
 //	{
+	if (_parent->getMap()->getExplosions()->empty() == true)
+		explode();
+
 	for (std::list<Explosion*>::const_iterator
 			i = _parent->getMap()->getExplosions()->begin();
 			i != _parent->getMap()->getExplosions()->end();
@@ -395,7 +393,6 @@ void ExplosionBState::think()
 	{
 		if ((*i)->animate() == false)
 		{
-
 			delete *i;
 			i = _parent->getMap()->getExplosions()->erase(i);
 

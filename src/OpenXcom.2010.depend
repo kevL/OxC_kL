@@ -4712,7 +4712,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Soldier.h"
 
-1438163377 source:f:\git\openxcom\src\basescape\craftsstate.cpp
+1438532124 source:f:\git\openxcom\src\basescape\craftsstate.cpp
 	"CraftsState.h"
 	"CraftInfoState.h"
 	"SellState.h"
@@ -5314,7 +5314,7 @@
 	"Position.h"
 	"../Engine/State.h"
 
-1438520039 f:\git\openxcom\src\ruleset\aliendeployment.h
+1438558003 f:\git\openxcom\src\ruleset\aliendeployment.h
 	"../Resource/XcomResourcePack.h"
 
 1438165681 source:f:\git\openxcom\src\battlescape\actionmenuitem.cpp
@@ -5439,7 +5439,7 @@
 1432984133 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1438526004 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1438533481 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	"AlienBAIState.h"
 	"BattlescapeState.h"
@@ -5607,7 +5607,7 @@
 1430149550 f:\git\openxcom\src\battlescape\battlescapemessage.h
 	"../Engine/Surface.h"
 
-1438166312 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1438531189 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	"AbortMissionState.h"
 	"ActionMenuState.h"
@@ -5771,7 +5771,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1438526055 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
+1438557473 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
 	"DebriefingState.h"
 	"CannotReequipState.h"
 	"CommendationDeadState.h"
@@ -6893,7 +6893,7 @@
 1430149550 f:\git\openxcom\src\geoscape\fundingstate.h
 	"../Engine/State.h"
 
-1438169708 source:f:\git\openxcom\src\geoscape\geoscapecraftstate.cpp
+1438532124 source:f:\git\openxcom\src\geoscape\geoscapecraftstate.cpp
 	"GeoscapeCraftState.h"
 	"GeoscapeState.h"
 	"Globe.h"
@@ -7120,7 +7120,7 @@
 	"../Engine/Action.h"
 	"../Engine/State.h"
 
-1438169932 source:f:\git\openxcom\src\geoscape\interceptstate.cpp
+1438532124 source:f:\git\openxcom\src\geoscape\interceptstate.cpp
 	"InterceptState.h"
 	"ConfirmDestinationState.h"
 	"GeoscapeCraftState.h"
@@ -8159,7 +8159,7 @@
 1430149550 f:\git\openxcom\src\ruleset\extrasounds.h
 	<yaml-cpp/yaml.h>
 
-1438520032 source:f:\git\openxcom\src\ruleset\aliendeployment.cpp
+1438533145 source:f:\git\openxcom\src\ruleset\aliendeployment.cpp
 	"AlienDeployment.h"
 
 1437431771 source:f:\git\openxcom\src\ruleset\alienrace.cpp
@@ -8414,7 +8414,7 @@
 	"Country.h"
 	"../Ruleset/RuleCountry.h"
 
-1438172398 source:f:\git\openxcom\src\savegame\craft.cpp
+1438532124 source:f:\git\openxcom\src\savegame\craft.cpp
 	"Craft.h"
 	"AlienBase.h"
 	"Base.h"
@@ -8490,7 +8490,7 @@
 	"../Interface/Text.h"
 	"../Ruleset/RuleResearch.h"
 
-1438518054 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
+1438533572 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
 	"SavedBattleGame.h"
 	"BattleItem.h"
 	"Node.h"
