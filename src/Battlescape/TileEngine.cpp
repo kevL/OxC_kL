@@ -468,7 +468,10 @@ bool TileEngine::calculateFOV(BattleUnit* const unit)
 
 					if (_battleSave->getTile(posTest) != NULL)
 					{
-						if (_battleSave->getBattleGame()->getPanicHandled() == true) // spot units ->>
+						const bool preBattle = _battleSave->getBattleGame() == NULL;
+
+						if (preBattle == true
+							|| _battleSave->getBattleGame()->getPanicHandled() == true) // spot units ->>
 						{
 							spottedUnit = _battleSave->getTile(posTest)->getUnit();
 
@@ -487,7 +490,8 @@ bool TileEngine::calculateFOV(BattleUnit* const unit)
 									spottedUnit->setUnitVisible();
 									spottedUnit->getTile()->setTileVisible();
 
-									if (_spotSound == true
+									if (preBattle == false
+										&& _spotSound == true
 										&& ret == true // play aggro sound if non-MC'd xCom unit spots a not-previously-visible hostile.
 										&& unit->getOriginalFaction() == FACTION_PLAYER
 										&& spottedUnit->getFaction() == FACTION_HOSTILE)

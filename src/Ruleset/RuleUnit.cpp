@@ -45,6 +45,7 @@ RuleUnit::RuleUnit(const std::string& type)
 		_specab(SPECAB_NONE),
 		_livingWeapon(false),
 		_female(false),
+		_dog(false),
 		_mechanical(false), // kL: these two should perhaps go to Armor class.
 		_psiImmune(false),
 		_canOpenDoor(true)
@@ -87,6 +88,7 @@ void RuleUnit::load(
 	_meleeWeapon	= node["meleeWeapon"]		.as<std::string>(_meleeWeapon);
 	_builtInWeapons	= node["builtInWeapons"]	.as<std::vector<std::string> >(_builtInWeapons);
 	_female			= node["female"]			.as<bool>(_female);
+	_dog			= node["dog"]				.as<bool>(_dog);
 	_mechanical		= node["mechanical"]		.as<bool>(_mechanical);
 	_psiImmune		= node["psiImmune"]			.as<bool>(_psiImmune);
 	_canOpenDoor	= node["canOpenDoor"]		.as<bool>(_canOpenDoor);
@@ -309,6 +311,15 @@ const std::vector<std::string>& RuleUnit::getBuiltInWeapons() const
 const bool RuleUnit::isFemale() const
 {
 	return _female;
+}
+
+/**
+ * Gets if this RuleUnit is dog.
+ * @return, true if dog
+ */
+const bool RuleUnit::isDog() const
+{
+	return _dog;
 }
 
 /**

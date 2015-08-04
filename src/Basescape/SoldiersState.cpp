@@ -287,6 +287,8 @@ std::sort(vPair.begin(), vPair.end(), sort_second()); */
  */
 void SoldiersState::btnSortClick(Action*)
 {
+	_base->setCurrentSoldierSlot(_lstSoldiers->getScroll());
+
 	std::multimap<int, Soldier*> soldiersOrdered;
 	const UnitStats* stats;
 	int weight;

@@ -51,6 +51,7 @@ units:
     aggroSound: 210
     energyRecovery: 80
     canOpenDoor: false
+    dog: true
 armors:
   - type: DOGE_ARMOR
     spriteSheet: DOGE.PCK

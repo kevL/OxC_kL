@@ -222,6 +222,7 @@ class RuleUnit
 private:
 	bool
 		_canOpenDoor,
+		_dog,
 		_female,
 		_livingWeapon,
 		_mechanical,
@@ -316,6 +317,9 @@ private:
 		/// Gets if this RuleUnit is female.
 		const bool isFemale() const;
 
+		/// Gets if this RuleUnit is dog.
+		const bool isDog() const;
+
 		/// Gets if this RuleUnit is a mechanical apparatus.
 		const bool isMechanical() const;
 		/// Gets if this RuleUnit is immune to psionic attacks.
@@ -361,17 +365,17 @@ struct convert<OpenXcom::UnitStats>
 	{
 		if (node.IsMap() == false) return false;
 
-		rhs.tu			= node["tu"].as<int>(rhs.tu);
-		rhs.stamina		= node["stamina"].as<int>(rhs.stamina);
-		rhs.health		= node["health"].as<int>(rhs.health);
-		rhs.bravery		= node["bravery"].as<int>(rhs.bravery);
-		rhs.reactions	= node["reactions"].as<int>(rhs.reactions);
-		rhs.firing		= node["firing"].as<int>(rhs.firing);
-		rhs.throwing	= node["throwing"].as<int>(rhs.throwing);
-		rhs.strength	= node["strength"].as<int>(rhs.strength);
-		rhs.psiStrength	= node["psiStrength"].as<int>(rhs.psiStrength);
-		rhs.psiSkill	= node["psiSkill"].as<int>(rhs.psiSkill);
-		rhs.melee		= node["melee"].as<int>(rhs.melee);
+		rhs.tu			= node["tu"]			.as<int>(rhs.tu);
+		rhs.stamina		= node["stamina"]		.as<int>(rhs.stamina);
+		rhs.health		= node["health"]		.as<int>(rhs.health);
+		rhs.bravery		= node["bravery"]		.as<int>(rhs.bravery);
+		rhs.reactions	= node["reactions"]		.as<int>(rhs.reactions);
+		rhs.firing		= node["firing"]		.as<int>(rhs.firing);
+		rhs.throwing	= node["throwing"]		.as<int>(rhs.throwing);
+		rhs.strength	= node["strength"]		.as<int>(rhs.strength);
+		rhs.psiStrength	= node["psiStrength"]	.as<int>(rhs.psiStrength);
+		rhs.psiSkill	= node["psiSkill"]		.as<int>(rhs.psiSkill);
+		rhs.melee		= node["melee"]			.as<int>(rhs.melee);
 
 		return true;
 	}

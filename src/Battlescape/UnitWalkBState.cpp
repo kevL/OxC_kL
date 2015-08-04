@@ -1226,8 +1226,12 @@ void UnitWalkBState::setWalkSpeed(bool gravLift) const // private.
 	int interval;
 	if (_unit->getFaction() == FACTION_PLAYER)
 	{
-		if (_action.dash == true)
+		if (_action.dash == true
+			|| (_unit->getUnitRules() != NULL
+				&& _unit->getUnitRules()->isDog() == true))
+		{
 			interval = Options::battleXcomSpeed * 2 / 3;
+		}
 		else
 			interval = Options::battleXcomSpeed;
 	}
@@ -1235,7 +1239,7 @@ void UnitWalkBState::setWalkSpeed(bool gravLift) const // private.
 		interval = Options::battleAlienSpeed;
 
 	if (gravLift == true)
-		interval = interval * 7 / 4;
+		interval = interval * 2;
 
 	_parent->setStateInterval(static_cast<Uint32>(interval));
 }
