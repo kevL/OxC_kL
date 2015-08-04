@@ -540,7 +540,7 @@ private:
 
 	RuleArmor* _armor;
 	Soldier* _geoscapeSoldier;
-	RuleUnit* _unitRules;
+	RuleUnit* _unitRule;
 
 	MovementType _moveType;
 	SoldierGender _gender;
@@ -1031,7 +1031,7 @@ private:
 
 		/// Gets this BattleUnit's rules if non-Soldier else NULL.
 		RuleUnit* getUnitRules() const
-		{ return _unitRules; }
+		{ return _unitRule; }
 
 		/// Sets this unit's rank integer.
 		void setRankInt(int ranks);

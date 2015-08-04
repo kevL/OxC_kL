@@ -471,7 +471,7 @@ bool ProjectileFlyBState::createNewProjectile() // private.
 	++_action.autoShotCount;
 
 	if (_unit->getGeoscapeSoldier() != NULL
-		&& (   _action.type != BA_THROW
+		&& (_action.type != BA_THROW
 			|| _action.type != BA_LAUNCH))
 	{
 		++_unit->getStatistics()->shotsFiredCounter;

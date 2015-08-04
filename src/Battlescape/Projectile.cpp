@@ -92,13 +92,13 @@ Projectile::Projectile(
 		{
 			//Log(LOG_INFO) << "Create Projectile -> BA_THROW";
 			_throwSprite =_res->getSurfaceSet("FLOOROB.PCK")->getFrame(getItem()->getRules()->getFloorSprite());
-			_speed = _speed * 3 / 7;
+			_speed = _speed / 2;
 		}
 		else // ba_SHOOT!! or hit, or spit
 		{
 			//Log(LOG_INFO) << "Create Projectile -> not BA_THROW";
 			if (_action.weapon->getRules()->getArcingShot() == true)
-				_speed = _speed * 4 / 7;
+				_speed = _speed / 2;
 
 			const BattleItem* const bullet = _action.weapon->getAmmoItem(); // the weapon itself if not-req'd. eg, lasers/melee
 			if (bullet != NULL) // try to get the required info from the bullet

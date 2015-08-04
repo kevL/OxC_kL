@@ -63,7 +63,7 @@ BattleUnit::BattleUnit(
 		const int diff)
 	:
 		_geoscapeSoldier(soldier),
-		_unitRules(NULL),
+		_unitRule(NULL),
 		_faction(FACTION_PLAYER),
 		_originalFaction(FACTION_PLAYER),
 		_killedBy(FACTION_NONE), // was, FACTION_PLAYER
@@ -226,7 +226,7 @@ BattleUnit::BattleUnit(
 		const int month,
 		BattlescapeGame* const battleGame) // for converted Units
 	:
-		_unitRules(unitRule),
+		_unitRule(unitRule),
 		_geoscapeSoldier(NULL),
 		_id(id),
 		_faction(faction),
@@ -1519,7 +1519,7 @@ int BattleUnit::damage(
 	if (power > 0)
 	{
 		const bool isSelfAware = _geoscapeSoldier != NULL
-							  || (_unitRules->isMechanical() == false
+							  || (_unitRule->isMechanical() == false
 									&& _race != "STR_ZOMBIE");
 		int wounds = 0;
 
@@ -1611,7 +1611,7 @@ int BattleUnit::damage(
 		&& _status != STATUS_UNCONSCIOUS
 		&& dType != DT_STUN
 		&& (_geoscapeSoldier != NULL
-			|| _unitRules->isMechanical() == false))
+			|| _unitRule->isMechanical() == false))
 	{
 		playHitSound();
 	}
@@ -1635,7 +1635,12 @@ void BattleUnit::playHitSound()
 		sound = RNG::generate(44, 46);
 	else if (_originalFaction == FACTION_PLAYER) // _type == "SOLDIER"
 	{
-		if (_gender == GENDER_MALE)
+		if (_unitRule != NULL
+			&& _unitRule->isDog() == true)
+		{
+			sound = _deathSound;
+		}
+		else if (_gender == GENDER_MALE)
 			sound = RNG::generate(141, 151);
 		else
 			sound = RNG::generate(121, 135);
@@ -1696,8 +1701,8 @@ int BattleUnit::getStun() const
 void BattleUnit::knockOut(BattlescapeGame* battleGame)
 {
 	if (_armor->getSize() > 1	// large units die
-		|| (_unitRules != NULL	// so do scout drones
-			&& _unitRules->isMechanical() == true))
+		|| (_unitRule != NULL	// so do scout drones
+			&& _unitRule->isMechanical() == true))
 	{
 		_health = 0;
 	}
@@ -2416,7 +2421,7 @@ void BattleUnit::prepUnit(bool full)
 //				|| isOut() == false) */
 		if (_stunLevel > 0
 			&& (_geoscapeSoldier != NULL
-				|| _unitRules->isMechanical() == false))
+				|| _unitRule->isMechanical() == false))
 		{
 			healStun(RNG::generate(1,3)); // recover stun
 		}
@@ -2501,7 +2506,7 @@ void BattleUnit::initTu(
 					energy /= 3;
 			}
 			else // aLiens & Tanks.
-				energy = energy * _unitRules->getEnergyRecovery() / 100;
+				energy = energy * _unitRule->getEnergyRecovery() / 100;
 
 			energy = static_cast<int>(Round(static_cast<double>(energy) * getAccuracyModifier()));
 
@@ -3011,8 +3016,8 @@ std::string BattleUnit::getMeleeWeapon() const
 		return getItem("STR_LEFT_HAND")->getRules()->getType();
 	}
 
-	if (_unitRules != NULL) // -> do not CTD for Mc'd xCom agents.
-		return _unitRules->getMeleeWeapon();
+	if (_unitRule != NULL) // -> do not CTD for Mc'd xCom agents.
+		return _unitRule->getMeleeWeapon();
 
 	return "";
 }
@@ -3486,7 +3491,7 @@ void BattleUnit::morphine()
 	}
 
 	if (_geoscapeSoldier != NULL
-		|| (_unitRules->isMechanical() == false
+		|| (_unitRule->isMechanical() == false
 			&& _race != "STR_ZOMBIE"))
 	{
 		_stunLevel += 10;
@@ -3699,7 +3704,7 @@ bool BattleUnit::isWoundable() const
 	return _status != STATUS_DEAD
 		&& (_geoscapeSoldier != NULL
 			|| (Options::alienBleeding == true
-				&& _unitRules->isMechanical() == false
+				&& _unitRule->isMechanical() == false
 				&& _race != "STR_ZOMBIE"));
 }
 
@@ -3712,7 +3717,7 @@ bool BattleUnit::isFearable() const
 	return _status != STATUS_DEAD
 		&& _status != STATUS_UNCONSCIOUS
 		&& (_geoscapeSoldier != NULL
-			|| (_unitRules->isMechanical() == false
+			|| (_unitRule->isMechanical() == false
 				&& _race != "STR_ZOMBIE"));
 }
 
@@ -3724,7 +3729,7 @@ bool BattleUnit::isHealable() const
 {
 	return _status != STATUS_DEAD
 		&& (_geoscapeSoldier != NULL
-			|| (_unitRules->isMechanical() == false
+			|| (_unitRule->isMechanical() == false
 				&& _race != "STR_ZOMBIE"));
 }
 
@@ -4390,7 +4395,7 @@ bool BattleUnit::hasInventory() const
 {
 	return _armor->hasInventory() == true
 		&& (_geoscapeSoldier != NULL
-			|| (_unitRules->isMechanical() == false
+			|| (_unitRule->isMechanical() == false
 				&& _rank != "STR_LIVE_TERRORIST"));
 }
 
