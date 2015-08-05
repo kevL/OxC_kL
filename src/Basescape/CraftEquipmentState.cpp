@@ -608,7 +608,12 @@ void CraftEquipmentState::moveRightByValue(int change)
 					if (itRule->getCompatibleAmmo()->empty() == false)
 					{
 						const RuleItem* const ammoRule = _game->getRuleset()->getItem(itRule->getCompatibleAmmo()->front());
-						const int clipSize = ammoRule->getClipSize();
+						int clipSize = ammoRule->getClipSize();
+						if (clipSize > 0
+							&& itRule->getClipSize() > 0)
+						{
+							clipSize = itRule->getClipSize() / clipSize;
+						}
 
 						if (_game->getSavedGame()->getMonthsPassed() == -1)
 							baseQty = 1;

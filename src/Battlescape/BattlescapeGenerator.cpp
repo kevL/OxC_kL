@@ -482,6 +482,8 @@ void BattlescapeGenerator::nextStage()
 	_unitSequence = _battleSave->getUnits()->back()->getId() + 1;
 	const size_t unitCount = _battleSave->getUnits()->size();
 
+	_alienRace = deployRule->getRace();
+
 	for (std::vector<MissionSite*>::const_iterator
 			i = _gameSave->getMissionSites()->begin();
 			i != _gameSave->getMissionSites()->end()
@@ -511,7 +513,7 @@ void BattlescapeGenerator::nextStage()
 
 	deployCivilians(deployRule->getCivilians());
 
-/*kL: Prob. don't need this anymore; it's done via "revealedFloors" in MapScripting ... but not quite.
+/*	// Probly don't need this anymore; it's done via "revealedFloors" in MapScripting ... but not quite.
 	for (int
 			i = 0;
 			i < _battleSave->getMapSizeXYZ();

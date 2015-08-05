@@ -88,7 +88,7 @@ DebriefingState::DebriefingState()
 		_rules(_game->getRuleset()),
 		_gameSave(_game->getSavedGame()),
 		_diff(static_cast<int>(_game->getSavedGame()->getDifficulty())),
-		_tacBattle(_game->getSavedGame()->getMonthsPassed() == -1),
+		_skirmish(_game->getSavedGame()->getMonthsPassed() == -1),
 		_region(NULL),
 		_country(NULL),
 		_base(NULL),
@@ -124,12 +124,12 @@ DebriefingState::DebriefingState()
 
 	_window			= new Window(this, 320, 200);
 
-	_txtTitle		= new Text(280, 17, 16, 8);
-	_txtBaseLabel	= new Text(80, 9, 216, 8);
+	_txtTitle		= new Text(280, 17,  16, 8);
+	_txtBaseLabel	= new Text( 80,  9, 216, 8);
 
-	_txtItem		= new Text(184, 9, 16, 24);
-	_txtQuantity	= new Text(60, 9, 200, 24);
-	_txtScore		= new Text(36, 9, 260, 24);
+	_txtItem		= new Text(184, 9,  16, 24);
+	_txtQuantity	= new Text( 60, 9, 200, 24);
+	_txtScore		= new Text( 36, 9, 260, 24);
 
 	_lstStats		= new TextList(288, 81, 16, 32);
 
@@ -184,18 +184,18 @@ DebriefingState::DebriefingState()
 	_txtScore->setText(tr("STR_SCORE"));
 
 	_lstStats->setColumns(3, 176, 60, 36);
-	_lstStats->setDot();
 	_lstStats->setMargin();
+	_lstStats->setDot();
 
 	_lstRecovery->setColumns(3, 176, 60, 36);
-	_lstRecovery->setDot();
 	_lstRecovery->setMargin();
+	_lstRecovery->setDot();
 
 	_lstTotal->setColumns(2, 244, 36);
 	_lstTotal->setDot();
 
 
-	prepareDebriefing(); /*/ <- -- GATHER ALL DATA HERE <- < */
+	prepareDebriefing(); // <- |-- GATHER ALL DATA HERE <- < ||
 
 
 	_txtBaseLabel->setText(_base->getName(_game->getLanguage()));
@@ -352,7 +352,7 @@ DebriefingState::DebriefingState()
 		}
 	}
 
-	if (_tacBattle == false)
+	if (_skirmish == false)
 	{
 //		_txtCost->setText(tr("STR_COST_").arg(Text::formatFunding(_missionCost)));
 		_txtCost->setText(Text::formatFunding(_missionCost));
@@ -373,13 +373,15 @@ DebriefingState::DebriefingState()
 	_missionStatistics->shade = battle->getGlobalShade();
 
 	//Log(LOG_INFO) << "DebriefingState::cTor";
+	Soldier* sol;
+
 	for (std::vector<BattleUnit*>::const_iterator
 			i = battle->getUnits()->begin();
 			i != battle->getUnits()->end();
 			++i)
 	{
 		//Log(LOG_INFO) << ". iter BattleUnits";
-		Soldier* sol = (*i)->getGeoscapeSoldier();
+		sol = (*i)->getGeoscapeSoldier();
 		// NOTE: In the case of a dead soldier this pointer is Valid but points to garbage.
 		// Use that.
 		if (sol != NULL)
@@ -532,7 +534,7 @@ void DebriefingState::btnOkClick(Action*)
 	_gameSave->setBattleGame(NULL);
 	_game->popState();
 
-	if (_tacBattle == true)
+	if (_skirmish == true)
 		_game->setState(new MainMenuState());
 	else
 	{
@@ -701,6 +703,8 @@ void DebriefingState::prepareDebriefing() // private.
 
 	SavedBattleGame* const battleSave = _gameSave->getSavedBattle();
 	AlienDeployment* const deployRule = _rules->getDeployment(battleSave->getMissionType());
+	// kL_note: I have a strong suspicion that although checks are made for a
+	// valid deployRule below if there isn't one you're fucked anyway.
 
 	if (deployRule != NULL)
 	{
@@ -758,14 +762,15 @@ void DebriefingState::prepareDebriefing() // private.
 									true));
 
 	const bool aborted = battleSave->isAborted();
-	bool missionAccomplished = !aborted;
+	bool missionAccomplished = !aborted
+							 || battleSave->allObjectivesDestroyed() == true;
 
 	std::vector<Craft*>::const_iterator ptrCraft;
 
 	_missionStatistics->timeStat = *_gameSave->getTime();
 	_missionStatistics->type = battleSave->getMissionType();
 
-	if (_tacBattle == false) // Do all aLienRace types here for SoldierDiary stat.
+	if (_skirmish == false) // Do all aLienRace types here for SoldierDiary stat.
 	{
 		if (battleSave->getAlienRace().empty() == false) // safety.
 			_missionStatistics->alienRace = battleSave->getAlienRace();
@@ -792,7 +797,7 @@ void DebriefingState::prepareDebriefing() // private.
 		{
 			if ((*j)->isInBattlescape() == true)
 			{
-				if (_tacBattle == false)
+				if (_skirmish == false)
 					_missionCost = (*i)->craftExpense(*j);
 
 				const double
@@ -946,7 +951,9 @@ void DebriefingState::prepareDebriefing() // private.
 		}
 	}
 
-	if (found == false)
+	if (found == false
+		&& (deployRule == NULL
+			|| deployRule->getNextStage().empty() == true))
 	{
 		for (std::vector<MissionSite*>::const_iterator // Second - search for MissionSite.
 				i = _gameSave->getMissionSites()->begin();
@@ -966,10 +973,9 @@ void DebriefingState::prepareDebriefing() // private.
 	}
 
 
-	// lets see what happens with units; first,
-	// evaluate how many surviving XCom units there are
-	// and if they are unconscious
-	// and how many have died, for Commendations Ceremony.
+	// lets see what happens with units;
+	// evaluate how many surviving xCom units there are and if they are
+	// unconscious and how many have died - for the Awards Ceremony.
 	for (std::vector<BattleUnit*>::const_iterator
 			i = battleSave->getUnits()->begin();
 			i != battleSave->getUnits()->end();
@@ -1049,7 +1055,9 @@ void DebriefingState::prepareDebriefing() // private.
 	}
 
 
-	if (found == false) // alien base disappears if not aborted
+	if (found == false // alien base disappears if not aborted
+		&& (deployRule == NULL
+			|| deployRule->getNextStage().empty() == true))
 	{
 		for (std::vector<AlienBase*>::const_iterator // Third - search for AlienBase.
 				i = _gameSave->getAlienBases()->begin();
@@ -1060,11 +1068,12 @@ void DebriefingState::prepareDebriefing() // private.
 			{
 				_txtRecovery->setText(tr("STR_ALIEN_BASE_RECOVERY"));
 
-				missionAccomplished = true; // True unless a nav-console is found below_
+				missionAccomplished = true;
 
-				if (deployRule->getNextStage().empty() == false)
-					missionAccomplished = false;
-				else if (aborted == true
+//				if (deployRule->getNextStage().empty() == false)
+//					missionAccomplished = false;
+//				else
+				if (aborted == true
 					|| soldierLive == 0)
 				{
 					if (battleSave->allObjectivesDestroyed() == false)
@@ -1155,7 +1164,7 @@ void DebriefingState::prepareDebriefing() // private.
 				const Soldier* const sol = _gameSave->getSoldier((*i)->getId());
 				if (sol != NULL) // xCom soldier.
 				{
-					if (_tacBattle == false)
+					if (_skirmish == false)
 						_missionCost += _base->soldierExpense(
 															sol,
 															true);
@@ -1185,7 +1194,7 @@ void DebriefingState::prepareDebriefing() // private.
 				}
 				else // not soldier -> tank
 				{
-					if (_tacBattle == false)
+					if (_skirmish == false)
 						_missionCost += _base->hwpExpense(
 													(*i)->getArmor()->getSize() * (*i)->getArmor()->getSize(),
 													true);
@@ -1234,7 +1243,7 @@ void DebriefingState::prepareDebriefing() // private.
 					{
 						recoverItems((*i)->getInventory());
 
-						if (_tacBattle == false)
+						if (_skirmish == false)
 							_missionCost += _base->soldierExpense(sol);
 
 //						sol->calcStatString( // calculate new statString
@@ -1246,7 +1255,7 @@ void DebriefingState::prepareDebriefing() // private.
 					{
 						_base->getItems()->addItem(type);
 
-						if (_tacBattle == false)
+						if (_skirmish == false)
 							_missionCost += _base->hwpExpense((*i)->getArmor()->getSize() * (*i)->getArmor()->getSize());
 
 						const RuleItem* itRule;
@@ -1261,9 +1270,13 @@ void DebriefingState::prepareDebriefing() // private.
 								if (ammoItem != NULL
 									&& ammoItem->getAmmoQuantity() > 0)
 								{
+									int total = ammoItem->getAmmoQuantity();
+									if (itRule->getClipSize() != 0) // meaning this tank can store multiple clips
+										total /= ammoItem->getRules()->getClipSize();
+
 									_base->getItems()->addItem(
 															itRule->getCompatibleAmmo()->front(),
-															ammoItem->getAmmoQuantity());
+															total);
 								}
 							}
 						}
@@ -1277,9 +1290,13 @@ void DebriefingState::prepareDebriefing() // private.
 								if (ammoItem != NULL
 									&& ammoItem->getAmmoQuantity() > 0)
 								{
+									int total = ammoItem->getAmmoQuantity();
+									if (itRule->getClipSize() != 0) // meaning this tank can store multiple clips
+										total /= ammoItem->getRules()->getClipSize();
+
 									_base->getItems()->addItem(
 															itRule->getCompatibleAmmo()->front(),
-															ammoItem->getAmmoQuantity());
+															total);
 								}
 							}
 						}
@@ -1617,7 +1634,7 @@ void DebriefingState::prepareDebriefing() // private.
 
 			_base->getVehicles()->clear();
 		}
-		else if (_tacBattle == false)
+		else if (_skirmish == false)
 		{
 			for (std::vector<Base*>::const_iterator
 					i = _gameSave->getBases()->begin();

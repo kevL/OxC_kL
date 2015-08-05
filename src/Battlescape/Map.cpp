@@ -1260,7 +1260,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 													if (itY < endY - 1)
 													{
 														if (unitWest->getArmor()->getSize() == 2
-															&& (   unitWest->getDirection() == 1 // Should these tie into STATUS_WALKING; they do, see below_
+															&& (unitWest->getDirection() == 1 // Should these tie into STATUS_WALKING; they do, see below_
 																|| unitWest->getDirection() == 5
 																|| unitWest->getDirection() == 3
 																|| unitWest->getDirection() == 7)) // ... large unitsWest are sticking their noses & butts out, through northerly walls in tileSouthWest.
@@ -1579,93 +1579,96 @@ void Map::drawTerrain(Surface* const surface) // private.
 									i != _battleSave->getUnits()->end();
 									++i)
 							{
-								if ((*i)->getStatus() == STATUS_WALKING
-									&& (*i)->getVerticalDirection() == 0 // not sure if this is needed ...
-									&& (*i)->getArmor()->getSize() == 1)
+								if ((*i)->getStatus() == STATUS_WALKING)
 								{
-									const Position curPos = (*i)->getPosition();
-
-									if (curPos.z + 1 == itZ
-										&& (curPos.x < itX
-											|| curPos.y < itY))
+									if ((*i)->getArmor()->getSize() == 1
+										&& (*i)->getVerticalDirection() == 0) // not sure if this is needed ...
 									{
-										const Position
-											prePos = (*i)->getLastPosition(),
-											endPos = (*i)->getDestination();
+										const Position curPos = (*i)->getPosition();
 
-										if (prePos == mapPosition
-											|| endPos == mapPosition)
+										if (curPos.z + 1 == itZ
+											&& (curPos.x < itX
+												|| curPos.y < itY))
 										{
-											int
-												dir = (*i)->getDirection(),
-												pixelOffset_x, // sprites: 32x40
-												pixelOffset_y;
+											const Position
+												prePos = (*i)->getLastPosition(),
+												endPos = (*i)->getDestination();
 
-											if (dir == 0 || dir == 4) // THESE NEED EFFORTS.
+											if (prePos == mapPosition
+												|| endPos == mapPosition)
 											{
-												pixelOffset_x = 16;
-												pixelOffset_y = 16;
-											}
-											else if (dir == 5)
-											{
-												pixelOffset_x = -32;
-												pixelOffset_y = 24;
-											}
-											else if (dir == 1)
-											{
-												pixelOffset_x = 32;
-												pixelOffset_y = 24;
-											}
-											else if (dir == 2 || dir == 6)
-											{
-												pixelOffset_x = -16;
-												pixelOffset_y = 16;
-											}
-											else //if (dir == 3 || dir == 7)
-											{
-												pixelOffset_x = 0;
-												pixelOffset_y = 8;
-											}
+												int
+													dir = (*i)->getDirection(),
+													pixelOffset_x, // sprites: 32x40
+													pixelOffset_y;
 
-//											quad = tile->getPosition().x - unit->getPosition().x
-//												+ (tile->getPosition().y - unit->getPosition().y) * 2;
-											quad = 0;
-
-											srfSprite = (*i)->getCache(&invalid, quad);
-//											srfSprite = NULL;
-											if (srfSprite)
-											{
-												if (kL_Debug_walk) Log(LOG_INFO) << ". drawUnit [30]";
-												if (tile->isDiscovered(2) == true)
-													shade = tile->getShade();
-												else
-													shade = 16;
-
-												calculateWalkingOffset(
-																	*i,
-																	&walkOffset);
-
-												srfSprite->blitNShade(
-														surface,
-														screenPosition.x + walkOffset.x + pixelOffset_x,
-														screenPosition.y + walkOffset.y + pixelOffset_y,
-														shade);
-
-												if ((*i)->getFireOnUnit() != 0)
+												if (dir == 0 || dir == 4) // THESE NEED EFFORTS.
 												{
-													frame = 4 + (_animFrame / 2);
-													srfSprite = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
-													if (srfSprite)
-														srfSprite->blitNShade(
-																surface,
-																screenPosition.x + walkOffset.x + pixelOffset_x,
-																screenPosition.y + walkOffset.y + pixelOffset_y,
-																0);
+													pixelOffset_x = 16;
+													pixelOffset_y = 16;
+												}
+												else if (dir == 5)
+												{
+													pixelOffset_x = -32;
+													pixelOffset_y = 24;
+												}
+												else if (dir == 1)
+												{
+													pixelOffset_x = 32;
+													pixelOffset_y = 24;
+												}
+												else if (dir == 2 || dir == 6)
+												{
+													pixelOffset_x = -16;
+													pixelOffset_y = 16;
+												}
+												else //if (dir == 3 || dir == 7)
+												{
+													pixelOffset_x = 0;
+													pixelOffset_y = 8;
+												}
+
+//												quad = tile->getPosition().x - unit->getPosition().x
+//													+ (tile->getPosition().y - unit->getPosition().y) * 2;
+												quad = 0;
+
+												srfSprite = (*i)->getCache(&invalid, quad);
+//												srfSprite = NULL;
+												if (srfSprite)
+												{
+													if (kL_Debug_walk) Log(LOG_INFO) << ". drawUnit [30]";
+													if (tile->isDiscovered(2) == true)
+														shade = tile->getShade();
+													else
+														shade = 16;
+
+													calculateWalkingOffset(
+																		*i,
+																		&walkOffset);
+
+													srfSprite->blitNShade(
+															surface,
+															screenPosition.x + walkOffset.x + pixelOffset_x,
+															screenPosition.y + walkOffset.y + pixelOffset_y,
+															shade);
+
+													if ((*i)->getFireOnUnit() != 0)
+													{
+														frame = 4 + (_animFrame / 2);
+														srfSprite = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
+														if (srfSprite)
+															srfSprite->blitNShade(
+																	surface,
+																	screenPosition.x + walkOffset.x + pixelOffset_x,
+																	screenPosition.y + walkOffset.y + pixelOffset_y,
+																	0);
+													}
 												}
 											}
-											break;
 										}
 									}
+
+									break;
 								}
 							}
 						}
@@ -3485,7 +3488,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 
 						// redraw units that are moving up from tileBelow
 						// so their heads don't get cut off as they're moving up but before they enter the same Z-level.
-						if (   tile->getMapData(O_WESTWALL) != NULL // TODO: draw only if there's no southern wall in tileEast that covers the unit's decapitation
+						if (tile->getMapData(O_WESTWALL) != NULL // TODO: draw only if there's no southern wall in tileEast that covers the unit's decapitation
 							|| tile->getMapData(O_NORTHWALL) != NULL
 							|| (tile->getMapData(O_OBJECT) != NULL
 								&& (   tile->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NONE

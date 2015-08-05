@@ -1690,12 +1690,14 @@ bool SavedBattleGame::isAborted() const
 
 /**
  * Changes the objectives-needed count.
+ * @note Used only to initialize the objective counter; cf addDestroyedObjective() below.
  * @note Objectives were tile-parts marked w/ MUST_DESTROY in their MCD but now
  * can be any specially marked tile. See elsewhere.
  */
 void SavedBattleGame::setObjectiveCount(int var)
 {
 	_objectivesNeeded = var;
+	_objectivesDestroyed = 0;
 }
 
 /**

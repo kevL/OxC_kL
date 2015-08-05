@@ -5296,11 +5296,10 @@ int TileEngine::calculateParabola(
 		const Position& delta)
 {
 	//Log(LOG_INFO) << "TileEngine::calculateParabola()";
-	const double
-		ro = std::sqrt(static_cast<double>(
-				  (target.x - origin.x) * (target.x - origin.x)
-				+ (target.y - origin.y) * (target.y - origin.y)
-				+ (target.z - origin.z) * (target.z - origin.z)));
+	const double ro = std::sqrt(static_cast<double>(
+					 (target.x - origin.x) * (target.x - origin.x)
+				   + (target.y - origin.y) * (target.y - origin.y)
+				   + (target.z - origin.z) * (target.z - origin.z)));
 	double
 		fi = std::acos(static_cast<double>(target.z - origin.z) / ro),
 		te = std::atan2(

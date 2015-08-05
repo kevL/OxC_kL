@@ -103,7 +103,7 @@ private:
 		_destroyXCOMBase,
 		_manageContainment,
 		_noContainment,
-		_tacBattle;
+		_skirmish;
 	int
 		_aliensControlled,
 		_aliensKilled,

@@ -57,9 +57,10 @@ AbandonGameState::AbandonGameState(OptionsOrigin origin)
 		x = 52;
 
 	_window		= new Window(this, 216, 160, x, 20, POPUP_BOTH);
+
 	_txtTitle	= new Text(206, 33, x + 5, 73);
 
-	_btnNo		= new TextButton(55, 20, x + 30, 132);
+	_btnNo		= new TextButton(55, 20, x +  30, 132);
 	_btnYes		= new TextButton(55, 20, x + 131, 132);
 
 	setInterface(
@@ -117,7 +118,7 @@ void AbandonGameState::btnYesClick(Action*)
 //		Options::baseXResolution = Options::baseXGeoscape; // kL
 //		Options::baseYResolution = Options::baseYGeoscape; // kL
 		// This sets Geoscape and Basescape to default (320x200) IG and the config.
-/*kL		Screen::updateScale(
+/*		Screen::updateScale(
 						Options::geoscapeScale,
 						Options::geoscapeScale,
 						Options::baseXGeoscape,
