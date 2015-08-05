@@ -702,9 +702,9 @@ void DebriefingState::prepareDebriefing() // private.
 		objectiveFailedScore = 0;	// dang vc++ compiler warnings.
 
 	SavedBattleGame* const battleSave = _gameSave->getSavedBattle();
-	AlienDeployment* const deployRule = _rules->getDeployment(battleSave->getMissionType());
-	// kL_note: I have a strong suspicion that although checks are made for a
-	// valid deployRule below if there isn't one you're fucked anyway.
+	const AlienDeployment* const deployRule = _rules->getDeployment(battleSave->getMissionType());
+	// kL_note: I have a strong suspicion that although checks are made for
+	// a valid deployRule below if there isn't one you're borked anyway.
 
 	if (deployRule != NULL)
 	{

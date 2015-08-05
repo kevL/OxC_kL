@@ -98,7 +98,7 @@ Projectile::Projectile(
 		{
 			//Log(LOG_INFO) << "Create Projectile -> not BA_THROW";
 			if (_action.weapon->getRules()->getArcingShot() == true)
-				_speed = _speed / 2;
+				_speed /= 2;
 
 			const BattleItem* const bullet = _action.weapon->getAmmoItem(); // the weapon itself if not-req'd. eg, lasers/melee
 			if (bullet != NULL) // try to get the required info from the bullet
@@ -114,6 +114,9 @@ Projectile::Projectile(
 
 			if (_speed == Options::battleFireSpeed)
 				_speed += _action.weapon->getRules()->getBulletSpeed();
+
+			if (_action.type == BA_AUTOSHOT)
+				_speed *= 2;
 
 			if (_bulletSprite == -1)
 			{

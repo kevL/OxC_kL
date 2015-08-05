@@ -1011,7 +1011,7 @@ Position TileEngine::getOriginVoxel(
 		posOrigin_voxel.y += offset;
 		// screw Warboy's obscurantist glamor-driven elitist campaign!!!! Have fun with that!!
 		// MUCH more predictable results. <- I didn't write that; just iterating it.
-		// ... better now but still waiting on it.
+		// ... better now but still waiting on it. Eg, the AI needs to account for it.
 /*
 		int direction = getDirectionTo(
 									posOrigin_tile,
@@ -5396,15 +5396,15 @@ bool TileEngine::validateThrow(
 						int* const voxelType)
 {
 	//Log(LOG_INFO) << "\nTileEngine::validateThrow()"; //, cf Projectile::calculateThrow()";
-	double parabolicCoefficient = 0.; // higher arc means lower arc IG. eh ......
+	const Position targetPos = targetVoxel / Position(16,16,24);
+	double parabolicCoefficient; // higher parabolicCoefficient means higher arc IG. eh ......
 
-	const Position targetPos = targetVoxel / Position(16, 16, 24);
-	if (targetPos != originVoxel / Position(16, 16, 24))
+	if (targetPos != originVoxel / Position(16,16,24))
 	{
-		parabolicCoefficient = 0.78;
+		parabolicCoefficient = 0.81;
 
 		// kL_note: Unfortunately, this prevents weak units from throwing heavy
-		// objects at their own feet. ( needs starting arc ~0.8, less if kneeled )
+		// objects at their own feet. (needs starting arc ~0.8, less if kneeled)
 /*		if (action.type == BA_THROW)
 		{
 			parabolicCoefficient += 0.8;
@@ -5423,11 +5423,13 @@ bool TileEngine::validateThrow(
 //			parabolicCoefficient = 1.73 / sqrt(sqrt(70.0 / 10.0)) + kneel; // OR ...
 //			parabolicCoefficient += 1.0635835046056873518242669985672;
 			parabolicCoefficient += 1.0;
-		}
+		} */
 
 		if (action.actor->isKneeled() == true)
-			parabolicCoefficient -= 0.5; // stock: 0.1 */
+			parabolicCoefficient += 0.3; // increase the arc reasons.
 	}
+	else
+		parabolicCoefficient = 0.;
 	//Log(LOG_INFO) << ". starting arc = " << parabolicCoefficient;
 
 	const Tile* const targetTile = _battleSave->getTile(action.target);
@@ -5473,7 +5475,7 @@ bool TileEngine::validateThrow(
 		if (test != VOXEL_OUTOFBOUNDS
 			&& test != VOXEL_WESTWALL
 			&& test != VOXEL_NORTHWALL
-			&& (trajectory.at(0) / Position(16, 16, 24)) == targetPos)
+			&& (trajectory.at(0) / Position(16,16,24)) == targetPos)
 		{
 			//Log(LOG_INFO) << ". . . found TRUE";
 			found = true;
@@ -5513,7 +5515,7 @@ bool TileEngine::validateThrow(
 		if (   test == VOXEL_OUTOFBOUNDS
 			|| test == VOXEL_WESTWALL
 			|| test == VOXEL_NORTHWALL
-			|| (trajectory.at(0) / Position(16, 16, 24)) != targetPos)
+			|| (trajectory.at(0) / Position(16,16,24)) != targetPos)
 		{
 			//Log(LOG_INFO) << ". . . found TRUE";
 			found = true;
@@ -5561,7 +5563,7 @@ int TileEngine::castedShade(const Position& voxel) const
 	int z;
 	for (
 			z = start_z;
-			z > 0;
+			z != 0;
 			--z)
 	{
 		testVoxel.z = z;
@@ -5658,7 +5660,7 @@ int TileEngine::voxelCheck(
 	}
 
 	// kL_note: should allow items to be thrown through a gravLift down to the floor below
-	if (targetPos.z %24 < 2
+	if (targetPos.z % 24 < 2
 		&& targetTile->getMapData(O_FLOOR) != NULL
 		&& targetTile->getMapData(O_FLOOR)->isGravLift() == true)
 	{
