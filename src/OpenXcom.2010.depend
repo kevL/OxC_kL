@@ -4385,7 +4385,7 @@
 	"Text.h"
 	"../Engine/InteractiveSurface.h"
 
-1433391317 f:\git\openxcom\src\resource\resourcepack.h
+1438830384 f:\git\openxcom\src\resource\resourcepack.h
 
 1438339338 f:\git\openxcom\src\savegame\base.h
 	"Target.h"
@@ -5154,7 +5154,7 @@
 1432586518 f:\git\openxcom\src\ruleset\rulesoldier.h
 	"../Ruleset/RuleUnit.h"
 
-1438165194 source:f:\git\openxcom\src\basescape\soldiermemorialstate.cpp
+1438830464 source:f:\git\openxcom\src\basescape\soldiermemorialstate.cpp
 	"SoldierMemorialState.h"
 	"SoldierInfoDeadState.h"
 	"../Engine/Action.h"
@@ -5413,7 +5413,7 @@
 1435256431 f:\git\openxcom\src\battlescape\battlestate.h
 	"BattlescapeGame.h"
 
-1435795757 f:\git\openxcom\src\battlescape\map.h
+1438843096 f:\git\openxcom\src\battlescape\map.h
 	"Position.h"
 	"../Engine/InteractiveSurface.h"
 
@@ -5523,7 +5523,7 @@
 
 1431472912 f:\git\openxcom\src\ruleset\ruleinventory.h
 
-1438781710 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
+1438829788 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
 	"BattlescapeGenerator.h"
 	"AlienBAIState.h"
 	"CivilianBAIState.h"
@@ -5931,7 +5931,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1438822106 source:f:\git\openxcom\src\battlescape\map.cpp
+1438844207 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	"BattlescapeMessage.h"
 	"BattlescapeState.h"
