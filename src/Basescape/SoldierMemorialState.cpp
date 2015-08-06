@@ -67,7 +67,7 @@ SoldierMemorialState::SoldierMemorialState()
 
 	setInterface("soldierMemorial");
 
-	_game->getResourcePack()->playMusic(OpenXcom::res_MUSIC_BASE_MEMORIAL);
+	_game->getResourcePack()->playMusic(OpenXcom::res_MUSIC_BASE_MEMORIAL); //, "", 1); <- ie. no terrain, 1 loop
 
 	add(_window,		"window",	"soldierMemorial");
 	add(_txtTitle,		"text",		"soldierMemorial");

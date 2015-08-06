@@ -1768,7 +1768,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 													case 4:
 														//Log(LOG_INFO) << "dir 4";
 														//Log(LOG_INFO) << "mapPos = " << mapPosition;
-														if (mapPosition == endPos) // && noEastWall && noWestWall && noObject
+														if (mapPosition == endPos)
 														{
 															pixelOffset_x = 16;
 															pixelOffset_y = 16;

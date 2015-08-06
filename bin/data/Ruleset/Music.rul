@@ -68,7 +68,7 @@ music:
   - type: BASE_AWARDS #defined in code but not used.
     files: [ 12MARS ]
   - type: BASE_MEMORIAL
-    files: [ PSGEO4 ]
+    files: [ PSGEO4, 12MEMOR ]
   - type: UFOPAEDIA
     files: [ LCNIGHT ]
   - type: WIN
