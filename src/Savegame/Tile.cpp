@@ -374,7 +374,7 @@ int Tile::getTUCostTile(
 			return 0;
 		}
 
-		return _objects[i]->getTUCostObject(moveType);
+		return _objects[i]->getTUCostData(moveType);
 	}
 
 	return 0;
@@ -497,7 +497,7 @@ int Tile::openDoor(
 			}
 
 			if (unit != NULL
-				&& unit->getTimeUnits() < _objects[i]->getTUCostObject(unit->getMoveTypeUnit())
+				&& unit->getTimeUnits() < _objects[i]->getTUCostData(unit->getMoveTypeUnit())
 											+ unit->getActionTUs(
 															reserved,
 															unit->getMainHandWeapon(false)))
@@ -523,7 +523,7 @@ int Tile::openDoor(
 			if (_curFrame[i] == 0) // ufo door part 0 - door is closed
 			{
 				if (unit != NULL
-					&& unit->getTimeUnits() < _objects[i]->getTUCostObject(unit->getMoveTypeUnit())
+					&& unit->getTimeUnits() < _objects[i]->getTUCostData(unit->getMoveTypeUnit())
 												+ unit->getActionTUs(
 																reserved,
 																unit->getMainHandWeapon(false)))

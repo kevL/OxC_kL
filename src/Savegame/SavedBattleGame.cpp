@@ -2367,7 +2367,7 @@ bool SavedBattleGame::setUnitPosition(
 					y != -1;
 					--y)
 			{
-				if (   x == 0
+				if (x == 0
 					&& y == 0)
 				{
 					unit->setPosition(pos);

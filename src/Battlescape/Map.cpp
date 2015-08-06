@@ -1572,7 +1572,9 @@ void Map::drawTerrain(Surface* const surface) // private.
 
 						// Redraw any unit moving onto or off of this Tile wrt a lower Z-level.
 						if (itZ > 0
-							&& tile->hasNoFloor(tileBelow) == false)
+							&& tile->hasNoFloor(tileBelow) == false
+							&& (tile->getMapData(O_OBJECT) == NULL
+								|| tile->getMapData(O_OBJECT)->getTUCostData(MT_WALK) < 6))
 						{
 							for (std::vector<BattleUnit*>::const_iterator
 									i = _battleSave->getUnits()->begin();
@@ -1584,59 +1586,239 @@ void Map::drawTerrain(Surface* const surface) // private.
 									if ((*i)->getArmor()->getSize() == 1
 										&& (*i)->getVerticalDirection() == 0) // not sure if this is needed ...
 									{
-										const Position curPos = (*i)->getPosition();
+										const Position pos = (*i)->getPosition();
 
-										if (curPos.z + 1 == itZ
-											&& (curPos.x < itX
-												|| curPos.y < itY))
+										if (pos.z + 1 == itZ
+											&& (pos.x < itX
+												|| pos.y < itY)
+											&& _battleSave->getTileEngine()->distance(
+																					pos,
+																					mapPosition,
+																					false) == 1)
 										{
+											redraw = true;
+
 											const Position
 												prePos = (*i)->getLastPosition(),
 												endPos = (*i)->getDestination();
 
-											if (prePos == mapPosition
-												|| endPos == mapPosition)
+											const int dir = (*i)->getDirection();
+											int
+												pixelOffset_x = 0, // sprites: 32x40
+												pixelOffset_y = 0; // avoid vc++ compiler warnings.
+
+											if (pos == endPos) // moving down off the hilltop ->
 											{
-												int
-													dir = (*i)->getDirection(),
-													pixelOffset_x, // sprites: 32x40
-													pixelOffset_y;
+												switch (dir)
+												{
+													case 1:
+														//Log(LOG_INFO) << "dir 1";
+														//Log(LOG_INFO) << "mapPos = " << mapPosition;
+														if (mapPosition == prePos)
+														{
+															pixelOffset_x = 32;
+															pixelOffset_y = 24;
+														}
+														else if (mapPosition.x == prePos.x + 1)
+														{
+															pixelOffset_x = 16;
+															pixelOffset_y = 16;
+														}
+														else
+															redraw = false;
+													break;
 
-												if (dir == 0 || dir == 4) // THESE NEED EFFORTS.
-												{
-													pixelOffset_x = 16;
-													pixelOffset_y = 16;
-												}
-												else if (dir == 5)
-												{
-													pixelOffset_x = -32;
-													pixelOffset_y = 24;
-												}
-												else if (dir == 1)
-												{
-													pixelOffset_x = 32;
-													pixelOffset_y = 24;
-												}
-												else if (dir == 2 || dir == 6)
-												{
-													pixelOffset_x = -16;
-													pixelOffset_y = 16;
-												}
-												else //if (dir == 3 || dir == 7)
-												{
-													pixelOffset_x = 0;
-													pixelOffset_y = 8;
-												}
+													case 0:
+														//Log(LOG_INFO) << "dir 0";
+														//Log(LOG_INFO) << "mapPos = " << mapPosition;
+														if (mapPosition == prePos)
+														{
+															pixelOffset_x = 16;
+															pixelOffset_y = 16;
+														}
+														else if (mapPosition.x == prePos.x + 1)
+														{
+															pixelOffset_x = 0;
+															pixelOffset_y = 8;
+														}
+														else
+															redraw = false;
+													break;
 
+													case 7:
+														//Log(LOG_INFO) << "dir 7";
+														//Log(LOG_INFO) << "mapPos = " << mapPosition;
+														if (mapPosition == prePos)
+														{
+															pixelOffset_x = 0;
+															pixelOffset_y = 8;
+														}
+														else if (mapPosition.x == prePos.x - 1)
+														{
+															pixelOffset_x = 16;
+															pixelOffset_y = 16;
+														}
+														else if (mapPosition.y == prePos.y - 1)
+														{
+															pixelOffset_x = -16;
+															pixelOffset_y = 16;
+														}
+														else
+															redraw = false;
+													break;
+
+													case 6:
+														//Log(LOG_INFO) << "dir 6";
+														//Log(LOG_INFO) << "mapPos = " << mapPosition;
+														if (mapPosition == prePos)
+														{
+															pixelOffset_x = -16;
+															pixelOffset_y = 16;
+														}
+														else if (mapPosition.y == prePos.y + 1)
+														{
+															pixelOffset_x = 0;
+															pixelOffset_y = 8;
+														}
+														else
+															redraw = false;
+													break;
+
+													case 5:
+														//Log(LOG_INFO) << "dir 5";
+														//Log(LOG_INFO) << "mapPos = " << mapPosition;
+														if (mapPosition == prePos)
+														{
+															pixelOffset_x = -32;
+															pixelOffset_y = 24;
+														}
+														else if (mapPosition.y == prePos.y + 1)
+														{
+															pixelOffset_x = -16;
+															pixelOffset_y = 16;
+														}
+														else
+															redraw = false;
+													break;
+
+													default:
+														redraw = false;
+												}
+											}
+											else if (pos == prePos) // moving up onto the hilltop ->
+											{
+												switch (dir)
+												{
+													case 1:
+														//Log(LOG_INFO) << "dir 1";
+														//Log(LOG_INFO) << "mapPos = " << mapPosition;
+														if (mapPosition == endPos)
+														{
+															pixelOffset_x = -32;
+															pixelOffset_y = 24;
+														}
+														else if (mapPosition.y == endPos.y + 1)
+														{
+															pixelOffset_x = -16;
+															pixelOffset_y = 16;
+														}
+														else
+															redraw = false;
+													break;
+
+													case 2:
+														//Log(LOG_INFO) << "dir 2";
+														//Log(LOG_INFO) << "mapPos = " << mapPosition;
+														if (mapPosition == endPos)
+														{
+															pixelOffset_x = -16;
+															pixelOffset_y = 16;
+														}
+														else if (mapPosition.y == endPos.y + 1)
+														{
+															pixelOffset_x = 0;
+															pixelOffset_y = 8;
+														}
+														else
+															redraw = false;
+													break;
+
+													case 3:
+														//Log(LOG_INFO) << "dir 3";
+														//Log(LOG_INFO) << "mapPos = " << mapPosition;
+														if (mapPosition == endPos)
+														{
+															pixelOffset_x = 0;
+															pixelOffset_y = 8;
+														}
+														else if (mapPosition.x == endPos.x - 1)
+														{
+															pixelOffset_x = 16;
+															pixelOffset_y = 16;
+														}
+														else if (mapPosition.y == endPos.y - 1)
+														{
+															pixelOffset_x = -16;
+															pixelOffset_y = 16;
+														}
+														else
+															redraw = false;
+													break;
+
+													case 4:
+														//Log(LOG_INFO) << "dir 4";
+														//Log(LOG_INFO) << "mapPos = " << mapPosition;
+														if (mapPosition == endPos) // && noEastWall && noWestWall && noObject
+														{
+															pixelOffset_x = 16;
+															pixelOffset_y = 16;
+														}
+														else if (mapPosition.x == endPos.x + 1)
+														{
+															pixelOffset_x = 0;
+															pixelOffset_y = 8;
+														}
+														else
+															redraw = false;
+													break;
+
+													case 5:
+														//Log(LOG_INFO) << "dir 5";
+														//Log(LOG_INFO) << "mapPos = " << mapPosition;
+														if (mapPosition == endPos)
+														{
+															pixelOffset_x = 32;
+															pixelOffset_y = 24;
+														}
+														else if (mapPosition.x == endPos.x + 1)
+														{
+															pixelOffset_x = 16;
+															pixelOffset_y = 16;
+														}
+														else
+															redraw = false;
+													break;
+
+													default:
+														redraw = false;
+												}
+											}
+
+											if (redraw == true)
+											{
+												//Log(LOG_INFO) << "offset X = " << pixelOffset_x;
+												//Log(LOG_INFO) << "offset Y = " << pixelOffset_y;
 //												quad = tile->getPosition().x - unit->getPosition().x
 //													+ (tile->getPosition().y - unit->getPosition().y) * 2;
-												quad = 0;
+//												quad = 0;
 
-												srfSprite = (*i)->getCache(&invalid, quad);
+												srfSprite = (*i)->getCache(&invalid, 0);
+//												srfSprite = (*i)->getCache(&invalid, quad);
 //												srfSprite = NULL;
 												if (srfSprite)
 												{
 													if (kL_Debug_walk) Log(LOG_INFO) << ". drawUnit [30]";
+
 													if (tile->isDiscovered(2) == true)
 														shade = tile->getShade();
 													else
@@ -1792,7 +1974,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 											//Log(LOG_INFO) << "[1] . dir 2/6";
 											if ((tile->getMapData(O_WESTWALL) == NULL			// redundant, due to
 //													|| tile->isUfoDoorOpen(O_WESTWALL) == true)	// this. <- checks if westWall is valid
-													|| tile->getMapData(O_WESTWALL)->getTUCostObject(MT_WALK) != 255)
+													|| tile->getMapData(O_WESTWALL)->getTUCostData(MT_WALK) != 255)
 												&& (tile->getMapData(O_OBJECT) == NULL
 													|| (tile->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NONE
 														&& std::abs(tileWest->getTerrainLevel() - tile->getTerrainLevel()) < 13) // positive means Tile is higher
@@ -1822,8 +2004,8 @@ void Map::drawTerrain(Surface* const surface) // private.
 																|| tileSouth->getMapData(O_NORTHWALL) == NULL) // <- getting very redudant; soon needs break-out functions like checkNorthSideBlockage() & checkWestSideBlockage() etc etc etc etc, also checkObjectSightBlockageLeft/Right() etc.
 															&& (tileSouthWest->getMapData(O_OBJECT) == NULL
 																|| (tileSouthWest->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NONE
-//																	&& tileSouthWest->getMapData(O_OBJECT)->getTUCostObject(MT_WALK) != 255 // <- maybe
-																	&& tileSouthWest->getMapData(O_OBJECT)->getTUCostObject(MT_WALK) < 6 // from Dir=1/5
+//																	&& tileSouthWest->getMapData(O_OBJECT)->getTUCostData(MT_WALK) != 255 // <- maybe
+																	&& tileSouthWest->getMapData(O_OBJECT)->getTUCostData(MT_WALK) < 6 // from Dir=1/5
 																	// that needs to change. Use, say, a TU cost in MCDs of 6+ to denote big bushy objects that act like chairs & other non-walkable objects.
 																	&& tileSouthWest->getMapData(O_OBJECT)->getDataset()->getName() != "LIGHTNIN"
 																	&& tileSouthWest->getMapData(O_OBJECT)->getSprite(0) != 42)
@@ -1852,8 +2034,8 @@ void Map::drawTerrain(Surface* const surface) // private.
 												&& (tile->getMapData(O_OBJECT) == NULL
 													|| (tile->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NONE
 														&& tileWest->getTerrainLevel() - tile->getTerrainLevel() < 13 // positive means Tile is higher
-//														&& tile->getMapData(O_OBJECT)->getTUCostObject(MT_WALK) != 255)))
-														&& tile->getMapData(O_OBJECT)->getTUCostObject(MT_WALK) < 6))) // ie. not a big bushy object or chair etc.
+//														&& tile->getMapData(O_OBJECT)->getTUCostData(MT_WALK) != 255)))
+														&& tile->getMapData(O_OBJECT)->getTUCostData(MT_WALK) < 6))) // ie. not a big bushy object or chair etc.
 											{
 												//Log(LOG_INFO) << "[1] . . tile No westwall OR object";
 												const Tile* const tileNorth = _battleSave->getTile(mapPosition + Position(0,-1,0));
@@ -1887,8 +2069,8 @@ void Map::drawTerrain(Surface* const surface) // private.
 																	|| tileSouth->getMapData(O_NORTHWALL) == NULL) // <- getting very redudant; soon needs break-out functions like checkNorthSideBlockage() & checkWestSideBlockage() etc etc etc etc, also checkObjectSightBlockageLeft/Right() etc.
 																&& (tileSouthWest->getMapData(O_OBJECT) == NULL
 																	|| (tileSouthWest->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NONE
-//																		&& tileSouthWest->getMapData(O_OBJECT)->getTUCostObject(MT_WALK) != 255
-																		&& tileSouthWest->getMapData(O_OBJECT)->getTUCostObject(MT_WALK) < 6
+//																		&& tileSouthWest->getMapData(O_OBJECT)->getTUCostData(MT_WALK) != 255
+																		&& tileSouthWest->getMapData(O_OBJECT)->getTUCostData(MT_WALK) < 6
 																		// that needs to change. Use, say, a TU cost in MCDs of 6+ to denote big bushy objects that act like chairs & other non-walkable objects.
 																		&& tileSouthWest->getMapData(O_OBJECT)->getDataset()->getName() != "LIGHTNIN"
 																		&& tileSouthWest->getMapData(O_OBJECT)->getSprite(0) != 42)
@@ -1904,7 +2086,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 															if ((tileSouthWest != NULL
 																	&& (tileSouthWest->getMapData(O_OBJECT) != NULL
 																	&& ((tileSouthWest->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NONE
-																			&& tileSouthWest->getMapData(O_OBJECT)->getTUCostObject(MT_WALK) == 255) // or terrainLevel < 0 perhaps
+																			&& tileSouthWest->getMapData(O_OBJECT)->getTUCostData(MT_WALK) == 255) // or terrainLevel < 0 perhaps
 																		|| tileSouthWest->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NWSE)))
 																|| (tileSouthSouthWest != NULL
 																	&& tileSouthSouthWest->getMapData(O_NORTHWALL) != NULL)) // <- needs more ...
@@ -2047,7 +2229,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 												if (tile->getMapData(O_OBJECT) == NULL // exposed floor, basically.
 													|| (tile->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NONE
 														&& std::abs(tileNorthWest->getTerrainLevel() - tile->getTerrainLevel()) < 13 // positive means Tile is higher
-														&& tile->getMapData(O_OBJECT)->getTUCostObject(MT_WALK) != 255)
+														&& tile->getMapData(O_OBJECT)->getTUCostData(MT_WALK) != 255)
 													|| tile->getMapData(O_OBJECT)->getBigWall() == BIGWALL_EAST
 													|| tile->getMapData(O_OBJECT)->getBigWall() == BIGWALL_E_S)
 												{
@@ -2065,7 +2247,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 														|| (tileWest->getMapData(O_OBJECT) != NULL
 															&& ((tileWest->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NONE
 																	&& tileWest->getTerrainLevel() - tile->getTerrainLevel() > 12) // positive means Tile is higher
-																|| tileWest->getMapData(O_OBJECT)->getTUCostObject(MT_WALK) == 255 // tentative: good for some objects, prob. not for others
+																|| tileWest->getMapData(O_OBJECT)->getTUCostData(MT_WALK) == 255 // tentative: good for some objects, prob. not for others
 																|| tileWest->getMapData(O_OBJECT)->getBigWall() == BIGWALL_BLOCK
 																|| tileWest->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NESW
 																|| tileWest->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NORTH
@@ -2085,11 +2267,11 @@ void Map::drawTerrain(Surface* const surface) // private.
 														|| (tileNorth->getMapData(O_WESTWALL) != NULL	// AND tu == 255, ie. isWalkable rubble that lets sight pass over it
 															&& ((tileNorth->getMapData(O_WESTWALL)->isUfoDoor() == true
 																	&& tileNorth->isUfoDoorOpen(O_WESTWALL) == false)
-																|| tileNorth->getMapData(O_WESTWALL)->getTUCostObject(MT_WALK) == 255))
+																|| tileNorth->getMapData(O_WESTWALL)->getTUCostData(MT_WALK) == 255))
 														|| (tileNorth->getMapData(O_OBJECT) != NULL
 															&& ((tileNorth->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NONE
 																	&& tileNorth->getTerrainLevel() - tile->getTerrainLevel() > 12) // positive means Tile is higher
-																|| tileNorth->getMapData(O_OBJECT)->getTUCostObject(MT_WALK) == 255 // tentative: good for some objects, prob. not for others
+																|| tileNorth->getMapData(O_OBJECT)->getTUCostData(MT_WALK) == 255 // tentative: good for some objects, prob. not for others
 																|| tileNorth->getMapData(O_OBJECT)->getBigWall() == BIGWALL_BLOCK
 																|| tileNorth->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NESW
 																|| tileNorth->getMapData(O_OBJECT)->getBigWall() == BIGWALL_WEST
@@ -3210,7 +3392,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 												&& tileBelowSouthEast->getTerrainLevel() - tileBelow->getTerrainLevel() < 1 // positive -> Tile is higher
 												&& tileBelowSouthEast->getMapData(O_OBJECT) != NULL
 												&& tileBelowSouthEast->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NONE
-												&& tileBelowSouthEast->getMapData(O_OBJECT)->getTUCostObject(MT_WALK) == 255)	// generally only nonwalkable content-objects
+												&& tileBelowSouthEast->getMapData(O_OBJECT)->getTUCostData(MT_WALK) == 255)	// generally only nonwalkable content-objects
 											{																							// rise high enough to cause an overblit.
 												srfSprite = tileBelowSouthEast->getSprite(O_OBJECT);
 //												srfSprite = NULL;
@@ -4009,12 +4191,21 @@ void Map::drawTerrain(Surface* const surface) // private.
 																					itY,
 																					itZ),
 																			action->actor->getPosition());
-								int upperLimit = 200;
+								int upperLimit;
 								switch (action->type)
 								{
-									case BA_AIMEDSHOT:	upperLimit = weaponRule->getAimRange();		break;
-									case BA_SNAPSHOT:	upperLimit = weaponRule->getSnapRange();	break;
-									case BA_AUTOSHOT:	upperLimit = weaponRule->getAutoRange();
+									case BA_AIMEDSHOT:
+										upperLimit = weaponRule->getAimRange();
+									break;
+									case BA_SNAPSHOT:
+										upperLimit = weaponRule->getSnapRange();
+									break;
+									case BA_AUTOSHOT:
+										upperLimit = weaponRule->getAutoRange();
+									break;
+
+									default:
+										upperLimit = 200;
 								}
 
 								Uint8 color = Palette::blockOffset(3)+3; // green

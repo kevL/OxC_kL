@@ -4091,7 +4091,7 @@ void BattlescapeState::saveAIMap()
 			}
 
 			if (t->getMapData(O_NORTHWALL)
-				&& t->getMapData(O_NORTHWALL)->getTUCostObject(MT_FLY) == 255)
+				&& t->getMapData(O_NORTHWALL)->getTUCostData(MT_FLY) == 255)
 			{
 				lineRGBA(
 						img,
@@ -4106,7 +4106,7 @@ void BattlescapeState::saveAIMap()
 			}
 
 			if (t->getMapData(O_WESTWALL)
-				&& t->getMapData(O_WESTWALL)->getTUCostObject(MT_FLY) == 255)
+				&& t->getMapData(O_WESTWALL)->getTUCostData(MT_FLY) == 255)
 			{
 				lineRGBA(
 						img,

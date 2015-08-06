@@ -243,12 +243,13 @@ private:
 		/// Checks the distance between two positions.
 		int distance(
 				const Position& pos1,
-				const Position& pos2) const;
+				const Position& pos2,
+				const bool considerZ = true) const;
 		/// Checks the distance squared between two positions.
 		int distanceSq(
 				const Position& pos1,
 				const Position& pos2,
-				bool considerZ = true) const;
+				const bool considerZ = true) const;
 		/// Checks the distance between two positions precisely.
 //		double distancePrecise(
 //				const Position& pos1,

@@ -203,7 +203,7 @@ private:
 				int type);
 
 		/// Gets the TU cost to move over the object.
-		int getTUCostObject(MovementType moveType) const;
+		int getTUCostData(MovementType moveType) const;
 		/// Sets the TU cost to move over the object.
 		void setTUCosts(
 				int walk,

@@ -316,13 +316,14 @@ Music* ResourcePack::getRandomMusic( // private.
 	}
 
 	const std::vector<std::pair<std::string, int> > codeList = assignment.at(terrainRule);
-	const size_t code = static_cast<size_t>(RNG::seedless(0, codeList.size() - 1));
+	const size_t code = static_cast<size_t>(RNG::seedless(
+													0,
+													codeList.size() - 1));
 //	const size_t code = static_cast<size_t>(SDL_GetTicks() % codeList.size());
 	const std::pair<std::string, int> music = codeList[code];
 
 	//Log(LOG_DEBUG) << "MUSIC: " << music.first;
 	Log(LOG_INFO) << "MUSIC: " << music.first;
-//	Music* const ret = _musicFile.at(music.first);
 
 	return _musicFile.at(music.first);
 }
@@ -430,8 +431,6 @@ void ResourcePack::playSoundFX(
 	if (randAngle == true)
 	{
 		const int var = 67; // maximum deflection left or right
-//		dir += (RNG::generate(-var, var)
-//			  + RNG::generate(-var, var))
 		dir += (RNG::seedless(-var, var)
 			  + RNG::seedless(-var, var))
 			/ 2;

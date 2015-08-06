@@ -5450,7 +5450,7 @@ bool TileEngine::validateThrow(
 			|| targetTile->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NWSE))
 //		&& (action.weapon->getRules()->getBattleType() == BT_GRENADE
 //			|| action.weapon->getRules()->getBattleType() == BT_PROXYGRENADE)
-//		&& targetTile->getMapData(O_OBJECT)->getTUCostObject(MT_WALK) == 255)
+//		&& targetTile->getMapData(O_OBJECT)->getTUCostData(MT_WALK) == 255)
 	{
 		return false; // prevent Grenades from landing on diagonal BigWalls.
 	}
@@ -5768,20 +5768,26 @@ int TileEngine::voxelCheck(
  * Calculates the distance between 2 points rounded to nearest integer.
  * @param pos1 - reference the first Position
  * @param pos2 - reference the second Position
+ * @param considerZ	- true to consider the z coordinate (default true)
  * @return, distance
  */
 int TileEngine::distance(
 		const Position& pos1,
-		const Position& pos2) const
+		const Position& pos2,
+		const bool considerZ) const
 {
 	const int
 		x = pos1.x - pos2.x,
-		y = pos1.y - pos2.y,
-		z = pos1.z - pos2.z; // kL
+		y = pos1.y - pos2.y;
 
-//	return static_cast<int>(std::ceil(
+	int z;
+	if (considerZ == true)
+		z = pos1.z - pos2.z;
+	else
+		z = 0;
+
 	return static_cast<int>(Round(
-		   std::sqrt(static_cast<double>(x * x + y * y + z * z)))); // kL: 3-d
+		   std::sqrt(static_cast<double>(x * x + y * y + z * z))));
 }
 
 /**
@@ -5795,7 +5801,7 @@ int TileEngine::distance(
 int TileEngine::distanceSq(
 		const Position& pos1,
 		const Position& pos2,
-		bool considerZ) const
+		const bool considerZ) const
 {
 	const int
 		x = pos1.x - pos2.x,
