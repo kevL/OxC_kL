@@ -289,50 +289,7 @@ void SoldiersState::btnSortClick(Action*)
 {
 	_base->setCurrentSoldierSlot(_lstSoldiers->getScroll());
 
-	std::multimap<int, Soldier*> soldiersOrdered;
-	const UnitStats* stats;
-	int weight;
-
-//	const int minPsi = _game->getRuleset()->getSoldier("XCOM")->getMinStats().psiSkill;
-
-	for (std::vector<Soldier*>::const_iterator
-			i = _base->getSoldiers()->begin();
-			i != _base->getSoldiers()->end();
-			++i)
-	{
-		stats = (*i)->getCurrentStats();
-		weight = stats->tu			*  8 // old values from CWXCED
-			   + stats->stamina		*  5
-			   + stats->health		*  7
-			   + stats->bravery		*  3
-			   + stats->reactions	* 21
-			   + stats->firing		* 19
-			   + stats->throwing	*  1
-			   + stats->strength	* 24
-			   + stats->melee		*  2;
-		// also: rank, missions, kills
-
-//		if (stats->psiSkill >= minPsi)
-		if (stats->psiSkill != 0) // don't include Psi unless revealed.
-			weight += stats->psiStrength * 22
-					+ stats->psiSkill	 * 11;
-
-		soldiersOrdered.insert(std::pair<int, Soldier*>(weight, *i));
-		// NOTE: unsure if multimap loses a player-preferred
-		// order of two soldiers with the same weight (to preserve that
-		// would have to use vector of key-weights, stable_sort'd,
-		// referenced back to a vector of <weight,Soldier> pairs,
-		// possibly using a comparoperator functor. /cheers)
-	}
-
-	size_t j = 0;
-	for (std::multimap<int, Soldier*>::const_iterator
-			i = soldiersOrdered.begin();
-			i != soldiersOrdered.end();
-			++i)
-	{
-		_base->getSoldiers()->at(j++) = (*i).second;
-	}
+	_base->sortSoldiers();
 
 	init();
 }

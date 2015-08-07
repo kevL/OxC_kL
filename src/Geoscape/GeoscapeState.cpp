@@ -2951,19 +2951,23 @@ void GeoscapeState::time1Day()
 		if ((*i)->getAvailablePsiLabs() != 0 // handle psionic training
 			&& Options::anytimePsiTraining == true)
 		{
+			bool sortSoldiers = false;
+
 			for (std::vector<Soldier*>::const_iterator
 					j = (*i)->getSoldiers()->begin();
 					j != (*i)->getSoldiers()->end();
 					++j)
 			{
 				if ((*j)->trainPsiDay() == true)
+				{
 					(*j)->autoStat();
-
-//				(*j)->calcStatString(
-//								_rules->getStatStrings(),
-//								(Options::psiStrengthEval
-//									&& _gameSave->isResearched(_rules->getPsiRequirements())));
+					sortSoldiers = true;
+				}
+//				(*j)->calcStatString(_rules->getStatStrings(), Options::psiStrengthEval && _gameSave->isResearched(_rules->getPsiRequirements()));
 			}
+
+			if (sortSoldiers == true)
+				(*i)->sortSoldiers();
 		}
 
 
