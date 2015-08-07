@@ -44,10 +44,11 @@ enum WindowPopup
 
 
 /**
- * Box with a coloured border and custom background.
- * Pretty much used as the background in most of the interface. In fact
- * it's also used in screens, so it's not really much of a window, just a... box.
- * But box sounds lame.
+ * Box with a colored border and custom background.
+ * @note Pretty much used as the background in most of the interface. In fact
+ * it's also used in screens so it's not really much of a window - it's just a
+ * ... box.
+ * But box sounds lame. Think window.
  */
 class Window
 	:
@@ -92,7 +93,7 @@ private:
 
 		/// Sets the background surface.
 		void setBackground(
-				Surface* bg,
+				Surface* const bg,
 				int dx = 0,
 				int dy = 0);
 

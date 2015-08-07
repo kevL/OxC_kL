@@ -1518,14 +1518,14 @@ int BattleUnit::damage(
 
 	if (power > 0)
 	{
-		const bool isSelfAware = _geoscapeSoldier != NULL
-							  || (_unitRule->isMechanical() == false
-									&& _race != "STR_ZOMBIE");
+		const bool selfAware = _geoscapeSoldier != NULL
+							|| (_unitRule->isMechanical() == false
+								&& _race != "STR_ZOMBIE");
 		int wounds = 0;
 
 		if (dType == DT_STUN)
 		{
-			if (isSelfAware == true)
+			if (selfAware == true)
 			{
 				//Log(LOG_INFO) << ". . stun = " << power;
 				_stunLevel += power;
@@ -1551,7 +1551,7 @@ int BattleUnit::damage(
 			}
 			else
 			{
-				if (isSelfAware == true)
+				if (selfAware == true)
 					_stunLevel += RNG::generate(0, power / 3);
 
 				wounds = RNG::generate(1,3);
@@ -1582,18 +1582,21 @@ int BattleUnit::damage(
 			_aboutToDie = true;
 
 		if (isOut_t(OUT_DEAD) == false
-			&& isSelfAware == true)
+			&& selfAware == true)
 		{
 			moraleChange(-wounds * 3);
 
 			int moraleLoss = (110 - _stats.bravery) / 10;
 			if (moraleLoss > 0)
 			{
-				int leadership = 100; // <- for civilians
-				if (_originalFaction == FACTION_PLAYER)
-					leadership = _battleGame->getBattlescapeState()->getSavedBattleGame()->getMoraleModifier();
-				else if (_originalFaction == FACTION_HOSTILE)
-					leadership = _battleGame->getBattlescapeState()->getSavedBattleGame()->getMoraleModifier(NULL, false);
+				int leadership = 100; // <- for civilians & pre-battle PS explosion.
+				if (_battleGame != NULL)
+				{
+					if (_originalFaction == FACTION_PLAYER)
+						leadership = _battleGame->getBattlescapeState()->getSavedBattleGame()->getMoraleModifier();
+					else if (_originalFaction == FACTION_HOSTILE)
+						leadership = _battleGame->getBattlescapeState()->getSavedBattleGame()->getMoraleModifier(NULL, false);
+				}
 
 				moraleLoss = moraleLoss * power * 10 / leadership;
 				//Log(LOG_INFO) << ". . . . moraleLoss = " << moraleLoss;

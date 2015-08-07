@@ -98,13 +98,13 @@ UfoDetectedState::UfoDetectedState(
 		_window			= new Window(this, 236, 140, 10, 48, POPUP_BOTH);
 
 	_txtUfo			= new Text(102, 16, 20, 56);
-	_txtDetected	= new Text(80, 9, 32, 73);
+	_txtDetected	= new Text( 80,  9, 32, 73);
 
 	_lstInfo		= new TextList(192, 33, 32, 85);
 
 	_btnCenter		= new TextButton(192, 16, 32, 124);
 
-	_btnIntercept	= new TextButton(88, 16, 32, 144);
+	_btnIntercept	= new TextButton(88, 16,  32, 144);
 	_btn5Sec		= new TextButton(88, 16, 136, 144);
 
 	_btnCancel		= new TextButton(192, 16, 32, 164);
@@ -526,11 +526,13 @@ void UfoDetectedState::btnCancelClick(Action*)
  */
 void UfoDetectedState::transposeWindow() // private.
 {
-	_window->setBackground(NULL);
+//	_window->setBackground(NULL);
+	_window->setVisible(false);
 
 	_txtDetected->setVisible(false);
 	_lstInfo->setVisible(false);
-	_btnCancel->setText(tr("STR_TERROR_CONTINUES").c_str());
+//	_btnCancel->setText(tr("STR_TERROR_CONTINUES").c_str());
+
 	if (_geo->getPause() == false)
 		_btnCenter->setText(tr("STR_PAUSE").c_str());
 	else

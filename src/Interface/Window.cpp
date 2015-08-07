@@ -111,7 +111,7 @@ Window::~Window()
  * @param dy - y offset (default 0)
  */
 void Window::setBackground(
-		Surface* bg,
+		Surface* const bg,
 		int dx,
 		int dy)
 {
@@ -125,7 +125,7 @@ void Window::setBackground(
 
 /**
  * Changes the color used to draw the shaded border.
- * @param color Color value.
+ * @param color - color value
  */
 void Window::setColor(Uint8 color)
 {
@@ -135,7 +135,7 @@ void Window::setColor(Uint8 color)
 
 /**
  * Returns the color used to draw the shaded border.
- * @return Color value.
+ * @return, color value
  */
 Uint8 Window::getColor() const
 {
@@ -143,7 +143,8 @@ Uint8 Window::getColor() const
 }
 
 /**
- * Enables/disables high contrast color. Mostly used for Battlescape UI.
+ * Enables/disables high contrast color.
+ * @note Mostly used for Battlescape UI.
  * @param contrast - high contrast setting (default true)
  */
 void Window::setHighContrast(bool contrast)
@@ -206,7 +207,7 @@ bool Window::isPopupDone() const
 
 /**
  * Draws the bordered window with a graphic background.
- * The background never moves with the window, it's always aligned to the
+ * @note The background never moves with the window; it's always aligned to the
  * top-left corner of the screen and cropped to fit inside the area.
  */
 void Window::draw()

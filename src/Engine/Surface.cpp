@@ -838,7 +838,7 @@ void Surface::setY(int y)
 
 /**
  * Changes the visibility of the surface.
- * A hidden surface isn't blitted nor receives events.
+ * @note An nonvisible surface isn't blitted nor does it receive events.
  * @param visible - visibility (default true)
  */
 void Surface::setVisible(bool visible)
