@@ -424,7 +424,15 @@ GraphsState::GraphsState(int curGraph)
 												static_cast<int>(i) * 16));
 		_financeToggles.push_back(false);
 
-		_btnFinances.at(i)->setInvertColor(static_cast<Uint8>(i) * 8 + 13);
+		Uint8 multi; // switch colors for Income (was yellow) and Maintenance (was green)
+		if (i == 0)
+			multi = 2;
+		else if (i == 2)
+			multi = 0;
+		else
+			multi = static_cast<Uint8>(i);
+
+		_btnFinances.at(i)->setInvertColor(multi * 8 + 13);
 		_btnFinances.at(i)->onMousePress((ActionHandler)& GraphsState::btnFinanceListClick);
 
 		add(_btnFinances.at(i), "button", "graphs");
@@ -1123,7 +1131,7 @@ void GraphsState::btnCountryListClick(Action* action)
 void GraphsState::btnFinanceListClick(Action* action)
 {
 	const size_t row = (action->getSender()->getY() - _game->getScreen()->getDY()) / 16;
-	ToggleTextButton* btn = _btnFinances.at(row);
+	const ToggleTextButton* const btn = _btnFinances.at(row);
 
 	_financeLines.at(row)->setVisible(_financeToggles.at(row) == false);
 	_financeToggles.at(row) = btn->getPressed();
@@ -1402,7 +1410,7 @@ void GraphsState::drawCountryLines()
 	int reduction;
 	Sint16
 		x,y;
-	std::vector<Sint16> newLineVector;
+	std::vector<Sint16> lineVector;
 	Country* country;
 
 	// draw country lines
@@ -1417,7 +1425,7 @@ void GraphsState::drawCountryLines()
 		_xcomCountryLines.at(itCountry)->clear();
 		_incomeLines.at(itCountry)->clear();
 
-		newLineVector.clear();
+		lineVector.clear();
 		if (color == 17) color = 0;
 
 		for (size_t
@@ -1457,9 +1465,9 @@ void GraphsState::drawCountryLines()
 
 			if (y > 175) y = 175;
 
-			newLineVector.push_back(y);
+			lineVector.push_back(y);
 
-			if (newLineVector.size() > 1)
+			if (lineVector.size() > 1)
 			{
 				x = 312 - static_cast<Sint16>(i) * 17;
 
@@ -1467,19 +1475,19 @@ void GraphsState::drawCountryLines()
 					_alienCountryLines.at(itCountry)->drawLine(
 							x,y,
 							x + 17,
-							newLineVector.at(newLineVector.size() - 2),
+							lineVector.at(lineVector.size() - 2),
 							color * 8 + 16);
 				else if (_income == true)
 					_incomeLines.at(itCountry)->drawLine(
 							x,y,
 							x + 17,
-							newLineVector.at(newLineVector.size() - 2),
+							lineVector.at(lineVector.size() - 2),
 							color * 8 + 16);
 				else
 					_xcomCountryLines.at(itCountry)->drawLine(
 							x,y,
 							x + 17,
-							newLineVector.at(newLineVector.size() - 2),
+							lineVector.at(lineVector.size() - 2),
 							color * 8 + 16);
 			}
 		}
@@ -1504,7 +1512,7 @@ void GraphsState::drawCountryLines()
 
 	color = static_cast<Uint8>(
 		   _game->getRuleset()->getInterface("graphs")->getElement("countryTotal")->color2);
-	newLineVector.clear();
+	lineVector.clear();
 
 	for (size_t
 			i = 0;
@@ -1516,9 +1524,9 @@ void GraphsState::drawCountryLines()
 		if (totals[i] > 0)
 			y -= static_cast<Sint16>(Round(static_cast<double>(totals[i]) / units));
 
-		newLineVector.push_back(y);
+		lineVector.push_back(y);
 
-		if (newLineVector.size() > 1)
+		if (lineVector.size() > 1)
 		{
 			x = 312 - static_cast<Sint16>(i) * 17;
 
@@ -1526,19 +1534,19 @@ void GraphsState::drawCountryLines()
 				_alienCountryLines.back()->drawLine(
 						x,y,
 						x + 17,
-						newLineVector.at(newLineVector.size() - 2),
+						lineVector.at(lineVector.size() - 2),
 						color);
 			else if (_income == true)
 				_incomeLines.back()->drawLine(
 						x,y,
 						x + 17,
-						newLineVector.at(newLineVector.size() - 2),
+						lineVector.at(lineVector.size() - 2),
 						color);
 			else
 				_xcomCountryLines.back()->drawLine(
 						x,y,
 						x + 17,
-						newLineVector.at(newLineVector.size() - 2),
+						lineVector.at(lineVector.size() - 2),
 						color);
 		}
 	}
@@ -1642,7 +1650,7 @@ void GraphsState::drawRegionLines()
 	int reduction;
 	Sint16
 		x,y;
-	std::vector<Sint16> newLineVector;
+	std::vector<Sint16> lineVector;
 	Region* region;
 
 	// draw region lines
@@ -1656,7 +1664,7 @@ void GraphsState::drawRegionLines()
 		_alienRegionLines.at(itRegion)->clear();
 		_xcomRegionLines.at(itRegion)->clear();
 
-		newLineVector.clear();
+		lineVector.clear();
 		if (color == 17) color = 0;
 
 		for (size_t
@@ -1687,9 +1695,9 @@ void GraphsState::drawRegionLines()
 
 			if (y > 175) y = 175;
 
-			newLineVector.push_back(y);
+			lineVector.push_back(y);
 
-			if (newLineVector.size() > 1)
+			if (lineVector.size() > 1)
 			{
 				x = 312 - static_cast<Sint16>(i) * 17;
 
@@ -1697,13 +1705,13 @@ void GraphsState::drawRegionLines()
 					_alienRegionLines.at(itRegion)->drawLine(
 							x,y,
 							x + 17,
-							newLineVector.at(newLineVector.size() - 2),
+							lineVector.at(lineVector.size() - 2),
 							color * 8 + 16);
 				else
 					_xcomRegionLines.at(itRegion)->drawLine(
 							x,y,
 							x + 17,
-							newLineVector.at(newLineVector.size() - 2),
+							lineVector.at(lineVector.size() - 2),
 							color * 8 + 16);
 			}
 		}
@@ -1724,7 +1732,7 @@ void GraphsState::drawRegionLines()
 
 	color = static_cast<Uint8>(
 		   _game->getRuleset()->getInterface("graphs")->getElement("regionTotal")->color2);
-	newLineVector.clear();
+	lineVector.clear();
 
 	for (size_t
 			i = 0;
@@ -1736,9 +1744,9 @@ void GraphsState::drawRegionLines()
 		if (totals[i] > 0)
 			y -= static_cast<Sint16>(Round(static_cast<double>(totals[i]) / units));
 
-		newLineVector.push_back(y);
+		lineVector.push_back(y);
 
-		if (newLineVector.size() > 1)
+		if (lineVector.size() > 1)
 		{
 			x = 312 - static_cast<Sint16>(i) * 17;
 
@@ -1746,13 +1754,13 @@ void GraphsState::drawRegionLines()
 				_alienRegionLines.back()->drawLine(
 						x,y,
 						x + 17,
-						newLineVector.at(newLineVector.size() - 2),
+						lineVector.at(lineVector.size() - 2),
 						color);
 			else
 				_xcomRegionLines.back()->drawLine(
 						x,y,
 						x + 17,
-						newLineVector.at(newLineVector.size() - 2),
+						lineVector.at(lineVector.size() - 2),
 						color);
 		}
 	}
@@ -1924,14 +1932,14 @@ void GraphsState::drawFinanceLines() // Council Analytics
 		reduction,
 		x,y;
 
-	std::vector<Sint16> newLineVector;
+	std::vector<Sint16> lineVector;
 
 	for (size_t
 			btn = 0;
 			btn != 5;
 			++btn)
 	{
-		newLineVector.clear();
+		lineVector.clear();
 
 		for (size_t
 				i = 0;
@@ -1954,27 +1962,38 @@ void GraphsState::drawFinanceLines() // Council Analytics
 				case 3:
 					reduction = static_cast<Sint16>(Round(static_cast<double>(balance[i]) / units));
 				break;
-				default: //case 4:
+				case 4:
+				default: // avoid vc++ compiler warning.
 					reduction = static_cast<Sint16>(Round(static_cast<double>(score[i]) / units));
 			}
 
 			y -= reduction;
 
-			newLineVector.push_back(y);
+			lineVector.push_back(y);
 
-			if (btn % 2 != 0)
-				color = 8;
-			else
-				color = 0;
-
-			if (newLineVector.size() > 1)
+			if (lineVector.size() > 1)
 			{
+				if (btn % 2 != 0)
+					color = 8;
+				else
+					color = 0;
+
+				Uint8 multi; // switch colors for Income (was yellow) and Maintenance (was green)
+				if (btn == 0)
+					multi = 2;
+				else if (btn == 2)
+					multi = 0;
+				else
+					multi = static_cast<Uint8>(btn);
+
+				color = Palette::blockOffset((multi / 2) + 1) + color;
+
 				x = 312 - static_cast<Sint16>(i) * 17;
 				_financeLines.at(btn)->drawLine(
 											x,y,
 											x + 17,
-											newLineVector.at(newLineVector.size() - 2),
-											Palette::blockOffset((static_cast<Uint8>(btn) / 2) + 1) + color);
+											lineVector.at(lineVector.size() - 2),
+											color);
 			}
 		}
 	}
