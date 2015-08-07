@@ -154,35 +154,31 @@ SelectDestinationState::SelectDestinationState(
 //	_txtTitle->setWordWrap();
 
 
-	bool goCydonia = true; // if all Soldiers have Power or Flight suits .......
-
-	if (_game->getSavedGame()->isResearched("STR_CYDONIA_OR_BUST") == true
-		&& _craft->getRules()->getSpacecraft() == true
+	if (_craft->getRules()->getSpacecraft() == true
+		&& _game->getSavedGame()->isResearched(_game->getRuleset()->getFinalResearch()) == true
 		&& _craft->getNumSoldiers() > 0)
 	{
-		for (std::vector<Soldier*>::const_iterator
+		for (std::vector<Soldier*>::const_iterator // if all Soldiers have Power or Flight suits .......
 			i = _craft->getBase()->getSoldiers()->begin();
-			i != _craft->getBase()->getSoldiers()->end()
-				&& goCydonia == true;
+			i != _craft->getBase()->getSoldiers()->end();
 			++i)
 		{
 			if ((*i)->getCraft() == _craft
 				&& (*i)->getArmor()->isSpacesuit() == false)
 			{
-				goCydonia = false;
+				_btnCydonia->setVisible(false);
+				break;
 			}
 		}
 	}
 	else
-		goCydonia = false;
+		_btnCydonia->setVisible(false);
 
-	if (goCydonia == true)
+	if (_btnCydonia->getVisible() == true)
 	{
 		_btnCydonia->setText(tr("STR_CYDONIA"));
 		_btnCydonia->onMouseClick((ActionHandler)& SelectDestinationState::btnCydoniaClick);
 	}
-	else
-		_btnCydonia->setVisible(false);
 }
 
 /**

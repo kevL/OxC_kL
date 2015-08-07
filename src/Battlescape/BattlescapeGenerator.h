@@ -250,10 +250,10 @@ private:
 		/// Sets the alien item level.
 		void setAlienItemlevel(int alienItemLevel);
 
-		/// Sets up the next stage (for Cydonia/TFTD missions).
-		void nextStage();
 		/// Runs the generator.
 		void run();
+		/// Sets up the next stage (for Cydonia/TFTD missions).
+		void nextStage();
 
 		/// Generates a fake battlescape for Craft & Base soldier-inventory.
 		void runInventory(

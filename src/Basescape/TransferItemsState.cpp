@@ -1008,7 +1008,7 @@ void TransferItemsState::increaseByValue(int change)
 	// ERRORS Done.
 
 
-	if (   type == TRANSFER_SOLDIER // personnel count
+	if (type == TRANSFER_SOLDIER // personnel count
 		|| type == TRANSFER_SCIENTIST
 		|| type == TRANSFER_ENGINEER)
 	{

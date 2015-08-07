@@ -4554,7 +4554,7 @@
 1430262701 f:\git\openxcom\src\interface\window.h
 	"../Engine/Surface.h"
 
-1438343784 f:\git\openxcom\src\ruleset\ruleset.h
+1438873422 f:\git\openxcom\src\ruleset\ruleset.h
 	"../Ruleset/RuleAlienMission.h"
 	"../Savegame/GameTime.h"
 
@@ -4621,7 +4621,7 @@
 1433651396 f:\git\openxcom\src\basescape\craftequipmentstate.h
 	"../Engine/State.h"
 
-1438523048 f:\git\openxcom\src\battlescape\battlescapegenerator.h
+1438908521 f:\git\openxcom\src\battlescape\battlescapegenerator.h
 	"../Ruleset/MapScript.h"
 
 1437861855 f:\git\openxcom\src\battlescape\inventorystate.h
@@ -5088,7 +5088,7 @@
 	"../Savegame/Base.h"
 	"../Savegame/BaseFacility.h"
 
-1438164785 source:f:\git\openxcom\src\basescape\sellstate.cpp
+1438873822 source:f:\git\openxcom\src\basescape\sellstate.cpp
 	"SellState.h"
 	"../Engine/Action.h"
 	"../Engine/Game.h"
@@ -5260,7 +5260,7 @@
 1430149550 f:\git\openxcom\src\basescape\transferconfirmstate.h
 	"../Engine/State.h"
 
-1438165603 source:f:\git\openxcom\src\basescape\transferitemsstate.cpp
+1438873927 source:f:\git\openxcom\src\basescape\transferitemsstate.cpp
 	"TransferItemsState.h"
 	"TransferConfirmState.h"
 	"../Engine/Action.h"
@@ -5931,7 +5931,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1438844207 source:f:\git\openxcom\src\battlescape\map.cpp
+1438874132 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	"BattlescapeMessage.h"
 	"BattlescapeState.h"
@@ -7287,7 +7287,7 @@
 	"../Resource/ResourcePack.h"
 	"../Ruleset/RuleItem.h"
 
-1438170234 source:f:\git\openxcom\src\geoscape\selectdestinationstate.cpp
+1438874094 source:f:\git\openxcom\src\geoscape\selectdestinationstate.cpp
 	"SelectDestinationState.h"
 	"ConfirmCydoniaState.h"
 	"CraftErrorState.h"
@@ -8241,7 +8241,7 @@
 1432579417 source:f:\git\openxcom\src\ruleset\ruleresearch.cpp
 	"RuleResearch.h"
 
-1438559634 source:f:\git\openxcom\src\ruleset\ruleset.cpp
+1438873416 source:f:\git\openxcom\src\ruleset\ruleset.cpp
 	"Ruleset.h"
 	"AlienRace.h"
 	"AlienDeployment.h"

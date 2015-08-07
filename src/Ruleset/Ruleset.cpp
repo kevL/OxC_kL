@@ -798,6 +798,9 @@ void Ruleset::loadFile(const std::string& file) // protected.
 			rule->load(
 					*i,
 					_researchListOrder);
+
+			if ((*i)["unlockFinalMission"].as<bool>(false))
+				_finalResearch = (*i)["name"].as<std::string>(_finalResearch);
 		}
 	}
 
@@ -2520,7 +2523,9 @@ const std::vector<std::string>* Ruleset::getMissionScriptList() const
 }
 
 /**
- *
+ * Gets a specific mission script rule.
+ * @param id - reference a mission script id
+ * @return, pointer to the RuleMissionScript
  */
 RuleMissionScript* Ruleset::getMissionScript(const std::string& id) const
 {
@@ -2529,6 +2534,15 @@ RuleMissionScript* Ruleset::getMissionScript(const std::string& id) const
 		return i->second;
 
 	return NULL;
+}
+
+/**
+ * Gets the final research Id.
+ * @return, final research id
+ */
+const std::string Ruleset::getFinalResearch() const
+{
+	return _finalResearch;
 }
 
 /**

@@ -282,6 +282,7 @@ research: #the stock research ruleset does massive re-ordering as of 2015 feb 2 
   - name: STR_CYDONIA_OR_BUST
     cost: 60000
     points: 60
+    unlockFinalMission: true
     dependencies:
       - STR_COMMANDER_PLUS
   - name: STR_HYPER_WAVE_DECODER

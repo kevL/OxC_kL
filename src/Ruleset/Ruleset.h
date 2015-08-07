@@ -113,7 +113,9 @@ protected:
 	const Game* const _game;
 	RuleGlobe* _globe;
 
-	std::string _font;
+	std::string
+		_finalResearch,
+		_font;
 
 	std::vector<std::string>
 		_alienMissionsIndex,
@@ -406,6 +408,9 @@ protected:
 		const std::vector<std::string>* getMissionScriptList() const;
 		/// Gets a mission script.
 		RuleMissionScript* getMissionScript(const std::string& id) const;
+
+		/// Gets the final research Id.
+		const std::string getFinalResearch() const;
 
 		/// Gets the current Game.
 		const Game* const getGame() const;
