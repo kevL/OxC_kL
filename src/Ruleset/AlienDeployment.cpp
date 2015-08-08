@@ -223,7 +223,7 @@ void AlienDeployment::load(const YAML::Node& node)
 
 /**
  * Returns the language string that names this deployment.
- * Each deployment type has a unique name.
+ * @note Each deployment type has a unique name.
  * @return, deployment name
  */
 std::string AlienDeployment::getType() const
@@ -241,7 +241,7 @@ std::vector<DeploymentData>* AlienDeployment::getDeploymentData()
 }
 
 /**
- * Gets dimensions.
+ * Gets the dimensions of this deployment's battlefield.
  * @param width		- pointer to width
  * @param lenght	- pointer to length
  * @param heigth	- pointer to height

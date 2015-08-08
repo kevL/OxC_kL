@@ -36,7 +36,8 @@ struct BattleAction;
 
 
 /**
- * The Medikit User Interface. Medikit is an item for healing a soldier.
+ * The Medikit User Interface.
+ * @note Medikit is an item for healing a soldier.
  */
 class MedikitState
 	:

@@ -1455,10 +1455,10 @@ void BattlescapeGenerator::loadGroundWeapon(BattleItem* const item) // private.
 	//Log(LOG_INFO) << "BattlescapeGenerator::loadGroundWeapon() EXIT false";
 }
 
-/**
+/*
  * Loads all XCom weaponry before anything else is distributed.
- */
-/* void BattlescapeGenerator::loadWeapons() // private.
+ *
+void BattlescapeGenerator::loadWeapons() // private.
 {
 	// let's try to load this weapon, whether we equip it or not.
 	for (std::vector<BattleItem*>::iterator
@@ -1527,82 +1527,77 @@ bool BattlescapeGenerator::placeItemByLayout(BattleItem* item) // private.
 				i != _battleSave->getUnits()->end();
 				++i)
 		{
-			// skip the vehicles, we need only X-Com soldiers WITH equipment-layout
-			if ((*i)->getGeoscapeSoldier() == NULL
-//kL			|| (*i)->getArmor()->getSize() > 1
-				|| (*i)->getGeoscapeSoldier()->getEquipmentLayout()->empty() == true)
+			// skip vehicles -> deal only with xCom soldiers that have a layout
+			if ((*i)->getGeoscapeSoldier() != NULL
+				&& (*i)->getGeoscapeSoldier()->getEquipmentLayout()->empty() == false)
 			{
-				continue;
-			}
-
-
-			// find the first matching layout-slot which is not already occupied
-			const std::vector<EquipmentLayoutItem*>* const layoutItems = (*i)->getGeoscapeSoldier()->getEquipmentLayout();
-			for (std::vector<EquipmentLayoutItem*>::const_iterator
-					j = layoutItems->begin();
-					j != layoutItems->end();
-					++j)
-			{
-				if (item->getRules()->getType() != (*j)->getItemType()
-					|| (*i)->getItem(
+				// find the first matching layout-slot which is not already occupied
+				const std::vector<EquipmentLayoutItem*>* const layoutItems = (*i)->getGeoscapeSoldier()->getEquipmentLayout();
+				for (std::vector<EquipmentLayoutItem*>::const_iterator
+						j = layoutItems->begin();
+						j != layoutItems->end();
+						++j)
+				{
+					if (item->getRules()->getType() != (*j)->getItemType()
+						|| (*i)->getItem(
 									(*j)->getSlot(),
 									(*j)->getSlotX(),
 									(*j)->getSlotY()) != NULL)
-				{
-					continue;
-				}
-
-				if ((*j)->getAmmoItem() == "NONE")
-					loaded = true;
-				else
-				{
-					loaded = false;
-
-					// maybe we find the layout-ammo on the ground to load it with -
-					// yeh, maybe: as in, maybe this works maybe it doesn't
-					for (std::vector<BattleItem*>::const_iterator
-							k = _tileEquipt->getInventory()->begin();
-							k != _tileEquipt->getInventory()->end()
-								&& loaded == false;
-							++k)
 					{
-						if ((*k)->getRules()->getType() == (*j)->getAmmoItem()
-							&& (*k)->getSlot() == ground		// why the redundancy?
-																// WHAT OTHER _tileEquipt IS THERE BUT THE GROUND TILE!!??!!!1
-							&& item->setAmmoItem(*k) == 0)		// okay, so load the damn item.
-						{
-							(*k)->setXCOMProperty();
-							(*k)->setSlot(righthand);			// why are you putting ammo in his right hand.....
-																// maybe just to get it off the ground so it doesn't get loaded into another weapon later.
-							_battleSave->getItems()->push_back(*k);
+						continue;
+					}
 
-							loaded = true;
-							// note: soldier is not owner of the ammo, we are using this fact when saving equipments
+					if ((*j)->getAmmoItem() == "NONE")
+						loaded = true;
+					else
+					{
+						loaded = false;
+
+						// maybe we find the layout-ammo on the ground to load it with -
+						// yeh, maybe: as in, maybe this works maybe it doesn't
+						for (std::vector<BattleItem*>::const_iterator
+								k = _tileEquipt->getInventory()->begin();
+								k != _tileEquipt->getInventory()->end()
+									&& loaded == false;
+								++k)
+						{
+							if ((*k)->getRules()->getType() == (*j)->getAmmoItem()
+								&& (*k)->getSlot() == ground		// why the redundancy?
+																	// WHAT OTHER _tileEquipt IS THERE BUT THE GROUND TILE!!??!!!1
+								&& item->setAmmoItem(*k) == 0)		// okay, so load the damn item.
+							{
+								(*k)->setXCOMProperty();
+								(*k)->setSlot(righthand);			// why are you putting ammo in his right hand.....
+																	// maybe just to get it off the ground so it doesn't get loaded into another weapon later.
+								_battleSave->getItems()->push_back(*k);
+
+								loaded = true;
+								// note: soldier is not owner of the ammo, this fact is relevant to the saved layouts
+							}
 						}
 					}
-				}
 
-				// only place the weapon (or any other item..) onto the soldier when it's loaded with its layout-ammo (if any)
-				if (loaded == true)
-				{
-					item->setXCOMProperty();
-
-					item->moveToOwner(*i);
-
-					item->setSlot(_rules->getInventory((*j)->getSlot()));
-					item->setSlotX((*j)->getSlotX());
-					item->setSlotY((*j)->getSlotY());
-
-					if (Options::includePrimeStateInSavedLayout == true
-						&& (item->getRules()->getBattleType() == BT_GRENADE
-							|| item->getRules()->getBattleType() == BT_PROXYGRENADE))
+					// only place the weapon (or any other item..) onto the soldier when it's loaded with its layout-ammo (if any)
+					if (loaded == true)
 					{
-						item->setFuseTimer((*j)->getFuseTimer());
+						item->setXCOMProperty();
+
+						item->moveToOwner(*i);
+
+						item->setSlot(_rules->getInventory((*j)->getSlot()));
+						item->setSlotX((*j)->getSlotX());
+						item->setSlotY((*j)->getSlotY());
+
+						if (item->getRules()->isGrenade() == true
+							&& Options::includePrimeStateInSavedLayout == true)
+						{
+							item->setFuseTimer((*j)->getFuseTimer());
+						}
+
+						_battleSave->getItems()->push_back(item);
+
+						return true;
 					}
-
-					_battleSave->getItems()->push_back(item);
-
-					return true;
 				}
 			}
 		}
@@ -2038,14 +2033,14 @@ bool BattlescapeGenerator::addItem( // private.
 
 /**
  * Deploys the aLiens according to the AlienDeployment rules.
- * @param depRule - pointer to the AlienDeployment rule
+ * @param deployRule - pointer to the AlienDeployment rule
  */
-void BattlescapeGenerator::deployAliens(AlienDeployment* const depRule) // private.
+void BattlescapeGenerator::deployAliens(AlienDeployment* const deployRule) // private.
 {
-	if (depRule->getRace().empty() == false
+	if (deployRule->getRace().empty() == false
 		&& _alienRace.empty() == true) //&& month != -1
 	{
-		_alienRace = depRule->getRace();
+		_alienRace = deployRule->getRace();
 	}
 
 /*	if (_battleSave->getDepth() > 0
@@ -2059,7 +2054,7 @@ void BattlescapeGenerator::deployAliens(AlienDeployment* const depRule) // priva
 	if (race == NULL)
 	{
 		throw Exception("Map generator encountered an error: Unknown race: "
-			  + _alienRace + " defined in depRule: " + depRule->getType());
+			  + _alienRace + " defined in deployRule: " + deployRule->getType());
 	}
 
 	int month = _gameSave->getMonthsPassed();
@@ -2084,8 +2079,8 @@ void BattlescapeGenerator::deployAliens(AlienDeployment* const depRule) // priva
 	BattleUnit* unit;
 
 	for (std::vector<DeploymentData>::const_iterator
-			data = depRule->getDeploymentData()->begin();
-			data != depRule->getDeploymentData()->end();
+			data = deployRule->getDeploymentData()->begin();
+			data != deployRule->getDeploymentData()->end();
 			++data)
 	{
 		aLien = race->getMember((*data).alienRank);

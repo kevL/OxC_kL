@@ -903,24 +903,34 @@ int RuleItem::getAutoKick() const
 
 /**
 * Gets if this item is a rifle.
-* @return, true if this item is a rifle
+* @return, true if rifle
 */
 bool RuleItem::isRifle() const
 {
-	return (_battleType == BT_FIREARM
-				|| _battleType == BT_MELEE)
-			&& _twoHanded == true;
+	return _twoHanded == true
+			&& (_battleType == BT_FIREARM
+				|| _battleType == BT_MELEE);
 }
 
 /**
 * Gets if this item is a pistol.
-* @return, true if this item is a pistol
+* @return, true if pistol
 */
 bool RuleItem::isPistol() const
 {
-	return (_battleType == BT_FIREARM
-				|| _battleType == BT_MELEE)
-			&& _twoHanded == false;
+	return _twoHanded == false
+			&& (_battleType == BT_FIREARM
+				|| _battleType == BT_MELEE);
+}
+
+/**
+ * Gets if this item is a grenade.
+ * @return, true if grenade
+ */
+bool RuleItem::isGrenade() const
+{
+	return _battleType == BT_GRENADE
+		|| _battleType == BT_PROXYGRENADE;
 }
 
 /**

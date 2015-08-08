@@ -77,8 +77,13 @@ void RuleRegion::load(const YAML::Node& node)
 		_lonMax.push_back(areas[i][1] * M_PI / 180.);
 		_latMin.push_back(areas[i][2] * M_PI / 180.);
 		_latMax.push_back(areas[i][3] * M_PI / 180.);
-	}
 
+		// safeties ->
+//		if (_lonMin.back() > _lonMax.back())
+//			std::swap(_lonMin.back(), _lonMax.back());
+//		if (_latMin.back() > _latMax.back())
+//			std::swap(_latMin.back(), _latMax.back());
+	}
 
 	// TODO: if ["delete"] delete previous mission zones.
 	// NOTE: the next line replaces previous missionZones:
@@ -175,8 +180,8 @@ bool RuleRegion::insideRegion(
 				  && lon < _lonMax[i]);
 		else
 			inLon = ((lon >= _lonMin[i]
-						&& lon < 6.283)
-					|| (lon >= 0.
+						&& lon < M_PI * 2)
+				  || (lon >= 0.
 						&& lon < _lonMax[i]));
 
 		inLat = (lat >= _latMin[i]

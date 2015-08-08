@@ -951,9 +951,9 @@ void DebriefingState::prepareDebriefing() // private.
 		}
 	}
 
-	if (found == false
-		&& (deployRule == NULL
-			|| deployRule->getNextStage().empty() == true))
+	if (found == false)
+//		&& (deployRule == NULL
+//			|| deployRule->getNextStage().empty() == true))
 	{
 		for (std::vector<MissionSite*>::const_iterator // Second - search for MissionSite.
 				i = _gameSave->getMissionSites()->begin();
@@ -1055,9 +1055,9 @@ void DebriefingState::prepareDebriefing() // private.
 	}
 
 
-	if (found == false // alien base disappears if not aborted
-		&& (deployRule == NULL
-			|| deployRule->getNextStage().empty() == true))
+	if (found == false) // alien base disappears if not aborted
+//		&& (deployRule == NULL
+//			|| deployRule->getNextStage().empty() == true))
 	{
 		for (std::vector<AlienBase*>::const_iterator // Third - search for AlienBase.
 				i = _gameSave->getAlienBases()->begin();
@@ -1070,10 +1070,12 @@ void DebriefingState::prepareDebriefing() // private.
 
 				missionAccomplished = true;
 
-//				if (deployRule->getNextStage().empty() == false)
-//					missionAccomplished = false;
-//				else
-				if (aborted == true
+				if (deployRule != NULL
+					&& deployRule->getNextStage().empty() == false)
+				{
+					missionAccomplished = false;
+				}
+				else if (aborted == true
 					|| soldierLive == 0)
 				{
 					if (battleSave->allObjectivesDestroyed() == false)
@@ -1961,7 +1963,9 @@ void DebriefingState::recoverItems(std::vector<BattleItem*>* battleItems) // pri
 						if (unit != NULL)
 						{
 							if (itRule->isRecoverable() == true
-								&& unit->getStatus() == STATUS_DEAD)
+								&& (unit->getStatus() == STATUS_DEAD
+									|| (unit->getStatus() == STATUS_TIME_OUT // kL_tentative.
+										&& unit->isOut_t(OUT_DEAD) == true)))
 							{
 								Log(LOG_INFO) << ". . corpse = " << itRule->getType();
 
@@ -1972,7 +1976,9 @@ void DebriefingState::recoverItems(std::vector<BattleItem*>* battleItems) // pri
 								if (unit->getArmor()->getCorpseGeoscape().empty() == false) // safety.
 									_base->getItems()->addItem(unit->getArmor()->getCorpseGeoscape());
 							}
-							else if (unit->getStatus() == STATUS_UNCONSCIOUS)
+							else if (unit->getStatus() == STATUS_UNCONSCIOUS
+								|| (unit->getStatus() == STATUS_TIME_OUT
+									&& unit->isOut_t(OUT_STUN) == true)) // kL_tentative.
 							{
 								if (itRule->isRecoverable() == true
 									&& unit->getOriginalFaction() == FACTION_HOSTILE)

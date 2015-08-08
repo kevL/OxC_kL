@@ -2268,7 +2268,7 @@ BattleUnit* TileEngine::hit(
 			}
 
 			if (targetUnit != NULL)
-//				&& targetUnit->isOut_t(OUT_HLTH_STUN) == false)
+//				&& targetUnit->isOut_t(OUT_DEAD_STUN) == false)
 			{
 				//Log(LOG_INFO) << ". . . targetUnit Valid ID = " << targetUnit->getId();
 				const int wounds = targetUnit->getFatalWounds();
@@ -2399,7 +2399,7 @@ BattleUnit* TileEngine::hit(
 					//Log(LOG_INFO) << ". . stunLevel = " << targetUnit->getStun();
 					if (targetUnit->getSpecialAbility() == SPECAB_EXPLODE // cyberdiscs
 //						&& targetUnit->isOut_t(OUT_STAT) == false
-						&& targetUnit->isOut_t(OUT_HLTH_STUN) == true)
+						&& targetUnit->isOut_t(OUT_DEAD_STUN) == true)
 //						&& (targetUnit->getHealth() == 0
 //							|| targetUnit->getStun() >= targetUnit->getHealth()))
 					{
@@ -2415,9 +2415,9 @@ BattleUnit* TileEngine::hit(
 							// but ExplosionBState::explode() creates a hit() ! -> terrain..
 
 							const Position unitPos = Position(
-//kL													targetUnit->getPosition().x * 16,
-//kL													targetUnit->getPosition().y * 16,
-//kL													targetUnit->getPosition().z * 24);
+//														targetUnit->getPosition().x * 16,
+//														targetUnit->getPosition().y * 16,
+//														targetUnit->getPosition().z * 24);
 														targetUnit->getPosition().x * 16 + 16,	// kL, cyberdisc a big unit.
 														targetUnit->getPosition().y * 16 + 16,	// kL
 														targetUnit->getPosition().z * 24 + 12);	// kL

@@ -102,8 +102,8 @@ enum OutCheck
 	OUT_ALL,		// 0
 	OUT_STAT,		// 1
 	OUT_DEAD,		// 2
-	OUT_STUNNED,	// 3
-	OUT_HLTH_STUN	// 4
+	OUT_STUN,		// 3
+	OUT_DEAD_STUN	// 4
 };
 
 
@@ -573,11 +573,11 @@ private:
 
 		/// Creates a BattleUnit from a geoscape Soldier.
 		BattleUnit( // xCom operatives
-				Soldier* soldier,
+				Soldier* const soldier,
 				const int diff); // for VictoryPts value per death.
 		/// Creates a BattleUnit from Unit rule.
 		BattleUnit( // aLiens, civies, & Tanks
-				RuleUnit* unitRule,
+				RuleUnit* const unitRule,
 				const UnitFaction faction,
 				const int id,
 				RuleArmor* const armor,
@@ -711,6 +711,8 @@ private:
 		bool healStun(int power);
 		/// Gets this unit's stun level.
 		int getStun() const;
+		/// Sets this unit's stun level.
+		void setStun(int stun);
 
 		/// Knocks this unit out instantly.
 		void knockOut(BattlescapeGame* battleGame);

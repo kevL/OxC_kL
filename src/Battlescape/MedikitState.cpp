@@ -153,8 +153,7 @@ MedikitState::MedikitState(BattleAction* action)
 	:
 		_action(action)
 {
-/*kL
-	if (Options::maximizeInfoScreens)
+/*	if (Options::maximizeInfoScreens)
 	{
 		Options::baseXResolution = Screen::ORIGINAL_WIDTH;
 		Options::baseYResolution = Screen::ORIGINAL_HEIGHT;
@@ -163,7 +162,6 @@ MedikitState::MedikitState(BattleAction* action)
 
 	_bg = new Surface(320, 200);
 
-//	_game->getSavedGame()->getSavedBattle()->setPaletteByDepth(this);
 	setPalette("PAL_BATTLESCAPE");
 
 	if (_game->getScreen()->getDY() > 50)
@@ -172,7 +170,7 @@ MedikitState::MedikitState(BattleAction* action)
 		_bg->drawRect(67, 44, 190, 100, Palette::blockOffset(15)+15);
 	}
 
-	_txtPart	= new Text(16, 9, 89, 120);
+	_txtPart	= new Text(16, 9,  89, 120);
 	_txtWound	= new Text(16, 9, 145, 120);
 	_mediView	= new MedikitView(
 								52, 58, 95, 60,
@@ -190,7 +188,7 @@ MedikitState::MedikitState(BattleAction* action)
 	_txtStim	= new MedikitText(87);
 	_txtHeal	= new MedikitText(123);
 
-	_numHealth		= new NumberText(15, 5, 90, 8);
+	_numHealth		= new NumberText(15, 5,  90, 8);
 	_numTotalHP		= new NumberText(15, 5, 225, 8);
 	_numStun		= new NumberText(15, 5, 105, 8);
 	_barHealth		= new Bar(300, 5, 120, 8);

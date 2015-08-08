@@ -82,15 +82,15 @@ OptionsModsState::OptionsModsState(OptionsOrigin origin)
 			i != rulesets.end();
 			++i)
 	{
-		std::string filename = *i;
+		std::string file = *i;
 		std::transform(
-					filename.begin(),
-					filename.end(),
-					filename.begin(),
+					file.begin(),
+					file.end(),
+					file.begin(),
 					tolower);
 
-		if ((filename.length() > 4
-				&& filename.substr(filename.length() - 4, 4) == ".rul")
+		if ((file.length() > 4
+				&& file.substr(file.length() - 4, 4) == ".rul")
 			|| CrossPlatform::getDataContents("Ruleset/" + *i, "rul").empty() == false)
 		{
 			std::string mod = CrossPlatform::noExt(*i);
@@ -109,7 +109,7 @@ OptionsModsState::OptionsModsState(OptionsOrigin origin)
 				_lstMods->addRow(
 							2,
 							modName.c_str(),
-							(modEnabled ? tr("STR_YES").c_str() : tr("STR_NO").c_str()));
+							modEnabled ? tr("STR_YES").c_str() : tr("STR_NO").c_str());
 
 				_mods.push_back(mod);
 			}

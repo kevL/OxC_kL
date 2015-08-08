@@ -1657,40 +1657,71 @@ inline void BattlescapeState::handle(Action* action)
 			{
 				if ((SDL_GetModState() & KMOD_CTRL) != 0)
 				{
-					if (action->getDetails()->key.keysym.sym == SDLK_d)		// "ctrl-d" - enable debug mode
+					if (action->getDetails()->key.keysym.sym == SDLK_d)				// "ctrl-d" - enable debug mode
 					{
 						_battleSave->setDebugMode();
 //						_txtOperationTitle->setVisible(false);
 						debug(L"Debug Mode");
 					}
-					else if (_battleSave->getDebugMode()
-						&& action->getDetails()->key.keysym.sym == SDLK_v)	// "ctrl-v" - reset tile visibility
+					else if (_battleSave->getDebugMode() == true)
 					{
-						debug(L"Resetting tile visibility");
-						_battleSave->resetTiles();
-					}
-					else if (_battleSave->getDebugMode()
-						&& action->getDetails()->key.keysym.sym == SDLK_k)	// "ctrl-k" - kill all aliens
-					{
-						debug(L"Influenza bacterium dispersed");
-						for (std::vector<BattleUnit*>::const_iterator
-								i = _battleSave->getUnits()->begin();
-								i !=_battleSave->getUnits()->end();
-								++i)
+						if (action->getDetails()->key.keysym.sym == SDLK_v)			// "ctrl-v" - reset tile visibility
 						{
-							if ((*i)->getOriginalFaction() == FACTION_HOSTILE)
+							debug(L"Resetting tile visibility");
+							_battleSave->resetTiles();
+						}
+						else
+						{
+							bool checkCasualties = false;
+
+							if (action->getDetails()->key.keysym.sym == SDLK_k)		// "ctrl-k" - kill all aliens
 							{
-								(*i)->instaKill();
-								if ((*i)->getTile() != NULL)
-									(*i)->getTile()->setUnit(NULL);
+								debug(L"Influenza bacterium dispersed");
+								for (std::vector<BattleUnit*>::const_iterator
+										i = _battleSave->getUnits()->begin();
+										i !=_battleSave->getUnits()->end();
+										++i)
+								{
+									if ((*i)->getOriginalFaction() == FACTION_HOSTILE
+										&& (*i)->isOut_t(OUT_DEAD) == false)
+									{
+										checkCasualties = true;
+										(*i)->setHealth(0);
+//										(*i)->damage(Position(0,0,0), 1000, DT_AP, true);
+									}
+								}
+							}
+							else if (action->getDetails()->key.keysym.sym == SDLK_j)	// "ctrl-j" - stun all aliens
+							{
+								debug(L"Deploying Celine Dione album");
+								for (std::vector<BattleUnit*>::const_iterator
+									i = _battleSave->getUnits()->begin();
+									i !=_battleSave->getUnits()->end();
+									++i)
+								{
+									if ((*i)->getOriginalFaction() == FACTION_HOSTILE
+										&& (*i)->isOut_t(OUT_DEAD) == false)
+//										&& (*i)->isOut() == false)
+									{
+										checkCasualties = true;
+										(*i)->setStun((*i)->getHealth() + 100);
+//										(*i)->damage(Position(0,0,0), 1000, DT_STUN, true);
+									}
+								}
+							}
+
+							if (checkCasualties == true)
+							{
+								_battleSave->getBattleGame()->checkForCasualties(NULL, NULL, true);
+								_battleSave->getBattleGame()->handleState();
 							}
 						}
 					}
 				}
 				else if (action->getDetails()->key.keysym.sym == SDLK_F10)	// f10 - voxel map dump
 					saveVoxelMap();
-				else if (action->getDetails()->key.keysym.sym == SDLK_F9	// f9 - ai dump
-					&& Options::traceAI == true)
+				else if (action->getDetails()->key.keysym.sym == SDLK_F9)	// f9 - ai dump
+//					&& Options::traceAI == true)
 				{
 					saveAIMap();
 				}
@@ -2908,7 +2939,7 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 			}
 		}
 
-		showPsiButton(
+		showPsiButton( // getSpecialWeapon() != NULL
 					selUnit->getOriginalFaction() == FACTION_HOSTILE
 					&& selUnit->getBaseStats()->psiSkill > 0);
 	}

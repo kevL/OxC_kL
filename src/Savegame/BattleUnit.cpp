@@ -59,7 +59,7 @@ namespace OpenXcom
  * @param diff		- for VictoryPts value at death
  */
 BattleUnit::BattleUnit(
-		Soldier* soldier,
+		Soldier* const soldier,
 		const int diff)
 	:
 		_geoscapeSoldier(soldier),
@@ -218,7 +218,7 @@ BattleUnit::BattleUnit(
  * @param battleGame	- pointer to the BattlescapeGame (default NULL)
  */
 BattleUnit::BattleUnit(
-		RuleUnit* unitRule,
+		RuleUnit* const unitRule,
 		const UnitFaction faction,
 		const int id,
 		RuleArmor* const armor,
@@ -1578,7 +1578,7 @@ int BattleUnit::damage(
 		}
 
 //		if (isOut(true, true) == true)
-		if (isOut_t(OUT_HLTH_STUN) == true)
+		if (isOut_t(OUT_DEAD_STUN) == true)
 			_aboutToDie = true;
 
 		if (isOut_t(OUT_DEAD) == false
@@ -1692,6 +1692,14 @@ bool BattleUnit::healStun(int power)
 int BattleUnit::getStun() const
 {
 	return _stunLevel;
+}
+
+/**
+ * Sets this unit's stun level.
+ */
+void BattleUnit::setStun(int stun)
+{
+	_stunLevel = stun;
 }
 
 /**
@@ -1865,7 +1873,7 @@ const bool BattleUnit::isOut_t(const OutCheck test) const
 				|| _status == STATUS_UNCONSCIOUS
 				|| _status == STATUS_TIME_OUT
 				|| _health == 0
-				|| _stunLevel >= _health)
+				|| _health <= _stunLevel)
 			{
 				return true;
 			}
@@ -1885,14 +1893,14 @@ const bool BattleUnit::isOut_t(const OutCheck test) const
 				return true;
 		break;
 
-		case OUT_STUNNED:
-			if (_stunLevel >= _health)
+		case OUT_STUN:
+			if (_health <= _stunLevel)
 				return true;
 		break;
 
-		case OUT_HLTH_STUN:
+		case OUT_DEAD_STUN:
 			if (_health == 0
-				|| _stunLevel >= _health)
+				|| _health <= _stunLevel)
 			{
 				return true;
 			}
@@ -2454,7 +2462,7 @@ void BattleUnit::prepUnit(bool full)
 	}
 
 //	if (isOut() == false)
-	if (isOut_t(OUT_STUNNED) == false)
+	if (isOut_t(OUT_STUN) == false)
 		initTu(
 			false,
 			lowMorale);
