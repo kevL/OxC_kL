@@ -5875,7 +5875,7 @@
 	"../Interface/Frame.h"
 	"../Interface/Text.h"
 
-1439014011 source:f:\git\openxcom\src\battlescape\inventory.cpp
+1439034076 source:f:\git\openxcom\src\battlescape\inventory.cpp
 	"Inventory.h"
 	"PrimeGrenadeState.h"
 	"TileEngine.h"
@@ -8389,7 +8389,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1439011179 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1439032793 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	"BattleItem.h"
 	"SavedGame.h"
