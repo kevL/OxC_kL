@@ -75,7 +75,7 @@ void BattleState::think() // virtual.
 
 /**
  * Gets the action result.
- * @note Returns error messages or an empty string when everything went fine.
+ * @note Returns an error message or else an empty string if everything went fine.
  * @return, a BattleAction struct (BattlescapeGame.h)
  */
 BattleAction BattleState::getAction() const

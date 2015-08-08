@@ -276,12 +276,12 @@ private:
 		void dropItem(
 				const Position& pos,
 				BattleItem* const item,
-				bool newItem = false,
-				bool removeItem = false);
+				bool created = false,
+				bool disown = false);
 
 		/// Converts a unit into a unit of another type.
 		BattleUnit* convertUnit(
-				BattleUnit* unit,
+				BattleUnit* const unit,
 				const std::string& conType);
 
 		/// Gets the map.

@@ -66,7 +66,7 @@ enum UnitStatus
 	STATUS_UNCONSCIOUS,	//  7
 	STATUS_PANICKING,	//  8
 	STATUS_BERSERK,		//  9
-	STATUS_TIME_OUT,	// 10 won't participate in a 'next stage' battle.
+	STATUS_LIMBO,		// 10 won't participate in a 'next stage' battle.
 	STATUS_DISABLED		// 11 dead or unconscious but doesn't know it yet.
 };
 

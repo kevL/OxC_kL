@@ -1615,7 +1615,7 @@ void BattlescapeGame::checkForCasualties(
 			i != _battleSave->getUnits()->end();
 			++i)
 	{
-		if ((*i)->getStatus() != STATUS_TIME_OUT) // kL_tentative.
+		if ((*i)->getStatus() != STATUS_LIMBO) // kL_tentative.
 		{
 //			dead = ((*i)->getHealth() == 0);
 //			stunned = ((*i)->getHealth() <= (*i)->getStun());
@@ -1682,7 +1682,6 @@ void BattlescapeGame::checkForCasualties(
 						&& defendUnit->getStatus() != STATUS_COLLAPSING	// kL_note: is this really needed ....
 						&& defendUnit->getStatus() != STATUS_TURNING	// kL: may be set by UnitDieBState cTor
 						&& defendUnit->getStatus() != STATUS_DISABLED)	// kL
-						// STATUS_TIME_OUT
 					|| converted == true)
 				{
 					if (dead == true)
@@ -1696,6 +1695,7 @@ void BattlescapeGame::checkForCasualties(
 
 						if (attackUnit->getGeoscapeSoldier() != NULL)
 						{
+							defendUnit->setMurdererId(attackUnit->getId());
 							attackUnit->getStatistics()->kills.push_back(new BattleUnitKills(
 																						killStatRank,
 																						killStatRace,
@@ -1706,7 +1706,6 @@ void BattlescapeGame::checkForCasualties(
 																						killStatMission,
 																						killStatTurn,
 																						killStatPoints));
-							defendUnit->setMurdererId(attackUnit->getId());
 						}
 
 						if (attackUnit->isFearable() == true)
@@ -1839,33 +1838,41 @@ void BattlescapeGame::checkForCasualties(
 
 					if (converted == false)
 					{
-						if (weapon != NULL)
-							statePushNext(new UnitDieBState( // kL_note: This is where units get sent to DEATH!
-														this,
-														*i,
-														weapon->getRules()->getDamageType()));
+						ItemDamageType dType;
+						bool noSound;
+
+						if (weapon != NULL) // This is where units get sent to DEATH!
+						{
+							dType = weapon->getRules()->getDamageType();
+							noSound = false;
+						}
 						else // hidden or terrain explosion or death by fatal wounds
 						{
-							if (hiddenExpl == true) // this is instant death from UFO powersources, without screaming sounds
-								statePushNext(new UnitDieBState(
-															this,
-															*i,
-															DT_HE,
-															true));
+							if (hiddenExpl == true) // this is instant death from UFO powersources without screaming sounds
+							{
+								dType = DT_HE;
+								noSound = true;
+							}
 							else
 							{
 								if (terrainExpl == true)
-									statePushNext(new UnitDieBState(
-																this,
-																*i,
-																DT_HE));
-								else // no attacker and no terrain explosion; must be fatal wounds
-									statePushNext(new UnitDieBState(
-																this,
-																*i,
-																DT_NONE)); // DT_NONE -> STR_HAS_DIED_FROM_A_FATAL_WOUND
+								{
+									dType = DT_HE;
+									noSound = false;
+								}
+								else // no attacker and no terrain explosion - must be fatal wounds
+								{
+									dType = DT_NONE; // -> STR_HAS_DIED_FROM_A_FATAL_WOUND
+									noSound = false;
+								}
 							}
 						}
+
+						statePushNext(new UnitDieBState(
+													this,
+													*i,
+													dType,
+													noSound));
 					}
 				}
 				else if (stunned == true
@@ -1874,7 +1881,6 @@ void BattlescapeGame::checkForCasualties(
 					&& defendUnit->getStatus() != STATUS_COLLAPSING	// kL_note: is this really needed ....
 					&& defendUnit->getStatus() != STATUS_TURNING	// kL_note: may be set by UnitDieBState cTor
 					&& defendUnit->getStatus() != STATUS_DISABLED)	// kL
-					// STATUS_TIME_OUT
 				{
 					(*i)->setStatus(STATUS_DISABLED); // kL
 
@@ -1915,13 +1921,11 @@ void BattlescapeGame::checkForCasualties(
 		if (_battleSave->getSide() == FACTION_PLAYER)
 		{
 			const BattleUnit* const unit = _battleSave->getSelectedUnit();
-			if (unit != NULL)
-				_parentState->showPsiButton(unit->getOriginalFaction() == FACTION_HOSTILE
-										 && unit->getBaseStats()->psiSkill > 0
-										 && unit->isOut_t() == false);
-//										 && unit->isOut(true, true) == false);
-			else
-				_parentState->showPsiButton(false);
+			_parentState->showPsiButton(unit != NULL
+									 && unit->getOriginalFaction() == FACTION_HOSTILE
+									 && unit->getBaseStats()->psiSkill > 0
+									 && unit->isOut_t() == false);
+//									 && unit->isOut(true, true) == false);
 		}
 
 /*		if (_battleSave->getTacticalType() == TCT_BASEASSAULT // do this in SavedBattleGame::addDestroyedObjective()
@@ -2985,49 +2989,42 @@ void BattlescapeGame::requestEndTurn()
 /**
  * Drops an item to the floor and affects it with gravity then recalculates FoV
  * if it's a light-source.
- * @param pos			- reference position to place the item
- * @param item			- pointer to the item
- * @param newItem		- true if this is a new item (default false)
- * @param removeItem	- true to remove the item from the owner (default false)
+ * @param pos		- reference position to place the item
+ * @param item		- pointer to the item
+ * @param create	- true if this is a new item (default false)
+ * @param disown	- true to remove the item from the owner (default false)
  */
 void BattlescapeGame::dropItem(
 		const Position& pos,
 		BattleItem* const item,
-		bool newItem,
-		bool removeItem)
+		bool created,
+		bool disown)
 {
-	if (_battleSave->getTile(pos) == NULL		// don't spawn anything outside of bounds
-		|| item->getRules()->isFixed() == true)	// don't ever drop fixed items
+	if (_battleSave->getTile(pos) != NULL			// don't spawn anything outside of bounds
+		&& item->getRules()->isFixed() == false)	// don't ever drop fixed items
 	{
-		return;
-	}
+		_battleSave->getTile(pos)->addItem(
+										item,
+										getRuleset()->getInventory("STR_GROUND"));
 
-	_battleSave->getTile(pos)->addItem(
-									item,
-									getRuleset()->getInventory("STR_GROUND"));
+		if (item->getUnit() != NULL)
+			item->getUnit()->setPosition(pos);
 
-	if (item->getUnit() != NULL)
-		item->getUnit()->setPosition(pos);
+		if (created == true)
+			_battleSave->getItems()->push_back(item);
 
-	if (newItem == true)
-		_battleSave->getItems()->push_back(item);
-//	else if (_battleSave->getSide() != FACTION_PLAYER)
-//		item->setTurnFlag(true);
+		if (disown == true)
+			item->moveToOwner(NULL);
+		else if (item->getRules()->isGrenade() == false)
+			item->setOwner(NULL);
 
-	if (removeItem == true)
-		item->moveToOwner(NULL);
-	else if (item->getRules()->getBattleType() != BT_GRENADE
-		&& item->getRules()->getBattleType() != BT_PROXYGRENADE)
-	{
-		item->setOwner(NULL);
-	}
+		getTileEngine()->applyGravity(_battleSave->getTile(pos));
 
-	getTileEngine()->applyGravity(_battleSave->getTile(pos));
-
-	if (item->getRules()->getBattleType() == BT_FLARE)
-	{
-		getTileEngine()->calculateTerrainLighting();
-		getTileEngine()->recalculateFOV(true);
+		if (item->getRules()->getBattleType() == BT_FLARE)
+		{
+			getTileEngine()->calculateTerrainLighting();
+			getTileEngine()->recalculateFOV(true);
+		}
 	}
 }
 
@@ -3038,7 +3035,7 @@ void BattlescapeGame::dropItem(
  * @return, pointer to the new unit
  */
 BattleUnit* BattlescapeGame::convertUnit(
-		BattleUnit* unit,
+		BattleUnit* const unit,
 		const std::string& conType)
 {
 	//Log(LOG_INFO) << "BattlescapeGame::convertUnit() " << conType;

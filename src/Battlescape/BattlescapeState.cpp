@@ -1301,8 +1301,7 @@ void BattlescapeState::mapOver(Action* action)
 							wst = tr(item->getAmmoItem()->getRules()->getType());
 							wst1 += L" | " + wst + L" (" + Text::formatNumber(item->getAmmoItem()->getAmmoQuantity()) + L")";
 						}
-						else if ((itRule->getBattleType() == BT_GRENADE
-								|| itRule->getBattleType() == BT_PROXYGRENADE)
+						else if (itRule->isGrenade() == true
 							&& item->getFuseTimer() > -1)
 						{
 							wst1 += L" (" + Text::formatNumber(item->getFuseTimer()) + L")";
@@ -3590,53 +3589,50 @@ void BattlescapeState::toggleIcons(bool vis)
 void BattlescapeState::drawFuse()
 {
 	const BattleUnit* const selectedUnit = _battleSave->getSelectedUnit();
-	if (selectedUnit == NULL)
-		return;
-
-
-	static const int pulse[PULSE_FRAMES] = { 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,
-											13,12,11,10, 9, 8, 7, 6, 5, 4, 3};
-
-	if (_fuseFrame == PULSE_FRAMES)
-		_fuseFrame = 0;
-
-	static Surface* const srf = _game->getResourcePack()->getSurfaceSet("SCANG.DAT")->getFrame(9); // plus sign
-
-	const BattleItem* item = selectedUnit->getItem("STR_LEFT_HAND");
-	if (item != NULL
-		&& ((item->getRules()->getBattleType() == BT_GRENADE
-				|| item->getRules()->getBattleType() == BT_PROXYGRENADE)
-			&& item->getFuseTimer() != -1))
+	if (selectedUnit != NULL)
 	{
-		_btnLeftHandItem->lock();
-		srf->blitNShade(
-					_btnLeftHandItem,
-					_btnLeftHandItem->getX() + 27,
-					_btnLeftHandItem->getY() - 1,
-					pulse[_fuseFrame],
-					false,
-					3); // red
-		_btnLeftHandItem->unlock();
-	}
+		static const int pulse[PULSE_FRAMES] = { 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,
+												13,12,11,10, 9, 8, 7, 6, 5, 4, 3};
 
-	item = selectedUnit->getItem("STR_RIGHT_HAND");
-	if (item != NULL
-		&& ((item->getRules()->getBattleType() == BT_GRENADE
-				|| item->getRules()->getBattleType() == BT_PROXYGRENADE)
-			&& item->getFuseTimer() != -1))
-	{
-		_btnRightHandItem->lock();
-		srf->blitNShade(
-					_btnRightHandItem,
-					_btnRightHandItem->getX() + 27,
-					_btnRightHandItem->getY() - 1,
-					pulse[_fuseFrame],
-					false,
-					3); // red
-		_btnRightHandItem->unlock();
-	}
+		if (_fuseFrame == PULSE_FRAMES)
+			_fuseFrame = 0;
 
-	++_fuseFrame;
+		static Surface* const srf = _game->getResourcePack()->getSurfaceSet("SCANG.DAT")->getFrame(9); // plus sign
+
+		const BattleItem* item = selectedUnit->getItem("STR_LEFT_HAND");
+		if (item != NULL
+			&& item->getRules()->isGrenade() == true
+			&& item->getFuseTimer() != -1)
+		{
+			_btnLeftHandItem->lock();
+			srf->blitNShade(
+						_btnLeftHandItem,
+						_btnLeftHandItem->getX() + 27,
+						_btnLeftHandItem->getY() - 1,
+						pulse[_fuseFrame],
+						false,
+						3); // red
+			_btnLeftHandItem->unlock();
+		}
+
+		item = selectedUnit->getItem("STR_RIGHT_HAND");
+		if (item != NULL
+			&& item->getRules()->isGrenade() == true
+			&& item->getFuseTimer() != -1)
+		{
+			_btnRightHandItem->lock();
+			srf->blitNShade(
+						_btnRightHandItem,
+						_btnRightHandItem->getX() + 27,
+						_btnRightHandItem->getY() - 1,
+						pulse[_fuseFrame],
+						false,
+						3); // red
+			_btnRightHandItem->unlock();
+		}
+
+		++_fuseFrame;
+	}
 }
 
 /**

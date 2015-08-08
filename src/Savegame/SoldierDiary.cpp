@@ -575,11 +575,8 @@ void SoldierDiary::updateDiary(
 
 			if ((*i)->hostileTurn() == true)
 			{
-				if (rules->getItem((*i)->_weapon)->getBattleType() == BT_GRENADE
-					|| rules->getItem((*i)->_weapon)->getBattleType() == BT_PROXYGRENADE)
-				{
+				if (rules->getItem((*i)->_weapon)->isGrenade() == true)
 					++_trapKillTotal;
-				}
 				else
 					++_reactionFireTotal;
 			}

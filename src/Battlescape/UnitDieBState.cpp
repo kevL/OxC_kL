@@ -131,8 +131,8 @@ UnitDieBState::~UnitDieBState()
 /**
  * Initializes this state.
  */
-void UnitDieBState::init()
-{}
+//void UnitDieBState::init()
+//{}
 
 /**
  * Runs state functionality every cycle.
@@ -293,8 +293,8 @@ void UnitDieBState::think()
 /**
  * Unit dying cannot be cancelled.
  */
-void UnitDieBState::cancel()
-{}
+//void UnitDieBState::cancel()
+//{}
 
 /**
  * Converts unit to a corpse-item.

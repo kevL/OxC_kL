@@ -132,8 +132,7 @@ ActionMenuState::ActionMenuState(
 //		|| _game->getSavedGame()->getSavedBattle()->getSelectedUnit()->getOriginalFaction() == FACTION_HOSTILE
 	// just because it's been mind-controlled doesn't mean you know how to use it.
 	{
-		if (itRule->getBattleType() == BT_GRENADE
-			|| itRule->getBattleType() == BT_PROXYGRENADE)
+		if (itRule->isGrenade() == true)
 		{
 			if (_action->weapon->getFuseTimer() == -1) // canPrime
 				addItem(

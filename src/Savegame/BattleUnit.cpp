@@ -1847,7 +1847,7 @@ bool BattleUnit::isOut(
 
 	if (_status == STATUS_DEAD
 		|| _status == STATUS_UNCONSCIOUS
-		|| _status == STATUS_TIME_OUT)
+		|| _status == STATUS_LIMBO)
 	{
 		return true;
 	}
@@ -1871,7 +1871,7 @@ const bool BattleUnit::isOut_t(const OutCheck test) const
 		case OUT_ALL:
 			if (_status == STATUS_DEAD
 				|| _status == STATUS_UNCONSCIOUS
-				|| _status == STATUS_TIME_OUT
+				|| _status == STATUS_LIMBO
 				|| _health == 0
 				|| _health <= _stunLevel)
 			{
@@ -1882,7 +1882,7 @@ const bool BattleUnit::isOut_t(const OutCheck test) const
 		case OUT_STAT:
 			if (_status == STATUS_DEAD
 				|| _status == STATUS_UNCONSCIOUS
-				|| _status == STATUS_TIME_OUT)
+				|| _status == STATUS_LIMBO)
 			{
 				return true;
 			}
@@ -2387,7 +2387,7 @@ int BattleUnit::getInitiative(const int tuSpent) const
  */
 void BattleUnit::prepUnit(bool full)
 {
-	if (_status == STATUS_TIME_OUT)
+	if (_status == STATUS_LIMBO)
 		return;
 
 	bool revertMc; // reverting from Mind Control at start of MC-ing faction's turn
@@ -4479,7 +4479,7 @@ bool BattleUnit::hasInventory() const
 } */
 
 /**
- * Gets this unit's movement type.
+ * Gets this BattleUnit's movement type.
  * @note Use this instead of checking the rules of the armor.
  * @return, MovementType
  */
@@ -4489,11 +4489,13 @@ MovementType BattleUnit::getMoveTypeUnit() const
 }
 
 /**
- * Sets this unit to time-out meaning they will NOT take part in the current battle.
+ * Elevates this BattleUnit to grand galactic inquisitor status, which means
+ * that it will NOT take part in a stage 2+ tactical battle.
+ * @note It is still a valid BattleUnit but should be bypassed.
  */
 /* void BattleUnit::goToTimeOut()
 {
-	_status = STATUS_TIME_OUT;
+	_status = STATUS_LIMBO;
 } */
 
 /**

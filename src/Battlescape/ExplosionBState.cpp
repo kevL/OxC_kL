@@ -425,12 +425,19 @@ void ExplosionBState::cancel()
  */
 void ExplosionBState::explode() // private.
 {
-	if (_item != NULL
-		&& _item->getRules()->getBattleType() == BT_PSIAMP)
+	const RuleItem* itRule;
+	if (_item != NULL)
 	{
-		_parent->popState();
-		return;
+		if (_item->getRules()->getBattleType() == BT_PSIAMP)
+		{
+			_parent->popState();
+			return;
+		}
+
+		itRule = _item->getRules();
 	}
+	else
+		itRule = NULL; // dang vc++ linker warnings.
 
 	// melee Hit success/failure, and hit/miss sound-FX, are determined in ProjectileFlyBState.
 
@@ -489,18 +496,16 @@ void ExplosionBState::explode() // private.
 			tileEngine->explode(
 							_center,
 							_power,
-							_item->getRules()->getDamageType(),
-							_item->getRules()->getExplosionRadius(),
+							itRule->getDamageType(),
+							itRule->getExplosionRadius(),
 							_unit,
-							_item->getRules()->getBattleType() == BT_GRENADE
-							|| _item->getRules()->getBattleType() == BT_PROXYGRENADE);
-
+							itRule->isGrenade() == true);
 //			tileEngine->setProjectileDirection(-1);
 		}
 		else // -> if !_cosmetics
 		{
 			//Log(LOG_INFO) << "ExplosionBState::explode() point te::hit";
-			ItemDamageType dType = _item->getRules()->getDamageType();
+			ItemDamageType dType = itRule->getDamageType();
 			if (_pistolWhip == true)
 				dType = DT_STUN;
 
@@ -511,7 +516,7 @@ void ExplosionBState::explode() // private.
 													_unit,
 													_hit);
 
-			if (_item->getRules()->getZombieUnit().empty() == false
+			if (itRule->getZombieUnit().empty() == false
 				&& victim != NULL
 //				&& victim->getArmor()->getSize() == 1
 				&& (victim->getGeoscapeSoldier() != NULL
@@ -521,7 +526,7 @@ void ExplosionBState::explode() // private.
 //				&& victim->getOriginalFaction() != FACTION_HOSTILE)
 			{
 				//Log(LOG_INFO) << victim->getId() << " murderer has zombieUnit string";
-				victim->setSpawnUnit(_item->getRules()->getZombieUnit());
+				victim->setSpawnUnit(itRule->getZombieUnit());
 			}
 		}
 	}
@@ -584,7 +589,8 @@ void ExplosionBState::explode() // private.
 
 
 	if (_unit != NULL // if this hit/explosion was caused by a unit put the weapon down
-		&& _unit->isOut() == false
+//		&& _unit->isOut() == false
+		&& _unit->isOut_t(OUT_STAT) == false
 		&& _lowerWeapon == true)
 	{
 		_unit->aim(false);
@@ -596,8 +602,7 @@ void ExplosionBState::explode() // private.
 
 
 	if (_item != NULL
-		&& (_item->getRules()->getBattleType() == BT_GRENADE
-			|| _item->getRules()->getBattleType() == BT_PROXYGRENADE))
+		&& (itRule->isGrenade() == true))
 	{
 		for (std::vector<BattleItem*>::const_iterator
 				i = _parent->getSave()->getItems()->begin();

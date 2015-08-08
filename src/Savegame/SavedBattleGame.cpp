@@ -2181,10 +2181,10 @@ void SavedBattleGame::tileVolatiles()
 } */
 
 /**
- * Checks for units that are unconscious and revives them if they shouldn't be.
+ * Checks if unit is unconscious and revives it if it shouldn't be.
  * @note Revived units need a tile to stand on. If the unit's current position
  * is occupied then all directions around the tile are searched for a free tile
- * to place the unit in. If no free tile is found the unit stays unconscious.
+ * to place the unit on. If no free tile is found the unit stays unconscious.
  * @param atTurnOver - true if called from SavedBattleGame::endBattlePhase (default false)
  */
 void SavedBattleGame::reviveUnit(
@@ -2222,7 +2222,7 @@ void SavedBattleGame::reviveUnit(
 			}
 		}
 
-		Tile* tileCorpse = getTile(posCorpse);
+		const Tile* const tileCorpse = getTile(posCorpse);
 		bool largeUnit = tileCorpse != NULL
 					  && tileCorpse->getUnit() != NULL
 					  && tileCorpse->getUnit() != unit

@@ -66,9 +66,9 @@ private:
 		~UnitDieBState();
 
 		/// Initializes the state.
-		void init();
+//		void init();
 		/// Handles a cancels request.
-		void cancel();
+//		void cancel();
 		/// Runs state functionality every cycle.
 		void think();
 };

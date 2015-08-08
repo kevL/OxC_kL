@@ -508,8 +508,7 @@ bool ProjectileFlyBState::createNewProjectile() // private.
 			|| _prjImpact == VOXEL_OBJECT)
 		{
 			if (_unit->getFaction() != FACTION_PLAYER
-				&& (_prjItem->getRules()->getBattleType() == BT_GRENADE
-					|| _prjItem->getRules()->getBattleType() == BT_PROXYGRENADE))
+				&& _prjItem->getRules()->isGrenade() == true)
 			{
 				//Log(LOG_INFO) << ". . auto-prime for AI, unitID " << _unit->getId();
 				_prjItem->setFuseTimer(0);

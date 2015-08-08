@@ -517,7 +517,7 @@ void BattlescapeGenerator::nextStage()
 					&& (*i)->getOriginalFaction() == FACTION_PLAYER
 					&& (*i)->isInExitArea(END_POINT) == false))
 		{
-			(*i)->setStatus(STATUS_TIME_OUT);
+			(*i)->setStatus(STATUS_LIMBO);
 		}
 
 		if ((*i)->getTile() != NULL)
@@ -1513,7 +1513,7 @@ void BattlescapeGenerator::loadWeapons() // private.
  * @param item - pointer to a BattleItem
  * @return, true if item is placed successfully
  */
-bool BattlescapeGenerator::placeItemByLayout(BattleItem* item) // private.
+bool BattlescapeGenerator::placeItemByLayout(BattleItem* const item) // private.
 {
 	const RuleInventory* const ground = _rules->getInventory("STR_GROUND");
 	if (item->getSlot() == ground)
@@ -1521,82 +1521,74 @@ bool BattlescapeGenerator::placeItemByLayout(BattleItem* item) // private.
 		RuleInventory* const righthand = _rules->getInventory("STR_RIGHT_HAND");
 		bool loaded = false;
 
-		// find the first soldier with a matching layout-slot
-		for (std::vector<BattleUnit*>::const_iterator
+		for (std::vector<BattleUnit*>::const_iterator // find the first soldier with a matching layout-slot
 				i = _battleSave->getUnits()->begin();
 				i != _battleSave->getUnits()->end();
 				++i)
 		{
-			// skip vehicles -> deal only with xCom soldiers that have a layout
-			if ((*i)->getGeoscapeSoldier() != NULL
+			if ((*i)->getGeoscapeSoldier() != NULL // handle only with xCom soldiers that have a layout
 				&& (*i)->getGeoscapeSoldier()->getEquipmentLayout()->empty() == false)
 			{
-				// find the first matching layout-slot which is not already occupied
 				const std::vector<EquipmentLayoutItem*>* const layoutItems = (*i)->getGeoscapeSoldier()->getEquipmentLayout();
 				for (std::vector<EquipmentLayoutItem*>::const_iterator
 						j = layoutItems->begin();
 						j != layoutItems->end();
 						++j)
 				{
-					if (item->getRules()->getType() != (*j)->getItemType()
-						|| (*i)->getItem(
+					if ((*j)->getItemType() == item->getRules()->getType() // find the first matching layout-slot which is not already occupied
+						&& (*i)->getItem(
 									(*j)->getSlot(),
 									(*j)->getSlotX(),
-									(*j)->getSlotY()) != NULL)
+									(*j)->getSlotY()) == NULL)
 					{
-						continue;
-					}
-
-					if ((*j)->getAmmoItem() == "NONE")
-						loaded = true;
-					else
-					{
-						loaded = false;
-
-						// maybe we find the layout-ammo on the ground to load it with -
-						// yeh, maybe: as in, maybe this works maybe it doesn't
-						for (std::vector<BattleItem*>::const_iterator
-								k = _tileEquipt->getInventory()->begin();
-								k != _tileEquipt->getInventory()->end()
-									&& loaded == false;
-								++k)
+						if ((*j)->getAmmoItem() == "NONE")
+							loaded = true;
+						else
 						{
-							if ((*k)->getRules()->getType() == (*j)->getAmmoItem()
-								&& (*k)->getSlot() == ground		// why the redundancy?
-																	// WHAT OTHER _tileEquipt IS THERE BUT THE GROUND TILE!!??!!!1
-								&& item->setAmmoItem(*k) == 0)		// okay, so load the damn item.
-							{
-								(*k)->setXCOMProperty();
-								(*k)->setSlot(righthand);			// why are you putting ammo in his right hand.....
-																	// maybe just to get it off the ground so it doesn't get loaded into another weapon later.
-								_battleSave->getItems()->push_back(*k);
+							loaded = false;
 
-								loaded = true;
-								// note: soldier is not owner of the ammo, this fact is relevant to the saved layouts
+							for (std::vector<BattleItem*>::const_iterator		// maybe we find the layout-ammo on the ground to load it with
+									k = _tileEquipt->getInventory()->begin();	// Yeh maybe: as in maybe this works maybe it doesn't
+									k != _tileEquipt->getInventory()->end();
+									++k)
+							{
+								if ((*k)->getRules()->getType() == (*j)->getAmmoItem()
+									&& (*k)->getSlot() == ground		// why the redundancy?
+																		// WHAT OTHER _tileEquipt IS THERE BUT THE GROUND TILE!!??!!!1
+									&& item->setAmmoItem(*k) == 0)		// okay, so load the damn item.
+								{
+									(*k)->setXCOMProperty();
+									(*k)->setSlot(righthand);			// why are you putting ammo in his right hand.....
+																		// maybe just to get it off the ground so it doesn't get loaded into another weapon later.
+									_battleSave->getItems()->push_back(*k);
+
+									loaded = true;
+									break;
+									// note: soldier is not owner of the ammo, this fact is relevant to the saved layouts
+								}
 							}
 						}
-					}
 
-					// only place the weapon (or any other item..) onto the soldier when it's loaded with its layout-ammo (if any)
-					if (loaded == true)
-					{
-						item->setXCOMProperty();
-
-						item->moveToOwner(*i);
-
-						item->setSlot(_rules->getInventory((*j)->getSlot()));
-						item->setSlotX((*j)->getSlotX());
-						item->setSlotY((*j)->getSlotY());
-
-						if (item->getRules()->isGrenade() == true
-							&& Options::includePrimeStateInSavedLayout == true)
+						if (loaded == true)	// only place the item onto the soldier when it's loaded with its layout-ammo if any
 						{
-							item->setFuseTimer((*j)->getFuseTimer());
+							item->setXCOMProperty();
+
+							item->moveToOwner(*i);
+
+							item->setSlot(_rules->getInventory((*j)->getSlot()));
+							item->setSlotX((*j)->getSlotX());
+							item->setSlotY((*j)->getSlotY());
+
+							if (item->getRules()->isGrenade() == true
+								&& Options::includePrimeStateInSavedLayout == true)
+							{
+								item->setFuseTimer((*j)->getFuseTimer());
+							}
+
+							_battleSave->getItems()->push_back(item);
+
+							return true;
 						}
-
-						_battleSave->getItems()->push_back(item);
-
-						return true;
 					}
 				}
 			}

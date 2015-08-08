@@ -127,7 +127,7 @@ private:
 	/// Load all Xcom weapons.
 //	void loadWeapons();
 	/// Places an item on a soldier based on equipment layout.
-	bool placeItemByLayout(BattleItem* item);
+	bool placeItemByLayout(BattleItem* const item);
 	/// Sets xCom soldiers' combat clothing style - spritesheets & paperdolls.
 	void setTacticalSprites();
 

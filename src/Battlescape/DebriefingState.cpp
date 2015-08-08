@@ -1964,7 +1964,7 @@ void DebriefingState::recoverItems(std::vector<BattleItem*>* battleItems) // pri
 						{
 							if (itRule->isRecoverable() == true
 								&& (unit->getStatus() == STATUS_DEAD
-									|| (unit->getStatus() == STATUS_TIME_OUT // kL_tentative.
+									|| (unit->getStatus() == STATUS_LIMBO // kL_tentative.
 										&& unit->isOut_t(OUT_DEAD) == true)))
 							{
 								Log(LOG_INFO) << ". . corpse = " << itRule->getType();
@@ -1977,7 +1977,7 @@ void DebriefingState::recoverItems(std::vector<BattleItem*>* battleItems) // pri
 									_base->getItems()->addItem(unit->getArmor()->getCorpseGeoscape());
 							}
 							else if (unit->getStatus() == STATUS_UNCONSCIOUS
-								|| (unit->getStatus() == STATUS_TIME_OUT
+								|| (unit->getStatus() == STATUS_LIMBO
 									&& unit->isOut_t(OUT_STUN) == true)) // kL_tentative.
 							{
 								if (itRule->isRecoverable() == true

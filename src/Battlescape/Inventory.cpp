@@ -1066,8 +1066,8 @@ void Inventory::mouseClick(Action* action, State* state)
 						if (item != NULL)
 						{
 							const BattleType itemType = item->getRules()->getBattleType();
-							if (BT_GRENADE == itemType
-								|| BT_PROXYGRENADE == itemType)
+							if (itemType == BT_GRENADE
+								|| itemType == BT_PROXYGRENADE)
 							{
 								if (item->getFuseTimer() == -1) // Prime that grenade!
 								{
