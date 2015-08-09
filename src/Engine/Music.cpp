@@ -79,7 +79,9 @@ void Music::load(
 		int byteSize)
 {
 #ifndef __NO_MUSIC
-	SDL_RWops* const rwops = SDL_RWFromConstMem(data, byteSize);
+	SDL_RWops* const rwops = SDL_RWFromConstMem(
+											data,
+											byteSize);
 	_music = Mix_LoadMUS_RW(rwops);
 	SDL_FreeRW(rwops);
 
@@ -99,11 +101,10 @@ void Music::play(int loop) const
 #ifndef __NO_MUSIC
 	if (Options::mute == false)
 	{
-		stop();
-
 		if (_music != NULL
 			&& Mix_PlayMusic(_music, loop) == -1)
 		{
+			stop();
 			Log(LOG_WARNING) << Mix_GetError();
 		}
 	}

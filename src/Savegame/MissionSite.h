@@ -110,9 +110,9 @@ private:
 		void setSiteTerrainType(const std::string& terrain);
 
 		/// Gets this MissionSite's texture.
-		int getSiteTextureInt() const;
+		int getSiteTextureId() const;
 		/// Sets this MissionSite's texture.
-		void setSiteTextureInt(int texture);
+		void setSiteTextureId(int texture);
 
 		/// Gets this MissionSite's city.
 		std::string getCity() const;

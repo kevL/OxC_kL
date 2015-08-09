@@ -4385,7 +4385,7 @@
 	"Text.h"
 	"../Engine/InteractiveSurface.h"
 
-1438830384 f:\git\openxcom\src\resource\resourcepack.h
+1439088719 f:\git\openxcom\src\resource\resourcepack.h
 
 1438914783 f:\git\openxcom\src\savegame\base.h
 	"Target.h"
@@ -4651,7 +4651,7 @@
 
 1432011926 f:\git\openxcom\src\savegame\vehicle.h
 
-1438163034 source:f:\git\openxcom\src\basescape\craftinfostate.cpp
+1439053417 source:f:\git\openxcom\src\basescape\craftinfostate.cpp
 	"CraftInfoState.h"
 	"CraftArmorState.h"
 	"CraftEquipmentState.h"
@@ -6444,7 +6444,7 @@
 	"LocalizedText.h"
 	"Language.h"
 
-1438171628 source:f:\git\openxcom\src\engine\music.cpp
+1439088281 source:f:\git\openxcom\src\engine\music.cpp
 	"Language.h"
 
 1438174715 source:f:\git\openxcom\src\engine\opengl.cpp
@@ -6917,7 +6917,7 @@
 1432346700 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1438915201 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1439088517 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	"AlienBaseState.h"
 	"BaseDefenseState.h"
@@ -8130,7 +8130,7 @@
 
 1430149550 f:\git\openxcom\src\savegame\serializationhelper.h
 
-1438820289 source:f:\git\openxcom\src\resource\resourcepack.cpp
+1439088912 source:f:\git\openxcom\src\resource\resourcepack.cpp
 	"ResourcePack.h"
 	"../Engine/Game.h"
 	"../Engine/Sound.h"
@@ -11044,7 +11044,7 @@
 	"../Engine/State.h"
 	"../Menu/OptionsBaseState.h"
 
-1438136266 f:\git\openxcom\src\savegame\missionsite.h
+1439089679 f:\git\openxcom\src\savegame\missionsite.h
 	"Target.h"
 
 1433721067 f:\git\openxcom\src\geoscape\missiondetectedstate.h

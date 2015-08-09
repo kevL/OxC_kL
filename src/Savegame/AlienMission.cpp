@@ -801,7 +801,7 @@ MissionSite* AlienMission::spawnMissionSite( // private.
 											deployRule->getDurationMin(),
 											deployRule->getDurationMax()) * 3600);
 		missionSite->setAlienRace(_race);
-		missionSite->setSiteTextureInt(area.texture);
+		missionSite->setSiteTextureId(area.texture);
 		missionSite->setCity(area.site);
 
 		return missionSite;

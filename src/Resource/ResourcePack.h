@@ -41,7 +41,7 @@ class SurfaceSet;
 
 /**
  * Packs of external game media.
- * Resource packs contain all the game media that's loaded externally,
+ * @note Resource packs contain all the game media that's loaded externally,
  * like graphics, fonts, languages, audio and world map.
  * @note The game is still hardcoded to X-Com resources,
  * so for now this just serves to keep all the file loading in one place.
@@ -57,8 +57,8 @@ private:
 
 	/// Gets a random music. This is private to prevent access. Use playMusic() instead.
 	Music* getRandomMusic( // sza_MusicRules
-			const std::string& track,
-			const std::string& terrainRule) const;
+			const std::string& trackType,
+			const std::string& terrainType) const;
 
 
 	protected:
@@ -129,13 +129,13 @@ private:
 			SurfaceSet* getSurfaceSet(const std::string& name) const;
 
 			/// Gets a particular music.
-			Music* getMusic(const std::string& track) const;
+			Music* getMusic(const std::string& trackType) const;
 			/// Checks if a particular music track is playing.
-			bool isMusicPlaying(const std::string& track) const;
+			bool isMusicPlaying(const std::string& trackType) const;
 			/// Plays a particular music.
 			void playMusic(
-					const std::string& track,
-					const std::string& terrainRule = "", // kL, sza_MusicRules
+					const std::string& trackType,
+					const std::string& terrainType = "", // kL, sza_MusicRules
 					int loops = -1);
 			/// Fades the currently playing music.
 			void fadeMusic(
@@ -143,14 +143,14 @@ private:
 					const int fadeDur);
 			/// Clear a music assignment
 			void ClearMusicAssignment( // sza_MusicRules
-					const std::string& track,
-					const std::string& terrainRule);
+					const std::string& trackType,
+					const std::string& terrainType);
 			/// Make a music assignment
 			void MakeMusicAssignment( // sza_MusicRules
-					const std::string& track,
-					const std::string& terrainRule,
-					const std::vector<std::string>& filenames,
-					const std::vector<int>& midiIndexes);
+					const std::string& trackType,
+					const std::string& terrainType,
+					const std::vector<std::string>& files,
+					const std::vector<int>& midiIdc);
 
 			/// Gets a particular sound.
 			Sound* getSound(

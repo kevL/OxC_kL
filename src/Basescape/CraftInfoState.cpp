@@ -69,7 +69,7 @@ CraftInfoState::CraftInfoState(
 		_craft(base->getCrafts()->at(craftId))
 {
 	if (_game->getSavedGame()->getMonthsPassed() != -1)
-		_window		= new Window(this, 320, 200, 0,0, POPUP_BOTH);
+		_window		= new Window(this, 320, 200, 0, 0, POPUP_BOTH);
 	else
 		_window		= new Window(this, 320, 200);
 
@@ -202,12 +202,12 @@ void CraftInfoState::init()
 	}
 
 
-	const bool tacBattle = _game->getSavedGame()->getMonthsPassed() == -1;
+	const bool skirmish = _game->getSavedGame()->getMonthsPassed() == -1;
 	_btnInventory->setVisible(_craft->getNumSoldiers() > 0
-							  && tacBattle == false);
+							  && skirmish == false);
 
 	_edtCraft->setText(_craft->getName(_game->getLanguage()));
-	if (tacBattle == true)
+	if (skirmish == true)
 		_txtStatus->setText(L"");
 	else
 		_txtStatus->setText(tr(_craft->getStatus()));
@@ -220,7 +220,7 @@ void CraftInfoState::init()
 		woststr1, // fuel
 		woststr2; // hull
 
-	if (tacBattle == true)
+	if (skirmish == true)
 		_craft->setFuel(crRule->getMaxFuel()); // top up Craft for insta-Battle mode.
 
 	woststr1 << tr("STR_FUEL").arg(Text::formatPercentage(_craft->getFuelPercentage()));
@@ -251,6 +251,12 @@ void CraftInfoState::init()
 	_txtDamage->setText(woststr2.str());
 
 
+	_sprite->clear(); // clear off sprites/icons
+	_crew->clear();
+	_equip->clear();
+	_weapon1->clear();
+	_weapon2->clear();
+
 	SurfaceSet* const baseBits = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
 	const int sprite = crRule->getSprite() + 33;
 	baseBits->getFrame(sprite)->setX(0); // BaseView::draw() changes x&y
@@ -262,9 +268,6 @@ void CraftInfoState::init()
 
 	if (crRule->getSoldiers() > 0)
 	{
-		_crew->clear();
-		_equip->clear();
-
 		int x = 0;
 
 		bit = baseBits->getFrame(38); // soldier graphic
@@ -309,7 +312,7 @@ void CraftInfoState::init()
 			bit->blit(_equip);
 		}
 
-		if (tacBattle == false)
+		if (skirmish == false)
 			calcCost();
 		else
 			_txtCost->setVisible(false);
@@ -362,7 +365,6 @@ void CraftInfoState::init()
 		}
 		else
 		{
-			_weapon1->clear();
 			_txtW1Name->setText(L"");
 			_txtW1Ammo->setText(L"");
 		}
@@ -408,7 +410,6 @@ void CraftInfoState::init()
 		}
 		else
 		{
-			_weapon2->clear();
 			_txtW2Name->setText(L"");
 			_txtW2Ammo->setText(L"");
 		}

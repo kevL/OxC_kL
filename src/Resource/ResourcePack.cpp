@@ -45,15 +45,15 @@ int
 
 	ResourcePack::EXPLOSION_OFFSET			= 0,
 	ResourcePack::UNDERWATER_SMOKE_OFFSET	= 0,
-	ResourcePack::SMOKE_OFFSET				= 7,	// was 8
+	ResourcePack::SMOKE_OFFSET				= 7,
 
 	ResourcePack::SMALL_EXPLOSION			= 2,
 	ResourcePack::DOOR_OPEN					= 3,
 	ResourcePack::LARGE_EXPLOSION			= 5,
 	ResourcePack::FLYING_SOUND				= 15,
-	ResourcePack::FLYING_SOUND_HQ			= 70,	// kL
+	ResourcePack::FLYING_SOUND_HQ			= 70,
 	ResourcePack::ITEM_RELOAD				= 17,
-	ResourcePack::ITEM_UNLOAD_HQ			= 74,	// kL
+	ResourcePack::ITEM_UNLOAD_HQ			= 74,
 	ResourcePack::SLIDING_DOOR_OPEN			= 20,
 	ResourcePack::SLIDING_DOOR_CLOSE		= 21,
 	ResourcePack::WALK_OFFSET				= 22,
@@ -62,9 +62,9 @@ int
 	ResourcePack::MALE_SCREAM[3]			= {41,42,43},
 	ResourcePack::FEMALE_SCREAM[3]			= {44,45,46},
 
-	ResourcePack::UFO_FIRE					= 9,	// was 8
+	ResourcePack::UFO_FIRE					= 9,
 	ResourcePack::UFO_HIT					= 12,
-	ResourcePack::UFO_CRASH					= 11,	// was 10
+	ResourcePack::UFO_CRASH					= 11,
 	ResourcePack::UFO_EXPLODE				= 11,
 	ResourcePack::INTERCEPTOR_HIT			= 10,
 	ResourcePack::INTERCEPTOR_EXPLODE		= 13,
@@ -82,7 +82,6 @@ int
  */
 ResourcePack::ResourcePack()
 {
-	//Log(LOG_INFO) << "Create ResourcePack";
 	_muteMusic = new Music();
 	_muteSound = new Sound();
 }
@@ -198,54 +197,59 @@ SurfaceSet* ResourcePack::getSurfaceSet(const std::string& name) const
 /**
  * Returns a specific music from the resource set.
  * kL_NOTE: This has become redundant w/ getRandomMusic() below.
- * @param track - reference the track of a Music
+ * @param trackType - reference the track of a Music
  * @return, pointer to the Music
  */
-Music* ResourcePack::getMusic(const std::string& track) const
+Music* ResourcePack::getMusic(const std::string& trackType) const
 {
 	if (Options::mute == true)
 		return _muteMusic;
 
-	return getRandomMusic(track, ""); // sza_MusicRules
+	return getRandomMusic(trackType, ""); // sza_MusicRules
 }
 
 /**
  * Checks if a particular music track is playing.
- * @param track - reference the track to check for
+ * @param trackType - reference the track to check for
  * @return, true if playing
  */
-bool ResourcePack::isMusicPlaying(const std::string& track) const
+bool ResourcePack::isMusicPlaying(const std::string& trackType) const
 {
-	return (_playingMusic == track);
+	return (_playingMusic == trackType);
 //	return _musics[_playingMusic]->isPlaying();
 }
 
 /**
  * Plays the specified track if it's not already playing.
- * @param track			- reference the track of a Music
- * @param terrainRule	- reference the RuleTerrain type (default "")
+ * @param trackType		- reference the track of a Music
+ * @param terrainType	- reference the RuleTerrain type (default "")
  * @param loops			- number of times to play the track (default -1 infinite)
  */
 void ResourcePack::playMusic(
-		const std::string& track,
-		const std::string& terrainRule, // kL: sza_MusicRules
+		const std::string& trackType,
+		const std::string& terrainType, // kL: sza_MusicRules
 		int loops)
 {
-	if (_playingMusic != track
+	if (_playingMusic != trackType
 		&& Options::mute == false)
 	{
-		_playingMusic = track;
-
-		if (Options::musicAlwaysLoop == false
-			&& (track == OpenXcom::res_MUSIC_WIN
-				|| track == OpenXcom::res_MUSIC_LOSE))
+		const Music* const music = getRandomMusic(
+												trackType,
+												terrainType);
+		if (music != _muteMusic) // note: '_muteMusic'= NULL
 		{
-			loops = 1;
-		}
+			if (Options::musicAlwaysLoop == false
+				&& (trackType == OpenXcom::res_MUSIC_WIN		// never loop these tracks
+					|| trackType == OpenXcom::res_MUSIC_LOSE))	// unless the Option is true
+			{
+				loops = 1;
+			}
 
-		getRandomMusic(
-					track,
-					terrainRule)->play(loops);
+			_playingMusic = trackType;
+			music->play(loops);
+		}
+		else
+			_playingMusic.clear();
 	}
 }
 
@@ -286,96 +290,96 @@ void ResourcePack::fadeMusic(
 
 /**
  * Returns a random music from the resource set.
- * @param track		- reference the track of a Music to pick from
- * @param terrainRule	- reference the RuleTerrain type
+ * @param trackType		- reference the track of a Music to pick from
+ * @param terrainType	- reference the RuleTerrain type
  * @return, pointer to the Music
  */
 Music* ResourcePack::getRandomMusic( // private.
-		const std::string& track,
-		const std::string& terrainRule) const // sza_MusicRules
+		const std::string& trackType,
+		const std::string& terrainType) const // sza_MusicRules
 {
-	if (Options::mute == true)
-		return _muteMusic;
-
-	if (terrainRule.empty() == true)
-		Log(LOG_DEBUG) << "MUSIC: Request " << track;
-	else
-		Log(LOG_DEBUG) << "MUSIC: Request " << track << " for terrainType " << terrainRule;
-
-	if (_musicAssignment.find(track) == _musicAssignment.end())
+	if (Options::mute == false)
 	{
-		Log(LOG_INFO) << "ResourcePack::getRandomMusic(), no music assignment: return MUTE [0]";
-		return _muteMusic;
+		std::string info = "MUSIC: Request " + trackType;
+		if (terrainType.empty() == false)
+			info += " for terrainType " + terrainType;
+		Log(LOG_DEBUG) << info;
+
+		if (_musicAssignment.find(trackType) != _musicAssignment.end())
+		{
+			const std::map<std::string, std::vector<std::pair<std::string, int> > > assignment = _musicAssignment.at(trackType);
+			if (assignment.find(terrainType) != assignment.end())
+			{
+				const std::vector<std::pair<std::string, int> > terrainMusic = assignment.at(terrainType);
+				const size_t pick = static_cast<size_t>(RNG::seedless(
+																0,
+																terrainMusic.size() - 1));
+//				const size_t pick = static_cast<size_t>(SDL_GetTicks() % terrainMusic.size());
+				const std::pair<std::string, int> musicId = terrainMusic[pick];
+
+				//Log(LOG_DEBUG) << "MUSIC: " << musicId.first;
+				Log(LOG_INFO) << "MUSIC: " << musicId.first;
+
+				return _musicFile.at(musicId.first);
+			}
+			else
+				Log(LOG_INFO) << "ResourcePack::getRandomMusic() No music for terrain - MUTE";
+		}
+		else
+			Log(LOG_INFO) << "ResourcePack::getRandomMusic() No music assignment - MUTE";
 	}
 
-	const std::map<std::string, std::vector<std::pair<std::string, int> > > assignment = _musicAssignment.at(track);
-	if (assignment.find(terrainRule) == assignment.end())
-	{
-		Log(LOG_INFO) << "ResourcePack::getRandomMusic(), no music for terrainRule: return MUTE [1]";
-		return _muteMusic;
-	}
-
-	const std::vector<std::pair<std::string, int> > codeList = assignment.at(terrainRule);
-	const size_t code = static_cast<size_t>(RNG::seedless(
-													0,
-													codeList.size() - 1));
-//	const size_t code = static_cast<size_t>(SDL_GetTicks() % codeList.size());
-	const std::pair<std::string, int> music = codeList[code];
-
-	//Log(LOG_DEBUG) << "MUSIC: " << music.first;
-	Log(LOG_INFO) << "MUSIC: " << music.first;
-
-	return _musicFile.at(music.first);
+	return _muteMusic;
 }
 
 /**
  * Clear a music assignment.
- * @param track		- reference the track of a Music
- * @param terrainRule	- reference the RuleTerrain type
+ * @param trackType		- reference the track of a Music
+ * @param terrainType	- reference the RuleTerrain type
  */
 void ResourcePack::ClearMusicAssignment( // sza_MusicRules
-		const std::string& track,
-		const std::string& terrainRule)
+		const std::string& trackType,
+		const std::string& terrainType)
 {
-	if (_musicAssignment.find(track) == _musicAssignment.end()
-		|| _musicAssignment.at(track).find(terrainRule) == _musicAssignment.at(track).end())
+	if (_musicAssignment.find(trackType) == _musicAssignment.end()
+		|| _musicAssignment.at(trackType).find(terrainType) == _musicAssignment.at(trackType).end())
 	{
 		return;
 	}
 
-	_musicAssignment.at(track).at(terrainRule).clear();
+	_musicAssignment.at(trackType).at(terrainType).clear();
 }
 
 /**
  * Make a music assignment.
- * @param track			- reference the track of a Music
- * @param terrainRule		- reference the RuleTerrain type
- * @param filenames		- reference a vector of filenames
- * @param midiIndexes	- reference a vector of indices
+ * @param trackType		- reference the track of a Music
+ * @param terrainType	- reference the RuleTerrain type
+ * @param files			- reference a vector of filenames
+ * @param midiIdc		- reference a vector of indices
  */
 void ResourcePack::MakeMusicAssignment( // sza_MusicRules
-		const std::string& track,
-		const std::string& terrainRule,
-		const std::vector<std::string>& filenames,
-		const std::vector<int>& midiIndexes)
+		const std::string& trackType,
+		const std::string& terrainType,
+		const std::vector<std::string>& files,
+		const std::vector<int>& midiIdc)
 {
-	if (_musicAssignment.find(track) == _musicAssignment.end())
-		_musicAssignment[track] = std::map<std::string, std::vector<std::pair<std::string, int> > >();
+	if (_musicAssignment.find(trackType) == _musicAssignment.end())
+		_musicAssignment[trackType] = std::map<std::string, std::vector<std::pair<std::string, int> > >();
 
-	if (_musicAssignment.at(track).find(terrainRule) == _musicAssignment.at(track).end())
-		_musicAssignment[track]
-						[terrainRule] = std::vector<std::pair<std::string, int> >();
+	if (_musicAssignment.at(trackType).find(terrainType) == _musicAssignment.at(trackType).end())
+		_musicAssignment[trackType]
+						[terrainType] = std::vector<std::pair<std::string, int> >();
 
 	for (size_t
 			i = 0;
-			i != filenames.size();
+			i != files.size();
 			++i)
 	{
 		const std::pair<std::string, int> toAdd = std::make_pair<std::string, int>(
-																				filenames.at(i),
-																				midiIndexes.at(i));
-		_musicAssignment[track]
-						[terrainRule].push_back(toAdd);
+																				files.at(i),
+																				midiIdc.at(i));
+		_musicAssignment[trackType]
+						[terrainType].push_back(toAdd);
 	}
 }
 

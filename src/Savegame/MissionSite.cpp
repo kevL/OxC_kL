@@ -248,7 +248,7 @@ void MissionSite::setSiteTerrainType(const std::string& terrain)
  * Gets the mission site's associated texture.
  * @return, the texture ID
  */
-int MissionSite::getSiteTextureInt() const
+int MissionSite::getSiteTextureId() const
 {
 	return _texture;
 }
@@ -257,7 +257,7 @@ int MissionSite::getSiteTextureInt() const
  * Sets the mission site's associated texture.
  * @param texture - the texture ID
  */
-void MissionSite::setSiteTextureInt(int texture)
+void MissionSite::setSiteTextureId(int texture)
 {
 	_texture = texture;
 }

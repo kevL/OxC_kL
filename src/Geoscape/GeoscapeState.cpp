@@ -1782,15 +1782,15 @@ void GeoscapeState::time5Seconds()
 
 							resetTimer();
 							popup(new GeoscapeCraftState(
-														*j,
-														this,
-														wp));
+													*j,
+													this,
+													wp));
 						}
 					}
 					else if (ufo->getStatus() == Ufo::DESTROYED
-						|| (ufo->getStatus() == Ufo::CRASHED	// kL, http://openxcom.org/forum/index.php?topic=2406.0
-							&& (*j)->getNumSoldiers() == 0))	// kL, Actually should set this on the UFO-crash event
-//							&& (*j)->getNumVehicles() == 0))	// kL, so that crashed-ufos can still be targeted for Patrols
+						|| (ufo->getStatus() == Ufo::CRASHED	// http://openxcom.org/forum/index.php?topic=2406.0
+							&& (*j)->getNumSoldiers() == 0))	// Actually should set this on the UFO-crash event
+//							&& (*j)->getNumVehicles() == 0))	// so that crashed-ufos can still be targeted for Patrols.
 					{
 						(*j)->returnToBase();
 					}
@@ -1805,16 +1805,6 @@ void GeoscapeState::time5Seconds()
 
 			if ((*j)->reachedDestination() == true)
 			{
-/*				if ((*j)->getDestination()->getSiteDepth() > (*j)->getRules()->getMaxDepth())
-				{
-					(*j)->returnToBase(); // TODO: set Patrol ...
-
-					popup(new CraftErrorState(
-										this,
-										tr("STR_SITE_TOO_DEEP").arg((*j)->getName(_game->getLanguage()))));
-					continue;
-				} */
-
 				Ufo* const ufo = dynamic_cast<Ufo*>((*j)->getDestination());
 				const Waypoint* const wayPoint = dynamic_cast<Waypoint*>((*j)->getDestination());
 				const MissionSite* const missionSite = dynamic_cast<MissionSite*>((*j)->getDestination());
@@ -1825,69 +1815,65 @@ void GeoscapeState::time5Seconds()
 					switch (ufo->getStatus())
 					{
 						case Ufo::FLYING:
-							// Not more than 4 interceptions at a time. kL_note: I thought orig could do up to 6.
-							if (_dogfights.size() + _dogfightsToStart.size() > 3)
+							if (_dogfights.size() + _dogfightsToStart.size() < 4) // Not more than 4 interceptions at a time. _note: I thought orig could do up to 6.
 							{
-								++j;
-								continue;
-							}
-
-							if ((*j)->isInDogfight() == false
-								&& AreSame((*j)->getDistance(ufo), 0.)) // craft ran into a UFO
-							{
-								_dogfightsToStart.push_back(new DogfightState(
-																			_globe,
-																			*j,
-																			ufo,
-																			this));
-								if (_dfStartTimer->isRunning() == false)
+								if ((*j)->isInDogfight() == false
+									&& AreSame((*j)->getDistance(ufo), 0.)) // craft ran into a UFO
 								{
-									_pause = true;
-									resetTimer();
-
-									// store current Globe coords & zoom; Globe will reset to those after dogfight ends
-									storePreDfCoords();
-									_globe->center(
-												(*j)->getLongitude(),
-												(*j)->getLatitude());
-
-									if (_dogfights.empty() == true // first dogfight, start music
-//										&& initDfMusic == false
-										&& _game->getResourcePack()->isMusicPlaying(OpenXcom::res_MUSIC_GEO_INTERCEPT) == false) // unless reloading to another dogfight ...
+									_dogfightsToStart.push_back(new DogfightState(
+																				_globe,
+																				*j,
+																				ufo,
+																				this));
+									if (_dfStartTimer->isRunning() == false)
 									{
-										_game->getResourcePack()->fadeMusic(_game, 425);
+										_pause = true;
+										resetTimer();
+
+										storePreDfCoords();	// store current Globe coords & zoom;
+										_globe->center(		// Globe will reset to these after dogfight ends
+													(*j)->getLongitude(),
+													(*j)->getLatitude());
+
+										if (_dogfights.empty() == true // first dogfight, start music
+//											&& initDfMusic == false
+											&& _game->getResourcePack()->isMusicPlaying(OpenXcom::res_MUSIC_GEO_INTERCEPT) == false) // unless reloading to another dogfight ...
+										{
+											_game->getResourcePack()->fadeMusic(_game, 425);
+										}
+
+										startDogfight();
+										_dfStartTimer->start();
 									}
 
-									startDogfight();
-									_dfStartTimer->start();
+									initDfMusic = true;
+									_game->getResourcePack()->playMusic(OpenXcom::res_MUSIC_GEO_INTERCEPT);
 								}
-
-								initDfMusic = true;
-								_game->getResourcePack()->playMusic(OpenXcom::res_MUSIC_GEO_INTERCEPT);
 							}
 						break;
 
 						case Ufo::LANDED:		// setSpeed 1/2 (need to speed up to full if UFO takes off)
 						case Ufo::CRASHED:		// setSpeed 1/2 (need to speed back up when setting a new destination)
 						case Ufo::DESTROYED:	// just before expiration
-							if ((*j)->getNumSoldiers() > 0) // || (*j)->getNumVehicles() > 0)
+							if ((*j)->getNumSoldiers() > 0)
+//								|| (*j)->getNumVehicles() > 0)
 							{
 								if ((*j)->isInDogfight() == false)
 								{
 									resetTimer();
 
-									int // look up polygon's texture + shade
-										texture,
+									int // look up polygon's textureId + shade
+										textureId,
 										shade;
 									_globe->getPolygonTextureAndShade(
 																	ufo->getLongitude(),
 																	ufo->getLatitude(),
-																	&texture,
+																	&textureId,
 																	&shade);
 									popup(new ConfirmLandingState(
 															*j,
 															// countryside Texture; choice of Terrain made in ConfirmLandingState
-															_rules->getGlobe()->getTextureRule(texture),
+															_rules->getGlobe()->getTextureRule(textureId),
 															shade));
 								}
 							}
@@ -1908,9 +1894,8 @@ void GeoscapeState::time5Seconds()
 					{
 						resetTimer();
 
-						int
-							texture = missionSite->getSiteTextureInt(),
-							shade;
+						const int textureId = missionSite->getSiteTextureId();
+						int shade;
 						_globe->getPolygonShade(
 											missionSite->getLongitude(),
 											missionSite->getLatitude(),
@@ -1918,7 +1903,7 @@ void GeoscapeState::time5Seconds()
 						popup(new ConfirmLandingState(
 												*j,
 												// preset missionSite Texture; choice of Terrain made via texture-deployment, in ConfirmLandingState
-												_rules->getGlobe()->getTextureRule(texture),
+												_rules->getGlobe()->getTextureRule(textureId),
 												shade));
 					}
 					else
