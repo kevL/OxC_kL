@@ -6253,7 +6253,7 @@
 	"UnitPanicBState.h"
 	"../Savegame/BattleUnit.h"
 
-1438525714 source:f:\git\openxcom\src\battlescape\unitsprite.cpp
+1439092073 source:f:\git\openxcom\src\battlescape\unitsprite.cpp
 	"UnitSprite.h"
 	"../Engine/SurfaceSet.h"
 	"../Ruleset/RuleArmor.h"
@@ -6917,7 +6917,7 @@
 1432346700 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1439088517 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1439089644 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	"AlienBaseState.h"
 	"BaseDefenseState.h"
@@ -8320,7 +8320,7 @@
 	"../Engine/Language.h"
 	"../Geoscape/Globe.h"
 
-1438208613 source:f:\git\openxcom\src\savegame\alienmission.cpp
+1439089679 source:f:\git\openxcom\src\savegame\alienmission.cpp
 	"AlienMission.h"
 	"AlienBase.h"
 	"Base.h"
@@ -11063,7 +11063,7 @@
 	"../Ruleset/AlienDeployment.h"
 	"../Savegame/MissionSite.h"
 
-1438172427 source:f:\git\openxcom\src\savegame\missionsite.cpp
+1439089679 source:f:\git\openxcom\src\savegame\missionsite.cpp
 	"MissionSite.h"
 	"../Engine/Language.h"
 	"../Geoscape/Globe.h"

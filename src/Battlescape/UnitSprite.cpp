@@ -248,18 +248,15 @@ void UnitSprite::draw()
 }
 
 /**
- * Drawing routine for
- *	- xCom soldiers in overalls/sectoids (routine 0)
- *	- mutons (routine 10)
- *	- aquanauts (routine 13)
- *	- calcinites/deep ones/gill men/lobster men/tasoths (routine 14)
- *	- aquatoids (routine 15) - this one is no different it just precludes breathing animations.
+ * Drawing routine for xCom soldiers in overalls/sectoids (routine 0) and
+ * mutons (routine 10)
  */
 void UnitSprite::drawRoutine0()
 {
 	//Log(LOG_INFO) << "** UnitSprite::drawRoutine0()";
-	if (_unit->isOut() == true)
-		return; // unit is drawn as an item
+//	if (_unit->isOut() == true)
+	if (_unit->isOut_t(OUT_STAT) == true)
+		return;
 
 	Surface
 			* torso		= NULL,
@@ -294,33 +291,31 @@ void UnitSprite::drawRoutine0()
 // #firstFrame:        48     72     96      120      144      168      192      216
 		rarmWalk[8] = {48, 48+24, 48+24*2, 48+24*3, 48+24*4, 48+24*5, 48+24*6, 48+24*7};
 
-	const int aquatoidYoffWalk[8] = {1, 0, 0, 1, 2, 1, 0, 0}; // bobbing up and down (aquatoid)
+	const int
+		yoffWalk[8]		= { 1,  0, -1,  0,  1,  0, -1,  0}, // bobbing up and down
+		yoffWalk_mut[8]	= { 1,  1,  0,  0,  1,  1,  0,  0}, // bobbing up and down (muton)
+//		yoffWalk_mut[8]	= { 0,  0,  0,  0,  0,  0,  0,  0}, // kL_TEST.
+		offX[8]			= { 8, 10,  7,  4, -9,-11, -7, -3}, // for the weapons
+		offY[8]			= {-6, -3,  0,  2,  0, -4, -7, -9}, // for the weapons
+		offX2[8]		= {-8,  3,  5, 12,  6, -1, -5,-13}, // for the left handed weapons
+		offY2[8]		= { 1, -4, -2,  0,  3,  3,  5,  0}, // for the left handed weapons
+		offX3[8]		= { 0,  0,  2,  2,  0,  0,  0,  0}, // for the weapons (muton)
+		offY3[8]		= {-3, -3, -1, -1, -1, -3, -3, -2}, // for the weapons (muton)
+		offX4[8]		= {-8,  2,  7, 14,  7, -2, -4, -8}, // for the left handed weapons
+		offY4[8]		= {-3, -3, -1,  0,  3,  3,  0,  1}, // for the left handed weapons
+		offX5[8]		= {-1,  1,  1,  2,  0, -1,  0,  0}, // for the weapons (muton)
+//		offY5[8]		= { 1, -1, -1, -1, -1, -2, -3,  0}, // for the weapons (muton) // kL
+		offY5[8]		= { 1, -1, -1, -1, -1, -1, -3,  0}, // for the weapons (muton)
+		offX6[8]		= { 0,  6,  6,  12,-4, -5, -5,-13}, // for the left handed rifles
+		offY6[8]		= {-4, -4, -1,  0,  5,  0,  1,  0}, // for the left handed rifles
+		offX7[8]		= { 0,  6,  8, 12,  2, -5, -5,-13}, // for the left handed rifles (muton)
+		offY7[8]		= {-4, -6, -1,  0,  3,  0,  1,  0}; // for the left handed rifles (muton)
 
-	const int yoffWalk[8]		= { 1,  0, -1,  0,  1,  0, -1,  0}; // bobbing up and down
-	const int yoffWalk_mut[8]	= { 1,  1,  0,  0,  1,  1,  0,  0}; // bobbing up and down (muton)
-//	const int yoffWalk_mut[8]	= { 0,  0,  0,  0,  0,  0,  0,  0}; // kL_TEST.
-	const int offX[8]			= { 8, 10,  7,  4, -9,-11, -7, -3}; // for the weapons
-	const int offY[8]			= {-6, -3,  0,  2,  0, -4, -7, -9}; // for the weapons
-	const int offX2[8]			= {-8,  3,  5, 12,  6, -1, -5,-13}; // for the left handed weapons
-	const int offY2[8]			= { 1, -4, -2,  0,  3,  3,  5,  0}; // for the left handed weapons
-	const int offX3[8]			= { 0,  0,  2,  2,  0,  0,  0,  0}; // for the weapons (muton)
-	const int offY3[8]			= {-3, -3, -1, -1, -1, -3, -3, -2}; // for the weapons (muton)
-	const int offX4[8]			= {-8,  2,  7, 14,  7, -2, -4, -8}; // for the left handed weapons
-	const int offY4[8]			= {-3, -3, -1,  0,  3,  3,  0,  1}; // for the left handed weapons
-	const int offX5[8]			= {-1,  1,  1,  2,  0, -1,  0,  0}; // for the weapons (muton)
-//	const int offY5[8]			= { 1, -1, -1, -1, -1, -2, -3,  0}; // for the weapons (muton) // kL
-	const int offY5[8]			= { 1, -1, -1, -1, -1, -1, -3,  0}; // for the weapons (muton)
-	const int offX6[8]			= { 0,  6,  6,  12,-4, -5, -5,-13}; // for the left handed rifles
-	const int offY6[8]			= {-4, -4, -1,  0,  5,  0,  1,  0}; // for the left handed rifles
-	const int offX7[8]			= { 0,  6,  8, 12,  2, -5, -5,-13}; // for the left handed rifles (muton)
-	const int offY7[8]			= {-4, -6, -1,  0,  3,  0,  1,  0}; // for the left handed rifles (muton)
-
-	const int offYKneel = 4;
-	const int offXAiming = 16;
-
-
-	const int unitDir	= _unit->getDirection();
-	const int walkPhase	= _unit->getWalkPhase();
+	const int
+		offYKneel	= 4,
+		offXAiming	= 16,
+		unitDir		= _unit->getDirection(),
+		walkPhase	= _unit->getWalkPhase();
 
 	if (_unit->getStatus() == STATUS_COLLAPSING)
 	{
@@ -356,16 +351,9 @@ void UnitSprite::drawRoutine0()
 	if (isWalking == true) // when walking, torso(fixed sprite) has to be animated up/down
 	{
 //		//Log(LOG_INFO) << "UnitSprite::drawRoutine0() : " << _unit->getId() << " STATUS_WALKING";
-		if (_drawingRoutine == 10)								// muton
+		if (_drawingRoutine == 10)							// muton
 			torsoHandsWeaponY = yoffWalk_mut[walkPhase];
-		else if (_drawingRoutine == 13
-			|| _drawingRoutine == 14)
-		{
-			torsoHandsWeaponY = yoffWalk[walkPhase] + 1;
-		}
-		else if (_drawingRoutine == 15)							// aquatoid
-			torsoHandsWeaponY = aquatoidYoffWalk[walkPhase];
-		else													// xCom agents etc
+		else												// xCom agents etc
 			torsoHandsWeaponY = yoffWalk[walkPhase];
 
 		torso->setY(torsoHandsWeaponY);
@@ -477,7 +465,7 @@ void UnitSprite::drawRoutine0()
 		}
 	}
 
-	if (_itemB) // if we are left handed or dual wielding...
+	if (_itemB) // if left handed or dual wielding...
 	{
 		leftArm = _unitSurface->getFrame(larm2H + unitDir);
 
@@ -548,7 +536,7 @@ void UnitSprite::drawRoutine0()
 		torso->setY(0);
 	}
 
-	if (itemA) // items are calculated for soldier height (22) - some aliens are smaller, so item is drawn lower.
+	if (itemA) // items are calculated for soldier height (22) - some aliens are smaller so item is drawn lower.
 	{
 		itemA->setY(itemA->getY() + (22 - _unit->getStandHeight()));
 	}
@@ -718,8 +706,9 @@ void UnitSprite::drawRoutine0()
  */
 void UnitSprite::drawRoutine1()
 {
-	if (_unit->isOut())
-		return; // unit is drawn as an item
+//	if (_unit->isOut() == true)
+	if (_unit->isOut_t(OUT_STAT) == true)
+		return;
 
 	Surface
 			* torso		= NULL,
@@ -767,7 +756,7 @@ void UnitSprite::drawRoutine1()
 	leftArm = _unitSurface->getFrame(larm + unitDir);
 	rightArm = _unitSurface->getFrame(rarm + unitDir);
 
-	// when walking, torso(fixed sprite) has to be animated up/down
+	// when walking torso(fixed sprite) has to be animated up/down
 	if (_unit->getStatus() == STATUS_WALKING)
 	{
 		// floater only has 5 walk animations instead of 8
@@ -821,7 +810,7 @@ void UnitSprite::drawRoutine1()
 		}
 	}
 
-	// if we are left handed or dual wielding...
+	// if left handed or dual wielding...
 	if (_itemB)
 	{
 		leftArm = _unitSurface->getFrame(larm2H + unitDir);
@@ -939,8 +928,9 @@ void UnitSprite::drawRoutine1()
  */
 void UnitSprite::drawRoutine2()
 {
-	if (_unit->isOut() == true)
-		return; // unit is drawn as an item
+//	if (_unit->isOut() == true)
+	if (_unit->isOut_t(OUT_STAT) == true)
+		return;
 
 	const int
 		offX[8] = {-2,-7,-5, 0, 5, 7, 2, 0}, // hovertank offsets
@@ -963,15 +953,17 @@ void UnitSprite::drawRoutine2()
 	// and forth ... in reverse gears. That is, _direction should remain constant
 	// throughout a single-tile strafe move with tanks. At least _faceDirection
 	// seems constant during these sprite-frames.
-	int dirFace = _unit->getDirection();
+	int dirFace;
 	if (_unit->getFaceDirection() > -1)
 		dirFace = _unit->getFaceDirection();
+	else
+		dirFace = _unit->getDirection();
 
 	// draw the tank itself
 	srf = _unitSurface->getFrame(hoverTank + (_part * 8) + dirFace);
 	drawRecolored(srf);
 
-	// draw the turret, together with the last part
+	// draw the turret together with the last part <- no draw it w/ each part.
 //	if (_part == 3 &&
 	if (turret != -1)
 	{
@@ -1018,8 +1010,9 @@ void UnitSprite::drawRoutine2()
  */
 void UnitSprite::drawRoutine3()
 {
-	if (_unit->isOut() == true)
-		return; // unit is drawn as an item
+//	if (_unit->isOut() == true)
+	if (_unit->isOut_t(OUT_STAT) == true)
+		return;
 
 	Surface* srf;
 
@@ -1041,8 +1034,9 @@ void UnitSprite::drawRoutine3()
  */
 void UnitSprite::drawRoutine4()
 {
-	if (_unit->isOut() == true)
-		return; // unit is drawn as an item
+//	if (_unit->isOut() == true)
+	if (_unit->isOut_t(OUT_STAT) == true)
+		return;
 
 	Surface
 		* srf	= NULL,
@@ -1192,8 +1186,9 @@ void UnitSprite::drawRoutine4()
  */
 void UnitSprite::drawRoutine5()
 {
-	if (_unit->isOut() == true)
-		return; // unit is drawn as an item
+//	if (_unit->isOut() == true)
+	if (_unit->isOut_t(OUT_STAT) == true)
+		return;
 
 	Surface* srf;
 
@@ -1210,8 +1205,9 @@ void UnitSprite::drawRoutine5()
  */
 void UnitSprite::drawRoutine6()
 {
-	if (_unit->isOut())
-		return; // unit is drawn as an item
+//	if (_unit->isOut() == true)
+	if (_unit->isOut_t(OUT_STAT) == true)
+		return;
 
 	Surface
 		* torso		= NULL,
@@ -1267,7 +1263,7 @@ void UnitSprite::drawRoutine6()
 	leftArm = _unitSurface->getFrame(larmStand + _unit->getDirection());
 	rightArm = _unitSurface->getFrame(rarmStand + _unit->getDirection());
 
-	// when walking, torso (fixed sprite) has to be animated up/down
+	// when walking torso (fixed sprite) has to be animated up/down
 	if (_unit->getStatus() == STATUS_WALKING)
 	{
 		int xoffWalk = 0;
@@ -1332,7 +1328,7 @@ void UnitSprite::drawRoutine6()
 		}
 	}
 
-	if (_itemB) // if we are left handed or dual wielding...
+	if (_itemB) // if left handed or dual wielding
 	{
 		leftArm = _unitSurface->getFrame(larm2H + _unit->getDirection());
 		itemB = _itemSurfaceB->getFrame(_itemB->getRules()->getHandSprite() + _unit->getDirection());
@@ -1473,8 +1469,9 @@ void UnitSprite::drawRoutine6()
  */
 void UnitSprite::drawRoutine7()
 {
-	if (_unit->isOut())
-		return; // unit is drawn as an item
+//	if (_unit->isOut() == true)
+	if (_unit->isOut_t(OUT_STAT) == true)
+		return;
 
 	Surface
 			* torso		= NULL,
@@ -1570,8 +1567,9 @@ void UnitSprite::drawRoutine7()
  */
 void UnitSprite::drawRoutine8()
 {
-	if (_unit->isOut())
-		return; // unit is drawn as an item
+//	if (_unit->isOut() == true)
+	if (_unit->isOut_t(OUT_STAT) == true)
+		return;
 
 	Surface* legs = NULL;
 
@@ -1599,8 +1597,9 @@ void UnitSprite::drawRoutine8()
  */
 void UnitSprite::drawRoutine9()
 {
-	if (_unit->isOut() == true)
-		return; // unit is drawn as an item
+//	if (_unit->isOut() == true)
+	if (_unit->isOut_t(OUT_STAT) == true)
+		return;
 
 	_redraw = true;
 
@@ -1653,11 +1652,10 @@ void UnitSprite::drawRoutine9()
  */
 void UnitSprite::sortRifles()
 {
-//	if (_itemA && _itemA->getRules()->isTwoHanded())
-	if (_itemA) // kL
+	// this is the draw active-hand code:
+	if (_itemA != NULL)
 	{
-//		if (_itemB && _itemB->getRules()->isTwoHanded())
-		if (_itemB) // kL
+		if (_itemB != NULL)
 		{
 			if (_unit->getActiveHand() == "STR_LEFT_HAND")
 				_itemA = _itemB;
@@ -1667,12 +1665,32 @@ void UnitSprite::sortRifles()
 		else if (_unit->getStatus() != STATUS_AIMING)
 			_itemB = NULL;
 	}
-//	else if (_itemB && _itemB->getRules()->isTwoHanded())
-	else if (_itemB) // kL
+	else if (_itemB != NULL)
 	{
 		if (_unit->getStatus() != STATUS_AIMING)
 			_itemA = NULL;
 	}
 }
+/*	// this is the draw dual-weapon code:
+	if (_itemA != NULL
+		&& _itemA->getRules()->isTwoHanded())
+	{
+		if (_itemB != NULL
+			&& _itemB->getRules()->isTwoHanded())
+		{
+			if (_unit->getActiveHand() == "STR_LEFT_HAND")
+				_itemA = _itemB;
+
+			_itemB = NULL;
+		}
+		else if (_unit->getStatus() != STATUS_AIMING)
+			_itemB = NULL;
+	}
+	else if (_itemB != NULL
+		&& _itemB->getRules()->isTwoHanded())
+	{
+		if (_unit->getStatus() != STATUS_AIMING)
+			_itemA = NULL;
+	} */
 
 }
