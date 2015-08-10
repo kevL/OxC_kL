@@ -85,7 +85,8 @@ class Target;
 
 /**
  * Represents a specific region of the world.
- * Contains constant info about a region like area covered and base construction costs.
+ * @note Contains constant info about a region like area covered and base
+ * construction costs.
  */
 class RuleRegion
 {
@@ -202,6 +203,12 @@ struct convert<OpenXcom::MissionArea>
 		rhs.lonMax = node[1].as<double>() * M_PI / 180.;
 		rhs.latMin = node[2].as<double>() * M_PI / 180.;
 		rhs.latMax = node[3].as<double>() * M_PI / 180.;
+
+		// safeties ->
+//		if (rhs.lonMin > rhs.lonMax)
+//			std::swap(rhs.lonMin, rhs.lonMax);
+//		if (rhs.latMin > rhs.latMax)
+//			std::swap(rhs.latMin, rhs.latMax);
 
 		if (node.size() > 4)
 			rhs.texture	= node[4].as<int>();

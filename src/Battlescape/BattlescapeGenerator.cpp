@@ -3425,6 +3425,26 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*>* const scri
 
 	delete _testBlock;
 
+	Tile* tile; // hack to ensure there's always a floor-tile on level 0
+	for (int
+			x = 0;
+			x != _mapsize_x;
+			++x)
+	{
+		for (int
+				y = 0;
+				y != _mapsize_y;
+				++y)
+		{
+			tile = _battleSave->getTile(Position(x,y,0));
+			if (tile->getMapData(O_FLOOR) == NULL)
+				tile->setMapData(
+							MapDataSet::getScorchedEarthTile(),
+							1,0,
+							O_FLOOR);
+		}
+	}
+
 	attachNodeLinks();
 }
 

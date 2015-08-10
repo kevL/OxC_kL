@@ -180,7 +180,7 @@ bool RuleRegion::insideRegion(
 				  && lon < _lonMax[i]);
 		else
 			inLon = ((lon >= _lonMin[i]
-						&& lon < M_PI * 2)
+						&& lon < M_PI * 2.)
 				  || (lon >= 0.
 						&& lon < _lonMax[i]));
 

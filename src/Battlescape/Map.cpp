@@ -772,7 +772,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 					hasObject = false;
 //					unitNorthValid = false;
 
-					// Draw Floor
+// Draw Floor
 					srfSprite = tile->getSprite(O_FLOOR);
 					if (srfSprite)
 					{
@@ -872,7 +872,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 					} // end draw floor
 
 
-					// Draw Cursor Background
+// Draw Cursor Background
 					if (_cursorType != CT_NONE
 						&& _selectorX > itX - _cursorSize
 						&& _selectorY > itY - _cursorSize
@@ -934,7 +934,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 					// end cursor bg
 
 
-					// Redraws Unit when it moves along the NORTH, WEST, or NORTH-WEST side of a content-object. Et&.
+// Redraws Unit when it moves along the NORTH, WEST, or NORTH-WEST side of a content-object. Et&.
 					if (itY > 0)
 //					if (false)
 					{
@@ -954,7 +954,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 						{
 							if (tileNorth->getTerrainLevel() - tile->getTerrainLevel() < 1) // positive -> Tile is higher
 							{
-								// Phase I: redraw unit NORTH to make sure it doesn't get drawn [over any walls or] under any tiles.
+// Phase I: redraw unit NORTH to make sure it doesn't get drawn [over any walls or] under any tiles.
 								if (unitNorth->getDirection() != 2
 									&& unitNorth->getDirection() != 6 // perhaps !0 && !4 also; ie. do dir=1,5,3,7
 									&& unitNorth->getStatus() != STATUS_FLYING)
@@ -1007,7 +1007,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 									}
 								}
 
-								// Phase II: redraw any east wall object in the tile NORTH of the moving unit;
+// Phase II: redraw any east wall object in the tile NORTH of the moving unit;
 								// only applies to movement in the north/south direction.
 								if (itY > 1)
 								{
@@ -1037,7 +1037,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 									}
 								}
 
-								// Phase III: redraw any south wall object in the tile NORTH-WEST.
+// Phase III: redraw any south wall object in the tile NORTH-WEST.
 								if (itX > 0)
 								{
 									if (unitNorth->getDirection() == 2
@@ -1066,7 +1066,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 									}
 								}
 
-								// Phase IV: redraw any south or east wall object in the tile NORTH.
+// Phase IV: redraw any south or east bigWall object in the tile NORTH.
 								srfSprite = tileNorth->getSprite(O_OBJECT);
 								if (srfSprite
 									&& tileNorth->getMapData(O_OBJECT)->getBigWall() > BIGWALL_NORTH // do East,South,East_South
@@ -1080,7 +1080,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 								}
 
 								// Phase V: redraw object in the tile SOUTH-WEST (half-tile). kL: moved below_
-								// Phase VI: redraw everything in the tile WEST (half-tile).
+// Phase VI: redraw everything in the tile WEST (half-tile).
 								if (itX > 0)
 								{
 									Tile* const tileWest = _battleSave->getTile(posMap + Position(-1,0,0));
@@ -1381,7 +1381,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 									}
 									// end redraw Tile West w/ unitNorth valid.
 
-									// Phase V-b: redraw object in the tile SOUTH-WEST (half-tile).
+// Phase V-b: redraw object in the tile SOUTH-WEST (half-tile).
 									if (itY < endY)
 									{
 										if (unitNorth->getDirection() == 1
@@ -1448,12 +1448,12 @@ void Map::drawTerrain(Surface* const surface) // private.
 					} // end (itY > 0)
 
 
-					// Draw Tile Background
-//					if (tile->isVoid(true, false) == false)
+// Draw Tile Background
+//					if (tile->isVoid(true, false) == false) // need to take this out because, flying units moving on/off roofs
 //					{
 						bool drawUnitNorth = false;
 
-						// Draw west wall
+// Draw west wall
 						srfSprite = tile->getSprite(O_WESTWALL);
 						if (srfSprite)
 						{
@@ -1476,7 +1476,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 									wallShade);
 						}
 
-						// Draw North Wall
+// Draw North Wall
 						srfSprite = tile->getSprite(O_NORTHWALL);
 						if (srfSprite)
 						{
@@ -1504,7 +1504,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 									halfRight);
 						}
 
-						// Draw Object Background & Center
+// Draw Object in Background & Center
 						srfSprite = tile->getSprite(O_OBJECT);
 						if (srfSprite
 							&& (tile->getMapData(O_OBJECT)->getBigWall() < BIGWALL_EAST // do none,Block,diagonals,West,North,West&North
@@ -1521,7 +1521,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 									tileShade);
 						}
 
-						// Draw Item on Floor (if any)
+// Draw Item on Floor if any
 						bool primed;
 						const int sprite = tile->getTopItemSprite(&primed);
 						if (sprite != -1)
@@ -1570,7 +1570,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 						}
 
 
-						// Redraw any unit moving onto or off of this Tile wrt a lower Z-level.
+// Redraw any unit moving onto or off of this Tile wrt a lower Z-level.
 						if (itZ > 0
 							&& tile->hasNoFloor(tileBelow) == false
 							&& (tile->getMapData(O_OBJECT) == NULL
@@ -1635,7 +1635,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 						// end hilltop Redraw.
 
 
-						// Redraw unitNorth when it's on a reverse slope. Or level slope. Or moving NS along westerly wall. Or if it's a snake ... with a long tail.
+// Redraw unitNorth when it's on a reverse slope. Or level slope. Or moving NS along westerly wall. Or if it's a snake ... with a long tail.
 						if (itY > 0
 							&& tile->getMapData(O_NORTHWALL) == NULL)
 						{
@@ -1656,6 +1656,8 @@ void Map::drawTerrain(Surface* const surface) // private.
 											&& unitNorth->getStatus() == STATUS_WALKING
 											&& (unitNorth->getDirection() == 0
 												|| unitNorth->getDirection() == 4))))
+//												|| unitNorth->getDirection() == 1		// new
+//												|| unitNorth->getDirection() == 5))))	// new
 								{
 									if ((tileNorth->getTerrainLevel() - tile->getTerrainLevel() > -1 // positive -> Tile is higher
 											&& tile->getMapData(O_OBJECT) != NULL
@@ -1676,6 +1678,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 										{
 											if (kL_Debug_stand && unitNorth->getStatus() == STATUS_STANDING) Log(LOG_INFO) << ". drawUnit [40]";
 											if (kL_Debug_walk && unitNorth->getStatus() == STATUS_WALKING) Log(LOG_INFO) << ". drawUnit [45]";
+
 											if (tileNorth->isDiscovered(2) == true)
 												shade = tileNorth->getShade();
 											else
@@ -1710,7 +1713,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 						// end Redraw unitNorth on reverse slope.
 
 
-						// Redraw westerly units that are moving easterly-westerly.
+// Redraw westerly units that are moving easterly-westerly.
 						if (itX > 0
 							&& unit == NULL)
 //TEST							&& (hasFloor == true						// special handling for moving units concealed by current floorTile.
@@ -2232,7 +2235,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 //					} // Void <- end.
 
 
-					// Draw Bullet if in Field Of View
+// Draw Bullet if in Field Of View
 					if (_showProjectile == true // <- used to hide Celatid glob while its spitting animation plays.
 						&& _projectile != NULL)
 //						&& _projectileInFOV)
@@ -2359,7 +2362,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 					// end draw bullet.
 
 
-					// Main Draw BattleUnit ->
+// Main Draw BattleUnit ->
 					if (unit != NULL
 						&& (unit->getUnitVisible() == true
 							|| _battleSave->getDebugMode() == true))
@@ -2782,7 +2785,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 					// end Main Draw BattleUnit.
 
 
-					// reDraw unitBelow moving up/down on a gravLift.
+// reDraw unitBelow moving up/down on a gravLift.
 					// Should this be STATUS_WALKING (up/down gravLift #2); uses verDir instead
 					if (itZ > 0
 						&& tile->getMapData(O_FLOOR) != NULL
@@ -2985,7 +2988,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 					// end gravLift.
 
 
-					// Draw Unconscious Soldier icon
+// Draw Unconscious Soldier icon
 					// - might want to redundant this, like rankIcons.
 					if (unit == NULL)
 					{
@@ -3020,7 +3023,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 					// end unconscious soldier icon.
 
 
-					// Draw unitBelow if it is on raised ground & there is no Floor.
+// Draw unitBelow if it is on raised ground & there is no Floor.
 					if (itZ > 0
 						&& tileBelow->getTerrainLevel() < -11
 						&& tile->hasNoFloor(tileBelow) == true)
@@ -3152,8 +3155,8 @@ void Map::drawTerrain(Surface* const surface) // private.
 
 									// special case if tileSouthEast doesn't have a floor
 									// and tileBelowSouthEast does have a sprite that should conceal the redrawn unit's right leg.
-//									if (false)
 									if (itX < endX && itY < endY)
+//									if (false)
 									{
 										const Tile* const tileSouthEast = _battleSave->getTile(posMap + Position(1,1,0));
 
@@ -3171,7 +3174,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 												&& tileBelowSouthEast->getMapData(O_OBJECT) != NULL
 												&& tileBelowSouthEast->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NONE
 												&& tileBelowSouthEast->getMapData(O_OBJECT)->getTUCostData(MT_WALK) == 255)	// generally only nonwalkable content-objects
-											{																							// rise high enough to cause an overblit.
+											{																				// rise high enough to cause an overblit.
 												srfSprite = tileBelowSouthEast->getSprite(O_OBJECT);
 //												srfSprite = NULL;
 												if (srfSprite)
@@ -3227,7 +3230,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 					// end draw unitBelow.
 
 
-					// Draw SMOKE & FIRE
+// Draw SMOKE & FIRE
 					if (tile->isDiscovered(2) == true
 						&& (tile->getSmoke() != 0
 							|| tile->getFire() != 0))
@@ -3259,7 +3262,8 @@ void Map::drawTerrain(Surface* const surface) // private.
 					} // end Smoke & Fire
 
 
-					if (itX > 0 && itY > 0 // Redraw fire on south-west & north-east Tiles of big units
+// Redraw fire on south-west & north-east Tiles of big units
+					if (itX > 0 && itY > 0
 						&& unit != NULL)
 					{
 						const Tile* const tileWest = _battleSave->getTile(posMap + Position(-1,0,0));
@@ -3280,9 +3284,6 @@ void Map::drawTerrain(Surface* const surface) // private.
 										{
 											if (tileWest->getFire() == 0)
 											{
-//												if (_battleSave->getDepth() > 0)
-//													frame = ResourcePack::UNDERWATER_SMOKE_OFFSET;
-//												else
 												frame = ResourcePack::SMOKE_OFFSET;
 
 												frame += (tileWest->getSmoke() + 1) / 2;
@@ -3313,9 +3314,6 @@ void Map::drawTerrain(Surface* const surface) // private.
 										{
 											if (tileNorth->getFire() == 0)
 											{
-//												if (_battleSave->getDepth() > 0)
-//													frame = ResourcePack::UNDERWATER_SMOKE_OFFSET;
-//												else
 												frame = ResourcePack::SMOKE_OFFSET;
 
 												frame += (tileNorth->getSmoke() + 1) / 2;
@@ -3395,7 +3393,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 						}
 					} */
 
-					// Draw pathPreview
+// Draw pathPreview
 					if (tile->getPreviewDir() != -1
 						&& (_previewSetting & PATH_ARROWS)
 						&& tile->isDiscovered(0) == true)
@@ -3426,7 +3424,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 					}
 
 
-					// Draw Front Object
+// Draw Front Object
 					srfSprite = tile->getSprite(O_OBJECT);
 					if (srfSprite
 						&& tile->getMapData(O_OBJECT)->getBigWall() > BIGWALL_NORTH // do East,South,East&South
@@ -3440,7 +3438,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 					}
 
 
-					// For VERTICAL DIRECTION:
+// For VERTICAL DIRECTION:
 					if (itZ > 0 // THIS IS LEADING TO A NEAR-INFINITE REGRESSION!!
 						&& tile->isVoid(false, false) == false)
 					{
@@ -3863,7 +3861,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 					}
 
 
-					// Draw Cursor Front
+// Draw Cursor Front
 					if (_cursorType != CT_NONE
 						&& _selectorX > itX - _cursorSize
 						&& _selectorY > itY - _cursorSize
@@ -4079,7 +4077,8 @@ void Map::drawTerrain(Surface* const surface) // private.
 					// end cursor front.
 
 
-					int // Draw WayPoints if any on current Tile
+// Draw WayPoints if any on current Tile
+					int
 						waypid = 1,
 						waypXOff = 2,
 						waypYOff = 2;
@@ -4126,7 +4125,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 					// end waypoints.
 
 
-					// Draw Map's border-sprite only on ground tiles
+// Draw Map's border-sprite only on ground tiles
 					if (itZ == _battleSave->getGroundLevel()
 						|| (itZ == 0
 							&& _battleSave->getGroundLevel() == -1))
@@ -4341,7 +4340,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 	// end Path Preview.
 
 
-	if (_explosionInFOV == true) // check if we got hit or explosion animations
+	if (_explosionInFOV == true) // check if they got hit or explosion animations
 	{
 		// big explosions cause the screen to flash as bright as possible before any explosions are actually drawn.
 		// this causes everything to look like EGA for a single frame.
@@ -4416,11 +4415,12 @@ void Map::drawTerrain(Surface* const surface) // private.
 }
 
 /**
- *
+ * Sets and returns variables about a unit moving on or off of a hilltop.
  * @param unit			- reference a BattleUnit
  * @param posMap		- reference the current tile position being drawn
  * @param pixelOffset_x	- reference to set for sprite offset on x-axis
  * @param pixelOffset_y	- reference to set for sprite offset on y-axis
+ * @return, true if @a unit should be redrawn
  */
 bool Map::hilltopRedraw( // private
 		const BattleUnit& unit,

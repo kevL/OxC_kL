@@ -1234,7 +1234,8 @@ void DebriefingState::prepareDebriefing() // private.
 				const Soldier* const sol = _gameSave->getSoldier((*i)->getId());
 
 				if (aborted == false					// so game is not aborted
-					|| ((*i)->isInExitArea() == true	// or aborted and unit is on exit area
+					|| (((*i)->isInExitArea() == true	// or aborted and unit is on exit area
+							|| (*i)->getStatus() == STATUS_LIMBO)
 						&& (tacType != TCT_BASEDEFENSE
 							|| missionAccomplished == true)))
 				{

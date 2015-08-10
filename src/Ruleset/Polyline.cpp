@@ -70,8 +70,8 @@ void Polyline::load(const YAML::Node& node)
 	{
 		size_t j = i / 2;
 
-		_lon[j] = coords[i] * M_PI / 180.0;
-		_lat[j] = coords[i + 1] * M_PI / 180.0;
+		_lon[j] = coords[i] * M_PI / 180.;
+		_lat[j] = coords[i + 1] * M_PI / 180.;
 	}
 }
 

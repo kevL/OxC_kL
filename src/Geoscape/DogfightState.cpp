@@ -2078,7 +2078,7 @@ void DogfightState::resetInterceptPort(
 			else // 2
 			{
 				_x = 80;
-				_y = 200 - _window->getHeight(); // 96;
+				_y = 201 - _window->getHeight(); // 96;
 			}
 		}
 //		else if (_totalIntercepts == 3)
@@ -2094,15 +2094,15 @@ void DogfightState::resetInterceptPort(
 			else if (dfOpen == 2)
 			{
 				_x = 0;
-				_y = 200 - _window->getHeight(); // 96;
+				_y = 201 - _window->getHeight(); // 96;
 			}
 			else // 3
 			{
 				_x = 320 - _window->getWidth(); // 160;
-				_y = 200 - _window->getHeight(); // 96;
+				_y = 201 - _window->getHeight(); // 96;
 			}
 		}
-		else
+		else // dfOpenTotal== 4
 		{
 //			if (_slot == 1)
 			if (dfOpen == 1)
@@ -2120,12 +2120,12 @@ void DogfightState::resetInterceptPort(
 			else if (dfOpen == 3)
 			{
 				_x = 0;
-				_y = 200 - _window->getHeight(); // 96;
+				_y = 201 - _window->getHeight(); // 96;
 			}
 			else // 4
 			{
 				_x = 320 - _window->getWidth(); // 160;
-				_y = 200 - _window->getHeight(); // 96;
+				_y = 201 - _window->getHeight(); // 96;
 			}
 		}
 

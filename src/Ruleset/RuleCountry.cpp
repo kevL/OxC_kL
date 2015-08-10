@@ -53,11 +53,11 @@ RuleCountry::~RuleCountry()
  */
 void RuleCountry::load(const YAML::Node& node)
 {
-	_type			= node["type"].as<std::string>(_type);
-	_fundingBase	= node["fundingBase"].as<int>(_fundingBase);
-	_fundingCap		= node["fundingCap"].as<int>(_fundingCap);
-	_labelLon		= node["labelLon"].as<double>(_labelLon) * M_PI / 180.;
-	_labelLat		= node["labelLat"].as<double>(_labelLat) * M_PI / 180.;
+	_type			= node["type"]			.as<std::string>(_type);
+	_fundingBase	= node["fundingBase"]	.as<int>(_fundingBase);
+	_fundingCap		= node["fundingCap"]	.as<int>(_fundingCap);
+	_labelLon		= node["labelLon"]		.as<double>(_labelLon) * M_PI / 180.;
+	_labelLat		= node["labelLat"]		.as<double>(_labelLat) * M_PI / 180.;
 
 	std::vector<std::vector<double> > areas;
 	areas = node["areas"].as<std::vector<std::vector<double> > >(areas);
@@ -71,6 +71,12 @@ void RuleCountry::load(const YAML::Node& node)
 		_lonMax.push_back(areas[i][1] * M_PI / 180.);
 		_latMin.push_back(areas[i][2] * M_PI / 180.);
 		_latMax.push_back(areas[i][3] * M_PI / 180.);
+
+		// safeties ->
+//		if (_lonMin.back() > _lonMax.back())
+//			std::swap(_lonMin.back(), _lonMax.back());
+//		if (_latMin.back() > _latMax.back())
+//			std::swap(_latMin.back(), _latMax.back());
 	}
 }
 
@@ -127,7 +133,7 @@ double RuleCountry::getLabelLatitude() const
  * Checks if a point is inside this country.
  * @param lon - longitude in radians
  * @param lat - latitude in radians
- * @return, true if it's inside
+ * @return, true if inside
  */
 bool RuleCountry::insideCountry(
 		double lon,
@@ -145,7 +151,7 @@ bool RuleCountry::insideCountry(
 		if (_lonMin[i] <= _lonMax[i])
 			inLon = (lon >= _lonMin[i] && lon < _lonMax[i]);
 		else
-			inLon = (lon >= _lonMin[i] && lon < 6.283)
+			inLon = (lon >= _lonMin[i] && lon < M_PI * 2.)
 					|| (lon >= 0. && lon < _lonMax[i]);
 
 		inLat = (lat >= _latMin[i] && lat < _latMax[i]);
