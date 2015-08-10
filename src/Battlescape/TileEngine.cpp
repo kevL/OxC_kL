@@ -4583,7 +4583,7 @@ bool TileEngine::detonate(Tile* const tile)
 	}
 
 
-	expl = ((expl + 29) / 30);
+	expl = (expl + 29) / 30;
 
 	if (tile->ignite((expl + 1) / 2) == false)
 		tile->addSmoke((expl + vol + 1) / 2);
@@ -4592,7 +4592,7 @@ bool TileEngine::detonate(Tile* const tile)
 	{
 		Tile* const tileAbove = _battleSave->getTile(tile->getPosition() + Position(0,0,1));
 		if (tileAbove != NULL
-			&& tileAbove->hasNoFloor(tile) == true
+			&& tileAbove->hasNoFloor(tile) == true // TODO: use verticalBlockage() instead
 			&& RNG::percent(tile->getSmoke() * 8) == true)
 		{
 			tileAbove->addSmoke((tile->getSmoke()) / 3);

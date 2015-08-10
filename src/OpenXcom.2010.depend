@@ -5500,7 +5500,7 @@
 	"BattleState.h"
 	"../Ruleset/RuleItem.h"
 
-1431473377 f:\git\openxcom\src\battlescape\unitfallbstate.h
+1439173385 f:\git\openxcom\src\battlescape\unitfallbstate.h
 	"BattleState.h"
 
 1433916325 f:\git\openxcom\src\battlescape\unitinfostate.h
@@ -6841,7 +6841,7 @@
 	"../Resource/XcomResourcePack.h"
 	"../Savegame/SavedGame.h"
 
-1438169659 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
+1439170509 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
 	"DogfightState.h"
 	"GeoscapeCraftState.h"
 	"GeoscapeState.h"
@@ -6917,7 +6917,7 @@
 1432346700 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1439089644 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1439171162 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	"AlienBaseState.h"
 	"BaseDefenseState.h"

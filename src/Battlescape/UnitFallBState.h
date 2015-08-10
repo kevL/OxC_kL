@@ -49,7 +49,7 @@ private:
 
 	public:
 		/// Creates a new UnitWalkBState class
-		explicit UnitFallBState(BattlescapeGame* parent);
+		explicit UnitFallBState(BattlescapeGame* const parent);
 		/// Cleans up the UnitWalkBState.
 		~UnitFallBState();
 

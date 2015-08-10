@@ -465,7 +465,7 @@ void UnitSprite::drawRoutine0()
 		}
 	}
 
-	if (_itemB) // if left handed or dual wielding...
+	if (_itemB) // if left handed or dual wielding
 	{
 		leftArm = _unitSurface->getFrame(larm2H + unitDir);
 
@@ -810,7 +810,7 @@ void UnitSprite::drawRoutine1()
 		}
 	}
 
-	// if left handed or dual wielding...
+	// if left handed or dual wielding
 	if (_itemB)
 	{
 		leftArm = _unitSurface->getFrame(larm2H + unitDir);
@@ -1104,7 +1104,7 @@ void UnitSprite::drawRoutine4()
 		}
 	}
 
-	if (_itemB // if dual wielding...
+	if (_itemB // if dual wielding
 		&& !_itemB->getRules()->isFixed())
 	{
 		itemB = _itemSurfaceB->getFrame(_itemB->getRules()->getHandSprite() + _unit->getDirection());

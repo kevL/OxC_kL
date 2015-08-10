@@ -41,13 +41,10 @@ namespace OpenXcom
  * Sets up an UnitFallBState.
  * @param parent - pointer to the BattlescapeGame
  */
-UnitFallBState::UnitFallBState(BattlescapeGame* parent)
+UnitFallBState::UnitFallBState(BattlescapeGame* const parent)
 	:
 		BattleState(parent),
 		_terrain(parent->getTileEngine())
-//		_terrain(NULL),
-//		_unitsToMove(),
-//		_tilesToFallInto()
 {}
 
 /**
@@ -76,15 +73,14 @@ void UnitFallBState::init()
 
 /**
  * Runs state functionality every cycle.
- * Progresses the fall, updates the battlescape, ...
+ * @note Progresses the fall and updates the battlescape etc.
  */
 void UnitFallBState::think()
 {
 	//Log(LOG_INFO) << "UnitFallBState::think()";
 	BattleUnit* unitBelow;
-	Tile
-		* tile,
-		* tileBelow;
+	const Tile* tile;
+	Tile* tileBelow;
 	Position startPos;
 
 	for (std::list<BattleUnit*>::const_iterator
@@ -331,7 +327,7 @@ void UnitFallBState::think()
 								break; // Try next direction.
 
 
-							// If all sections of the unit-fallen-onto can be moved, then move it.
+							// If all sections of the unit-fallen-onto can be moved then move it.
 							if (k == bodyPositions.end())
 							{
 								//Log(LOG_INFO) << ". . . . move unit";
@@ -392,10 +388,10 @@ void UnitFallBState::think()
 
 				tileBelow = _parent->getSave()->getTile(destination);
 				(*i)->startWalking(
-									Pathfinding::DIR_DOWN,
-									destination,
-									tileBelow);
-//									onScreen);
+								Pathfinding::DIR_DOWN,
+								destination,
+								tileBelow);
+//								onScreen);
 
 				(*i)->setCache(NULL);
 				_parent->getMap()->cacheUnit(*i);
@@ -410,10 +406,10 @@ void UnitFallBState::think()
 				{
 					// kL_add: Put burnedBySilacoid() here! etc
 					(*i)->getTile()->ignite(1);
-					Position pos = ((*i)->getPosition() * Position(16,16,24))
-									+ Position(
-											8,8,
-											-(*i)->getTile()->getTerrainLevel());
+					const Position pos = ((*i)->getPosition() * Position(16,16,24))
+										+ Position(
+												8,8,
+												-(*i)->getTile()->getTerrainLevel());
 					_parent->getTileEngine()->hit(
 												pos,
 												(*i)->getBaseStats()->strength, // * (*i)->getAccuracyModifier(),

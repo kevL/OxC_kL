@@ -2130,7 +2130,7 @@ void SavedBattleGame::tileVolatiles()
 		{
 			tile = getTile((*i)->getPosition() + Position(0,0,1));
 			if (tile != NULL
-				&& tile->hasNoFloor(*i) == true)
+				&& tile->hasNoFloor(*i) == true) // TODO: use verticalBlockage() instead
 			{
 				tile->addSmoke(var / 3);
 			}
@@ -2142,11 +2142,11 @@ void SavedBattleGame::tileVolatiles()
 			{
 				if (RNG::percent(var * 8) == true)
 				{
-					Position spreadPos;
+					Position posSpread;
 					Pathfinding::directionToVector(
 												dir,
-												&spreadPos);
-					tile = getTile((*i)->getPosition() + spreadPos);
+												&posSpread);
+					tile = getTile((*i)->getPosition() + posSpread);
 					if (tile != NULL
 						&& _tileEngine->horizontalBlockage(
 														*i,

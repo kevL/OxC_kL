@@ -2042,6 +2042,18 @@ bool DetectXCOMBase::operator() (const Ufo* ufo) const
 		return false;
 	}
 
+	if (ufo->getTrajectoryPoint() < 2)
+	{
+		//Log(LOG_INFO) << ". . UFO just entered atmosphere - can't detect!";
+		return false;
+	}
+
+	if (ufo->getTrajectory().getZone(ufo->getTrajectoryPoint()) == 5)
+	{
+		//Log(LOG_INFO) << ". . UFO about to leave atmosphere - can't detect!";
+		return false;
+	}
+
 	if (ufo->getTrajectory().getID() == UfoTrajectory::RETALIATION_ASSAULT_RUN)
 	{
 		//Log(LOG_INFO) << ". uFo's attacking a base don't bother with this!";
@@ -2070,17 +2082,17 @@ bool DetectXCOMBase::operator() (const Ufo* ufo) const
 
 
 	const double inverseFactor = dist * 12. / range; // should use log() ...
-	int detChance = static_cast<int>(Round(
+	int pct = static_cast<int>(Round(
 					static_cast<double>(_base.getDetectionChance(_diff) + ufo->getDetectors()) / inverseFactor));
 	if (ufo->getUfoMissionType() == "STR_ALIEN_RETALIATION"
 		&& Options::aggressiveRetaliation == true)
 	{
 		//Log(LOG_INFO) << ". . uFo's on retaliation missions scan for bases 'aggressively'";
-		detChance += 3 + _diff;
+		pct += 3 + _diff;
 	}
-	//Log(LOG_INFO) << ". . . detChance = " << detChance;
+	//Log(LOG_INFO) << ". . . pct = " << pct;
 
-	return RNG::percent(detChance);
+	return RNG::percent(pct);
 }
 
 
