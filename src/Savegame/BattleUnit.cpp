@@ -117,6 +117,7 @@ BattleUnit::BattleUnit(
 		_turnDir(0),
 		_mcStrength(0),
 		_mcSkill(0),
+		_drugDose(0),
 
 		_deathSound(-1),
 		_aggroSound(-1),
@@ -288,6 +289,7 @@ BattleUnit::BattleUnit(
 		_turnDir(0),
 		_mcStrength(0),
 		_mcSkill(0),
+		_drugDose(0),
 
 		_statistics(NULL), // Soldier Diary
 
@@ -464,6 +466,7 @@ void BattleUnit::load(const YAML::Node& node)
 	_activeHand			= node["activeHand"]			.as<std::string>(_activeHand);
 	_mcStrength			= node["mcStrength"]			.as<int>(_mcStrength);
 	_mcSkill			= node["mcSkill"]				.as<int>(_mcSkill);
+	_drugDose			= node["drugDose"]				.as<int>(_drugDose);
 
 	for (size_t
 			i = 0;
@@ -593,6 +596,7 @@ YAML::Node BattleUnit::save() const
 	node["killedBy"]		= static_cast<int>(_killedBy);
 	node["motionPoints"]	= _motionPoints;
 	node["activeHand"]		= _activeHand;
+
 //	node["specab"]			= (int)_specab;
 //	node["respawn"]			= _respawn;
 	// could put (if not tank) here:
@@ -602,6 +606,9 @@ YAML::Node BattleUnit::save() const
 
 	if (_kills != 0)
 		node["kills"] = _kills;
+
+	if (_drugDose != 0)
+		node["drugDose"] = _drugDose;
 
 	if (_faction == FACTION_PLAYER
 		&& _dontReselect == true)
@@ -1613,6 +1620,7 @@ int BattleUnit::damage(
 //		&& _health > _stunLevel
 		&& _status != STATUS_UNCONSCIOUS
 		&& dType != DT_STUN
+//		&& _drugDose < 3
 		&& (_geoscapeSoldier != NULL
 			|| _unitRule->isMechanical() == false))
 	{
@@ -3508,6 +3516,10 @@ void BattleUnit::morphine()
 			&& _race != "STR_ZOMBIE"))
 	{
 		_stunLevel += 10;
+
+		if (++_drugDose > 2)
+			_health = 0;
+
 		_battleGame->checkForCasualties();
 	}
 }
@@ -3527,6 +3539,15 @@ bool BattleUnit::amphetamine(
 		_energy = getBaseStats()->stamina;
 
 	return healStun(stun);
+}
+
+/**
+ * Gets if the unit has overdosed on morphine.
+ * @return, true if overdosed
+ */
+bool BattleUnit::getOverDose() const
+{
+	return (_drugDose > 2);
 }
 
 /**

@@ -146,7 +146,9 @@ void UnitDieBState::think()
 		&& _doneScream == false)
 	{
 		_doneScream = true;
-		playDeathSound();
+
+		if (_unit->getOverDose() == false)
+			playDeathSound();
 
 		if (_unit->getUnitVisible() == true)
 		{

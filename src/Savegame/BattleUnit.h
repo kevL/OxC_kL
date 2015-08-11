@@ -469,6 +469,7 @@ private:
 		_morale,
 		_moraleRestored,
 		_motionPoints,
+		_drugDose,
 		_spinPhase,
 		_stunLevel,
 		_toDirection,
@@ -930,6 +931,9 @@ private:
 		bool amphetamine(
 				int energy,
 				int stun);
+
+		/// Gets if the unit has overdosed on morphine.
+		bool getOverDose() const;
 
 		/// Gets motion points of this unit for the motion scanner.
 		int getMotionPoints() const;

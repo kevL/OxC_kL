@@ -412,7 +412,9 @@ void MedikitState::onPainClick(Action*)
 			_action->weapon->setPainKillerQuantity(painQty - 1);
 			_action->targetUnit->morphine();
 
-			if (_action->targetUnit->getFaction() == FACTION_NEUTRAL) // take control of Civies.
+			if (_action->targetUnit->getHealth() == 0)
+				_game->popState();
+			else if (_action->targetUnit->getFaction() == FACTION_NEUTRAL) // take control of Civies.
 			{
 				_action->targetUnit->convertToFaction(FACTION_PLAYER);
 				_action->targetUnit->initTu();
