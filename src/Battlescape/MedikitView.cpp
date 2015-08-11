@@ -76,7 +76,7 @@ MedikitView::MedikitView(
 			w,h,
 			x,y),
 		_game(game),
-		_selectedPart(BODYPARTS),
+		_selectedPart(BattleUnit::PARTS_BODY),
 		_unit(unit),
 		_txtPart(part),
 		_txtWound(wound)
@@ -96,7 +96,7 @@ void MedikitView::draw()
 	this->lock();
 	for (size_t
 			i = 0;
-			i != BODYPARTS; //static_cast<int>(srt->getTotalFrames());
+			i != BattleUnit::PARTS_BODY; //static_cast<int>(srt->getTotalFrames());
 			++i)
 	{
 		if (_unit->getFatalWound(i) != 0)
@@ -118,7 +118,7 @@ void MedikitView::draw()
 	_redraw = false;
 
 
-	if (_selectedPart != BODYPARTS)
+	if (_selectedPart != BattleUnit::PARTS_BODY)
 	{
 		_txtPart->setText(_game->getLanguage()->getString(BODY_PARTS[_selectedPart]));
 
@@ -144,7 +144,7 @@ void MedikitView::mouseClick(Action* action, State*)
 
 	for (size_t
 			i = 0;
-			i != BODYPARTS; //static_cast<int>(srt->getTotalFrames());
+			i != BattleUnit::PARTS_BODY; //static_cast<int>(srt->getTotalFrames());
 			++i)
 	{
 		srf = srt->getFrame(static_cast<int>(i));
@@ -174,7 +174,7 @@ void MedikitView::autoSelectPart()
 {
 	for (size_t
 			i = 0;
-			i != BODYPARTS;
+			i != BattleUnit::PARTS_BODY;
 			++i)
 	{
 		if (_unit->getFatalWound(i) != 0)

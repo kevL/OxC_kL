@@ -4636,7 +4636,7 @@
 1438533579 f:\git\openxcom\src\savegame\savedbattlegame.h
 	"BattleUnit.h"
 
-1439267378 f:\git\openxcom\src\savegame\battleunit.h
+1439310205 f:\git\openxcom\src\savegame\battleunit.h
 	"Soldier.h"
 	"../Battlescape/BattlescapeGame.h"
 	"../Battlescape/Position.h"
@@ -5905,7 +5905,7 @@
 	<SDL.h>
 	<yaml-cpp/yaml.h>
 
-1438166893 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
+1439307694 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
 	"InventoryState.h"
 	"BattlescapeState.h"
 	"Inventory.h"
@@ -5990,10 +5990,10 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1439263963 f:\git\openxcom\src\battlescape\medikitview.h
+1439310146 f:\git\openxcom\src\battlescape\medikitview.h
 	"../Engine/InteractiveSurface.h"
 
-1439264796 source:f:\git\openxcom\src\battlescape\medikitview.cpp
+1439310028 source:f:\git\openxcom\src\battlescape\medikitview.cpp
 	"MedikitView.h"
 	"../Engine/Action.h"
 	"../Engine/Game.h"

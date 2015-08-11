@@ -39,7 +39,6 @@ class MedikitView
 {
 
 private:
-	static const size_t BODYPARTS = 6;
 	static const std::string BODY_PARTS[];
 
 	size_t _selectedPart;
