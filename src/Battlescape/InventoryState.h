@@ -144,7 +144,7 @@ private:
 		/// Handler for clicking the Ground button.
 		void btnGroundClick(Action* action);
 		/// Handler for right-clicking the Ground button.
-		void btnUnloadUnitClick(Action* action);
+		void btnUnequipUnitClick(Action* action);
 
 		/// Handler for clicking the Rank button.
 		void btnRankClick(Action* action);

@@ -5680,25 +5680,25 @@ int TileEngine::voxelCheck(
 	// not to allow 2x2 units to stick through walls
 	for (int // terrain parts [0=floor, 1/2=walls, 3=content-object]
 			i = 0;
-			i < 4;
+			i != static_cast<int>(Tile::PARTS_TILE);
 			++i)
 	{
-		if (targetTile->isUfoDoorOpen(i) == true)
-			continue;
-
-		const MapData* const dataTarget = targetTile->getMapData(i);
-		if (dataTarget != NULL)
+		if (targetTile->isUfoDoorOpen(i) == false)
 		{
-			const int
-				x = 15 - targetPos.x % 16,	// x-direction is reversed
-				y = targetPos.y % 16;		// y-direction is standard
-
-			const int loftIdx = ((dataTarget->getLoftID((targetPos.z % 24) / 2) * 16) + y);
-			if (loftIdx < static_cast<int>(_voxelData->size()) // davide, http://openxcom.org/forum/index.php?topic=2934.msg32146#msg32146 (x2 _below)
-				&& _voxelData->at(loftIdx) & (1 << x))
+			const MapData* const dataTarget = targetTile->getMapData(i);
+			if (dataTarget != NULL)
 			{
-				//Log(LOG_INFO) << ". vC() ret = " << i;
-				return i;
+				const int
+					x = 15 - targetPos.x % 16,	// x-direction is reversed
+					y = targetPos.y % 16;		// y-direction is standard
+
+				const int loftIdx = ((dataTarget->getLoftID((targetPos.z % 24) / 2) * 16) + y);
+				if (loftIdx < static_cast<int>(_voxelData->size()) // davide, http://openxcom.org/forum/index.php?topic=2934.msg32146#msg32146 (x2 _below)
+					&& _voxelData->at(loftIdx) & (1 << x))
+				{
+					//Log(LOG_INFO) << ". vC() ret = " << i;
+					return i;
+				}
 			}
 		}
 	}

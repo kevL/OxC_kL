@@ -76,8 +76,8 @@ private:
 		_mapsize_x,
 		_mapsize_y,
 		_mapsize_z,
-		_unitSequence,
-		_shade;
+		_shade,
+		_unitSequence;
 	size_t _battleOrder;
 
 	SDL_Rect

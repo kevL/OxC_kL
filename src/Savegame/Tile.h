@@ -53,8 +53,7 @@ class Tile
 protected:
 	static const size_t
 		LIGHTLAYERS	= 3,
-		PARTS		= 4,
-		SECTS		= 3;
+		SECTIONS	= 3;
 
 	bool
 		_danger,
@@ -66,7 +65,6 @@ protected:
 		_explosive,
 		_explosiveType,
 		_fire,
-//		_lastLight[LIGHTLAYERS],
 		_light[LIGHTLAYERS],
 		_mapDataID[4],
 		_mapDataSetID[4],
@@ -93,6 +91,7 @@ protected:
 
 	public:
 //		static const int NOT_CALCULATED = -1;
+		static const size_t PARTS_TILE = 4;
 
 		static struct SerializationKey
 		{
@@ -178,16 +177,18 @@ protected:
 				const BattleUnit* const unit = NULL,
 				const BattleActionType reserved = BA_NONE);
 		/**
-		 * Checks if the ufo door is open or opening. Used for visibility/light blocking checks.
-		 * This function assumes that there never are 2 doors on 1 tile or a door and another wall on 1 tile.
-		 * @param part	-
-		 * @return bool	-
+		 * Checks if the ufo door is open or opening.
+		 * @note Used for visibility/light blocking checks. This function
+		 * assumes that there never are 2 doors on 1 tile or a door and another
+		 * wall on 1 tile.
+		 * @param part		- the tile part to consider
+		 * @return, bool	- true if ufo-door is valid and not closed
 		 */
 		bool isUfoDoorOpen(int part) const
-		{	return _objects[part] != NULL
-				&& _objects[part]->isUfoDoor() == true
-				&& _curFrame[part] != 0; }
-//				&& _curFrame[part] != 4; } // <- not sure if 4 is ever relevant. It's not, see Tile::animate()
+		{	const size_t i = static_cast<size_t>(part);
+			return _objects[i] != NULL
+				&& _objects[i]->isUfoDoor() == true
+				&& _curFrame[i] != 0; }
 		/// Closes ufo door.
 		int closeUfoDoor();
 

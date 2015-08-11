@@ -147,7 +147,7 @@ MedikitButton::MedikitButton(int y)
 
 /**
  * Initializes the Medikit State.
- * @param action		- pointer to BattleAction (BattlescapeGame.h)
+ * @param action - pointer to BattleAction (BattlescapeGame.h)
  */
 MedikitState::MedikitState(BattleAction* action)
 	:

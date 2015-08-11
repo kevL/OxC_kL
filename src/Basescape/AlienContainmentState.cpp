@@ -67,21 +67,22 @@ AlienContainmentState::AlienContainmentState(
 		_usedSpace(base->getUsedContainment())
 {
 	_window			= new Window(this, 320, 200);
-	_txtTitle		= new Text(300, 17, 10, 10);
-	_txtBaseLabel	= new Text(80, 9, 16, 10);
 
-	_txtSpace		= new Text(144, 9, 16, 30);
+	_txtTitle		= new Text(300, 17, 10, 10);
+	_txtBaseLabel	= new Text( 80,  9, 16, 10);
+
+	_txtSpace		= new Text(144, 9,  16, 30);
 	_txtResearch	= new Text(144, 9, 154, 30);
 
-	_txtItem		= new Text(138, 9, 16, 40);
-	_txtLiveAliens	= new Text(50, 9, 154, 40);
-	_txtDeadAliens	= new Text(50, 9, 204, 40);
-	_txtInResearch	= new Text(47, 9, 254, 40);
+	_txtItem		= new Text(138, 9,  16, 40);
+	_txtLiveAliens	= new Text( 50, 9, 154, 40);
+	_txtDeadAliens	= new Text( 50, 9, 204, 40);
+	_txtInResearch	= new Text( 47, 9, 254, 40);
 //	_lstAliens->setColumns(4, 130, 50, 50, 47);
 
 	_lstAliens		= new TextList(285, 121, 16, 50);
 
-	_btnCancel		= new TextButton(134, 16, 16, 177);
+	_btnCancel		= new TextButton(134, 16,  16, 177);
 	_btnOk			= new TextButton(134, 16, 170, 177);
 
 	setInterface("manageContainment");
@@ -200,7 +201,7 @@ AlienContainmentState::AlienContainmentState(
 			qtyAliens = _base->getItems()->getItemQty(*i);			// get Qty of each aLien-type at this base
 			if (qtyAliens != 0)
 			{
-				_qtys.push_back(0);		// put it in the _qtys<vector> as (int)
+				_qty.push_back(0);		// put it in the _qty<vector> as (int)
 				_aliens.push_back(*i);	// put its name in the _aliens<vector> as (string)
 
 				std::wostringstream woststr;
@@ -242,7 +243,7 @@ AlienContainmentState::AlienContainmentState(
 			i != baseProjects.end();
 			++i)
 	{
-		_qtys.push_back(0);
+		_qty.push_back(0);
 		_aliens.push_back(*i);
 
 		_lstAliens->addRow(
@@ -252,7 +253,7 @@ AlienContainmentState::AlienContainmentState(
 						L"0",
 						tr("STR_YES").c_str());
 		_lstAliens->setRowColor(
-							_qtys.size() - 1,
+							_qty.size() - 1,
 							_lstAliens->getSecondaryColor());
 	}
 
@@ -291,20 +292,20 @@ void AlienContainmentState::btnOkClick(Action*)
 {
 	for (size_t
 			i = 0;
-			i != _qtys.size();
+			i != _qty.size();
 			++i)
 	{
-		if (_qtys[i] > 0)
+		if (_qty[i] > 0)
 		{
 			_base->getItems()->removeItem(
 									_aliens[i],
-									_qtys[i]);
+									_qty[i]);
 
 			_base->getItems()->addItem(
 									_game->getRuleset()->getArmor(
 															_game->getRuleset()->getUnit(_aliens[i])->getArmor())
 														->getCorpseGeoscape(),
-									_qtys[i]);
+									_qty[i]);
 		}
 	}
 
@@ -434,13 +435,13 @@ void AlienContainmentState::increaseByValue(int change)
 {
 	if (change > 0)
 	{
-		const int qtyType = getQuantity() - _qtys[_sel];
+		const int qtyType = getQuantity() - _qty[_sel];
 		if (qtyType > 0)
 		{
 			change = std::min(
 							change,
 							qtyType);
-			_qtys[_sel] += change;
+			_qty[_sel] += change;
 			_fishFood += change;
 
 			update();
@@ -466,12 +467,12 @@ void AlienContainmentState::decrease()
 void AlienContainmentState::decreaseByValue(int change)
 {
 	if (change > 0
-		&& _qtys[_sel] > 0)
+		&& _qty[_sel] > 0)
 	{
 		change = std::min(
 						change,
-						_qtys[_sel]);
-		_qtys[_sel] -= change;
+						_qty[_sel]);
+		_qty[_sel] -= change;
 		_fishFood -= change;
 
 		update();
@@ -480,7 +481,7 @@ void AlienContainmentState::decreaseByValue(int change)
 
 /**
  * Updates the row (quantity & color) of the selected aLien species.
- * Also determines if the OK button should be in/visible.
+ * @note Also determines if the OK button should be in/visible.
  */
 void AlienContainmentState::update() // private.
 {
@@ -488,12 +489,12 @@ void AlienContainmentState::update() // private.
 		woststr1,
 		woststr2;
 
-	const int qty = getQuantity() - _qtys[_sel];
+	const int qty = getQuantity() - _qty[_sel];
 	woststr1 << qty;
-	woststr2 << _qtys[_sel];
+	woststr2 << _qty[_sel];
 
 	Uint8 color;
-	if (_qtys[_sel] != 0)
+	if (_qty[_sel] != 0)
 		color = _lstAliens->getSecondaryColor();
 	else
 	{

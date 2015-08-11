@@ -183,7 +183,7 @@ BattleUnit::BattleUnit(
 
 	for (size_t
 			i = 0;
-			i != PARTS_WOUNDS;
+			i != PARTS_BODY;
 			++i)
 	{
 		_fatalWounds[i] = 0;
@@ -347,7 +347,7 @@ BattleUnit::BattleUnit(
 
 	for (size_t
 			i = 0;
-			i != PARTS_WOUNDS;
+			i != PARTS_BODY;
 			++i)
 	{
 		_fatalWounds[i] = 0;
@@ -475,7 +475,7 @@ void BattleUnit::load(const YAML::Node& node)
 
 	for (size_t
 			i = 0;
-			i != PARTS_WOUNDS;
+			i != PARTS_BODY;
 			++i)
 	{
 		_fatalWounds[i] = node["fatalWounds"][i].as<int>(_fatalWounds[i]);
@@ -624,7 +624,7 @@ YAML::Node BattleUnit::save() const
 	{
 		for (size_t
 				i = 0;
-				i != PARTS_WOUNDS;
+				i != PARTS_BODY;
 				++i)
 		{
 			node["fatalWounds"].push_back(_fatalWounds[i]);
@@ -2355,7 +2355,7 @@ int BattleUnit::getFatalWounds() const
 	int ret = 0;
 	for (size_t
 			i = 0;
-			i != PARTS_WOUNDS;
+			i != PARTS_BODY;
 			++i)
 	{
 		ret += _fatalWounds[i];
@@ -3434,7 +3434,8 @@ int BattleUnit::getMiniMapSpriteIndex() const
 }
 
 /**
- * Sets the turret type. -1 is no turret.
+ * Sets the turret type.
+ * @note -1 is no turret.
  * @param turretType - the turret type to set
  */
 void BattleUnit::setTurretType(int turretType)
@@ -3443,7 +3444,8 @@ void BattleUnit::setTurretType(int turretType)
 }
 
 /**
- * Gets the turret type. -1 is no turret.
+ * Gets the turret type.
+ * @note -1 is no turret.
  * @return, turret type
  */
 int BattleUnit::getTurretType() const
@@ -3456,12 +3458,12 @@ int BattleUnit::getTurretType() const
  * @param part - the body part (in the range 0-5)
  * @return, the quantity of fatal wounds of a body part
  */
-int BattleUnit::getFatalWound(int part) const
+int BattleUnit::getFatalWound(size_t part) const
 {
-	if (part < 0 || part > 5)
+	if (part > 5)
 		return 0;
 
-	return _fatalWounds[static_cast<size_t>(part)];
+	return _fatalWounds[part];
 }
 
 /**
@@ -3471,13 +3473,13 @@ int BattleUnit::getFatalWound(int part) const
  * @param health	- the amount of health to add to soldier health
  */
 void BattleUnit::heal(
-		int part,
+		size_t part,
 		int wounds,
 		int health)
 {
 	if (getFatalWound(part) != 0)
 	{
-		_fatalWounds[static_cast<size_t>(part)] -= wounds;
+		_fatalWounds[part] -= wounds;
 
 		_health += health;
 		if (_health > getBaseStats()->health)

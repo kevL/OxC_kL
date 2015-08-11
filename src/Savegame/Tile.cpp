@@ -80,30 +80,29 @@ Tile::Tile(const Position& pos)
 {
 	for (size_t
 			i = 0;
-			i != PARTS;
+			i != PARTS_TILE;
 			++i)
 	{
-		_objects[i] =  0;
-		_mapDataID[i] = -1;
-		_mapDataSetID[i] = -1;
-		_curFrame[i] =  0;
+		_objects[i]			=  0;
+		_mapDataID[i]		= -1;
+		_mapDataSetID[i]	= -1;
+		_curFrame[i]		=  0;
 	}
 
 	for (size_t
 			i = 0;
-			i != SECTS;
+			i != SECTIONS;
 			++i)
 	{
 		_discovered[i] = false;
 	}
 
 	for (size_t
-			layer = 0;
-			layer != LIGHTLAYERS;
-			++layer)
+			i = 0;
+			i != LIGHTLAYERS;
+			++i)
 	{
-		_light[layer] = 0;
-//		_lastLight[layer] = -1;
+		_light[i] = 0;
 	}
 }
 
@@ -133,7 +132,7 @@ void Tile::load(const YAML::Node& node)
 	//_position = node["position"].as<Position>(_position);
 	for (size_t
 			i = 0;
-			i != PARTS;
+			i != PARTS_TILE;
 			++i)
 	{
 		_mapDataID[i]		= node["mapDataID"][i]		.as<int>(_mapDataID[i]);
@@ -148,7 +147,7 @@ void Tile::load(const YAML::Node& node)
 	{
 		for (size_t
 				i = 0;
-				i != SECTS;
+				i != SECTIONS;
 				++i)
 		{
 			_discovered[i] = node["discovered"][i].as<bool>();
@@ -162,7 +161,7 @@ void Tile::load(const YAML::Node& node)
 		_curFrame[2] = 7;
 
 //	if (_fire || _smoke)
-//		_animationOffset = std::rand() %4;
+//		_animationOffset = std::rand() % 4;
 }
 
 /**
@@ -215,7 +214,7 @@ YAML::Node Tile::save() const
 
 	for (size_t
 			i = 0;
-			i != PARTS;
+			i != PARTS_TILE;
 			++i)
 	{
 		node["mapDataID"].push_back(_mapDataID[i]);
@@ -232,7 +231,7 @@ YAML::Node Tile::save() const
 	{
 		for (size_t
 				i = 0;
-				i != SECTS;
+				i != SECTIONS;
 				++i)
 		{
 			node["discovered"].push_back(_discovered[i]);
@@ -552,7 +551,7 @@ int Tile::closeUfoDoor()
 
 	for (size_t
 			i = 0;
-			i != PARTS;
+			i != PARTS_TILE;
 			++i)
 	{
 		if (isUfoDoorOpen(static_cast<int>(i)) == true)
@@ -614,7 +613,6 @@ bool Tile::isDiscovered(int part) const
 void Tile::resetLight(size_t layer)
 {
 	_light[layer] = 0;
-//	_lastLight[layer] = _light[layer];
 }
 
 /**
@@ -797,7 +795,7 @@ int Tile::getFlammability() const
 
 	for (size_t
 			i = 0;
-			i != PARTS;
+			i != PARTS_TILE;
 			++i)
 	{
 		if (   _objects[i] != NULL
@@ -858,7 +856,7 @@ int Tile::getFuel(int part) const
 
 		for (size_t
 				i = 0;
-				i != PARTS;
+				i != PARTS_TILE;
 				++i)
 		{
 			if (_objects[i] != NULL
@@ -871,7 +869,7 @@ int Tile::getFuel(int part) const
 		return fuel;
 	}
 
-	if (part < PARTS)
+	if (part < PARTS_TILE)
 		return _objects[static_cast<size_t>(part)]->getFuel();
 
 	return 0;
@@ -1276,7 +1274,7 @@ void Tile::animateTile()
 
 	for (size_t
 			i = 0;
-			i != PARTS;
+			i != PARTS_TILE;
 			++i)
 	{
 		if (_objects[i] != NULL)

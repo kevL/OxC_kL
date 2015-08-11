@@ -39,10 +39,10 @@ class MedikitView
 {
 
 private:
-	static const int BODYPARTS = 6;
+	static const size_t BODYPARTS = 6;
 	static const std::string BODY_PARTS[];
 
-	int _selectedPart;
+	size_t _selectedPart;
 
 	BattleUnit* _unit;
 	Game* _game;
@@ -70,7 +70,7 @@ private:
 		void draw();
 
 		/// Gets the selected body part.
-		int getSelectedPart() const;
+		size_t getSelectedPart() const;
 		/// Automatically selects a wounded body part.
 		void autoSelectPart();
 };

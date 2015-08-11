@@ -261,11 +261,12 @@ void BattlescapeGenerator::setAlienRace(const std::string& alienRace)
 }
 
 /**
- * Sets the alien item level. This is used to determine how advanced the equipment of the aliens will be.
- * note: this only applies to "New Battle" type games. we intentionally don't alter the month for those,
- * because we're using monthsPassed -1 for new battle in other sections of code.
- * - this value should be from 0 to the size of the itemLevel array in the ruleset (default 9).
- * - at a certain number of months higher item levels appear more and more and lower ones will gradually disappear
+ * Sets the alien item level.
+ * @note This is used to determine how advanced the equipment of the aliens will
+ * be. It applies only to "New Battle" games and is usually overridden by the
+ * current month. This value should be between 0 and the size of the itemLevel
+ * array in the ruleset inclusive. At specified months higher item levels appear
+ * more and lower ones gradually disappear.
  * @param alienItemLevel - alienItemLevel
  */
 void BattlescapeGenerator::setAlienItemlevel(int alienItemLevel)
@@ -1829,15 +1830,14 @@ bool BattlescapeGenerator::addItem( // private.
 		_battleSave->getItems()->push_back(item);
 	}
 
-	// If not placed, the item is deleted from wherever this function was called.
+	// If not placed the item is deleted from wherever this function was called.
 	return placed;
 }
 // New code that sucks:
-//kL	int weight = 0;
+//	int weight = 0;
 	// tanks and aliens don't care about weight or multiple items; their
 	// loadouts are defined in the rulesets and more or less set in stone.
-/*kL
-	if (unit->getFaction() == FACTION_PLAYER // XCOM Soldiers!!! auto-equip
+/*	if (unit->getFaction() == FACTION_PLAYER // XCOM Soldiers!!! auto-equip
 		&& unit->hasInventory())
 	{
 		weight = unit->getCarriedWeight() + item->getRules()->getWeight();
@@ -1888,8 +1888,7 @@ bool BattlescapeGenerator::addItem( // private.
 	bool placed = false; */
 //	bool loaded = false;
 
-/*kL
-	bool keep = true;
+/*	bool keep = true;
 	switch (item->getRules()->getBattleType())
 	{
 		case BT_FIREARM:
@@ -2029,35 +2028,26 @@ bool BattlescapeGenerator::addItem( // private.
  */
 void BattlescapeGenerator::deployAliens(AlienDeployment* const deployRule) // private.
 {
-	if (deployRule->getRace().empty() == false
-		&& _alienRace.empty() == true) //&& month != -1
-	{
-		_alienRace = deployRule->getRace();
-	}
-
-/*	if (_battleSave->getDepth() > 0
-		&& _alienRace.find("_UNDERWATER") == std::string::npos)
-	{
-		_alienRace += "_UNDERWATER";
-	} */
-
-	const AlienRace* const race = _game->getRuleset()->getAlienRace(_alienRace);
-
-	if (race == NULL)
-	{
-		throw Exception("Map generator encountered an error: Unknown race: "
-			  + _alienRace + " defined in deployRule: " + deployRule->getType());
-	}
-
 	int month = _gameSave->getMonthsPassed();
 	if (month != -1)
 	{
 		const int itemLevel_top = static_cast<int>(_rules->getAlienItemLevels().size()) - 1;
 		if (month > itemLevel_top)
 			month = itemLevel_top;
+
+		// race re-defined by deployment if there is one.
+		if (deployRule->getRace().empty() == false) // && _alienRace== ""
+			_alienRace = deployRule->getRace();
 	}
 	else
 		month = _alienItemLevel;
+
+	const AlienRace* const race = _game->getRuleset()->getAlienRace(_alienRace);
+	if (race == NULL)
+	{
+		throw Exception("Map generator encountered an error: Unknown race: "
+			  + _alienRace + " defined in deployRule: " + deployRule->getType());
+	}
 
 
 	std::string aLien;

@@ -271,7 +271,7 @@ InventoryState::InventoryState(
 					(ActionHandler)& InventoryState::btnGroundClick,
 					SDL_BUTTON_LEFT);
 	_btnGround->onMouseClick(
-					(ActionHandler)& InventoryState::btnUnloadUnitClick,
+					(ActionHandler)& InventoryState::btnUnequipUnitClick,
 					SDL_BUTTON_RIGHT);
 //	_btnGround->setTooltip("STR_SCROLL_RIGHT");
 //	_btnGround->onMouseIn((ActionHandler)& InventoryState::txtTooltipIn);
@@ -299,9 +299,9 @@ InventoryState::InventoryState(
 //	_btnApplyTemplate->onMouseIn((ActionHandler)& InventoryState::txtTooltipIn);
 //	_btnApplyTemplate->onMouseOut((ActionHandler)& InventoryState::txtTooltipOut);
 
-/*	_btnClearInventory->onMouseClick((ActionHandler)& InventoryState::btnUnloadUnitClick);
+/*	_btnClearInventory->onMouseClick((ActionHandler)& InventoryState::btnUnequipUnitClick);
 	_btnClearInventory->onKeyboardPress(
-					(ActionHandler)& InventoryState::btnUnloadUnitClick,
+					(ActionHandler)& InventoryState::btnUnequipUnitClick,
 					Options::keyInvClear); */
 //	_btnClearInventory->setTooltip("STR_CLEAR_INVENTORY");
 //	_btnClearInventory->onMouseIn((ActionHandler)& InventoryState::txtTooltipIn);
@@ -865,7 +865,7 @@ void InventoryState::btnGroundClick(Action*)
  * Clears the current unit's inventory and moves all items to the ground.
  * @param action - pointer to an Action
  */
-void InventoryState::btnUnloadUnitClick(Action*)
+void InventoryState::btnUnequipUnitClick(Action*)
 {
 	if (_tuMode == false					// don't accept clicks in battlescape because this doesn't cost TU.
 		&& _inv->getSelectedItem() == NULL) // or when mouse is holding an item
@@ -898,7 +898,7 @@ void InventoryState::btnUnloadUnitClick(Action*)
 									->play();
 	}
 }
-/* void InventoryState::btnUnloadUnitClick(Action*)
+/* void InventoryState::btnUnequipUnitClick(Action*)
 {
 	if (_tuMode == true						// don't accept clicks in battlescape
 		&& _inv->getSelectedItem() == NULL) // or when moving items
@@ -924,7 +924,7 @@ void InventoryState::btnUnloadUnitClick(Action*)
 } */
 /*
  * Clears unit's inventory - move everything to the ground.
- * @note Helper for btnUnloadUnitClick().
+ * @note Helper for btnUnequipUnitClick().
  * @param game			- pointer to the core Game to get the Ruleset
  * @param unitInv		- pointer to a vector of pointers to BattleItems
  * @param groundTile	- pointer to the ground Tile

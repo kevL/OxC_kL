@@ -40,8 +40,8 @@ class Window;
 
 
 /**
- * ManageAlienContainment screen that lets the player manage
- * alien numbers in a particular base.
+ * ManageAlienContainment screen that lets the player manage alien numbers in a
+ * particular base.
  */
 class AlienContainmentState
 	:
@@ -77,7 +77,7 @@ private:
 		* _timerInc;
 	Window* _window;
 
-	std::vector<int> _qtys;
+	std::vector<int> _qty;
 	std::vector<std::string> _aliens;
 
 	/// Gets selected quantity.

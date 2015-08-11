@@ -427,8 +427,8 @@ class BattleUnit // no copy cTor.
 private:
 //	static const int SPEC_WEAPON_MAX = 3;
 	static const size_t
-			PARTS_ARMOR		= 5, // doubles as both armorValues and sprites' cache
-			PARTS_WOUNDS	= 6;
+			PARTS_ARMOR	= 5, // doubles as both armorValues and sprites' cache
+			PARTS_BODY	= 6;
 
 	bool
 		_aboutToDie,
@@ -460,7 +460,7 @@ private:
 		_expThrowing,
 		_faceDirection, // used only during strafing moves
 		_fallPhase,
-		_fatalWounds[PARTS_WOUNDS],
+		_fatalWounds[PARTS_BODY],
 		_fire,
 		_health,
 		_id,
@@ -917,10 +917,10 @@ private:
 		int getTurretType() const;
 
 		/// Gets fatal wound amount of a body part.
-		int getFatalWound(int part) const;
+		int getFatalWound(size_t part) const;
 		/// Heals fatal wounds.
 		void heal(
-				int part,
+				size_t part,
 				int wounds,
 				int health);
 		/// Gives pain killers to this unit.

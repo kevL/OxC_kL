@@ -1753,9 +1753,11 @@ void Map::drawTerrain(Surface* const surface) // private.
 											|| unitWest->getDirection() == 6)
 										{
 											//Log(LOG_INFO) << "[1] . dir 2/6";
-											if ((tile->getMapData(O_WESTWALL) == NULL			// redundant, due to
-//													|| tile->isUfoDoorOpen(O_WESTWALL) == true)	// this. <- checks if westWall is valid
-													|| tile->getMapData(O_WESTWALL)->getTUCostData(MT_WALK) != 255)
+											if ((tile->getMapData(O_WESTWALL) == NULL			// redundant [not exactly it appears], due to
+//													|| tile->isUfoDoorOpen(O_WESTWALL) == true	// this. <- checks if westWall is valid
+													|| (tile->getMapData(O_WESTWALL)->getTUCostData(MT_WALK) != 255
+														&& (tile->getMapData(O_WESTWALL)->isUfoDoor() == false
+															|| tile->isUfoDoorOpen(O_WESTWALL) == true)))
 												&& (tile->getMapData(O_OBJECT) == NULL
 													|| (tile->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NONE
 														&& std::abs(tileWest->getTerrainLevel() - tile->getTerrainLevel()) < 13) // positive means Tile is higher
@@ -1781,8 +1783,8 @@ void Map::drawTerrain(Surface* const surface) // private.
 													if (tileSouthWest == NULL
 														|| (tileSouthWest->getUnit() == NULL
 															&& (tileSouthWest->getMapData(O_NORTHWALL) == NULL
-																|| tileSouthWest->isUfoDoorOpen(O_NORTHWALL) == true
-																|| tileSouth->getMapData(O_NORTHWALL) == NULL) // <- getting very redudant; soon needs break-out functions like checkNorthSideBlockage() & checkWestSideBlockage() etc etc etc etc, also checkObjectSightBlockageLeft/Right() etc.
+																|| tileSouthWest->isUfoDoorOpen(O_NORTHWALL) == true)
+//																|| tileSouth->getMapData(O_NORTHWALL) == NULL) // <- getting very redudant; soon needs break-out functions like checkNorthSideBlockage() & checkWestSideBlockage() etc etc etc etc, also checkObjectSightBlockageLeft/Right() etc.
 															&& (tileSouthWest->getMapData(O_OBJECT) == NULL
 																|| (tileSouthWest->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NONE
 //																	&& tileSouthWest->getMapData(O_OBJECT)->getTUCostData(MT_WALK) != 255 // <- maybe

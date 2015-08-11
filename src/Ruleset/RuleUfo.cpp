@@ -81,6 +81,8 @@ void RuleUfo::load(
 
 	if (const YAML::Node& terrain = node["battlescapeTerrainData"])
 	{
+		delete _tacticalTerrainData;
+
 		RuleTerrain* const terrainRule = new RuleTerrain(terrain["name"].as<std::string>());
 		terrainRule->load(
 						terrain,
@@ -91,7 +93,7 @@ void RuleUfo::load(
 
 /**
  * Gets the language string that names this UFO.
- * Each UFO type has a unique name.
+ * @note Each UFO type has a unique name.
  * @return, the Ufo's type
  */
 std::string RuleUfo::getType() const

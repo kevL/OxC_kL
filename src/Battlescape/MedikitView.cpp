@@ -42,12 +42,12 @@ namespace OpenXcom
  */
 const std::string MedikitView::BODY_PARTS[] =
 {
-	"STR_HEAD",
-	"STR_TORSO",
-	"STR_RIGHT_ARM",
-	"STR_LEFT_ARM",
-	"STR_RIGHT_LEG",
-	"STR_LEFT_LEG"
+	"STR_HEAD",			// 0
+	"STR_TORSO",		// 1
+	"STR_RIGHT_ARM",	// 2
+	"STR_LEFT_ARM",		// 3
+	"STR_RIGHT_LEG",	// 4
+	"STR_LEFT_LEG"		// 5
 };
 
 
@@ -76,7 +76,7 @@ MedikitView::MedikitView(
 			w,h,
 			x,y),
 		_game(game),
-		_selectedPart(-1),
+		_selectedPart(BODYPARTS),
 		_unit(unit),
 		_txtPart(part),
 		_txtWound(wound)
@@ -94,7 +94,7 @@ void MedikitView::draw()
 	int color;
 
 	this->lock();
-	for (int
+	for (size_t
 			i = 0;
 			i != BODYPARTS; //static_cast<int>(srt->getTotalFrames());
 			++i)
@@ -104,7 +104,7 @@ void MedikitView::draw()
 		else
 			color = _game->getRuleset()->getInterface("medikit")->getElement("body")->color;
 
-		Surface* const srf = srt->getFrame(i);
+		Surface* const srf = srt->getFrame(static_cast<int>(i));
 		srf->blitNShade(
 					this,
 					Surface::getX(),
@@ -118,9 +118,9 @@ void MedikitView::draw()
 	_redraw = false;
 
 
-	if (_selectedPart != -1)
+	if (_selectedPart != BODYPARTS)
 	{
-		_txtPart->setText(_game->getLanguage()->getString(BODY_PARTS[static_cast<size_t>(_selectedPart)]));
+		_txtPart->setText(_game->getLanguage()->getString(BODY_PARTS[_selectedPart]));
 
 		std::wostringstream woststr;
 		woststr << _unit->getFatalWound(_selectedPart);
@@ -135,19 +135,19 @@ void MedikitView::draw()
  */
 void MedikitView::mouseClick(Action* action, State*)
 {
-	SurfaceSet* const sst = _game->getResourcePack()->getSurfaceSet("MEDIBITS.DAT");
+	SurfaceSet* const srt = _game->getResourcePack()->getSurfaceSet("MEDIBITS.DAT");
+	const Surface* srf;
 
 	const int
 		x = static_cast<int>(action->getRelativeXMouse() / action->getXScale()),
 		y = static_cast<int>(action->getRelativeYMouse() / action->getYScale());
 
-	const Surface* srf;
-	for (int
+	for (size_t
 			i = 0;
-			i != BODYPARTS; //static_cast<int>(sst->getTotalFrames());
+			i != BODYPARTS; //static_cast<int>(srt->getTotalFrames());
 			++i)
 	{
-		srf = sst->getFrame(i);
+		srf = srt->getFrame(static_cast<int>(i));
 		if (srf->getPixelColor(x,y) != 0)
 		{
 			_selectedPart = i;
@@ -162,7 +162,7 @@ void MedikitView::mouseClick(Action* action, State*)
  * Gets the selected body part.
  * @return, the selected body part
  */
-int MedikitView::getSelectedPart() const
+size_t MedikitView::getSelectedPart() const
 {
 	return _selectedPart;
 }
@@ -172,7 +172,7 @@ int MedikitView::getSelectedPart() const
  */
 void MedikitView::autoSelectPart()
 {
-	for (int
+	for (size_t
 			i = 0;
 			i != BODYPARTS;
 			++i)
