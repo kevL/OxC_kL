@@ -428,7 +428,8 @@ class BattleUnit // no copy cTor.
 		static const size_t PARTS_BODY = 6;
 
 private:
-	static const size_t PARTS_ARMOR = 5; // doubles as both armorValues and sprites' cache
+	static const size_t PARTS_ARMOR	= 5; // doubles as both armorValues and sprites' cache
+	static const int DOSE_LETHAL	= 3;
 //	static const int SPEC_WEAPON_MAX = 3;
 
 	bool

@@ -3515,9 +3515,9 @@ void BattleUnit::morphine()
 		|| (_unitRule->isMechanical() == false
 			&& _race != "STR_ZOMBIE"))
 	{
-		_stunLevel += 10;
+		_stunLevel += 8 + RNG::generate(0,6);
 
-		if (++_drugDose > 2)
+		if (++_drugDose >= DOSE_LETHAL)
 			_health = 0;
 
 		_battleGame->checkForCasualties();
@@ -3547,7 +3547,7 @@ bool BattleUnit::amphetamine(
  */
 bool BattleUnit::getOverDose() const
 {
-	return (_drugDose > 2);
+	return (_drugDose >= DOSE_LETHAL);
 }
 
 /**
