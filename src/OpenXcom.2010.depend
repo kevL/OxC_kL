@@ -5971,7 +5971,7 @@
 	"../Engine/Surface.h"
 	"../Ruleset/MapData.h"
 
-1439314876 source:f:\git\openxcom\src\battlescape\medikitstate.cpp
+1439346297 source:f:\git\openxcom\src\battlescape\medikitstate.cpp
 	"MedikitState.h"
 	"BattlescapeState.h"
 	"Camera.h"
@@ -6841,7 +6841,7 @@
 	"../Resource/XcomResourcePack.h"
 	"../Savegame/SavedGame.h"
 
-1439177894 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
+1439363943 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
 	"DogfightState.h"
 	"GeoscapeCraftState.h"
 	"GeoscapeState.h"
@@ -6871,7 +6871,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Ufo.h"
 
-1437509221 f:\git\openxcom\src\geoscape\dogfightstate.h
+1439361595 f:\git\openxcom\src\geoscape\dogfightstate.h
 	"../Engine/State.h"
 
 1438235003 f:\git\openxcom\src\savegame\alienstrategy.h

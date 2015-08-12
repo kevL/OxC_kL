@@ -29,12 +29,6 @@
 namespace OpenXcom
 {
 
-const int
-	DST_ENGAGE		= 635,
-	DST_STANDOFF	= 595,
-	DST_CLOSE		= 64,
-	MSG_TIMEOUT		= 45;
-
 enum ColorNames
 {
 	CRAFT_MIN,			//  0
@@ -73,19 +67,27 @@ class DogfightState
 {
 
 private:
-	static const int _projectileBlobs[4][6][3];
+	static const int
+		_projectileBlobs[4][6][3],
+
+		DST_ENGAGE		= 635,
+		DST_STANDOFF	= 595,
+		DST_CLOSE		= 64,
+		MSG_TIMEOUT		= 45;
+
 
 	bool
 		_end,
 		_destroyUfo,
 		_destroyCraft,
 		_ufoBreakingOff,
-		_weapon1Enabled,
-		_weapon2Enabled,
+		_w1Enabled,
+		_w2Enabled,
 		_minimized,
 		_endDogfight,
 		_animatingHit;
 	int
+		_cautionLevel,
 		_diff,
 		_timeout,
 		_dist,
