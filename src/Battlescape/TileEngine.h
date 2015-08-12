@@ -273,7 +273,6 @@ private:
 				const BattleUnit* const attacker,
 				const BattleUnit* const targetUnit,
 				Position* const dest);
-//				const bool preferEnemy = true);
 
 		/// Gets the AI to look through a window.
 		int faceWindow(const Position& position);

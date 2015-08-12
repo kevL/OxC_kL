@@ -4644,7 +4644,7 @@
 	"../Ruleset/RuleItem.h"
 	"../Ruleset/RuleUnit.h"
 
-1439015496 f:\git\openxcom\src\battlescape\battlescapegame.h
+1439391586 f:\git\openxcom\src\battlescape\battlescapegame.h
 	"Position.h"
 
 1432586518 f:\git\openxcom\src\battlescape\position.h
@@ -5317,7 +5317,7 @@
 1439009849 f:\git\openxcom\src\ruleset\aliendeployment.h
 	"../Resource/XcomResourcePack.h"
 
-1438165681 source:f:\git\openxcom\src\battlescape\actionmenuitem.cpp
+1439396855 source:f:\git\openxcom\src\battlescape\actionmenuitem.cpp
 	"ActionMenuItem.h"
 	"../Engine/Game.h"
 	"../Interface/Frame.h"
@@ -5331,7 +5331,7 @@
 1430149550 f:\git\openxcom\src\interface\frame.h
 	"../Engine/Surface.h"
 
-1439015534 source:f:\git\openxcom\src\battlescape\actionmenustate.cpp
+1439396654 source:f:\git\openxcom\src\battlescape\actionmenustate.cpp
 	"ActionMenuState.h"
 	"ActionMenuItem.h"
 	"Map.h"
@@ -5346,12 +5346,13 @@
 	"../Engine/Sound.h"
 	"../Interface/Text.h"
 	"../Resource/ResourcePack.h"
+	"../Ruleset/RuleArmor.h"
 	"../Savegame/BattleItem.h"
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1434546385 f:\git\openxcom\src\battlescape\actionmenustate.h
+1439395770 f:\git\openxcom\src\battlescape\actionmenustate.h
 	"BattlescapeGame.h"
 	"../Engine/State.h"
 
@@ -5369,7 +5370,7 @@
 1433916034 f:\git\openxcom\src\battlescape\scannerstate.h
 	"../Engine/State.h"
 
-1438744387 f:\git\openxcom\src\battlescape\tileengine.h
+1439393267 f:\git\openxcom\src\battlescape\tileengine.h
 	"BattlescapeGame.h"
 	"Position.h"
 	"../Ruleset/RuleItem.h"
@@ -5377,7 +5378,7 @@
 1436732961 f:\git\openxcom\src\savegame\battleitem.h
 	"../Battlescape/Position.h"
 
-1439268436 f:\git\openxcom\src\savegame\tile.h
+1439395204 f:\git\openxcom\src\savegame\tile.h
 	"BattleUnit.h"
 	"../Battlescape/Position.h"
 	"../Ruleset/MapData.h"
@@ -6841,7 +6842,7 @@
 	"../Resource/XcomResourcePack.h"
 	"../Savegame/SavedGame.h"
 
-1439363943 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
+1439388689 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
 	"DogfightState.h"
 	"GeoscapeCraftState.h"
 	"GeoscapeState.h"
@@ -8576,7 +8577,7 @@
 	"TerrorSite.h"
 	"../Engine/Language.h"
 
-1439268002 source:f:\git\openxcom\src\savegame\tile.cpp
+1439395351 source:f:\git\openxcom\src\savegame\tile.cpp
 	"Tile.h"
 	"BattleItem.h"
 	"SerializationHelper.h"
@@ -11110,7 +11111,7 @@
 1434060310 f:\git\openxcom\src\battlescape\meditargetstate.h
 	"../Engine/State.h"
 
-1438167053 source:f:\git\openxcom\src\battlescape\meditargetstate.cpp
+1439392551 source:f:\git\openxcom\src\battlescape\meditargetstate.cpp
 	"MediTargetState.h"
 	"MediKitState.h"
 	"TileEngine.h"

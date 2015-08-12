@@ -63,7 +63,8 @@ enum BattleActionType
 	BA_DEFUSE,		// 14, kL_add ->>
 	BA_DROP,		// 15
 	BA_PSICONFUSE,	// 16 reduces victim's TU
-	BA_PSICOURAGE	// 17 increases morale of ally
+	BA_PSICOURAGE,	// 17 increases morale of ally
+	BA_EXECUTE		// 18
 };
 
 /**

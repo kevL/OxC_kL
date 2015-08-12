@@ -1962,12 +1962,12 @@ int BattleUnit::getActionTUs(
 			const RuleInventory
 				* const handRule = _battleGame->getRuleset()->getInventory("STR_RIGHT_HAND"), // might be leftHand Lol ...
 				* const groundRule = _battleGame->getRuleset()->getInventory("STR_GROUND");
-			cost = handRule->getCost(groundRule);
+			cost = handRule->getCost(groundRule); // flat rate.
 		}
 		break;
 
 		case BA_DEFUSE:
-			cost = 15;
+			cost = 15; // flat rate.
 		break;
 
 		case BA_PRIME:
@@ -1977,7 +1977,7 @@ int BattleUnit::getActionTUs(
 		break;
 
 		case BA_THROW:
-			cost = 23;
+			cost = 23; // fractional rate.
 		break;
 
 		case BA_LAUNCH:
@@ -2010,6 +2010,10 @@ int BattleUnit::getActionTUs(
 			cost = rule->getTUMelee();
 		break;
 
+		case BA_EXECUTE:
+			cost = 19; // flat rate.
+		break;
+
 		case BA_USE:
 		case BA_PSICONTROL:
 		case BA_PSIPANIC:
@@ -2035,7 +2039,8 @@ int BattleUnit::getActionTUs(
 				&& rule->getFlatRate() == false) // it's a percentage, apply to TUs
 			|| batType == BA_THROW)
 		&& batType != BA_DEFUSE
-		&& batType != BA_DROP)
+		&& batType != BA_DROP
+		&& batType != BA_EXECUTE)
 	{
 		cost = std::max(
 					1,

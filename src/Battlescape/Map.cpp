@@ -2994,7 +2994,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 					// - might want to redundant this, like rankIcons.
 					if (unit == NULL)
 					{
-						const int status = tile->getHasUnconsciousSoldier();
+						const int status = tile->hasUnconsciousUnit();
 						if (status != 0)
 						{
 							srfSprite = _res->getSurface("RANK_ROOKIE"); // background panel for red cross icon.

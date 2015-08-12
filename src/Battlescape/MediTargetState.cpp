@@ -65,7 +65,7 @@ MediTargetState::MediTargetState(BattleAction* const action)
 	_btnCancel	= new TextButton(120, 14, 100, 125);
 
 	setPalette("PAL_BATTLESCAPE");
-//			_game->getRuleset()->getInterface("soldierList")->getElement("palette")->color);
+//	_game->getRuleset()->getInterface("soldierList")->getElement("palette")->color);
 
 	add(_window,	"messageWindowBorder",	"battlescape");
 	add(_txtTitle,	"messageWindows",		"battlescape");
@@ -131,7 +131,9 @@ void MediTargetState::init()
 		addToList,
 		actorFound = false; // adds actor to top of MediTargetList.
 
-	const std::vector<BattleUnit*>* const targetUnits = _game->getSavedGame()->getSavedBattle()->getUnits();
+	SavedBattleGame* const battleSave = _game->getSavedGame()->getSavedBattle();
+
+	const std::vector<BattleUnit*>* const targetUnits = battleSave->getUnits();
 	for (std::vector<BattleUnit*>::const_iterator
 			i = targetUnits->begin();
 			i != targetUnits->end();
@@ -152,13 +154,13 @@ void MediTargetState::init()
 			if (actorFound == true
 				&& *i != _action->actor)
 			{
-				if ((*i)->getStatus() == STATUS_UNCONSCIOUS
-						&& (*i)->getPosition() == _action->actor->getPosition()
+				if (((*i)->getStatus() == STATUS_UNCONSCIOUS
+						&& (*i)->getPosition() == _action->actor->getPosition())
 					|| ((*i)->getFaction() != FACTION_HOSTILE
-						&& _game->getSavedGame()->getSavedBattle()->getTileEngine()->validMeleeRange(
-																							_action->actor,
-																							*i,
-																							_action->actor->getDirection()) == true))
+						&& battleSave->getTileEngine()->validMeleeRange(
+																	_action->actor,
+																	*i,
+																	_action->actor->getDirection()) == true))
 				{
 					addToList = true;
 				}

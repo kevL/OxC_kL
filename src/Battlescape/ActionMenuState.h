@@ -51,6 +51,10 @@ private:
 			BattleActionType batType,
 			const std::string& desc,
 			size_t* id);
+	/// Checks if there is a viable execution target nearby.
+	bool canExecute();
+	/// Checks for an unconscious unit in valid range.
+	bool hasUnconscious();
 
 
 	public:

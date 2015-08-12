@@ -1509,12 +1509,13 @@ int Tile::getTopItemSprite(bool* ptrPrimed) const
 }
 
 /**
- * Gets if this Tile has an unconscious xCom unit in its inventory.
+ * Gets if this Tile has an unconscious unit in its inventory.
+ * @param playerOnly - true to check for only xCom units (default true)
  * @return,	0 - no living Soldier
  *			1 - stunned Soldier
  *			2 - stunned and wounded Soldier
  */
-int Tile::getHasUnconsciousSoldier() const
+int Tile::hasUnconsciousUnit(bool playerOnly) const
 {
 	int ret = 0;
 
@@ -1526,11 +1527,15 @@ int Tile::getHasUnconsciousSoldier() const
 		const BattleUnit* const bu = (*i)->getUnit();
 
 		if (bu != NULL
-			&& bu->getOriginalFaction() == FACTION_PLAYER
-			&& bu->getStatus() == STATUS_UNCONSCIOUS)
+			&& bu->getStatus() == STATUS_UNCONSCIOUS
+			&& (bu->getOriginalFaction() == FACTION_PLAYER
+				|| playerOnly == false))
 		{
-			if (bu->getFatalWounds() == 0)
+			if (playerOnly == true
+				&& bu->getFatalWounds() == 0)
+			{
 				ret = 1;
+			}
 			else
 				return 2;
 		}

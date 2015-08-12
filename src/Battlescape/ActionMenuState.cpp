@@ -39,6 +39,7 @@
 #include "../Resource/ResourcePack.h"
 
 //#include "../Ruleset/RuleItem.h"
+#include "../Ruleset/RuleArmor.h"
 
 #include "../Savegame/BattleItem.h"
 //#include "../Savegame/BattleUnit.h"
@@ -122,10 +123,18 @@ ActionMenuState::ActionMenuState(
 					&id);
 		}
 		else
+		{
 			addItem( // melee weapon
 					BA_HIT,
 					"STR_HIT_MELEE",
 					&id);
+
+			if (canExecute() == true)
+				addItem(
+						BA_EXECUTE,
+						"STR_EXECUTE",
+						&id);
+		}
 	}
 
 	if (_game->getSavedGame()->isResearched(itRule->getRequirements()) == true)
@@ -237,7 +246,7 @@ void ActionMenuState::addItem( // private.
 		wst1, // acu
 		wst2; // tu
 
-	if (   batType == BA_THROW
+	if (batType == BA_THROW
 		|| batType == BA_AIMEDSHOT
 		|| batType == BA_SNAPSHOT
 		|| batType == BA_AUTOSHOT
@@ -320,6 +329,7 @@ void ActionMenuState::btnActionMenuClick(Action* action)
 		_action->TU = _menuSelect[btnId]->getTUs();
 		_action->type = _menuSelect[btnId]->getAction();
 
+		// TODO: put these in a switch()
 		if (_action->type == BA_NONE) // doggie bark
 		{
 			_game->popState();
@@ -426,12 +436,100 @@ void ActionMenuState::btnActionMenuClick(Action* action)
 
 			_game->popState();
 		}
+		else if (_action->type == BA_EXECUTE)
+		{
+		}
 		else // shoot, throw, psi-attack
 		{
 			_action->targeting = true;
 			_game->popState();
 		}
 	}
+}
+
+/**
+ * Checks if there is a viable execution target nearby.
+ * @return, true if can execute
+ */
+bool ActionMenuState::canExecute() // private.
+{
+	const SavedBattleGame* const battleSave = _game->getSavedGame()->getSavedBattle();
+	const Tile* const tile = battleSave->getTile(_action->actor->getPosition());
+
+	if (tile->hasUnconsciousUnit(false) != 0
+		|| hasUnconscious() == true)
+	{
+		return true;
+	}
+
+	return false;
+}
+
+/**
+ * Checks for an unconscious unit in valid range.
+ * @note Helper for canExecute().
+ * @return, true if there's an unconscious unit in the direction of facing
+ */
+bool ActionMenuState::hasUnconscious() // private.
+{
+	SavedBattleGame* const battleSave = _game->getSavedGame()->getSavedBattle();
+
+	const int dir = _action->actor->getDirection();
+	Position posTarget;
+	Pathfinding::directionToVector(
+								dir,
+								&posTarget);
+
+	const Position origin = _action->actor->getPosition();
+	Tile
+		* tileOrigin,
+		* tileTarget,
+		* tileTarget_above,
+		* tileTarget_below;
+
+	const int unitSize = _action->actor->getArmor()->getSize() - 1;
+	for (int
+			x = 0;
+			x != unitSize + 1;
+			++x)
+	{
+		for (int
+				y = 0;
+				y != unitSize + 1;
+				++y)
+		{
+			tileOrigin = battleSave->getTile(Position(origin + Position(x,y,0)));
+			tileTarget = battleSave->getTile(Position(origin + Position(x,y,0) + posTarget));
+
+			if (tileOrigin != NULL
+				&& tileTarget != NULL)
+			{
+				if (tileTarget->hasUnconsciousUnit(false) != 0)
+					return true;
+				else
+				{
+					tileTarget_above = battleSave->getTile(Position(origin + Position(x,y, 1) + posTarget));
+					tileTarget_below = battleSave->getTile(Position(origin + Position(x,y,-1) + posTarget));
+
+					if (tileTarget_above != NULL // standing on a rise only 1/3 up z-axis reaches adjacent tileAbove.
+						&& std::abs(tileTarget_above->getTerrainLevel() - (tileOrigin->getTerrainLevel() + 24)) < 9)
+					{
+						tileTarget = tileTarget_above;
+					}
+					else if (tileTarget_below != NULL // can reach targetUnit standing on a rise only 1/3 up z-axis on adjacent tileBelow.
+						&& std::abs((tileTarget_below->getTerrainLevel() + 24) + tileOrigin->getTerrainLevel()) < 9)
+					{
+						tileTarget = tileTarget_below;
+					}
+
+					if (tileTarget->hasUnconsciousUnit(false) != 0)
+						return true;
+				}
+			}
+		}
+	}
+
+	return false;
 }
 
 /**

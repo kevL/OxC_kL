@@ -129,7 +129,7 @@ void ActionMenuItem::setAction(
 
 /**
  * Gets the action that was linked to this menu item.
- * @return, the BattleActionType that was linked to this menu item
+ * @return, the BattleActionType that is linked to this menu item
  */
 BattleActionType ActionMenuItem::getAction() const
 {
@@ -138,7 +138,7 @@ BattleActionType ActionMenuItem::getAction() const
 
 /**
  * Gets the action tus that were linked to this menu item.
- * @return, the timeunits that were linked to this menu item
+ * @return, the timeunits that are linked to this menu item
  */
 int ActionMenuItem::getTUs() const
 {
