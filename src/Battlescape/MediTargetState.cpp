@@ -241,6 +241,7 @@ void MediTargetState::lstTargetPress(Action* action)
 
 /**
  * Returns to the previous screen.
+ * @param action - pointer to an Action
  */
 void MediTargetState::btnCancelClick(Action*)
 {

@@ -20,6 +20,7 @@
 #include "ActionMenuState.h"
 
 #include "ActionMenuItem.h"
+#include "ExecuteState.h"
 #include "Map.h"
 #include "MedikitState.h"
 #include "MediTargetState.h"
@@ -438,6 +439,8 @@ void ActionMenuState::btnActionMenuClick(Action* action)
 		}
 		else if (_action->type == BA_EXECUTE)
 		{
+			_game->popState();
+			_game->pushState(new ExecuteState(_action));
 		}
 		else // shoot, throw, psi-attack
 		{
@@ -454,7 +457,7 @@ void ActionMenuState::btnActionMenuClick(Action* action)
 bool ActionMenuState::canExecute() // private.
 {
 	const SavedBattleGame* const battleSave = _game->getSavedGame()->getSavedBattle();
-	const Tile* const tile = battleSave->getTile(_action->actor->getPosition());
+	const Tile* const tile = battleSave->getTile(_action->actor->getPosition()); // TODO: check quads of large units.
 
 	if (tile->hasUnconsciousUnit(false) != 0
 		|| hasUnconscious() == true)

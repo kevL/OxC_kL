@@ -1000,6 +1000,8 @@ void BattlescapeGame::handleNonTargetAction()
 
 		// NOTE: These actions are done partly in ActionMenuState::btnActionMenuClick() and
 		// this subsequently handles a greater or lesser proportion of the resultant niceties.
+		//
+		// TODO: put these in a switch()
  		if (_currentAction.type == BA_PRIME
 			|| _currentAction.type == BA_DEFUSE)
 		{
@@ -1071,6 +1073,19 @@ void BattlescapeGame::handleNonTargetAction()
 										getMap()->getSoundAngle(_currentAction.actor->getPosition()));
 			}
 		}
+		else if (_currentAction.type == BA_EXECUTE)
+		{
+			if (_currentAction.result.empty() == false)
+				showWarning = true;
+			else
+			{
+				if (_currentAction.weapon->getRules()->getBattleType() == BT_MELEE)
+				{}
+				else if (_currentAction.weapon->getRules()->getBattleType() == BT_FIREARM)
+				{}
+			}
+		}
+
 
 		if (showWarning == true)
 		{

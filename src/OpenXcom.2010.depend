@@ -5331,9 +5331,10 @@
 1430149550 f:\git\openxcom\src\interface\frame.h
 	"../Engine/Surface.h"
 
-1439396654 source:f:\git\openxcom\src\battlescape\actionmenustate.cpp
+1439405335 source:f:\git\openxcom\src\battlescape\actionmenustate.cpp
 	"ActionMenuState.h"
 	"ActionMenuItem.h"
+	"ExecuteState.h"
 	"Map.h"
 	"MedikitState.h"
 	"MediTargetState.h"
@@ -5440,7 +5441,7 @@
 1432984133 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1439032135 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1439405944 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	"AlienBAIState.h"
 	"BattlescapeState.h"
@@ -5932,7 +5933,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1439272003 source:f:\git\openxcom\src\battlescape\map.cpp
+1439395171 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	"BattlescapeMessage.h"
 	"BattlescapeState.h"
@@ -6175,7 +6176,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1439268282 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1439393027 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	"AlienBAIState.h"
 	"BattlescapeState.h"
@@ -8390,7 +8391,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1439346541 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1439397316 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	"BattleItem.h"
 	"SavedGame.h"
@@ -11196,4 +11197,24 @@
 
 1438345767 source:f:\git\openxcom\src\ruleset\rulemissionscript.cpp
 	"RuleMissionScript.h"
+
+1439405634 source:f:\git\openxcom\src\battlescape\executestate.cpp
+	"ExecuteState.h"
+	"Pathfinding.h"
+	"../Engine/Action.h"
+	"../Engine/Game.h"
+	"../Interface/Text.h"
+	"../Interface/TextButton.h"
+	"../Interface/TextList.h"
+	"../Interface/Window.h"
+	"../Resource/ResourcePack.h"
+	"../Ruleset/RuleArmor.h"
+	"../Savegame/BattleItem.h"
+	"../Savegame/BattleUnit.h"
+	"../Savegame/SavedBattleGame.h"
+	"../Savegame/SavedGame.h"
+	"../Savegame/Tile.h"
+
+1439403960 f:\git\openxcom\src\battlescape\executestate.h
+	"../Engine/State.h"
 
