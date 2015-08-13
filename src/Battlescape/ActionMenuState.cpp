@@ -215,7 +215,8 @@ ActionMenuState::ActionMenuState(
 		}
 
 		if ((itRule->canExecute() == true
-				|| _action->weapon->getAmmoItem()->getRules()->canExecute() == true)
+				|| (_action->weapon->getAmmoItem() != NULL
+					&& _action->weapon->getAmmoItem()->getRules()->canExecute() == true))
 			&& canExecuteTarget() == true)
 		{
 			addItem(
@@ -330,122 +331,122 @@ void ActionMenuState::btnActionMenuClick(Action* action)
 		_action->TU = _menuSelect[btnId]->getTUs();
 		_action->type = _menuSelect[btnId]->getAction();
 
-		// TODO: put these in a switch()
-		if (_action->type == BA_NONE) // doggie bark
+		switch (_action->type)
 		{
-			_game->popState();
-			_game->getResourcePack()->getSound(
-											"BATTLE.CAT",
-											itRule->getMeleeSound())
-										->play(
-											-1,
-											_game->getSavedGame()->getSavedBattle()->getBattleGame()->getMap()
-												->getSoundAngle(_action->actor->getPosition()));
-		}
-		else if (_action->type == BA_PRIME)
-		{
-			if (itRule->getBattleType() == BT_PROXYGRENADE)
-			{
-				_action->value = 0;
+			case BA_NONE: // doggie bark
 				_game->popState();
-			}
-			else
-				_game->pushState(new PrimeGrenadeState(
-													_action,
-													false,
-													NULL));
-		}
-		else if (_action->type == BA_DEFUSE)
-		{
-			_action->value = -1;
-			_game->popState();
-		}
-		else if (_action->type == BA_DROP)
-		{
-			if (_action->actor->spendTimeUnits(_action->TU) == true)
-			{
-				_action->weapon->moveToOwner(NULL);
-				_action->actor->getTile()->addItem(
-												_action->weapon,
-												_game->getRuleset()->getInventory("STR_GROUND"));
+				_game->getResourcePack()->getSound(
+												"BATTLE.CAT",
+												itRule->getMeleeSound())
+											->play(
+												-1,
+												_game->getSavedGame()->getSavedBattle()->getBattleGame()->getMap()
+													->getSoundAngle(_action->actor->getPosition()));
+			break;
 
-				if (_action->actor->getItem("STR_LEFT_HAND") == NULL)
-					_action->actor->setActiveHand("STR_RIGHT_HAND");
+			case BA_PRIME:
+				if (itRule->getBattleType() == BT_PROXYGRENADE)
+				{
+					_action->value = 0;
+					_game->popState();
+				}
 				else
-					_action->actor->setActiveHand("STR_LEFT_HAND");
+					_game->pushState(new PrimeGrenadeState(
+														_action,
+														false,
+														NULL));
+			break;
 
-				_action->actor->invalidateCache();
-			}
-			else
-				_action->result = "STR_NOT_ENOUGH_TIME_UNITS";
-
-			_game->popState();
-		}
-		else if (_action->type == BA_USE)
-		{
-			if (itRule->getBattleType() == BT_MEDIKIT)
-			{
+			case BA_DEFUSE:
+				_action->value = -1;
 				_game->popState();
-				_game->pushState(new MediTargetState(_action));
-			}
-			else if (itRule->getBattleType() == BT_SCANNER)
-			{
+			break;
+
+			case BA_DROP:
 				if (_action->actor->spendTimeUnits(_action->TU) == true)
 				{
-					_game->popState();
-					_game->pushState(new ScannerState(_action));
+					_action->weapon->moveToOwner(NULL);
+					_action->actor->getTile()->addItem(
+													_action->weapon,
+													_game->getRuleset()->getInventory("STR_GROUND"));
+
+					if (_action->actor->getItem("STR_LEFT_HAND") == NULL)
+						_action->actor->setActiveHand("STR_RIGHT_HAND");
+					else
+						_action->actor->setActiveHand("STR_LEFT_HAND");
+
+					_action->actor->invalidateCache();
 				}
 				else
-				{
 					_action->result = "STR_NOT_ENOUGH_TIME_UNITS";
+
+				_game->popState();
+			break;
+
+			case BA_USE:
+				if (itRule->getBattleType() == BT_MEDIKIT)
+				{
+					_game->popState();
+					_game->pushState(new MediTargetState(_action));
+				}
+				else if (itRule->getBattleType() == BT_SCANNER)
+				{
+					if (_action->actor->spendTimeUnits(_action->TU) == true)
+					{
+						_game->popState();
+						_game->pushState(new ScannerState(_action));
+					}
+					else
+					{
+						_action->result = "STR_NOT_ENOUGH_TIME_UNITS";
+						_game->popState();
+					}
+				}
+				else if (itRule->getBattleType() == BT_MINDPROBE)
+				{
+					_action->targeting = true;
 					_game->popState();
 				}
-			}
-			else if (itRule->getBattleType() == BT_MINDPROBE)
-			{
+			break;
+
+			case BA_LAUNCH:
+				if (_action->TU > _action->actor->getTimeUnits())
+					_action->result = "STR_NOT_ENOUGH_TIME_UNITS";
+				else if (_action->weapon->getAmmoItem() == NULL
+					|| _action->weapon->getAmmoItem()->getAmmoQuantity() == 0)
+				{
+					_action->result = "STR_NO_AMMUNITION_LOADED";
+				}
+				else
+					_action->targeting = true;
+
+				_game->popState();
+			break;
+
+			case BA_HIT:
+				if (_action->TU > _action->actor->getTimeUnits())
+					_action->result = "STR_NOT_ENOUGH_TIME_UNITS";
+				else if (_game->getSavedGame()->getSavedBattle()->getTileEngine()->validMeleeRange(
+																							_action->actor->getPosition(),
+																							_action->actor->getDirection(),
+																							_action->actor,
+																							NULL,
+																							&_action->target) == false)
+				{
+					_action->result = "STR_THERE_IS_NO_ONE_THERE";
+				}
+
+				_game->popState();
+			break;
+
+			case BA_EXECUTE:
+				_game->popState();
+				_game->pushState(new ExecuteState(_action));
+			break;
+
+			default: // shoot, throw, psi-attack
 				_action->targeting = true;
 				_game->popState();
-			}
-		}
-		else if (_action->type == BA_LAUNCH)
-		{
-			if (_action->TU > _action->actor->getTimeUnits())
-				_action->result = "STR_NOT_ENOUGH_TIME_UNITS";
-			else if (_action->weapon->getAmmoItem() == NULL
-				|| _action->weapon->getAmmoItem()->getAmmoQuantity() == 0)
-			{
-				_action->result = "STR_NO_AMMUNITION_LOADED";
-			}
-			else
-				_action->targeting = true;
-
-			_game->popState();
-		}
-		else if (_action->type == BA_HIT)
-		{
-			if (_action->TU > _action->actor->getTimeUnits())
-				_action->result = "STR_NOT_ENOUGH_TIME_UNITS";
-			else if (_game->getSavedGame()->getSavedBattle()->getTileEngine()->validMeleeRange(
-																						_action->actor->getPosition(),
-																						_action->actor->getDirection(),
-																						_action->actor,
-																						NULL,
-																						&_action->target) == false)
-			{
-				_action->result = "STR_THERE_IS_NO_ONE_THERE";
-			}
-
-			_game->popState();
-		}
-		else if (_action->type == BA_EXECUTE)
-		{
-			_game->popState();
-			_game->pushState(new ExecuteState(_action));
-		}
-		else // shoot, throw, psi-attack
-		{
-			_action->targeting = true;
-			_game->popState();
 		}
 	}
 }

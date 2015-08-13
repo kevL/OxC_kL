@@ -117,13 +117,13 @@ private:
 		bool occupiesSlot(
 				int x,
 				int y,
-				BattleItem* item = NULL) const;
+				const BattleItem* const item = NULL) const;
 		/// Gets the item's ammo item.
 		BattleItem* getAmmoItem() const;
 		/// Determines if this item uses ammo.
 		bool usesAmmo() const;
 		/// Sets the item's ammo item.
-		int setAmmoItem(BattleItem* item);
+		int setAmmoItem(BattleItem* const item);
 		/// Gets the item's tile.
 		Tile* getTile() const;
 		/// Sets the tile.

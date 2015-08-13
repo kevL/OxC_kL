@@ -5331,7 +5331,7 @@
 1430149550 f:\git\openxcom\src\interface\frame.h
 	"../Engine/Surface.h"
 
-1439478234 source:f:\git\openxcom\src\battlescape\actionmenustate.cpp
+1439482290 source:f:\git\openxcom\src\battlescape\actionmenustate.cpp
 	"ActionMenuState.h"
 	"ActionMenuItem.h"
 	"ExecuteState.h"
@@ -5376,7 +5376,7 @@
 	"Position.h"
 	"../Ruleset/RuleItem.h"
 
-1436732961 f:\git\openxcom\src\savegame\battleitem.h
+1439479577 f:\git\openxcom\src\savegame\battleitem.h
 	"../Battlescape/Position.h"
 
 1439395204 f:\git\openxcom\src\savegame\tile.h
@@ -5441,7 +5441,7 @@
 1432984133 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1439477104 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1439482999 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	"AlienBAIState.h"
 	"BattlescapeState.h"

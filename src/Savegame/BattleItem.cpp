@@ -30,7 +30,7 @@ namespace OpenXcom
 {
 
 /**
- * Initializes a item of the specified type.
+ * Initializes an item of the specified type.
  * @param itRule	- pointer to RuleItem
  * @param pId		- pointer to an integer ID for this item
  * @param id		- value for ID when loading a saved game (default -1)
@@ -348,13 +348,13 @@ void BattleItem::setSlotY(int y)
  * Checks if the item is covering certain inventory slot(s).
  * @param x		- slot X position
  * @param y 	- slot Y position
- * @param item	- pointer to an item to check for overlap, or NULL if none
+ * @param item	- pointer to an item to check for overlap or default NULL if none
  * @return, true if it is covering
  */
 bool BattleItem::occupiesSlot(
 		int x,
 		int y,
-		BattleItem* item) const
+		const BattleItem* const item) const
 {
 	if (item == this)
 		return false;
@@ -378,7 +378,7 @@ bool BattleItem::occupiesSlot(
 /**
  * Gets an item's currently loaded ammo item.
  * @return, pointer to BattleItem
- *			- NULL if item is ammo or has no ammo loaded
+ *			- NULL if this BattleItem is ammo or this BattleItem has no ammo loaded
  *			- the weapon itself if weapon is its own ammo
  */
 BattleItem* BattleItem::getAmmoItem() const
@@ -388,7 +388,7 @@ BattleItem* BattleItem::getAmmoItem() const
 
 /**
  * Determines if this BattleItem uses ammo.
- * @note No ammo is needed if the item has itself assigned as its ammoItem.
+ * @note No ammo is needed if the item has itself assigned as its '_ammoItem'.
  * @return, true if the item uses ammo
  */
 bool BattleItem::usesAmmo() const
@@ -403,9 +403,9 @@ bool BattleItem::usesAmmo() const
  *			-1 = weapon already contains ammo
  *			 0 = success or invalid item
  */
-int BattleItem::setAmmoItem(BattleItem* item)
+int BattleItem::setAmmoItem(BattleItem* const item)
 {
-	if (usesAmmo() == true)
+	if (_ammoItem != this)
 	{
 		if (item == NULL)
 		{

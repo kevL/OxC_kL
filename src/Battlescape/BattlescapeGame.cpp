@@ -1001,153 +1001,174 @@ void BattlescapeGame::handleNonTargetAction()
 		// NOTE: These actions are done partly in ActionMenuState::btnActionMenuClick() and
 		// this subsequently handles a greater or lesser proportion of the resultant niceties.
 		//
-		// TODO: put these in a switch()
- 		if (_currentAction.type == BA_PRIME
-			|| _currentAction.type == BA_DEFUSE)
+		switch (_currentAction.type)
 		{
-			if (_currentAction.actor->spendTimeUnits(_currentAction.TU) == false)
-				_parentState->warning("STR_NOT_ENOUGH_TIME_UNITS");
-			else
-			{
-				_currentAction.weapon->setFuseTimer(_currentAction.value);
-
-				if (_currentAction.value == -1)
-					_parentState->warning("STR_GRENADE_IS_DEACTIVATED");
-				else if (_currentAction.value == 0)
-					_parentState->warning("STR_GRENADE_IS_ACTIVATED");
-				else
-					_parentState->warning(
-										"STR_GRENADE_IS_ACTIVATED_",
-										true,
-										_currentAction.value);
-			}
-		}
-		else if (_currentAction.type == BA_USE)
-		{
-			if (_currentAction.result.empty() == false)
-				showWarning = true;
-
-			if (_currentAction.targetUnit != NULL)
-			{
-				_battleSave->reviveUnit(_currentAction.targetUnit);
-				_currentAction.targetUnit = NULL;
-			}
-		}
-		else if (_currentAction.type == BA_LAUNCH)
-		{
-			if (_currentAction.result.empty() == false)
-				showWarning = true;
-		}
-		else if (_currentAction.type == BA_HIT)
-		{
-			if (_currentAction.result.empty() == false)
-				showWarning = true;
-			else
-			{
+			case BA_PRIME:
+			case BA_DEFUSE:
 				if (_currentAction.actor->spendTimeUnits(_currentAction.TU) == false)
 					_parentState->warning("STR_NOT_ENOUGH_TIME_UNITS");
 				else
 				{
-//					statePushBack(new MeleeAttackBState(this, _currentAction)); // And remove 'return;' below_
-					statePushBack(new ProjectileFlyBState(
-														this,
-														_currentAction));
-					return;
+					_currentAction.weapon->setFuseTimer(_currentAction.value);
+
+					if (_currentAction.value == -1)
+						_parentState->warning("STR_GRENADE_IS_DEACTIVATED");
+					else if (_currentAction.value == 0)
+						_parentState->warning("STR_GRENADE_IS_ACTIVATED");
+					else
+						_parentState->warning(
+											"STR_GRENADE_IS_ACTIVATED_",
+											true,
+											_currentAction.value);
 				}
-			}
-		}
-		else if (_currentAction.type == BA_DROP)
-		{
-			if (_currentAction.result.empty() == false)
-				showWarning = true;
-			else
-			{
-//				if (_currentAction.actor->getPosition().z > 0) // effectively done in applyGravity()
-				_battleSave->getTileEngine()->applyGravity(_currentAction.actor->getTile());
+			break;
 
-				getResourcePack()->getSound(
-										"BATTLE.CAT",
-										ResourcePack::ITEM_DROP)
-									->play(
-										-1,
-										getMap()->getSoundAngle(_currentAction.actor->getPosition()));
-			}
-		}
-		else if (_currentAction.type == BA_EXECUTE)
-		{
-			if (_currentAction.result.empty() == false) // not enough TU.
-				showWarning = true;
-			else
-			{
-				const RuleItem* const itRule = _currentAction.weapon->getRules();
-				BattleItem* const ammo = _currentAction.weapon->getAmmoItem();
-				int sound = -1;
+			case BA_USE:
+				if (_currentAction.result.empty() == false)
+					showWarning = true;
 
-				if (itRule->getBattleType() == BT_MELEE)
+				if (_currentAction.targetUnit != NULL)
 				{
-					sound = ammo->getRules()->getMeleeHitSound();
-					if (sound == -1)
-					{
-						sound = itRule->getMeleeHitSound();
-						if (sound == -1)
-							sound = ResourcePack::ITEM_DROP; // I want steel-slicing **sching!** here
-					}
-
-					if (_battleSave->getDebugMode() == false
-						&& ammo != NULL
-						&& ammo->spendBullet() == false)
-					{
-						_battleSave->removeItem(ammo);
-
-						if (_currentAction.weapon != NULL) // in case the weapon just spent itself as a bullet -- jic.
-							_currentAction.weapon->setAmmoItem(NULL);
-					}
+					_battleSave->reviveUnit(_currentAction.targetUnit);
+					_currentAction.targetUnit = NULL;
 				}
-				else if (itRule->getBattleType() == BT_FIREARM)
+			break;
+
+			case BA_LAUNCH:
+				if (_currentAction.result.empty() == false)
+					showWarning = true;
+			break;
+
+			case BA_HIT:
+				if (_currentAction.result.empty() == false)
+					showWarning = true;
+				else
 				{
-					if (ammo == NULL)
-					{
-						_currentAction.result = "STR_NO_AMMUNITION_LOADED";
-						showWarning = true;
-					}
-					else if (ammo->getAmmoQuantity() == 0)
-					{
-						_currentAction.result = "STR_NO_ROUNDS_LEFT";
-						showWarning = true;
-					}
+					if (_currentAction.actor->spendTimeUnits(_currentAction.TU) == false)
+						_parentState->warning("STR_NOT_ENOUGH_TIME_UNITS");
 					else
 					{
-						sound = ammo->getRules()->getHitSound();
+//						statePushBack(new MeleeAttackBState(this, _currentAction)); // And remove 'return;' below_
+						statePushBack(new ProjectileFlyBState(
+															this,
+															_currentAction));
+						return;
+					}
+				}
+			break;
+
+			case BA_DROP:
+				if (_currentAction.result.empty() == false)
+					showWarning = true;
+				else
+				{
+//					if (_currentAction.actor->getPosition().z > 0) // effectively done in applyGravity()
+					_battleSave->getTileEngine()->applyGravity(_currentAction.actor->getTile());
+
+					getResourcePack()->getSound(
+											"BATTLE.CAT",
+											ResourcePack::ITEM_DROP)
+										->play(
+											-1,
+											getMap()->getSoundAngle(_currentAction.actor->getPosition()));
+				}
+			break;
+
+			case BA_EXECUTE:
+				if (_currentAction.result.empty() == false) // not enough TU.
+					showWarning = true;
+				else
+				{
+					const RuleItem* const itRule = _currentAction.weapon->getRules();
+					BattleItem* const ammo = _currentAction.weapon->getAmmoItem();
+					int sound = -1;
+
+					if (itRule->getBattleType() == BT_MELEE)
+					{
+						sound = ammo->getRules()->getMeleeHitSound();
 						if (sound == -1)
-							sound = itRule->getHitSound();
+						{
+							sound = itRule->getMeleeHitSound();
+							if (sound == -1)
+								sound = ResourcePack::ITEM_DROP; // I want steel-slicing **sching!** here
+						}
 
 						if (_battleSave->getDebugMode() == false
+							&& ammo != NULL
 							&& ammo->spendBullet() == false)
 						{
 							_battleSave->removeItem(ammo);
-							_currentAction.weapon->setAmmoItem(NULL);
+
+							if (_currentAction.weapon != NULL) // in case the weapon just spent itself as a bullet -- jic.
+								_currentAction.weapon->setAmmoItem(NULL);
 						}
 					}
+					else if (itRule->getBattleType() == BT_FIREARM)
+					{
+						// note: these warnings generally won't show because
+						// ActionMenuState::cTor does a pseudo-check for ammo - but
+						// only if the weapon itself fails its check for canExecute()
+						// - and if it doesn't fail but could be currently unloaded
+						// it should be considered a mistake in the YAML:items' file
+						// entries. Because only items that *do not* have
+						// 'compatibleAmmo' nodes should have their damageTypes set.
+						//
+						// If they *do* have a 'compatibleAmmo' node then they ought
+						// fail the ActionMenu cTor's NULL-check if they are *not*
+						// loaded with a valid ammoItem.
+						//
+						// The long & short of it is I'm not making extra NULL-checks
+						// for 'ammo' above & below just as an extra safety for an
+						// improper ruleset entry.
+						//
+						// So ... I could/should also take these here warnings out.
+						// And I'd also like to go through the code and rulesets with
+						// that brilliant idea: "melee does not use Ammo" period.
+						// That is, ditch all super-ultra-duper Plasma Whips ....
+						if (ammo == NULL)
+						{
+							_currentAction.result = "STR_NO_AMMUNITION_LOADED";
+							showWarning = true;
+						}
+						else if (ammo->getAmmoQuantity() == 0)
+						{
+							_currentAction.result = "STR_NO_ROUNDS_LEFT";
+							showWarning = true;
+						}
+						else
+						{
+							sound = ammo->getRules()->getHitSound();
+							if (sound == -1)
+								sound = itRule->getHitSound();
+
+							if (_battleSave->getDebugMode() == false
+								&& ammo->spendBullet() == false)
+							{
+								_battleSave->removeItem(ammo);
+								_currentAction.weapon->setAmmoItem(NULL);
+							}
+						}
+					}
+
+					if (showWarning == false)
+					{
+						if (sound != -1)
+							getResourcePack()->getSound(
+													"BATTLE.CAT",
+													sound)
+												->play(
+													-1,
+													getMap()->getSoundAngle(_currentAction.actor->getPosition()));
+
+						_currentAction.actor->spendTimeUnits(_currentAction.TU);
+
+						_currentAction.targetUnit->setHealth(0);
+						checkForCasualties(					// TODO: streamline the code-path through checkForCasualties() & UnitDieBState
+									_currentAction.weapon,	// .... probly somethin' fudgy going on in those.
+									_currentAction.actor);
+					}
 				}
-
-				if (showWarning == false)
-				{
-					if (sound != -1)
-						getResourcePack()->getSound(
-												"BATTLE.CAT",
-												sound)
-											->play(
-												-1,
-												getMap()->getSoundAngle(_currentAction.actor->getPosition()));
-
-					_currentAction.actor->spendTimeUnits(_currentAction.TU);
-
-					_currentAction.targetUnit->setHealth(0);
-					checkForCasualties(					// TODO: streamline the code-path through checkForCasualties() & UnitDieBState
-								_currentAction.weapon,	// .... probly somethin' fudgy going on in those.
-								_currentAction.actor);
-				}
-			}
+			break;
 		}
 
 
