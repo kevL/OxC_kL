@@ -29,6 +29,7 @@
 #include "Camera.h"
 #include "CivilianBAIState.h"
 #include "ExplosionBState.h"
+#include "Explosion.h" // Execute.
 #include "InfoboxOKState.h"
 #include "InfoboxState.h"
 #include "Map.h"
@@ -90,7 +91,8 @@ BattlescapeGame::BattlescapeGame(
 		_AISecondMove(false),
 		_playedAggroSound(false),
 		_endTurnRequested(false),
-		_firstInit(true)
+		_firstInit(true),
+		_executeProgress(false)
 //		_endTurnProcessed(false)
 {
 	//Log(LOG_INFO) << "Create BattlescapeGame";
@@ -223,7 +225,35 @@ void BattlescapeGame::think()
 			else
 			{
 				//Log(LOG_INFO) << "bg:think() . panic Handled is TRUE";
-				_parentState->updateExperienceInfo();
+				if (_executeProgress == true)
+				{
+					getMap()->showExecuteExpl(true);
+
+					for (std::list<Explosion*>::const_iterator
+							i = getMap()->getExplosions()->begin();
+							i != getMap()->getExplosions()->end();
+							)
+					{
+						if ((*i)->animate() == false) // done.
+						{
+							delete *i;
+							i = getMap()->getExplosions()->erase(i);
+
+							if (getMap()->getExplosions()->empty() == true)
+							{
+								_executeProgress = false;
+								getMap()->showExecuteExpl(false);
+								setStateInterval(static_cast<Uint32>(BattlescapeState::DEFAULT_ANIM_SPEED));
+
+								return;
+							}
+						}
+						else
+							++i;
+					}
+				}
+				else
+					_parentState->updateExperienceInfo();
 			}
 		}
 
@@ -1075,57 +1105,58 @@ void BattlescapeGame::handleNonTargetAction()
 			break;
 
 			case BA_EXECUTE:
-				if (_currentAction.result.empty() == false) // not enough TU.
+				if (_currentAction.result.empty() == false)
 					showWarning = true;
 				else
 				{
 					const RuleItem* const itRule = _currentAction.weapon->getRules();
 					BattleItem* const ammo = _currentAction.weapon->getAmmoItem();
-					int sound = -1;
+					int
+						sound = -1,
+						start = 0,		// void vc++ linker warning.
+						isMelee = 0;	// void vc++ linker warning.
 
 					if (itRule->getBattleType() == BT_MELEE)
 					{
+						start = itRule->getMeleeAnimation();
+						isMelee = 1;
+
 						sound = ammo->getRules()->getMeleeHitSound();
 						if (sound == -1)
 						{
 							sound = itRule->getMeleeHitSound();
 							if (sound == -1)
-								sound = ResourcePack::ITEM_DROP; // I want steel-slicing **sching!** here
-						}
-
-						if (_battleSave->getDebugMode() == false
-							&& ammo != NULL
-							&& ammo->spendBullet() == false)
-						{
-							_battleSave->removeItem(ammo);
-
-							if (_currentAction.weapon != NULL) // in case the weapon just spent itself as a bullet -- jic.
-								_currentAction.weapon->setAmmoItem(NULL);
+								sound = ResourcePack::ITEM_DROP;
 						}
 					}
 					else if (itRule->getBattleType() == BT_FIREARM)
 					{
+						start = ammo->getRules()->getHitAnimation();
+//						isMelee = 0;
+
 						// note: these warnings generally won't show because
-						// ActionMenuState::cTor does a pseudo-check for ammo - but
-						// only if the weapon itself fails its check for canExecute()
-						// - and if it doesn't fail but could be currently unloaded
-						// it should be considered a mistake in the YAML:items' file
-						// entries. Because only items that *do not* have
-						// 'compatibleAmmo' nodes should have their damageTypes set.
+						// ActionMenuState::cTor does a pseudo-check for ammo -
+						// but only if the weapon itself fails its check for
+						// canExecute() - and if it doesn't fail but happens to
+						// be currently unloaded it should be considered a
+						// mistake in the YAML:items' file entries. Because only
+						// items that *do not* have 'compatibleAmmo' nodes
+						// should have their damageTypes set.
 						//
-						// If they *do* have a 'compatibleAmmo' node then they ought
-						// fail the ActionMenu cTor's NULL-check if they are *not*
+						// If they have a 'compatibleAmmo' node then they ought
+						// fail the ActionMenu cTor's NULL-check if they are not
 						// loaded with a valid ammoItem.
 						//
-						// The long & short of it is I'm not making extra NULL-checks
-						// for 'ammo' above & below just as an extra safety for an
-						// improper ruleset entry.
+						// The long & short of it is I'm not making extra
+						// NULL-checks for 'ammo' above & below as an extra
+						// safety for an improper ruleset entry.
 						//
-						// So ... I could/should also take these here warnings out.
-						// And I'd also like to go through the code and rulesets with
-						// that brilliant idea: "melee does not use Ammo" period.
-						// That is, ditch all super-ultra-duper Plasma Whips ....
-						if (ammo == NULL)
+						// So ... I could/should also take these warnings out.
+						// And I'd also like to go through the code and rulesets
+						// with that brilliant idea: "melee does not use Ammo"
+						// period. That is, ditch all super-ultra-duper Plasma
+						// Whips ....
+/*						if (ammo == NULL)
 						{
 							_currentAction.result = "STR_NO_AMMUNITION_LOADED";
 							showWarning = true;
@@ -1136,39 +1167,60 @@ void BattlescapeGame::handleNonTargetAction()
 							showWarning = true;
 						}
 						else
-						{
-							sound = ammo->getRules()->getHitSound();
-							if (sound == -1)
-								sound = itRule->getHitSound();
-
-							if (_battleSave->getDebugMode() == false
-								&& ammo->spendBullet() == false)
-							{
-								_battleSave->removeItem(ammo);
-								_currentAction.weapon->setAmmoItem(NULL);
-							}
-						}
+						{ */
+						sound = ammo->getRules()->getHitSound();
+						if (sound == -1)
+							sound = itRule->getHitSound();
+//						}
 					}
 
-					if (showWarning == false)
+//					if (showWarning == false)
+//					{
+					if (sound != -1)
+						getResourcePack()->getSound(
+												"BATTLE.CAT",
+												sound)
+											->play(
+												-1,
+												getMap()->getSoundAngle(_currentAction.actor->getPosition()));
+
+					if (ammo->spendBullet() == false)
+//						&& _battleSave->getDebugMode() == false)
 					{
-						if (sound != -1)
-							getResourcePack()->getSound(
-													"BATTLE.CAT",
-													sound)
-												->play(
-													-1,
-													getMap()->getSoundAngle(_currentAction.actor->getPosition()));
+						_battleSave->removeItem(ammo);
 
-						_currentAction.actor->spendTimeUnits(_currentAction.TU);
-
-						_currentAction.targetUnit->setHealth(0);
-						checkForCasualties(					// TODO: streamline the code-path through checkForCasualties() & UnitDieBState
-									_currentAction.weapon,	// .... probly somethin' fudgy going on in those.
-									_currentAction.actor);
+//						if (_currentAction.weapon != NULL) // in case the weapon just spent itself as a bullet -- jic.
+						_currentAction.weapon->setAmmoItem(NULL);
 					}
+
+					// Looks like this needs a think()
+					// That is, a whole new FakeExplosionBState thingie.
+					// Because I'm not going through all the substates inserting a boolean 'execute' var ....
+					Position posOrigin_voxel = _currentAction.target * Position(16,16,24) + Position(8,8,2);
+					Explosion* const explosion = new Explosion(
+															posOrigin_voxel,
+															start,
+															0,
+															false,
+															isMelee);
+					getMap()->getExplosions()->push_back(explosion);
+					_executeProgress = true;
+//					getMap()->showExecuteExpl(false);
+
+					setStateInterval(std::max(
+										1,
+										((BattlescapeState::DEFAULT_ANIM_SPEED * 5 / 7) - (ammo->getRules()->getExplosionSpeed() * 10))));
+
+
+					_currentAction.actor->spendTimeUnits(_currentAction.TU);
+
+					_currentAction.targetUnit->setHealth(0);
+					checkForCasualties(					// TODO: streamline the code-path through checkForCasualties() & UnitDieBState
+								_currentAction.weapon,	// .... probly somethin' fudgy going on in those.
+								_currentAction.actor);
+//					}
 				}
-			break;
+			// switch_end.
 		}
 
 
@@ -3834,6 +3886,15 @@ void BattlescapeGame::objectiveDone()
 		if (messagePop.empty() == false)
 			_infoboxQueue.push_back(new InfoboxOKState(game->getLanguage()->getString(messagePop)));
 	}
+}
+
+/**
+ * Returns true if an execution's explosion animation is in progress.
+ * @return, true if in progress
+ */
+bool BattlescapeGame::executeProgress() const
+{
+	return (_executeProgress == true);
 }
 
 }

@@ -183,12 +183,12 @@ void BattleItem::setFuseTimer(int turn)
  */
 int BattleItem::getAmmoQuantity() const
 {
-	if (_itRule->getClipSize() == -1) // is Laser, melee, etc. This could be taken out
-//		|| _ammoQty == -1)	// kL, NOTE: specifying clipSize(-1) in Ruleset should no longer be necessary. BLEH !
-							// This should iron out some ( rare ) reaction & AI problems ....
-							// But it creates problems w/ TANKS returning to Base.
+	if (_itRule->getClipSize() == -1)	// is Laser, melee, etc. This could be taken out
+//		|| _ammoQty == -1)				// kL, NOTE: specifying clipSize(-1) in Ruleset should no longer be necessary. BLEH !
+										// This should iron out some ( rare ) reaction & AI problems ....
+										// But it creates problems w/ TANKS returning to Base.
 	{
-		return 255;
+		return 255; // TODO: set this to int_max and be done with it. (i hate '255' -- it's so oldschool)
 	}
 
 	return _ammoQty;
@@ -209,14 +209,11 @@ void BattleItem::setAmmoQuantity(int qty)
  */
 bool BattleItem::spendBullet()
 {
-	if (_ammoQty < 0)	// the ammo should have gotten deleted if/when it reaches 0;
-		return true;	// less than 0 denotes self-powered weapons. But ...
-						// let ==0 be a fudge-factor.
-
-	--_ammoQty;
-
-	if (_ammoQty == 0)
-		return false;
+	if (_ammoQty == -1)		// the ammo should have gotten deleted if/when it reaches 0;
+		return true;		// less than 0 denotes self-powered weapons. But ...
+							// let ==0 be a fudge-factor.
+	if (--_ammoQty == 0)	// TODO: See about removing the '_ammoItem' from the game here
+		return false;		// so there is *never* a clip w/ 0 qty IG.
 
 	return true;
 }

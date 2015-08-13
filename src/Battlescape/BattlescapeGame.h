@@ -161,6 +161,7 @@ private:
 		_AISecondMove,
 //		_endTurnProcessed,
 		_endTurnRequested,
+		_executeProgress,
 		_firstInit,
 		_playedAggroSound,
 		_playerPanicHandled;
@@ -353,6 +354,9 @@ private:
 
 		/// Sets up a mission complete notification.
 		void objectiveDone();
+
+		/// Returns true if an execution's explosion animation is in progress.
+		bool executeProgress() const;
 };
 
 }

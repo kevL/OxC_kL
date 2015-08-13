@@ -81,6 +81,7 @@ private:
 		_mapIsHidden,
 		_noDraw,
 		_projectileInFOV,
+		_showExecuteExpl,
 		_showProjectile,
 		_smoothingEngaged,
 		_unitDying,
@@ -271,6 +272,8 @@ private:
 
 		/// Sets whether to draw the projectile on the Map.
 		void setShowProjectile(bool show = true);
+		/// Sets whether to show the execution explosion.
+		void showExecuteExpl(bool show = true);
 };
 
 }

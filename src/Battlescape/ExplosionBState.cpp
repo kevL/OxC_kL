@@ -391,7 +391,7 @@ void ExplosionBState::think()
 			i != _parent->getMap()->getExplosions()->end();
 			)
 	{
-		if ((*i)->animate() == false)
+		if ((*i)->animate() == false) // done.
 		{
 			delete *i;
 			i = _parent->getMap()->getExplosions()->erase(i);

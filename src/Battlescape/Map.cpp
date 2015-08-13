@@ -127,7 +127,8 @@ Map::Map(
 		_showProjectile(true),
 		_battleSave(game->getSavedGame()->getSavedBattle()),
 		_res(game->getResourcePack()),
-		_fuseColor(31)
+		_fuseColor(31),
+		_showExecuteExpl(false)
 {
 	_iconWidth = _game->getRuleset()->getInterface("battlescape")->getElement("icons")->w;
 	_iconHeight = _game->getRuleset()->getInterface("battlescape")->getElement("icons")->h;
@@ -4386,7 +4387,9 @@ void Map::drawTerrain(Surface* const surface) // private.
 							bullet.y - 64,
 							0);
 				}
-				else if ((*i)->isHit() == 1) // melee or psiamp, http://ufopaedia.org/index.php?title=HIT.PCK
+				else if ((*i)->isHit() == 1 // melee or psiamp, http://ufopaedia.org/index.php?title=HIT.PCK
+					&& (_showExecuteExpl == true
+						|| _battleSave->getBattleGame()->executeProgress() == false))
 				{
 					srfSprite = _res->getSurfaceSet("HIT.PCK")->getFrame((*i)->getCurrentFrame());
 					srfSprite->blitNShade(
@@ -4395,7 +4398,9 @@ void Map::drawTerrain(Surface* const surface) // private.
 							bullet.y - 25,
 							0);
 				}
-				else if ((*i)->isHit() == 0) // bullet, http://ufopaedia.org/index.php?title=SMOKE.PCK
+				else if ((*i)->isHit() == 0 // bullet, http://ufopaedia.org/index.php?title=SMOKE.PCK
+					&& (_showExecuteExpl == true
+						|| _battleSave->getBattleGame()->executeProgress() == false))
 				{
 					//Log(LOG_INFO) << "Map:hitFrame = " << (*i)->getCurrentFrame();
 					srfSprite = _res->getSurfaceSet("SMOKE.PCK")->getFrame((*i)->getCurrentFrame());
@@ -5364,6 +5369,15 @@ void Map::setWaypointAction(bool wp)
 void Map::setShowProjectile(bool show)
 {
 	_showProjectile = show;
+}
+
+/**
+ * Sets whether to show the execution explosion.
+ * @param show - true to reveal explosion (default true)
+ */
+void Map::showExecuteExpl(bool show)
+{
+	_showExecuteExpl = show;
 }
 
 }

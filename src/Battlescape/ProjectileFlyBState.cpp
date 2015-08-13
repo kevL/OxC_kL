@@ -1335,8 +1335,8 @@ void ProjectileFlyBState::performMeleeAttack()
 	{
 		_parent->getSave()->removeItem(_ammo);
 
-		if (_action.weapon != NULL) // kL, in case the weapon just spent itself as a bullet -- jic.
-			_action.weapon->setAmmoItem(NULL);
+//		if (_action.weapon != NULL) // kL, in case the weapon just spent itself as a bullet -- jic.
+		_action.weapon->setAmmoItem(NULL);
 	}
 
 	if (_unit->getSpecialAbility() == SPECAB_BURN)

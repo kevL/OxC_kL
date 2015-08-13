@@ -4644,7 +4644,7 @@
 	"../Ruleset/RuleItem.h"
 	"../Ruleset/RuleUnit.h"
 
-1439391586 f:\git\openxcom\src\battlescape\battlescapegame.h
+1439492171 f:\git\openxcom\src\battlescape\battlescapegame.h
 	"Position.h"
 
 1432586518 f:\git\openxcom\src\battlescape\position.h
@@ -5331,7 +5331,7 @@
 1430149550 f:\git\openxcom\src\interface\frame.h
 	"../Engine/Surface.h"
 
-1439482290 source:f:\git\openxcom\src\battlescape\actionmenustate.cpp
+1439484916 source:f:\git\openxcom\src\battlescape\actionmenustate.cpp
 	"ActionMenuState.h"
 	"ActionMenuItem.h"
 	"ExecuteState.h"
@@ -5415,7 +5415,7 @@
 1435256431 f:\git\openxcom\src\battlescape\battlestate.h
 	"BattlescapeGame.h"
 
-1438843096 f:\git\openxcom\src\battlescape\map.h
+1439491733 f:\git\openxcom\src\battlescape\map.h
 	"Position.h"
 	"../Engine/InteractiveSurface.h"
 
@@ -5441,7 +5441,7 @@
 1432984133 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1439482999 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1439493715 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	"AlienBAIState.h"
 	"BattlescapeState.h"
@@ -5449,6 +5449,7 @@
 	"Camera.h"
 	"CivilianBAIState.h"
 	"ExplosionBState.h"
+	"Explosion.h"
 	"InfoboxOKState.h"
 	"InfoboxState.h"
 	"Map.h"
@@ -5841,7 +5842,7 @@
 1434252297 f:\git\openxcom\src\battlescape\explosion.h
 	"Position.h"
 
-1439450178 source:f:\git\openxcom\src\battlescape\explosionbstate.cpp
+1439488817 source:f:\git\openxcom\src\battlescape\explosionbstate.cpp
 	"ExplosionBState.h"
 	"BattlescapeState.h"
 	"Camera.h"
@@ -5933,7 +5934,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1439395171 source:f:\git\openxcom\src\battlescape\map.cpp
+1439492253 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	"BattlescapeMessage.h"
 	"BattlescapeState.h"
@@ -6118,7 +6119,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1439476486 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
+1439486218 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
 	"ProjectileFlyBState.h"
 	"AlienBAIState.h"
 	"BattlescapeState.h"
@@ -8384,7 +8385,7 @@
 	"Base.h"
 	"../Ruleset/RuleBaseFacility.h"
 
-1436733796 source:f:\git\openxcom\src\savegame\battleitem.cpp
+1439485658 source:f:\git\openxcom\src\savegame\battleitem.cpp
 	"BattleItem.h"
 	"BattleUnit.h"
 	"Tile.h"
@@ -11198,7 +11199,7 @@
 1438345767 source:f:\git\openxcom\src\ruleset\rulemissionscript.cpp
 	"RuleMissionScript.h"
 
-1439476683 source:f:\git\openxcom\src\battlescape\executestate.cpp
+1439485146 source:f:\git\openxcom\src\battlescape\executestate.cpp
 	"ExecuteState.h"
 	"Pathfinding.h"
 	"TileEngine.h"
