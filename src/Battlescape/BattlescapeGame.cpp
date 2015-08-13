@@ -1080,15 +1080,31 @@ void BattlescapeGame::handleNonTargetAction()
 			else
 			{
 				const RuleItem* const itRule = _currentAction.weapon->getRules();
+				BattleItem* const ammo = _currentAction.weapon->getAmmoItem();
 				int sound = -1;
 
 				if (itRule->getBattleType() == BT_MELEE)
 				{
-					sound = itRule->getMeleeHitSound();
+					sound = ammo->getRules()->getMeleeHitSound();
+					if (sound == -1)
+					{
+						sound = itRule->getMeleeHitSound();
+						if (sound == -1)
+							sound = ResourcePack::ITEM_DROP; // I want steel-slicing **sching!** here
+					}
+
+					if (_battleSave->getDebugMode() == false
+						&& ammo != NULL
+						&& ammo->spendBullet() == false)
+					{
+						_battleSave->removeItem(ammo);
+
+						if (_currentAction.weapon != NULL) // in case the weapon just spent itself as a bullet -- jic.
+							_currentAction.weapon->setAmmoItem(NULL);
+					}
 				}
 				else if (itRule->getBattleType() == BT_FIREARM)
 				{
-					const BattleItem* const ammo = _currentAction.weapon->getAmmoItem();
 					if (ammo == NULL)
 					{
 						_currentAction.result = "STR_NO_AMMUNITION_LOADED";
@@ -1100,7 +1116,18 @@ void BattlescapeGame::handleNonTargetAction()
 						showWarning = true;
 					}
 					else
-						sound = itRule->getHitSound();
+					{
+						sound = ammo->getRules()->getHitSound();
+						if (sound == -1)
+							sound = itRule->getHitSound();
+
+						if (_battleSave->getDebugMode() == false
+							&& ammo->spendBullet() == false)
+						{
+							_battleSave->removeItem(ammo);
+							_currentAction.weapon->setAmmoItem(NULL);
+						}
+					}
 				}
 
 				if (showWarning == false)

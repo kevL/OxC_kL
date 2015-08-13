@@ -291,6 +291,7 @@
     <ClCompile Include="Battlescape\CommendationDeadState.cpp" />
     <ClCompile Include="Battlescape\CommendationState.cpp" />
     <ClCompile Include="Battlescape\DebriefingState.cpp" />
+    <ClCompile Include="Battlescape\ExecuteState.cpp" />
     <ClCompile Include="Battlescape\Explosion.cpp" />
     <ClCompile Include="Battlescape\ExplosionBState.cpp" />
     <ClCompile Include="Battlescape\InfoboxOKState.cpp" />
@@ -625,6 +626,7 @@
     <ClInclude Include="Battlescape\CommendationDeadState.h" />
     <ClInclude Include="Battlescape\CommendationState.h" />
     <ClInclude Include="Battlescape\DebriefingState.h" />
+    <ClInclude Include="Battlescape\ExecuteState.h" />
     <ClInclude Include="Battlescape\Explosion.h" />
     <ClInclude Include="Battlescape\ExplosionBState.h" />
     <ClInclude Include="Battlescape\InfoboxOKState.h" />

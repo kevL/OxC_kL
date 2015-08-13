@@ -5331,7 +5331,7 @@
 1430149550 f:\git\openxcom\src\interface\frame.h
 	"../Engine/Surface.h"
 
-1439449048 source:f:\git\openxcom\src\battlescape\actionmenustate.cpp
+1439478234 source:f:\git\openxcom\src\battlescape\actionmenustate.cpp
 	"ActionMenuState.h"
 	"ActionMenuItem.h"
 	"ExecuteState.h"
@@ -5441,7 +5441,7 @@
 1432984133 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1439449141 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1439477104 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	"AlienBAIState.h"
 	"BattlescapeState.h"
@@ -5841,7 +5841,7 @@
 1434252297 f:\git\openxcom\src\battlescape\explosion.h
 	"Position.h"
 
-1439017918 source:f:\git\openxcom\src\battlescape\explosionbstate.cpp
+1439450178 source:f:\git\openxcom\src\battlescape\explosionbstate.cpp
 	"ExplosionBState.h"
 	"BattlescapeState.h"
 	"Camera.h"
@@ -6118,7 +6118,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1439408738 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
+1439476486 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
 	"ProjectileFlyBState.h"
 	"AlienBAIState.h"
 	"BattlescapeState.h"
@@ -11198,12 +11198,14 @@
 1438345767 source:f:\git\openxcom\src\ruleset\rulemissionscript.cpp
 	"RuleMissionScript.h"
 
-1439443171 source:f:\git\openxcom\src\battlescape\executestate.cpp
+1439476683 source:f:\git\openxcom\src\battlescape\executestate.cpp
 	"ExecuteState.h"
 	"Pathfinding.h"
 	"TileEngine.h"
+	"Map.h"
 	"../Engine/Action.h"
 	"../Engine/Game.h"
+	"../Engine/Sound.h"
 	"../Interface/Text.h"
 	"../Interface/TextButton.h"
 	"../Interface/TextList.h"

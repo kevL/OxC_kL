@@ -560,9 +560,8 @@ bool ProjectileFlyBState::createNewProjectile() // private.
 			_parent->getMap()->cacheUnit(_unit);
 
 			// lift-off
-			if (_ammo->getRules()->getFireSound() != -1)
-				sound = _ammo->getRules()->getFireSound();
-			else if (_action.weapon->getRules()->getFireSound() != -1)
+			sound = _ammo->getRules()->getFireSound();
+			if (sound == -1)
 				sound = _action.weapon->getRules()->getFireSound();
 
 			if (_parent->getSave()->getDebugMode() == false
@@ -634,9 +633,8 @@ bool ProjectileFlyBState::createNewProjectile() // private.
 			_parent->getMap()->cacheUnit(_unit);
 
 			// lift-off
-			if (_ammo->getRules()->getFireSound() != -1)
-				sound = _ammo->getRules()->getFireSound();
-			else if (_action.weapon->getRules()->getFireSound() != -1)
+			sound = _ammo->getRules()->getFireSound();
+			if (sound == -1)
 				sound = _action.weapon->getRules()->getFireSound();
 
 			if (_parent->getSave()->getDebugMode() == false
@@ -1301,9 +1299,8 @@ void ProjectileFlyBState::performMeleeAttack()
 	{
 		//Log(LOG_INFO) << ". meleeAttack MISS, unitID " << _unit->getId();
 		if (_ammo->getRules()->getBattleType() == BT_MELEE
-			&& _ammo->getRules()->getMeleeSound() != -1
-			&& _ammo->getRules()->getMeleeHitSound() != -1)	// if there is a hitSound play attackSound, else ITEM_THROW;
-															// the hitSound will be used for success.
+			&& _ammo->getRules()->getMeleeSound() != -1		// if there is a hitSound play attackSound, else ITEM_THROW;
+			&& _ammo->getRules()->getMeleeHitSound() != -1)	// the hitSound will be used for success.
 		{
 			sound = _ammo->getRules()->getMeleeSound();
 		}
@@ -1315,9 +1312,8 @@ void ProjectileFlyBState::performMeleeAttack()
 		//Log(LOG_INFO) << ". meleeAttack HIT, unitID " << _unit->getId();
 		if (_ammo->getRules()->getBattleType() == BT_MELEE)
 		{
-			if (_ammo->getRules()->getMeleeHitSound() != -1)
-				sound = _ammo->getRules()->getMeleeHitSound();
-			else if (_ammo->getRules()->getMeleeSound() != -1)
+			sound = _ammo->getRules()->getMeleeHitSound();
+			if (sound == -1)
 				sound = _ammo->getRules()->getMeleeSound();
 		}
 		else

@@ -249,12 +249,27 @@ void ExecuteState::lstTargetPress(Action* action)
 			_action->target = targetUnit->getPosition(); // jic.
 			_action->targetUnit = targetUnit;
 
-			const RuleItem* const itRule = _action->weapon->getRules();
+			const RuleItem
+				* const itRule = _action->weapon->getRules(),
+				* const amRule = _action->weapon->getAmmoItem()->getRules();
 			int sound = -1;
+
 			if (itRule->getBattleType() == BT_MELEE)
-				sound = itRule->getMeleeSound();
+			{
+				sound = amRule->getMeleeSound();
+				if (sound == -1)
+				{
+					sound = itRule->getMeleeSound();
+					if (sound == -1)
+						sound = ResourcePack::ITEM_THROW;
+				}
+			}
 			else
-				sound = itRule->getFireSound();
+			{
+				sound = amRule->getFireSound();
+				if (sound == -1)
+					sound = itRule->getFireSound();
+			}
 
 			if (sound != -1)
 				_game->getResourcePack()->getSound(

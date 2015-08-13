@@ -942,6 +942,7 @@
     <ClCompile Include="Basescape\ManufactureCostsState.cpp" />
     <ClCompile Include="Ufopaedia\ExtraAlienInfoState.cpp" />
     <ClCompile Include="Ruleset\RuleMissionScript.cpp" />
+    <ClCompile Include="Battlescape\ExecuteState.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1913,6 +1914,7 @@
     <ClInclude Include="Basescape\ManufactureCostsState.h" />
     <ClInclude Include="Ufopaedia\ExtraAlienInfoState.h" />
     <ClInclude Include="Ruleset\RuleMissionScript.h" />
+    <ClInclude Include="Battlescape\ExecuteState.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Geoscape">

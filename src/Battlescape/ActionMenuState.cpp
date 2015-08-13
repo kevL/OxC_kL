@@ -214,7 +214,8 @@ ActionMenuState::ActionMenuState(
 			}
 		}
 
-		if (itRule->canExecute() == true
+		if ((itRule->canExecute() == true
+				|| _action->weapon->getAmmoItem()->getRules()->canExecute() == true)
 			&& canExecuteTarget() == true)
 		{
 			addItem(
