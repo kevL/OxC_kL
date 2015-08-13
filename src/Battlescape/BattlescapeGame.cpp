@@ -1062,8 +1062,8 @@ void BattlescapeGame::handleNonTargetAction()
 				showWarning = true;
 			else
 			{
-				if (_currentAction.actor->getPosition().z > 0)
-					_battleSave->getTileEngine()->applyGravity(_currentAction.actor->getTile());
+//				if (_currentAction.actor->getPosition().z > 0) // effectively done in applyGravity()
+				_battleSave->getTileEngine()->applyGravity(_currentAction.actor->getTile());
 
 				getResourcePack()->getSound(
 										"BATTLE.CAT",
@@ -1075,14 +1075,51 @@ void BattlescapeGame::handleNonTargetAction()
 		}
 		else if (_currentAction.type == BA_EXECUTE)
 		{
-			if (_currentAction.result.empty() == false)
+			if (_currentAction.result.empty() == false) // not enough TU.
 				showWarning = true;
 			else
 			{
-				if (_currentAction.weapon->getRules()->getBattleType() == BT_MELEE)
-				{}
-				else if (_currentAction.weapon->getRules()->getBattleType() == BT_FIREARM)
-				{}
+				const RuleItem* const itRule = _currentAction.weapon->getRules();
+				int sound = -1;
+
+				if (itRule->getBattleType() == BT_MELEE)
+				{
+					sound = itRule->getMeleeHitSound();
+				}
+				else if (itRule->getBattleType() == BT_FIREARM)
+				{
+					const BattleItem* const ammo = _currentAction.weapon->getAmmoItem();
+					if (ammo == NULL)
+					{
+						_currentAction.result = "STR_NO_AMMUNITION_LOADED";
+						showWarning = true;
+					}
+					else if (ammo->getAmmoQuantity() == 0)
+					{
+						_currentAction.result = "STR_NO_ROUNDS_LEFT";
+						showWarning = true;
+					}
+					else
+						sound = itRule->getHitSound();
+				}
+
+				if (showWarning == false)
+				{
+					if (sound != -1)
+						getResourcePack()->getSound(
+												"BATTLE.CAT",
+												sound)
+											->play(
+												-1,
+												getMap()->getSoundAngle(_currentAction.actor->getPosition()));
+
+					_currentAction.actor->spendTimeUnits(_currentAction.TU);
+
+					_currentAction.targetUnit->setHealth(0);
+					checkForCasualties(					// TODO: streamline the code-path through checkForCasualties() & UnitDieBState
+								_currentAction.weapon,	// .... probly somethin' fudgy going on in those.
+								_currentAction.actor);
+				}
 			}
 		}
 
@@ -1920,7 +1957,7 @@ void BattlescapeGame::checkForCasualties(
 						defendUnit->getStatistics()->wasUnconscious = true;
 					}
 
-					statePushNext(new UnitDieBState( // kL_note: This is where units get set to STUNNED
+					statePushNext(new UnitDieBState( // This is where units get sent to STUNNED.
 												this,
 												*i,
 												DT_STUN,
@@ -2806,55 +2843,6 @@ void BattlescapeGame::primaryAction(const Position& targetPos)
 				{
 					pf->removePreview();
 				}
-
-/* Take care of this muck in Pathfinding:
-				_currentAction.strafe = (Options::strafe == true)
-									&& ((modifCTRL == true		// soldier strafe
-											&& isMech == false)
-										|| (modifALT == true	// tank reverse gear, 1 tile only
-											&& isMech == true));
-				//Log(LOG_INFO) << ". primary action: Strafe";
-
-				const Position
-					actorPos = _currentAction.actor->getPosition(),
-					pos = Position(
-								targetPos.x - actorPos.x,
-								targetPos.y - actorPos.y,
-								0);
-				const int
-//					dist = _battleSave->getTileEngine()->distance(
-//																actorPos,
-//																targetPos),
-					dirUnit = _currentAction.actor->getDirection();
-
-				int dir;
-				pf->vectorToDirection(pos, dir);
-
-				const size_t pathSize = pf->getPath().size();
-
-				//Log(LOG_INFO) << ". strafe = " << (int)_currentAction.strafe;
-				//Log(LOG_INFO) << ". isSoldier = " << (int)(_currentAction.actor->getGeoscapeSoldier() != NULL);
-				//Log(LOG_INFO) << ". diff_Z = " << (int)(actorPos.z != targetPos.z);
-				//Log(LOG_INFO) << ". dist = " << dist;
-				//Log(LOG_INFO) << ". pathSize = " << (int)pathSize;
-				//Log(LOG_INFO) << ". dirUnit = " << dirUnit;
-				//Log(LOG_INFO) << ". dir = " << dir;
-
-				if (_currentAction.strafe == true
-					&& _currentAction.actor->getGeoscapeSoldier() != NULL
-					&& (actorPos.z != targetPos.z
-//						|| dist > 1
-						|| pathSize > 1
-						|| (actorPos.z == targetPos.z
-//							&& dist < 2
-							&& pathSize == 1
-							&& dirUnit == dir)))
-				{
-					_currentAction.strafe = false;
-					_currentAction.dash = true;
-					_currentAction.actor->setDashing();
-				} */
-
 
 				_currentAction.target = targetPos;
 				pf->calculate( // CREATE the Path.

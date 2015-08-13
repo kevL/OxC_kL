@@ -77,6 +77,7 @@ class RuleItem
 private:
 	bool
 		_arcingShot,
+		_canExecute,
 		_fixedWeapon,
 		_flatRate,
 		_liveAlien,
@@ -385,6 +386,9 @@ private:
 
 		/// Checks if an item is exempt from research.
 		bool isResearchExempt() const;
+
+		/// Checks if this item is capable of executing a BattleUnit.
+		bool canExecute() const;
 };
 
 }

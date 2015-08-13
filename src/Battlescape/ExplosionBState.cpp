@@ -450,7 +450,8 @@ void ExplosionBState::explode() // private.
 
 		if (_unit != NULL)
 		{
-			if (_unit->isOut() == false)
+//			if (_unit->isOut() == false)
+			if (_unit->isOut_t() == false)
 			{
 				_unit->aim(false);
 				_unit->setCache(NULL);

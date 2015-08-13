@@ -226,8 +226,9 @@ void NextTurnState::nextTurn()
 	_state->getBattleGame()->tallyUnits(
 									liveAliens,
 									liveSoldiers);
-	if (liveAliens == 0
-		|| liveSoldiers == 0)
+	if ((liveAliens == 0
+			|| liveSoldiers == 0)
+		&& _battleSave->getObjectiveType() != MUST_DESTROY) // not the final mission and all aliens dead.
 	{
 		switchMusic = true;
 		_state->finishBattle(
@@ -244,7 +245,6 @@ void NextTurnState::nextTurn()
 			_game->getCursor()->setVisible();
 
 			const int turn = _battleSave->getTurn();
-
 /*			if (turn == 1
 				|| (turn % Options::autosaveFrequency) == 0)
 			{

@@ -107,7 +107,8 @@ RuleItem::RuleItem(const std::string& type)
 		_meleePower(0),
 		_meleeAnimation(0),
 		_meleeHitSound(-1),
-		_specialType(-1)
+		_specialType(-1),
+		_canExecute(false)
 {}
 
 /**
@@ -267,7 +268,17 @@ void RuleItem::load(
 	_meleePower			= node["meleePower"]		.as<int>(_meleePower);
 	_specialType		= node["specialType"]		.as<int>(_specialType);
 
-	_listOrder			= node["listOrder"]			.as<int>(_listOrder);
+	switch (_damageType)
+	{
+		case DT_AP:
+		case DT_LASER:
+		case DT_PLASMA:
+		case DT_MELEE:
+		case DT_ACID:
+			_canExecute = true;
+	}
+
+	_listOrder = node["listOrder"].as<int>(_listOrder);
 	if (_listOrder == 0)
 		_listOrder = listOrder;
 }
@@ -1116,6 +1127,15 @@ bool RuleItem::isResearchExempt() const
 		return true;
 	}
 	return false; */
+}
+
+/**
+ * Checks if this item is capable of executing a BattleUnit.
+ * @return, true if executable
+ */
+bool RuleItem::canExecute() const
+{
+	return (_canExecute == true);
 }
 
 }

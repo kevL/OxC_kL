@@ -140,13 +140,15 @@ void ProjectileFlyBState::init()
 	{
 		const BattleUnit* const targetUnit = _parent->getSave()->getTile(_action.target)->getUnit();
 		reactionValid = targetUnit != NULL
-					 && targetUnit->isOut(true, true) == false
+//					 && targetUnit->isOut(true, true) == false
+					 && targetUnit->isOut_t() == false
 					 && targetUnit == _parent->getSave()->getSelectedUnit()
 					 && _ammo != NULL;
 	}
 
 
-	if (_unit->isOut(true, true) == true
+	if (_unit->isOut_t() == true
+//		_unit->isOut(true, true) == true
 		|| _action.weapon == NULL
 		|| targetTileValid == false)
 	{
@@ -710,7 +712,8 @@ void ProjectileFlyBState::think()
 	{
 		if (_action.type == BA_AUTOSHOT
 			&& _action.autoShotCount < _action.weapon->getRules()->getAutoShots()
-			&& _unit->isOut() == false
+			&& _unit->isOut_t() == false
+//			&& _unit->isOut() == false
 //			&& _ammo != NULL // kL
 			&& _ammo->getAmmoQuantity() != 0
 			&& ((_parent->getSave()->getTile(_unit->getPosition()) != NULL
@@ -773,7 +776,8 @@ void ProjectileFlyBState::think()
 														_action.type != BA_HIT);
 			}
 
-			if (_unit->isOut() == false
+			if (_unit->isOut_t() == false
+//				_unit->isOut() == false
 				&& _action.type != BA_HIT)	// huh? -> ie. melee & psi attacks shouldn't even get in here. But code needs cosmetic surgery .....
 			{								// actually, Melee *does* get in here; but probably not Psi.
 				_unit->setStatus(STATUS_STANDING);

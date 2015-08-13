@@ -52,7 +52,7 @@ private:
 			const std::string& desc,
 			size_t* id);
 	/// Checks if there is a viable execution target nearby.
-	bool canExecute();
+	bool canExecuteTarget();
 	/// Checks for an unconscious unit in valid range.
 	bool hasUnconscious();
 

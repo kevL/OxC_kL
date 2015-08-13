@@ -2067,7 +2067,7 @@ bool BattleUnit::spendTimeUnits(int tu)
 }
 
 /**
- * Spends energy if it can. Return false if it can't.
+ * Spends energy if it can. Returns false if it can't.
  * @param energy - the stamina to check & expend
  * @return, true if this unit could expend the stamina
  */

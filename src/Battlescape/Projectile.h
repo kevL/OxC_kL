@@ -59,7 +59,6 @@ private:
 	Position
 		_origin,
 		_targetVoxel;
-	const ResourcePack* _res;
 	const SavedBattleGame* _battleSave;
 	Surface* _throwSprite;
 

@@ -102,46 +102,36 @@ ActionMenuState::ActionMenuState(
 					&id);
 	}
 
-	if (itRule->getTUMelee() != 0)
+	if (_game->getSavedGame()->isResearched(itRule->getRequirements()) == true)
 	{
-		if (itRule->getBattleType() == BT_MELEE
-			&& itRule->getDamageType() == DT_STUN)
+		if (itRule->getTUMelee() != 0) // TODO: remove 'HIT' action-items if no target in range.
 		{
-			addItem( // stun rod
-					BA_HIT,
-					"STR_STUN",
-					&id);
-		}
-		else if (itRule->getType() == "STR_DOGE")
-		{
-			addItem( // doggie bite
-					BA_HIT,
-					"STR_DOGE_BITE",
-					&id);
-			addItem( // doggie bark
-					BA_NONE,
-					"STR_DOGE_BARK",
-					&id);
-		}
-		else
-		{
-			addItem( // melee weapon
-					BA_HIT,
-					"STR_HIT_MELEE",
-					&id);
-
-			if (canExecute() == true)
-				addItem(
-						BA_EXECUTE,
-						"STR_EXECUTE",
+			if (itRule->getBattleType() == BT_MELEE
+				&& itRule->getDamageType() == DT_STUN)
+			{
+				addItem( // stun rod
+						BA_HIT,
+						"STR_STUN",
+						&id);
+			}
+			else if (itRule->getType() == "STR_DOGE")
+			{
+				addItem( // doggie bite
+						BA_HIT,
+						"STR_DOGE_BITE",
+						&id);
+				addItem( // doggie bark
+						BA_NONE,
+						"STR_DOGE_BARK",
+						&id);
+			}
+			else
+				addItem( // melee weapon
+						BA_HIT,
+						"STR_HIT_MELEE",
 						&id);
 		}
-	}
 
-	if (_game->getSavedGame()->isResearched(itRule->getRequirements()) == true)
-//		|| _game->getSavedGame()->getSavedBattle()->getSelectedUnit()->getOriginalFaction() == FACTION_HOSTILE
-	// just because it's been mind-controlled doesn't mean you know how to use it.
-	{
 		if (itRule->isGrenade() == true)
 		{
 			if (_action->weapon->getFuseTimer() == -1) // canPrime
@@ -222,6 +212,15 @@ ActionMenuState::ActionMenuState(
 						"STR_LAUNCH_MISSILE",
 						&id);
 			}
+		}
+
+		if (itRule->canExecute() == true
+			&& canExecuteTarget() == true)
+		{
+			addItem(
+					BA_EXECUTE,
+					"STR_EXECUTE",
+					&id);
 		}
 	}
 }
@@ -340,7 +339,7 @@ void ActionMenuState::btnActionMenuClick(Action* action)
 										->play(
 											-1,
 											_game->getSavedGame()->getSavedBattle()->getBattleGame()->getMap()
-											->getSoundAngle(_action->actor->getPosition()));
+												->getSoundAngle(_action->actor->getPosition()));
 		}
 		else if (_action->type == BA_PRIME)
 		{
@@ -454,7 +453,7 @@ void ActionMenuState::btnActionMenuClick(Action* action)
  * Checks if there is a viable execution target nearby.
  * @return, true if can execute
  */
-bool ActionMenuState::canExecute() // private.
+bool ActionMenuState::canExecuteTarget() // private.
 {
 	const SavedBattleGame* const battleSave = _game->getSavedGame()->getSavedBattle();
 	const Tile* const tile = battleSave->getTile(_action->actor->getPosition()); // TODO: check quads of large units.
@@ -473,7 +472,7 @@ bool ActionMenuState::canExecute() // private.
  * @note Helper for canExecute().
  * @return, true if there's an unconscious unit in the direction of facing
  */
-bool ActionMenuState::hasUnconscious() // private.
+bool ActionMenuState::hasUnconscious() // private. // TODO: duplicate of ExecuteState::getTargetTile()
 {
 	SavedBattleGame* const battleSave = _game->getSavedGame()->getSavedBattle();
 
@@ -507,9 +506,7 @@ bool ActionMenuState::hasUnconscious() // private.
 			if (tileOrigin != NULL
 				&& tileTarget != NULL)
 			{
-				if (tileTarget->hasUnconsciousUnit(false) != 0)
-					return true;
-				else
+				if (tileTarget->hasUnconsciousUnit(false) == 0)
 				{
 					tileTarget_above = battleSave->getTile(Position(origin + Position(x,y, 1) + posTarget));
 					tileTarget_below = battleSave->getTile(Position(origin + Position(x,y,-1) + posTarget));
@@ -524,9 +521,26 @@ bool ActionMenuState::hasUnconscious() // private.
 					{
 						tileTarget = tileTarget_below;
 					}
+				}
 
-					if (tileTarget->hasUnconsciousUnit(false) != 0)
+				if (tileTarget->hasUnconsciousUnit(false) != 0)
+				{
+					const Position voxelOrigin = Position(tileOrigin->getPosition() * Position(16,16,24))
+											   + Position(
+														8,8,
+														_action->actor->getHeight(true)
+															- tileOrigin->getTerrainLevel()
+															- 4);
+					Position scanVoxel;
+					if (battleSave->getTileEngine()->canTargetTile(
+																&voxelOrigin,
+																tileOrigin,
+																O_FLOOR,
+																&scanVoxel,
+																_action->actor) == true)
+					{
 						return true;
+					}
 				}
 			}
 		}

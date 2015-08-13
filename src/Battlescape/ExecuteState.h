@@ -55,7 +55,7 @@ private:
 
 	std::vector<BattleUnit*> _targetUnits;
 
-	/// Gets an unconscious unit in valid range.
+	/// Gets a tile with an unconscious unit in valid range.
 	Tile* getTargetTile();
 
 

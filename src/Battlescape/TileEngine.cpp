@@ -1106,7 +1106,8 @@ bool TileEngine::canTargetUnit(
 			-relY,	 relX
 		};
 
-	if (targetUnit->isOut() == false)
+//	if (targetUnit->isOut() == false)
+	if (targetUnit->isOut_t(OUT_STAT) == false)
 		heightRange = targetUnit->getHeight();
 	else
 		heightRange = 12;
@@ -6348,10 +6349,9 @@ bool TileEngine::validMeleeRange(
 						const Position voxelOrigin = Position(tileOrigin->getPosition() * Position(16,16,24))
 												   + Position(
 															8,8,
-															attacker->getHeight()
-																+ attacker->getFloatHeight()
+															attacker->getHeight(true)
 																- tileOrigin->getTerrainLevel()
-																- 5);
+																- 4);
 
 						Position voxelTarget;
 						if (canTargetUnit(

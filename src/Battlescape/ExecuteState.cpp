@@ -20,10 +20,13 @@
 #include "ExecuteState.h"
 
 #include "Pathfinding.h"
+#include "TileEngine.h"
+#include "Map.h"
 
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
 //#include "../Engine/LocalizedText.h"
+#include "../Engine/Sound.h"
 
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
@@ -150,10 +153,10 @@ void ExecuteState::init()
 }
 
 /**
- * Gets an unconscious unit in valid range.
+ * Gets a tile with an unconscious unit in valid range.
  * @return, pointer to a Tile
  */
-Tile* ExecuteState::getTargetTile() // private.
+Tile* ExecuteState::getTargetTile() // private. // TODO: duplicate of ActionMenuState::hasUnconscious()
 {
 	SavedBattleGame* const battleSave = _game->getSavedGame()->getSavedBattle();
 
@@ -187,9 +190,7 @@ Tile* ExecuteState::getTargetTile() // private.
 			if (tileOrigin != NULL
 				&& tileTarget != NULL)
 			{
-				if (tileTarget->hasUnconsciousUnit(false) != 0)
-					return tileTarget;
-				else
+				if (tileTarget->hasUnconsciousUnit(false) == 0)
 				{
 					tileTarget_above = battleSave->getTile(Position(origin + Position(x,y, 1) + posTarget));
 					tileTarget_below = battleSave->getTile(Position(origin + Position(x,y,-1) + posTarget));
@@ -204,9 +205,26 @@ Tile* ExecuteState::getTargetTile() // private.
 					{
 						tileTarget = tileTarget_below;
 					}
+				}
 
-					if (tileTarget->hasUnconsciousUnit(false) != 0)
+				if (tileTarget->hasUnconsciousUnit(false) != 0)
+				{
+					const Position voxelOrigin = Position(tileOrigin->getPosition() * Position(16,16,24))
+											   + Position(
+														8,8,
+														_action->actor->getHeight(true)
+															- tileOrigin->getTerrainLevel()
+															- 4);
+					Position scanVoxel;
+					if (battleSave->getTileEngine()->canTargetTile(
+																&voxelOrigin,
+																tileOrigin,
+																O_FLOOR,
+																&scanVoxel,
+																_action->actor) == true)
+					{
 						return tileTarget;
+					}
 				}
 			}
 		}
@@ -230,6 +248,22 @@ void ExecuteState::lstTargetPress(Action* action)
 			BattleUnit* const targetUnit = _targetUnits[_lstTarget->getSelectedRow()];
 			_action->target = targetUnit->getPosition(); // jic.
 			_action->targetUnit = targetUnit;
+
+			const RuleItem* const itRule = _action->weapon->getRules();
+			int sound = -1;
+			if (itRule->getBattleType() == BT_MELEE)
+				sound = itRule->getMeleeSound();
+			else
+				sound = itRule->getFireSound();
+
+			if (sound != -1)
+				_game->getResourcePack()->getSound(
+												"BATTLE.CAT",
+												sound)
+											->play(
+												-1,
+												_game->getSavedGame()->getSavedBattle()->getBattleGame()->getMap()
+													->getSoundAngle(_action->actor->getPosition()));
 		}
 
 		_game->popState();

@@ -67,7 +67,6 @@ Projectile::Projectile(
 		const Position& origin,
 		const Position& targetVoxel)
 	:
-		_res(res),
 		_battleSave(battleSave),
 		_action(action),
 		_origin(origin),
@@ -91,7 +90,7 @@ Projectile::Projectile(
 		if (_action.type == BA_THROW)
 		{
 			//Log(LOG_INFO) << "Create Projectile -> BA_THROW";
-			_throwSprite =_res->getSurfaceSet("FLOOROB.PCK")->getFrame(getItem()->getRules()->getFloorSprite());
+			_throwSprite = res->getSurfaceSet("FLOOROB.PCK")->getFrame(getItem()->getRules()->getFloorSprite());
 			_speed = _speed / 2;
 		}
 		else // ba_SHOOT!! or hit, or spit
@@ -632,7 +631,7 @@ void Projectile::applyAccuracy( // private.
 			calcHori,
 			calcVert;
 
-		if (   target->y != origin.y
+		if (target->y != origin.y
 			|| target->x != origin.x)
 		{
 			calcHori = true;
