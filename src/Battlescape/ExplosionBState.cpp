@@ -87,7 +87,7 @@ ExplosionBState::ExplosionBState(
  */
 ExplosionBState::~ExplosionBState()
 {
-	_parent->setStateInterval(static_cast<Uint32>(BattlescapeState::DEFAULT_ANIM_SPEED)); // kL
+	_parent->setStateInterval(BattlescapeState::STATE_INTERVAL_STANDARD); // kL
 }
 
 /**
@@ -242,7 +242,7 @@ void ExplosionBState::init()
 				_parent->getMap()->getExplosions()->push_back(explosion);
 			}
 
-			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED); // * 10 / 7);
+			_parent->setStateInterval(BattlescapeState::STATE_INTERVAL_STANDARD); // * 10 / 7);
 //			_parent->getMap()->setBlastFlash(true);
 
 
@@ -330,9 +330,10 @@ void ExplosionBState::init()
 													result); // --> _cosmetic effect bleh.
 			_parent->getMap()->getExplosions()->push_back(explosion);
 
-			_parent->setStateInterval(std::max(
-											1,
-											((BattlescapeState::DEFAULT_ANIM_SPEED * 5 / 7) - (_item->getRules()->getExplosionSpeed() * 10))));
+			Uint32 interval = BattlescapeState::STATE_INTERVAL_STANDARD * 5 / 7;
+			interval -= static_cast<Uint32>(_item->getRules()->getExplosionSpeed()) * 10;
+			if (interval < 1) interval = 1;
+			_parent->setStateInterval(interval);
 		}
 
 		Camera* const exploCam = _parent->getMap()->getCamera(); // -> apply more cosmetics

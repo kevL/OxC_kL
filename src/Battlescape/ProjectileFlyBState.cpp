@@ -106,7 +106,7 @@ ProjectileFlyBState::ProjectileFlyBState( // blaster launch, BattlescapeGame::la
  */
 ProjectileFlyBState::~ProjectileFlyBState()
 {
-	_parent->setStateInterval(static_cast<Uint32>(BattlescapeState::DEFAULT_ANIM_SPEED)); // kL
+	_parent->setStateInterval(BattlescapeState::STATE_INTERVAL_STANDARD); // kL
 }
 
 /**

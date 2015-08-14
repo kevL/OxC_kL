@@ -20,7 +20,7 @@
 #include "Timer.h"
 
 #include "Game.h"
-#include "Options.h"
+//#include "Options.h"
 
 
 namespace OpenXcom
@@ -142,11 +142,13 @@ void Timer::think(
 	// must be signed to permit negative numbers
 	Sint64 current = static_cast<Sint64>(slowTick());
 
-	// this is used to make sure we stop calling *_state on *state
+	// this is used to make sure it stops calling *_state on *state
 	// in the loop once *state has been popped and deallocated:
-	const Game* game = NULL;
+	const Game* game;
 	if (state != NULL)
 		game = state->_game;
+	else
+		game = NULL;
 //	assert(!game || game->isState(state));
 
 	if (_running == true)
@@ -156,7 +158,6 @@ void Timer::think(
 			for (int
 					i = 0;
 					i <= maxFrameSkip
-//						&& isRunning()
 						&& _running == true
 						&& current - static_cast<Sint64>(_frameSkipStart) >= static_cast<Sint64>(_interval);
 					++i)
@@ -172,7 +173,7 @@ void Timer::think(
 				// breaking here after one iteration effectively returns this function to its old functionality:
 				if (game == NULL
 					|| _frameSkipping == false
-					|| game->isState(state) == false) // if game isn't set, we can't verify *state
+					|| game->isState(state) == false) // if game isn't set, can't verify *state
 				{
 					break;
 				}

@@ -2655,9 +2655,9 @@ bool AlienBAIState::psiAction() // private.
 								true) == true
 					&& (losReq == false
 						|| std::find(
-								_unit->getVisibleUnits()->begin(),
-								_unit->getVisibleUnits()->end(),
-								*i) != _unit->getVisibleUnits()->end()))
+								_unit->getHostileUnits()->begin(),
+								_unit->getHostileUnits()->end(),
+								*i) != _unit->getHostileUnits()->end()))
 				{
 					losTrue = false;
 

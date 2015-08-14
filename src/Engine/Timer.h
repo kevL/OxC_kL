@@ -35,15 +35,11 @@ typedef void (Surface::*SurfaceHandler)();
 
 /**
  * Timer used to run code in fixed intervals.
- * Used for code that should run at the same fixed interval in
- * various machines based on miliseconds instead of CPU cycles.
+ * @note Used for code that should run at the same fixed interval in various
+ * machines based on milliseconds instead of CPU cycles.
  */
 class Timer
 {
-	public:
-		static int maxFrameSkip;
-		static Uint32 gameSlowSpeed;
-
 
 private:
 	bool
@@ -59,6 +55,9 @@ private:
 
 
 	public:
+		static int maxFrameSkip;
+		static Uint32 gameSlowSpeed;
+
 		/// Creates a stopped timer.
 		Timer(
 				Uint32 interval,

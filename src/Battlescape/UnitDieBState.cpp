@@ -68,7 +68,7 @@ UnitDieBState::UnitDieBState(
 		_extraTicks(0)
 {
 //	_unit->clearVisibleTiles();
-	_unit->clearVisibleUnits();
+	_unit->clearHostileUnits();
 
 	if (_noSound == false)			// pre-battle hidden explosion death; needed here to stop Camera CTD.
 		_unit->setUnitVisible();	// TEST. has side-effect of keeping stunned victims non-revealed if not already visible.
@@ -84,7 +84,7 @@ UnitDieBState::UnitDieBState(
 
 		if (_unit->getSpawnUnit().empty() == false)
 		{
-			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 8 / 7);
+			_parent->setStateInterval(BattlescapeState::STATE_INTERVAL_STANDARD * 8 / 7);
 			_unit->lookAt(3); // inits STATUS_TURNING if not facing correctly. Else STATUS_STANDING
 		}
 		else
@@ -125,7 +125,7 @@ UnitDieBState::UnitDieBState(
  */
 UnitDieBState::~UnitDieBState()
 {
-	_parent->setStateInterval(static_cast<Uint32>(BattlescapeState::DEFAULT_ANIM_SPEED)); // kL
+	_parent->setStateInterval(BattlescapeState::STATE_INTERVAL_STANDARD); // kL
 }
 
 /**
@@ -166,7 +166,7 @@ void UnitDieBState::think()
 	{
 		if (_unit->getSpinPhase() != -1)
 		{
-			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 2 / 7);
+			_parent->setStateInterval(BattlescapeState::STATE_INTERVAL_STANDARD * 2 / 7);
 			_unit->contDeathSpin(); // -> STATUS_STANDING
 		}
 		else // spawn conversion is going to happen
@@ -181,7 +181,7 @@ void UnitDieBState::think()
 //	else if (_unit->isOut() == false) // this ought be Status_Standing/Disabled also.
 	else if (_unit->isOut_t(OUT_STAT) == false) // this ought be Status_Standing/Disabled also.
 	{
-		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED);
+		_parent->setStateInterval(BattlescapeState::STATE_INTERVAL_STANDARD);
 		_unit->startFalling(); // -> STATUS_COLLAPSING
 
 		if (_unit->getSpawnUnit().empty() == false)

@@ -501,14 +501,14 @@ private:
 		_killedBy;
 	UnitStatus _status;
 
-	std::list<BattleUnit*> _unitSpotters;
+	std::list<BattleUnit*> _rfSpotters;
 
-	std::vector<int> _spottedId; // for loading '_unitsSpottedThisTurn'
+	std::vector<int> _spottedId; // for saving/loading '_hostileUnitsThisTurn'
 
 	std::vector<BattleItem*> _inventory;
 	std::vector<BattleUnit*>
-		_visibleUnits,
-		_unitsSpottedThisTurn;
+		_hostileUnits,
+		_hostileUnitsThisTurn;
 //	std::vector<Tile*> _visibleTiles;
 
 	std::string
@@ -764,13 +764,13 @@ private:
 		/// Gets whether this unit is visible.
 		bool getUnitVisible() const;
 		/// Adds unit to visible units.
-		void addToVisibleUnits(BattleUnit* const unit);
+		void addToHostileUnits(BattleUnit* const unit);
 		/// Gets the list of visible units.
-		std::vector<BattleUnit*>* getVisibleUnits();
+		std::vector<BattleUnit*>* getHostileUnits();
 		/// Clears visible units.
-		void clearVisibleUnits();
+		void clearHostileUnits();
 		/// Gets the vector of BattleUnits that this unit has seen this turn.
-		std::vector<BattleUnit*>& getUnitsSpottedThisTurn();
+		std::vector<BattleUnit*>& getHostileUnitsThisTurn();
 
 		/// Adds tile to visible tiles.
 //		bool addToVisibleTiles(Tile* const tile);
@@ -1152,7 +1152,7 @@ private:
 		void setRevived(bool revived = true);
 
 		/// Gets all units in the battlescape that are valid RF-spotters of this BattleUnit.
-		std::list<BattleUnit*>* getUnitSpotters();
+		std::list<BattleUnit*>* getRfSpotters();
 
 		/// Sets the parameters of a successful mind-control psi attack.
 		void hostileMcParameters(

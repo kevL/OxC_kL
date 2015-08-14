@@ -147,7 +147,7 @@ void State::add(Surface* surface)
 {
 	surface->setPalette(_palette);
 
-	if (   _game->getLanguage() != NULL
+	if (_game->getLanguage() != NULL
 		&& _game->getResourcePack() != NULL)
 	{
 		surface->initText(
@@ -185,14 +185,14 @@ void State::add(
 		{
 			if (parent != NULL)
 			{
-				if (   element->x != std::numeric_limits<int>::max()
+				if (element->x != std::numeric_limits<int>::max()
 					&& element->y != std::numeric_limits<int>::max())
 				{
 					surface->setX(parent->getX() + element->x);
 					surface->setY(parent->getY() + element->y);
 				}
 
-				if (   element->w != -1
+				if (element->w != -1
 					&& element->h != -1)
 				{
 					surface->setWidth(element->w);

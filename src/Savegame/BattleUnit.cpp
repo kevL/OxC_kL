@@ -540,7 +540,7 @@ void BattleUnit::loadSpotted(SavedBattleGame* const battleSave)
 		{
 			if ((*j)->getId() == _spottedId.at(i))
 			{
-				_unitsSpottedThisTurn.push_back(*j);
+				_hostileUnitsThisTurn.push_back(*j);
 				break;
 			}
 		}
@@ -671,10 +671,10 @@ YAML::Node BattleUnit::save() const
 		int spottedId;
 		for (size_t
 				i = 0;
-				i != _unitsSpottedThisTurn.size();
+				i != _hostileUnitsThisTurn.size();
 				++i)
 		{
-			spottedId = _unitsSpottedThisTurn.at(i)->getId();
+			spottedId = _hostileUnitsThisTurn.at(i)->getId();
 			node["spottedUnitsId"].push_back(spottedId);
 		}
 	}
@@ -682,11 +682,11 @@ YAML::Node BattleUnit::save() const
 
 	return node;
 		// kL_note: This doesn't save/load such things as
-		// _visibleUnits (no need),
-		// _unitsSpottedThisTurn (done),
+		// _hostileUnits (no need),
+		// _hostileUnitsThisTurn (done),
 		// _visibleTiles (removed).
 		// AI is saved, but loaded someplace else -> SavedBattleGame ->
-		// so are _unitsSpottedThisTurn
+		// so are _hostileUnitsThisTurn
 }
 
 /**
@@ -2136,13 +2136,13 @@ bool BattleUnit::getUnitVisible() const
  * @note Called from TileEngine::calculateFOV().
  * @param unit - pointer to a seen BattleUnit
  */
-void BattleUnit::addToVisibleUnits(BattleUnit* const unit)
+void BattleUnit::addToHostileUnits(BattleUnit* const unit)
 {
 	bool addUnit = true;
 
 	for (std::vector<BattleUnit*>::const_iterator
-			i = _unitsSpottedThisTurn.begin();
-			i != _unitsSpottedThisTurn.end();
+			i = _hostileUnitsThisTurn.begin();
+			i != _hostileUnitsThisTurn.end();
 			++i)
 	{
 //		if (dynamic_cast<BattleUnit*>(*i) == unit)
@@ -2154,12 +2154,12 @@ void BattleUnit::addToVisibleUnits(BattleUnit* const unit)
 	}
 
 	if (addUnit == true)
-		_unitsSpottedThisTurn.push_back(unit); // <- don't think I even use this anymore .... Maybe for AI .... doggie barks.
+		_hostileUnitsThisTurn.push_back(unit); // <- don't think I even use this anymore .... Maybe for AI .... doggie barks.
 
 
 	for (std::vector<BattleUnit*>::const_iterator
-			i = _visibleUnits.begin();
-			i != _visibleUnits.end();
+			i = _hostileUnits.begin();
+			i != _hostileUnits.end();
 			++i)
 	{
 //		if (dynamic_cast<BattleUnit*>(*i) == unit)
@@ -2167,33 +2167,33 @@ void BattleUnit::addToVisibleUnits(BattleUnit* const unit)
 			return;
 	}
 
-	_visibleUnits.push_back(unit);
+	_hostileUnits.push_back(unit);
 }
 
 /**
  * Gets the pointer to a vector of visible units.
  * @return, pointer to a vector of pointers to visible units
  */
-std::vector<BattleUnit*>* BattleUnit::getVisibleUnits()
+std::vector<BattleUnit*>* BattleUnit::getHostileUnits()
 {
-	return &_visibleUnits;
+	return &_hostileUnits;
 }
 
 /**
  * Clears visible units.
  */
-void BattleUnit::clearVisibleUnits()
+void BattleUnit::clearHostileUnits()
 {
-	_visibleUnits.clear();
+	_hostileUnits.clear();
 }
 
 /**
  * Gets the other units spotted this turn by this unit.
  * @return, reference to a vector of pointers to BattleUnits
  */
-std::vector<BattleUnit*>& BattleUnit::getUnitsSpottedThisTurn()
+std::vector<BattleUnit*>& BattleUnit::getHostileUnitsThisTurn()
 {
-	return _unitsSpottedThisTurn;
+	return _hostileUnitsThisTurn;
 }
 
 /**
@@ -2412,7 +2412,7 @@ void BattleUnit::prepUnit(bool full)
 	else
 		revertMc = false;
 
-	_unitsSpottedThisTurn.clear();
+	_hostileUnitsThisTurn.clear();
 
 	_dontReselect = false;
 	_motionPoints = 0;
@@ -4699,9 +4699,9 @@ void BattleUnit::setRevived(bool revived)
  * Gets all units in the battlescape that are valid RF-spotters of this BattleUnit.
  * @return, pointer to a list of pointers to BattleUnits that are spotting
  */
-std::list<BattleUnit*>* BattleUnit::getUnitSpotters()
+std::list<BattleUnit*>* BattleUnit::getRfSpotters()
 {
-	return &_unitSpotters;
+	return &_rfSpotters;
 }
 
 /**

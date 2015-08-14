@@ -134,6 +134,7 @@
 #include "./Engine/ShaderDrawHelper.h"
 #include "./Engine/ShaderMove.h"
 #include "./Engine/ShaderRepeat.h"
+#include "./Engine/Timer.h"
 #include "./Engine/Zoom.h"
 
 // To check memory leaks in VS
@@ -155,7 +156,6 @@
 #include "./Engine/State.h"
 #include "./Engine/Surface.h"
 #include "./Engine/SurfaceSet.h"
-#include "./Engine/Timer.h"
 
 
 #include "./Battlescape/PathfindingNode.h"

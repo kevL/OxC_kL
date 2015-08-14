@@ -80,7 +80,7 @@ UnitWalkBState::UnitWalkBState(
  */
 UnitWalkBState::~UnitWalkBState()
 {
-	_parent->setStateInterval(static_cast<Uint32>(BattlescapeState::DEFAULT_ANIM_SPEED)); // kL
+	_parent->setStateInterval(BattlescapeState::STATE_INTERVAL_STANDARD); // kL
 }
 
 /**
@@ -102,7 +102,7 @@ void UnitWalkBState::init()
 
 
 	// kL_note: This is used only for aLiens
-	_unitsSpotted = _unit->getUnitsSpottedThisTurn().size();
+	_unitsSpotted = _unit->getHostileUnitsThisTurn().size();
 
 	//Log(LOG_INFO) << ". walking from " << _unit->getPosition() << " to " << _action.target;
 
@@ -208,7 +208,7 @@ void UnitWalkBState::think()
 				return;
 			}
 			else if (_parent->getPanicHandled() == true)
-				_parent->getBattlescapeState()->refreshVisUnits();
+				_parent->getBattlescapeState()->updateHostileHotcons();
 		}
 		else if (_onScreen == true) // still walking ... make sure the unit sprites are up to date
 		{
@@ -996,7 +996,7 @@ void UnitWalkBState::doStatusTurn() // private.
 		_parent->popState();
 	}
 	else if (_parent->getPanicHandled() == true)
-		_parent->getBattlescapeState()->refreshVisUnits();
+		_parent->getBattlescapeState()->updateHostileHotcons();
 }
 
 /**
@@ -1209,7 +1209,7 @@ bool UnitWalkBState::visForUnits() const // private.
 	if (_unit->getFaction() != FACTION_PLAYER)
 	{
 		ret = ret
-		   && _unit->getUnitsSpottedThisTurn().size() > _unitsSpotted
+		   && _unit->getHostileUnitsThisTurn().size() > _unitsSpotted
 		   && _action.desperate == false
 		   && _unit->getCharging() == NULL;
 	}

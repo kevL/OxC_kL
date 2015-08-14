@@ -5375,7 +5375,7 @@ void Map::setShowProjectile(bool show)
  * Sets whether to show the execution explosion.
  * @param show - true to reveal explosion (default true)
  */
-void Map::showExecuteExpl(bool show)
+void Map::showExecute(bool show)
 {
 	_showExecuteExpl = show;
 }

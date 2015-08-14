@@ -208,24 +208,24 @@ BattlescapeState::BattlescapeState()
 	_visUnitTarget = new Surface(32, 40, screenWidth / 2 - 16, visibleMapHeight / 2);
 
 	std::fill_n(
-			_visibleUnit,
-			INDICATORS,
+			_hostileUnit,
+			UNIT_HOTCONS,
 			static_cast<BattleUnit*>(NULL));
 
 	int offset_x = 0;
 	for (size_t
 			i = 0;
-			i != INDICATORS;
+			i != UNIT_HOTCONS;
 			++i)
 	{
 		if (i > 9)
 			offset_x = 15;
 
-		_btnVisibleUnit[i] = new InteractiveSurface(
+		_btnHostileUnit[i] = new InteractiveSurface(
 												15,13,
 												x + iconsWidth - 21 - offset_x,
 												y - 16 - (static_cast<int>(i) * 13));
-		_numVisibleUnit[i] = new NumberText(
+		_numHostileUnit[i] = new NumberText(
 										9,9,
 										x + iconsWidth - 15 - offset_x,
 										y - 12 - (static_cast<int>(i) * 13));
@@ -233,10 +233,10 @@ BattlescapeState::BattlescapeState()
 
 	for (size_t // center 10+ on buttons
 			i = 9;
-			i != INDICATORS;
+			i != UNIT_HOTCONS;
 			++i)
 	{
-		_numVisibleUnit[i]->setX(_numVisibleUnit[i]->getX() - 2);
+		_numHostileUnit[i]->setX(_numHostileUnit[i]->getX() - 2);
 	}
 
 	_warning	= new WarningMessage(
@@ -390,11 +390,11 @@ BattlescapeState::BattlescapeState()
 
 	for (size_t
 			i = 0;
-			i != INDICATORS;
+			i != UNIT_HOTCONS;
 			++i)
 	{
-		add(_btnVisibleUnit[i]);
-		add(_numVisibleUnit[i]);
+		add(_btnHostileUnit[i]);
+		add(_numHostileUnit[i]);
 	}
 
 
@@ -907,22 +907,22 @@ BattlescapeState::BattlescapeState()
 	const Uint8 color = static_cast<Uint8>(_rules->getInterface("battlescape")->getElement("visibleUnits")->color);
 	for (size_t
 			i = 0;
-			i != INDICATORS;
+			i != UNIT_HOTCONS;
 			++i)
 	{
-		_btnVisibleUnit[i]->onMousePress((ActionHandler)& BattlescapeState::btnVisibleUnitPress);
-//		_btnVisibleUnit[i]->onKeyboardPress(
+		_btnHostileUnit[i]->onMousePress((ActionHandler)& BattlescapeState::btnVisibleUnitPress);
+//		_btnHostileUnit[i]->onKeyboardPress(
 //						(ActionHandler)& BattlescapeState::btnVisibleUnitPress,
 //						buttons[i]);
 
 //		std::ostringstream tooltip;
 //		tooltip << "STR_CENTER_ON_ENEMY_" << (i + 1);
-//		_btnVisibleUnit[i]->setTooltip(tooltip.str());
-//		_btnVisibleUnit[i]->onMouseIn((ActionHandler)& BattlescapeState::txtTooltipIn);
-//		_btnVisibleUnit[i]->onMouseOut((ActionHandler)& BattlescapeState::txtTooltipOut);
+//		_btnHostileUnit[i]->setTooltip(tooltip.str());
+//		_btnHostileUnit[i]->onMouseIn((ActionHandler)& BattlescapeState::txtTooltipIn);
+//		_btnHostileUnit[i]->onMouseOut((ActionHandler)& BattlescapeState::txtTooltipOut);
 
-		_numVisibleUnit[i]->setColor(color);
-		_numVisibleUnit[i]->setValue(static_cast<unsigned>(i) + 1);
+		_numHostileUnit[i]->setColor(color);
+		_numHostileUnit[i]->setValue(static_cast<unsigned>(i) + 1);
 	}
 
 	_txtName->setHighContrast();
@@ -950,11 +950,11 @@ BattlescapeState::BattlescapeState()
 	_btnReserveAimed->setGroup(&_reserve);
 	_btnReserveAuto->setGroup(&_reserve); */
 
-	_animTimer = new Timer(DEFAULT_ANIM_SPEED);
+	_animTimer = new Timer(STATE_INTERVAL_STANDARD);
 	_animTimer->onTimer((StateHandler)& BattlescapeState::animate);
 
-	_gameTimer = new Timer(DEFAULT_ANIM_SPEED + 32);
-	_gameTimer->onTimer((StateHandler)& BattlescapeState::handleState);
+	_battleTimer = new Timer(STATE_INTERVAL_STANDARD + 32);
+	_battleTimer->onTimer((StateHandler)& BattlescapeState::handleState);
 
 	_battleGame = new BattlescapeGame(
 									_battleSave,
@@ -969,7 +969,7 @@ BattlescapeState::~BattlescapeState()
 {
 	//Log(LOG_INFO) << "Delete BattlescapeState";
 	delete _animTimer;
-	delete _gameTimer;
+	delete _battleTimer;
 	delete _battleGame;
 }
 
@@ -981,7 +981,7 @@ void BattlescapeState::init()
 	State::init();
 
 	_animTimer->start();
-	_gameTimer->start();
+	_battleTimer->start();
 
 	_map->setFocus(true);
 	_map->cacheUnits();
@@ -1050,7 +1050,7 @@ void BattlescapeState::init()
 void BattlescapeState::think()
 {
 	//Log(LOG_INFO) << "BattlescapeState::think()";
-	if (_gameTimer->isRunning() == true)
+	if (_battleTimer->isRunning() == true)
 	{
 		static bool popped; // inits to false.
 
@@ -1058,13 +1058,13 @@ void BattlescapeState::think()
 		{
 			State::think();
 
-			//Log(LOG_INFO) << "BattlescapeState::think() -> _battlegame.think()";
+			//Log(LOG_INFO) << "BattlescapeState::think() -> _battleGame.think()";
 			_battleGame->think();
 			//Log(LOG_INFO) << "BattlescapeState::think() -> _animTimer.think()";
 			_animTimer->think(this, NULL);
-			//Log(LOG_INFO) << "BattlescapeState::think() -> _gametimer.think()";
-			_gameTimer->think(this, NULL);
-			//Log(LOG_INFO) << "BattlescapeState::think() -> back from think";
+			//Log(LOG_INFO) << "BattlescapeState::think() -> _battleTimer.think()";
+			_battleTimer->think(this, NULL);
+			//Log(LOG_INFO) << "BattlescapeState::think() -> back from thinks";
 
 			if (popped == true)
 			{
@@ -2253,16 +2253,16 @@ void BattlescapeState::btnVisibleUnitPress(Action* action)
 		size_t i;
 		for ( // find out which button was pressed
 				i = 0;
-				i != INDICATORS;
+				i != UNIT_HOTCONS;
 				++i)
 		{
-			if (_btnVisibleUnit[i] == action->getSender())
+			if (_btnHostileUnit[i] == action->getSender())
 				break;
 		}
 
 		if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 		{
-			_map->getCamera()->centerOnPosition(_visibleUnit[i]->getPosition());
+			_map->getCamera()->centerOnPosition(_hostileUnit[i]->getPosition());
 
 			_visUnitTarget->setVisible();
 			_visUnitTargetFrame = 0;
@@ -2290,9 +2290,9 @@ void BattlescapeState::btnVisibleUnitPress(Action* action)
 				if ((*j)->getFaction() == FACTION_PLAYER
 					&& (*j)->isOut() == false
 					&& std::find(
-								(*j)->getVisibleUnits()->begin(),
-								(*j)->getVisibleUnits()->end(),
-								_visibleUnit[i]) != (*j)->getVisibleUnits()->end())
+								(*j)->getHostileUnits()->begin(),
+								(*j)->getHostileUnits()->end(),
+								_hostileUnit[i]) != (*j)->getHostileUnits()->end())
 				{
 					nextSpotter = *j;
 					break;
@@ -2309,9 +2309,9 @@ void BattlescapeState::btnVisibleUnitPress(Action* action)
 					if ((*j)->getFaction() == FACTION_PLAYER
 						&& (*j)->isOut() == false
 						&& std::find(
-									(*j)->getVisibleUnits()->begin(),
-									(*j)->getVisibleUnits()->end(),
-									_visibleUnit[i]) != (*j)->getVisibleUnits()->end())
+									(*j)->getHostileUnits()->begin(),
+									(*j)->getHostileUnits()->end(),
+									_hostileUnit[i]) != (*j)->getHostileUnits()->end())
 					{
 						nextSpotter = *j;
 						break;
@@ -2628,13 +2628,13 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 {
 	for (size_t // remove target indicators
 			i = 0;
-			i != INDICATORS;
+			i != UNIT_HOTCONS;
 			++i)
 	{
-		_btnVisibleUnit[i]->setVisible(false);
-		_numVisibleUnit[i]->setVisible(false);
+		_btnHostileUnit[i]->setVisible(false);
+		_numHostileUnit[i]->setVisible(false);
 
-		_visibleUnit[i] = NULL;
+		_hostileUnit[i] = NULL;
 	}
 
 	_rank->clear();
@@ -2726,17 +2726,17 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 		for (std::vector<BattleUnit*>::const_iterator
 			i = _battleSave->getUnits()->begin();
 			i != _battleSave->getUnits()->end()
-				&& j != INDICATORS;
+				&& j != UNIT_HOTCONS;
 			++i)
 		{
 			if ((*i)->isOut() == false
 				&& (*i)->getUnitVisible() == true
 				&& (*i)->getFaction() == FACTION_HOSTILE)
 			{
-				_btnVisibleUnit[j]->setVisible();
-				_numVisibleUnit[j]->setVisible();
+				_btnHostileUnit[j]->setVisible();
+				_numHostileUnit[j]->setVisible();
 
-				_visibleUnit[j++] = *i;
+				_hostileUnit[j++] = *i;
 			}
 		}
 
@@ -2971,7 +2971,7 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 /**
  * Shifts the colors of the visible unit buttons' backgrounds.
  */
-void BattlescapeState::blinkVisibleUnitButtons() // private.
+void BattlescapeState::cycleHostileHotcons() // private.
 {
 	BattleUnit* const selUnit = _battleSave->getSelectedUnit();
 	if (selUnit != NULL)
@@ -2987,10 +2987,10 @@ void BattlescapeState::blinkVisibleUnitButtons() // private.
 
 		for (size_t
 				i = 0;
-				i != INDICATORS;
+				i != UNIT_HOTCONS;
 				++i)
 		{
-			if (_btnVisibleUnit[i]->getVisible() == true)
+			if (_btnHostileUnit[i]->getVisible() == true)
 			{
 				isSpotted = false;
 
@@ -3004,9 +3004,9 @@ void BattlescapeState::blinkVisibleUnitButtons() // private.
 //						&& (*j)->isOut() == false)
 					{
 						if (std::find(
-									(*j)->getVisibleUnits()->begin(),
-									(*j)->getVisibleUnits()->end(),
-									_visibleUnit[i]) != (*j)->getVisibleUnits()->end())
+									(*j)->getHostileUnits()->begin(),
+									(*j)->getHostileUnits()->end(),
+									_hostileUnit[i]) != (*j)->getHostileUnits()->end())
 						{
 							isSpotted = true;
 							break;
@@ -3017,9 +3017,9 @@ void BattlescapeState::blinkVisibleUnitButtons() // private.
 				if (isSpotted == true)
 				{
 					if (std::find(
-								selUnit->getVisibleUnits()->begin(),
-								selUnit->getVisibleUnits()->end(),
-								_visibleUnit[i]) != selUnit->getVisibleUnits()->end())
+								selUnit->getHostileUnits()->begin(),
+								selUnit->getHostileUnits()->end(),
+								_hostileUnit[i]) != selUnit->getHostileUnits()->end())
 					{
 						color = static_cast<Uint8>(colorRed);
 					}
@@ -3029,8 +3029,8 @@ void BattlescapeState::blinkVisibleUnitButtons() // private.
 				else
 					color = 51; // green // 114; // lt.blue <- hostile unit is visible but not currently viewed by friendly units; ergo do not cycle colors.
 
-				_btnVisibleUnit[i]->drawRect(0,0, 15,13, static_cast<Uint8>(color_border));
-				_btnVisibleUnit[i]->drawRect(1,1, 13,11, color);
+				_btnHostileUnit[i]->drawRect(0,0, 15,13, static_cast<Uint8>(color_border));
+				_btnHostileUnit[i]->drawRect(1,1, 13,11, color);
 			}
 		}
 
@@ -3049,26 +3049,26 @@ void BattlescapeState::blinkVisibleUnitButtons() // private.
  * Refreshes the visUnits indicators for UnitWalk/TurnBStates.
  * @note Should not run when player's units are panicking.
  */
-void BattlescapeState::refreshVisUnits()
+void BattlescapeState::updateHostileHotcons()
 {
 	if (playableUnitSelected() == true)
 	{
 		for (size_t // hide target indicators & clear targets
 				i = 0;
-				i != INDICATORS;
+				i != UNIT_HOTCONS;
 				++i)
 		{
-			_btnVisibleUnit[i]->setVisible(false);
-			_numVisibleUnit[i]->setVisible(false);
+			_btnHostileUnit[i]->setVisible(false);
+			_numHostileUnit[i]->setVisible(false);
 
-			_visibleUnit[i] = NULL;
+			_hostileUnit[i] = NULL;
 		}
 
 		size_t j = 0;
 		for (std::vector<BattleUnit*>::const_iterator
 			i = _battleSave->getUnits()->begin();
 			i != _battleSave->getUnits()->end()
-				&& j != INDICATORS;
+				&& j != UNIT_HOTCONS;
 			++i)
 		{
 //			if ((*i)->isOut() == false
@@ -3076,10 +3076,10 @@ void BattlescapeState::refreshVisUnits()
 				&& (*i)->getUnitVisible() == true
 				&& (*i)->getFaction() == FACTION_HOSTILE)
 			{
-				_btnVisibleUnit[j]->setVisible();
-				_numVisibleUnit[j]->setVisible();
+				_btnHostileUnit[j]->setVisible();
+				_numHostileUnit[j]->setVisible();
 
-				_visibleUnit[j++] = *i;
+				_hostileUnit[j++] = *i;
 			}
 		}
 	}
@@ -3094,13 +3094,13 @@ void BattlescapeState::animate()
 														// doors (&tc) do not stall walking units (&tc)
 	if (_map->getMapHidden() == false)
 	{
-		blinkVisibleUnitButtons();
+		cycleHostileHotcons();
 		drawFuse();
 		flashMedic();
-		drawVisUnitTarget();
+		drawHostileTargeter();
 
 		if (_isOverweight == true
-			&& RNG::seedless(0,3) > 2)
+			&& RNG::seedless(0,3) == 0)
 		{
 			_overWeight->setVisible(!_overWeight->getVisible());
 		}
@@ -3160,12 +3160,12 @@ void BattlescapeState::handleState()
 }
 
 /**
- * Sets the timer interval for think() calls of the state.
+ * Sets the '_battleTimer' interval for think() calls of the state.
  * @param interval - an interval in ms
  */
 void BattlescapeState::setStateInterval(Uint32 interval)
 {
-	_gameTimer->setInterval(interval);
+	_battleTimer->setInterval(interval);
 }
 
 /**
@@ -3315,7 +3315,7 @@ void BattlescapeState::finishBattle(
 	{
 		_popups.clear();
 		_animTimer->stop();
-		_gameTimer->stop();
+		_battleTimer->stop();
 		_game->popState();
 
 		if (abort == true		// abort was done or no player is still alive
@@ -3918,7 +3918,7 @@ void BattlescapeState::flashMedic()
 /**
  * Animates targeting cursor over hostile unit when visUnit indicator is clicked.
  */
-void BattlescapeState::drawVisUnitTarget()
+void BattlescapeState::drawHostileTargeter()
 {
 	static const int cursorFrames[TARGET_FRAMES] = {0,1,2,3,4,0}; // note: does not show the last frame.
 

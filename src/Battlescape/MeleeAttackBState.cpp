@@ -183,7 +183,7 @@ void MeleeAttackBState::think()
 		if (_parent->convertInfected() && Options::battleNotifyDeath && _target && _target->getFaction() == FACTION_PLAYER)
 		{
 			_deathMessage = true;
-			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED);
+			_parent->setStateInterval(BattlescapeState::STATE_INTERVAL_STANDARD);
 		}
 		else
 		{

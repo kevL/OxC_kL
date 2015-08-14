@@ -413,7 +413,7 @@ void SavedBattleGame::load(
 		}
 	}
 
-	// load _unitsSpottedThisTurn here:
+	// load _hostileUnitsThisTurn here:
 	// convert unitID's into pointers to BattleUnit
 	for (size_t
 			i = 0;
@@ -2476,7 +2476,7 @@ bool SavedBattleGame::placeUnitNearPosition(
 	for (std::vector<BattleUnit*>::const_iterator i = getUnits()->begin(); i != getUnits()->end(); ++i)
 	{
 		if ((*i)->getFaction() != faction) continue;
-		std::vector<BattleUnit*>* vis = (*i)->getVisibleUnits();
+		std::vector<BattleUnit*>* vis = (*i)->getHostileUnits();
 		if (std::find(vis->begin(), vis->end(), unit) != vis->end())
 		{
 			return true;

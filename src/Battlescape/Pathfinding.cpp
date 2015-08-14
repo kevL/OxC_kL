@@ -1704,9 +1704,9 @@ BIGWALL_E_S		// 8
 			if (   _unit != NULL
 				&& _unit->getFaction() == FACTION_HOSTILE
 				&& std::find(
-						_unit->getUnitsSpottedThisTurn().begin(),
-						_unit->getUnitsSpottedThisTurn().end(),
-						targetUnit) != _unit->getUnitsSpottedThisTurn().end())
+						_unit->getHostileUnitsThisTurn().begin(),
+						_unit->getHostileUnitsThisTurn().end(),
+						targetUnit) != _unit->getHostileUnitsThisTurn().end())
 			{
 				return true; // AI knows only spotted xCom units.
 			}

@@ -470,7 +470,7 @@ GeoscapeState::GeoscapeState()
 
 	std::fill_n(
 			_visibleUfo,
-			INDICATORS,
+			UFO_HOTCONS,
 			static_cast<Ufo*>(NULL));
 
 	int
@@ -478,7 +478,7 @@ GeoscapeState::GeoscapeState()
 		offset_y;
 	for (size_t
 			i = 0;
-			i != INDICATORS;
+			i != UFO_HOTCONS;
 			++i)
 	{
 		offset_x = ((i % 4) * 13); // 4 UFOs per row only
@@ -539,7 +539,7 @@ GeoscapeState::GeoscapeState()
 	_txtScore = new Text(63, 8, screenWidth - 64, screenHeight / 2 + 102);
 
 	_timeSpeed = _btn5Secs;
-	_gameTimer = new Timer(static_cast<Uint32>(Options::geoClockSpeed));
+	_geoTimer = new Timer(static_cast<Uint32>(Options::geoClockSpeed));
 
 	const Uint32 optionSpeed = static_cast<Uint32>(Options::dogfightSpeed);
 	_dfZoomInTimer	= new Timer(optionSpeed);
@@ -587,7 +587,7 @@ GeoscapeState::GeoscapeState()
 
 	for (size_t
 			i = 0;
-			i != INDICATORS;
+			i != UFO_HOTCONS;
 			++i)
 	{
 		add(_isfVisibleUfo[i]);
@@ -971,8 +971,8 @@ GeoscapeState::GeoscapeState()
 	_txtYear->setColor(Palette::blockOffset(15)+2);
 //	_txtYear->setAlign(ALIGN_LEFT);
 
-	_gameTimer->onTimer((StateHandler)& GeoscapeState::timeAdvance);
-	_gameTimer->start();
+	_geoTimer->onTimer((StateHandler)& GeoscapeState::timeAdvance);
+	_geoTimer->start();
 
 	_dfZoomInTimer->onTimer((StateHandler)& GeoscapeState::dfZoomIn);
 	_dfZoomOutTimer->onTimer((StateHandler)& GeoscapeState::dfZoomOut);
@@ -990,7 +990,7 @@ GeoscapeState::GeoscapeState()
  */
 GeoscapeState::~GeoscapeState()
 {
-	delete _gameTimer;
+	delete _geoTimer;
 	delete _dfZoomInTimer;
 	delete _dfZoomOutTimer;
 	delete _dfStartTimer;
@@ -1219,7 +1219,7 @@ void GeoscapeState::think()
 		&& (_dfZoomOutTimer->isRunning() == false
 			|| _dfZoomOutDone == true))
 	{
-		_gameTimer->think(this, NULL); // Handle timers
+		_geoTimer->think(this, NULL); // Handle timers
 	}
 	else
 	{
@@ -1229,7 +1229,7 @@ void GeoscapeState::think()
 			if (_dogfights.size() == _dfMinimized) // if all dogfights are minimized rotate the globe, etc.
 			{
 				_pause = false;
-				_gameTimer->think(this, NULL);
+				_geoTimer->think(this, NULL);
 			}
 
 			_dfTimer->think(this, NULL);
@@ -1251,7 +1251,7 @@ void GeoscapeState::drawUfoIndicators()
 {
 	for (size_t
 			i = 0;
-			i != INDICATORS;
+			i != UFO_HOTCONS;
 			++i)
 	{
 		_isfVisibleUfo[i]->setVisible(false);
@@ -1325,7 +1325,7 @@ void GeoscapeState::drawUfoIndicators()
 			++j;
 		}
 
-		if (j == INDICATORS - 1)
+		if (j == UFO_HOTCONS - 1)
 			break;
 	}
 }
@@ -4134,7 +4134,25 @@ void GeoscapeState::determineAlienMissions()
 		if (missionCommand->getLabel() > 0
 			&& conditions.find(missionCommand->getLabel()) != conditions.end())
 		{
-			throw Exception("Mission generator encountered an error: multiple commands are sharing the same label.");
+			std::stringstream ststr;
+			ststr << "Mission generator encountered an error: multiple commands: [" << missionCommand->getType() << "] and ";
+			for (std::vector<RuleMissionScript*>::const_iterator
+					j = availableMissions.begin();
+					j != availableMissions.end();
+					++j)
+			{
+				if (*j != *i
+					&& missionCommand->getLabel() == (*j)->getLabel())
+				{
+					ststr << "["
+						  << (*j)->getType()
+						  << "]";
+				}
+			}
+			ststr << " are sharing the same label: ["
+				  << missionCommand->getLabel()
+				  << "]";
+			throw Exception(ststr.str());
 		}
 
 		if (process == true													// level four condition check: random chance flavor for this command's execution
@@ -4659,7 +4677,7 @@ void GeoscapeState::btnVisibleUfoPress(Action* action) // private.
 {
 	for (size_t // find out which button was pressed
 			i = 0;
-			i != INDICATORS;
+			i != UFO_HOTCONS;
 			++i)
 	{
 		if (_isfVisibleUfo[i] == action->getSender())

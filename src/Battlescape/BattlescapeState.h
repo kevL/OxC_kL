@@ -62,7 +62,7 @@ class BattlescapeState
 
 private:
 	static const size_t
-		INDICATORS		= 20,
+		UNIT_HOTCONS	= 20,
 		TARGET_FRAMES	= 6,
 		PULSE_FRAMES	= 22;
 
@@ -117,20 +117,20 @@ private:
 //		* _reserve;
 //		* _btnReserveNone, * _btnReserveSnap, * _btnReserveAimed, * _btnReserveAuto, * _btnReserveKneel, * _btnZeroTUs;
 	BattlescapeGame* _battleGame;
-	BattleUnit* _visibleUnit[INDICATORS];
+	BattleUnit* _hostileUnit[UNIT_HOTCONS];
 	InteractiveSurface
 		* _icons,
 		* _btnLeftHandItem,
 		* _btnRightHandItem,
 		* _btnStats,
-		* _btnVisibleUnit[INDICATORS],
+		* _btnHostileUnit[UNIT_HOTCONS],
 		* _btnWounds,
 		* _btnZeroTUs;
 //	ImageButton* _reserve;
 //	ImageButton* _btnReserveNone, * _btnReserveSnap, * _btnReserveAimed, * _btnReserveAuto, * _btnReserveKneel, * _btnZeroTUs;
 	Map* _map;
 	NumberText
-		* _numVisibleUnit[INDICATORS],
+		* _numHostileUnit[UNIT_HOTCONS],
 
 		* _numTUAim,
 		* _numTUAuto,
@@ -185,7 +185,7 @@ private:
 		* _lstTileInfo;
 	Timer
 		* _animTimer,
-		* _gameTimer;
+		* _battleTimer;
 //	TurnCounter* _turnCounter;
 	WarningMessage* _warning;
 
@@ -199,7 +199,7 @@ private:
 	void handClick(BattleItem* const item);
 
 	/// Shifts the red colors of the visible unit buttons backgrounds.
-	void blinkVisibleUnitButtons();
+	void cycleHostileHotcons();
 	/// Draws the kneel indicator.
 //	void drawKneelIndicator();
 	/// Draws the fatal wounds indicator.
@@ -207,8 +207,8 @@ private:
 
 
 	public:
-//		static const int DEFAULT_ANIM_SPEED = 89; // for shaders Raw, Quillez, etc.
-		static const int DEFAULT_ANIM_SPEED = 79; // for shaders 4xHQX & above.
+//		static const Uint32 STATE_INTERVAL_STANDARD = 89; // for fast shaders - Raw, Quillez, etc.
+		static const Uint32 STATE_INTERVAL_STANDARD = 79; // for slow shaders - 4xHQX & above.
 
 		/// Creates a BattlescapeState.
 		BattlescapeState();
@@ -324,10 +324,12 @@ private:
 
 		/// Determines whether a playable unit is selected.
 		bool playableUnitSelected();
+
 		/// Updates soldier name/rank/tu/energy/health/morale.
 		void updateSoldierInfo(bool calcFoV = true);
+
 		/// Refreshes the visUnits' surfaces' visibility for UnitWalk/TurnBStates.
-		void refreshVisUnits();
+		void updateHostileHotcons();
 
 		/// Animates map objects on the map, also smoke,fire, ...
 		void animate();
@@ -417,7 +419,7 @@ private:
 		/// Animates a red cross icon when an injured soldier is selected.
 		void flashMedic();
 		/// Animates targeting cursor over hostile unit when visUnit indicator is clicked.
-		void drawVisUnitTarget();
+		void drawHostileTargeter();
 
 		/// Saves a map as used by the AI.
 		void saveAIMap();

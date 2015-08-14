@@ -227,7 +227,7 @@ void BattlescapeGame::think()
 				//Log(LOG_INFO) << "bg:think() . panic Handled is TRUE";
 				if (_executeProgress == true)
 				{
-					getMap()->showExecuteExpl(true);
+					getMap()->showExecute(true);
 
 					for (std::list<Explosion*>::const_iterator
 							i = getMap()->getExplosions()->begin();
@@ -239,13 +239,13 @@ void BattlescapeGame::think()
 							delete *i;
 							i = getMap()->getExplosions()->erase(i);
 
+							getMap()->showExecute(false);
+							_executeProgress = false;
+
 							if (getMap()->getExplosions()->empty() == true)
 							{
-								_executeProgress = false;
-								getMap()->showExecuteExpl(false);
-								setStateInterval(static_cast<Uint32>(BattlescapeState::DEFAULT_ANIM_SPEED));
-
-								return;
+								setStateInterval(BattlescapeState::STATE_INTERVAL_STANDARD);
+//								return;
 							}
 						}
 						else
@@ -737,7 +737,7 @@ void BattlescapeGame::handleAI(BattleUnit* const unit)
 
 	unit->setUnitVisible(false);
 
-	// might need this: populate _visibleUnit for a newly-created alien
+	// might need this: populate _hostileUnit for a newly-created alien
 	//Log(LOG_INFO) << "BattlescapeGame::handleAI(), calculateFOV() call";
 	_battleSave->getTileEngine()->calculateFOV(unit->getPosition());
 		// it might also help chryssalids realize they've zombified someone and need to move on;
@@ -800,7 +800,7 @@ void BattlescapeGame::handleAI(BattleUnit* const unit)
 	//Log(LOG_INFO) << ". pre hunt for weapon";
 	if (unit->getOriginalFaction() == FACTION_HOSTILE
 		&& unit->getMainHandWeapon() == NULL)
-//		&& unit->getVisibleUnits()->size() == 0)
+//		&& unit->getHostileUnits()->size() == 0)
 	// TODO: and, if either no innate meleeWeapon, or a visible hostile is not within say 5 tiles.
 	{
 		//Log(LOG_INFO) << ". . no mainhand weapon or no ammo";
@@ -1132,50 +1132,12 @@ void BattlescapeGame::handleNonTargetAction()
 					else if (itRule->getBattleType() == BT_FIREARM)
 					{
 						start = ammo->getRules()->getHitAnimation();
-//						isMelee = 0;
 
-						// note: these warnings generally won't show because
-						// ActionMenuState::cTor does a pseudo-check for ammo -
-						// but only if the weapon itself fails its check for
-						// canExecute() - and if it doesn't fail but happens to
-						// be currently unloaded it should be considered a
-						// mistake in the YAML:items' file entries. Because only
-						// items that *do not* have 'compatibleAmmo' nodes
-						// should have their damageTypes set.
-						//
-						// If they have a 'compatibleAmmo' node then they ought
-						// fail the ActionMenu cTor's NULL-check if they are not
-						// loaded with a valid ammoItem.
-						//
-						// The long & short of it is I'm not making extra
-						// NULL-checks for 'ammo' above & below as an extra
-						// safety for an improper ruleset entry.
-						//
-						// So ... I could/should also take these warnings out.
-						// And I'd also like to go through the code and rulesets
-						// with that brilliant idea: "melee does not use Ammo"
-						// period. That is, ditch all super-ultra-duper Plasma
-						// Whips ....
-/*						if (ammo == NULL)
-						{
-							_currentAction.result = "STR_NO_AMMUNITION_LOADED";
-							showWarning = true;
-						}
-						else if (ammo->getAmmoQuantity() == 0)
-						{
-							_currentAction.result = "STR_NO_ROUNDS_LEFT";
-							showWarning = true;
-						}
-						else
-						{ */
 						sound = ammo->getRules()->getHitSound();
 						if (sound == -1)
 							sound = itRule->getHitSound();
-//						}
 					}
 
-//					if (showWarning == false)
-//					{
 					if (sound != -1)
 						getResourcePack()->getSound(
 												"BATTLE.CAT",
@@ -1185,15 +1147,12 @@ void BattlescapeGame::handleNonTargetAction()
 												getMap()->getSoundAngle(_currentAction.actor->getPosition()));
 
 					if (ammo->spendBullet() == false)
-//						&& _battleSave->getDebugMode() == false)
 					{
 						_battleSave->removeItem(ammo);
-
-//						if (_currentAction.weapon != NULL) // in case the weapon just spent itself as a bullet -- jic.
 						_currentAction.weapon->setAmmoItem(NULL);
 					}
 
-					// Looks like this needs a think()
+					// Looks like this needs a think() -> BattlescapeGame::think() isn't working too well
 					// That is, a whole new FakeExplosionBState thingie.
 					// Because I'm not going through all the substates inserting a boolean 'execute' var ....
 					Position posOrigin_voxel = _currentAction.target * Position(16,16,24) + Position(8,8,2);
@@ -1205,11 +1164,12 @@ void BattlescapeGame::handleNonTargetAction()
 															isMelee);
 					getMap()->getExplosions()->push_back(explosion);
 					_executeProgress = true;
-//					getMap()->showExecuteExpl(false);
 
-					setStateInterval(std::max(
-										1,
-										((BattlescapeState::DEFAULT_ANIM_SPEED * 5 / 7) - (ammo->getRules()->getExplosionSpeed() * 10))));
+//					Uint32 interval = BattlescapeState::STATE_INTERVAL_STANDARD * 5 / 7;
+					Uint32 interval = BattlescapeState::STATE_INTERVAL_STANDARD * 100; // test
+					interval -= static_cast<Uint32>(ammo->getRules()->getExplosionSpeed()) * 10;
+					if (interval < 1) interval = 1;
+					setStateInterval(interval);
 
 
 					_currentAction.actor->spendTimeUnits(_currentAction.TU);
@@ -1218,7 +1178,6 @@ void BattlescapeGame::handleNonTargetAction()
 					checkForCasualties(					// TODO: streamline the code-path through checkForCasualties() & UnitDieBState
 								_currentAction.weapon,	// .... probly somethin' fudgy going on in those.
 								_currentAction.actor);
-//					}
 				}
 			// switch_end.
 		}
@@ -1675,12 +1634,12 @@ void BattlescapeGame::checkForCasualties(
 		// attacker gets Exposed if a spotter is still conscious
 		// NOTE: Useful only after Melee attacks. Firearms & explosives handle
 		// things differently ... see note in TileEngine::checkReactionFire().
-		//Log(LOG_INFO) << ". check for spotters Qty = " << (int)attackUnit->getUnitSpotters()->size();
-		if (attackUnit->getUnitSpotters()->empty() == false)
+		//Log(LOG_INFO) << ". check for spotters Qty = " << (int)attackUnit->getRfSpotters()->size();
+		if (attackUnit->getRfSpotters()->empty() == false)
 		{
 			for (std::list<BattleUnit*>::const_iterator // -> not sure what happens if RF-trigger kills Cyberdisc that kills aLien .....
-					i = attackUnit->getUnitSpotters()->begin();
-					i != attackUnit->getUnitSpotters()->end();
+					i = attackUnit->getRfSpotters()->begin();
+					i != attackUnit->getRfSpotters()->end();
 					++i)
 			{
 //				if ((*i)->getHealth() != 0 && (*i)->getHealth() > (*i)->getStun())
@@ -1691,7 +1650,7 @@ void BattlescapeGame::checkForCasualties(
 				}
 			}
 
-			attackUnit->getUnitSpotters()->clear();
+			attackUnit->getRfSpotters()->clear();
 		}
 	}
 	// kL_note: what about tile explosions
@@ -2670,9 +2629,9 @@ void BattlescapeGame::primaryAction(const Position& targetPos)
 			{
 				if (_currentAction.weapon->getRules()->isLOSRequired() == false
 					|| std::find(
-							_currentAction.actor->getVisibleUnits()->begin(),
-							_currentAction.actor->getVisibleUnits()->end(),
-							targetUnit) != _currentAction.actor->getVisibleUnits()->end())
+							_currentAction.actor->getHostileUnits()->begin(),
+							_currentAction.actor->getHostileUnits()->end(),
+							targetUnit) != _currentAction.actor->getHostileUnits()->end())
 				{
 					if (getTileEngine()->distance( // in Range
 											_currentAction.actor->getPosition(),
@@ -2732,9 +2691,9 @@ void BattlescapeGame::primaryAction(const Position& targetPos)
 
 				if (_currentAction.weapon->getRules()->isLOSRequired() == false
 					|| std::find(
-							_currentAction.actor->getVisibleUnits()->begin(),
-							_currentAction.actor->getVisibleUnits()->end(),
-							targetUnit) != _currentAction.actor->getVisibleUnits()->end())
+							_currentAction.actor->getHostileUnits()->begin(),
+							_currentAction.actor->getHostileUnits()->end(),
+							targetUnit) != _currentAction.actor->getHostileUnits()->end())
 				{
 					if (getTileEngine()->distance( // in Range
 											_currentAction.actor->getPosition(),
@@ -3393,7 +3352,7 @@ bool BattlescapeGame::worthTaking(
 
 	// don't even think about making a move for that gun if you can see a target, for some reason
 	// (maybe this should check for enemies spotting the tile the item is on?)
-//kL	if (action->actor->getVisibleUnits()->empty()) // kL_note: this also appears in HandleAI() above.
+//kL	if (action->actor->getHostileUnits()->empty()) // kL_note: this also appears in HandleAI() above.
 //	{
 		// retrieve an insignificantly low value from the ruleset.
 //kL, above,		worth = item->getRules()->getAttraction();

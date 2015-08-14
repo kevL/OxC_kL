@@ -65,7 +65,7 @@ class GeoscapeState
 {
 
 private:
-	static const size_t INDICATORS = 16;
+	static const size_t UFO_HOTCONS = 16;
 
 	bool
 		_dfCenterCurrentCoords,
@@ -107,9 +107,9 @@ private:
 		* _timeSpeed;
 //	InteractiveSurface* _btnRotateLeft, * _btnRotateRight, * _btnRotateUp, * _btnRotateDown, * _btnZoomIn, * _btnZoomOut;
 	InteractiveSurface
-		* _isfVisibleUfo[INDICATORS],
+		* _isfVisibleUfo[UFO_HOTCONS],
 		* _isfTime;
-//	NumberText* _numVisibleUfo[INDICATORS];
+//	NumberText* _numVisibleUfo[UFO_HOTCONS];
 	Ruleset* _rules;
 	SavedGame* _gameSave;
 	Surface
@@ -143,12 +143,12 @@ private:
 		* _sideTop,
 		* _sideBottom;
 	Timer
-		* _gameTimer,
+		* _geoTimer,
 		* _dfZoomInTimer,
 		* _dfZoomOutTimer,
 		* _dfStartTimer,
 		* _dfTimer;
-	Ufo* _visibleUfo[INDICATORS];
+	Ufo* _visibleUfo[UFO_HOTCONS];
 
 	std::list<State*> _popups;
 	std::list<DogfightState*>

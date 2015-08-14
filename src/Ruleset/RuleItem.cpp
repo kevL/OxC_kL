@@ -1099,11 +1099,11 @@ BattleActionType RuleItem::getDefaultAction(const bool isPrimed) const
 
 /**
  * Checks if an item is exempt from research.
- * Currently this is used to exclude SHADICS ARMORS from getting marked
+ * @note Currently this is used to exclude SHADICS ARMORS from getting marked
  * as unresearched in various lists, such as Stores & Transfers ...
  * This boolean should be set in the Rulesets under these ITEMS respectively.
  * and then the checks both here and in those lists ought be simplified.
- * Note: put in Ruleset done.
+ * @note Put in Ruleset done.
  * @return, true if this item shows in lists without being researched
  */
 bool RuleItem::isResearchExempt() const

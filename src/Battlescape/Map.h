@@ -273,7 +273,7 @@ private:
 		/// Sets whether to draw the projectile on the Map.
 		void setShowProjectile(bool show = true);
 		/// Sets whether to show the execution explosion.
-		void showExecuteExpl(bool show = true);
+		void showExecute(bool show = true);
 };
 
 }

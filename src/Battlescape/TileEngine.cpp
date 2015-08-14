@@ -358,7 +358,7 @@ void TileEngine::addLight(
  */
 bool TileEngine::calculateFOV(BattleUnit* const unit)
 {
-	unit->clearVisibleUnits();
+	unit->clearHostileUnits();
 //	unit->clearVisibleTiles();
 
 //	if (unit->isOut(true, true) == true)
@@ -374,7 +374,7 @@ bool TileEngine::calculateFOV(BattleUnit* const unit)
 
 	bool ret = false;
 
-	const size_t visUnits_pre = unit->getUnitsSpottedThisTurn().size();
+	const size_t hostiles_pre = unit->getHostileUnitsThisTurn().size();
 
 	int dir;
 	if (Options::strafe == true
@@ -496,7 +496,7 @@ bool TileEngine::calculateFOV(BattleUnit* const unit)
 										&& unit->getOriginalFaction() == FACTION_PLAYER
 										&& spottedUnit->getFaction() == FACTION_HOSTILE)
 									{
-										const std::vector<BattleUnit*> spottedUnits = unit->getUnitsSpottedThisTurn();
+										const std::vector<BattleUnit*> spottedUnits = unit->getHostileUnitsThisTurn();
 										if (std::find(
 													spottedUnits.begin(),
 													spottedUnits.end(),
@@ -522,8 +522,8 @@ bool TileEngine::calculateFOV(BattleUnit* const unit)
 									|| (unit->getFaction() == FACTION_HOSTILE
 										&& spottedUnit->getFaction() != FACTION_HOSTILE))
 								{
-									// adds spottedUnit to _visibleUnits *and* to _unitsSpottedThisTurn:
-									unit->addToVisibleUnits(spottedUnit);
+									// adds spottedUnit to _hostileUnits *and* to _hostileUnitsThisTurn:
+									unit->addToHostileUnits(spottedUnit);
 //									unit->addToVisibleTiles(spottedUnit->getTile());
 
 									if (_battleSave->getSide() == FACTION_HOSTILE
@@ -724,8 +724,8 @@ bool TileEngine::calculateFOV(BattleUnit* const unit)
 	}
 
 	if (unit->getFaction() != FACTION_PLAYER
-		&& unit->getVisibleUnits()->empty() == false
-		&& unit->getUnitsSpottedThisTurn().size() > visUnits_pre)
+		&& unit->getHostileUnits()->empty() == false
+		&& unit->getHostileUnitsThisTurn().size() > hostiles_pre)
 	{
 		return true;
 	}
@@ -1891,10 +1891,10 @@ BattleUnit* TileEngine::getReactor(
 	{
 		//Log(LOG_INFO) << "getReactor() id-" << nextReactor->getId() << " spots " << defender->getId();
 		if (autoSpot == true)
-			defender->setExposed();									// defender has been spotted on Player turn.
+			defender->setExposed();								// defender has been spotted on Player turn.
 		else
-			defender->getUnitSpotters()->push_back(nextReactor);	// let BG::checkForCasualties() figure it out
-	}																// this is so that if an aLien in the spotters-vector gets put down by the trigger-shot it won't tell its buds.
+			defender->getRfSpotters()->push_back(nextReactor);	// let BG::checkForCasualties() figure it out
+	}															// this is so that if an aLien in the spotters-vector gets put down by the trigger-shot it won't tell its buds.
 
 	//Log(LOG_INFO) << ". init = " << init;
 	return nextReactor;
@@ -4867,7 +4867,7 @@ int TileEngine::unitOpensDoor(
 
 					// look from the other side (may need check reaction fire)
 					// kL_note: This seems redundant, but hey maybe it removes now-unseen units from a unit's visible-units vector ....
-					const std::vector<BattleUnit*>* const visibleUnits = unit->getVisibleUnits();
+					const std::vector<BattleUnit*>* const visibleUnits = unit->getHostileUnits();
 					for (size_t
 							i = 0;
 							i != visibleUnits->size();

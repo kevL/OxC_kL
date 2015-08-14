@@ -209,11 +209,17 @@ void BattleItem::setAmmoQuantity(int qty)
  */
 bool BattleItem::spendBullet()
 {
-	if (_ammoQty == -1)		// the ammo should have gotten deleted if/when it reaches 0;
+/*	if (_ammoQty == -1)		// the ammo should have gotten deleted if/when it reaches 0;
 		return true;		// less than 0 denotes self-powered weapons. But ...
 							// let ==0 be a fudge-factor.
 	if (--_ammoQty == 0)	// TODO: See about removing the '_ammoItem' from the game here
-		return false;		// so there is *never* a clip w/ 0 qty IG.
+		return false;		// so there is *never* a clip w/ 0 qty IG. */
+
+	if (_ammoQty != -1
+		&& --_ammoQty == 0)
+	{
+		return false;
+	}
 
 	return true;
 }

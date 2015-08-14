@@ -62,7 +62,7 @@ UnitTurnBState::UnitTurnBState(
  */
 UnitTurnBState::~UnitTurnBState()
 {
-	_parent->setStateInterval(static_cast<Uint32>(BattlescapeState::DEFAULT_ANIM_SPEED)); // kL
+	_parent->setStateInterval(BattlescapeState::STATE_INTERVAL_STANDARD); // kL
 }
 
 /**
@@ -172,7 +172,7 @@ void UnitTurnBState::think()
 		_unit->setCache(NULL);
 		_parent->getMap()->cacheUnit(_unit);
 
-		const size_t preSpots = _unit->getUnitsSpottedThisTurn().size();
+		const size_t preSpots = _unit->getHostileUnitsThisTurn().size();
 		const bool vis = _parent->getTileEngine()->calculateFOV(_unit);
 
 		if (_unit->getFaction() == FACTION_PLAYER)
@@ -189,7 +189,7 @@ void UnitTurnBState::think()
 		}
 		else if (_chargeTUs == true
 			&& _action.type == BA_NONE
-			&& _unit->getUnitsSpottedThisTurn().size() > preSpots)
+			&& _unit->getHostileUnitsThisTurn().size() > preSpots)
 		{
 			_unit->setStatus(STATUS_STANDING);
 		}
@@ -200,7 +200,7 @@ void UnitTurnBState::think()
 			_parent->popState();
 		}
 		else if (_chargeTUs == true)
-			_parent->getBattlescapeState()->refreshVisUnits();
+			_parent->getBattlescapeState()->updateHostileHotcons();
 	}
 	else
 	{
