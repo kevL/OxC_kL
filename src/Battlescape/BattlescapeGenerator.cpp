@@ -506,6 +506,8 @@ void BattlescapeGenerator::run()
  */
 void BattlescapeGenerator::nextStage()
 {
+	int aliensAlive = 0;
+
 	// kill all enemy units, or those not in endpoint area (if aborted)
 	for (std::vector<BattleUnit*>::const_iterator
 			i = _battleSave->getUnits()->begin();
@@ -518,6 +520,12 @@ void BattlescapeGenerator::nextStage()
 					&& (*i)->getOriginalFaction() == FACTION_PLAYER
 					&& (*i)->isInExitArea(END_POINT) == false))
 		{
+			if ((*i)->getOriginalFaction() == FACTION_HOSTILE
+				&& (*i)->isOut_t(OUT_STAT) == false)
+			{
+				++aliensAlive;
+			}
+
 			(*i)->setStatus(STATUS_LIMBO);
 		}
 
@@ -550,8 +558,13 @@ void BattlescapeGenerator::nextStage()
 			i != _battleSave->getItems()->end();
 			)
 	{
-		if ((*i)->getOwner() == NULL
-			|| (*i)->getOwner()->getOriginalFaction() != FACTION_PLAYER)
+		if (aliensAlive == 0
+			&& (*i)->getRules()->isRecoverable() == true
+			&& (*i)->getUnit() == NULL)
+		{
+			takeToNextStage.push_back(*i);
+		}
+		else
 		{
 			bool skipThis = false;
 			for (std::vector<BattleItem*>::const_iterator
@@ -571,42 +584,43 @@ void BattlescapeGenerator::nextStage()
 				}
 			}
 
-			if (skipThis == true)
+			if (skipThis == false)
 			{
-				++i;
-				continue;
-			}
-
-			tile = (*i)->getTile();
-			toContainer = takeHomeConditional;
-
-			if (tile != NULL)
-			{
-				tile->removeItem(*i);
-
-				if (tile->getMapData(O_FLOOR) != NULL)
+				if ((*i)->getOwner() == NULL
+					|| (*i)->getOwner()->getOriginalFaction() != FACTION_PLAYER)
 				{
-					if (tile->getMapData(O_FLOOR)->getSpecialType() == START_POINT)
-						toContainer = takeHomeGuaranteed;
-					else if (tile->getMapData(O_FLOOR)->getSpecialType() == END_POINT
-						&& (*i)->getRules()->isRecoverable() == true
-						&& (*i)->getUnit() == NULL)
-					{
-						takeToNextStage.push_back(*i);
+					tile = (*i)->getTile();
+					toContainer = takeHomeConditional;
 
-						++i;
+					if (tile != NULL)
+					{
+						tile->removeItem(*i);
+
+						if (tile->getMapData(O_FLOOR) != NULL)
+						{
+							if (tile->getMapData(O_FLOOR)->getSpecialType() == START_POINT)
+								toContainer = takeHomeGuaranteed;
+							else if (tile->getMapData(O_FLOOR)->getSpecialType() == END_POINT
+								&& (*i)->getRules()->isRecoverable() == true
+								&& (*i)->getUnit() == NULL)
+							{
+								takeToNextStage.push_back(*i);
+
+								++i;
+								continue;
+							}
+						}
+					}
+
+					if ((*i)->getRules()->isRecoverable() == true
+						&& (*i)->getXCOMProperty() == false) // note that <-
+					{
+						toContainer->push_back(*i);
+
+						i = _battleSave->getItems()->erase(i);
 						continue;
 					}
 				}
-			}
-
-			if ((*i)->getRules()->isRecoverable() == true
-				&& (*i)->getXCOMProperty() == false) // note that <-
-			{
-				toContainer->push_back(*i);
-				i = _battleSave->getItems()->erase(i);
-
-				continue;
 			}
 		}
 
