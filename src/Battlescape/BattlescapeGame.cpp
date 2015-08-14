@@ -225,35 +225,7 @@ void BattlescapeGame::think()
 			else
 			{
 				//Log(LOG_INFO) << "bg:think() . panic Handled is TRUE";
-				if (_executeProgress == true)
-				{
-					getMap()->showExecute(true);
-
-					for (std::list<Explosion*>::const_iterator
-							i = getMap()->getExplosions()->begin();
-							i != getMap()->getExplosions()->end();
-							)
-					{
-						if ((*i)->animate() == false) // done.
-						{
-							delete *i;
-							i = getMap()->getExplosions()->erase(i);
-
-							getMap()->showExecute(false);
-							_executeProgress = false;
-
-							if (getMap()->getExplosions()->empty() == true)
-							{
-								setStateInterval(BattlescapeState::STATE_INTERVAL_STANDARD);
-//								return;
-							}
-						}
-						else
-							++i;
-					}
-				}
-				else
-					_parentState->updateExperienceInfo();
+				_parentState->updateExperienceInfo();
 			}
 		}
 
@@ -1166,10 +1138,10 @@ void BattlescapeGame::handleNonTargetAction()
 					_executeProgress = true;
 
 //					Uint32 interval = BattlescapeState::STATE_INTERVAL_STANDARD * 5 / 7;
-					Uint32 interval = BattlescapeState::STATE_INTERVAL_STANDARD * 100; // test
+/*					Uint32 interval = BattlescapeState::STATE_INTERVAL_STANDARD * 100; // test
 					interval -= static_cast<Uint32>(ammo->getRules()->getExplosionSpeed()) * 10;
 					if (interval < 1) interval = 1;
-					setStateInterval(interval);
+					setStateInterval(interval); */
 
 
 					_currentAction.actor->spendTimeUnits(_currentAction.TU);
@@ -3848,12 +3820,21 @@ void BattlescapeGame::objectiveDone()
 }
 
 /**
- * Returns true if an execution's explosion animation is in progress.
- * @return, true if in progress
+ * Sets if an execution is underway and needs animation.
+ * @param execute - true to execute (default true)
  */
-bool BattlescapeGame::executeProgress() const
+void BattlescapeGame::setExecution(bool execute)
 {
-	return (_executeProgress == true);
+	_executeProgress = execute;
+}
+
+/**
+ * Gets if an execution is underway and needs animation.
+ * @return, true if execute
+ */
+bool BattlescapeGame::getExecution() const
+{
+	return _executeProgress;
 }
 
 }

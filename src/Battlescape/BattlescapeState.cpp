@@ -34,6 +34,7 @@
 #include "BriefingState.h"
 #include "Camera.h"
 #include "DebriefingState.h"
+#include "Explosion.h" // Execute.
 #include "InventoryState.h"
 #include "Map.h"
 #include "MiniMapState.h"
@@ -119,7 +120,7 @@ BattlescapeState::BattlescapeState()
 		_mouseScrollingStartTime(0),
 		_fuseFrame(0),
 		_showConsole(2),
-		_visUnitTargetFrame(0),
+		_hostileTargeterFrame(0),
 		_showSoldierData(false),
 		_iconsHidden(false),
 		_isOverweight(false),
@@ -205,7 +206,7 @@ BattlescapeState::BattlescapeState()
 //		visibleUnitX = _rules->getInterface("battlescape")->getElement("visibleUnits")->x,
 //		visibleUnitY = _rules->getInterface("battlescape")->getElement("visibleUnits")->y;
 
-	_visUnitTarget = new Surface(32, 40, screenWidth / 2 - 16, visibleMapHeight / 2);
+	_hostileTargeter = new Surface(32, 40, screenWidth / 2 - 16, visibleMapHeight / 2);
 
 	std::fill_n(
 			_hostileUnit,
@@ -383,9 +384,9 @@ BattlescapeState::BattlescapeState()
 	add(_numAmmoRight,		"numAmmoRight",			"battlescape", _icons);
 //	add(_numFuseLeft,		"numAmmoLeft",			"battlescape", _icons);
 //	add(_numFuseRight,		"numAmmoRight",			"battlescape", _icons);
-	add(_visUnitTarget);
+	add(_hostileTargeter);
 
-	_visUnitTarget->setVisible(false);
+	_hostileTargeter->setVisible(false);
 //	_iconsLayer->setVisible(false);
 
 	for (size_t
@@ -950,10 +951,10 @@ BattlescapeState::BattlescapeState()
 	_btnReserveAimed->setGroup(&_reserve);
 	_btnReserveAuto->setGroup(&_reserve); */
 
-	_animTimer = new Timer(STATE_INTERVAL_STANDARD);
+	_animTimer = new Timer(STATE_INTERVAL_STANDARD); // setStateInterval() does NOT set this <-
 	_animTimer->onTimer((StateHandler)& BattlescapeState::animate);
 
-	_battleTimer = new Timer(STATE_INTERVAL_STANDARD + 32);
+	_battleTimer = new Timer(STATE_INTERVAL_STANDARD); //+ 32); // setStateInterval() sets this <-
 	_battleTimer->onTimer((StateHandler)& BattlescapeState::handleState);
 
 	_battleGame = new BattlescapeGame(
@@ -1025,7 +1026,7 @@ void BattlescapeState::init()
 		_btnReserveAuto->setGroup(&_reserve); */
 	}
 
-	_numLayers->setValue(static_cast<unsigned int>(_map->getCamera()->getViewLevel() + 1));
+	_numLayers->setValue(static_cast<unsigned int>(_map->getCamera()->getViewLevel()) + 1);
 
 	if (_iconsHidden == false
 		&& _battleSave->getControlDestroyed() == true)
@@ -2264,8 +2265,8 @@ void BattlescapeState::btnVisibleUnitPress(Action* action)
 		{
 			_map->getCamera()->centerOnPosition(_hostileUnit[i]->getPosition());
 
-			_visUnitTarget->setVisible();
-			_visUnitTargetFrame = 0;
+			_hostileTargeter->setVisible();
+			_hostileTargeterFrame = 0;
 		}
 		else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 		{
@@ -2969,83 +2970,6 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 } */
 
 /**
- * Shifts the colors of the visible unit buttons' backgrounds.
- */
-void BattlescapeState::cycleHostileHotcons() // private.
-{
-	BattleUnit* const selUnit = _battleSave->getSelectedUnit();
-	if (selUnit != NULL)
-	{
-		static int
-			delta = 1,
-			colorRed = 34,		// currently selected unit sees other unit
-			colorBlue = 114,	// another unit can see other unit
-			color_border = 15;	// dark.gray
-
-		Uint8 color;
-		bool isSpotted;
-
-		for (size_t
-				i = 0;
-				i != UNIT_HOTCONS;
-				++i)
-		{
-			if (_btnHostileUnit[i]->getVisible() == true)
-			{
-				isSpotted = false;
-
-				for (std::vector<BattleUnit*>::const_iterator
-					j = _battleSave->getUnits()->begin();
-					j != _battleSave->getUnits()->end();
-					++j)
-				{
-					if ((*j)->getFaction() == FACTION_PLAYER
-						&& (*j)->isOut_t(OUT_STAT) == false)
-//						&& (*j)->isOut() == false)
-					{
-						if (std::find(
-									(*j)->getHostileUnits()->begin(),
-									(*j)->getHostileUnits()->end(),
-									_hostileUnit[i]) != (*j)->getHostileUnits()->end())
-						{
-							isSpotted = true;
-							break;
-						}
-					}
-				}
-
-				if (isSpotted == true)
-				{
-					if (std::find(
-								selUnit->getHostileUnits()->begin(),
-								selUnit->getHostileUnits()->end(),
-								_hostileUnit[i]) != selUnit->getHostileUnits()->end())
-					{
-						color = static_cast<Uint8>(colorRed);
-					}
-					else
-						color = static_cast<Uint8>(colorBlue);
-				}
-				else
-					color = 51; // green // 114; // lt.blue <- hostile unit is visible but not currently viewed by friendly units; ergo do not cycle colors.
-
-				_btnHostileUnit[i]->drawRect(0,0, 15,13, static_cast<Uint8>(color_border));
-				_btnHostileUnit[i]->drawRect(1,1, 13,11, color);
-			}
-		}
-
-		if (colorRed == 34)
-			delta = 1;
-		else if (colorRed == 45)
-			delta = -1;
-
-		colorRed += delta;
-		colorBlue += delta;
-		color_border -= delta;
-	}
-}
-
-/**
  * Refreshes the visUnits indicators for UnitWalk/TurnBStates.
  * @note Should not run when player's units are panicking.
  */
@@ -3094,16 +3018,220 @@ void BattlescapeState::animate()
 														// doors (&tc) do not stall walking units (&tc)
 	if (_map->getMapHidden() == false)
 	{
-		cycleHostileHotcons();
-		drawFuse();
-		flashMedic();
-		drawHostileTargeter();
-
-		if (_isOverweight == true
-			&& RNG::seedless(0,3) == 0)
+		const BattleUnit* const selUnit = _battleSave->getSelectedUnit();
+		if (selUnit != NULL)
 		{
-			_overWeight->setVisible(!_overWeight->getVisible());
+			cycleHostileHotcons();
+			drawFuse();
+
+			if (selUnit->getFatalWounds() > 0)
+				flashMedic();
+
+			if (_hostileTargeter->getVisible() == true)
+				drawHostileTargeter();
+
+			if (_battleGame->getExecution() == true)
+				doExecution();
+
+			if (_isOverweight == true
+				&& RNG::seedless(0,3) == 0)
+			{
+				_overWeight->setVisible(!_overWeight->getVisible());
+			}
 		}
+	}
+}
+
+/**
+ * Animates primer warnings on hand-held live grenades.
+ */
+void BattlescapeState::drawFuse() // private.
+{
+	static Surface* const srf = _game->getResourcePack()->getSurfaceSet("SCANG.DAT")->getFrame(9); // plus sign
+	static const int pulse[PULSE_FRAMES] = { 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,
+											13,12,11,10, 9, 8, 7, 6, 5, 4, 3};
+
+	if (_fuseFrame == PULSE_FRAMES)
+		_fuseFrame = 0;
+
+	const BattleUnit* const selUnit = _battleSave->getSelectedUnit();
+	const BattleItem* item = selUnit->getItem("STR_LEFT_HAND");
+	if (item != NULL
+		&& item->getRules()->isGrenade() == true
+		&& item->getFuseTimer() != -1)
+	{
+		_btnLeftHandItem->lock();
+		srf->blitNShade(
+					_btnLeftHandItem,
+					_btnLeftHandItem->getX() + 27,
+					_btnLeftHandItem->getY() - 1,
+					pulse[_fuseFrame],
+					false,
+					3); // red
+		_btnLeftHandItem->unlock();
+	}
+
+	item = selUnit->getItem("STR_RIGHT_HAND");
+	if (item != NULL
+		&& item->getRules()->isGrenade() == true
+		&& item->getFuseTimer() != -1)
+	{
+		_btnRightHandItem->lock();
+		srf->blitNShade(
+					_btnRightHandItem,
+					_btnRightHandItem->getX() + 27,
+					_btnRightHandItem->getY() - 1,
+					pulse[_fuseFrame],
+					false,
+					3); // red
+		_btnRightHandItem->unlock();
+	}
+
+	++_fuseFrame;
+}
+
+/**
+ * Shifts the colors of the hostileUnit buttons' backgrounds.
+ */
+void BattlescapeState::cycleHostileHotcons() // private.
+{
+	BattleUnit* const selUnit = _battleSave->getSelectedUnit();
+
+	static int
+		delta = 1,
+		colorRed = 34,		// currently selected unit sees other unit
+		colorBlue = 114,	// another unit can see other unit
+		color_border = 15;	// dark.gray
+
+	Uint8 color;
+	bool isSpotted;
+
+	for (size_t
+			i = 0;
+			i != UNIT_HOTCONS;
+			++i)
+	{
+		if (_btnHostileUnit[i]->getVisible() == true)
+		{
+			isSpotted = false;
+
+			for (std::vector<BattleUnit*>::const_iterator
+				j = _battleSave->getUnits()->begin();
+				j != _battleSave->getUnits()->end();
+				++j)
+			{
+				if ((*j)->getFaction() == FACTION_PLAYER
+					&& (*j)->isOut_t(OUT_STAT) == false)
+//						&& (*j)->isOut() == false)
+				{
+					if (std::find(
+								(*j)->getHostileUnits()->begin(),
+								(*j)->getHostileUnits()->end(),
+								_hostileUnit[i]) != (*j)->getHostileUnits()->end())
+					{
+						isSpotted = true;
+						break;
+					}
+				}
+			}
+
+			if (isSpotted == true)
+			{
+				if (std::find(
+							selUnit->getHostileUnits()->begin(),
+							selUnit->getHostileUnits()->end(),
+							_hostileUnit[i]) != selUnit->getHostileUnits()->end())
+				{
+					color = static_cast<Uint8>(colorRed);
+				}
+				else
+					color = static_cast<Uint8>(colorBlue);
+			}
+			else
+				color = 51; // green // 114; // lt.blue <- hostile unit is visible but not currently viewed by friendly units; ergo do not cycle colors.
+
+			_btnHostileUnit[i]->drawRect(0,0, 15,13, static_cast<Uint8>(color_border));
+			_btnHostileUnit[i]->drawRect(1,1, 13,11, color);
+		}
+	}
+
+	if (colorRed == 34)
+		delta = 1;
+	else if (colorRed == 45)
+		delta = -1;
+
+	colorRed += delta;
+	colorBlue += delta;
+	color_border -= delta;
+}
+
+/**
+ * Animates a red cross icon when an injured soldier is selected.
+ */
+void BattlescapeState::flashMedic() // private.
+{
+	static int phase; // init's only once, to 0
+
+	Surface* const srfCross = _game->getResourcePack()->getSurfaceSet("SCANG.DAT")->getFrame(11); // gray cross
+
+	_btnWounds->lock();
+	srfCross->blitNShade(
+					_btnWounds,
+					_btnWounds->getX() + 2,
+					_btnWounds->getY() + 1,
+					phase,
+					false,
+					3); // red
+	_btnWounds->unlock();
+
+	_numWounds->setColor(Palette::blockOffset(9) + static_cast<Uint8>(phase)); // yellow shades
+
+
+	phase += 2;
+	if (phase == 16)
+		phase = 0;
+}
+
+/**
+ * Animates a target cursor over hostile unit when hostileUnit indicator is clicked.
+ */
+void BattlescapeState::drawHostileTargeter() // private.
+{
+	static const int cursorFrames[TARGET_FRAMES] = {0,1,2,3,4,0}; // note: does not show the last frame.
+
+	Surface* const targetCursor = _game->getResourcePack()->getSurfaceSet("TARGET.PCK")->getFrame(cursorFrames[_hostileTargeterFrame]);
+	targetCursor->blit(_hostileTargeter);
+
+	++_hostileTargeterFrame;
+
+	if (_hostileTargeterFrame == TARGET_FRAMES)
+		_hostileTargeter->setVisible(false);
+}
+
+/**
+ * Draws an execution explosion on the Map.
+ */
+void BattlescapeState::doExecution() // private.
+{
+	for (std::list<Explosion*>::const_iterator
+			i = _battleGame->getMap()->getExplosions()->begin();
+			i != _battleGame->getMap()->getExplosions()->end();
+			)
+	{
+		if ((*i)->animate() == false) // done.
+		{
+			delete *i;
+			i = _battleGame->getMap()->getExplosions()->erase(i);
+
+			if (_battleGame->getMap()->getExplosions()->empty() == true)
+			{
+				_battleGame->setExecution(false);
+//				setStateInterval(BattlescapeState::STATE_INTERVAL_STANDARD);
+				return;
+			}
+		}
+		else
+			++i;
 	}
 }
 
@@ -3152,7 +3280,7 @@ void BattlescapeState::handClick(BattleItem* const item) // private.
 	} */
 
 /**
- * Handles the battle game state.
+ * Handles the top battle game state.
  */
 void BattlescapeState::handleState()
 {
@@ -3502,7 +3630,7 @@ void BattlescapeState::resize(
 			i != _surfaces.end();
 			++i)
 	{
-		if (   *i != _map
+		if (*i != _map
 			&& *i != _btnPsi
 			&& *i != _btnLaunch
 			&& *i != _txtDebug)
@@ -3581,58 +3709,6 @@ void BattlescapeState::toggleIcons(bool vis)
 	_overWeight->setVisible(vis && _isOverweight);
 	// no need for handling the kneel indicator i guess; do it anyway
 	_kneel->setVisible(vis && _isKneeled);
-}
-
-/**
- * Animates primer warnings on all live grenades.
- */
-void BattlescapeState::drawFuse()
-{
-	const BattleUnit* const selectedUnit = _battleSave->getSelectedUnit();
-	if (selectedUnit != NULL)
-	{
-		static const int pulse[PULSE_FRAMES] = { 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,
-												13,12,11,10, 9, 8, 7, 6, 5, 4, 3};
-
-		if (_fuseFrame == PULSE_FRAMES)
-			_fuseFrame = 0;
-
-		static Surface* const srf = _game->getResourcePack()->getSurfaceSet("SCANG.DAT")->getFrame(9); // plus sign
-
-		const BattleItem* item = selectedUnit->getItem("STR_LEFT_HAND");
-		if (item != NULL
-			&& item->getRules()->isGrenade() == true
-			&& item->getFuseTimer() != -1)
-		{
-			_btnLeftHandItem->lock();
-			srf->blitNShade(
-						_btnLeftHandItem,
-						_btnLeftHandItem->getX() + 27,
-						_btnLeftHandItem->getY() - 1,
-						pulse[_fuseFrame],
-						false,
-						3); // red
-			_btnLeftHandItem->unlock();
-		}
-
-		item = selectedUnit->getItem("STR_RIGHT_HAND");
-		if (item != NULL
-			&& item->getRules()->isGrenade() == true
-			&& item->getFuseTimer() != -1)
-		{
-			_btnRightHandItem->lock();
-			srf->blitNShade(
-						_btnRightHandItem,
-						_btnRightHandItem->getX() + 27,
-						_btnRightHandItem->getY() - 1,
-						pulse[_fuseFrame],
-						false,
-						3); // red
-			_btnRightHandItem->unlock();
-		}
-
-		++_fuseFrame;
-	}
 }
 
 /**
@@ -3880,57 +3956,6 @@ void BattlescapeState::updateTileInfo(const Tile* const tile)
 								0,
 								color,
 								true);
-	}
-}
-
-/**
- * Animates a red cross icon when an injured soldier is selected.
- */
-void BattlescapeState::flashMedic()
-{
-	const BattleUnit* const selectedUnit = _battleSave->getSelectedUnit();
-	if (selectedUnit != NULL
-		&& selectedUnit->getFatalWounds() > 0)
-	{
-		static int phase; // init's only once, to 0
-
-		Surface* const srfCross = _game->getResourcePack()->getSurfaceSet("SCANG.DAT")->getFrame(11); // gray cross
-
-		_btnWounds->lock();
-		srfCross->blitNShade(
-						_btnWounds,
-						_btnWounds->getX() + 2,
-						_btnWounds->getY() + 1,
-						phase,
-						false,
-						3); // red
-		_btnWounds->unlock();
-
-		_numWounds->setColor(Palette::blockOffset(9) + static_cast<Uint8>(phase)); // yellow shades
-
-
-		phase += 2;
-		if (phase == 16)
-			phase = 0;
-	}
-}
-
-/**
- * Animates targeting cursor over hostile unit when visUnit indicator is clicked.
- */
-void BattlescapeState::drawHostileTargeter()
-{
-	static const int cursorFrames[TARGET_FRAMES] = {0,1,2,3,4,0}; // note: does not show the last frame.
-
-	if (_visUnitTarget->getVisible() == true)
-	{
-		Surface* const targetCursor = _game->getResourcePack()->getSurfaceSet("TARGET.PCK")->getFrame(cursorFrames[_visUnitTargetFrame]);
-		targetCursor->blit(_visUnitTarget);
-
-		++_visUnitTargetFrame;
-
-		if (_visUnitTargetFrame == TARGET_FRAMES)
-			_visUnitTarget->setVisible(false);
 	}
 }
 

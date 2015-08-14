@@ -1006,9 +1006,9 @@ static inline void func(
  * @param x				- X position of Surface blitted to
  * @param y				- Y position of Surface blitted to
  * @param colorOffset	- color offset (generally 0-15)
- * @param half			- some tiles blit only the right half (default false)
+ * @param halfRight		- some tiles blit only the right half (default false)
  * @param colorGroup	- Attention: the actual colorblock + 1 because 0 is no new base color (default 0)
- * @param halfLeft		- kL_add: blits only the left half NOTE This conflicts w/ 'half' (default false)
+ * @param halfLeft		- kL_add: blits only the left half - NOTE This conflicts w/ 'halfRight' (default false)
  *						  but i am far too lazy to refactor a gajillion blitNShade calls!
  */
 void Surface::blitNShade(
@@ -1016,13 +1016,13 @@ void Surface::blitNShade(
 		int x,
 		int y,
 		int colorOffset,
-		bool half,
+		bool halfRight,
 		int colorGroup,
 		bool halfLeft)
 {
 	ShaderMove<Uint8> src (this, x, y); // init.
 
-	if (half == true)
+	if (halfRight == true)
 	{
 		GraphSubset graph (src.getDomain()); // init.
 		graph.beg_x = graph.end_x / 2;

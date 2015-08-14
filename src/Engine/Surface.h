@@ -34,10 +34,10 @@ class Language;
 
 /**
  * Element that is blit (rendered) onto the screen.
- * Mainly an encapsulation for SDL's SDL_Surface struct, so it
- * borrows a lot of its terminology. Takes care of all the common
- * rendering tasks and color effects, while serving as the base
- * class for more specialized screen elements.
+ * @note Mainly an encapsulation for SDL's SDL_Surface struct so it borrows a
+ * lot of its terminology. Takes care of all the common rendering tasks and
+ * color effects while serving as the base class for more specialized screen
+ * elements.
  */
 class Surface
 {
@@ -202,8 +202,8 @@ protected:
 		SDL_Rect* getCrop();
 
 		/**
-		 * Changes the color of a pixel in the surface
-		 * relative to the top-left corner of the surface.
+		 * Changes the color of a pixel in the surface relative to the top-left
+		 * corner of the surface.
 		 * @param x		- X position of the pixel
 		 * @param y		- Y position of the pixel
 		 * @param color	- color for the pixel
@@ -226,10 +226,12 @@ protected:
 					= color; }
 
 		/**
-		 * Changes the color of a pixel in the surface and returns the next pixel position.
-		 * Useful when changing a lot of pixels in a row, eg. loading images.
-		 * @param x		- pointer to the X position of the pixel; changed to the next X position in the sequence
-		 * @param y		- pointer to the Y position of the pixel; changed to the next Y position in the sequence
+		 * Changes the color of a pixel in the surface and returns the next
+		 * pixel position.
+		 * @note Useful when changing a lot of pixels in a row - eg. loading
+		 * images.
+		 * @param x		- pointer to the X position of the pixel; changes to the next X position in the sequence
+		 * @param y		- pointer to the Y position of the pixel; changes to the next Y position in the sequence
 		 * @param color	- color for the pixel
 		 */
 		void setPixelIterative( // setPixelColorIterative
@@ -303,7 +305,7 @@ protected:
 				int x,
 				int y,
 				int colorOffset,
-				bool half = false,
+				bool halfRight = false,
 				int colorGroup = 0,
 				bool halfLeft = false); // <-kL_add
 

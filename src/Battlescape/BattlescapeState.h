@@ -84,7 +84,7 @@ private:
 		_yBeforeMouseScrolling;
 	size_t
 		_fuseFrame,
-		_visUnitTargetFrame;
+		_hostileTargeterFrame;
 
 	Uint32 _mouseScrollingStartTime;
 
@@ -159,7 +159,7 @@ private:
 		* _kneel,
 		* _rank,
 		* _overWeight,
-		* _visUnitTarget;
+		* _hostileTargeter;
 //		* _srfWounds;
 	Text
 		* _txtBaseLabel,
@@ -195,15 +195,25 @@ private:
 		_cursorPosition,
 		_mapOffsetBeforeDragScroll;
 
-	/// Popups a context sensitive list of actions the player can choose from.
-	void handClick(BattleItem* const item);
 
-	/// Shifts the red colors of the visible unit buttons backgrounds.
+	/// Shows primer warnings on hand-held live grenades.
+	void drawFuse();
+	/// Shifts the colors of the visible unit buttons' backgrounds.
 	void cycleHostileHotcons();
+	/// Animates a red cross icon when an injured soldier is selected.
+	void flashMedic();
+	/// Animates a target cursor over hostile unit when hostileUnit indicator is clicked.
+	void drawHostileTargeter();
+	/// Draws an execution explosion on the Map.
+	void doExecution();
 	/// Draws the kneel indicator.
 //	void drawKneelIndicator();
 	/// Draws the fatal wounds indicator.
 //	void drawWoundIndicator();
+
+	/// Popups a context sensitive list of actions the player can choose from.
+	void handClick(BattleItem* const item);
+
 
 
 	public:
@@ -327,13 +337,12 @@ private:
 
 		/// Updates soldier name/rank/tu/energy/health/morale.
 		void updateSoldierInfo(bool calcFoV = true);
-
 		/// Refreshes the visUnits' surfaces' visibility for UnitWalk/TurnBStates.
 		void updateHostileHotcons();
 
 		/// Animates map objects on the map, also smoke,fire, ...
 		void animate();
-		/// Handles the battle game state.
+		/// Handles the top battle game state.
 		void handleState();
 		/// Sets the state timer interval.
 		void setStateInterval(Uint32 interval);
@@ -397,9 +406,6 @@ private:
 		/// Toggles the icons' surfaces' visibility for Hidden Movement.
 		void toggleIcons(bool vis);
 
-		/// Shows primer warnings on all live grenades. Adapted from Inventory.
-		void drawFuse();
-
 		/// Gets the TimeUnits field from icons.
 		NumberText* getTimeUnitsField() const;
 		/// Gets the TimeUnits bar from icons.
@@ -415,11 +421,6 @@ private:
 		void updateExperienceInfo();
 		/// Updates tile info for the tile under mouseover.
 		void updateTileInfo(const Tile* const tile);
-
-		/// Animates a red cross icon when an injured soldier is selected.
-		void flashMedic();
-		/// Animates targeting cursor over hostile unit when visUnit indicator is clicked.
-		void drawHostileTargeter();
 
 		/// Saves a map as used by the AI.
 		void saveAIMap();

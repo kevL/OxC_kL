@@ -355,8 +355,10 @@ private:
 		/// Sets up a mission complete notification.
 		void objectiveDone();
 
-		/// Returns true if an execution's explosion animation is in progress.
-		bool executeProgress() const;
+		/// Sets if an execution is underway.
+		void setExecution(bool execute = true);
+		/// Gets if an execution is underway.
+		bool getExecution() const;
 };
 
 }
