@@ -1948,7 +1948,6 @@ int BattleUnit::getActionTUs(
 		const BattleActionType batType,
 		const RuleItem* rule) const
 {
-//	if (rule == NULL) return 0;
 	if (batType == BA_NONE)
 		return 0;
 
@@ -2025,8 +2024,7 @@ int BattleUnit::getActionTUs(
 		break;
 
 		default:
-			cost = 0;
-						// problem: cost=0 can lead to infinite loop in reaction fire
+			cost = 0;	// problem: cost=0 can lead to infinite loop in reaction fire
 						// Presently, cost=0 means 'cannot do' but conceivably an action
 						// could be free, or cost=0; so really cost=-1 ought be
 						// implemented, to mean 'cannot do' ......

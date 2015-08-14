@@ -58,10 +58,8 @@ ExecuteState::ExecuteState(BattleAction* const action)
 	_screen = false;
 
 	_window		= new Window(this, 270, 96, 25, 50);
-	_txtTitle	= new Text(200, 9, 60, 58);
-
+	_txtTitle	= new Text(200, 17, 60, 58);
 	_lstTarget	= new TextList(234, 33, 42, 80);
-
 	_btnCancel	= new TextButton(120, 14, 100, 125);
 
 	setPalette("PAL_BATTLESCAPE");
@@ -81,6 +79,7 @@ ExecuteState::ExecuteState(BattleAction* const action)
 	_txtTitle->setText(tr("STR_EXECUTE"));
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setHighContrast();
+	_txtTitle->setBig();
 
 	_lstTarget->setColumns(1, 234);
 	_lstTarget->setColor(Palette::blockOffset(11));

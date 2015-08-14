@@ -1079,7 +1079,7 @@ void BattlescapeGame::handleNonTargetAction()
 			case BA_EXECUTE:
 				if (_currentAction.result.empty() == false)
 					showWarning = true;
-				else
+				else if (_currentAction.targetUnit != NULL)
 				{
 					_currentAction.actor->aim();
 					_currentAction.actor->setCache(NULL);
@@ -1151,9 +1151,11 @@ void BattlescapeGame::handleNonTargetAction()
 					_currentAction.actor->spendTimeUnits(_currentAction.TU);
 
 					_currentAction.targetUnit->setHealth(0);
-					checkForCasualties(					// TODO: streamline the code-path through checkForCasualties() & UnitDieBState
-								_currentAction.weapon,	// .... probly somethin' fudgy going on in those.
-								_currentAction.actor);
+					checkForCasualties(						// TODO: streamline the code-path through checkForCasualties() & UnitDieBState
+									_currentAction.weapon,	// .... probly somethin' fudgy going on in those.
+									_currentAction.actor);
+
+					_currentAction.targetUnit = NULL;
 				}
 			// switch_end.
 		}
