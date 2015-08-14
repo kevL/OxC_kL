@@ -1081,6 +1081,10 @@ void BattlescapeGame::handleNonTargetAction()
 					showWarning = true;
 				else
 				{
+					_currentAction.actor->aim();
+					_currentAction.actor->setCache(NULL);
+					getMap()->cacheUnit(_currentAction.actor);
+
 					const RuleItem* const itRule = _currentAction.weapon->getRules();
 					BattleItem* const ammo = _currentAction.weapon->getAmmoItem();
 					int

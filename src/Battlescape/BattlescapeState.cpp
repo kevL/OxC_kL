@@ -3227,6 +3227,12 @@ void BattlescapeState::doExecution() // private.
 			{
 				_battleGame->setExecution(false);
 //				setStateInterval(BattlescapeState::STATE_INTERVAL_STANDARD);
+
+				BattleUnit* const selUnit = _battleSave->getSelectedUnit();
+				selUnit->aim(false);
+				selUnit->setCache(NULL);
+				_battleGame->getMap()->cacheUnits();
+
 				return;
 			}
 		}
