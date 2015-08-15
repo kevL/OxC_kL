@@ -1326,8 +1326,7 @@ int AlienBAIState::selectNearestTarget() // private.
 	{
 		if (validTarget(
 					*i,
-					true,
-					true) == true
+					true,true) == true
 			&& te->visible(
 						_unit,
 						(*i)->getTile()) == true)
@@ -1341,19 +1340,15 @@ int AlienBAIState::selectNearestTarget() // private.
 			{
 				bool valid = false;
 
-				if (_rifle == true
-					|| _melee == false) // -> is ambiguity like that required.
+				if (_rifle == true || _melee == false) // -> is ambiguity like that required.
 				{
 					action.actor = _unit;
-//					action.type = BA_NONE; // ie. !BA_LAUNCH
-//					action.weapon = _unit->getMainHandWeapon();
-//					action.target = (*i)->getPosition();
 
-					origin = te->getOriginVoxel(action); // needs only .actor & .type <-
+					origin = te->getOriginVoxel(action);
 					valid = te->canTargetUnit(
 											&origin,
 											(*i)->getTile(),
-											&target, // this should be in voxelspace ... not used.
+											&target,
 											_unit);
 				}
 				else if (selectPositionNearTarget(
@@ -1361,12 +1356,12 @@ int AlienBAIState::selectNearestTarget() // private.
 											_unit->getTimeUnits()) == true)
 				{
 					dir = te->getDirectionTo(
-										_attackAction->target, // is that backward; if so, why.
+										_attackAction->target,
 										(*i)->getPosition());
 					valid = te->validMeleeRange(
 											_attackAction->target,
 											dir,
-											_unit, // is that backward; if so, why.
+											_unit,
 											*i);
 				}
 
@@ -2092,7 +2087,7 @@ bool AlienBAIState::explosiveEfficacy(
 
 /**
  * Attempts to take a melee attack/charge a seen enemy.
- * @note Melee targetting: can see an enemy, can move to it, so let's charge
+ * @note Melee targeting: can see an enemy, can move to it, so let's charge
  * blindly at it.
  */
 void AlienBAIState::meleeAction() // private.
@@ -2109,8 +2104,8 @@ void AlienBAIState::meleeAction() // private.
 							_aggroTarget->getPosition());
 		if (te->validMeleeRange(
 							_unit,
-							_aggroTarget,
-							dir) == true)
+							dir,
+							_aggroTarget) == true)
 		{
 			meleeAttack();
 			return;
@@ -2163,8 +2158,8 @@ void AlienBAIState::meleeAction() // private.
 							_aggroTarget->getPosition());
 		if (te->validMeleeRange(
 							_unit,
-							_aggroTarget,
-							dir) == true)
+							dir,
+							_aggroTarget) == true)
 		{
 			meleeAttack();
 		}

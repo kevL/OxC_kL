@@ -1031,8 +1031,8 @@ void UnitWalkBState::postPathProcedures() // private.
 
 			if (_parent->getTileEngine()->validMeleeRange(
 													_unit,
-													_action.actor->getChargeTarget(),
-													dir))
+													dir,
+													_action.actor->getChargeTarget()))
 			{
 				BattleAction action;
 				action.actor = _unit;

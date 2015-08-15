@@ -1965,10 +1965,10 @@ bool TileEngine::reactionShot(
 					&& canMelee == false;
 				++i)
 		{
-			canMelee = validMeleeRange(			// hopefully this is blocked by walls & bigWalls ...
-									unit,		// see also, AI do_grenade_action .....
-									targetUnit,	// darn Sectoid tried to hurl a grenade through a northwall .. with *no LoS*
-									i);			// cf. ActionMenuState::btnActionMenuItemClick()
+			canMelee = validMeleeRange(				// hopefully this is blocked by walls & bigWalls ...
+									unit,			// see also, AI do_grenade_action .....
+									i,				// darn Sectoid tried to hurl a grenade through a northwall .. with *no LoS*
+									targetUnit);	// cf. ActionMenuState::btnActionMenuItemClick()
 		}
 
 		if (canMelee == false)
@@ -6247,17 +6247,20 @@ Tile* TileEngine::applyGravity(Tile* const tile) const
 }
 
 /**
- * Validates the melee range between two units.
- * @param actor			- pointer to an attacking unit
- * @param targetUnit	- pointer to the unit to attack
- * @param dir			- direction to check
- * @return, true if range is valid
+ * Validates the melee range between two BattleUnits.
+ * @param actor			- pointer to acting unit
+ * @param dir			- direction of action (default -1)
+ * @param targetUnit	- pointer to targetUnit (default NULL)
+ * @return, true if within one tile
  */
 bool TileEngine::validMeleeRange(
 		const BattleUnit* const actor,
-		const BattleUnit* const targetUnit,
-		const int dir) const
+		int dir,
+		const BattleUnit* const targetUnit) const
 {
+	if (dir == -1)
+		dir = actor->getDirection();
+
 	return validMeleeRange(
 						actor->getPosition(),
 						dir,
@@ -6266,140 +6269,80 @@ bool TileEngine::validMeleeRange(
 }
 
 /**
- * Validates the melee range between a tile and a unit.
- * @param origin		- reference the Position to check from
+ * Validates the melee range between a Position and a BattleUnit.
+ * @param pos			- reference the position of action
  * @param dir			- direction to check
- * @param actor			- pointer to the acting BattleUnit
- * @param targetUnit	- pointer to the BattleUnit to attack (default NULL - any unit)
- * @param posFinal		- pointer to destination (default NULL - test only)
- *						- will be set to where targetUnit *if specified* is
- * @return, true if within melee range
+ * @param actor			- pointer to acting unit
+ * @param targetUnit	- pointer to targetUnit (default NULL)
+ * @return, true if within one tile
  */
 bool TileEngine::validMeleeRange(
-		const Position& origin,
+		const Position& pos,
 		const int dir,
 		const BattleUnit* const actor,
-		const BattleUnit* const targetUnit,
-		Position* const posFinal) const
+		const BattleUnit* const targetUnit) const
 {
-	//Log(LOG_INFO) << "TileEngine::validMeleeRange()";
-	//if (targetUnit != NULL) Log(LOG_INFO) << ". targetUnit ID " << targetUnit->getId();
-	if (dir < 0 || dir > 7)
-		return false;
-
-	Position
-		posOrigin,
-		posTarget,
-		posVector;
-	Pathfinding::directionToVector(
-								dir,
-								&posVector);
 	const Tile
 		* tileOrigin,
 		* tileTarget;
-//		* tileTarget_above,
-//		* tileTarget_below;
+	Position
+		posOrigin,
+		posTarget,
+		posVector,
+		posOrigin_vox,
+		posTarget_vox; // not used.
 
-	std::vector<BattleUnit*> targetUnits;
+	Pathfinding::directionToVector(
+								dir,
+								&posVector);
 
-	const int unitSize = actor->getArmor()->getSize() - 1;
+	const int actorSize = actor->getArmor()->getSize();
 	for (int
 			x = 0;
-			x != unitSize + 1;
+			x != actorSize;
 			++x)
 	{
 		for (int
 				y = 0;
-				y != unitSize + 1;
+				y != actorSize;
 				++y)
 		{
-			//Log(LOG_INFO) << ". . . iterate Size";
-			posOrigin = origin + Position(x,y,0);
+			posOrigin = pos + Position(x,y,0);
 			posTarget = posOrigin + posVector;
 
 			tileOrigin = _battleSave->getTile(posOrigin);
 			tileTarget = _battleSave->getTile(posTarget);
 
-			if (tileOrigin != NULL
-				&& tileTarget != NULL)
+			if (tileOrigin != NULL && tileTarget != NULL)
 			{
-				//Log(LOG_INFO) << ". . . . origin & target VALID";
 				if (tileTarget->getUnit() == NULL)
+					tileTarget = getVerticalTile(
+											posOrigin,
+											posTarget);
+
+				if (tileTarget->getUnit() != NULL
+					&& (targetUnit == NULL
+						|| targetUnit == tileTarget->getUnit()))
 				{
-					//Log(LOG_INFO) << ". . . . . tileTarget->unit NOT Valid";
-					tileTarget = getElevationTile(
-												posOrigin,
-												posTarget);
-/*					tileTarget_above = _battleSave->getTile(Position(origin + Position(x,y, 1) + posVector));
-					tileTarget_below = _battleSave->getTile(Position(origin + Position(x,y,-1) + posVector));
-
-					if (tileTarget_above != NULL // standing on a rise only 1/3 up z-axis reaches adjacent tileAbove.
-						&& std::abs(tileTarget_above->getTerrainLevel() - (tileOrigin->getTerrainLevel() + 24)) < 9)
+					posOrigin_vox = Position(posOrigin * Position(16,16,24))
+								  + Position(
+											8,8,
+											actor->getHeight(true)
+												- tileOrigin->getTerrainLevel()
+												- 4);
+					if (canTargetUnit(
+								&posOrigin_vox,
+								tileTarget,
+								&posTarget_vox,
+								actor) == true) // or canTargetTile() for executions
 					{
-						tileTarget = tileTarget_above;
-					}
-					else if (tileTarget_below != NULL // can reach targetUnit standing on a rise only 1/3 up z-axis on adjacent tileBelow.
-						&& std::abs((tileTarget_below->getTerrainLevel() + 24) + tileOrigin->getTerrainLevel()) < 9)
-					{
-						tileTarget = tileTarget_below;
-					} */
-				}
-
-				//Log(LOG_INFO) << ". . . . recheck for tileTarget->unit";
-				if (tileTarget->getUnit() != NULL)
-				{
-					//Log(LOG_INFO) << ". . . . . tileTarget->unit VALID";
-					if (targetUnit == NULL
-						|| targetUnit == tileTarget->getUnit())
-					{
-						//Log(LOG_INFO) << ". . . . . . targetUnit NOT Valid or targetUnit==tileTarget->unit";
-						const Position voxelOrigin = Position(tileOrigin->getPosition() * Position(16,16,24))
-												   + Position(
-															8,8,
-															actor->getHeight(true)
-																- tileOrigin->getTerrainLevel()
-																- 4);
-						Position voxelTarget; // not used.
-						if (canTargetUnit(
-										&voxelOrigin,
-										tileTarget,
-										&voxelTarget,
-										actor) == true)
-						{
-							//Log(LOG_INFO) << ". . . . . . canTargetUnit TRUE";
-							if (targetUnit != NULL)
-							{
-								if (posFinal != NULL)
-									*posFinal = tileTarget->getPosition();
-
-								//Log(LOG_INFO) << ". . . . . . . targetUnit found, ret TRUE";
-								return true;
-							}
-							else
-							{
-								//Log(LOG_INFO) << ". . . . . . . add targetUnit to target vector";
-								targetUnits.push_back(tileTarget->getUnit());
-							}
-						}
+						return true;
 					}
 				}
 			}
 		}
 	}
 
-	if (targetUnits.size() != 0
-		&& posFinal != NULL)
-	{
-		const size_t pick = static_cast<size_t>(RNG::generate(
-														0,
-														static_cast<int>(targetUnits.size()) - 1));
-		*posFinal = targetUnits[pick]->getPosition();
-		//Log(LOG_INFO) << ". . set targetUnit Pos " << targetUnits[pick]->getPosition();
-
-		return true;
-	}
-
-	//Log(LOG_INFO) << ". ret FALSE";
 	return false;
 }
 
@@ -6409,7 +6352,7 @@ bool TileEngine::validMeleeRange(
  * @param posTarget - reference a position target
  * @return, pointer to a tile within melee range
  */
-Tile* TileEngine::getElevationTile(
+Tile* TileEngine::getVerticalTile(
 		const Position& posOrigin,
 		const Position& posTarget) const
 {

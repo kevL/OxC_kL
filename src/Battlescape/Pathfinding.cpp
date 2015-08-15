@@ -1282,7 +1282,7 @@ int Pathfinding::getTUCostPF(
  * @param dir		- source direction
  * @param unitVect	- pointer to a Position
  */
-void Pathfinding::directionToVector(
+void Pathfinding::directionToVector( // static.
 		const int dir,
 		Position* unitVect)
 {
@@ -1302,7 +1302,7 @@ void Pathfinding::directionToVector(
  * @param unitVect	- reference to a Position
  * @param dir		- reference to the resulting direction (up/down & same-tile sets dir -1)
  */
-void Pathfinding::vectorToDirection(
+void Pathfinding::vectorToDirection( // static.
 		const Position& unitVect,
 		int& dir)
 {

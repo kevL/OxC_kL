@@ -425,10 +425,8 @@ void ActionMenuState::btnActionMenuClick(Action* action)
 			case BA_HIT:
 				if (_action->TU > _action->actor->getTimeUnits())
 					_action->result = "STR_NOT_ENOUGH_TIME_UNITS";
-				else if (_game->getSavedGame()->getSavedBattle()->getTileEngine()->validMeleeRange(
-																							_action->actor->getPosition(),
-																							_action->actor->getDirection(),
-																							_action->actor) == false)
+				else if (_game->getSavedGame()->getSavedBattle()->getTileEngine()
+										->validMeleeRange(_action->actor) == false)
 				{
 					_action->result = "STR_THERE_IS_NO_ONE_THERE";
 				}

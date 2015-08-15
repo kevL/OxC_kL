@@ -261,20 +261,19 @@ private:
 		/// Applies gravity to anything that occupies this tile.
 		Tile* applyGravity(Tile* const tile) const;
 
-		/// Returns melee validity between two units.
-		bool validMeleeRange(
-				const BattleUnit* const attacker,
-				const BattleUnit* const targetUnit,
-				const int dir) const;
-		/// Returns validity of a melee attack from a given position.
-		bool validMeleeRange(
-				const Position& origin,
+		/// Validates the melee range between two BattleUnits.
+		bool TileEngine::validMeleeRange(
+				const BattleUnit* const actor,
+				const int dir = -1,
+				const BattleUnit* const targetUnit = NULL) const;
+		/// Validates the melee range between a Position and a BattleUnit.
+		bool TileEngine::validMeleeRange(
+				const Position& pos,
 				const int dir,
-				const BattleUnit* const attacker,
-				const BattleUnit* const targetUnit = NULL,
-				Position* const posTarget = NULL) const;
+				const BattleUnit* const actor,
+				const BattleUnit* const targetUnit = NULL) const;
 		/// Gets a Tile within melee range.
-		Tile* getElevationTile(
+		Tile* getVerticalTile(
 				const Position& posOrigin,
 				const Position& posTarget) const;
 
