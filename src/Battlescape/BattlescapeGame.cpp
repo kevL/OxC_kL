@@ -1153,9 +1153,6 @@ void BattlescapeGame::executeUnit() // private.
 		_currentAction.weapon->setAmmoItem(NULL);
 	}
 
-	// Looks like this needs a think() -> BattlescapeGame::think() isn't working too well
-	// That is, a whole new FakeExplosionBState thingie.
-	// Because I'm not going through all the substates inserting a boolean 'execute' var ....
 	Position posOrigin_voxel = _currentAction.target * Position(16,16,24) + Position(8,8,2);
 	Explosion* const explosion = new Explosion(
 											posOrigin_voxel,

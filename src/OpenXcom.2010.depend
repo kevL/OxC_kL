@@ -8391,7 +8391,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1439573436 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1439606119 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	"BattleItem.h"
 	"SavedGame.h"

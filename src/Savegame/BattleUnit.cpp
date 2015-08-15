@@ -3515,16 +3515,19 @@ void BattleUnit::morphine()
 		_moraleRestored = lostHealth;
 	}
 
-	if (_geoscapeSoldier != NULL
-		|| (_unitRule->isMechanical() == false
-			&& _race != "STR_ZOMBIE"))
+	_stunLevel += 8 + RNG::generate(0,6);
+
+	if (++_drugDose >= DOSE_LETHAL)
+		_health = 0;
+
+	if (isOut_t(OUT_STAT) == false
+		&& isOut_t(OUT_DEAD_STUN) == true)
 	{
-		_stunLevel += 8 + RNG::generate(0,6);
-
-		if (++_drugDose >= DOSE_LETHAL)
-			_health = 0;
-
-		_battleGame->checkForCasualties();
+		_battleGame->checkForCasualties(
+									_battleGame->getCurrentAction()->weapon,
+									_battleGame->getCurrentAction()->actor,
+									false,false,
+									isOut_t(OUT_DEAD));
 	}
 }
 
