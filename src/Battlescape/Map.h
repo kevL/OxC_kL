@@ -199,7 +199,7 @@ private:
 		/// Sets the 3D cursor type.
 		void setCursorType(
 				CursorType type,
-				int cursorSize = 1);
+				int quads = 1);
 		/// Gets the 3D cursor type.
 		CursorType getCursorType() const;
 

@@ -560,7 +560,9 @@ void BattlescapeGenerator::nextStage()
 	{
 		if (aliensAlive == 0
 			&& (*i)->getRules()->isRecoverable() == true
-			&& (*i)->getUnit() == NULL)
+			&& (*i)->getUnit() == NULL
+			&& ((*i)->getOwner() == NULL
+				|| (*i)->getOwner()->getOriginalFaction() != FACTION_PLAYER))
 		{
 			takeToNextStage.push_back(*i);
 		}

@@ -4978,17 +4978,15 @@ int Map::getTerrainLevel( // private.
 
 /**
  * Sets the 3D cursor to selection/aim mode.
- * @param type			- CursorType (Map.h)
- * @param cursorSize	- size of the cursor
+ * @param type	- CursorType (Map.h)
+ * @param quads	- size of the cursor (default 1)
  */
 void Map::setCursorType(
 		CursorType type,
-		int cursorSize)
+		int quads)
 {
-	_cursorType = type;
-
-	if (_cursorType == CT_NORMAL)
-		_cursorSize = cursorSize;
+	if ((_cursorType = type) == CT_NORMAL)
+		_cursorSize = quads;
 	else
 		_cursorSize = 1;
 }

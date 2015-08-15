@@ -1066,7 +1066,6 @@ void BattlescapeGame::handleNonTargetAction()
 				{
 //					if (_currentAction.actor->getPosition().z > 0) // effectively done in applyGravity()
 					_battleSave->getTileEngine()->applyGravity(_currentAction.actor->getTile());
-
 					getResourcePack()->getSound(
 											"BATTLE.CAT",
 											ResourcePack::ITEM_DROP)
@@ -1081,82 +1080,10 @@ void BattlescapeGame::handleNonTargetAction()
 					showWarning = true;
 				else if (_currentAction.targetUnit != NULL)
 				{
-					_currentAction.actor->aim();
-					_currentAction.actor->setCache(NULL);
-					getMap()->cacheUnit(_currentAction.actor);
-
-					const RuleItem* const itRule = _currentAction.weapon->getRules();
-					BattleItem* const ammo = _currentAction.weapon->getAmmoItem();
-					int
-						sound = -1,
-						start = 0,		// void vc++ linker warning.
-						isMelee = 0;	// void vc++ linker warning.
-
-					if (itRule->getBattleType() == BT_MELEE)
-					{
-						start = itRule->getMeleeAnimation();
-						isMelee = 1;
-
-						sound = ammo->getRules()->getMeleeHitSound();
-						if (sound == -1)
-						{
-							sound = itRule->getMeleeHitSound();
-							if (sound == -1)
-								sound = ResourcePack::ITEM_DROP;
-						}
-					}
-					else if (itRule->getBattleType() == BT_FIREARM)
-					{
-						start = ammo->getRules()->getHitAnimation();
-
-						sound = ammo->getRules()->getHitSound();
-						if (sound == -1)
-							sound = itRule->getHitSound();
-					}
-
-					if (sound != -1)
-						getResourcePack()->getSound(
-												"BATTLE.CAT",
-												sound)
-											->play(
-												-1,
-												getMap()->getSoundAngle(_currentAction.actor->getPosition()));
-
-					if (ammo->spendBullet() == false)
-					{
-						_battleSave->removeItem(ammo);
-						_currentAction.weapon->setAmmoItem(NULL);
-					}
-
-					// Looks like this needs a think() -> BattlescapeGame::think() isn't working too well
-					// That is, a whole new FakeExplosionBState thingie.
-					// Because I'm not going through all the substates inserting a boolean 'execute' var ....
-					Position posOrigin_voxel = _currentAction.target * Position(16,16,24) + Position(8,8,2);
-					Explosion* const explosion = new Explosion(
-															posOrigin_voxel,
-															start,
-															0,
-															false,
-															isMelee);
-					getMap()->getExplosions()->push_back(explosion);
-					_executeProgress = true;
-
-//					Uint32 interval = BattlescapeState::STATE_INTERVAL_STANDARD * 5 / 7;
-/*					Uint32 interval = BattlescapeState::STATE_INTERVAL_STANDARD * 100; // test
-					interval -= static_cast<Uint32>(ammo->getRules()->getExplosionSpeed()) * 10;
-					if (interval < 1) interval = 1;
-					setStateInterval(interval); */
-
-
-					_currentAction.actor->spendTimeUnits(_currentAction.TU);
-
-					_currentAction.targetUnit->setHealth(0);
-					checkForCasualties(						// TODO: streamline the code-path through checkForCasualties() & UnitDieBState
-									_currentAction.weapon,	// .... probly somethin' fudgy going on in those.
-									_currentAction.actor);
-
+					executeUnit();
 					_currentAction.targetUnit = NULL;
 				}
+
 			// switch_end.
 		}
 
@@ -1172,6 +1099,89 @@ void BattlescapeGame::handleNonTargetAction()
 	}
 
 	setupCursor();
+}
+
+/**
+ * Summary execution.
+ */
+void BattlescapeGame::executeUnit() // private.
+{
+	_currentAction.actor->aim();
+	_currentAction.actor->setCache(NULL);
+	getMap()->cacheUnit(_currentAction.actor);
+
+	const RuleItem* const itRule = _currentAction.weapon->getRules();
+	BattleItem* const ammo = _currentAction.weapon->getAmmoItem();
+	int
+		sound = -1,
+		start = 0,		// void vc++ linker warning.
+		isMelee = 0;	// void vc++ linker warning.
+
+	if (itRule->getBattleType() == BT_MELEE)
+	{
+		start = itRule->getMeleeAnimation();
+		isMelee = 1;
+
+		sound = ammo->getRules()->getMeleeHitSound();
+		if (sound == -1)
+		{
+			sound = itRule->getMeleeHitSound();
+			if (sound == -1)
+				sound = ResourcePack::ITEM_DROP;
+		}
+	}
+	else if (itRule->getBattleType() == BT_FIREARM)
+	{
+		start = ammo->getRules()->getHitAnimation();
+
+		sound = ammo->getRules()->getHitSound();
+		if (sound == -1)
+			sound = itRule->getHitSound();
+	}
+
+	if (sound != -1)
+		getResourcePack()->getSound(
+								"BATTLE.CAT",
+								sound)
+							->play(
+								-1,
+								getMap()->getSoundAngle(_currentAction.actor->getPosition()));
+
+	if (ammo->spendBullet() == false)
+	{
+		_battleSave->removeItem(ammo);
+		_currentAction.weapon->setAmmoItem(NULL);
+	}
+
+	// Looks like this needs a think() -> BattlescapeGame::think() isn't working too well
+	// That is, a whole new FakeExplosionBState thingie.
+	// Because I'm not going through all the substates inserting a boolean 'execute' var ....
+	Position posOrigin_voxel = _currentAction.target * Position(16,16,24) + Position(8,8,2);
+	Explosion* const explosion = new Explosion(
+											posOrigin_voxel,
+											start,
+											0,
+											false,
+											isMelee);
+	getMap()->getExplosions()->push_back(explosion);
+	_executeProgress = true;
+
+//	Uint32 interval = BattlescapeState::STATE_INTERVAL_STANDARD * 5 / 7;
+/*	Uint32 interval = BattlescapeState::STATE_INTERVAL_STANDARD * 100; // test
+	interval -= static_cast<Uint32>(ammo->getRules()->getExplosionSpeed()) * 10;
+	if (interval < 1) interval = 1;
+	setStateInterval(interval); */
+
+	_currentAction.targetUnit->playDeathSound(); // scream little piggie
+
+	_currentAction.actor->spendTimeUnits(_currentAction.TU);
+
+	_currentAction.targetUnit->setHealth(0);
+	checkForCasualties(
+					_currentAction.weapon,
+					_currentAction.actor,
+					false,false,
+					true);
 }
 
 /**
@@ -1201,14 +1211,16 @@ void BattlescapeGame::setupCursor()
 	else
 	{
 		_currentAction.actor = _battleSave->getSelectedUnit();
+		int quads;
 
 		if (_currentAction.actor != NULL)
-			getMap()->setCursorType(
-								CT_NORMAL,
-								_currentAction.actor->getArmor()->getSize());
+			quads = _currentAction.actor->getArmor()->getSize();
 		else
-			getMap()->setCursorType(
-								CT_NORMAL);
+			quads = 1;
+
+		getMap()->setCursorType(
+							CT_NORMAL,
+							quads);
 	}
 }
 
@@ -1578,18 +1590,21 @@ void BattlescapeGame::endTurnPhase() // private.
  * @param attackUnit	- pointer to credit the kill (default NULL)
  * @param hiddenExpl	- true for UFO Power Source explosions at the start of battlescape (default false)
  * @param terrainExpl	- true for terrain explosions (default false)
+ * @param execution		- true if called by an execution (default false)
  */
 void BattlescapeGame::checkForCasualties(
 		const BattleItem* const weapon,
 		BattleUnit* attackUnit,
 		bool hiddenExpl,
-		bool terrainExpl)
+		bool terrainExpl,
+		bool execution)
 {
 	//Log(LOG_INFO) << "BattlescapeGame::checkForCasualties()"; if (attackUnit != NULL) Log(LOG_INFO) << ". id-" << attackUnit->getId();
 
 	// If the victim was killed by the attacker's death explosion,
 	// fetch who killed the attacker and make THAT the attacker!
-	if (attackUnit != NULL)
+	if (attackUnit != NULL
+		&& execution == false)
 	{
 		if (attackUnit->getStatus() == STATUS_DEAD
 			&& attackUnit->getMurdererId() != 0
@@ -1773,7 +1788,9 @@ void BattlescapeGame::checkForCasualties(
 						&& defendUnit->getStatus() != STATUS_DISABLED)	// kL
 					|| converted == true)
 				{
-					if (dead == true)
+					if (execution == true)
+						defendUnit->setStatus(STATUS_DEAD);
+					else if (dead == true)
 						defendUnit->setStatus(STATUS_DISABLED);
 
 					// attacker's Morale Bonus & diary ->
@@ -1924,6 +1941,9 @@ void BattlescapeGame::checkForCasualties(
 						}
 					}
 //					}
+
+					if (execution == true)
+						return;
 
 					if (converted == false)
 					{

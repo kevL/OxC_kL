@@ -32,6 +32,7 @@
 #include "../Battlescape/BattleAIState.h"
 #include "../Battlescape/BattlescapeGame.h"
 #include "../Battlescape/BattlescapeState.h"
+#include "../Battlescape/Map.h"
 #include "../Battlescape/Pathfinding.h"
 
 #include "../Engine/Language.h"
@@ -4726,6 +4727,40 @@ void BattleUnit::hostileMcParameters(
 		if (_mcStrength < 0) _mcStrength = 0;
 		if (_mcSkill < 0) _mcSkill = 0;
 	}
+}
+
+/**
+ * Plays this BattleUnit's death scream.
+ */
+void BattleUnit::playDeathSound()
+{
+	int sound = -1;
+
+	if (_type == "SOLDIER")
+	{
+		if (_gender == GENDER_MALE)
+			sound = RNG::generate(111,116);
+		else
+			sound = RNG::generate(101,103);
+	}
+	else if (_unitRule->getRace() == "STR_CIVILIAN")
+	{
+		if (_gender == GENDER_MALE)
+			sound = ResourcePack::MALE_SCREAM[RNG::generate(0,2)];
+		else
+			sound = ResourcePack::FEMALE_SCREAM[RNG::generate(0,2)];
+	}
+	else
+		sound = _deathSound;
+
+
+	if (sound != -1)
+		_battleGame->getResourcePack()->getSound(
+										"BATTLE.CAT",
+										sound)
+									->play(
+										-1,
+										_battleGame->getMap()->getSoundAngle(_pos));
 }
 
 }

@@ -1158,6 +1158,9 @@ private:
 		void hostileMcParameters(
 				int& strength,
 				int& skill);
+
+		/// Plays the death sound.
+		void playDeathSound();
 };
 
 }

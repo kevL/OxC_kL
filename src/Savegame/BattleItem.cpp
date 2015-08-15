@@ -176,7 +176,7 @@ void BattleItem::setFuseTimer(int turn)
 }
 
 /**
- * Gets the quantity of ammo in this ammo-item.
+ * Gets the '_ammoQty' of this BattleItem.
  * @return, ammo quantity
  *			0	- item is not ammo
  *			255	- item is its own ammo
@@ -195,7 +195,7 @@ int BattleItem::getAmmoQuantity() const
 }
 
 /**
- * Changes the quantity of ammo in this item.
+ * Sets the '_ammoQty' of this BattleItem.
  * @param qty - ammo quantity
  */
 void BattleItem::setAmmoQuantity(int qty)
@@ -204,7 +204,7 @@ void BattleItem::setAmmoQuantity(int qty)
 }
 
 /**
- * Spends a bullet from the ammo in this item.
+ * Spends a bullet from this BattleItem.
  * @return, true if there are bullets left
  */
 bool BattleItem::spendBullet()

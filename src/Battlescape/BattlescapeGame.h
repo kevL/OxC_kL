@@ -183,6 +183,8 @@ private:
 
 	/// Determines whether there are any actions pending for the given unit.
 	bool noActionsPending(const BattleUnit* const unit) const;
+	/// Summary execution.
+	void executeUnit();
 	/// Ends the turn.
 	void endTurnPhase();
 	/// Picks the first soldier that is panicking.
@@ -242,7 +244,8 @@ private:
 				const BattleItem* const weapon = NULL,
 				BattleUnit* attacker = NULL,
 				bool hiddenExpl = false,
-				bool terrainExpl = false);
+				bool terrainExpl = false,
+				bool execution = false);
 		/// Checks reserved tu.
 		bool checkReservedTU(
 				BattleUnit* bu,

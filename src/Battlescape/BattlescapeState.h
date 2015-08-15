@@ -205,7 +205,7 @@ private:
 	/// Animates a target cursor over hostile unit when hostileUnit indicator is clicked.
 	void drawHostileTargeter();
 	/// Draws an execution explosion on the Map.
-	void doExecution();
+	void doExecutionExpl();
 	/// Draws the kneel indicator.
 //	void drawKneelIndicator();
 	/// Draws the fatal wounds indicator.

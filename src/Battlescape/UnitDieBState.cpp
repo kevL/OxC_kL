@@ -28,14 +28,12 @@
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
 //#include "../Engine/Options.h"
-//#include "../Engine/RNG.h"
 #include "../Engine/Sound.h"
 
 #include "../Resource/ResourcePack.h"
 
 #include "../Ruleset/RuleArmor.h"
 #include "../Ruleset/Ruleset.h"
-#include "../Ruleset/RuleUnit.h"
 
 #include "../Savegame/BattleItem.h"
 #include "../Savegame/BattleUnit.h"
@@ -71,7 +69,7 @@ UnitDieBState::UnitDieBState(
 	_unit->clearHostileUnits();
 
 	if (_noSound == false)			// pre-battle hidden explosion death; needed here to stop Camera CTD.
-		_unit->setUnitVisible();	// TEST. has side-effect of keeping stunned victims non-revealed if not already visible.
+		_unit->setUnitVisible();	// Has side-effect of keeping stunned victims non-revealed if not already visible.
 
 	if (_unit->getUnitVisible() == true)
 	{
@@ -148,7 +146,7 @@ void UnitDieBState::think()
 		_doneScream = true;
 
 		if (_unit->getOverDose() == false)
-			playDeathSound();
+			_unit->playDeathSound();
 
 		if (_unit->getUnitVisible() == true)
 		{
@@ -461,41 +459,6 @@ void UnitDieBState::convertToCorpse() // private.
 											pos,
 											true);
 	}
-}
-
-/**
- * Plays the death sound.
- * kL rewrite to include NwN2 hits & screams.
- */
-void UnitDieBState::playDeathSound() // private.
-{
-	int sound = -1;
-
-	if (_unit->getType() == "SOLDIER")
-	{
-		if (_unit->getGender() == GENDER_MALE)
-			sound = RNG::generate(111,116);
-		else
-			sound = RNG::generate(101,103);
-	}
-	else if (_unit->getUnitRules()->getRace() == "STR_CIVILIAN")
-	{
-		if (_unit->getGender() == GENDER_MALE)
-			sound = ResourcePack::MALE_SCREAM[RNG::generate(0,2)];
-		else
-			sound = ResourcePack::FEMALE_SCREAM[RNG::generate(0,2)];
-	}
-	else
-		sound = _unit->getDeathSound();
-
-
-	if (sound != -1)
-		_parent->getResourcePack()->getSound(
-										"BATTLE.CAT",
-										sound)
-									->play(
-										-1,
-										_parent->getMap()->getSoundAngle(_unit->getPosition()));
 }
 
 }

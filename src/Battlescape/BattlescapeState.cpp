@@ -3031,7 +3031,7 @@ void BattlescapeState::animate()
 				drawHostileTargeter();
 
 			if (_battleGame->getExecution() == true)
-				doExecution();
+				doExecutionExpl();
 
 			if (_isOverweight == true
 				&& RNG::seedless(0,3) == 0)
@@ -3211,7 +3211,7 @@ void BattlescapeState::drawHostileTargeter() // private.
 /**
  * Draws an execution explosion on the Map.
  */
-void BattlescapeState::doExecution() // private.
+void BattlescapeState::doExecutionExpl() // private.
 {
 	for (std::list<Explosion*>::const_iterator
 			i = _battleGame->getMap()->getExplosions()->begin();
