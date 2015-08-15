@@ -213,10 +213,11 @@ void AlienBAIState::think(BattleAction* action)
 								_unit->getTimeUnits());
 //	_wasHitBy.clear();
 
-	if (_unit->getCharging() != NULL
-		&& _unit->getCharging()->isOut(true, true) == true)
+	if (_unit->getChargeTarget() != NULL
+		&& _unit->getChargeTarget()->isOut_t(OUT_STAT) == true)
+//		&& _unit->getChargeTarget()->isOut(true, true) == true)
 	{
-		_unit->setCharging(NULL);
+		_unit->setChargeTarget(NULL);
 	}
 
 	// debug:
@@ -428,7 +429,7 @@ void AlienBAIState::think(BattleAction* action)
 	{
 		case AI_ESCAPE:
 			//Log(LOG_INFO) << ". . . . AI_ESCAPE";
-			_unit->setCharging(NULL);
+			_unit->setChargeTarget(NULL);
 
 			action->type = _escapeAction->type;
 			action->target = _escapeAction->target;
@@ -443,7 +444,7 @@ void AlienBAIState::think(BattleAction* action)
 
 		case AI_PATROL:
 			//Log(LOG_INFO) << ". . . . AI_PATROL";
-			_unit->setCharging(NULL);
+			_unit->setChargeTarget(NULL);
 
 			if (action->weapon != NULL
 				&& action->weapon->getRules()->getBattleType() == BT_FIREARM)
@@ -505,7 +506,7 @@ void AlienBAIState::think(BattleAction* action)
 
 		case AI_AMBUSH:
 			//Log(LOG_INFO) << ". . . . AI_AMBUSH";
-			_unit->setCharging(NULL);
+			_unit->setChargeTarget(NULL);
 
 			action->type = _ambushAction->type;
 			action->target = _ambushAction->target;
@@ -1238,8 +1239,7 @@ int AlienBAIState::countKnownTargets() const // private.
 	{
 		if (validTarget(
 					*i,
-					true,
-					true) == true)
+					true,true) == true)
 		{
 			++ret;
 		}
@@ -1259,6 +1259,7 @@ int AlienBAIState::countSpottingUnits(const Position& pos) const // private.
 
 	// if target doesn't actually occupy the position being checked do a virtual LOF check
 	const bool checking = (pos != _unit->getPosition());
+	const TileEngine* const te = _battleSave->getTileEngine();
 
 	for (std::vector<BattleUnit*>::const_iterator
 			i = _battleSave->getUnits()->begin();
@@ -1266,13 +1267,13 @@ int AlienBAIState::countSpottingUnits(const Position& pos) const // private.
 			++i)
 	{
 		if (validTarget(*i) == true
-			&& _battleSave->getTileEngine()->distance(
-													pos,
-													(*i)->getPosition()) < 25) // note: does not account for xCom's reduced nightvision
+			&& te->distance(
+						pos,
+						(*i)->getPosition()) < 25) // note: does not account for xCom's reduced nightvision
 		{
 			Position
 				targetVoxel,
-				originVoxel = _battleSave->getTileEngine()->getSightOriginVoxel(*i);
+				originVoxel = te->getSightOriginVoxel(*i);
 			originVoxel.z -= 2;
 
 			const BattleUnit* potentialUnit;
@@ -1281,12 +1282,12 @@ int AlienBAIState::countSpottingUnits(const Position& pos) const // private.
 			else
 				potentialUnit = NULL;
 
-			if (_battleSave->getTileEngine()->canTargetUnit(
-														&originVoxel,
-														_battleSave->getTile(pos),
-														&targetVoxel,
-														*i,
-														potentialUnit) == true)
+			if (te->canTargetUnit(
+								&originVoxel,
+								_battleSave->getTile(pos),
+								&targetVoxel,
+								*i,
+								potentialUnit) == true)
 			{
 				++ret;
 			}
@@ -1313,8 +1314,9 @@ int AlienBAIState::selectNearestTarget() // private.
 	Position target;
 	int
 		ret = 0,
-		dist,
+		distTest,
 		dir;
+	const TileEngine* const te = _battleSave->getTileEngine();
 
 	for (std::vector<BattleUnit*>::const_iterator
 			i = _battleSave->getUnits()->begin();
@@ -1325,16 +1327,16 @@ int AlienBAIState::selectNearestTarget() // private.
 					*i,
 					true,
 					true) == true
-			&& _battleSave->getTileEngine()->visible(
-												_unit,
-												(*i)->getTile()) == true)
+			&& te->visible(
+						_unit,
+						(*i)->getTile()) == true)
 		{
 			++ret;
 
-			dist = _battleSave->getTileEngine()->distance(
-													_unit->getPosition(),
-													(*i)->getPosition());
-			if (dist < _closestDist)
+			distTest = te->distance(
+								_unit->getPosition(),
+								(*i)->getPosition());
+			if (distTest < _closestDist)
 			{
 				bool valid = false;
 
@@ -1346,31 +1348,30 @@ int AlienBAIState::selectNearestTarget() // private.
 					action.weapon = _unit->getMainHandWeapon();
 					action.target = (*i)->getPosition();
 
-					Position origin = _battleSave->getTileEngine()->getOriginVoxel(action);
-					valid = _battleSave->getTileEngine()->canTargetUnit(
-																	&origin,
-																	(*i)->getTile(),
-																	&target,
-																	_unit);
+					Position origin = te->getOriginVoxel(action);
+					valid = te->canTargetUnit(
+											&origin,
+											(*i)->getTile(),
+											&target,
+											_unit);
 				}
 				else if (selectPointNearTarget(
 											*i,
 											_unit->getTimeUnits()) == true)
 				{
-					dir = _battleSave->getTileEngine()->getDirectionTo(
-																	_attackAction->target,
-																	(*i)->getPosition());
-					valid = _battleSave->getTileEngine()->validMeleeRange(
-																	_attackAction->target,
-																	dir,
-																	_unit,
-																	*i,
-																	NULL);
+					dir = te->getDirectionTo(
+										_attackAction->target,
+										(*i)->getPosition());
+					valid = te->validMeleeRange(
+											_attackAction->target,
+											dir,
+											_unit,
+											*i);
 				}
 
 				if (valid == true)
 				{
-					_closestDist = dist;
+					_closestDist = distTest;
 					_aggroTarget = *i;
 				}
 			}
@@ -1391,8 +1392,9 @@ bool AlienBAIState::selectClosestKnownEnemy() // private.
 {
 	_aggroTarget = NULL;
 	int
-		minDist = 255,
-		dist;
+		distClosest = 255,
+		distTest;
+	const TileEngine* const te = _battleSave->getTileEngine();
 
 	for (std::vector<BattleUnit*>::const_iterator
 			i = _battleSave->getUnits()->begin();
@@ -1403,12 +1405,12 @@ bool AlienBAIState::selectClosestKnownEnemy() // private.
 					*i,
 					true) == true)
 		{
-			dist = _battleSave->getTileEngine()->distance(
-													(*i)->getPosition(),
-													_unit->getPosition());
-			if (dist < minDist)
+			distTest = te->distance(
+								(*i)->getPosition(),
+								_unit->getPosition());
+			if (distTest < distClosest)
 			{
-				minDist = dist;
+				distClosest = distTest;
 				_aggroTarget = *i;
 			}
 		}
@@ -1425,8 +1427,9 @@ bool AlienBAIState::selectRandomTarget() // private.
 {
 	_aggroTarget = NULL;
 	int
-		farthest = -100,
-		dist;
+		distFarthest = -1000,
+		distTest;
+	const TileEngine* const te = _battleSave->getTileEngine();
 
 	for (std::vector<BattleUnit*>::const_iterator
 			i = _battleSave->getUnits()->begin();
@@ -1435,15 +1438,15 @@ bool AlienBAIState::selectRandomTarget() // private.
 	{
 		if (validTarget(
 					*i,
-					true,
-					true) == true)
+					true,true) == true)
 		{
-			dist = RNG::generate(0,20) - _battleSave->getTileEngine()->distance(
-																			_unit->getPosition(),
-																			(*i)->getPosition());
-			if (dist > farthest)
+			distTest = RNG::generate(0,20);
+			distTest -= te->distance(
+								_unit->getPosition(),
+								(*i)->getPosition());
+			if (distTest > distFarthest)
 			{
-				farthest = dist;
+				distFarthest = distTest;
 				_aggroTarget = *i;
 			}
 		}
@@ -1507,8 +1510,7 @@ bool AlienBAIState::selectPointNearTarget( // private.
 																			checkPath,
 																			dir,
 																			_unit,
-																			target,
-																			NULL),
+																			target),
 						fitHere = _battleSave->setUnitPosition(
 															_unit,
 															checkPath,
@@ -1550,7 +1552,7 @@ bool AlienBAIState::selectPointNearTarget( // private.
  */
 void AlienBAIState::evaluateAIMode() // private.
 {
-	if (_unit->getCharging() != NULL
+	if (_unit->getChargeTarget() != NULL
 		&& _attackAction->type != BA_RETHINK)
 	{
 		_AIMode = AI_COMBAT;
@@ -1559,7 +1561,7 @@ void AlienBAIState::evaluateAIMode() // private.
 
 	// if the aliens are cheating or the unit is charging enforce combat as a priority
 	if (_battleSave->isCheating() == true // <- hmm, do i want this - kL_note
-		|| _unit->getCharging() != NULL
+		|| _unit->getChargeTarget() != NULL
 		|| _blaster == true)	// The two (_blaster==true) checks in this function ought obviate the entire re-evaluate thing!
 								// Note, there is a valid targetPosition but targetUnit is NOT at that Pos if blaster=TRUE ....
 	{
@@ -1574,7 +1576,7 @@ void AlienBAIState::evaluateAIMode() // private.
 			escapeOdds = 13.f; // was 15
 
 		if (_unit->getTimeUnits() > _unit->getBaseStats()->tu / 2
-			|| _unit->getCharging() != NULL)
+			|| _unit->getChargeTarget() != NULL)
 		{
 			escapeOdds = 5.f;
 		}
@@ -2090,78 +2092,79 @@ bool AlienBAIState::explosiveEfficacy(
  */
 void AlienBAIState::meleeAction() // private.
 {
+	const TileEngine* const te = _battleSave->getTileEngine();
+	int dir;
+
 	if (_aggroTarget != NULL
-		&& _aggroTarget->isOut() == false) // (true, true)
+		&& _aggroTarget->isOut_t(OUT_STAT) == false)
+//		&& _aggroTarget->isOut() == false) // (true, true)
 	{
-		if (_battleSave->getTileEngine()->validMeleeRange(
-													_unit,
-													_aggroTarget,
-													_battleSave->getTileEngine()->getDirectionTo(
-																							_unit->getPosition(),
-																							_aggroTarget->getPosition())) == true)
+		dir = te->getDirectionTo(
+							_unit->getPosition(),
+							_aggroTarget->getPosition());
+		if (te->validMeleeRange(
+							_unit,
+							_aggroTarget,
+							dir) == true)
 		{
 			meleeAttack();
 			return;
 		}
 	}
 
-	const int tuBeforeMelee = _unit->getTimeUnits()
-							- _unit->getActionTUs(
+	const int tuPreMelee = _unit->getTimeUnits()
+						 - _unit->getActionTUs(
 											BA_HIT,
 											_attackAction->weapon);
 //											_unit->getMainHandWeapon());
 	int
-		dist = (tuBeforeMelee / 4) + 1,
-		closestDist;
+		dist = (tuPreMelee / 4) + 1,
+		distTest;
 
 	_aggroTarget = NULL;
 
+	// TODO: set up a vector of BattleUnits to pick from
 	for (std::vector<BattleUnit*>::const_iterator
 			i = _battleSave->getUnits()->begin();
 			i != _battleSave->getUnits()->end();
 			++i)
 	{
-		closestDist = _battleSave->getTileEngine()->distance(
-													_unit->getPosition(),
-													(*i)->getPosition());
-		if (closestDist > 20
-			|| validTarget(
-						*i,
-						true,
-						true) == false)
+		if (validTarget( // pick closest living unit that can be moved to
+					*i,
+					true,true) == true)
 		{
-			continue;
-		}
-
-		// pick closest living unit that we can move to
-		if ((closestDist < dist
-				|| closestDist == 1)
-			&& (*i)->isOut() == false)
-		{
-			if (closestDist == 1
-				|| selectPointNearTarget(
-									*i,
-									tuBeforeMelee) == true)
+			distTest = te->distance(
+								_unit->getPosition(),
+								(*i)->getPosition());
+			if (distTest == 1 // TODO: should do a validMeleeRange() for this. Or even in validTarget(isMelee) ...
+				|| (distTest < dist
+					&& selectPointNearTarget(
+										*i,
+										tuPreMelee) == true))
 			{
-				_aggroTarget = (*i);
+				_aggroTarget = *i;
 				_attackAction->type = BA_WALK;
-				_unit->setCharging(_aggroTarget);
+				_unit->setChargeTarget(_aggroTarget);
 
-				dist = closestDist;
+				dist = distTest;
 			}
 		}
 	}
 
-	if (_aggroTarget != NULL
-		&& _battleSave->getTileEngine()->validMeleeRange(
-													_unit,
-													_aggroTarget,
-													_battleSave->getTileEngine()->getDirectionTo(_unit->getPosition(),
-													_aggroTarget->getPosition())) == true)
+	if (_aggroTarget != NULL)
 	{
-		meleeAttack();
+		dir = te->getDirectionTo(
+							_unit->getPosition(),
+							_aggroTarget->getPosition());
+		if (te->validMeleeRange(
+							_unit,
+							_aggroTarget,
+							dir) == true)
+		{
+			meleeAttack();
+		}
 	}
-
+}
 /*	if (_traceAI && _aggroTarget)
 	{
 		Log(LOG_INFO) << "AlienBAIState::meleeAction:"
@@ -2169,7 +2172,6 @@ void AlienBAIState::meleeAction() // private.
 				<< " at: "  << _attackAction->target;
 		Log(LOG_INFO) << "CHARGE!";
 	} */
-}
 
 /**
  * Performs a melee attack action.
@@ -2795,7 +2797,8 @@ bool AlienBAIState::validTarget( // private.
 {
 	//Log(LOG_INFO) << "AlienBAIState::validTarget() ID " << unit->getId();
 	if (unit->getFaction() == FACTION_HOSTILE				// target must not be on aLien side
-		|| unit->isOut(true, true) == true					// ignore targets that are dead/unconscious
+		|| unit->isOut_t(OUT_STAT) == true					// ignore targets that are dead/unconscious
+//		|| unit->isOut(true, true) == true
 		|| unit->getExposed() == -1
 		|| unit->getExposed() > _intelligence				// target must be a unit that this aLien 'knows about'
 		|| (assessDanger == true
@@ -2805,11 +2808,9 @@ bool AlienBAIState::validTarget( // private.
 		return false;
 	}
 
-	if (includeCivs == true)
-		return true;
-
 	//Log(LOG_INFO) << ". . ret = " << (unit->getFaction() == FACTION_PLAYER);
-	return (unit->getFaction() == FACTION_PLAYER);
+	return unit->getFaction() == FACTION_PLAYER
+		|| includeCivs == true;
 }
 
 /**

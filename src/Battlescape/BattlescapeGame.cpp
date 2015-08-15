@@ -781,7 +781,7 @@ void BattlescapeGame::handleAI(BattleUnit* const unit)
 	}
 	//Log(LOG_INFO) << ". findItem DONE";
 
-	if (unit->getCharging() != NULL
+	if (unit->getChargeTarget() != NULL
 		&& _playedAggroSound == false)
 	{
 		_playedAggroSound = true;
@@ -795,7 +795,7 @@ void BattlescapeGame::handleAI(BattleUnit* const unit)
 									-1,
 									getMap()->getSoundAngle(unit->getPosition()));
 	}
-	//Log(LOG_INFO) << ". getCharging DONE";
+	//Log(LOG_INFO) << ". getChargeTarget DONE";
 
 
 //	std::wostringstream ss; // debug.

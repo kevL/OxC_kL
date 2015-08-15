@@ -1015,10 +1015,10 @@ void UnitWalkBState::postPathProcedures() // private.
 		if (_action.finalAction == true)
 			_unit->dontReselect();
 
-		if (_unit->getCharging() != NULL)
+		if (_unit->getChargeTarget() != NULL)
 		{
 			//Log(LOG_INFO) << ". . charging = TRUE";
-			const Position targetPos = _unit->getCharging()->getPosition();
+			const Position targetPos = _unit->getChargeTarget()->getPosition();
 			finalDir = _parent->getTileEngine()->getDirectionTo(
 															_unit->getPosition(),
 															targetPos);
@@ -1031,7 +1031,7 @@ void UnitWalkBState::postPathProcedures() // private.
 
 			if (_parent->getTileEngine()->validMeleeRange(
 													_unit,
-													_action.actor->getCharging(),
+													_action.actor->getChargeTarget(),
 													finalDir))
 			{
 				BattleAction action;
@@ -1086,7 +1086,7 @@ void UnitWalkBState::postPathProcedures() // private.
 				}
 
 
-				_unit->setCharging(NULL);
+				_unit->setChargeTarget(NULL);
 
 				if (action.weapon != NULL) // also checked in getActionTUs() & ProjectileFlyBState::init()
 				{
@@ -1211,7 +1211,7 @@ bool UnitWalkBState::visForUnits() const // private.
 		ret = ret
 		   && _unit->getHostileUnitsThisTurn().size() > _unitsSpotted
 		   && _action.desperate == false
-		   && _unit->getCharging() == NULL;
+		   && _unit->getChargeTarget() == NULL;
 	}
 
 	return ret;

@@ -356,7 +356,7 @@ void TileEngine::addLight(
  * @param unit - pointer to a BattleUnit to check field of view for
  * @return, true when previously concealed units are spotted
  */
-bool TileEngine::calculateFOV(BattleUnit* const unit)
+bool TileEngine::calculateFOV(BattleUnit* const unit) const
 {
 	unit->clearHostileUnits();
 //	unit->clearVisibleTiles();
@@ -787,7 +787,7 @@ void TileEngine::recalculateFOV(bool spotSound)
  */
 bool TileEngine::visible(
 		const BattleUnit* const unit,
-		const Tile* const tile)
+		const Tile* const tile) const
 {
 	if (tile == NULL
 		|| tile->getUnit() == NULL)
@@ -796,7 +796,8 @@ bool TileEngine::visible(
 	}
 
 	const BattleUnit* const targetUnit = tile->getUnit();
-	if (targetUnit->isOut(true, true) == true)
+//	if (targetUnit->isOut(true, true) == true)
+	if (targetUnit->isOut_t() == true)
 		return false;
 
 	if (unit->getFaction() == targetUnit->getFaction())
@@ -901,7 +902,7 @@ bool TileEngine::visible(
  * @param unit - the watcher
  * @return, approximately an eyeball voxel
  */
-Position TileEngine::getSightOriginVoxel(const BattleUnit* const unit)
+Position TileEngine::getSightOriginVoxel(const BattleUnit* const unit) const
 {
 	// determine the origin (and target) voxels for calculations
 	Position posOrigin_voxel = Position(
@@ -939,7 +940,7 @@ Position TileEngine::getSightOriginVoxel(const BattleUnit* const unit)
  */
 Position TileEngine::getOriginVoxel(
 		const BattleAction& action,
-		const Tile* tile)
+		const Tile* tile) const
 {
 //	const int dirYshift[8] = {1, 1, 8,15,15,15, 8, 1};
 //	const int dirXshift[8] = {8,14,15,15, 8, 1, 1, 1};
@@ -1046,7 +1047,7 @@ bool TileEngine::canTargetUnit(
 		const Tile* const targetTile,
 		Position* const scanVoxel,
 		const BattleUnit* const excludeUnit,
-		const BattleUnit* targetUnit)
+		const BattleUnit* targetUnit) const
 {
 	//Log(LOG_INFO) << "TileEngine::canTargetUnit()";
 	const bool hypothetical = (targetUnit != NULL);
@@ -3286,7 +3287,7 @@ void TileEngine::explode(
 int TileEngine::horizontalBlockage(
 		const Tile* const startTile,
 		const Tile* const endTile,
-		const ItemDamageType dType)
+		const ItemDamageType dType) const
 {
 	//Log(LOG_INFO) << "TileEngine::horizontalBlockage()";
 	bool visLike = dType == DT_NONE
@@ -3862,7 +3863,7 @@ int TileEngine::horizontalBlockage(
 int TileEngine::verticalBlockage(
 		const Tile* const startTile,
 		const Tile* const endTile,
-		const ItemDamageType dType)
+		const ItemDamageType dType) const
 {
 	//Log(LOG_INFO) << "TileEngine::verticalBlockage()";
 	if (startTile == NULL // safety check
@@ -4075,7 +4076,7 @@ int TileEngine::blockage(
 		const ItemDamageType dType,
 		const int dir,
 		const bool originTest,
-		const bool trueDir)
+		const bool trueDir) const
 {
 	//Log(LOG_INFO) << "TileEngine::blockage() dir " << dir;
 	const bool visLike = dType == DT_NONE
@@ -4349,7 +4350,7 @@ int TileEngine::blockage(
  * @param tile - pointer to Tile affected
  * @return, true if an objective was destroyed
  */
-bool TileEngine::detonate(Tile* const tile)
+bool TileEngine::detonate(Tile* const tile) const
 {
 	int expl = tile->getExplosive(); // <- power that hit the Tile.
 	if (expl == 0) // no explosive applied to the Tile
@@ -4609,7 +4610,7 @@ bool TileEngine::detonate(Tile* const tile)
  * May be due a direct hit, other explosion or fire.
  * @return, tile on which an explosion occurred
  */
-Tile* TileEngine::checkForTerrainExplosions()
+Tile* TileEngine::checkForTerrainExplosions() const
 {
 	for (size_t
 			i = 0;
@@ -4942,7 +4943,7 @@ int TileEngine::unitOpensDoor(
  */
 void TileEngine::openAdjacentDoors(
 		Position pos,
-		int part)
+		int part) const
 {
 	Position offset;
 	const bool westSide = (part == 1);
@@ -5054,7 +5055,7 @@ int TileEngine::calculateLine(
 		const BattleUnit* const excludeUnit,
 		const bool doVoxelCheck, // false is used only for calculateFOV()
 		const bool onlyVisible,
-		const BattleUnit* const excludeAllBut)
+		const BattleUnit* const excludeAllBut) const
 {
 	bool
 		swap_xy,
@@ -5294,7 +5295,7 @@ int TileEngine::calculateParabola(
 		std::vector<Position>* const trajectory,
 		const BattleUnit* const excludeUnit,
 		const double arc,
-		const Position& delta)
+		const Position& delta) const
 {
 	//Log(LOG_INFO) << "TileEngine::calculateParabola()";
 	const double ro = std::sqrt(static_cast<double>(
@@ -5394,7 +5395,7 @@ bool TileEngine::validateThrow(
 						const Position& originVoxel,
 						const Position& targetVoxel,
 						double* const arc,
-						int* const voxelType)
+						int* const voxelType) const
 {
 	//Log(LOG_INFO) << "\nTileEngine::validateThrow()"; //, cf Projectile::calculateThrow()";
 	const Position targetPos = targetVoxel / Position(16,16,24);
@@ -6087,7 +6088,7 @@ bool TileEngine::psiAttack(BattleAction* const action)
  * @param tile - pointer to a Tile to check
  * @return, pointer to the Tile where stuff ends up
  */
-Tile* TileEngine::applyGravity(Tile* const tile)
+Tile* TileEngine::applyGravity(Tile* const tile) const
 {
 	if (tile == NULL)
 		return NULL;
@@ -6248,41 +6249,40 @@ Tile* TileEngine::applyGravity(Tile* const tile)
 
 /**
  * Validates the melee range between two units.
- * @param attacker		- pointer to an attacking unit
+ * @param actor			- pointer to an attacking unit
  * @param targetUnit	- pointer to the unit to attack
  * @param dir			- direction to check
  * @return, true if range is valid
  */
 bool TileEngine::validMeleeRange(
-		const BattleUnit* const attacker,
+		const BattleUnit* const actor,
 		const BattleUnit* const targetUnit,
-		const int dir)
+		const int dir) const
 {
 	return validMeleeRange(
-						attacker->getPosition(),
+						actor->getPosition(),
 						dir,
-						attacker,
-						targetUnit,
-						NULL);
+						actor,
+						targetUnit);
 }
 
 /**
  * Validates the melee range between a tile and a unit.
  * @param origin		- reference the Position to check from
  * @param dir			- direction to check
- * @param attacker		- pointer to an attacking BattleUnit
- * @param targetUnit	- pointer to the BattleUnit to attack
+ * @param actor			- pointer to an attacking BattleUnit
+ * @param targetUnit	- pointer to the BattleUnit to attack (default NULL)
  *							- NULL any unit
  *							- medikit usage requires a valid BattleUnit for MediTargetState list
- * @param dest			- pointer to destination Position; will be set according to where targetUnit actually is
+ * @param dest			- pointer to destination Position; will be set according to where targetUnit actually is (default NULL)
  * @return, true if range is valid
  */
 bool TileEngine::validMeleeRange(
 		const Position& origin,
 		const int dir,
-		const BattleUnit* const attacker,
+		const BattleUnit* const actor,
 		const BattleUnit* const targetUnit,
-		Position* const dest)
+		Position* const dest) const
 {
 	//Log(LOG_INFO) << "TileEngine::validMeleeRange()";
 	//if (targetUnit != NULL) Log(LOG_INFO) << ". targetUnit ID " << targetUnit->getId();
@@ -6301,7 +6301,7 @@ bool TileEngine::validMeleeRange(
 
 	std::vector<BattleUnit*> targetUnits;
 
-	const int unitSize = attacker->getArmor()->getSize() - 1;
+	const int unitSize = actor->getArmor()->getSize() - 1;
 	for (int
 			x = 0;
 			x != unitSize + 1;
@@ -6349,7 +6349,7 @@ bool TileEngine::validMeleeRange(
 						const Position voxelOrigin = Position(tileOrigin->getPosition() * Position(16,16,24))
 												   + Position(
 															8,8,
-															attacker->getHeight(true)
+															actor->getHeight(true)
 																- tileOrigin->getTerrainLevel()
 																- 4);
 
@@ -6358,7 +6358,7 @@ bool TileEngine::validMeleeRange(
 										&voxelOrigin,
 										tileTarget,
 										&voxelTarget,
-										attacker) == true)
+										actor) == true)
 						{
 							//Log(LOG_INFO) << ". . . . . . canTargetUnit TRUE";
 							if (targetUnit != NULL) // medikit check always returns here!
@@ -6399,15 +6399,21 @@ bool TileEngine::validMeleeRange(
 }
 
 /**
+ *
+ */
+//Tile* getAdjacentTile
+//{}
+
+/**
  * Gets the AI to look through a window.
- * @param position - reference the current Position
+ * @param pos - reference the current Position
  * @return, direction or -1 if no window found
  */
-int TileEngine::faceWindow(const Position& position)
+int TileEngine::faceWindow(const Position& pos) const
 {
 	int ret = -1;
 
-	const Tile* tile = _battleSave->getTile(position);
+	const Tile* tile = _battleSave->getTile(pos);
 	if (tile != NULL)
 	{
 		if (tile->getMapData(O_NORTHWALL) != NULL
@@ -6422,7 +6428,7 @@ int TileEngine::faceWindow(const Position& position)
 		}
 	}
 
-	tile = _battleSave->getTile(position + Position(1,0,0));
+	tile = _battleSave->getTile(pos + Position(1,0,0));
 	if (tile != NULL
 		&& tile->getMapData(O_WESTWALL) != NULL
 		&& tile->getMapData(O_WESTWALL)->stopLOS() == false)
@@ -6430,7 +6436,7 @@ int TileEngine::faceWindow(const Position& position)
 		ret = 2;
 	}
 
-	tile = _battleSave->getTile(position + Position(0,1,0));
+	tile = _battleSave->getTile(pos + Position(0,1,0));
 	if (tile != NULL
 		&& tile->getMapData(O_NORTHWALL) != NULL
 		&& tile->getMapData(O_NORTHWALL)->stopLOS() == false)
@@ -6440,13 +6446,13 @@ int TileEngine::faceWindow(const Position& position)
 
 
 	if ((ret == 0
-			&& position.y == 0)
+			&& pos.y == 0)
 		|| (ret == 2
-			&& position.x == _battleSave->getMapSizeX() - 1)
+			&& pos.x == _battleSave->getMapSizeX() - 1)
 		|| (ret == 4
-			&& position.y == _battleSave->getMapSizeY() - 1)
+			&& pos.y == _battleSave->getMapSizeY() - 1)
 		|| (ret == 6
-			&& position.x == 0))
+			&& pos.x == 0))
 	{
 		ret = -1;
 	}

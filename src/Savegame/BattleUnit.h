@@ -1022,9 +1022,9 @@ private:
 		void killedBy(UnitFaction faction);
 
 		/// Sets the BattleUnits that this unit is charging towards.
-		void setCharging(BattleUnit* chargeTarget);
+		void setChargeTarget(BattleUnit* const chargeTarget);
 		/// Gets the BattleUnits that this unit is charging towards.
-		BattleUnit* getCharging() const;
+		BattleUnit* getChargeTarget() const;
 
 		/// Gets the carried weight in strength units.
 		int getCarriedWeight(const BattleItem* const dragItem = NULL) const;

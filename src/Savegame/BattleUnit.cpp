@@ -3515,10 +3515,10 @@ void BattleUnit::morphine()
 		_moraleRestored = lostHealth;
 	}
 
-	_stunLevel += 8 + RNG::generate(0,6);
-
 	if (++_drugDose >= DOSE_LETHAL)
 		_health = 0;
+	else
+		_stunLevel += 8 + RNG::generate(0,6);
 
 	if (isOut_t(OUT_STAT) == false
 		&& isOut_t(OUT_DEAD_STUN) == true)
@@ -3974,19 +3974,19 @@ void BattleUnit::killedBy(UnitFaction faction)
 }
 
 /**
- * Sets the units we are charging towards.
- * @param chargeTarget - pointer to a target
+ * Sets a BattleUnit to charge towards.
+ * @param chargeTarget - pointer to a BattleUnit
  */
-void BattleUnit::setCharging(BattleUnit* chargeTarget)
+void BattleUnit::setChargeTarget(BattleUnit* const chargeTarget)
 {
 	_charging = chargeTarget;
 }
 
 /**
  * Gets the unit this BattleUnit is charging towards.
- * @return, pointer to the charged BattleUnit
+ * @return, pointer to a BattleUnit
  */
-BattleUnit* BattleUnit::getCharging() const
+BattleUnit* BattleUnit::getChargeTarget() const
 {
 	return _charging;
 }

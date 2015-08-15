@@ -84,7 +84,7 @@ private:
 			const ItemDamageType dType,
 			const int dir = -1,
 			const bool originTest = false,
-			const bool trueDir = false);
+			const bool trueDir = false) const;
 
 
 	public:
@@ -108,7 +108,7 @@ private:
 		void togglePersonalLighting();
 
 		/// Calculates Field of Vision from a unit's view point.
-		bool calculateFOV(BattleUnit* const unit);
+		bool calculateFOV(BattleUnit* const unit) const;
 		/// Calculates Field of Vision including for all units within range of Position.
 		void calculateFOV(
 				const Position& pos,
@@ -119,21 +119,21 @@ private:
 		/// Checks visibility of a unit on this tile.
 		bool visible(
 				const BattleUnit* const unit,
-				const Tile* const tile);
+				const Tile* const tile) const;
 
 		/// Gets the origin voxel of a unit's eyesight.
-		Position getSightOriginVoxel(const BattleUnit* const unit);
+		Position getSightOriginVoxel(const BattleUnit* const unit) const;
 		/// Gets the origin voxel of a given action.
 		Position getOriginVoxel(
 				const BattleAction& action,
-				const Tile* tile = NULL);
+				const Tile* tile = NULL) const;
 		/// Checks validity for targetting a unit.
 		bool canTargetUnit(
 				const Position* const originVoxel,
 				const Tile* const targetTile,
 				Position* const scanVoxel,
 				const BattleUnit* const excludeUnit,
-				const BattleUnit* targetUnit = NULL);
+				const BattleUnit* targetUnit = NULL) const;
 		/// Check validity for targetting a tile.
 		bool canTargetTile(
 				const Position* const originVoxel,
@@ -183,18 +183,18 @@ private:
 		int horizontalBlockage(
 				const Tile* const startTile,
 				const Tile* const endTile,
-				const ItemDamageType dType);
+				const ItemDamageType dType) const;
 		/// Checks the vertical blockage of a tile.
 		int verticalBlockage(
 				const Tile* const startTile,
 				const Tile* const endTile,
-				const ItemDamageType dType);
+				const ItemDamageType dType) const;
 		/// Sets the final direction from which a missile or thrown-object came.
 		void setProjectileDirection(const int dir);
 		/// Blows this tile up.
-		bool detonate(Tile* const tile);
+		bool detonate(Tile* const tile) const;
 		/// Checks if a destroyed tile starts an explosion.
-		Tile* checkForTerrainExplosions();
+		Tile* checkForTerrainExplosions() const;
 
 		/// Tries to open a door.
 		int unitOpensDoor(
@@ -209,7 +209,7 @@ private:
 		/// Opens any doors this door is connected to.
 		void openAdjacentDoors(
 				Position pos,
-				int part);
+				int part) const;
 		/// Closes ufo doors.
 		int closeUfoDoors();
 
@@ -222,7 +222,7 @@ private:
 				const BattleUnit* const excludeUnit,
 				const bool doVoxelCheck = true,
 				const bool onlyVisible = false,
-				const BattleUnit* const excludeAllBut = NULL);
+				const BattleUnit* const excludeAllBut = NULL) const;
 		/// Calculates a parabola trajectory.
 		int calculateParabola(
 				const Position& origin,
@@ -231,14 +231,14 @@ private:
 				std::vector<Position>* const trajectory,
 				const BattleUnit* const excludeUnit,
 				const double arc,
-				const Position& delta = Position(0,0,0));
+				const Position& delta = Position(0,0,0)) const;
 		/// Validates a throwing action.
 		bool validateThrow(
 				const BattleAction& action,
 				const Position& originVoxel,
 				const Position& targetVoxel,
 				double* const arc = NULL,
-				int* const voxelType = NULL);
+				int* const voxelType = NULL) const;
 
 		/// Checks the distance between two positions.
 		int distance(
@@ -259,23 +259,23 @@ private:
 		bool psiAttack(BattleAction* const action); // removed, post-cosmetic
 
 		/// Applies gravity to anything that occupies this tile.
-		Tile* applyGravity(Tile* const tile);
+		Tile* applyGravity(Tile* const tile) const;
 
 		/// Returns melee validity between two units.
 		bool validMeleeRange(
 				const BattleUnit* const attacker,
 				const BattleUnit* const targetUnit,
-				const int dir);
+				const int dir) const;
 		/// Returns validity of a melee attack from a given position.
 		bool validMeleeRange(
 				const Position& origin,
 				const int dir,
 				const BattleUnit* const attacker,
-				const BattleUnit* const targetUnit,
-				Position* const dest);
+				const BattleUnit* const targetUnit = NULL,
+				Position* const dest = NULL) const;
 
 		/// Gets the AI to look through a window.
-		int faceWindow(const Position& position);
+		int faceWindow(const Position& pos) const;
 
 		/// Calculates the z voxel for shadows.
 		int castedShade(const Position& voxel) const;
