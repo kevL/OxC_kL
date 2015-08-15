@@ -998,7 +998,9 @@ void BattlescapeGame::handleNonTargetAction()
 	{
 		_currentAction.cameraPosition = Position(0,0,-1);
 
-		bool showWarning = false;
+		bool
+			showWarning = false,
+			useArg = false;
 
 		// NOTE: These actions are done partly in ActionMenuState::btnActionMenuClick() and
 		// this subsequently handles a greater or lesser proportion of the resultant niceties.
@@ -1008,28 +1010,37 @@ void BattlescapeGame::handleNonTargetAction()
 			case BA_PRIME:
 			case BA_DEFUSE:
 				if (_currentAction.actor->spendTimeUnits(_currentAction.TU) == false)
-					_parentState->warning("STR_NOT_ENOUGH_TIME_UNITS");
+				{
+					_currentAction.result = "STR_NOT_ENOUGH_TIME_UNITS";
+					showWarning = true;
+				}
 				else
 				{
 					_currentAction.weapon->setFuseTimer(_currentAction.value);
 
 					if (_currentAction.value == -1)
-						_parentState->warning("STR_GRENADE_IS_DEACTIVATED");
+					{
+						_currentAction.result = "STR_GRENADE_IS_DEACTIVATED";
+						showWarning = true;
+					}
 					else if (_currentAction.value == 0)
-						_parentState->warning("STR_GRENADE_IS_ACTIVATED");
+					{
+						_currentAction.result = "STR_GRENADE_IS_ACTIVATED";
+						showWarning = true;
+					}
 					else
-						_parentState->warning(
-											"STR_GRENADE_IS_ACTIVATED_",
-											true,
-											_currentAction.value);
+					{
+						_currentAction.result = "STR_GRENADE_IS_ACTIVATED_";
+						showWarning = true;
+						useArg = true;
+					}
 				}
 			break;
 
 			case BA_USE:
 				if (_currentAction.result.empty() == false)
 					showWarning = true;
-
-				if (_currentAction.targetUnit != NULL)
+				else if (_currentAction.targetUnit != NULL)
 				{
 					_battleSave->reviveUnit(_currentAction.targetUnit);
 					_currentAction.targetUnit = NULL;
@@ -1044,18 +1055,18 @@ void BattlescapeGame::handleNonTargetAction()
 			case BA_HIT:
 				if (_currentAction.result.empty() == false)
 					showWarning = true;
+				else if (_currentAction.actor->spendTimeUnits(_currentAction.TU) == false)
+				{
+					_currentAction.result = "STR_NOT_ENOUGH_TIME_UNITS";
+					showWarning = true;
+				}
 				else
 				{
-					if (_currentAction.actor->spendTimeUnits(_currentAction.TU) == false)
-						_parentState->warning("STR_NOT_ENOUGH_TIME_UNITS");
-					else
-					{
-//						statePushBack(new MeleeAttackBState(this, _currentAction)); // And remove 'return;' below_
-						statePushBack(new ProjectileFlyBState(
-															this,
-															_currentAction));
-						return;
-					}
+//					statePushBack(new MeleeAttackBState(this, _currentAction)); // And remove 'return;' below_
+					statePushBack(new ProjectileFlyBState(
+														this,
+														_currentAction));
+					return;
 				}
 			break;
 
@@ -1090,7 +1101,13 @@ void BattlescapeGame::handleNonTargetAction()
 
 		if (showWarning == true)
 		{
-			_parentState->warning(_currentAction.result);
+			if (useArg == true)
+				_parentState->warning(
+									_currentAction.result,
+									_currentAction.value);
+			else
+				_parentState->warning(_currentAction.result);
+
 			_currentAction.result.clear();
 		}
 

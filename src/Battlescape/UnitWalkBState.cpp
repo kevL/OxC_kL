@@ -1010,7 +1010,7 @@ void UnitWalkBState::postPathProcedures() // private.
 
 	if (_unit->getFaction() != FACTION_PLAYER)
 	{
-		int finalDir = _action.finalFacing;
+		int dir = _action.finalFacing;
 
 		if (_action.finalAction == true)
 			_unit->dontReselect();
@@ -1019,9 +1019,9 @@ void UnitWalkBState::postPathProcedures() // private.
 		{
 			//Log(LOG_INFO) << ". . charging = TRUE";
 			const Position targetPos = _unit->getChargeTarget()->getPosition();
-			finalDir = _parent->getTileEngine()->getDirectionTo(
-															_unit->getPosition(),
-															targetPos);
+			dir = _parent->getTileEngine()->getDirectionTo(
+														_unit->getPosition(),
+														targetPos);
 			// kL_notes (pre-above):
 			// put an appropriate facing direction here
 			// don't stare at a wall. Get if aggro, face closest xCom op <- might be done somewhere already.
@@ -1032,7 +1032,7 @@ void UnitWalkBState::postPathProcedures() // private.
 			if (_parent->getTileEngine()->validMeleeRange(
 													_unit,
 													_action.actor->getChargeTarget(),
-													finalDir))
+													dir))
 			{
 				BattleAction action;
 				action.actor = _unit;
@@ -1080,7 +1080,7 @@ void UnitWalkBState::postPathProcedures() // private.
 				}
 				else if (action.weapon != NULL
 					&& action.weapon->getRules()->getBattleType() != BT_MELEE
-					&& action.weapon->getRules()->getBattleType() != BT_FIREARM)
+					&& action.weapon->getRules()->getBattleType() != BT_FIREARM) // probly shouldn't be here <-
 				{
 					action.weapon = NULL;
 				}
@@ -1106,17 +1106,17 @@ void UnitWalkBState::postPathProcedures() // private.
 		}
 		else if (_unit->isHiding() == true)
 		{
-//			finalDir = _unit->getDirection() + 4; // just remove this so I don't have to look at Sectopod arses.
+//			dir = _unit->getDirection() + 4; // just remove this so I don't have to look at Sectopod arses.
 			_unit->setHiding(false);
 			_unit->dontReselect();
 		}
 
-		if (finalDir == -1)
-			finalDir = getFinalDirection();
+		if (dir == -1)
+			dir = getFinalDirection();
 
-		if (finalDir != -1)
+		if (dir != -1)
 		{
-			_unit->lookAt(finalDir % 8);
+			_unit->lookAt(dir % 8);
 
 			while (_unit->getStatus() == STATUS_TURNING)
 			{
@@ -1171,7 +1171,8 @@ int UnitWalkBState::getFinalDirection() const // private.
 			++i)
 	{
 		if ((*i)->getFaction() == FACTION_PLAYER
-			&& (*i)->isOut(true, true) == false
+			&& (*i)->isOut_t(OUT_STAT) == false
+//			&& (*i)->isOut(true, true) == false
 			&& (*i)->getExposed() != -1
 			&& (*i)->getExposed() <= _unit->getIntelligence())
 		{

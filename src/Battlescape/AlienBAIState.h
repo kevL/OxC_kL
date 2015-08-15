@@ -104,9 +104,9 @@ protected:
 	/// Selects a random known target.
 	bool selectRandomTarget();
 	/// Selects the nearest reachable point relative to a target.
-	bool selectPointNearTarget(
-			BattleUnit* target,
-			int maxTUs) const;
+	bool selectPositionNearTarget(
+			const BattleUnit* const targetUnit,
+			int tuMax) const;
 
 	/// re-evaluate the situation and make a decision from available options.
 	void evaluateAIMode();

@@ -6060,7 +6060,6 @@ bool TileEngine::psiAttack(BattleAction* const action)
 
 			_battleSave->getBattleState()->warning(
 												info,
-												true,
 												success);
 
 			if (victim->getOriginalFaction() == FACTION_PLAYER
@@ -6270,34 +6269,36 @@ bool TileEngine::validMeleeRange(
  * Validates the melee range between a tile and a unit.
  * @param origin		- reference the Position to check from
  * @param dir			- direction to check
- * @param actor			- pointer to an attacking BattleUnit
- * @param targetUnit	- pointer to the BattleUnit to attack (default NULL)
- *							- NULL any unit
- *							- medikit usage requires a valid BattleUnit for MediTargetState list
- * @param dest			- pointer to destination Position; will be set according to where targetUnit actually is (default NULL)
- * @return, true if range is valid
+ * @param actor			- pointer to the acting BattleUnit
+ * @param targetUnit	- pointer to the BattleUnit to attack (default NULL - any unit)
+ * @param posFinal		- pointer to destination (default NULL - test only)
+ *						- will be set to where targetUnit *if specified* is
+ * @return, true if within melee range
  */
 bool TileEngine::validMeleeRange(
 		const Position& origin,
 		const int dir,
 		const BattleUnit* const actor,
 		const BattleUnit* const targetUnit,
-		Position* const dest) const
+		Position* const posFinal) const
 {
 	//Log(LOG_INFO) << "TileEngine::validMeleeRange()";
 	//if (targetUnit != NULL) Log(LOG_INFO) << ". targetUnit ID " << targetUnit->getId();
 	if (dir < 0 || dir > 7)
 		return false;
 
-	Position posTarget;
+	Position
+		posOrigin,
+		posTarget,
+		posVector;
 	Pathfinding::directionToVector(
 								dir,
-								&posTarget);
+								&posVector);
 	const Tile
 		* tileOrigin,
-		* tileTarget,
-		* tileTarget_above,
-		* tileTarget_below;
+		* tileTarget;
+//		* tileTarget_above,
+//		* tileTarget_below;
 
 	std::vector<BattleUnit*> targetUnits;
 
@@ -6313,8 +6314,11 @@ bool TileEngine::validMeleeRange(
 				++y)
 		{
 			//Log(LOG_INFO) << ". . . iterate Size";
-			tileOrigin = _battleSave->getTile(Position(origin + Position(x,y,0)));
-			tileTarget = _battleSave->getTile(Position(origin + Position(x,y,0) + posTarget));
+			posOrigin = origin + Position(x,y,0);
+			posTarget = posOrigin + posVector;
+
+			tileOrigin = _battleSave->getTile(posOrigin);
+			tileTarget = _battleSave->getTile(posTarget);
 
 			if (tileOrigin != NULL
 				&& tileTarget != NULL)
@@ -6323,8 +6327,11 @@ bool TileEngine::validMeleeRange(
 				if (tileTarget->getUnit() == NULL)
 				{
 					//Log(LOG_INFO) << ". . . . . tileTarget->unit NOT Valid";
-					tileTarget_above = _battleSave->getTile(Position(origin + Position(x,y, 1) + posTarget));
-					tileTarget_below = _battleSave->getTile(Position(origin + Position(x,y,-1) + posTarget));
+					tileTarget = getElevationTile(
+												posOrigin,
+												posTarget);
+/*					tileTarget_above = _battleSave->getTile(Position(origin + Position(x,y, 1) + posVector));
+					tileTarget_below = _battleSave->getTile(Position(origin + Position(x,y,-1) + posVector));
 
 					if (tileTarget_above != NULL // standing on a rise only 1/3 up z-axis reaches adjacent tileAbove.
 						&& std::abs(tileTarget_above->getTerrainLevel() - (tileOrigin->getTerrainLevel() + 24)) < 9)
@@ -6335,7 +6342,7 @@ bool TileEngine::validMeleeRange(
 						&& std::abs((tileTarget_below->getTerrainLevel() + 24) + tileOrigin->getTerrainLevel()) < 9)
 					{
 						tileTarget = tileTarget_below;
-					}
+					} */
 				}
 
 				//Log(LOG_INFO) << ". . . . recheck for tileTarget->unit";
@@ -6352,8 +6359,7 @@ bool TileEngine::validMeleeRange(
 															actor->getHeight(true)
 																- tileOrigin->getTerrainLevel()
 																- 4);
-
-						Position voxelTarget;
+						Position voxelTarget; // not used.
 						if (canTargetUnit(
 										&voxelOrigin,
 										tileTarget,
@@ -6361,10 +6367,10 @@ bool TileEngine::validMeleeRange(
 										actor) == true)
 						{
 							//Log(LOG_INFO) << ". . . . . . canTargetUnit TRUE";
-							if (targetUnit != NULL) // medikit check always returns here!
+							if (targetUnit != NULL)
 							{
-								if (dest != NULL)
-									*dest = tileTarget->getPosition();
+								if (posFinal != NULL)
+									*posFinal = tileTarget->getPosition();
 
 								//Log(LOG_INFO) << ". . . . . . . targetUnit found, ret TRUE";
 								return true;
@@ -6381,28 +6387,54 @@ bool TileEngine::validMeleeRange(
 		}
 	}
 
-	if (targetUnits.size() == 0)
-		return false;
-
-
-	if (dest != NULL)
+	if (targetUnits.size() != 0
+		&& posFinal != NULL)
 	{
-		//Log(LOG_INFO) << ". . set targetUnit Pos " << targetUnit->getPosition();
 		const size_t pick = static_cast<size_t>(RNG::generate(
 														0,
 														static_cast<int>(targetUnits.size()) - 1));
-		*dest = targetUnits[pick]->getPosition();
+		*posFinal = targetUnits[pick]->getPosition();
+		//Log(LOG_INFO) << ". . set targetUnit Pos " << targetUnits[pick]->getPosition();
+
+		return true;
 	}
 
-	//Log(LOG_INFO) << ". ret = " << (int)(targetUnit != NULL);
-	return true;
+	//Log(LOG_INFO) << ". ret FALSE";
+	return false;
 }
 
 /**
- *
+ * Gets a Tile within melee range.
+ * @param posOrigin - reference a position origin
+ * @param posTarget - reference a position target
+ * @return, pointer to a tile within melee range
  */
-//Tile* getAdjacentTile
-//{}
+Tile* TileEngine::getElevationTile(
+		const Position& posOrigin,
+		const Position& posTarget) const
+{
+	Tile
+		* tileOrigin = _battleSave->getTile(posOrigin),
+
+		* tileTargetAbove = _battleSave->getTile(posTarget + Position(0,0,1)),
+		* tileTargetBelow = _battleSave->getTile(posTarget + Position(0,0,-1));
+
+	// standing on a rise only 1/3 up z-axis reaches adjacent tileAbove.
+	if (tileTargetAbove != NULL
+		&& std::abs(tileTargetAbove->getTerrainLevel() - (tileOrigin->getTerrainLevel() + 24)) < 9)
+	{
+		return tileTargetAbove;
+	}
+
+	// can reach targetUnit standing on a rise only 1/3 up z-axis on adjacent tileBelow.
+	if (tileTargetBelow != NULL
+		&& std::abs((tileTargetBelow->getTerrainLevel() + 24) + tileOrigin->getTerrainLevel()) < 9)
+	{
+		return tileTargetBelow;
+	}
+
+	return NULL;
+}
 
 /**
  * Gets the AI to look through a window.
@@ -6479,13 +6511,13 @@ int TileEngine::getDirectionTo(
 		offset_x = target.x - origin.x,
 		offset_y = target.y - origin.y,
 
-	// kL_note: atan2() usually takes the y-value first;
-	// and that's why things may seem so fucked up.
+		// kL_note: atan2() usually takes the y-value first;
+		// and that's why things may seem so fucked up.
 		theta = std::atan2( // radians: + = y > 0; - = y < 0;
 						-offset_y,
 						offset_x),
 
-	// divide the pie in 4 thetas, each at 1/8th before each quarter
+		// divide the pie in 4 thetas, each at 1/8th before each quarter
 		m_pi_8 = M_PI / 8.,	// a circle divided into 16 sections (rads) -> 22.5 deg
 		d = 0.1,			// kL, a bias toward cardinal directions. (0.1..0.12)
 		pie[4] =

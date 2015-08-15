@@ -1306,17 +1306,18 @@ int AlienBAIState::countSpottingUnits(const Position& pos) const // private.
 int AlienBAIState::selectNearestTarget() // private.
 {
 	_aggroTarget = NULL;
-	_closestDist = 100;
+	_closestDist = 1000;
 
-//	Position origin = _battleSave->getTileEngine()->getSightOriginVoxel(_unit);
-//	origin.z -= 2;
-
-	Position target;
+	Position
+		origin,
+		target;
 	int
 		ret = 0,
 		distTest,
 		dir;
 	const TileEngine* const te = _battleSave->getTileEngine();
+
+	BattleAction action;
 
 	for (std::vector<BattleUnit*>::const_iterator
 			i = _battleSave->getUnits()->begin();
@@ -1341,31 +1342,31 @@ int AlienBAIState::selectNearestTarget() // private.
 				bool valid = false;
 
 				if (_rifle == true
-					|| _melee == false)
+					|| _melee == false) // -> is ambiguity like that required.
 				{
-					BattleAction action;
 					action.actor = _unit;
-					action.weapon = _unit->getMainHandWeapon();
-					action.target = (*i)->getPosition();
+//					action.type = BA_NONE; // ie. !BA_LAUNCH
+//					action.weapon = _unit->getMainHandWeapon();
+//					action.target = (*i)->getPosition();
 
-					Position origin = te->getOriginVoxel(action);
+					origin = te->getOriginVoxel(action); // needs only .actor & .type <-
 					valid = te->canTargetUnit(
 											&origin,
 											(*i)->getTile(),
-											&target,
+											&target, // this should be in voxelspace ... not used.
 											_unit);
 				}
-				else if (selectPointNearTarget(
+				else if (selectPositionNearTarget(
 											*i,
 											_unit->getTimeUnits()) == true)
 				{
 					dir = te->getDirectionTo(
-										_attackAction->target,
+										_attackAction->target, // is that backward; if so, why.
 										(*i)->getPosition());
 					valid = te->validMeleeRange(
 											_attackAction->target,
 											dir,
-											_unit,
+											_unit, // is that backward; if so, why.
 											*i);
 				}
 
@@ -1456,87 +1457,91 @@ bool AlienBAIState::selectRandomTarget() // private.
 }
 
 /**
- * Selects a point near enough to our target to perform a melee attack.
- * @param target - pointer to a target BattleUnit
- * @param maxTUs - maximum time units that the path to the target can cost
+ * Selects a point near enough to a BattleUnit to perform a melee attack.
+ * @param targetUnit	- pointer to a target BattleUnit
+ * @param tuMax		- maximum time units that the path can cost
  * @return, true if a point was found
  */
-bool AlienBAIState::selectPointNearTarget( // private.
-		BattleUnit* target,
-		int maxTUs) const
+bool AlienBAIState::selectPositionNearTarget( // private.
+		const BattleUnit* const targetUnit,
+		int tuMax) const
 {
 	bool ret = false;
 
 	const int
-		unitSize = _unit->getArmor()->getSize(),
-		targetSize = target->getArmor()->getSize();
+		actorSize = _unit->getArmor()->getSize(),
+		targetSize = targetUnit->getArmor()->getSize();
 	size_t dist = 1000;
+
 	Pathfinding* const pf = _battleSave->getPathfinding();
 	pf->setPathingUnit(_unit);
 
+	const TileEngine* const te = _battleSave->getTileEngine();
+
+	Position pos;
+	int dir;
+	bool
+		valid,
+		fit;
+
 	for (int
 			z = -1;
-			z <= 1;
+			z < 2;
 			++z)
 	{
 		for (int
-				x = -unitSize;
+				x = -actorSize;
 				x <= targetSize;
 				++x)
 		{
 			for (int
-					y = -unitSize;
+					y = -actorSize;
 					y <= targetSize;
 					++y)
 			{
-				if (x || y) // skip the unit itself
+				if (x != 0 || y != 0) // skip the unit itself
 				{
-					const Position checkPath = target->getPosition() + Position(x,y,z);
+					pos = targetUnit->getPosition() + Position(x,y,z);
 
-					if (_battleSave->getTile(checkPath) == NULL
-						|| std::find(
+					if (_battleSave->getTile(pos) != NULL
+						&& std::find(
 								_reachable.begin(),
 								_reachable.end(),
-								_battleSave->getTileIndex(checkPath)) == _reachable.end())
+								_battleSave->getTileIndex(pos)) != _reachable.end())
 					{
-						continue;
-					}
-
-					const int dir = _battleSave->getTileEngine()->getDirectionTo(
-																			checkPath,
-																			target->getPosition());
-					const bool
-						valid = _battleSave->getTileEngine()->validMeleeRange(
-																			checkPath,
-																			dir,
-																			_unit,
-																			target),
-						fitHere = _battleSave->setUnitPosition(
-															_unit,
-															checkPath,
-															true);
-					if (valid == true
-						&& fitHere == true
-						&& _battleSave->getTile(checkPath)->getDangerous() == false)
-					{
-						pf->calculate(
-									_unit,
-									checkPath,
-									NULL,
-									maxTUs);
-
-						if (pf->getStartDirection() != -1
-							&& pf->getPath().size() < dist)
-//							&& _battleSave->getTileEngine()->distance(checkPath, _unit->getPosition()) < dist)
+						dir = te->getDirectionTo(
+											pos,
+											targetUnit->getPosition());
+						valid = te->validMeleeRange(
+												pos,
+												dir,
+												_unit,
+												targetUnit);
+						fit = _battleSave->setUnitPosition(
+														_unit,
+														pos,
+														true);
+						if (valid == true
+							&& fit == true
+							&& _battleSave->getTile(pos)->getDangerous() == false)
 						{
-//							dist = _battleSave->getTileEngine()->distance(checkPath, _unit->getPosition());
-							dist = pf->getPath().size();
-							ret = true;
+							pf->calculate(
+										_unit,
+										pos,
+										NULL,
+										tuMax);
 
-							_attackAction->target = checkPath;
+							if (pf->getStartDirection() != -1
+								&& pf->getPath().size() < dist)
+							{
+								dist = pf->getPath().size();
+								ret = true;
+
+								_attackAction->target = pos;
+							}
+
+							pf->abortPath();
 						}
-
-						pf->abortPath();
 					}
 				}
 			}
@@ -2138,9 +2143,9 @@ void AlienBAIState::meleeAction() // private.
 								(*i)->getPosition());
 			if (distTest == 1 // TODO: should do a validMeleeRange() for this. Or even in validTarget(isMelee) ...
 				|| (distTest < dist
-					&& selectPointNearTarget(
-										*i,
-										tuPreMelee) == true))
+					&& selectPositionNearTarget(
+											*i,
+											tuPreMelee) == true))
 			{
 				_aggroTarget = *i;
 				_attackAction->type = BA_WALK;

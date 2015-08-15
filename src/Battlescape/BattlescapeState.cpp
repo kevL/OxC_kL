@@ -3350,19 +3350,18 @@ void BattlescapeState::debug(const std::wstring& message)
 
 /**
  * Shows a warning message.
- * @param message	- reference a message, usually a warning
- * @param useArg	- true to add an argument to the message (default false)
- * @param arg		- the argument to add as an integer (default -1)
+ * @note Currently uses 'arg' only to show Psi pct & Fuse timer.
+ * @param message	- reference a message usually a warning
+ * @param arg		- the argument to show as an integer (default 0)
  */
 void BattlescapeState::warning(
 		const std::string& message,
-		const bool useArg,
 		const int arg)
 {
-	if (useArg == false)
+	if (arg == 0)
 		_warning->showMessage(tr(message));
 	else
-		_warning->showMessage(tr(message).arg(arg));
+		_warning->showMessage(tr(message).arg(arg)); // note tr() probly accepts an empty .arg ...
 }
 
 /**

@@ -272,7 +272,11 @@ private:
 				const int dir,
 				const BattleUnit* const attacker,
 				const BattleUnit* const targetUnit = NULL,
-				Position* const dest = NULL) const;
+				Position* const posTarget = NULL) const;
+		/// Gets a Tile within melee range.
+		Tile* getElevationTile(
+				const Position& posOrigin,
+				const Position& posTarget) const;
 
 		/// Gets the AI to look through a window.
 		int faceWindow(const Position& pos) const;
