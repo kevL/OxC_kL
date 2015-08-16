@@ -6299,7 +6299,8 @@ bool TileEngine::validMeleeRange(
 											posOrigin,
 											posTarget);
 
-				if (tileTarget->getUnit() != NULL
+				if (tileTarget != NULL
+					&& tileTarget->getUnit() != NULL
 					&& (targetUnit == NULL
 						|| targetUnit == tileTarget->getUnit()))
 				{
@@ -6372,7 +6373,8 @@ Tile* TileEngine::getExecutionTile(const BattleUnit* const actor) const
 											posOrigin,
 											posTarget);
 
-				if (tileTarget->hasUnconsciousUnit(false) != 0)
+				if (tileTarget != NULL
+					&& tileTarget->hasUnconsciousUnit(false) != 0)
 				{
 					posOrigin_vox = Position(posOrigin * Position(16,16,24))
 								  + Position(
