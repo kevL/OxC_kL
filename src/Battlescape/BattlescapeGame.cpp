@@ -351,10 +351,6 @@ void BattlescapeGame::popState()
 				{
 					case BA_LAUNCH: // see also, cancelCurrentAction()
 						_currentAction.waypoints.clear();
-	//					_parentState->showLaunchButton(false);
-	//					_parentState->getMap()->getWaypoints()->clear(); // might be done already.
-	//				break;
-
 					case BA_THROW:
 					case BA_SNAPSHOT:
 					case BA_AIMEDSHOT:
@@ -409,10 +405,10 @@ void BattlescapeGame::popState()
 				{
 					//Log(LOG_INFO) << ". . ID " << action.actor->getId() << " currentTU = " << action.actor->getTimeUnits();
 					action.actor->spendTimeUnits(action.TU);
-						// kL_query: Does this happen **before** ReactionFire/getReactor()?
-						// no. not for shooting, but for throwing it does; actually no it doesn't.
-						//
-						// wtf, now RF works fine. NO IT DOES NOT.
+					// kL_query: Does this happen **before** ReactionFire/getReactor()?
+					// no. not for shooting, but for throwing it does; actually no it doesn't.
+					//
+					// wtf, now RF works fine. NO IT DOES NOT.
 					//Log(LOG_INFO) << ". . ID " << action.actor->getId() << " currentTU = " << action.actor->getTimeUnits() << " spent TU = " << action.TU;
 				}
 
@@ -481,7 +477,7 @@ void BattlescapeGame::popState()
 									cancelCurrentAction(true);
 								}
 							break;
-	/*						case BA_PSIPANIC:
+/*							case BA_PSIPANIC:
 								if (curTU < action.actor->getActionTUs(BA_PSIPANIC, action.weapon))
 									cancelCurrentAction(true);
 							break;
@@ -489,19 +485,13 @@ void BattlescapeGame::popState()
 								if (curTU < action.actor->getActionTUs(BA_PSICONTROL, action.weapon))
 									cancelCurrentAction(true);
 							break; */
-	/*						case BA_USE:
+/*							case BA_USE:
 								if (action.weapon->getRules()->getBattleType() == BT_MINDPROBE
 									&& curTU < action.actor->getActionTUs(BA_PSICONTROL, action.weapon))
 									cancelCurrentAction(true);
 							break; */
 						}
 					} // kL_end.
-
-					// kL_note: This is done at the end of this function also, but somehow it's
-					// not updating visUnit indicators when watching a unit die and expose a second
-					// enemy unit behind the first. btw, calcFoV ought have been done by now ...
-	//				_parentState->updateSoldierInfo(); // kL
-					// I put in a call in UnitDieBState ...
 
 					setupCursor();
 					_parentState->getGame()->getCursor()->setVisible();
@@ -1205,37 +1195,45 @@ void BattlescapeGame::setupCursor()
 {
 	getMap()->refreshSelectorPosition();
 
+	CursorType cType;
+	int quads = 1;
+
 	if (_currentAction.targeting == true)
 	{
-		if (_currentAction.type == BA_THROW)
-			getMap()->setCursorType(CT_THROW);
-		else if (_currentAction.type == BA_PSICONTROL
-			|| _currentAction.type == BA_PSIPANIC
-			|| _currentAction.type == BA_PSICONFUSE
-			|| _currentAction.type == BA_PSICOURAGE
-			|| _currentAction.type == BA_USE)
+		switch (_currentAction.type)
 		{
-			getMap()->setCursorType(CT_PSI);
+			case BA_THROW:
+				cType = CT_THROW;
+			break;
+
+			case BA_PSICONTROL:
+			case BA_PSIPANIC:
+			case BA_PSICONFUSE:
+			case BA_PSICOURAGE:
+			case BA_USE:
+				cType = CT_PSI;
+			break;
+
+			case BA_LAUNCH:
+				cType = CT_WAYPOINT;
+			break;
+
+			default:
+				cType = CT_AIM;
 		}
-		else if (_currentAction.type == BA_LAUNCH)
-			getMap()->setCursorType(CT_WAYPOINT);
-		else
-			getMap()->setCursorType(CT_AIM);
 	}
 	else
 	{
-		_currentAction.actor = _battleSave->getSelectedUnit();
-		int quads;
+		cType = CT_NORMAL;
 
+		_currentAction.actor = _battleSave->getSelectedUnit();
 		if (_currentAction.actor != NULL)
 			quads = _currentAction.actor->getArmor()->getSize();
-		else
-			quads = 1;
-
-		getMap()->setCursorType(
-							CT_NORMAL,
-							quads);
 	}
+
+	getMap()->setCursorType(
+						cType,
+						quads);
 }
 
 /**
@@ -1345,7 +1343,7 @@ bool BattlescapeGame::kneel(BattleUnit* const bu)
 
 /**
  * Ends the turn.
- * @note This starts the switchover
+ * @note This starts the switchover.
  *	- popState()
  *	- handleState()
  *	- statePushBack()
@@ -1556,9 +1554,9 @@ void BattlescapeGame::endTurnPhase() // private.
 	int // if all units from either faction are killed - the mission is over.
 		liveAliens,
 		liveSoldiers;
-	const bool pacified = tallyUnits(
-								liveAliens,
-								liveSoldiers);
+	const bool hostilesPacified = tallyUnits(
+										liveAliens,
+										liveSoldiers);
 
 	if (_battleSave->allObjectivesDestroyed() == true // brain death.
 		&& _battleSave->getObjectiveType() == MUST_DESTROY)
@@ -1591,7 +1589,7 @@ void BattlescapeGame::endTurnPhase() // private.
 		_parentState->getGame()->pushState(new NextTurnState(
 														_battleSave,
 														_parentState,
-														pacified));
+														hostilesPacified));
 	}
 
 	_endTurnRequested = false;
@@ -2816,8 +2814,8 @@ void BattlescapeGame::primaryAction(const Position& targetPos)
 				getMap()->getWaypoints()->clear();
 			}
 
-//			getMap()->setCursorType(CT_NONE); // remove these because box-cursor doesn't refresh properly.
-//			_parentState->getGame()->getCursor()->setVisible(false);
+			getMap()->setCursorType(CT_NONE);
+//			_parentState->getGame()->getCursor()->setVisible(false); // leave vis 'cause box-cursor won't refresh if mouse is moved while invis.
 
 			_currentAction.target = targetPos;
 			_currentAction.cameraPosition = getMap()->getCamera()->getMapOffset();
@@ -2932,7 +2930,7 @@ void BattlescapeGame::primaryAction(const Position& targetPos)
 					if (allowPreview == false) // -= start walking =- //
 					{
 						getMap()->setCursorType(CT_NONE);
-						_parentState->getGame()->getCursor()->setVisible(false);
+//						_parentState->getGame()->getCursor()->setVisible(false); // leave vis 'cause box-cursor won't refresh if mouse is moved while invis.
 
 						statePushBack(new UnitWalkBState(
 														this,
@@ -2983,8 +2981,8 @@ void BattlescapeGame::launchAction()
 	getMap()->getWaypoints()->clear();
 	_currentAction.target = _currentAction.waypoints.front();
 
-//	getMap()->setCursorType(CT_NONE); // remove these because box-cursor doesn't refresh properly.
-//	_parentState->getGame()->getCursor()->setVisible(false);
+	getMap()->setCursorType(CT_NONE);
+//	_parentState->getGame()->getCursor()->setVisible(false); // leave vis 'cause box-cursor won't refresh if mouse is moved while invis.
 
 //	_currentAction.cameraPosition = getMap()->getCamera()->getMapOffset();
 
@@ -3033,7 +3031,7 @@ void BattlescapeGame::moveUpDown(
 		--_currentAction.target.z;
 
 	getMap()->setCursorType(CT_NONE);
-	_parentState->getGame()->getCursor()->setVisible(false);
+//	_parentState->getGame()->getCursor()->setVisible(false); // leave vis 'cause box-cursor won't refresh if mouse is moved while invis.
 
 	Pathfinding* const pf = _battleSave->getPathfinding();
 //	pf->setPathingUnit(_currentAction.actor); // set in BattlescapeState::btnUnitUp/DownClick()

@@ -52,13 +52,13 @@ const int
 
 /**
  * Initializes all the elements in the MiniMapView.
- * @param w				- the MiniMapView width
- * @param h				- the MiniMapView height
- * @param x				- the MiniMapView x origin
- * @param y				- the MiniMapView y origin
+ * @param w				- the width
+ * @param h				- the height
+ * @param x				- the x origin
+ * @param y				- the y origin
  * @param game			- pointer to the core Game
  * @param camera		- pointer to the battlescape Camera
- * @param battleGame	- pointer to the SavedBattleGame
+ * @param battleSave	- pointer to the SavedBattleGame
  */
 MiniMapView::MiniMapView(
 		int w,
@@ -67,19 +67,19 @@ MiniMapView::MiniMapView(
 		int y,
 		Game* game,
 		Camera* camera,
-		SavedBattleGame* battleGame)
+		SavedBattleGame* battleSave)
 	:
 		InteractiveSurface(
 			w,h,
 			x,y),
 		_game(game),
 		_camera(camera),
-		_battleGame(battleGame),
+		_battleSave(battleSave),
 		_frame(0),
 		_isMouseScrolling(false),
 		_isMouseScrolled(false),
-		_xBeforeMouseScrolling(0),
-		_yBeforeMouseScrolling(0),
+//		_xBeforeMouseScrolling(0),
+//		_yBeforeMouseScrolling(0),
 		_mouseScrollX(0),
 		_mouseScrollY(0),
 		_totalMouseMoveX(0),
@@ -138,7 +138,7 @@ void MiniMapView::draw()
 						x += CELL_WIDTH)
 				{
 					pos = Position(px, py, lvl);
-					tile = _battleGame->getTile(pos);
+					tile = _battleSave->getTile(pos);
 
 					if (tile == NULL)
 					{
@@ -152,9 +152,9 @@ void MiniMapView::draw()
 						colorOffset;
 
 					if (   px == 0
-						|| px == _battleGame->getMapSizeX() - 1
+						|| px == _battleSave->getMapSizeX() - 1
 						|| py == 0
-						|| py == _battleGame->getMapSizeY() - 1)
+						|| py == _battleSave->getMapSizeY() - 1)
 					{
 						colorGroup = 1; // greyscale
 						colorOffset = 5;
@@ -219,7 +219,7 @@ void MiniMapView::draw()
 
 						srf = _set->getFrame(frame);
 
-						if (unit == _battleGame->getSelectedUnit()) // selected unit
+						if (unit == _battleSave->getSelectedUnit()) // selected unit
 						{
 							colorGroup = 4; // pale green
 							colorOffset = 0;
@@ -345,11 +345,11 @@ void MiniMapView::mousePress(Action* action, State* state) // private.
 		_isMouseScrolling = true;
 		_isMouseScrolled = false;
 
-		SDL_GetMouseState(
-						&_xBeforeMouseScrolling,
-						&_yBeforeMouseScrolling);
+//		SDL_GetMouseState(
+//					&_xBeforeMouseScrolling,
+//					&_yBeforeMouseScrolling);
 
-		_posBeforeDragScroll = _camera->getCenterPosition();
+		_posPreDragScroll = _camera->getCenterPosition();
 
 /*kL
 		if (!Options::battleDragScrollInvert
@@ -367,7 +367,7 @@ void MiniMapView::mousePress(Action* action, State* state) // private.
 		_totalMouseMoveY = 0;
 
 		_mouseOverThreshold = false;
-		_mouseScrollingStartTime = SDL_GetTicks();
+		_mouseScrollStartTime = SDL_GetTicks();
 	}
 }
 
@@ -392,9 +392,9 @@ void MiniMapView::mouseClick(Action* action, State* state) // private.
 			// so we missed again the mouse-release :(
 			// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
 			if (_mouseOverThreshold == false
-				&& SDL_GetTicks() - _mouseScrollingStartTime <= static_cast<Uint32>(Options::dragScrollTimeTolerance))
+				&& SDL_GetTicks() - _mouseScrollStartTime <= static_cast<Uint32>(Options::dragScrollTimeTolerance))
 			{
-				_camera->centerOnPosition(_posBeforeDragScroll);
+				_camera->centerOnPosition(_posPreDragScroll);
 				_redraw = true;
 			}
 
@@ -416,12 +416,12 @@ void MiniMapView::mouseClick(Action* action, State* state) // private.
 
 		// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
 		if (_mouseOverThreshold == false
-			&& SDL_GetTicks() - _mouseScrollingStartTime <= static_cast<Uint32>(Options::dragScrollTimeTolerance))
+			&& SDL_GetTicks() - _mouseScrollStartTime <= static_cast<Uint32>(Options::dragScrollTimeTolerance))
 		{
 			_isMouseScrolled = false;
 //			stopScrolling(action); // newScroll
 
-			_camera->centerOnPosition(_posBeforeDragScroll);
+			_camera->centerOnPosition(_posPreDragScroll);
 			_redraw = true;
 		}
 
@@ -474,9 +474,9 @@ void MiniMapView::mouseOver(Action* action, State* state) // private.
 			// so we missed again the mouse-release :(
 			// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
 			if (_mouseOverThreshold == false
-				&& SDL_GetTicks() - _mouseScrollingStartTime <= static_cast<Uint32>(Options::dragScrollTimeTolerance))
+				&& SDL_GetTicks() - _mouseScrollStartTime <= static_cast<Uint32>(Options::dragScrollTimeTolerance))
 			{
-					_camera->centerOnPosition(_posBeforeDragScroll);
+					_camera->centerOnPosition(_posPreDragScroll);
 					_redraw = true;
 			}
 
@@ -518,29 +518,29 @@ void MiniMapView::mouseOver(Action* action, State* state) // private.
 		{
 			_mouseScrollX += static_cast<int>(action->getDetails()->motion.xrel);
 			_mouseScrollY += static_cast<int>(action->getDetails()->motion.yrel);
-			newX = _posBeforeDragScroll.x + _mouseScrollX / 3;
-			newY = _posBeforeDragScroll.y + _mouseScrollY / 3;
+			newX = _posPreDragScroll.x + _mouseScrollX / 3;
+			newY = _posPreDragScroll.y + _mouseScrollY / 3;
 
 			// Keep the limits...
 			if (newX < -1
 				|| newX > _camera->getMapSizeX())
 			{
 				_mouseScrollX -= static_cast<int>(action->getDetails()->motion.xrel);
-				newX = _posBeforeDragScroll.x + _mouseScrollX / 3;
+				newX = _posPreDragScroll.x + _mouseScrollX / 3;
 			}
 
 			if (newY < -1
 				|| newY > _camera->getMapSizeY())
 			{
 				_mouseScrollY -= static_cast<int>(action->getDetails()->motion.yrel);
-				newY = _posBeforeDragScroll.y + _mouseScrollY / 3;
+				newY = _posPreDragScroll.y + _mouseScrollY / 3;
 			}
 		}
 		else
 		{
-			newX = _posBeforeDragScroll.x - static_cast<int>(
+			newX = _posPreDragScroll.x - static_cast<int>(
 													static_cast<double>(_totalMouseMoveX) / action->getXScale() / 3.0);
-			newY = _posBeforeDragScroll.y - static_cast<int>(
+			newY = _posPreDragScroll.y - static_cast<int>(
 													static_cast<double>(_totalMouseMoveY) / action->getYScale() / 3.0);
 
 			// Keep the limits...
@@ -574,12 +574,12 @@ void MiniMapView::mouseOver(Action* action, State* state) // private.
 
 //		_mouseScrollX += static_cast<int>(action->getDetails()->motion.xrel);
 //		_mouseScrollY += static_cast<int>(action->getDetails()->motion.yrel);
-//		newX = _posBeforeDragScroll.x + (_mouseScrollX / action->getXScale() / 4);
-//		newY = _posBeforeDragScroll.y + (_mouseScrollY / action->getYScale() / 4);
+//		newX = _posPreDragScroll.x + (_mouseScrollX / action->getXScale() / 4);
+//		newY = _posPreDragScroll.y + (_mouseScrollY / action->getYScale() / 4);
 		_mouseScrollX -= static_cast<int>(action->getDetails()->motion.xrel);
 		_mouseScrollY -= static_cast<int>(action->getDetails()->motion.yrel);
-		newX = _posBeforeDragScroll.x + (_mouseScrollX / 11);
-		newY = _posBeforeDragScroll.y + (_mouseScrollY / 11);
+		newX = _posPreDragScroll.x + (_mouseScrollX / 11);
+		newY = _posPreDragScroll.y + (_mouseScrollY / 11);
 
 /*kL
 		// keep the limits...
@@ -587,14 +587,14 @@ void MiniMapView::mouseOver(Action* action, State* state) // private.
 			|| _camera->getMapSizeX() < newX)
 		{
 			_mouseScrollX -= scrollX;
-			newX = _posBeforeDragScroll.x + (_mouseScrollX / 4);
+			newX = _posPreDragScroll.x + (_mouseScrollX / 4);
 		}
 
 		if (newY < -1
 			|| _camera->getMapSizeY() < newY)
 		{
 			_mouseScrollY -= scrollY;
-			newY = _posBeforeDragScroll.y + (_mouseScrollY / 4);
+			newY = _posPreDragScroll.y + (_mouseScrollY / 4);
 		} */
 
 		_camera->centerOnPosition(Position( // scroll

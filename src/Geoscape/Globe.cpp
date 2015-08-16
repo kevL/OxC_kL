@@ -330,13 +330,13 @@ Globe::Globe(
 		_isMouseScrolled(false),
 		_isMouseScrolling(false),
 		_mouseOverThreshold(false),
-		_mouseScrollingStartTime(0),
-		_xBeforeMouseScrolling(0),
-		_yBeforeMouseScrolling(0),
+		_mouseScrollStartTime(0),
+//		_xBeforeMouseScrolling(0),
+//		_yBeforeMouseScrolling(0),
 		_totalMouseMoveX(0),
 		_totalMouseMoveY(0),
-		_lonBeforeMouseScrolling(0.),
-		_latBeforeMouseScrolling(0.),
+		_lonPreMouseScroll(0.),
+		_latPreMouseScroll(0.),
 		_radius(0.),
 		_radiusStep(0.),
 		_debugType(0)
@@ -833,8 +833,8 @@ void Globe::setZoom(size_t zoom) // private.
 
 	if (_isMouseScrolling == true)
 	{
-		_lonBeforeMouseScrolling = _cenLon;
-		_latBeforeMouseScrolling = _cenLat;
+		_lonPreMouseScroll = _cenLon;
+		_latPreMouseScroll = _cenLat;
 		_totalMouseMoveX =
 		_totalMouseMoveY = 0;
 	}
@@ -2732,11 +2732,11 @@ void Globe::mouseOver(Action* action, State* state)
 			// so we missed again the mouse-release :(
 			// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
 			if (_mouseOverThreshold == false
-				&& SDL_GetTicks() - _mouseScrollingStartTime <= static_cast<Uint32>(Options::dragScrollTimeTolerance))
+				&& SDL_GetTicks() - _mouseScrollStartTime <= static_cast<Uint32>(Options::dragScrollTimeTolerance))
 			{
 				center(
-					_lonBeforeMouseScrolling,
-					_latBeforeMouseScrolling);
+					_lonPreMouseScroll,
+					_latPreMouseScroll);
 			}
 
 			_isMouseScrolled =
@@ -2772,14 +2772,14 @@ void Globe::mouseOver(Action* action, State* state)
 							   || std::abs(_totalMouseMoveY) > Options::dragScrollPixelTolerance;
 
 
-		if (Options::geoDragScrollInvert == true) // scroll
+		if (Options::geoDragScrollInvert == true) // scroll. I don't use this
 		{
 			const double
 				newLon = (static_cast<double>(_totalMouseMoveX) / action->getXScale()) * ROTATE_LONGITUDE / static_cast<double>(_zoom + 1) / 2.,
 				newLat = (static_cast<double>(_totalMouseMoveY) / action->getYScale()) * ROTATE_LATITUDE / static_cast<double>(_zoom + 1) / 2.;
 			center(
-				_lonBeforeMouseScrolling + newLon / static_cast<double>(Options::geoScrollSpeed), //kL / 10.0,
-				_latBeforeMouseScrolling + newLat / static_cast<double>(Options::geoScrollSpeed)); //kL / 10.0);
+				_lonPreMouseScroll + newLon / static_cast<double>(Options::geoScrollSpeed), //kL / 10.0,
+				_latPreMouseScroll + newLat / static_cast<double>(Options::geoScrollSpeed)); //kL / 10.0);
 		}
 		else
 		{
@@ -2846,18 +2846,18 @@ void Globe::mousePress(Action* action, State* state)
 		_isMouseScrolling = true;
 		_isMouseScrolled = false;
 
-		SDL_GetMouseState(
-					&_xBeforeMouseScrolling,
-					&_yBeforeMouseScrolling);
+//		SDL_GetMouseState(
+//					&_xBeforeMouseScrolling,
+//					&_yBeforeMouseScrolling);
 
-		_lonBeforeMouseScrolling = _cenLon;
-		_latBeforeMouseScrolling = _cenLat;
+		_lonPreMouseScroll = _cenLon;
+		_latPreMouseScroll = _cenLat;
 
 		_totalMouseMoveX =
 		_totalMouseMoveY = 0;
 
 		_mouseOverThreshold = false;
-		_mouseScrollingStartTime = SDL_GetTicks();
+		_mouseScrollStartTime = SDL_GetTicks();
 	}
 
 	if (lat == lat // Check for errors
@@ -2927,11 +2927,11 @@ void Globe::mouseClick(Action* action, State* state)
 			// so we missed again the mouse-release :(
 			// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
 			if (_mouseOverThreshold == false
-				&& SDL_GetTicks() - _mouseScrollingStartTime <= static_cast<Uint32>(Options::dragScrollTimeTolerance))
+				&& SDL_GetTicks() - _mouseScrollStartTime <= static_cast<Uint32>(Options::dragScrollTimeTolerance))
 			{
 				center(
-					_lonBeforeMouseScrolling,
-					_latBeforeMouseScrolling);
+					_lonPreMouseScroll,
+					_latPreMouseScroll);
 			}
 
 			_isMouseScrolled = _isMouseScrolling = false;
@@ -2952,12 +2952,12 @@ void Globe::mouseClick(Action* action, State* state)
 
 		// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
 		if (_mouseOverThreshold == false
-			&& SDL_GetTicks() - _mouseScrollingStartTime <= static_cast<Uint32>(Options::dragScrollTimeTolerance))
+			&& SDL_GetTicks() - _mouseScrollStartTime <= static_cast<Uint32>(Options::dragScrollTimeTolerance))
 		{
 			_isMouseScrolled = false;
 			center(
-				_lonBeforeMouseScrolling,
-				_latBeforeMouseScrolling);
+				_lonPreMouseScroll,
+				_latPreMouseScroll);
 		}
 
 		if (_isMouseScrolled == true)

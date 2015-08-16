@@ -1656,8 +1656,6 @@ void Map::drawTerrain(Surface* const surface) // private.
 											&& unitNorth->getStatus() == STATUS_WALKING
 											&& (unitNorth->getDirection() == 0
 												|| unitNorth->getDirection() == 4))))
-//												|| unitNorth->getDirection() == 1		// new
-//												|| unitNorth->getDirection() == 5))))	// new
 								{
 									if ((tileNorth->getTerrainLevel() - tile->getTerrainLevel() > -1 // positive -> Tile is higher
 											&& tile->getMapData(O_OBJECT) != NULL
@@ -1781,10 +1779,10 @@ void Map::drawTerrain(Surface* const surface) // private.
 													const Tile* const tileSouthWest = _battleSave->getTile(posMap + Position(-1,1,0));
 
 													if (tileSouthWest == NULL
-														|| (tileSouthWest->getUnit() == NULL
+														|| (tileSouthWest->getUnit() == NULL // <- maybe.
 															&& (tileSouthWest->getMapData(O_NORTHWALL) == NULL
 																|| tileSouthWest->isUfoDoorOpen(O_NORTHWALL) == true)
-//																|| tileSouth->getMapData(O_NORTHWALL) == NULL) // <- getting very redudant; soon needs break-out functions like checkNorthSideBlockage() & checkWestSideBlockage() etc etc etc etc, also checkObjectSightBlockageLeft/Right() etc.
+//																|| tileSouth->getMapData(O_NORTHWALL) == NULL) // <- getting very redundant; soon needs break-out functions like checkNorthSideBlockage() & checkWestSideBlockage() etc etc etc etc, also checkObjectSightBlockageLeft/Right() etc.
 															&& (tileSouthWest->getMapData(O_OBJECT) == NULL
 																|| (tileSouthWest->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NONE
 //																	&& tileSouthWest->getMapData(O_OBJECT)->getTUCostData(MT_WALK) != 255 // <- maybe
@@ -1846,10 +1844,15 @@ void Map::drawTerrain(Surface* const surface) // private.
 														const Tile* const tileSouthWest = _battleSave->getTile(posMap + Position(-1,1,0));
 
 														if (tileSouthWest == NULL
-															|| //(tileSouthWest->getUnit() == NULL &&
-																(tileSouthWest->getMapData(O_NORTHWALL) == NULL
+															|| (((unitWest->getDirection() == 1
+																		&& (unitWest->getPosition() != unitWest->getDestination()
+																			|| tileSouthWest->getUnit() == NULL))
+																	|| (unitWest->getDirection() == 5
+																		&& (unitWest->getPosition() == unitWest->getDestination()
+																			|| tileSouthWest->getUnit() == NULL)))
+																&& (tileSouthWest->getMapData(O_NORTHWALL) == NULL
 																	|| tileSouthWest->isUfoDoorOpen(O_NORTHWALL) == true
-																	|| tileSouth->getMapData(O_NORTHWALL) == NULL) // <- getting very redudant; soon needs break-out functions like checkNorthSideBlockage() & checkWestSideBlockage() etc etc etc etc, also checkObjectSightBlockageLeft/Right() etc.
+																	|| tileSouth->getMapData(O_NORTHWALL) == NULL) // <- getting very redundant; soon needs break-out functions like checkNorthSideBlockage() & checkWestSideBlockage() etc etc etc etc, also checkObjectSightBlockageLeft/Right() etc.
 																&& (tileSouthWest->getMapData(O_OBJECT) == NULL
 																	|| (tileSouthWest->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NONE
 //																		&& tileSouthWest->getMapData(O_OBJECT)->getTUCostData(MT_WALK) != 255
@@ -1858,7 +1861,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 																		&& tileSouthWest->getMapData(O_OBJECT)->getDataset()->getName() != "LIGHTNIN"
 																		&& tileSouthWest->getMapData(O_OBJECT)->getSprite(0) != 42)
 																	|| tileSouthWest->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NWSE
-																	|| tileSouthWest->getMapData(O_OBJECT)->getBigWall() == BIGWALL_WEST))
+																	|| tileSouthWest->getMapData(O_OBJECT)->getBigWall() == BIGWALL_WEST)))
 														{
 															//Log(LOG_INFO) << "[1] . . . . . tileSouthWest No northwall OR object";
 															//Log(LOG_INFO) << "[1] . . . . . REDRAW";
@@ -4157,7 +4160,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 
 
 	// Draw Bouncing Arrow over selected unit.
-	if (getCursorType() != CT_NONE
+	if (_cursorType != CT_NONE
 		&& (_battleSave->getSide() == FACTION_PLAYER
 			|| _battleSave->getDebugMode() == true))
 	{
@@ -4784,7 +4787,7 @@ void Map::setSelectorPosition(
 							&_selectorX,
 							&_selectorY);
 
-	if (   pre_X != _selectorX
+	if (pre_X != _selectorX
 		|| pre_Y != _selectorY)
 	{
 		_redraw = true;

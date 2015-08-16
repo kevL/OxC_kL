@@ -4009,7 +4009,7 @@ int BattleUnit::getCarriedWeight(const BattleItem* const dragItem) const
 		{
 			weight += (*i)->getRules()->getWeight();
 
-			if ((*i)->getAmmoItem()
+			if ((*i)->getAmmoItem() != NULL
 				&& (*i)->getAmmoItem() != *i)
 			{
 				weight += (*i)->getAmmoItem()->getRules()->getWeight();

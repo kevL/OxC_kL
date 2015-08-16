@@ -642,7 +642,7 @@ int Camera::getMapSizeY() const
  * Gets the map offset.
  * @return, the map offset Position
  */
-Position Camera::getMapOffset()
+Position Camera::getMapOffset() const
 {
 	return _mapOffset;
 }

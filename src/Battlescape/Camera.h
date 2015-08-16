@@ -158,7 +158,7 @@ private:
 		int getMapSizeY() const;
 
 		/// Gets the map x/y screen offset.
-		Position getMapOffset();
+		Position getMapOffset() const;
 		/// Sets the map x/y screen offset.
 		void setMapOffset(const Position& pos);
 

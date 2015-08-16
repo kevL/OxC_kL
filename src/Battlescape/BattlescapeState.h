@@ -79,14 +79,14 @@ private:
 	int
 		_showConsole,
 		_totalMouseMoveX,
-		_totalMouseMoveY,
-		_xBeforeMouseScrolling,
-		_yBeforeMouseScrolling;
+		_totalMouseMoveY;
+//		_xBeforeMouseScrolling,
+//		_yBeforeMouseScrolling;
 	size_t
 		_fuseFrame,
 		_hostileTargeterFrame;
 
-	Uint32 _mouseScrollingStartTime;
+	Uint32 _mouseScrollStartTime;
 
 //	std::string _currentTooltip;
 
@@ -191,10 +191,12 @@ private:
 
 	std::vector<State*> _popups;
 
-	Position
-		_cursorPosition,
-		_mapOffsetBeforeDragScroll;
+	Position _offsetPreDragScroll;
+//		_cursorPosition,
 
+
+	/// Prints contents of hovered Tile's inventory to screen.
+	void printTileInventory();
 
 	/// Shows primer warnings on hand-held live grenades.
 	void drawFuse();
@@ -303,8 +305,8 @@ private:
 		/// Handler for right-clicking the right hand item button.
 		void btnRightHandRightClick(Action* action);
 
-		/// Handler for clicking a visible unit button.
-		void btnVisibleUnitPress(Action* action);
+		/// Handler for clicking a hostile unit button.
+		void btnHostileUnitPress(Action* action);
 		/// Handler for clicking the wounded unit button.
 		void btnWoundedPress(Action* action);
 

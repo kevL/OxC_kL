@@ -78,16 +78,16 @@ private:
 //		_blinkVal,
 		_debugType,
 		_totalMouseMoveX,
-		_totalMouseMoveY,
-		_xBeforeMouseScrolling,
-		_yBeforeMouseScrolling;
+		_totalMouseMoveY;
+//		_xBeforeMouseScrolling,
+//		_yBeforeMouseScrolling;
 	double
 		_cenLat,
 		_cenLon,
 		_hoverLat,
 		_hoverLon,
-		_lonBeforeMouseScrolling,
-		_latBeforeMouseScrolling,
+		_lonPreMouseScroll,
+		_latPreMouseScroll,
 		_rotLat,
 		_rotLon,
 		_radius,
@@ -95,7 +95,7 @@ private:
 	Sint16
 		_cenX,
 		_cenY;
-	Uint32 _mouseScrollingStartTime;
+	Uint32 _mouseScrollStartTime;
 	size_t
 		_zoom,
 		_zoomTexture;

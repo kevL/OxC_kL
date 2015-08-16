@@ -780,25 +780,25 @@ void TileEngine::recalculateFOV(bool spotSound)
 }
 
 /**
- * Checks for an opposing unit on a tile.
- * @param unit - pointer a BattleUnit that's looking at @a tile
+ * Checks visibility of a unit to a tile.
+ * @param unit - pointer to a BattleUnit that's looking at @a tile
  * @param tile - pointer to a Tile that @a unit is looking at
- * @return, true if a unit is on that tile and is seen
+ * @return, true if the unit on @a tile is seen
  */
 bool TileEngine::visible(
 		const BattleUnit* const unit,
 		const Tile* const tile) const
 {
-	if (tile == NULL
-		|| tile->getUnit() == NULL)
+	if (tile == NULL)
+		return false;
+
+	const BattleUnit* const targetUnit = tile->getUnit();
+	if (targetUnit == NULL
+		|| targetUnit->isOut_t() == true)
+//		|| targetUnit->isOut(true, true) == true)
 	{
 		return false;
 	}
-
-	const BattleUnit* const targetUnit = tile->getUnit();
-//	if (targetUnit->isOut(true, true) == true)
-	if (targetUnit->isOut_t() == true)
-		return false;
 
 	if (unit->getFaction() == targetUnit->getFaction())
 		return true;
@@ -818,30 +818,16 @@ bool TileEngine::visible(
 	}
 
 
-	// for large units origin voxel is in the middle ( not anymore )
-	// kL_note: this leads to problems with large units trying to shoot around corners, b.t.w.
-	// because it might See with a clear LoS, but the LoF is taken from a different, offset voxel.
-	// further, i think Lines of Sight and Fire determinations are getting mixed up somewhere!!!
 	const Position originVoxel = getSightOriginVoxel(unit);
 	Position scanVoxel;
 	std::vector<Position> _trajectory;
 
-	// kL_note: Is an intermediary object *not* obstructing viewing
-	// or targetting, when it should be?? Like, around corners?
-	// kL_later: it might have something to do with an offset for handedness re. LoF.
-	bool isSeen = canTargetUnit(
-							&originVoxel,
-							tile,
-							&scanVoxel,
-							unit);
-	if (isSeen == true)
+	if (canTargetUnit(
+					&originVoxel,
+					tile,
+					&scanVoxel,
+					unit) == true)
 	{
-		// now check if we really see it taking into account smoke tiles
-		// initial smoke "density" of a smoke grenade is around 15 per tile
-		// we do density/3 to get the decay of visibility
-		// so in fresh smoke we should only have 4 tiles of visibility
-		// this is traced in voxel space, with smoke affecting visibility every step of the way
-		// kL_note: well not really, not until I floatified it.....
 		_trajectory.clear();
 
 		calculateLine(
@@ -852,49 +838,39 @@ bool TileEngine::visible(
 					unit);
 
 
-		const Tile* scanTile = _battleSave->getTile(unit->getPosition());
 		double distWeighted = static_cast<double>(_trajectory.size());
+		const Tile* scanTile = _battleSave->getTile(unit->getPosition());
 
 		for (size_t
 				i = 0;
 				i != _trajectory.size();
 				++i)
 		{
-			// The 'origin tile' now steps along through voxel/tile-space, picking up extra weight
-			// as it goes ( effective distance is reduced by real distance * obscuration-per-voxel ).
 			scanTile = _battleSave->getTile(Position(
 												_trajectory.at(i).x / 16,
 												_trajectory.at(i).y / 16,
 												_trajectory.at(i).z / 24));
 
 			distWeighted += static_cast<double>(scanTile->getSmoke()) / 3.;
-			distWeighted += static_cast<double>(scanTile->getFire());
+			distWeighted += static_cast<double>(scanTile->getFire()) / 3.;
 
 			if (static_cast<int>(std::ceil(distWeighted * distWeighted)) > MAX_VOXEL_VIEW_DIST_SQR)
-//			if (static_cast<int>(std::ceil(distWeighted)) > MAX_VOXEL_VIEW_DISTANCE)
-			{
-				isSeen = false;
-				break;
-			}
+				return false;
 		}
 
-		// Check if unitSeen (the unit at the end of calculateLine() trajectory) is really The targetUnit.
-		if (isSeen == true)
+		if (scanTile->getUnit() == targetUnit)
+			return true;
+
+		const Tile* const tileBelow = _battleSave->getTile(scanTile->getPosition() + Position(0,0,-1));
+		if (tileBelow != NULL
+			&& scanTile->hasNoFloor(tileBelow) == true
+			&& tileBelow->getUnit() == targetUnit)
 		{
-			// have to check if targetUnit is poking its head up from tileBelow
-			const Tile* const tileBelow = _battleSave->getTile(scanTile->getPosition() + Position(0,0,-1));
-			if (!
-				(scanTile->getUnit() == targetUnit
-					|| (tileBelow != NULL // could add a check for && scanTile->hasNoFloor() around here.
-						&& tileBelow->getUnit() != NULL
-						&& tileBelow->getUnit() == targetUnit)))
-			{
-				isSeen = false;
-			}
+			return true;
 		}
 	}
 
-	return isSeen;
+	return false;
 }
 
 /**
@@ -1074,8 +1050,8 @@ bool TileEngine::canTargetUnit(
 										targetTile->getPosition().z * 24);
 	const int
 		targetMinHeight = targetVoxel.z
-							- targetTile->getTerrainLevel()
-							+ targetUnit->getFloatHeight(),
+						- targetTile->getTerrainLevel()
+						+ targetUnit->getFloatHeight(),
 		// if there is a unit on targetTile, assume check against that unit's height
 		xOffset = targetUnit->getPosition().x - targetTile->getPosition().x,
 		yOffset = targetUnit->getPosition().y - targetTile->getPosition().y,

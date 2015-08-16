@@ -108,8 +108,8 @@ BattlescapeState::BattlescapeState()
 		_battleSave(_game->getSavedGame()->getSavedBattle()),
 		_rules(_game->getRuleset()),
 //		_reserve(0),
-		_xBeforeMouseScrolling(0),
-		_yBeforeMouseScrolling(0),
+//		_xBeforeMouseScrolling(0),
+//		_yBeforeMouseScrolling(0),
 		_totalMouseMoveX(0),
 		_totalMouseMoveY(0),
 		_mouseOverThreshold(false),
@@ -117,7 +117,7 @@ BattlescapeState::BattlescapeState()
 		_mouseOverIcons(false),
 		_isMouseScrolled(false),
 		_isMouseScrolling(false),
-		_mouseScrollingStartTime(0),
+		_mouseScrollStartTime(0),
 		_fuseFrame(0),
 		_showConsole(2),
 		_hostileTargeterFrame(0),
@@ -911,9 +911,9 @@ BattlescapeState::BattlescapeState()
 			i != UNIT_HOTCONS;
 			++i)
 	{
-		_btnHostileUnit[i]->onMousePress((ActionHandler)& BattlescapeState::btnVisibleUnitPress);
+		_btnHostileUnit[i]->onMousePress((ActionHandler)& BattlescapeState::btnHostileUnitPress);
 //		_btnHostileUnit[i]->onKeyboardPress(
-//						(ActionHandler)& BattlescapeState::btnVisibleUnitPress,
+//						(ActionHandler)& BattlescapeState::btnHostileUnitPress,
 //						buttons[i]);
 
 //		std::ostringstream tooltip;
@@ -1101,9 +1101,9 @@ void BattlescapeState::mapOver(Action* action)
 			// so we missed again the mouse-release :(
 			// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
 			if (_mouseOverThreshold == false
-				&& SDL_GetTicks() - _mouseScrollingStartTime <= static_cast<Uint32>(Options::dragScrollTimeTolerance))
+				&& SDL_GetTicks() - _mouseScrollStartTime <= static_cast<Uint32>(Options::dragScrollTimeTolerance))
 			{
-				_map->getCamera()->setMapOffset(_mapOffsetBeforeDragScroll);
+				_map->getCamera()->setMapOffset(_offsetPreDragScroll);
 			}
 
 			_isMouseScrolled =
@@ -1139,7 +1139,7 @@ void BattlescapeState::mapOver(Action* action)
 							   || std::abs(_totalMouseMoveY) > Options::dragScrollPixelTolerance;
 
 
-		if (Options::battleDragScrollInvert == true) // scroll
+		if (Options::battleDragScrollInvert == true) // scroll. I don't use this
 		{
 /*fenyo1
 			_map->getCamera()->setMapOffset(_mapOffsetBeforeMouseScrolling);
@@ -1191,11 +1191,11 @@ void BattlescapeState::mapOver(Action* action)
 			} */
 
 			_map->getCamera()->scrollXY(
-								static_cast<int>(static_cast<double>(action->getDetails()->motion.xrel) * 3.62 / action->getXScale()),
-								static_cast<int>(static_cast<double>(action->getDetails()->motion.yrel) * 3.62 / action->getYScale()),
-								false);
+									static_cast<int>(static_cast<double>(action->getDetails()->motion.xrel) * 3.62 / action->getXScale()),
+									static_cast<int>(static_cast<double>(action->getDetails()->motion.yrel) * 3.62 / action->getYScale()),
+									false);
 
-			Position delta = _map->getCamera()->getMapOffset();
+/*			Position delta = _map->getCamera()->getMapOffset();
 			delta = _map->getCamera()->getMapOffset() - delta;
 			_cursorPosition.x = std::min(
 									_game->getScreen()->getWidth() - static_cast<int>(Round(action->getXScale())),
@@ -1206,7 +1206,7 @@ void BattlescapeState::mapOver(Action* action)
 									_game->getScreen()->getHeight() - static_cast<int>(Round(action->getYScale())),
 									std::max(
 											0,
-											_cursorPosition.y + static_cast<int>(Round(static_cast<double>(delta.y) * action->getYScale()))));
+											_cursorPosition.y + static_cast<int>(Round(static_cast<double>(delta.y) * action->getYScale())))); */
 /*kL
 			int barWidth = _game->getScreen()->getCursorLeftBlackBand();
 			int barHeight = _game->getScreen()->getCursorTopBlackBand();
@@ -1226,202 +1226,210 @@ void BattlescapeState::mapOver(Action* action)
 		&& _mouseOverIcons == false
 		&& allowButtons() == true)
 	{
-		_txtConsole1->setText(L"");
-		_txtConsole2->setText(L"");
-//		_txtConsole3->setText(L"");
-//		_txtConsole4->setText(L"");
+		printTileInventory();
+	}
+}
 
-		bool showInfo = true;
+/**
+ * Prints contents of hovered Tile's inventory to screen.
+ */
+void BattlescapeState::printTileInventory() // private.
+{
+	_txtConsole1->setText(L"");
+	_txtConsole2->setText(L"");
+//	_txtConsole3->setText(L"");
+//	_txtConsole4->setText(L"");
 
-		Position pos;
-		_map->getSelectorPosition(&pos);
+	bool showInfo = true;
 
-		Tile* const tile = _battleSave->getTile(pos);
-		if (   tile != NULL
-			&& tile->isDiscovered(2) == true
-			&& tile->getInventory()->empty() == false)
+	Position pos;
+	_map->getSelectorPosition(&pos);
+
+	Tile* const tile = _battleSave->getTile(pos);
+	if (tile != NULL
+		&& tile->isDiscovered(2) == true
+		&& tile->getInventory()->empty() == false)
+	{
+		showInfo = false;
+
+		size_t row = 0;
+		std::wostringstream
+			woststr,	// test
+			woststr1,	// Console #1
+			woststr2;	// Console #2
+		std::wstring
+			wst,
+			wst1,
+			wst2,
+			wst3;
+		int qty = 1;
+
+		for (size_t
+				i = 0;
+				i != tile->getInventory()->size() + 1;
+				++i)
 		{
-			showInfo = false;
+			wst1 = L"> ";
 
-			size_t row = 0;
-			std::wostringstream
-				woststr,	// test
-				woststr1,	// Console #1
-				woststr2;	// Console #2
-			std::wstring
-				wst,
-				wst1,
-				wst2,
-				wst3;
-			int qty = 1;
-
-			for (size_t
-					i = 0;
-					i != tile->getInventory()->size() + 1;
-					++i)
+			if (i < tile->getInventory()->size())
 			{
-				wst1 = L"> ";
+				const BattleItem* const item = tile->getInventory()->at(i);
+				const RuleItem* const itRule = item->getRules();
 
-				if (i < tile->getInventory()->size())
+				if (item->getUnit() != NULL)
 				{
-					const BattleItem* const item = tile->getInventory()->at(i);
-					const RuleItem* const itRule = item->getRules();
-
-					if (item->getUnit() != NULL)
+					if (item->getUnit()->getType().compare(0,11, "STR_FLOATER") == 0) // TODO: require Floater autopsy research; also, InventoryState::setExtraInfo()
 					{
-						if (item->getUnit()->getType().compare(0,11, "STR_FLOATER") == 0) // TODO: require Floater autopsy research; also, InventoryState::setExtraInfo()
-						{
-							wst1 += tr("STR_FLOATER");
-							wst1 += L" (status doubtful)";
-						}
-						else if (item->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
-						{
-							wst1 += item->getUnit()->getName(_game->getLanguage());
-
-							if (item->getUnit()->getGeoscapeSoldier() != NULL)
-								wst1 += L" (" + Text::formatNumber(item->getUnit()->getHealth() - item->getUnit()->getStun() - 1) + L")";
-						}
-						else
-						{
-							wst1 += tr(itRule->getType());
-
-							if (item->getUnit()->getGeoscapeSoldier() != NULL)
-								wst1 += L" (" + item->getUnit()->getName(_game->getLanguage()) + L")";
-						}
+						wst1 += tr("STR_FLOATER");
+						wst1 += L" (status doubtful)";
 					}
-					else if (_game->getSavedGame()->isResearched(itRule->getRequirements()) == true)
+					else if (item->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
+					{
+						wst1 += item->getUnit()->getName(_game->getLanguage());
+
+						if (item->getUnit()->getGeoscapeSoldier() != NULL)
+							wst1 += L" (" + Text::formatNumber(item->getUnit()->getHealth() - item->getUnit()->getStun() - 1) + L")";
+					}
+					else
 					{
 						wst1 += tr(itRule->getType());
 
-						if (itRule->getBattleType() == BT_AMMO)
-							wst1 += L" (" + Text::formatNumber(item->getAmmoQuantity()) + L")";
-						else if (itRule->getBattleType() == BT_FIREARM
-							&& item->getAmmoItem() != NULL
-							&& item->getAmmoItem() != item)
-						{
-							wst = tr(item->getAmmoItem()->getRules()->getType());
-							wst1 += L" | " + wst + L" (" + Text::formatNumber(item->getAmmoItem()->getAmmoQuantity()) + L")";
-						}
-						else if (itRule->isGrenade() == true
-							&& item->getFuseTimer() > -1)
-						{
-							wst1 += L" (" + Text::formatNumber(item->getFuseTimer()) + L")";
-						}
+						if (item->getUnit()->getGeoscapeSoldier() != NULL)
+							wst1 += L" (" + item->getUnit()->getName(_game->getLanguage()) + L")";
 					}
-					else
-						wst1 += tr("STR_ALIEN_ARTIFACT");
 				}
-
-				if (i == 0)
+				else if (_game->getSavedGame()->isResearched(itRule->getRequirements()) == true)
 				{
-					wst3 =
-					wst2 = wst1;
-					continue;
-				}
+					wst1 += tr(itRule->getType());
 
-				if (wst1 == wst3)
-				{
-					++qty;
-					continue;
+					if (itRule->getBattleType() == BT_AMMO)
+						wst1 += L" (" + Text::formatNumber(item->getAmmoQuantity()) + L")";
+					else if (itRule->getBattleType() == BT_FIREARM
+						&& item->getAmmoItem() != NULL
+						&& item->getAmmoItem() != item)
+					{
+						wst = tr(item->getAmmoItem()->getRules()->getType());
+						wst1 += L" | " + wst + L" (" + Text::formatNumber(item->getAmmoItem()->getAmmoQuantity()) + L")";
+					}
+					else if (itRule->isGrenade() == true
+						&& item->getFuseTimer() > -1)
+					{
+						wst1 += L" (" + Text::formatNumber(item->getFuseTimer()) + L")";
+					}
 				}
 				else
-					wst3 = wst1;
-
-				if (qty > 1)
-				{
-					wst2 += L" * " + Text::formatNumber(qty);
-					qty = 1;
-				}
-
-				wst2 += L"\n";
-				woststr << wst2;
-				wst3 =
-				wst2 = wst1;
-
-
-				if (row < 26) // Console #1
-				{
-					if (row == 24)
-					{
-						woststr << L"> more >>>";
-						++row;
-					}
-
-					woststr1.str(L"");
-					woststr1 << woststr.str();
-
-					if (row == 25)
-					{
-						/* Log(LOG_INFO) << "row 25";
-						std::string s (wst1.begin(), wst1.end());
-						Log(LOG_INFO) << ". wst1 = " << s;
-						std::string t (wst2.begin(), wst2.end());
-						Log(LOG_INFO) << ". wst2 = " << t;
-						std::string u (wst3.begin(), wst3.end());
-						Log(LOG_INFO) << ". wst3 = " << u;
-						std::wstring wstr1 (woststr1.str());
-						std::string v (wstr1.begin(), wstr1.end());
-						Log(LOG_INFO) << ". woststr1 = " << v;
-						std::wstring wstr2 (woststr.str());
-						std::string w (wstr2.begin(), wstr2.end());
-						Log(LOG_INFO) << ". woststr = " << w; */
-
-						if (wst1 == L"> ")
-						{
-							wst = woststr1.str();
-							wst.erase(wst.length() - 8);
-							woststr1.str(L"");
-							woststr1 << wst;
-						}
-
-						if (_showConsole == 1)
-							break;
-
-						woststr.str(L"");
-					}
-				}
-
-				if (row > 26) // Console #2
-				{
-					if (row == 50)
-						woststr << L"> more >>>";
-
-					woststr2.str(L"");
-					woststr2 << woststr.str();
-
-					if (row == 51)
-					{
-						if (wst1 == L"> ")
-						{
-							wst = woststr2.str();
-							wst.erase(wst.length() - 8);
-							woststr2.str(L"");
-							woststr2 << wst;
-						}
-
-						break;
-					}
-				}
-
-				++row;
+					wst1 += tr("STR_ALIEN_ARTIFACT");
 			}
 
-			_txtConsole1->setText(woststr1.str());
-			_txtConsole2->setText(woststr2.str());
+			if (i == 0)
+			{
+				wst3 =
+				wst2 = wst1;
+				continue;
+			}
+
+			if (wst1 == wst3)
+			{
+				++qty;
+				continue;
+			}
+			else
+				wst3 = wst1;
+
+			if (qty > 1)
+			{
+				wst2 += L" * " + Text::formatNumber(qty);
+				qty = 1;
+			}
+
+			wst2 += L"\n";
+			woststr << wst2;
+			wst3 =
+			wst2 = wst1;
+
+
+			if (row < 26) // Console #1
+			{
+				if (row == 24)
+				{
+					woststr << L"> more >>>";
+					++row;
+				}
+
+				woststr1.str(L"");
+				woststr1 << woststr.str();
+
+				if (row == 25)
+				{
+					/* Log(LOG_INFO) << "row 25";
+					std::string s (wst1.begin(), wst1.end());
+					Log(LOG_INFO) << ". wst1 = " << s;
+					std::string t (wst2.begin(), wst2.end());
+					Log(LOG_INFO) << ". wst2 = " << t;
+					std::string u (wst3.begin(), wst3.end());
+					Log(LOG_INFO) << ". wst3 = " << u;
+					std::wstring wstr1 (woststr1.str());
+					std::string v (wstr1.begin(), wstr1.end());
+					Log(LOG_INFO) << ". woststr1 = " << v;
+					std::wstring wstr2 (woststr.str());
+					std::string w (wstr2.begin(), wstr2.end());
+					Log(LOG_INFO) << ". woststr = " << w; */
+
+					if (wst1 == L"> ")
+					{
+						wst = woststr1.str();
+						wst.erase(wst.length() - 8);
+						woststr1.str(L"");
+						woststr1 << wst;
+					}
+
+					if (_showConsole == 1)
+						break;
+
+					woststr.str(L"");
+				}
+			}
+
+			if (row > 26) // Console #2
+			{
+				if (row == 50)
+					woststr << L"> more >>>";
+
+				woststr2.str(L"");
+				woststr2 << woststr.str();
+
+				if (row == 51)
+				{
+					if (wst1 == L"> ")
+					{
+						wst = woststr2.str();
+						wst.erase(wst.length() - 8);
+						woststr2.str(L"");
+						woststr2 << wst;
+					}
+
+					break;
+				}
+			}
+
+			++row;
 		}
 
-		updateTileInfo(tile);
-
-		_txtTerrain->setVisible(showInfo);
-		_txtShade->setVisible(showInfo);
-		_txtTurn->setVisible(showInfo);
-
-		_txtOrder->setVisible(showInfo);
-		_lstSoldierInfo->setVisible(showInfo);
-		_alienMark->setVisible(showInfo && allowAlienMark());
-//		_txtHasKill->setVisible(showInfo);
-		_showSoldierData = showInfo;
+		_txtConsole1->setText(woststr1.str());
+		_txtConsole2->setText(woststr2.str());
 	}
+
+	updateTileInfo(tile);
+
+	_txtTerrain->setVisible(showInfo);
+	_txtShade->setVisible(showInfo);
+	_txtTurn->setVisible(showInfo);
+
+	_txtOrder->setVisible(showInfo);
+	_lstSoldierInfo->setVisible(showInfo);
+	_alienMark->setVisible(showInfo && allowAlienMark());
+//	_txtHasKill->setVisible(showInfo);
+	_showSoldierData = showInfo;
 }
 
 /**
@@ -1437,11 +1445,11 @@ void BattlescapeState::mapPress(Action* action)
 		_isMouseScrolling = true;
 		_isMouseScrolled = false;
 
-		SDL_GetMouseState(
-					&_xBeforeMouseScrolling,
-					&_yBeforeMouseScrolling);
+//		SDL_GetMouseState(
+//					&_xBeforeMouseScrolling,
+//					&_yBeforeMouseScrolling);
 
-		_mapOffsetBeforeDragScroll = _map->getCamera()->getMapOffset();
+		_offsetPreDragScroll = _map->getCamera()->getMapOffset();
 
 /*kL
 		if (!Options::battleDragScrollInvert
@@ -1456,7 +1464,7 @@ void BattlescapeState::mapPress(Action* action)
 		_totalMouseMoveX =
 		_totalMouseMoveY = 0;
 		_mouseOverThreshold = false;
-		_mouseScrollingStartTime = SDL_GetTicks();
+		_mouseScrollStartTime = SDL_GetTicks();
 	}
 }
 
@@ -1478,9 +1486,9 @@ void BattlescapeState::mapClick(Action* action)
 			// so we missed again the mouse-release :(
 			// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
 			if (_mouseOverThreshold == false
-				&& SDL_GetTicks() - _mouseScrollingStartTime <= static_cast<Uint32>(Options::dragScrollTimeTolerance))
+				&& SDL_GetTicks() - _mouseScrollStartTime <= static_cast<Uint32>(Options::dragScrollTimeTolerance))
 			{
-				_map->getCamera()->setMapOffset(_mapOffsetBeforeDragScroll);
+				_map->getCamera()->setMapOffset(_offsetPreDragScroll);
 			}
 
 			_isMouseScrolled =
@@ -1502,10 +1510,10 @@ void BattlescapeState::mapClick(Action* action)
 
 		// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
 		if (_mouseOverThreshold == false
-			&& SDL_GetTicks() - _mouseScrollingStartTime <= static_cast<Uint32>(Options::dragScrollTimeTolerance))
+			&& SDL_GetTicks() - _mouseScrollStartTime <= static_cast<Uint32>(Options::dragScrollTimeTolerance))
 		{
 			_isMouseScrolled = false;
-//			_map->getCamera()->setMapOffset(_mapOffsetBeforeDragScroll); // oldScroll
+//			_map->getCamera()->setMapOffset(_offsetPreDragScroll); // oldScroll
 //			stopScrolling(action); // newScroll
 		}
 
@@ -2011,11 +2019,9 @@ void BattlescapeState::selectNextFactionUnit(
 		bool setDontReselect,
 		bool checkInventory)
 {
-	if (allowButtons() == true)
+	if (allowButtons() == true
+		&& _battleGame->getCurrentAction()->type == BA_NONE)
 	{
-		if (_battleGame->getCurrentAction()->type != BA_NONE)
-			return;
-
 		BattleUnit* const unit = _battleSave->selectNextFactionUnit(
 																checkReselect,
 																setDontReselect,
@@ -2026,7 +2032,7 @@ void BattlescapeState::selectNextFactionUnit(
 			_map->getCamera()->centerOnPosition(unit->getPosition());
 
 		_battleGame->cancelCurrentAction();
-		_battleGame->getCurrentAction()->actor = unit;
+//		_battleGame->getCurrentAction()->actor = unit; // -> done in setupCursor()
 		_battleGame->setupCursor();
 	}
 }
@@ -2042,11 +2048,9 @@ void BattlescapeState::selectPreviousFactionUnit(
 		bool setDontReselect,
 		bool checkInventory)
 {
-	if (allowButtons() == true)
+	if (allowButtons() == true
+		&& _battleGame->getCurrentAction()->type == BA_NONE)
 	{
-		if (_battleGame->getCurrentAction()->type != BA_NONE)
-			return;
-
 		BattleUnit* const unit = _battleSave->selectPreviousFactionUnit(
 																	checkReselect,
 																	setDontReselect,
@@ -2057,7 +2061,7 @@ void BattlescapeState::selectPreviousFactionUnit(
 			_map->getCamera()->centerOnPosition(unit->getPosition());
 
 		_battleGame->cancelCurrentAction();
-		_battleGame->getCurrentAction()->actor = unit;
+//		_battleGame->getCurrentAction()->actor = unit; // -> done in setupCursor()
 		_battleGame->setupCursor();
 	}
 }
@@ -2243,7 +2247,7 @@ void BattlescapeState::btnRightHandRightClick(Action*)
  * RMB cycles through spotters of the unit corresponding to the button.
  * @param action - pointer to an Action
  */
-void BattlescapeState::btnVisibleUnitPress(Action* action)
+void BattlescapeState::btnHostileUnitPress(Action* action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
 		btnMapDownClick(NULL);
@@ -2291,9 +2295,9 @@ void BattlescapeState::btnVisibleUnitPress(Action* action)
 				if ((*j)->getFaction() == FACTION_PLAYER
 					&& (*j)->isOut() == false
 					&& std::find(
-								(*j)->getHostileUnits()->begin(),
-								(*j)->getHostileUnits()->end(),
-								_hostileUnit[i]) != (*j)->getHostileUnits()->end())
+							(*j)->getHostileUnits()->begin(),
+							(*j)->getHostileUnits()->end(),
+							_hostileUnit[i]) != (*j)->getHostileUnits()->end())
 				{
 					nextSpotter = *j;
 					break;
@@ -2310,9 +2314,9 @@ void BattlescapeState::btnVisibleUnitPress(Action* action)
 					if ((*j)->getFaction() == FACTION_PLAYER
 						&& (*j)->isOut() == false
 						&& std::find(
-									(*j)->getHostileUnits()->begin(),
-									(*j)->getHostileUnits()->end(),
-									_hostileUnit[i]) != (*j)->getHostileUnits()->end())
+								(*j)->getHostileUnits()->begin(),
+								(*j)->getHostileUnits()->end(),
+								_hostileUnit[i]) != (*j)->getHostileUnits()->end())
 					{
 						nextSpotter = *j;
 						break;
@@ -2328,7 +2332,7 @@ void BattlescapeState::btnVisibleUnitPress(Action* action)
 					updateSoldierInfo();
 
 					_battleGame->cancelCurrentAction();
-					_battleGame->getCurrentAction()->actor = nextSpotter;
+//					_battleGame->getCurrentAction()->actor = nextSpotter; // -> done in setupCursor()
 					_battleGame->setupCursor();
 				}
 

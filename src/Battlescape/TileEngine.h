@@ -120,7 +120,7 @@ private:
 		/// Recalculates Field of Vision of all units.
 		void recalculateFOV(bool spotSound = false);
 
-		/// Checks visibility of a unit on this tile.
+		/// Checks visibility of a unit to a tile.
 		bool visible(
 				const BattleUnit* const unit,
 				const Tile* const tile) const;

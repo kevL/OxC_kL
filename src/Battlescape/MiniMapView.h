@@ -53,20 +53,20 @@ private:
 		_mouseScrollX,
 		_mouseScrollY,
 		_totalMouseMoveX,
-		_totalMouseMoveY,
-		_xBeforeMouseScrolling,
-		_yBeforeMouseScrolling;
+		_totalMouseMoveY;
+//		_xBeforeMouseScrolling,
+//		_yBeforeMouseScrolling;
 
 	Camera* _camera;
 	Game* _game;
-	SavedBattleGame* _battleGame;
+	SavedBattleGame* _battleSave;
 	SurfaceSet* _set;
 
+	Position _posPreDragScroll;
+//		_cursorPosition;
 
-	Position
-		_cursorPosition,
-		_posBeforeDragScroll;
-	Uint32 _mouseScrollingStartTime;
+	Uint32 _mouseScrollStartTime;
+
 
 	/// Handles pressing on the MiniMap.
 	void mousePress(Action* action, State* state);
@@ -89,7 +89,7 @@ private:
 				int y,
 				Game* game,
 				Camera* camera,
-				SavedBattleGame* battleGame);
+				SavedBattleGame* battleSave);
 
 		/// Draws the minimap.
 		void draw();

@@ -4730,7 +4730,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Ufo.h"
 
-1432721483 f:\git\openxcom\src\geoscape\globe.h
+1439755627 f:\git\openxcom\src\geoscape\globe.h
 	"Cord.h"
 	"../Engine/FastLineClip.h"
 	"../Engine/InteractiveSurface.h"
@@ -5310,7 +5310,7 @@
 1431047771 f:\git\openxcom\src\battlescape\abortmissionstate.h
 	"../Engine/State.h"
 
-1439658905 f:\git\openxcom\src\battlescape\battlescapestate.h
+1439755686 f:\git\openxcom\src\battlescape\battlescapestate.h
 	"Position.h"
 	"../Engine/State.h"
 
@@ -5369,7 +5369,7 @@
 1433916034 f:\git\openxcom\src\battlescape\scannerstate.h
 	"../Engine/State.h"
 
-1439696839 f:\git\openxcom\src\battlescape\tileengine.h
+1439741494 f:\git\openxcom\src\battlescape\tileengine.h
 	"BattlescapeGame.h"
 	"Position.h"
 	"../Ruleset/RuleItem.h"
@@ -5439,7 +5439,7 @@
 1432984133 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1439659297 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1439751064 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	"AlienBAIState.h"
 	"BattlescapeState.h"
@@ -5477,7 +5477,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1434855187 f:\git\openxcom\src\battlescape\camera.h
+1439751371 f:\git\openxcom\src\battlescape\camera.h
 	"Position.h"
 
 1433862595 f:\git\openxcom\src\battlescape\civilianbaistate.h
@@ -5742,7 +5742,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Ufo.h"
 
-1435795014 source:f:\git\openxcom\src\battlescape\camera.cpp
+1439751377 source:f:\git\openxcom\src\battlescape\camera.cpp
 	"Camera.h"
 	"BattlescapeState.h"
 	"Map.h"
@@ -5933,7 +5933,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1439701977 source:f:\git\openxcom\src\battlescape\map.cpp
+1439748237 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	"BattlescapeMessage.h"
 	"BattlescapeState.h"
@@ -5973,7 +5973,7 @@
 	"../Engine/Surface.h"
 	"../Ruleset/MapData.h"
 
-1439346297 source:f:\git\openxcom\src\battlescape\medikitstate.cpp
+1439753386 source:f:\git\openxcom\src\battlescape\medikitstate.cpp
 	"MedikitState.h"
 	"BattlescapeState.h"
 	"Camera.h"
@@ -6023,7 +6023,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1433830828 f:\git\openxcom\src\battlescape\minimapview.h
+1439755654 f:\git\openxcom\src\battlescape\minimapview.h
 	"Position.h"
 	"../Engine/InteractiveSurface.h"
 
@@ -6176,7 +6176,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1439696960 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1439743327 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	"AlienBAIState.h"
 	"BattlescapeState.h"
@@ -8389,7 +8389,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1439612430 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1439722716 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	"BattleItem.h"
 	"SavedGame.h"
