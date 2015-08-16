@@ -5197,10 +5197,12 @@ std::vector<Position>* Map::getWaypoints()
  * @param pressed	- the state of the button
  */
 void Map::setButtonsPressed(
-		Uint8 button,
+		Uint8 btn,
 		bool pressed)
 {
-	setButtonPressed(button, pressed);
+	setButtonPressed(
+				btn,
+				pressed);
 }
 
 /**
@@ -5242,7 +5244,7 @@ void Map::setWidth(int width)
  * Gets the hidden movement screen's vertical position.
  * @return, the vertical position of the hidden movement window
  */
-const int Map::getMessageY()
+const int Map::getMessageY() const
 {
 	return _hiddenScreen->getY();
 }
@@ -5251,7 +5253,7 @@ const int Map::getMessageY()
  * Gets the icon height.
  * @return, icon panel height
  */
-const int Map::getIconHeight()
+const int Map::getIconHeight() const
 {
 	return _iconHeight;
 }
@@ -5260,7 +5262,7 @@ const int Map::getIconHeight()
  * Gets the icon width.
  * @return, icon panel width
  */
-const int Map::getIconWidth()
+const int Map::getIconWidth() const
 {
 	return _iconWidth;
 }
@@ -5270,7 +5272,7 @@ const int Map::getIconWidth()
  * @param pos - reference the map position to calculate the sound angle from
  * @return, the angle of the sound (360 = 0 degrees center)
  */
-const int Map::getSoundAngle(const Position& pos)
+const int Map::getSoundAngle(const Position& pos) const
 {
 	const int midPoint = getWidth() / 2;
 

@@ -22,7 +22,6 @@
 #include "ActionMenuItem.h"
 #include "ExecuteState.h"
 #include "Map.h"
-#include "MedikitState.h"
 #include "MediTargetState.h"
 #include "Pathfinding.h"
 #include "PrimeGrenadeState.h"
@@ -35,11 +34,8 @@
 //#include "../Engine/Options.h"
 #include "../Engine/Sound.h"
 
-#include "../Interface/Text.h"
-
 #include "../Resource/ResourcePack.h"
 
-//#include "../Ruleset/RuleItem.h"
 #include "../Ruleset/RuleArmor.h"
 
 #include "../Savegame/BattleItem.h"
@@ -453,95 +449,28 @@ void ActionMenuState::btnActionMenuClick(Action* action)
 bool ActionMenuState::canExecuteTarget() // private.
 {
 	const SavedBattleGame* const battleSave = _game->getSavedGame()->getSavedBattle();
-	const Tile* const tile = battleSave->getTile(_action->actor->getPosition()); // TODO: check quads of large units.
+	const Position pos = _action->actor->getPosition();
+	const Tile* tile = battleSave->getTile(pos);
 
-	if (tile->hasUnconsciousUnit(false) != 0
-		|| hasUnconscious() == true)
-	{
-		return true;
-	}
-
-	return false;
-}
-
-/**
- * Checks for an unconscious unit in valid range.
- * @note Helper for canExecute().
- * @return, true if there's an unconscious unit in the direction of facing
- */
-bool ActionMenuState::hasUnconscious() // private. // TODO: duplicate of ExecuteState::getTargetTile()
-{
-	SavedBattleGame* const battleSave = _game->getSavedGame()->getSavedBattle();
-
-	const int dir = _action->actor->getDirection();
-	Position posTarget;
-	Pathfinding::directionToVector(
-								dir,
-								&posTarget);
-
-	const Position origin = _action->actor->getPosition();
-	Tile
-		* tileOrigin,
-		* tileTarget,
-		* tileTarget_above,
-		* tileTarget_below;
-
-	const int unitSize = _action->actor->getArmor()->getSize() - 1;
+	const int actorSize = _action->actor->getArmor()->getSize();
 	for (int
 			x = 0;
-			x != unitSize + 1;
+			x != actorSize;
 			++x)
 	{
 		for (int
 				y = 0;
-				y != unitSize + 1;
+				y != actorSize;
 				++y)
 		{
-			tileOrigin = battleSave->getTile(Position(origin + Position(x,y,0)));
-			tileTarget = battleSave->getTile(Position(origin + Position(x,y,0) + posTarget));
-
-			if (tileOrigin != NULL
-				&& tileTarget != NULL)
-			{
-				if (tileTarget->hasUnconsciousUnit(false) == 0)
-				{
-					tileTarget_above = battleSave->getTile(Position(origin + Position(x,y, 1) + posTarget));
-					tileTarget_below = battleSave->getTile(Position(origin + Position(x,y,-1) + posTarget));
-
-					if (tileTarget_above != NULL // standing on a rise only 1/3 up z-axis reaches adjacent tileAbove.
-						&& std::abs(tileTarget_above->getTerrainLevel() - (tileOrigin->getTerrainLevel() + 24)) < 9)
-					{
-						tileTarget = tileTarget_above;
-					}
-					else if (tileTarget_below != NULL // can reach targetUnit standing on a rise only 1/3 up z-axis on adjacent tileBelow.
-						&& std::abs((tileTarget_below->getTerrainLevel() + 24) + tileOrigin->getTerrainLevel()) < 9)
-					{
-						tileTarget = tileTarget_below;
-					}
-				}
-
-				if (tileTarget->hasUnconsciousUnit(false) != 0)
-				{
-					const Position voxelOrigin = Position(tileOrigin->getPosition() * Position(16,16,24))
-											   + Position(
-														8,8,
-														_action->actor->getHeight(true)
-															- tileOrigin->getTerrainLevel()
-															- 4);
-					Position scanVoxel;
-					if (battleSave->getTileEngine()->canTargetTile(
-																&voxelOrigin,
-																tileOrigin,
-																O_FLOOR,
-																&scanVoxel,
-																_action->actor) == true)
-					{
-						return true;
-					}
-				}
-			}
+			tile = battleSave->getTile(pos + Position(x,y,0));
+			if (tile->hasUnconsciousUnit(false) != 0)
+				return true;
 		}
 	}
+
+	if (battleSave->getTileEngine()->getExecutionTile(_action->actor) != NULL)
+		return true;
 
 	return false;
 }

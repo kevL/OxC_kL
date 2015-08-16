@@ -821,11 +821,11 @@ void DogfightState::updateDogfight()
 							_craft->getLatitude());
 		}
 	}
-	else if (_ufo->isCrashed() == false // UFO cannot break off because it's crappier than the crappy craft.
-		&& _ufo->getStatus() == Ufo::FLYING)
+	else // UFO cannot break off because it's crappier than the crappy craft.
+//	if (_ufo->isCrashed() == false && _ufo->getStatus() == Ufo::FLYING)
 	{
 		_ufoBreakingOff = false;
-		_craft->setSpeed(_ufo->getSpeed());
+//		_craft->setSpeed(_ufo->getSpeed()); // -> let the movingTarget logic dictate speed
 	}
 
 	bool projectileInFlight = false;
@@ -834,7 +834,7 @@ void DogfightState::updateDogfight()
 	{
 		int deltaDist; // Update distance.
 		const int deltaAccel = (_craft->getRules()->getAcceleration()
-							   - _ufo->getRules()->getAcceleration()) / 2;
+							  - _ufo->getRules()->getAcceleration()) / 2;
 
 		if (_ufoBreakingOff == false)
 		{

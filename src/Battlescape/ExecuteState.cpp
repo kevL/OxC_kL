@@ -19,9 +19,8 @@
 
 #include "ExecuteState.h"
 
-#include "Pathfinding.h"
-#include "TileEngine.h"
 #include "Map.h"
+#include "TileEngine.h"
 
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
@@ -38,7 +37,7 @@
 #include "../Ruleset/RuleArmor.h"
 
 #include "../Savegame/BattleItem.h"
-#include "../Savegame/BattleUnit.h"
+//#include "../Savegame/BattleUnit.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Tile.h"
@@ -67,7 +66,7 @@ ExecuteState::ExecuteState(BattleAction* const action)
 
 	add(_window,	"messageWindowBorder",	"battlescape");
 	add(_txtTitle,	"messageWindows",		"battlescape");
-	add(_lstTarget);//,	"messageWindows",		"battlescape");
+	add(_lstTarget);//,	"messageWindows",	"battlescape");
 	add(_btnCancel,	"messageWindowButtons",	"battlescape");
 
 	centerAllSurfaces();
@@ -110,126 +109,58 @@ void ExecuteState::init()
 {
 	State::init();
 
-	BattleUnit* bu;
+	BattleUnit* targetUnit;
 
 	const SavedBattleGame* const battleSave = _game->getSavedGame()->getSavedBattle();
-	Tile* tile = battleSave->getTile(_action->actor->getPosition());
+	const Position pos = _action->actor->getPosition();
+	Tile* tile = battleSave->getTile(pos);
 
-	for (std::vector<BattleItem*>::const_iterator
-			i = tile->getInventory()->begin();
-			i != tile->getInventory()->end();
-			++i)
+	const int actorSize = _action->actor->getArmor()->getSize();
+	for (int
+			x = 0;
+			x != actorSize;
+			++x)
 	{
-		bu = (*i)->getUnit();
-		if (bu != NULL
-			&& bu->getStatus() == STATUS_UNCONSCIOUS)
+		for (int
+				y = 0;
+				y != actorSize;
+				++y)
 		{
-			_targetUnits.push_back(bu);
-			_lstTarget->addRow(
-							1,
-							bu->getName(_game->getLanguage()).c_str());
+			tile = battleSave->getTile(pos + Position(x,y,0));
+			for (std::vector<BattleItem*>::const_iterator
+					i = tile->getInventory()->begin();
+					i != tile->getInventory()->end();
+					++i)
+			{
+				if ((targetUnit = (*i)->getUnit()) != NULL
+					&& targetUnit->getStatus() == STATUS_UNCONSCIOUS)
+				{
+					_targetUnits.push_back(targetUnit);
+					_lstTarget->addRow(
+									1,
+									targetUnit->getName(_game->getLanguage()).c_str());
+				}
+			}
 		}
 	}
 
-	if ((tile = getTargetTile()) != NULL)
+	if ((tile = battleSave->getTileEngine()->getExecutionTile(_action->actor)) != NULL)
 	{
 		for (std::vector<BattleItem*>::const_iterator
 				i = tile->getInventory()->begin();
 				i != tile->getInventory()->end();
 				++i)
 		{
-			bu = (*i)->getUnit();
-			if (bu != NULL
-				&& bu->getStatus() == STATUS_UNCONSCIOUS)
+			if ((targetUnit = (*i)->getUnit()) != NULL
+				&& targetUnit->getStatus() == STATUS_UNCONSCIOUS)
 			{
-				_targetUnits.push_back(bu);
+				_targetUnits.push_back(targetUnit);
 				_lstTarget->addRow(
 								1,
-								bu->getName(_game->getLanguage()).c_str());
+								targetUnit->getName(_game->getLanguage()).c_str());
 			}
 		}
 	}
-}
-
-/**
- * Gets a tile with an unconscious unit in valid range.
- * @return, pointer to a Tile
- */
-Tile* ExecuteState::getTargetTile() // private. // TODO: duplicate of ActionMenuState::hasUnconscious()
-{
-	SavedBattleGame* const battleSave = _game->getSavedGame()->getSavedBattle();
-
-	const int dir = _action->actor->getDirection();
-	Position posTarget;
-	Pathfinding::directionToVector(
-								dir,
-								&posTarget);
-
-	const Position origin = _action->actor->getPosition();
-	Tile
-		* tileOrigin,
-		* tileTarget,
-		* tileTarget_above,
-		* tileTarget_below;
-
-	const int unitSize = _action->actor->getArmor()->getSize() - 1;
-	for (int
-			x = 0;
-			x != unitSize + 1;
-			++x)
-	{
-		for (int
-				y = 0;
-				y != unitSize + 1;
-				++y)
-		{
-			tileOrigin = battleSave->getTile(Position(origin + Position(x,y,0)));
-			tileTarget = battleSave->getTile(Position(origin + Position(x,y,0) + posTarget));
-
-			if (tileOrigin != NULL
-				&& tileTarget != NULL)
-			{
-				if (tileTarget->hasUnconsciousUnit(false) == 0)
-				{
-					tileTarget_above = battleSave->getTile(Position(origin + Position(x,y, 1) + posTarget));
-					tileTarget_below = battleSave->getTile(Position(origin + Position(x,y,-1) + posTarget));
-
-					if (tileTarget_above != NULL // standing on a rise only 1/3 up z-axis reaches adjacent tileAbove.
-						&& std::abs(tileTarget_above->getTerrainLevel() - (tileOrigin->getTerrainLevel() + 24)) < 9)
-					{
-						tileTarget = tileTarget_above;
-					}
-					else if (tileTarget_below != NULL // can reach targetUnit standing on a rise only 1/3 up z-axis on adjacent tileBelow.
-						&& std::abs((tileTarget_below->getTerrainLevel() + 24) + tileOrigin->getTerrainLevel()) < 9)
-					{
-						tileTarget = tileTarget_below;
-					}
-				}
-
-				if (tileTarget->hasUnconsciousUnit(false) != 0)
-				{
-					const Position voxelOrigin = Position(tileOrigin->getPosition() * Position(16,16,24))
-											   + Position(
-														8,8,
-														_action->actor->getHeight(true)
-															- tileOrigin->getTerrainLevel()
-															- 4);
-					Position scanVoxel;
-					if (battleSave->getTileEngine()->canTargetTile(
-																&voxelOrigin,
-																tileOrigin,
-																O_FLOOR,
-																&scanVoxel,
-																_action->actor) == true)
-					{
-						return tileTarget;
-					}
-				}
-			}
-		}
-	}
-
-	return NULL;
 }
 
 /**
@@ -271,13 +202,15 @@ void ExecuteState::lstTargetPress(Action* action)
 			}
 
 			if (sound != -1)
+			{
+				const Map* const battleMap = _game->getSavedGame()->getSavedBattle()->getBattleGame()->getMap();
 				_game->getResourcePack()->getSound(
 												"BATTLE.CAT",
 												sound)
 											->play(
 												-1,
-												_game->getSavedGame()->getSavedBattle()->getBattleGame()->getMap()
-													->getSoundAngle(_action->actor->getPosition()));
+												battleMap->getSoundAngle(_action->actor->getPosition()));
+			}
 		}
 
 		_game->popState();

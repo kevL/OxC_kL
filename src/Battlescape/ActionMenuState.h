@@ -53,8 +53,6 @@ private:
 			size_t* id);
 	/// Checks if there is a viable execution target nearby.
 	bool canExecuteTarget();
-	/// Checks for an unconscious unit in valid range.
-	bool hasUnconscious();
 
 
 	public:

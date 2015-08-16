@@ -1396,7 +1396,7 @@ bool TileEngine::canTargetTile(
 		const Tile* const targetTile,
 		const int tilePart,
 		Position* const scanVoxel,
-		const BattleUnit* const excludeUnit)
+		const BattleUnit* const excludeUnit) const
 {
 	static int
 		sliceObjectSpiral[82] =
@@ -6282,6 +6282,9 @@ bool TileEngine::validMeleeRange(
 		const BattleUnit* const actor,
 		const BattleUnit* const targetUnit) const
 {
+	if (dir < 0 || dir > 7)
+		return false;
+
 	const Tile
 		* tileOrigin,
 		* tileTarget;
@@ -6334,7 +6337,7 @@ bool TileEngine::validMeleeRange(
 								&posOrigin_vox,
 								tileTarget,
 								&posTarget_vox,
-								actor) == true) // or canTargetTile() for executions
+								actor) == true)
 					{
 						return true;
 					}
@@ -6347,12 +6350,84 @@ bool TileEngine::validMeleeRange(
 }
 
 /**
+ * Gets an adjacent tile with an unconscious unit if any.
+ * @return, pointer to a Tile
+ */
+Tile* TileEngine::getExecutionTile(const BattleUnit* const actor) const
+{
+	const Tile* tileOrigin;
+	Tile* tileTarget;
+	const Position pos = actor->getPosition();
+	Position
+		posOrigin,
+		posTarget,
+		posVector,
+		posOrigin_vox,
+		posTarget_vox; // not used.
+
+	const int
+		actorSize = actor->getArmor()->getSize(),
+		dir = actor->getDirection();
+
+	Pathfinding::directionToVector(
+								dir,
+								&posVector);
+
+	for (int
+			x = 0;
+			x != actorSize;
+			++x)
+	{
+		for (int
+				y = 0;
+				y != actorSize;
+				++y)
+		{
+			posOrigin = pos + Position(x,y,0);
+			posTarget = posOrigin + posVector;
+
+			tileOrigin = _battleSave->getTile(posOrigin);
+			tileTarget = _battleSave->getTile(posTarget);
+
+			if (tileOrigin != NULL && tileTarget != NULL)
+			{
+				if (tileTarget->hasUnconsciousUnit(false) == 0)
+					tileTarget = getVerticalTile(
+											posOrigin,
+											posTarget);
+
+				if (tileTarget->hasUnconsciousUnit(false) != 0)
+				{
+					posOrigin_vox = Position(posOrigin * Position(16,16,24))
+								  + Position(
+											8,8,
+											actor->getHeight(true)
+												- tileOrigin->getTerrainLevel()
+												- 4);
+					if (canTargetTile(
+									&posOrigin_vox,
+									tileOrigin,
+									O_FLOOR,
+									&posTarget_vox,
+									actor) == true)
+					{
+						return tileTarget;
+					}
+				}
+			}
+		}
+	}
+
+	return NULL;
+}
+
+/**
  * Gets a Tile within melee range.
  * @param posOrigin - reference a position origin
  * @param posTarget - reference a position target
  * @return, pointer to a tile within melee range
  */
-Tile* TileEngine::getVerticalTile(
+Tile* TileEngine::getVerticalTile( // private.
 		const Position& posOrigin,
 		const Position& posTarget) const
 {
@@ -6362,14 +6437,12 @@ Tile* TileEngine::getVerticalTile(
 		* tileTargetAbove = _battleSave->getTile(posTarget + Position(0,0,1)),
 		* tileTargetBelow = _battleSave->getTile(posTarget + Position(0,0,-1));
 
-	// standing on a rise only 1/3 up z-axis reaches adjacent tileAbove.
 	if (tileTargetAbove != NULL
 		&& std::abs(tileTargetAbove->getTerrainLevel() - (tileOrigin->getTerrainLevel() + 24)) < 9)
 	{
 		return tileTargetAbove;
 	}
 
-	// can reach targetUnit standing on a rise only 1/3 up z-axis on adjacent tileBelow.
 	if (tileTargetBelow != NULL
 		&& std::abs((tileTargetBelow->getTerrainLevel() + 24) + tileOrigin->getTerrainLevel()) < 9)
 	{
@@ -6449,8 +6522,7 @@ int TileEngine::getDirectionTo(
 	if (origin == target) // kL. safety
 		return 0;
 
-
-	double
+	const double
 		offset_x = target.x - origin.x,
 		offset_y = target.y - origin.y,
 
@@ -6501,7 +6573,7 @@ int TileEngine::getDirectionTo(
 void TileEngine::setDangerZone(
 		const Position& pos,
 		const int radius,
-		const BattleUnit* const unit)
+		const BattleUnit* const unit) const
 {
 	Tile* tile = _battleSave->getTile(pos);
 	if (tile == NULL)
@@ -6538,10 +6610,12 @@ void TileEngine::setDangerZone(
 											12 - tile->getTerrainLevel());
 
 						std::vector<Position> trajectory;
-						// we'll trace a line here, ignoring all units, to check if the explosion will reach this point;
-						// granted this won't properly account for explosions tearing through walls, but then we can't really
-						// know that kind of information before the fact, so let's have the AI assume that the wall (or tree)
-						// is enough to protect them.
+						// trace a line here ignoring all units to check if the
+						// explosion will reach this point; granted this won't
+						// properly account for explosions tearing through walls,
+						// but then you can't really know that kind of
+						// information before the fact so let the AI assume that
+						// the wall (or tree) is enough of a shield.
 						if (calculateLine(
 										originVoxel,
 										targetVoxel,

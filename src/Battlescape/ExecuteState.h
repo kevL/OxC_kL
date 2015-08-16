@@ -55,9 +55,6 @@ private:
 
 	std::vector<BattleUnit*> _targetUnits;
 
-	/// Gets a tile with an unconscious unit in valid range.
-	Tile* getTargetTile();
-
 
 	public:
 		/// Creates the Execute state.

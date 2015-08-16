@@ -85,6 +85,10 @@ private:
 			const int dir = -1,
 			const bool originTest = false,
 			const bool trueDir = false) const;
+	/// Gets a Tile within melee range.
+	Tile* getVerticalTile(
+			const Position& posOrigin,
+			const Position& posTarget) const;
 
 
 	public:
@@ -140,7 +144,7 @@ private:
 				const Tile* const targetTile,
 				const int tilePart,
 				Position* const scanVoxel,
-				const BattleUnit* const excludeUnit);
+				const BattleUnit* const excludeUnit) const;
 		/// Checks a unit's % exposure on a tile.
 //		int checkVoxelExposure(Position* originVoxel, Tile* tile, BattleUnit* excludeUnit, BattleUnit* excludeAllBut);
 
@@ -272,10 +276,9 @@ private:
 				const int dir,
 				const BattleUnit* const actor,
 				const BattleUnit* const targetUnit = NULL) const;
-		/// Gets a Tile within melee range.
-		Tile* getVerticalTile(
-				const Position& posOrigin,
-				const Position& posTarget) const;
+
+		/// Gets an adjacent tile with an unconscious unit if any.
+		Tile* TileEngine::getExecutionTile(const BattleUnit* const actor) const;
 
 		/// Gets the AI to look through a window.
 		int faceWindow(const Position& pos) const;
@@ -302,7 +305,7 @@ private:
 		void setDangerZone(
 				const Position& pos,
 				const int radius,
-				const BattleUnit* const unit);
+				const BattleUnit* const unit) const;
 
 		/// Sets a tile with a diagonal bigwall as the true epicenter of an explosion.
 		void setTrueTile(Tile* const tile);
