@@ -153,28 +153,72 @@ static inline void ShaderDraw(
 }
 
 
-template<typename ColorFunc, typename DestType, typename Src0Type, typename Src1Type, typename Src2Type>
-static inline void ShaderDraw(const DestType& dest_frame, const Src0Type& src0_frame, const Src1Type& src1_frame, const Src2Type& src2_frame)
+template<
+	typename ColorFunc,
+	typename DestType,
+	typename Src0Type,
+	typename Src1Type,
+	typename Src2Type>
+static inline void ShaderDraw(
+		const DestType& dest_frame,
+		const Src0Type& src0_frame,
+		const Src1Type& src1_frame,
+		const Src2Type& src2_frame)
 {
-	ShaderDraw<ColorFunc>(dest_frame, src0_frame, src1_frame, src2_frame, helper::Nothing());
+	ShaderDraw<ColorFunc>(
+						dest_frame,
+						src0_frame,
+						src1_frame,
+						src2_frame,
+						helper::Nothing());
 }
 
-template<typename ColorFunc, typename DestType, typename Src0Type, typename Src1Type>
-static inline void ShaderDraw(const DestType& dest_frame, const Src0Type& src0_frame, const Src1Type& src1_frame)
+template<
+	typename ColorFunc,
+	typename DestType,
+	typename Src0Type,
+	typename Src1Type>
+static inline void ShaderDraw(
+		const DestType& dest_frame,
+		const Src0Type& src0_frame,
+		const Src1Type& src1_frame)
 {
-	ShaderDraw<ColorFunc>(dest_frame, src0_frame, src1_frame, helper::Nothing(), helper::Nothing());
+	ShaderDraw<ColorFunc>(
+						dest_frame,
+						src0_frame,
+						src1_frame,
+						helper::Nothing(),
+						helper::Nothing());
 }
 
-template<typename ColorFunc, typename DestType, typename Src0Type>
-static inline void ShaderDraw(const DestType& dest_frame, const Src0Type& src0_frame)
+template<
+	typename ColorFunc,
+	typename DestType,
+	typename Src0Type>
+static inline void ShaderDraw(
+		const DestType& dest_frame,
+		const Src0Type& src0_frame)
 {
-	ShaderDraw<ColorFunc>(dest_frame, src0_frame, helper::Nothing(), helper::Nothing(), helper::Nothing());
+	ShaderDraw<ColorFunc>(
+						dest_frame,
+						src0_frame,
+						helper::Nothing(),
+						helper::Nothing(),
+						helper::Nothing());
 }
 
-template<typename ColorFunc, typename DestType>
-static inline void ShaderDraw(const DestType& dest_frame)
+template<
+	typename ColorFunc,
+	typename DestType>
+static inline void ShaderDraw(
+		const DestType& dest_frame)
 {
-	ShaderDraw<ColorFunc>(dest_frame, helper::Nothing(), helper::Nothing(), helper::Nothing(), helper::Nothing());
+	ShaderDraw<ColorFunc>(
+						dest_frame,
+						helper::Nothing(),
+						helper::Nothing(),
+						helper::Nothing(),
+						helper::Nothing());
 }
 
 
@@ -204,4 +248,4 @@ const Uint8
 
 }
 
-#endif	/* OPENXCOM_SHADERDRAW_H */
+#endif

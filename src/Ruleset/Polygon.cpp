@@ -60,20 +60,20 @@ Polygon::Polygon(size_t points)
 Polygon::Polygon(const Polygon& other)
 {
 	_points	= other._points;
-	_lat	= new double[_points];
-	_lon	= new double[_points];
-	_x		= new Sint16[_points];
-	_y		= new Sint16[_points];
+	_lat = new double[_points];
+	_lon = new double[_points];
+	_x = new Sint16[_points];
+	_y = new Sint16[_points];
 
 	for (size_t
 			i = 0;
 			i != _points;
 			++i)
 	{
-		_lat[i]	= other._lat[i];
-		_lon[i]	= other._lon[i];
-		_x[i]	= other._x[i];
-		_y[i]	= other._y[i];
+		_lat[i] = other._lat[i];
+		_lon[i] = other._lon[i];
+		_x[i] = other._x[i];
+		_y[i] = other._y[i];
 	}
 
 	_texture = other._texture;
@@ -122,7 +122,7 @@ void Polygon::load(const YAML::Node& node)
 		_lon[j] = coords[i] * M_PI / 180.;
 		_lat[j] = coords[i + 1] * M_PI / 180.;
 
-		_x[j] = 0;
+		_x[j] =
 		_y[j] = 0;
 	}
 }

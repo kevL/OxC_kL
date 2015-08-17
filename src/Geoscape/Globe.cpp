@@ -85,7 +85,8 @@ Uint8 // these are only fallbacks for Geography.rul->globe
 //	Globe::CLO_RADAR1		=		// let base radars do its own thing in XuLine()
 	Globe::CLO_RADAR2		= 150,	// Palette::blockOffset(9)+6;	// brown
 	Globe::CLO_FLIGHT		= 166,	// Palette::blockOffset(10)+6;	// steel gray
-	Globe::CLO_OCEAN		= 192;	// Palette::blockOffset(12),	// blue ofc.
+	Globe::CLO_OCEAN		= 192,	// Palette::blockOffset(12),	// blue ofc.
+	Globe::CLO_BLACK		=  15;
 
 
 namespace
@@ -238,7 +239,7 @@ struct CreateShadow
 			else
 				val = static_cast<Uint8>(temp.x);
 
-			if (   d == Globe::CLO_OCEAN
+			if (d == Globe::CLO_OCEAN
 				|| d == Globe::CLO_OCEAN + 16)
 			{
 				return Globe::CLO_OCEAN + val; // this pixel is ocean
@@ -467,7 +468,7 @@ Globe::Globe(
 			i != _randomNoiseData.size();
 			++i)
 	{
-		_randomNoiseData[i] = rand() %4;
+		_randomNoiseData[i] = rand() % 4;
 	}
 
 	cachePolygons();
@@ -637,7 +638,7 @@ bool Globe::insidePolygon(
 			i != poly->getPoints();
 			++i)
 	{
-		const size_t j = (i + 1) %poly->getPoints();
+		const size_t j = (i + 1) % poly->getPoints();
 
 //		double x = lon, y = lat, x_i = poly->getLongitude(i), y_i = poly->getLatitude(i), x_j = poly->getLongitude(j), y_j = poly->getLatitude(j);
 		double
@@ -1328,6 +1329,7 @@ void Globe::draw()
 
 	drawOcean();
 	drawLand();
+	drawBevel();
 	drawRadars();
 	drawShadow();
 	drawMarkers();
@@ -1336,7 +1338,7 @@ void Globe::draw()
 }
 
 /**
- * Renders the ocean shading it according to the time of day.
+ * Renders the ocean and shades it according to the time of day.
  */
 void Globe::drawOcean()
 {
@@ -1351,8 +1353,8 @@ void Globe::drawOcean()
 }
 
 /**
- * Renders the land taking all the visible world polygons
- * and texturing and shading them accordingly.
+ * Renders the land taking all the visible world polygons and texturing and
+ * shading them accordingly.
  */
 void Globe::drawLand()
 {
@@ -1379,6 +1381,38 @@ void Globe::drawLand()
 						(*i)->getPoints(),
 						_texture->getFrame(static_cast<int>((*i)->getPolyTexture() + _zoomTexture)),
 						0,0);
+	}
+}
+
+/**
+ * Draws the 3d bevel around the continents.
+ */
+void Globe::drawBevel()
+{
+	bool bevelPixel;
+	int
+		w = this->getWidth(),
+		h = this->getHeight();
+
+	for (int
+			y = 0;
+			y != h;
+			++y)
+	{
+		for (int
+				x = 0;
+				x != w;
+				++x)
+		{
+			bevelPixel = this->getPixelColor(x - 1, y - 1) != CLO_OCEAN
+					  && this->getPixelColor(x - 1, y - 1) != CLO_BLACK;
+
+			if (bevelPixel == true
+				&& this->getPixelColor(x,y) == CLO_OCEAN)
+			{
+				this->setPixelColor(x,y, CLO_BLACK);
+			}
+		}
 	}
 }
 

@@ -20,7 +20,7 @@
 #ifndef OPENXCOM_SHADERDRAWHELPER_H
 #define	OPENXCOM_SHADERDRAWHELPER_H
 
-#include <vector>
+//#include <vector>
 
 #include "GraphSubset.h"
 #include "Surface.h"

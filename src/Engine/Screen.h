@@ -29,17 +29,16 @@
 namespace OpenXcom
 {
 
-class Surface;
 class Action;
+class Surface;
 
 
 /**
- * A display screen, handles rendering onto the game window.
- * In SDL a Screen is treated like a Surface, so this is just
- * a specialized version of a Surface with functionality more
- * relevant for display screens. Contains a Surface buffer
- * where all the contents are kept, so any filters or conversions
- * can be applied before rendering the screen.
+ * A display screen - handles rendering onto the game window.
+ * @note In SDL a Screen is treated like a Surface so this is just a specialized
+ * version of a Surface with functionality more relevant for display screens.
+ * Contains a Surface buffer where all the contents are kept so any filters or
+ * conversions can be applied before rendering the screen.
  */
 class Screen
 {
@@ -76,7 +75,8 @@ private:
 			SDL_Surface* dst,
 			int flipx,
 			int flipy);
-	/// Sets the _flags and _bpp variables based on game options; needed in more than one place now
+
+	/// Sets the '_flags' and '_bpp' variables based on game options.
 	void makeVideoFlags();
 
 
@@ -91,9 +91,9 @@ private:
 		~Screen();
 
 		/// Get horizontal offset.
-		int getDX();
+		int getDX() const;
 		/// Get vertical offset.
-		int getDY();
+		int getDY() const;
 
 		/// Gets the internal buffer.
 		Surface* getSurface();
@@ -135,9 +135,9 @@ private:
 		/// Takes a screenshot.
 		void screenshot(const std::string& filename) const;
 
-		/// Checks whether a 32bit scaler is requested and works for the selected resolution
+		/// Checks whether a 32bit scaler is requested and works for the selected resolution.
 		static bool is32bitEnabled();
-		/// Checks whether OpenGL output is requested
+		/// Checks whether OpenGL output is requested.
 		static bool isOpenGLEnabled();
 
 		/// update the game scale as required.

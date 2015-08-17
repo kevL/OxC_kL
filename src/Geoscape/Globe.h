@@ -46,9 +46,9 @@ class Timer;
 
 /**
  * Interactive globe view of the world.
- * Takes a flat world map made out of land polygons with
- * polar coordinates and renders it as a 3D-looking globe
- * with cartesian coordinates that the player can interact with.
+ * @note Takes a flat world map made out of land polygons with polar coordinates
+ * and renders it as a 3D-looking globe with cartesian coordinates that the
+ * player can interact with.
  */
 class Globe
 	:
@@ -56,10 +56,9 @@ class Globe
 {
 
 private:
-	static const int
-		NUM_LANDSHADES	= 48,
-		NUM_SEASHADES	= 72,
-		NEAR_RADIUS		= 25;
+	static const int NEAR_RADIUS = 25;
+//		NUM_LANDSHADES	= 48,
+//		NUM_SEASHADES	= 72,
 //		CITY_MARKER		= 8;
 //		NUM_TEXTURES	= 13;
 //		static const size_t DOGFIGHT_ZOOM = 5; // kL, was 3
@@ -220,7 +219,8 @@ private:
 //			CLO_RADAR1,
 			CLO_RADAR2,
 			CLO_FLIGHT,
-			CLO_OCEAN;
+			CLO_OCEAN,
+			CLO_BLACK;
 
 		/// Creates a new globe at the specified position and size.
 		Globe(
@@ -330,6 +330,8 @@ private:
 		void drawOcean();
 		/// Draws the land of the globe.
 		void drawLand();
+		/// Draws the 3d bevel around the continents.
+		void drawBevel();
 		/// Draws the shadow.
 		void drawShadow();
 		/// Draws the radar ranges of the globe.

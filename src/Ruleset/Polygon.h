@@ -29,8 +29,8 @@ namespace OpenXcom
 
 /**
  * Represents a polygon in the world map.
- * Polygons constitute the textured land portions
- * of the X-Com globe and typically have 3-4 points.
+ * @note Polygons constitute the textured land portions of the X-Com globe and
+ * typically have 3-4 points.
  */
 class Polygon
 {

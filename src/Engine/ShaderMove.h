@@ -31,6 +31,8 @@ class ShaderMove
 	:
 		public helper::ShaderBase<Pixel>
 {
+
+private:
 	int
 		_move_x,
 		_move_y;
@@ -162,7 +164,7 @@ inline ShaderMove<Uint8> ShaderSurface(
 		int x,
 		int y)
 {
-	return ShaderMove<Uint8>(s, x, y);
+	return ShaderMove<Uint8>(s,x,y);
 }
 
 /**
@@ -177,7 +179,7 @@ inline ShaderMove<Uint8> ShaderCrop(
 		int x,
 		int y)
 {
-	ShaderMove<Uint8> ret (s, x, y); // init.
+	ShaderMove<Uint8> ret (s,x,y); // init.
 
 	SDL_Rect* s_crop = s->getCrop();
 	if (s_crop->w && s_crop->h)

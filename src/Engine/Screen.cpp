@@ -52,9 +52,7 @@ void Screen::makeVideoFlags()
 	_flags = SDL_HWSURFACE|SDL_DOUBLEBUF|SDL_HWPALETTE;
 
 	if (Options::asyncBlit == true)
-	{
 		_flags |= SDL_ASYNCBLIT;
-	}
 
 	if (isOpenGLEnabled() == true)
 	{
@@ -70,7 +68,7 @@ void Screen::makeVideoFlags()
 		_flags |= SDL_RESIZABLE;
 
 	// Handle window positioning
-	if (   Options::windowedModePositionX != -1
+	if (Options::windowedModePositionX != -1
 		|| Options::windowedModePositionY != -1)
 	{
 		std::ostringstream oststr;
@@ -91,9 +89,7 @@ void Screen::makeVideoFlags()
 
 	// Handle display mode
 	if (Options::fullscreen == true)
-	{
 		_flags |= SDL_FULLSCREEN;
-	}
 
 	if (Options::borderless == true)
 	{
@@ -103,7 +99,7 @@ void Screen::makeVideoFlags()
 	else
 		SDL_putenv(const_cast<char*>("SDL_VIDEO_CENTERED="));
 
-	_bpp = (is32bitEnabled() || isOpenGLEnabled())? 32: 8;
+	_bpp = (is32bitEnabled() || isOpenGLEnabled()) ? 32 : 8;
 
 	_baseWidth = Options::baseXResolution;
 	_baseHeight = Options::baseYResolution;
@@ -220,9 +216,9 @@ void Screen::handle(Action* action)
  */
 void Screen::flip()
 {
-	if (   getWidth() != _baseWidth
-		|| getHeight() != _baseHeight
-		|| isOpenGLEnabled() == true)
+	if (isOpenGLEnabled() == true
+		|| getWidth() != _baseWidth
+		|| getHeight() != _baseHeight)
 	{
 		Zoom::flipWithZoom(
 					_surface->getSurface(),
@@ -273,10 +269,10 @@ void Screen::clear()
 	_surface->clear();
 
 	if (_screen->flags & SDL_SWSURFACE)
-		memset(
-			_screen->pixels,
-			0,
-			_screen->h*_screen->pitch);
+		std::memset(
+				_screen->pixels,
+				0,
+				_screen->h * _screen->pitch);
 	else
 		SDL_FillRect(
 				_screen,
@@ -409,7 +405,7 @@ void Screen::resetDisplay(bool resetVideo)
 							_baseWidth,
 							_baseHeight,
 							0,0,
-							Screen::is32bitEnabled()? 32: 8);
+							Screen::is32bitEnabled() ? 32 : 8);
 
 		if (_surface->getSurface()->format->BitsPerPixel == 8)
 			_surface->setPalette(deferredPalette);
@@ -550,7 +546,9 @@ void Screen::resetDisplay(bool resetVideo)
 	if (isOpenGLEnabled() == true)
 	{
 #ifndef __NO_OPENGL
-		glOutput.init(_baseWidth, _baseHeight);
+		glOutput.init(
+				_baseWidth,
+				_baseHeight);
 		glOutput.linear = Options::useOpenGLSmoothing; // setting from shader file will override this, though
 		glOutput.set_shader(CrossPlatform::getDataFile(Options::useOpenGLShader).c_str());
 		glOutput.setVSync(Options::vSyncForOpenGL);
@@ -666,7 +664,7 @@ void Screen::screenshot(const std::string& filename) const
  * Check whether a 32bpp scaler has been selected.
  * @return, true if it is enabled with a compatible resolution
  */
-bool Screen::is32bitEnabled()
+bool Screen::is32bitEnabled() // static.
 {
 	int
 		w = Options::displayWidth,
@@ -690,7 +688,7 @@ bool Screen::is32bitEnabled()
  * Check if OpenGL is enabled.
  * @return, true if enabled
  */
-bool Screen::isOpenGLEnabled()
+bool Screen::isOpenGLEnabled() // static.
 {
 #ifdef __NO_OPENGL
 	return false;
@@ -703,16 +701,16 @@ bool Screen::isOpenGLEnabled()
  * Gets the Horizontal offset from the mid-point of the screen in pixels.
  * @return, horizontal offset
  */
-int Screen::getDX()
+int Screen::getDX() const
 {
 	return (_baseWidth - ORIGINAL_WIDTH) / 2;
 }
 
 /**
- * Gets the Vertical offset from the mid-point of the screen, in pixels.
+ * Gets the Vertical offset from the mid-point of the screen in pixels.
  * @return, vertical offset
  */
-int Screen::getDY()
+int Screen::getDY() const
 {
 	return (_baseHeight - ORIGINAL_HEIGHT) / 2;
 }
@@ -725,14 +723,14 @@ int Screen::getDY()
 * @param height		- reference which y scale to adjust
 * @param change		- true to change the current scale
 */
-void Screen::updateScale(
+void Screen::updateScale( // static.
 		int& type,
 		int selection,
 		int& width,
 		int& height,
 		bool change)
 {
-	double pixelRatioY = 1.0;
+	double pixelRatioY = 1.;
 	if (Options::nonSquarePixelRatio)
 		pixelRatioY = 1.2;
 
