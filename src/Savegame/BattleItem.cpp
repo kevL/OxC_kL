@@ -54,7 +54,8 @@ BattleItem::BattleItem(
 		_painKiller(0),
 		_heal(0),
 		_stimulant(0),
-		_XCOMProperty(false)
+		_XCOMProperty(false),
+		_isLoad(false)
 {
 	if (pId != NULL)	// <- this is for SavedBattleGame only to keep
 	{					// track of brand new item on the battlefield
@@ -402,9 +403,9 @@ bool BattleItem::usesAmmo() const
 /**
  * Sets an ammo item.
  * @param item - the ammo item
- * @return,	-2 = ammo doesn't fit or nothing happened
+ * @return,	 0 = success or invalid item
  *			-1 = weapon already contains ammo
- *			 0 = success or invalid item
+ *			-2 = ammo doesn't fit or nothing happened
  */
 int BattleItem::setAmmoItem(BattleItem* const item)
 {
@@ -412,6 +413,9 @@ int BattleItem::setAmmoItem(BattleItem* const item)
 	{
 		if (item == NULL)
 		{
+			if (_ammoItem != NULL)
+				_ammoItem->isLoaded(false);
+
 			_ammoItem = NULL;
 			return 0;
 		}
@@ -426,6 +430,8 @@ int BattleItem::setAmmoItem(BattleItem* const item)
 		{
 			if (*i == item->getRules()->getType())
 			{
+				item->isLoaded();
+
 				_ammoItem = item;
 				return 0;
 			}
@@ -596,6 +602,24 @@ void BattleItem::convertToCorpse(RuleItem* const itRule)
 	{
 		_itRule = itRule;
 	}
+}
+
+/**
+ * Sets if the item is a clip in a weapon.
+ * @param - true if loaded
+ */
+void BattleItem::isLoaded(bool loaded)
+{
+	_isLoad = loaded;
+}
+
+/**
+ * Gets if the item is a clip in a weapon.
+ * @return, true if loaded
+ */
+bool BattleItem::isLoaded() const
+{
+	return _isLoad;
 }
 
 }

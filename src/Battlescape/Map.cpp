@@ -4743,7 +4743,8 @@ void Map::animateMap(bool redraw)
 			i != _battleSave->getUnits()->end();
 			++i)
 	{
-		if ((*i)->getArmor()->getConstantAnimation() == true)
+		if ((*i)->isOut_t(OUT_STAT) == false
+			&& (*i)->getArmor()->getConstantAnimation() == true)
 		{
 			(*i)->setCache(NULL);
 			cacheUnit(*i);

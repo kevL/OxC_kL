@@ -288,18 +288,19 @@ void Inventory::drawGrid()
 }
 
 /**
- * Draws the items contained in the soldier's inventory.
+ * Draws the items contained in the unit's inventory.
  */
 void Inventory::drawItems()
 {
 	_items->clear();
 	_grenadeFuses.clear();
 
-	const Uint8 color = static_cast<Uint8>(_game->getRuleset()->getInterface("inventory")->getElement("numStack")->color);
-
 	if (_selUnit != NULL)
 	{
-		SurfaceSet* const texture = _game->getResourcePack()->getSurfaceSet("BIGOBS.PCK");
+		const Uint8 color = static_cast<Uint8>(_game->getRuleset()->getInterface("inventory")->getElement("numStack")->color);
+
+		SurfaceSet* const srt = _game->getResourcePack()->getSurfaceSet("BIGOBS.PCK");
+		Surface* srf;
 
 		for (std::vector<BattleItem*>::const_iterator // Soldier items
 				i = _selUnit->getInventory()->begin();
@@ -308,34 +309,35 @@ void Inventory::drawItems()
 		{
 			if (*i != _selItem)
 			{
-				Surface* const frame = texture->getFrame((*i)->getRules()->getBigSprite());
-				if (frame != NULL) // safety.
+				srf = srt->getFrame((*i)->getRules()->getBigSprite());
+				if (srf != NULL) // safety.
 				{
 					if ((*i)->getSlot()->getType() == INV_SLOT)
 					{
-						frame->setX((*i)->getSlot()->getX() + (*i)->getSlotX() * RuleInventory::SLOT_W);
-						frame->setY((*i)->getSlot()->getY() + (*i)->getSlotY() * RuleInventory::SLOT_H);
+						srf->setX((*i)->getSlot()->getX() + (*i)->getSlotX() * RuleInventory::SLOT_W);
+						srf->setY((*i)->getSlot()->getY() + (*i)->getSlotY() * RuleInventory::SLOT_H);
 					}
 					else if ((*i)->getSlot()->getType() == INV_HAND)
 					{
-						frame->setX(
+						srf->setX(
 								(*i)->getSlot()->getX()
-										+ (RuleInventory::HAND_W - (*i)->getRules()->getInventoryWidth())
+								+ (RuleInventory::HAND_W - (*i)->getRules()->getInventoryWidth())
 									* RuleInventory::SLOT_W / 2);
-						frame->setY(
+						srf->setY(
 								(*i)->getSlot()->getY()
-										+ (RuleInventory::HAND_H - (*i)->getRules()->getInventoryHeight())
+								+ (RuleInventory::HAND_H - (*i)->getRules()->getInventoryHeight())
 									* RuleInventory::SLOT_H / 2);
 					}
 
-					texture->getFrame((*i)->getRules()->getBigSprite())->blit(_items);
+//					srt->getFrame((*i)->getRules()->getBigSprite())->blit(_items);
+					srf->blit(_items);
 
 					if ((*i)->getFuseTimer() > -1) // grenade primer indicators
 						_grenadeFuses.push_back(std::make_pair(
-															frame->getX(),
-															frame->getY()));
+															srf->getX(),
+															srf->getY()));
 				}
-				else Log(LOG_INFO) << "ERROR: bigob not found #" << (*i)->getRules()->getBigSprite();
+				//else Log(LOG_INFO) << "ERROR: bigob not found #" << (*i)->getRules()->getBigSprite();
 			}
 		}
 
@@ -350,60 +352,61 @@ void Inventory::drawItems()
 				i != _selUnit->getTile()->getInventory()->end();
 				++i)
 		{
-			// note that you can make items invisible by setting their width
-			// or height to 0 (for example used with tank corpse items)
-			if (*i == _selItem
-				|| (*i)->getSlotX() < _groundOffset
-				|| (*i)->getRules()->getInventoryHeight() == 0
-				|| (*i)->getRules()->getInventoryWidth() == 0)
+			// Note that items can be made invisible by setting their
+			// width or height to 0 - eg. used with tank corpse items.
+			if (*i != _selItem
+				&& (*i)->getSlotX() >= _groundOffset
+				&& (*i)->getRules()->getInventoryHeight() != 0
+				&& (*i)->getRules()->getInventoryWidth() != 0)
 			{
-				continue;
-			}
-
-			Surface* const frame = texture->getFrame((*i)->getRules()->getBigSprite());
-			if (frame != NULL) // safety.
-			{
-				frame->setX(
+				srf = srt->getFrame((*i)->getRules()->getBigSprite());
+				if (srf != NULL) // safety.
+				{
+					srf->setX(
 							(*i)->getSlot()->getX()
-								+ ((*i)->getSlotX() - _groundOffset) * RuleInventory::SLOT_W);
-				frame->setY(
+							+ ((*i)->getSlotX() - _groundOffset) * RuleInventory::SLOT_W);
+					srf->setY(
 							(*i)->getSlot()->getY()
-								+ ((*i)->getSlotY() * RuleInventory::SLOT_H));
-				texture->getFrame((*i)->getRules()->getBigSprite())->blit(_items);
+							+ ((*i)->getSlotY() * RuleInventory::SLOT_H));
 
-				if ((*i)->getFuseTimer() > -1) // grenade primer indicators
-					_grenadeFuses.push_back(std::make_pair(
-														frame->getX(),
-														frame->getY()));
-			}
-			//else Log(LOG_INFO) << "ERROR : bigob not found #" << (*i)->getRules()->getBigSprite();
+//					srt->getFrame((*i)->getRules()->getBigSprite())->blit(_items);
+					srf->blit(_items);
 
-			if (_stackLevel[(*i)->getSlotX()][(*i)->getSlotY()] > 1) // item stacking
-			{
-				_stackNumber->setX(
-								((*i)->getSlot()->getX()
-									+ (((*i)->getSlotX() + (*i)->getRules()->getInventoryWidth()) - _groundOffset)
-										* RuleInventory::SLOT_W)
+					if ((*i)->getFuseTimer() > -1) // grenade primer indicators
+						_grenadeFuses.push_back(std::make_pair(
+															srf->getX(),
+															srf->getY()));
+				}
+				//else Log(LOG_INFO) << "ERROR : bigob not found #" << (*i)->getRules()->getBigSprite();
+
+				if (_stackLevel[(*i)->getSlotX()]
+							   [(*i)->getSlotY()] > 1) // item stacking
+				{
+					_stackNumber->setX(
+									((*i)->getSlot()->getX()
+										+ (((*i)->getSlotX() + (*i)->getRules()->getInventoryWidth()) - _groundOffset)
+											* RuleInventory::SLOT_W)
 									- 4);
 
-				if (_stackLevel[(*i)->getSlotX()][(*i)->getSlotY()] > 9)
-					_stackNumber->setX(_stackNumber->getX()-4);
+					if (_stackLevel[(*i)->getSlotX()]
+								   [(*i)->getSlotY()] > 9)
+						_stackNumber->setX(_stackNumber->getX() - 4);
 
-				_stackNumber->setY(
-								((*i)->getSlot()->getY()
-									+ ((*i)->getSlotY() + (*i)->getRules()->getInventoryHeight())
-										* RuleInventory::SLOT_H)
+					_stackNumber->setY(
+									((*i)->getSlot()->getY()
+										+ ((*i)->getSlotY() + (*i)->getRules()->getInventoryHeight())
+											* RuleInventory::SLOT_H)
 									- 6);
-				_stackNumber->setValue(_stackLevel[(*i)->getSlotX()][(*i)->getSlotY()]);
-				_stackNumber->draw();
-				_stackNumber->setColor(color);
-//				_stackNumber->setColor(Palette::blockOffset(4)+2);
-				_stackNumber->blit(stackLayer);
+					_stackNumber->setValue(_stackLevel[(*i)->getSlotX()]
+													  [(*i)->getSlotY()]);
+					_stackNumber->draw();
+					_stackNumber->setColor(color); // Palette::blockOffset(4)+2
+					_stackNumber->blit(stackLayer);
+				}
 			}
 		}
 
 		stackLayer->blit(_items);
-
 		delete stackLayer;
 	}
 }

@@ -156,7 +156,10 @@ ArticleStateVehicle::ArticleStateVehicle(ArticleDefinitionVehicle* defs)
 					tr(amRule->getName()).c_str());
 
 		woststr.str(L"");
-		woststr << amRule->getClipSize();
+		if (itRule->getClipSize() > 0)
+			woststr << itRule->getClipSize();
+		else
+			woststr << amRule->getClipSize();
 		_lstStats->addRow(
 					2,
 					tr("STR_ROUNDS").c_str(),

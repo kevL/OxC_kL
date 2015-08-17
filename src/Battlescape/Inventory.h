@@ -53,7 +53,6 @@ private:
 		_tuMode;
 	int
 		_fuseFrame,
-//		_depth,
 		_groundOffset,
 		_prime,
 		_tuCost;

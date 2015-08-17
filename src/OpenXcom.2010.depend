@@ -5374,7 +5374,7 @@
 	"Position.h"
 	"../Ruleset/RuleItem.h"
 
-1439479577 f:\git\openxcom\src\savegame\battleitem.h
+1439827684 f:\git\openxcom\src\savegame\battleitem.h
 	"../Battlescape/Position.h"
 
 1439395204 f:\git\openxcom\src\savegame\tile.h
@@ -5524,7 +5524,7 @@
 
 1431472912 f:\git\openxcom\src\ruleset\ruleinventory.h
 
-1439574087 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
+1439827713 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
 	"BattlescapeGenerator.h"
 	"AlienBAIState.h"
 	"CivilianBAIState.h"
@@ -5564,7 +5564,7 @@
 	"../Savegame/Ufo.h"
 	"../Savegame/Vehicle.h"
 
-1437194323 f:\git\openxcom\src\battlescape\inventory.h
+1439823584 f:\git\openxcom\src\battlescape\inventory.h
 	"../Engine/InteractiveSurface.h"
 
 1433853214 f:\git\openxcom\src\engine\crossplatform.h
@@ -5773,7 +5773,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1439228478 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
+1439828249 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
 	"DebriefingState.h"
 	"CannotReequipState.h"
 	"CommendationDeadState.h"
@@ -5877,7 +5877,7 @@
 	"../Interface/Frame.h"
 	"../Interface/Text.h"
 
-1439307965 source:f:\git\openxcom\src\battlescape\inventory.cpp
+1439825277 source:f:\git\openxcom\src\battlescape\inventory.cpp
 	"Inventory.h"
 	"PrimeGrenadeState.h"
 	"TileEngine.h"
@@ -5933,7 +5933,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1439748237 source:f:\git\openxcom\src\battlescape\map.cpp
+1439822110 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	"BattlescapeMessage.h"
 	"BattlescapeState.h"
@@ -7051,7 +7051,7 @@
 
 1435005791 f:\git\openxcom\src\ufopaedia\ufopaedia.h
 
-1439812411 source:f:\git\openxcom\src\geoscape\globe.cpp
+1439821939 source:f:\git\openxcom\src\geoscape\globe.cpp
 	"Globe.h"
 	"GeoscapeState.h"
 	"../Engine/Action.h"
@@ -8382,7 +8382,7 @@
 	"Base.h"
 	"../Ruleset/RuleBaseFacility.h"
 
-1439570763 source:f:\git\openxcom\src\savegame\battleitem.cpp
+1439827622 source:f:\git\openxcom\src\savegame\battleitem.cpp
 	"BattleItem.h"
 	"BattleUnit.h"
 	"Tile.h"

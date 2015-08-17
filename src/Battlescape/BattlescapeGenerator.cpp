@@ -508,8 +508,7 @@ void BattlescapeGenerator::nextStage()
 {
 	int aliensAlive = 0;
 
-	// kill all enemy units, or those not in endpoint area (if aborted)
-	for (std::vector<BattleUnit*>::const_iterator
+	for (std::vector<BattleUnit*>::const_iterator // kill all enemy units or those not in endpoint area if aborted
 			i = _battleSave->getUnits()->begin();
 			i != _battleSave->getUnits()->end();
 			++i)
@@ -543,16 +542,18 @@ void BattlescapeGenerator::nextStage()
 
 	// remove all items not belonging to soldiers from the map.
 	// sort items into two categories:
-	// - the ones that are guaranteed to be able to take home, barring complete failure (ie: stuff on the ship)
-	// - and the ones that are scattered about on the ground, that will be recovered ONLY on success.
-	// this does not include items in soldiers' hands.
+	// - the ones that are guaranteed to be able to take home barring complete failure - ie: stuff on the ship
+	// - and the ones that are scattered about on the ground that will be recovered ONLY on success.
+	// This does not include items in soldiers' hands.
 	std::vector<BattleItem*>
 		* takeHomeGuaranteed = _battleSave->getGuaranteedRecoveredItems(),
 		* takeHomeConditional = _battleSave->getConditionalRecoveredItems(),
-		* toContainer,
-		takeToNextStage;
+//		* toContainer,
+		takeToNextStage,
+		carryToNextStage,
+		removeFromGame;
 
-	Tile* tile;
+/*	Tile* tile;
 	for (std::vector<BattleItem*>::iterator
 			i = _battleSave->getItems()->begin();
 			i != _battleSave->getItems()->end();
@@ -627,7 +628,98 @@ void BattlescapeGenerator::nextStage()
 		}
 
 		++i;
+	} */
+	for (std::vector<BattleItem*>::const_iterator
+			i = _battleSave->getItems()->begin();
+			i != _battleSave->getItems()->end();
+			++i)
+	{
+		// first off don't process ammo loaded into weapons at least not at this level;
+		// ammo will be handled simultaneously to what. probly its weapon ... duhr.
+		if ((*i)->isLoaded() == false)
+		{
+			std::vector<BattleItem*>* toContainer = &removeFromGame;
+
+			if ((*i)->getRules()->isRecoverable() == true // if it's recoverable and it's not owned by someone
+				&& (*i)->getOwner() == NULL)
+			{
+				if (aliensAlive == 0) // Protocol 1: all defenders dead so recover all items.
+				{
+					if ((*i)->getUnit() != NULL // any corpses or unconscious units get put in the skyranger as well as any unresearched items
+						|| _game->getSavedGame()->isResearched((*i)->getRules()->getRequirements()) == false)
+					{
+						toContainer = takeHomeGuaranteed;
+					}
+					else // otherwise it goes to stage two
+						toContainer = &takeToNextStage;
+				}
+				else	// Protocol 2: some of the aliens survived meaning they ran to the exit zone.
+				{		// recover stuff depending on where it was at the end of the mission.
+					Tile* const tile = (*i)->getTile();
+					if (tile != NULL) // on a tile at least so give them the benefit of the doubt on this and give it a conditional recovery at this point
+					{
+						toContainer = takeHomeConditional;
+						if (tile->getMapData(O_FLOOR) != NULL)
+						{
+							if (tile->getMapData(O_FLOOR)->getSpecialType() == START_POINT) // if in the skyranger it goes home.
+								toContainer = takeHomeGuaranteed;
+							else if (tile->getMapData(O_FLOOR)->getSpecialType() == END_POINT) // if on the exit grid it goes to stage two.
+								toContainer = &takeToNextStage;
+						}
+					}
+				}
+			}
+
+			if ((*i)->getOwner() != NULL
+				&& (*i)->getOwner()->getFaction() == FACTION_PLAYER)
+			{
+				toContainer = &carryToNextStage;
+			}
+
+			BattleItem* const ammo = (*i)->getAmmoItem();
+			if (ammo != NULL
+				&& *i != ammo)
+			{
+				toContainer->push_back(ammo);
+			}
+
+			toContainer->push_back(*i);
+		}
 	}
+
+	for (std::vector<BattleItem*>::const_iterator
+			i = removeFromGame.begin();
+			i != removeFromGame.end();
+			++i)
+	{
+		if ((*i)->getOwner() != NULL)
+		{
+			for (std::vector<BattleItem*>::const_iterator
+					j = (*i)->getOwner()->getInventory()->begin();
+					j != (*i)->getOwner()->getInventory()->end();
+					++j)
+			{
+				if (*i == *j)
+				{
+					(*i)->getOwner()->getInventory()->erase(j);
+					break;
+				}
+			}
+		}
+
+		delete *i;
+	}
+
+	_battleSave->getItems()->clear();
+
+	for (std::vector<BattleItem*>::const_iterator
+			i = carryToNextStage.begin();
+			i != carryToNextStage.end();
+			++i)
+	{
+		_battleSave->getItems()->push_back(*i);
+	}
+
 
 //	_missionType = _battleSave->getMissionType();
 //	AlienDeployment* const deployRule = _rules->getDeployment(_missionType);
@@ -738,6 +830,7 @@ void BattlescapeGenerator::nextStage()
 		i != takeToNextStage.end();
 		++i)
 	{
+		_battleSave->getItems()->push_back(*i);
 		_tileEquipt->addItem(
 						*i,
 						ground);

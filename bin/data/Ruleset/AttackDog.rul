@@ -81,7 +81,7 @@ ufopaedia:
     type_id: 3
     section: STR_HEAVY_WEAPONS_PLATFORMS
     text: STR_DOGE_UFOPEDIA
-    weapon: STR_DOGE_JAWS
+    weapon: STR_DOGE_BITE
 extraSprites:
   - type: DOGE.PCK
     subX: 32

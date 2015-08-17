@@ -41,7 +41,9 @@ class BattleItem
 {
 
 private:
-	bool _XCOMProperty;
+	bool
+		_isLoad,
+		_XCOMProperty;
 //		_droppedOnAlienTurn,
 	int
 		_ammoQty,
@@ -156,6 +158,11 @@ private:
 //		void setTurnFlag(bool flag);
 		/// Sets the item's ruleset.
 		void convertToCorpse(RuleItem* const itRule);
+
+		/// Sets if the item is a clip in a weapon.
+		void BattleItem::isLoaded(bool loaded);
+		/// Gets if the item is a clip in a weapon.
+		bool BattleItem::isLoaded() const;
 };
 
 }

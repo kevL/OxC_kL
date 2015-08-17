@@ -1827,8 +1827,8 @@ void DebriefingState::reequipCraft(Craft* craft) // private.
 		}
 
 
-		const RuleItem* const itRule = _rules->getItem(i->first);
-		const RuleUnit* const tankUnit = _rules->getUnit(itRule->getType());
+		const RuleItem* const tankRule = _rules->getItem(i->first);
+		const RuleUnit* const tankUnit = _rules->getUnit(tankRule->getType());
 
 		int tankSize;
 		if (tankUnit != NULL)
@@ -1839,7 +1839,7 @@ void DebriefingState::reequipCraft(Craft* craft) // private.
 		else
 			tankSize = 4; // safety.
 
-		if (itRule->getCompatibleAmmo()->empty() == true) // so this tank does NOT require ammo
+		if (tankRule->getCompatibleAmmo()->empty() == true) // so this tank does NOT require ammo
 		{
 			for (int
 					j = 0;
@@ -1847,8 +1847,8 @@ void DebriefingState::reequipCraft(Craft* craft) // private.
 					++j)
 			{
 				craft->getVehicles()->push_back(new Vehicle(
-														itRule,
-														itRule->getClipSize(),
+														tankRule,
+														tankRule->getClipSize(),
 														tankSize));
 			}
 
@@ -1858,8 +1858,14 @@ void DebriefingState::reequipCraft(Craft* craft) // private.
 		}
 		else // so this tank requires ammo
 		{
-			const RuleItem* const ammoRule = _rules->getItem(itRule->getCompatibleAmmo()->front());
-			const int ammoPerVehicle = ammoRule->getClipSize();
+			const RuleItem* const ammoRule = _rules->getItem(tankRule->getCompatibleAmmo()->front());
+
+			int ammoPerVehicle = ammoRule->getClipSize();
+			if (ammoPerVehicle > 0
+				&& tankRule->getClipSize() > 0)
+			{
+				ammoPerVehicle = tankRule->getClipSize() / ammoRule->getClipSize();
+			}
 
 			const int baseQty = _base->getItems()->getItemQty(ammoRule->getType()); // Ammo Quantity for this vehicle-type on the base
 
@@ -1888,7 +1894,7 @@ void DebriefingState::reequipCraft(Craft* craft) // private.
 						++j)
 				{
 					craft->getVehicles()->push_back(new Vehicle(
-															itRule,
+															tankRule,
 															ammoPerVehicle,
 															tankSize));
 

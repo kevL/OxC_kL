@@ -1389,6 +1389,7 @@ void Globe::drawLand()
  */
 void Globe::drawBevel()
 {
+	Uint8 p;
 	int
 		w = this->getWidth(),
 		h = this->getHeight();
@@ -1403,11 +1404,14 @@ void Globe::drawBevel()
 				x != w;
 				++x)
 		{
-			if (this->getPixelColor(x,y) == CLO_OCEAN
-				&& this->getPixelColor(x - 1, y - 1) != CLO_OCEAN
-				&& this->getPixelColor(x - 1, y - 1) != CLO_BLACK)
+			if (this->getPixelColor(x,y) == CLO_OCEAN)
 			{
-				this->setPixelColor(x,y, CLO_BLACK);
+				p = this->getPixelColor(x - 1, y - 1);
+				if (p != CLO_OCEAN
+					&& p != CLO_BLACK)
+				{
+					this->setPixelColor(x,y, CLO_BLACK);
+				}
 			}
 		}
 	}
