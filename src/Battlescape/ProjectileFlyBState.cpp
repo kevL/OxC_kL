@@ -455,7 +455,7 @@ void ProjectileFlyBState::init()
 
 	if (createNewProjectile() == true)
 	{
-		_parent->getMap()->setCursorType(CT_NONE);
+		_parent->getMap()->setCursorType(CT_NONE); // might be already done in primaryAction()
 		_parent->getMap()->getCamera()->stopMouseScrolling();
 	}
 	//Log(LOG_INFO) << "ProjectileFlyBState::init() EXIT";
@@ -1342,7 +1342,7 @@ void ProjectileFlyBState::performMeleeAttack()
 	if (_unit->getSpecialAbility() == SPECAB_BURN)
 		_parent->getSave()->getTile(_action.target)->ignite(15);
 
-	_parent->getMap()->setCursorType(CT_NONE);
+	_parent->getMap()->setCursorType(CT_NONE); // might be already done in primaryAction()
 
 	_parent->statePushNext(new ExplosionBState(
 											_parent,

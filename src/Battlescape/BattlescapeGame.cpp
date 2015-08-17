@@ -494,7 +494,8 @@ void BattlescapeGame::popState()
 					} // kL_end.
 
 					setupCursor();
-					_parentState->getGame()->getCursor()->setVisible();
+					_parentState->getGame()->getCursor()->setVisible(); // might not be needed here anymore. But safety.
+					_parentState->getGame()->getCursor()->setHidden(false);
 					//Log(LOG_INFO) << ". end NOT actionFailed";
 				}
 			}
@@ -604,6 +605,7 @@ void BattlescapeGame::popState()
 				//Log(LOG_INFO) << ". enable cursor";
 				getMap()->setCursorType(CT_NORMAL);
 				_parentState->getGame()->getCursor()->setVisible();
+				_parentState->getGame()->getCursor()->setHidden(false);
 			}
 		}
 
@@ -2815,7 +2817,8 @@ void BattlescapeGame::primaryAction(const Position& targetPos)
 			}
 
 			getMap()->setCursorType(CT_NONE);
-//			_parentState->getGame()->getCursor()->setVisible(false); // leave vis 'cause box-cursor won't refresh if mouse is moved while invis.
+//			_parentState->getGame()->getCursor()->setVisible(false);	// leave vis 'cause box-cursor won't refresh if mouse is moved while invis.
+			_parentState->getGame()->getCursor()->setHidden();			// yes.
 
 			_currentAction.target = targetPos;
 			_currentAction.cameraPosition = getMap()->getCamera()->getMapOffset();
@@ -2930,7 +2933,8 @@ void BattlescapeGame::primaryAction(const Position& targetPos)
 					if (allowPreview == false) // -= start walking =- //
 					{
 						getMap()->setCursorType(CT_NONE);
-//						_parentState->getGame()->getCursor()->setVisible(false); // leave vis 'cause box-cursor won't refresh if mouse is moved while invis.
+//						_parentState->getGame()->getCursor()->setVisible(false);	// leave vis 'cause box-cursor won't refresh if mouse is moved while invis.
+						_parentState->getGame()->getCursor()->setHidden();			// yes.
 
 						statePushBack(new UnitWalkBState(
 														this,
@@ -2982,7 +2986,8 @@ void BattlescapeGame::launchAction()
 	_currentAction.target = _currentAction.waypoints.front();
 
 	getMap()->setCursorType(CT_NONE);
-//	_parentState->getGame()->getCursor()->setVisible(false); // leave vis 'cause box-cursor won't refresh if mouse is moved while invis.
+//	_parentState->getGame()->getCursor()->setVisible(false);	// leave vis 'cause box-cursor won't refresh if mouse is moved while invis.
+	_parentState->getGame()->getCursor()->setHidden();			// yes.
 
 //	_currentAction.cameraPosition = getMap()->getCamera()->getMapOffset();
 
@@ -3031,7 +3036,8 @@ void BattlescapeGame::moveUpDown(
 		--_currentAction.target.z;
 
 	getMap()->setCursorType(CT_NONE);
-//	_parentState->getGame()->getCursor()->setVisible(false); // leave vis 'cause box-cursor won't refresh if mouse is moved while invis.
+//	_parentState->getGame()->getCursor()->setVisible(false);	// leave vis 'cause box-cursor won't refresh if mouse is moved while invis.
+	_parentState->getGame()->getCursor()->setHidden();			// yes.
 
 	Pathfinding* const pf = _battleSave->getPathfinding();
 //	pf->setPathingUnit(_currentAction.actor); // set in BattlescapeState::btnUnitUp/DownClick()

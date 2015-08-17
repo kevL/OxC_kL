@@ -97,9 +97,15 @@ void ArticleState::initLayout(bool contrast)
 
 	_btnPrev->setText(L"<");
 	_btnPrev->onMouseClick((ActionHandler)& ArticleState::btnPrevClick);
+	_btnPrev->onKeyboardPress(
+					(ActionHandler)& ArticleState::btnPrevClick,
+					SDLK_LEFT);
 
 	_btnNext->setText(L">");
 	_btnNext->onMouseClick((ActionHandler)& ArticleState::btnNextClick);
+	_btnNext->onKeyboardPress(
+					(ActionHandler)& ArticleState::btnNextClick,
+					SDLK_RIGHT);
 
 	if (contrast == true)
 	{

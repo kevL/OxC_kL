@@ -1182,7 +1182,7 @@ void InventoryState::setExtraInfo( // private.
 
 	if (item->getUnit() != NULL)
 	{
-		if (item->getUnit()->getType().compare(0,11, "STR_FLOATER") == 0) // TODO: require Floater autopsy research; also, BattlescapeState::mapOver()
+		if (item->getUnit()->getType().compare(0,11, "STR_FLOATER") == 0) // TODO: require Floater autopsy research; also, BattlescapeState::printTileInventory()
 		{
 			label << tr("STR_FLOATER") // STR_FLOATER_CORPSE
 				  << L" (status doubtful)";

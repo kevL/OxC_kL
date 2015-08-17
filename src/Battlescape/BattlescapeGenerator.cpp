@@ -683,6 +683,7 @@ void BattlescapeGenerator::nextStage()
 				toContainer->push_back(ammo);
 			}
 
+			(*i)->setTile(NULL);
 			toContainer->push_back(*i);
 		}
 	}

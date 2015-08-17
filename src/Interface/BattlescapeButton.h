@@ -35,9 +35,9 @@ enum InversionType
 
 /**
  * Regular image that works like a button.
- * Unlike the TextButton, this button doesn't draw anything on its own. It takes
- * an existing graphic and treats it as a button, inverting colors when necessary.
- * This is necessary for special buttons like in the Geoscape.
+ * @note Unlike the TextButton this button doesn't draw anything on its own. It
+ * takes an existing graphic and treats it as a button and inverts colors when
+ * necessary. This is necessary for special buttons like in the Geoscape.
  */
 class BattlescapeButton
 	:
@@ -80,7 +80,7 @@ protected:
 		void toggle(bool invert);
 		/// Allows this button to be toggled on/off with a click.
 		void allowToggleInversion();
-		/// Allows this button to be toggled on when clicked, and off when released.
+		/// Allows this button to be toggled on when clicked and off when released.
 		void allowClickInversion();
 
 		/// Sets up the "pressed" surface.

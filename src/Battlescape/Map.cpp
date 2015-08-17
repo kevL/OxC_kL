@@ -4771,8 +4771,8 @@ void Map::refreshSelectorPosition()
 
 /**
  * Sets the rectangular selector to a certain tile.
-// * @param x - mouse x position
-// * @param y - mouse y position
+ * @param x - mouse x position
+ * @param y - mouse y position
  */
 void Map::setSelectorPosition(
 		int x,

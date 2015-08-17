@@ -250,7 +250,7 @@
 	"State.h"
 	"Surface.h"
 
-1439538110 f:\git\openxcom\src\engine\surface.h
+1439841342 f:\git\openxcom\src\engine\surface.h
 
 1325796034 f:\git\openxcom\deps\include\sdl\sdl_image.h
 	"SDL.h"
@@ -5439,7 +5439,7 @@
 1432984133 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1439751064 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1439841511 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	"AlienBAIState.h"
 	"BattlescapeState.h"
@@ -5524,7 +5524,7 @@
 
 1431472912 f:\git\openxcom\src\ruleset\ruleinventory.h
 
-1439827713 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
+1439841865 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
 	"BattlescapeGenerator.h"
 	"AlienBAIState.h"
 	"CivilianBAIState.h"
@@ -5773,7 +5773,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1439828249 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
+1439828495 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
 	"DebriefingState.h"
 	"CannotReequipState.h"
 	"CommendationDeadState.h"
@@ -5877,7 +5877,7 @@
 	"../Interface/Frame.h"
 	"../Interface/Text.h"
 
-1439825277 source:f:\git\openxcom\src\battlescape\inventory.cpp
+1439828709 source:f:\git\openxcom\src\battlescape\inventory.cpp
 	"Inventory.h"
 	"PrimeGrenadeState.h"
 	"TileEngine.h"
@@ -5907,7 +5907,7 @@
 	<SDL.h>
 	<yaml-cpp/yaml.h>
 
-1439307694 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
+1439838879 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
 	"InventoryState.h"
 	"BattlescapeState.h"
 	"Inventory.h"
@@ -5933,7 +5933,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1439822110 source:f:\git\openxcom\src\battlescape\map.cpp
+1439837547 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	"BattlescapeMessage.h"
 	"BattlescapeState.h"
@@ -6558,7 +6558,7 @@
 1430149550 f:\git\openxcom\src\interface\slider.h
 	"../Engine/InteractiveSurface.h"
 
-1439538122 source:f:\git\openxcom\src\engine\surface.cpp
+1439841366 source:f:\git\openxcom\src\engine\surface.cpp
 	"Surface.h"
 	"Language.h"
 	<malloc.h>
@@ -8621,7 +8621,7 @@
 1438172634 source:f:\git\openxcom\src\savegame\weightedoptions.cpp
 	"WeightedOptions.h"
 
-1438172667 source:f:\git\openxcom\src\ufopaedia\articlestate.cpp
+1439843526 source:f:\git\openxcom\src\ufopaedia\articlestate.cpp
 	"ArticleState.h"
 	"Ufopaedia.h"
 	"../Engine/Game.h"
@@ -8718,7 +8718,7 @@
 	"../Ruleset/Ruleset.h"
 	"../Ruleset/RuleUfo.h"
 
-1438173095 source:f:\git\openxcom\src\ufopaedia\articlestatevehicle.cpp
+1439828475 source:f:\git\openxcom\src\ufopaedia\articlestatevehicle.cpp
 	"ArticleStateVehicle.h"
 	"../Engine/Game.h"
 	"../Engine/Surface.h"
@@ -10742,10 +10742,10 @@
 1430149550 source:f:\git\openxcom\src\ruleset\ruleinterface.cpp
 	"RuleInterface.h"
 
-1430149550 f:\git\openxcom\src\interface\battlescapebutton.h
+1439842031 f:\git\openxcom\src\interface\battlescapebutton.h
 	"../Engine/InteractiveSurface.h"
 
-1430149550 source:f:\git\openxcom\src\interface\battlescapebutton.cpp
+1439842762 source:f:\git\openxcom\src\interface\battlescapebutton.cpp
 	"BattlescapeButton.h"
 	"../Engine/Action.h"
 

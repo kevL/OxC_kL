@@ -129,8 +129,8 @@ inline void DeleteAligned(void* buffer)
 
 
 /**
- * Sets up a blank 8bpp surface with the specified size and position
- * with pure black as the transparent color.
+ * Sets up a blank 8bpp surface with the specified size and position with pure
+ * black as the transparent color.
  * @note Surfaces don't have to fill the whole size since their
  * background is transparent, specially subclasses with their own
  * drawing logic, so it just covers the maximum drawing area.
@@ -152,8 +152,8 @@ Surface::Surface(
 		_visible(true),
 		_hidden(false),
 		_redraw(false),
-		_tftdMode(false),
 		_alignedBuffer(NULL)
+//		_tftdMode(false),
 {
 	_alignedBuffer = NewAligned(
 							bpp,
@@ -258,13 +258,13 @@ Surface::Surface(const Surface& other)
 	_visible = other._visible;
 	_hidden = other._hidden;
 	_redraw = other._redraw;
-	_tftdMode = other._tftdMode;
+//	_tftdMode = other._tftdMode;
 }
 
 /**
  * Deletes the surface from memory.
  */
-Surface::~Surface()
+Surface::~Surface() // virtual.
 {
 	DeleteAligned(_alignedBuffer);
 	SDL_FreeSurface(_surface);
@@ -273,17 +273,17 @@ Surface::~Surface()
 /**
  * Loads the contents of an X-Com SCR image file into the surface.
  * SCR files are simply uncompressed images containing the palette offset of each pixel.
- * @param filename - reference the filename of the SCR image
+ * @param file - reference the filename of the SCR image
  * @sa http://www.ufopaedia.org/index.php?title=Image_Formats#SCR_.26_DAT
  */
-void Surface::loadScr(const std::string& filename)
+void Surface::loadScr(const std::string& file)
 {
 	std::ifstream imgFile( // Load file and put pixels in surface
-					filename.c_str(),
+					file.c_str(),
 					std::ios::binary);
 	if (imgFile.fail() == true)
 	{
-		throw Exception(filename + " not found");
+		throw Exception(file + " not found");
 	}
 
 	std::vector<char> buffer(
@@ -307,9 +307,9 @@ void Surface::loadScr(const std::string& filename)
 
 /**
  * Loads the contents of an image file of a known format into the surface.
- * @param filename - reference the filename of the image
+ * @param file - reference the filename of the image
  */
-void Surface::loadImage(const std::string& filename)
+void Surface::loadImage(const std::string& file)
 {
 	DeleteAligned(_alignedBuffer); // Destroy current surface (will be replaced)
 
@@ -319,11 +319,11 @@ void Surface::loadImage(const std::string& filename)
 
 	// SDL only takes UTF-8 filenames
 	// so here's an ugly hack to match this ugly reasoning
-	const std::string utf8 = Language::wstrToUtf8(Language::fsToWstr(filename)); // Load file
+	const std::string utf8 = Language::wstrToUtf8(Language::fsToWstr(file)); // Load file
 	_surface = IMG_Load(utf8.c_str());
 	if (_surface == NULL)
 	{
-		const std::string err = filename + ":" + IMG_GetError();
+		const std::string err = file + ":" + IMG_GetError();
 		throw Exception(err);
 	}
 }
@@ -332,17 +332,17 @@ void Surface::loadImage(const std::string& filename)
  * Loads the contents of an X-Com SPK image file into
  * the surface. SPK files are compressed with a custom
  * algorithm since they're usually full-screen images.
- * @param filename - reference the filename of the SPK image
+ * @param file - reference the filename of the SPK image
  * @sa http://www.ufopaedia.org/index.php?title=Image_Formats#SPK
  */
-void Surface::loadSpk(const std::string& filename)
+void Surface::loadSpk(const std::string& file)
 {
 	std::ifstream imgFile( // Load file and put pixels in surface
-						filename.c_str(),
+						file.c_str(),
 						std::ios::in | std::ios::binary);
 	if (imgFile.fail() == true)
 	{
-		throw Exception(filename + " not found");
+		throw Exception(file + " not found");
 	}
 
 	lock();
@@ -353,7 +353,7 @@ void Surface::loadSpk(const std::string& filename)
 		y = 0;
 
 	while (imgFile.read(
-					(char*)& flag,
+					(char*)&flag,
 					sizeof(flag)))
 	{
 		flag = SDL_SwapLE16(flag);
@@ -361,7 +361,7 @@ void Surface::loadSpk(const std::string& filename)
 		if (flag == 65535)
 		{
 			imgFile.read(
-					(char*)& flag,
+					(char*)&flag,
 					sizeof(flag));
 			flag = SDL_SwapLE16(flag);
 
@@ -376,7 +376,7 @@ void Surface::loadSpk(const std::string& filename)
 		else if (flag == 65534)
 		{
 			imgFile.read(
-					(char*)& flag,
+					(char*)&flag,
 					sizeof(flag));
 			flag = SDL_SwapLE16(flag);
 
@@ -386,8 +386,8 @@ void Surface::loadSpk(const std::string& filename)
 					++i)
 			{
 				imgFile.read(
-							(char*)& value,
-							1);
+						(char*)&value,
+						1);
 				setPixelIterative(&x,&y, value);
 			}
 		}
@@ -400,17 +400,17 @@ void Surface::loadSpk(const std::string& filename)
 /**
  * Loads the contents of a TFTD BDY image file into the surface;
  * BDY files are compressed with a custom algorithm.
- * @param filename - reference the filename of the BDY image
+ * @param file - reference the filename of the BDY image
  * @sa http://www.ufopaedia.org/index.php?title=Image_Formats#BDY
  */
-void Surface::loadBdy(const std::string& filename)
+void Surface::loadBdy(const std::string& file)
 {
 	std::ifstream imgFile( // Load file and put pixels in surface
-						filename.c_str(),
+						file.c_str(),
 						std::ios::in | std::ios::binary);
 	if (imgFile.fail() == true)
 	{
-		throw Exception(filename + " not found");
+		throw Exception(file + " not found");
 	}
 
 	lock();
@@ -422,14 +422,14 @@ void Surface::loadBdy(const std::string& filename)
 		currentRow = 0;
 
 	while (imgFile.read(
-					(char*)& dataByte,
+					(char*)&dataByte,
 					sizeof(dataByte)))
 	{
 		if (dataByte >= 129)
 		{
 			pixelCnt = 257 - static_cast<int>(dataByte);
 			imgFile.read(
-					(char*)& dataByte,
+					(char*)&dataByte,
 					sizeof(dataByte));
 
 			currentRow = y;
@@ -453,7 +453,7 @@ void Surface::loadBdy(const std::string& filename)
 					++i)
 			{
 				imgFile.read(
-						(char*)& dataByte,
+						(char*)&dataByte,
 						sizeof(dataByte));
 				if (currentRow == y) // avoid overscan into next row
 					setPixelIterative(&x,&y, dataByte);
@@ -486,7 +486,7 @@ void Surface::clear(Uint32 color)
 
 /**
  * Shifts all the colors in the surface by a set amount.
- * This is a common method in 8bpp games to simulate color effects for cheap.
+ * @note This is a common method in 8bpp games to simulate color effects for cheap.
  * @param delta		- amount to shift
  * @param minColor	- minimum color to shift to (default -1)
  * @param maxColor	- maximum color to shift to (default -1)
@@ -498,47 +498,47 @@ void Surface::offset(
 		int maxColor,
 		int mult)
 {
-	if (delta == 0)
-		return;
-
-	lock();
-	for (int
-			x = 0,
-				y = 0;
-			x < getWidth()
-				&& y < getHeight();
-			)
+	if (delta != 0)
 	{
-		const int pixel = static_cast<int>(getPixelColor(x,y));	// getPixelColor
-		int p;													// the new color
-
-		if (delta > 0)
-			p = (pixel * mult) + delta;
-		else
-			p = (pixel + delta) / mult;
-
-		if (minColor != -1
-			&& p < minColor)
+		lock();
+		for (int
+				x = 0,
+					y = 0;
+				x < getWidth()
+					&& y < getHeight();
+				)
 		{
-			p = minColor;
-		}
-		else if (maxColor != -1
-			&& p > maxColor)
-		{
-			p = maxColor;
-		}
+			const int pixel = static_cast<int>(getPixelColor(x,y));	// the old color
+			int p;													// the new color
 
-		if (pixel > 0)
-			setPixelIterative(&x,&y, static_cast<Uint8>(p));
-		else
-			setPixelIterative(&x,&y, 0);
+			if (delta > 0)
+				p = (pixel * mult) + delta;
+			else
+				p = (pixel + delta) / mult;
+
+			if (minColor != -1
+				&& p < minColor)
+			{
+				p = minColor;
+			}
+			else if (maxColor != -1
+				&& p > maxColor)
+			{
+				p = maxColor;
+			}
+
+			if (pixel > 0)
+				setPixelIterative(&x,&y, static_cast<Uint8>(p));
+			else
+				setPixelIterative(&x,&y, 0);
+		}
+		unlock();
 	}
-	unlock();
 }
 
 /**
  * Inverts all the colors in the surface according to a middle point.
- * Used for effects like shifting a button between pressed and unpressed.
+ * @note Used for effects like shifting a button between pressed and unpressed.
  * @param mid - middle point color
  */
 void Surface::invert(Uint8 mid)
@@ -562,29 +562,30 @@ void Surface::invert(Uint8 mid)
 
 /**
  * Runs any code the surface needs to keep updating every
- * game cycle, like animations and other real-time elements.
+ * game cycle like animations and other real-time elements.
  */
-void Surface::think()
+void Surface::think() // virtual.
 {}
 
 /**
  * Draws the graphic that the surface contains before it gets blitted onto
- * other surfaces. The surface is only redrawn if the flag is set by a
- * property change to avoid unnecessary drawing.
+ * other surfaces.
+ * @note The surface is only redrawn if the flag is set by a property change to
+ * avoid unnecessary drawing.
  */
-void Surface::draw()
+void Surface::draw() // virtual.
 {
 	_redraw = false;
 	clear();
 }
 
 /**
- * Blits this surface onto another one, with its position relative to the
- * top-left corner of the target surface. The cropping rectangle controls
- * the portion of the surface that is blitted.
+ * Blits this surface onto another one with its position relative to the
+ * top-left corner of the target surface.
+ * @note The cropping rectangle controls the portion of the surface that is blitted.
  * @param surface - pointer to surface to blit onto
  */
-void Surface::blit(Surface* surface)
+void Surface::blit(Surface* surface) // virtual.
 {
 	if (_visible == true
 		&& _hidden == false)
@@ -595,7 +596,7 @@ void Surface::blit(Surface* surface)
 		SDL_Rect* crop;
 		SDL_Rect target;
 
-		if (   _crop.w == 0
+		if (_crop.w == 0
 			&& _crop.h == 0)
 		{
 			crop = NULL;
@@ -616,9 +617,9 @@ void Surface::blit(Surface* surface)
 
 /**
  * Copies the exact contents of another surface onto this one.
- * Only the content that would overlap both surfaces is copied in
- * accordance with their positions. This is handy for applying
- * effects over another surface without modifying the original.
+ * @note Only the content that would overlap both surfaces is copied in
+ * accordance with their positions. This is handy for applying effects over
+ * another surface without modifying the original.
  * @param surface - pointer to a Surface to copy from
  */
 void Surface::copy(Surface* surface)
@@ -822,7 +823,7 @@ void Surface::drawString(
  * Changes the position of the surface in the X axis.
  * @param x - X position in pixels
  */
-void Surface::setX(int x)
+void Surface::setX(int x) // virtual.
 {
 	_x = x;
 }
@@ -831,7 +832,7 @@ void Surface::setX(int x)
  * Changes the position of the surface in the Y axis.
  * @param y - Y position in pixels
  */
-void Surface::setY(int y)
+void Surface::setY(int y) // virtual.
 {
 	_y = y;
 }
@@ -882,7 +883,7 @@ SDL_Rect* Surface::getCrop()
  * @param firstcolor	- offset of the first color to replace (default 0)
  * @param ncolors		- amount of colors to replace (default 256)
  */
-void Surface::setPalette(
+void Surface::setPalette( // virtual.
 		SDL_Color* colors,
 		int firstcolor,
 		int ncolors)
@@ -896,11 +897,10 @@ void Surface::setPalette(
 }
 
 /**
- * This is a separate visibility setting intended
- * for temporary effects like window popups,
- * so as to not override the default visibility setting.
+ * This is a separate visibility setting intended for temporary effects like
+ * window popups so as to not override the default visibility setting.
  * @note Do not confuse with setVisible!
- * @param hidden - shown or hidden
+ * @param hidden - shown or hidden (default true)
  */
 void Surface::setHidden(bool hidden)
 {
@@ -909,7 +909,7 @@ void Surface::setHidden(bool hidden)
 
 /**
  * Locks the surface from outside access for pixel-level access.
- * Must be unlocked afterwards.
+ * @note Must be unlocked afterwards.
  * @sa unlock()
  */
 void Surface::lock()
@@ -1136,10 +1136,11 @@ void Surface::resize(
 
 /**
  * Changes the width of the surface.
- * @warning This is not a trivial setter! It will force the surface to be recreated for the new size.
+ * @warning This is not a trivial setter! It will force the surface to be
+ * recreated for the new size.
  * @param width - new width in pixels
  */
-void Surface::setWidth(int width)
+void Surface::setWidth(int width) // virtual.
 {
 	resize(
 		width,
@@ -1150,10 +1151,11 @@ void Surface::setWidth(int width)
 
 /**
  * Changes the height of the surface.
- * @warning This is not a trivial setter! It will force the surface to be recreated for the new size.
+ * @warning This is not a trivial setter! It will force the surface to be
+ * recreated for the new size.
  * @param height - new height in pixels
  */
-void Surface::setHeight(int height)
+void Surface::setHeight(int height) // virtual.
 {
 	resize(
 		getWidth(),
@@ -1162,20 +1164,20 @@ void Surface::setHeight(int height)
 	_redraw = true;
 }
 
-/**
+/*
  * TFTD mode: much like click inversion but does a color swap rather than a palette shift.
  * @param mode - set TFTD mode to this
- */
-/* void Surface::setTFTDMode(bool mode)
+ *
+void Surface::setTFTDMode(bool mode)
 {
 	_tftdMode = mode;
 } */
 
-/**
+/*
  * Checks TFTD mode.
  * @return, true if TFTD mode
- */
-/* bool Surface::isTFTDMode()
+ *
+bool Surface::isTFTDMode()
 {
 	return _tftdMode;
 } */

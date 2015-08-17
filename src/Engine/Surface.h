@@ -46,8 +46,8 @@ protected:
 	bool
 		_hidden,
 		_redraw,
-		_tftdMode,
 		_visible;
+//		_tftdMode,
 	int
 		_x,
 		_y;
@@ -74,19 +74,19 @@ protected:
 				int x = 0,
 				int y = 0,
 				int bpp = 8);
-		/// Creates a new surface from an existing one.
+		/// Creates a new surface from an existing one.file
 		Surface(const Surface& other);
 		/// Cleans up the surface.
 		virtual ~Surface();
 
 		/// Loads an X-Com SCR graphic.
-		void loadScr(const std::string& filename);
+		void loadScr(const std::string& file);
 		/// Loads an X-Com SPK graphic.
-		void loadSpk(const std::string& filename);
+		void loadSpk(const std::string& file);
 		/// Loads a TFTD BDY graphic.
-		void loadBdy(const std::string& filename);
+		void loadBdy(const std::string& file);
 		/// Loads a general image file.
-		void loadImage(const std::string& filename);
+		void loadImage(const std::string& file);
 
 		/// Clears the surface's contents with a specified colour.
 		void clear(Uint32 color = 0);
@@ -292,7 +292,7 @@ protected:
 		virtual void setHeight(int height); // should be Unit16
 
 		/// Sets the surface's special hidden flag.
-		void setHidden(bool hidden);
+		void setHidden(bool hidden = true);
 
 		/// Locks the surface.
 		void lock();
