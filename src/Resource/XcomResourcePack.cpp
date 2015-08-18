@@ -1654,9 +1654,9 @@ void XcomResourcePack::loadBattlescapeResources()
 //	oststr1 << "GEODATA/" << "LOFTEMPS.DAT";
 //	}
 
-	MapDataSet::loadLOFTEMPS(
-						CrossPlatform::getDataFile(oststr1.str()),
-						&_voxelData);
+	MapDataSet::loadLoft(
+					CrossPlatform::getDataFile(oststr1.str()),
+					&_voxelData);
 
 	const std::string scrs[] =
 	{

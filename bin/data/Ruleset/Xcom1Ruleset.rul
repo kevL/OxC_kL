@@ -2135,7 +2135,7 @@ armors:
       - 1.2 #melee
       - 1.5 #acid
       - 1.12 #smoke
-    loftempsSet: [3]
+    loftSet: [3]
     agility: 1
   - type: STR_PERSONAL_ARMOR_UC
     spriteSheet: XCOM_1.PCK
@@ -2162,7 +2162,7 @@ armors:
       - 1.05 #melee
       - 1.15 #acid
       - 1.12 #smoke
-    loftempsSet: [3]
+    loftSet: [3]
   - type: STR_POWER_SUIT_UC
     spriteSheet: XCOM_2.PCK
     spriteInv: MAN_2
@@ -2184,7 +2184,7 @@ armors:
       - 0.9 #melee
       - 0.95 #acid
       - 0.0 #smoke
-    loftempsSet: [3]
+    loftSet: [3]
     isSpacesuit: true
     agility: 2
     forcedTorso: 1
@@ -2210,7 +2210,7 @@ armors:
       - 0.9 #melee
       - 0.95 #acid
       - 0.0 #smoke
-    loftempsSet: [3]
+    loftSet: [3]
     isSpacesuit: true
     agility: 2
     forcedTorso: 2
@@ -2239,7 +2239,7 @@ armors:
       - 0.77 #melee
       - 0.43 #acid
       - 0.0 #smoke
-    loftempsSet: [92,89,90,91]
+    loftSet: [92,89,90,91]
   - type: HOVERTANK_ARMOR
     spriteSheet: TANKS.PCK
     allowInv: false
@@ -2267,7 +2267,7 @@ armors:
       - 0.77 #melee
       - 0.43 #acid
       - 0.0 #smoke
-    loftempsSet: [92,89,90,91]
+    loftSet: [92,89,90,91]
   - type: CIVM_ARMOR
     spriteSheet: CIVM.PCK
     corpseBattle:
@@ -2288,7 +2288,7 @@ armors:
       - 1.2
       - 1.5
       - 1.12
-    loftempsSet: [3]
+    loftSet: [3]
     agility: 1
   - type: CIVF_ARMOR
     spriteSheet: CIVF.PCK
@@ -2310,7 +2310,7 @@ armors:
       - 1.2
       - 1.5
       - 1.12
-    loftempsSet: [3]
+    loftSet: [3]
     agility: 1
 soldiers:
   - type: XCOM

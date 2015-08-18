@@ -37,7 +37,7 @@ class SurfaceSet;
 
 /**
  * Represents a Terrain Map Datafile that corresponds to an XCom MCD & PCK file.
- * The list of map datafiles is stored in RuleSet, but referenced in RuleTerrain.
+ * @note The list of map datafiles is stored in RuleSet but referenced in RuleTerrain.
  * @sa http://www.ufopaedia.org/index.php?title=MCD
  */
 class MapDataSet
@@ -87,8 +87,8 @@ private:
 		void unloadData();
 
 		/// Loads voxeldata from a DAT file.
-		static void loadLOFTEMPS(
-				const std::string& filename,
+		static void loadLoft(
+				const std::string& file,
 				std::vector<Uint16>* voxelData);
 
 		/// Gets a blank floor tile.

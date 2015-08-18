@@ -147,7 +147,7 @@ BattleUnit::BattleUnit(
 	//Log(LOG_INFO) << "Create BattleUnit 1 : soldier ID = " << getId();
 	_stats += *_armor->getStats(); // armors may modify tactical stats
 
-	_loftempsSet = _armor->getLoftempsSet();
+	_loftSet = _armor->getLoftSet();
 	_moveType = _armor->getMoveTypeArmor();
 
 	int rankValue;
@@ -300,7 +300,7 @@ BattleUnit::BattleUnit(
 		_standHeight(unitRule->getStandHeight()),
 		_kneelHeight(unitRule->getKneelHeight()),
 		_floatHeight(unitRule->getFloatHeight()),
-		_loftempsSet(armor->getLoftempsSet()),
+		_loftSet(armor->getLoftSet()),
 		_deathSound(unitRule->getDeathSound()),
 		_aggroSound(unitRule->getAggroSound()),
 		_moveSound(unitRule->getMoveSound()),
@@ -3699,12 +3699,12 @@ int BattleUnit::getFloatHeight() const
  * Gets this unit's LOFT id, one per unit tile.
  * @note This is one slice only as it is repeated over the entire height of the
  * unit - each tile has only one LOFT.
- * @param entry - an entry in LOFTemps set
+ * @param layer - an entry in this BattleUnit's LOFT set (default 0)
  * @return, this unit's Line of Fire Template id
  */
-int BattleUnit::getLoftemps(int entry) const
+size_t BattleUnit::getLoft(size_t layer) const
 {
-	return _loftempsSet.at(entry);
+	return _loftSet.at(layer);
 }
 
 /**
@@ -4564,7 +4564,7 @@ MovementType BattleUnit::getMoveTypeUnit() const
 	item = rule->getItem(getArmor()->getSpecialWeapon());
 	if (item)
 		_specWeapon[i++] = createItem(save, this, item);
-	if (getBaseStats()->psiSkill > 0 && getFaction() == FACTION_HOSTILE)
+	if (getBaseStats()->psiSkill > 0 && getOriginalFaction() == FACTION_HOSTILE)
 	{
 		item = rule->getItem("ALIEN_PSI_WEAPON");
 		if (item)
@@ -4582,7 +4582,6 @@ MovementType BattleUnit::getMoveTypeUnit() const
 	for (int i = 0; i < SPEC_WEAPON_MAX; ++i)
 		if (_specWeapon[i] && _specWeapon[i]->getRules()->getBattleType() == type)
 			return _specWeapon[i];
-
 	return 0;
 } */
 

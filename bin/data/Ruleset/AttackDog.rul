@@ -74,7 +74,7 @@ armors:
       - 1.2  #melee
       - 1.5  #acid
       - 1.12 #smoke
-    loftempsSet: [2]
+    loftSet: [2]
     agility: 2
 ufopaedia:
   - id: STR_DOGE

@@ -173,7 +173,7 @@ YAML::Node Node::save() const
  * Gets this Node's ID.
  * @return, unique ID
  */
-int Node::getID() const
+int Node::getId() const
 {
 	return _id;
 }

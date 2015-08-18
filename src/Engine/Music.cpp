@@ -99,14 +99,13 @@ void Music::load(
 void Music::play(int loop) const
 {
 #ifndef __NO_MUSIC
-	if (Options::mute == false)
+	if (_music != NULL
+		&& Options::mute == false)
 	{
-		if (_music != NULL
-			&& Mix_PlayMusic(_music, loop) == -1)
-		{
-			stop();
+		stop();
+
+		if (Mix_PlayMusic(_music, loop) == -1)
 			Log(LOG_WARNING) << Mix_GetError();
-		}
 	}
 #endif
 }

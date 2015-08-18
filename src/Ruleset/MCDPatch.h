@@ -45,6 +45,7 @@ private:
 		_footstepSounds,
 		_fuels,
 		_HEBlocks,
+		_objectTypes,
 		_specialTypes,
 		_terrainHeight,
 		_TUWalks,
@@ -53,7 +54,7 @@ private:
 	std::vector<std::pair<size_t, bool> >
 		_noFloors,
 		_stopLOSses;
-	std::vector<std::pair<size_t, std::vector<int> > > _LOFTS;
+	std::vector<std::pair<size_t, std::vector<size_t> > > _LOFTS;
 
 
 	public:

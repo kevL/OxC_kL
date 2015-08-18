@@ -101,7 +101,7 @@ private:
 		YAML::Node save() const;
 
 		/// Gets the node's id.
-		int getID() const;
+		int getId() const;
 
 		/// Gets the node's paths.
 		std::vector<int>* getNodeLinks();

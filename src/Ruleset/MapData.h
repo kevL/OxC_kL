@@ -110,7 +110,6 @@ private:
 		_fuel,
 		_isPsychedelic,
 		_lightSource,
-		_loftID[12],
 		_objectType,
 		_sprite[8],
 		_terrainLevel,
@@ -118,6 +117,9 @@ private:
 		_TUFly,
 		_TUSlide,
 		_yOffset;
+
+	size_t _loftId[12];
+
 	unsigned short _miniMapIndex;
 
 	MapDataSet* _dataset;
@@ -127,7 +129,7 @@ private:
 
 	public:
 		/// cTor.
-		explicit MapData(MapDataSet* dataSet);
+		explicit MapData(MapDataSet* const dataSet);
 		/// dTor.
 		~MapData();
 
@@ -144,11 +146,11 @@ private:
 
 		/// Gets whether this is an animated ufo door.
 		bool isUfoDoor() const;
-		/// kL. Gets whether this stops LoS.
-		bool stopLOS() const; // kL
+		/// Gets whether this stops LoS.
+		bool stopLOS() const;
 		/// Gets whether this is a floor.
 		bool isNoFloor() const;
-		/// Gets whether this is a big wall, which blocks all surrounding paths.
+		/// Gets whether this is a big wall.
 		int getBigWall() const;
 		/// Gets whether this is a normal door.
 		bool isDoor() const;
@@ -159,8 +161,8 @@ private:
 		/// Gets whether this blocks fire.
 		bool blockFire() const;
 
-		/// kL. Sets whether this stops LoS.
-		void setStopLOS(bool stopLOS = true); // kL
+		/// Sets whether this stops LoS.
+		void setStopLOS(bool stopLOS = true);
 
 		/// Sets all kinds of flags.
 		void setFlags(
@@ -192,8 +194,10 @@ private:
 		/// Sets the offset on the Y axis for drawing this object.
 		void setYOffset(int value);
 
-		/// Get the type of tile.
+		/// Gets the type of tile.
 		int getObjectType() const;
+		/// Sets the type of tile.
+		void setObjectType(int type);
 
 		/// Gets info about special tile types
 		SpecialTileType getSpecialType() const;
@@ -249,11 +253,11 @@ private:
 		void setFuel(int value);
 
 		/// Gets the loft index for a certain layer.
-		int getLoftID(int layer) const;
+		size_t getLoftId(size_t layer) const;
 		/// Sets the loft index for a certain layer.
-		void setLoftID(
-				int loft,
-				int layer);
+		void setLoftId(
+				size_t loft,
+				size_t layer);
 
 		/// Gets the amount of explosive.
 		int getExplosive() const;
@@ -279,7 +283,7 @@ private:
 		/// Sets the TUSlide value.
 		void setTUSlide(const int TUSlide);
 
-		/// Sets this tile as not a floor (water, etc.)
+		/// Sets this tile as not a floor.
 		void setNoFloor(bool isNoFloor);
 
 		/// Check if this is an xcom base object.
@@ -287,9 +291,6 @@ private:
 
 		/// Gets if this tilepart is psychedelic.
 		int isPsychedelic() const;
-
-		/// Sets this tile as not stopping LOS. // kL_note: "not" drop more LSD.
-//		void setStopLOS(bool stopLOS);
 };
 
 }

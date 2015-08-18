@@ -33,7 +33,7 @@ namespace OpenXcom
  * Creates a new Map Data Object.
  * @param dataSet - pointer to the MapDataSet this object belongs to
  */
-MapData::MapData(MapDataSet* dataSet)
+MapData::MapData(MapDataSet* const dataSet)
 	:
 		_dataset(dataSet),
 		_specialType(TILE),
@@ -66,7 +66,7 @@ MapData::MapData(MapDataSet* dataSet)
 {
 	std::fill_n(_sprite, 8,0);
 	std::fill_n(_block, 6,0);
-	std::fill_n(_loftID, 12,0);
+	std::fill_n(_loftId, 12,0);
 }
 
 /**
@@ -116,10 +116,10 @@ bool MapData::isUfoDoor() const
 }
 
 /**
- * kL. Gets whether this stops LoS.
+ * Gets whether this stops LoS.
  * @return, true if this stops LoS
  */
-bool MapData::stopLOS() const // kL
+bool MapData::stopLOS() const
 {
 	return _stopLOS;
 }
@@ -192,17 +192,17 @@ bool MapData::blockFire() const
 }
 
 /**
- * kL. Sets whether this stops LoS.
- * @return, true if this stops LoS (default true)
+ * Sets whether this tile part stops LoS.
+ * @return, true if stops LoS (default true)
  */
-void MapData::setStopLOS(bool stopLOS) // kL
+void MapData::setStopLOS(bool stopLOS)
 {
 	_stopLOS = stopLOS;
 	_block[1] = stopLOS ? 100 : 0;
 }
 
 /**
- * Sets all kinds of flags.
+ * Sets a bunch of flags.
  * @param isUfoDoor		- true if this is a ufo door
  * @param stopLOS		- true if this stops line of sight
  * @param isNoFloor		- true if this is *not* a floor
@@ -224,14 +224,14 @@ void MapData::setFlags(
 		bool blockSmoke,
 		bool baseModule)
 {
-	_isUfoDoor	= isUfoDoor;
-	_stopLOS	= stopLOS;
-	_isNoFloor	= isNoFloor;
-	_bigWall	= bigWall;
-	_isGravLift	= isGravLift;
-	_isDoor		= isDoor;
-	_blockFire	= blockFire;
-	_blockSmoke	= blockSmoke;
+	_isUfoDoor = isUfoDoor;
+	_stopLOS = stopLOS;
+	_isNoFloor = isNoFloor;
+	_bigWall = bigWall;
+	_isGravLift = isGravLift;
+	_isDoor = isDoor;
+	_blockFire = blockFire;
+	_blockSmoke = blockSmoke;
 	_baseModule = baseModule;
 }
 
@@ -286,7 +286,7 @@ void MapData::setBlock(
 
 	_block[0] = lightBlock; // not used
 //	_block[1] = visionBlock; // kL
-//kL	_block[1] = visionBlock == 1? 255: 0; // <- why? kL_note. haha
+//	_block[1] = visionBlock == 1? 255: 0; // <- why? kL_note. haha
 	_block[1] = visionBlock == 1 ? 100 : 0; // kL
 		// stopLoS==true needs to be a significantly large integer (only about 10+ really)
 		// so that if a directionally opposite Field of View check includes a "-1",
@@ -297,7 +297,7 @@ void MapData::setBlock(
 		// horizontalBlockage() & blockage() were coded differently [verticalBlockage()
 		// too, perhaps]
 	_block[2] = HEBlock;
-//kL	_block[3] = smokeBlock == 1? 256: 0; // <- why? kL_note. I basically use visionBlock for smoke ....
+//	_block[3] = smokeBlock == 1? 256: 0; // <- why? kL_note. I basically use visionBlock for smoke ....
 	_block[3] = smokeBlock;
 	_block[4] = fireBlock; // this is Flammable, NOT Block_Fire.
 	_block[5] = gasBlock;
@@ -337,6 +337,15 @@ void MapData::setYOffset(int value)
 int MapData::getObjectType() const
 {
 	return _objectType;
+}
+
+/**
+ * Sets the type of object.
+ * @param type - the object type (0-3)
+ */
+void MapData::setObjectType(int type)
+{
+	_objectType = type;
 }
 
 /**
@@ -489,7 +498,7 @@ void MapData::setDieMCD(int value)
  */
 int MapData::getLightSource() const
 {
-	if (_lightSource == 1)	// lamp posts have 1,
+	if (_lightSource == 1)	// lamp posts have 1
 		return 15;			// but they should emit more light
 
 	return _lightSource - 1;
@@ -563,21 +572,21 @@ void MapData::setFuel(int value)
  * @param layer - the layer
  * @return, the LOFT index
  */
-int MapData::getLoftID(int layer) const
+size_t MapData::getLoftId(size_t layer) const
 {
-	return _loftID[layer];
+	return _loftId[layer];
 }
 
 /**
  * Sets the loft index for a certain layer.
  * @param loft	- the LOFT index
- * @param layer	- the layer
+ * @param layer	- the layer (0..11)
  */
-void MapData::setLoftID(
-		int loft,
-		int layer)
+void MapData::setLoftId(
+		size_t loft,
+		size_t layer)
 {
-	_loftID[layer] = loft;
+	_loftId[layer] = loft;
 }
 
 /**
@@ -696,15 +705,5 @@ int MapData::isPsychedelic() const
 {
 	return _isPsychedelic;
 }
-
-/**
- * Set the "stopLOS" flag.
- * @param stopLOS - true to stop LoS
- */
-/* void MapData::setStopLOS(bool stopLOS)
-{
-	_stopLOS = stopLOS;
-	_block[1] = stopLOS ? 255 : 0;
-} */
 
 }

@@ -103,8 +103,8 @@ YAML::Node CivilianBAIState::save() const
 		fromNodeId = -1,
 		toNodeId = -1;
 
-	if (_fromNode != NULL)	fromNodeId	= _fromNode->getID();
-	if (_toNode != NULL)	toNodeId	= _toNode->getID();
+	if (_fromNode != NULL)	fromNodeId	= _fromNode->getId();
+	if (_toNode != NULL)	toNodeId	= _toNode->getId();
 
 	YAML::Node node;
 

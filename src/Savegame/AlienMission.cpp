@@ -582,6 +582,7 @@ Ufo* AlienMission::spawnUfo( // private.
 		coord = getWaypoint(
 						trajectory,
 						0,
+						globe,
 						regionRule);
 
 		ufo->setAltitude(trajectory.getAltitude(0));
@@ -597,6 +598,7 @@ Ufo* AlienMission::spawnUfo( // private.
 		coord = getWaypoint(
 						trajectory,
 						1,
+						globe,
 						regionRule);
 
 		wp = new Waypoint();
@@ -681,6 +683,7 @@ void AlienMission::ufoReachedWaypoint(
 	const std::pair<double, double> pos = getWaypoint(
 												trajectory,
 												nextWaypoint,
+												globe,
 												regionRule);
 
 	Waypoint* const wayPoint = new Waypoint();
@@ -741,8 +744,8 @@ void AlienMission::ufoReachedWaypoint(
 				}
 			}
 		}
-		else if (trajectory.getID() == UfoTrajectory::RETALIATION_ASSAULT_RUN)	// remove UFO, replace with Base defense.
-		{															// Ignore what the trajectory might say, this is a base defense.
+		else if (trajectory.getId() == UfoTrajectory::RETALIATION_ASSAULT_RUN)	// remove UFO, replace with Base defense.
+		{																		// Ignore what the trajectory might say, this is a base defense.
 			ufo.setDetected(false);
 
 			const std::vector<Base*>::const_iterator xcomBase = std::find_if(
@@ -995,14 +998,25 @@ void AlienMission::ufoShotDown(const Ufo& ufo)
  * waypoint.
  * @param trajectory	- reference the trajectory in question
  * @param nextWaypoint	- the next logical waypoint in sequence (0 for newly spawned UFOs)
+ * @param globe			- reference the Globe
  * @param region		- reference the ruleset for the region of this mission
  * @return, pair of lon and lat coordinates based on the criteria of the trajectory
  */
 std::pair<double, double> AlienMission::getWaypoint(
 		const UfoTrajectory& trajectory,
 		const size_t nextWaypoint,
+		const Globe& globe,
 		const RuleRegion& region)
 {
+	if (trajectory.getWaypointTotal() > nextWaypoint + 1
+		&& trajectory.getAltitude(nextWaypoint + 1) == "STR_GROUND")
+ 	{
+ 		return getLandPoint(
+						globe,
+						region,
+						trajectory.getZone(nextWaypoint));
+ 	}
+
 	size_t waveNumber = _waveCount - 1;
 	if (waveNumber == std::numeric_limits<size_t>::max())
 		waveNumber = _missionRule.getWaveTotal() - 1;

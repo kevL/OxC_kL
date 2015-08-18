@@ -251,7 +251,7 @@ YAML::Node Ufo::save(bool newBattle) const
 	if (newBattle == false)
 	{
 		node["mission"]			= _mission->getId();
-		node["trajectory"]		= _trajectory->getID();
+		node["trajectory"]		= _trajectory->getId();
 		node["trajectoryPoint"]	= _trajectoryPoint;
 	}
 

@@ -538,7 +538,7 @@ private:
 
 	std::wstring _name;
 
-	std::vector<int> _loftempsSet;
+	std::vector<size_t> _loftSet;
 	std::vector<std::pair<Uint8, Uint8> > _recolor;
 
 	RuleArmor* _armor;
@@ -953,7 +953,7 @@ private:
 		int getKneelHeight() const;
 
 		/// Gets this unit's loft ID.
-		int getLoftemps(int entry = 0) const;
+		size_t getLoft(size_t layer = 0) const;
 
 		/// Gets this unit's victory point value.
 		int getValue() const;

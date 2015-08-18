@@ -290,7 +290,7 @@ private:
 //		bool isVoxelVisible(const Position& voxel) const;
 		/// Checks what type of voxel occupies posTarget in voxel space.
 		int voxelCheck(
-				const Position& targetPos,
+				const Position& posTarget,
 				const BattleUnit* const excludeUnit = NULL,
 				const bool excludeAllUnits = false,
 				const bool onlyVisible = false,

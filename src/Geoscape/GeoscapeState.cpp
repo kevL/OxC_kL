@@ -1585,7 +1585,7 @@ void GeoscapeState::time5Seconds()
 							&& (*i)->getFollowers()->empty() == false)
 						{
 							if (!
-								((*i)->getTrajectory().getID() == UfoTrajectory::RETALIATION_ASSAULT_RUN
+								((*i)->getTrajectory().getId() == UfoTrajectory::RETALIATION_ASSAULT_RUN
 									&& (*i)->getStatus() == Ufo::LANDED))
 							{
 								resetTimer();
@@ -1702,52 +1702,52 @@ void GeoscapeState::time5Seconds()
 					lat = (*j)->getLatitude();
 
 				for (std::vector<Country*>::const_iterator
-						country = _gameSave->getCountries()->begin();
-						country != _gameSave->getCountries()->end();
-						++country)
+						k = _gameSave->getCountries()->begin();
+						k != _gameSave->getCountries()->end();
+						++k)
 				{
-					if ((*country)->getRules()->insideCountry(
+					if ((*k)->getRules()->insideCountry(
 															lon,
 															lat) == true)
 					{
-						(*country)->addActivityAlien((*j)->getRules()->getScore());
-						(*country)->recentActivity();
+						(*k)->addActivityAlien((*j)->getRules()->getScore());
+						(*k)->recentActivity();
 						break;
 					}
 				}
 
 				for (std::vector<Region*>::const_iterator
-						region = _gameSave->getRegions()->begin();
-						region != _gameSave->getRegions()->end();
-						++region)
+						k = _gameSave->getRegions()->begin();
+						k != _gameSave->getRegions()->end();
+						++k)
 				{
-					if ((*region)->getRules()->insideRegion(
+					if ((*k)->getRules()->insideRegion(
 														lon,
 														lat) == true)
 					{
-						(*region)->addActivityAlien((*j)->getRules()->getScore());
-						(*region)->recentActivity();
+						(*k)->addActivityAlien((*j)->getRules()->getScore());
+						(*k)->recentActivity();
 						break;
 					}
 				}
 
-				// if a transport craft has been shot down, kill all the soldiers on board.
+				// if a transport craft has been shot down kill all soldiers on board.
 				if ((*j)->getRules()->getSoldiers() > 0)
 				{
 					for (std::vector<Soldier*>::const_iterator
-							soldier = (*i)->getSoldiers()->begin();
-							soldier != (*i)->getSoldiers()->end();
+							k = (*i)->getSoldiers()->begin();
+							k != (*i)->getSoldiers()->end();
 							)
 					{
-						if ((*soldier)->getCraft() == *j)
+						if ((*k)->getCraft() == *j)
 						{
-							(*soldier)->die(_gameSave);
+							(*k)->die(_gameSave);
 
-							delete *soldier;
-							soldier = (*i)->getSoldiers()->erase(soldier);
+							delete *k;
+							k = (*i)->getSoldiers()->erase(k);
 						}
 						else
-							++soldier;
+							++k;
 					}
 				}
 
@@ -1762,16 +1762,19 @@ void GeoscapeState::time5Seconds()
 				const Ufo* const ufo = dynamic_cast<Ufo*>((*j)->getDestination());
 				if (ufo != NULL)
 				{
+					if (ufo->getStatus() != Ufo::FLYING)
+						(*j)->setInDogfight(false);
+
 					if (ufo->getDetected() == false	// lost radar contact
-						&& ufo != ufoExpired)		// <- ie. not just shot down while trying to outrun interceptor but it crashed into the sea instead Lol
+						&& ufo != ufoExpired)		// <- ie. not recently shot down while trying to outrun interceptor but it crashed into the sea instead Lol
 					{
-						if (ufo->getTrajectory().getID() == UfoTrajectory::RETALIATION_ASSAULT_RUN // note: this is where that targeting-terrorUfo/Site glitch should also be taken care of.
-							&& (ufo->getStatus() == Ufo::LANDED
+						if (ufo->getTrajectory().getId() == UfoTrajectory::RETALIATION_ASSAULT_RUN
+							&& (ufo->getStatus() == Ufo::LANDED // base defense
 								|| ufo->getStatus() == Ufo::DESTROYED))
 						{
 							(*j)->returnToBase();
 						}
-						else
+						else // note: this is near where that targeting-terrorUfo/Site glitch should also be taken care of.
 						{
 							(*j)->setDestination(NULL);
 
@@ -1795,6 +1798,8 @@ void GeoscapeState::time5Seconds()
 						(*j)->returnToBase();
 					}
 				}
+				else
+					(*j)->setInDogfight(false); // safety.
 			}
 
 			if (_dfZoomInTimer->isRunning() == false
@@ -2054,7 +2059,7 @@ bool DetectXCOMBase::operator() (const Ufo* ufo) const
 		return false;
 	}
 
-	if (ufo->getTrajectory().getID() == UfoTrajectory::RETALIATION_ASSAULT_RUN)
+	if (ufo->getTrajectory().getId() == UfoTrajectory::RETALIATION_ASSAULT_RUN)
 	{
 		//Log(LOG_INFO) << ". uFo's attacking a base don't bother with this!";
 		return false;

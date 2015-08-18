@@ -66,7 +66,7 @@ armors:
       - 1.0 #melee
       - 1.4 #acid
       - 0.0 #smoke
-    loftempsSet: [ 4 ]
+    loftSet: [4]
 units:
   - type: STR_SCOUT_DRONE
     race: STR_SCOUT_DRONE

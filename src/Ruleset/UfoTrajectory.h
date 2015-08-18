@@ -78,7 +78,7 @@ private:
 		 * Gets the trajectory's ID.
 		 * @return, the trajectory's ID
 		 */
-		const std::string& getID() const
+		const std::string& getId() const
 		{ return _id; }
 
 		/**

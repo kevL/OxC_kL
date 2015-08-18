@@ -146,8 +146,14 @@ void MCDPatch::load(const YAML::Node& node)
 
 		if ((*i)["LOFTS"])
 		{
-			std::vector<int> lofts = (*i)["LOFTS"].as< std::vector<int> >();
+			std::vector<size_t> lofts = (*i)["LOFTS"].as<std::vector<size_t> >();
 			_LOFTS.push_back(std::make_pair(MCDIndex, lofts));
+		}
+
+		if ((*i)["objectType"])
+		{
+			int objectType = (*i)["objectType"].as<int>();
+			_objectTypes.push_back(std::make_pair(MCDIndex, objectType));
 		}
 	}
 }
@@ -280,21 +286,29 @@ void MCDPatch::modifyData(MapDataSet* dataSet) const
 		dataSet->getObjects()->at(i->first)->setStopLOS(i->second);
 	}
 
-	for (std::vector<std::pair<size_t, std::vector<int> > >::const_iterator
+	for (std::vector<std::pair<size_t, std::vector<size_t> > >::const_iterator
 			i = _LOFTS.begin();
 			i != _LOFTS.end();
 			++i)
 	{
-		int layer = 0;
-		for (std::vector<int>::const_iterator
+		size_t layer = 0;
+		for (std::vector<size_t>::const_iterator
 				j = i->second.begin();
 				j != i->second.end();
 				++j)
 		{
-			dataSet->getObjects()->at(i->first)->setLoftID(
+			dataSet->getObjects()->at(i->first)->setLoftId(
 														*j,
 														layer++);
 		}
+	}
+
+	for (std::vector<std::pair<size_t, int> >::const_iterator
+			i = _objectTypes.begin();
+			i != _objectTypes.end();
+			++i)
+	{
+		dataSet->getObjects()->at(i->first)->setObjectType(i->second);
 	}
 }
 

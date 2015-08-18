@@ -138,8 +138,8 @@ YAML::Node AlienBAIState::save() const
 		fromNodeID	= -1,
 		toNodeID	= -1;
 
-	if (_fromNode != NULL)	fromNodeID	= _fromNode->getID();
-	if (_toNode != NULL)	toNodeID	= _toNode->getID();
+	if (_fromNode != NULL)	fromNodeID	= _fromNode->getId();
+	if (_toNode != NULL)	toNodeID	= _toNode->getId();
 
 	YAML::Node node;
 

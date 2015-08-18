@@ -535,9 +535,6 @@ void BattlescapeGenerator::nextStage()
 		(*i)->setPosition(Position(-1,-1,-1), false);
 	}
 
-//	while (_battleSave->getSide() != FACTION_PLAYER)
-//		_battleSave->endBattlePhase();
-
 	_battleSave->resetTurnCounter();
 
 	// remove all items not belonging to soldiers from the map.
@@ -548,122 +545,43 @@ void BattlescapeGenerator::nextStage()
 	std::vector<BattleItem*>
 		* takeHomeGuaranteed = _battleSave->getGuaranteedRecoveredItems(),
 		* takeHomeConditional = _battleSave->getConditionalRecoveredItems(),
-//		* toContainer,
 		takeToNextStage,
 		carryToNextStage,
 		removeFromGame;
 
-/*	Tile* tile;
-	for (std::vector<BattleItem*>::iterator
-			i = _battleSave->getItems()->begin();
-			i != _battleSave->getItems()->end();
-			)
-	{
-		if (aliensAlive == 0
-			&& (*i)->getRules()->isRecoverable() == true
-			&& (*i)->getUnit() == NULL
-			&& ((*i)->getOwner() == NULL
-				|| (*i)->getOwner()->getOriginalFaction() != FACTION_PLAYER))
-		{
-			takeToNextStage.push_back(*i);
-		}
-		else
-		{
-			bool skipThis = false;
-			for (std::vector<BattleItem*>::const_iterator
-					j = _battleSave->getItems()->begin();
-					j != _battleSave->getItems()->end();
-					++j)
-			{
-				if ((*j)->getAmmoItem() == *i)
-				{
-					if ((*j)->getOwner() != NULL
-						&& (*j)->getOwner()->getOriginalFaction() == FACTION_PLAYER)
-					{
-						skipThis = true;
-					}
-
-					break;
-				}
-			}
-
-			if (skipThis == false)
-			{
-				if ((*i)->getOwner() == NULL
-					|| (*i)->getOwner()->getOriginalFaction() != FACTION_PLAYER)
-				{
-					tile = (*i)->getTile();
-					toContainer = takeHomeConditional;
-
-					if (tile != NULL)
-					{
-						tile->removeItem(*i);
-
-						if (tile->getMapData(O_FLOOR) != NULL)
-						{
-							if (tile->getMapData(O_FLOOR)->getSpecialType() == START_POINT)
-								toContainer = takeHomeGuaranteed;
-							else if (tile->getMapData(O_FLOOR)->getSpecialType() == END_POINT
-								&& (*i)->getRules()->isRecoverable() == true
-								&& (*i)->getUnit() == NULL)
-							{
-								takeToNextStage.push_back(*i);
-
-								++i;
-								continue;
-							}
-						}
-					}
-
-					if ((*i)->getRules()->isRecoverable() == true
-						&& (*i)->getXCOMProperty() == false) // note that <-
-					{
-						toContainer->push_back(*i);
-
-						i = _battleSave->getItems()->erase(i);
-						continue;
-					}
-				}
-			}
-		}
-
-		++i;
-	} */
 	for (std::vector<BattleItem*>::const_iterator
 			i = _battleSave->getItems()->begin();
 			i != _battleSave->getItems()->end();
 			++i)
 	{
-		// first off don't process ammo loaded into weapons at least not at this level;
-		// ammo will be handled simultaneously to what. probly its weapon ... duhr.
 		if ((*i)->isLoaded() == false)
 		{
 			std::vector<BattleItem*>* toContainer = &removeFromGame;
 
-			if ((*i)->getRules()->isRecoverable() == true // if it's recoverable and it's not owned by someone
+			if ((*i)->getRules()->isRecoverable() == true
 				&& (*i)->getOwner() == NULL)
 			{
-				if (aliensAlive == 0) // Protocol 1: all defenders dead so recover all items.
+				if (aliensAlive == 0)
 				{
-					if ((*i)->getUnit() != NULL // any corpses or unconscious units get put in the skyranger as well as any unresearched items
+					if ((*i)->getUnit() != NULL
 						|| _game->getSavedGame()->isResearched((*i)->getRules()->getRequirements()) == false)
 					{
 						toContainer = takeHomeGuaranteed;
 					}
-					else // otherwise it goes to stage two
+					else
 						toContainer = &takeToNextStage;
 				}
-				else	// Protocol 2: some of the aliens survived meaning they ran to the exit zone.
-				{		// recover stuff depending on where it was at the end of the mission.
-					Tile* const tile = (*i)->getTile();
-					if (tile != NULL) // on a tile at least so give them the benefit of the doubt on this and give it a conditional recovery at this point
+				else
+				{
+					const Tile* const tile = (*i)->getTile();
+					if (tile != NULL)
 					{
 						toContainer = takeHomeConditional;
 						if (tile->getMapData(O_FLOOR) != NULL)
 						{
-							if (tile->getMapData(O_FLOOR)->getSpecialType() == START_POINT) // if in the skyranger it goes home.
+							if (tile->getMapData(O_FLOOR)->getSpecialType() == START_POINT)
 								toContainer = takeHomeGuaranteed;
-							else if (tile->getMapData(O_FLOOR)->getSpecialType() == END_POINT) // if on the exit grid it goes to stage two.
+							else if (tile->getMapData(O_FLOOR)->getSpecialType() == END_POINT)
 								toContainer = &takeToNextStage;
 						}
 					}
@@ -680,6 +598,7 @@ void BattlescapeGenerator::nextStage()
 			if (ammo != NULL
 				&& *i != ammo)
 			{
+				ammo->setTile(NULL);
 				toContainer->push_back(ammo);
 			}
 
@@ -754,8 +673,8 @@ void BattlescapeGenerator::nextStage()
 	generateMap(script); // <-- BATTLE MAP GENERATION.
 	setupObjectives(deployRule);
 
-	bool selectedFirstSoldier = false;
-	int highestSoldierID = 0;
+	bool selectedSoldier = false;
+//	int highestSoldierID = 0;
 
 	for (std::vector<BattleUnit*>::const_iterator
 			i = _battleSave->getUnits()->begin();
@@ -770,11 +689,11 @@ void BattlescapeGenerator::nextStage()
 				(*i)->setExposed(-1);
 //				(*i)->getVisibleTiles()->clear();
 
-				if (selectedFirstSoldier == false
-					&& (*i)->getGeoscapeSoldier())
+				if (selectedSoldier == false
+					&& (*i)->getGeoscapeSoldier() != NULL)
 				{
 					_battleSave->setSelectedUnit(*i);
-					selectedFirstSoldier = true;
+					selectedSoldier = true;
 				}
 
 				const Node* const node = _battleSave->getSpawnNode(
@@ -785,8 +704,8 @@ void BattlescapeGenerator::nextStage()
 				{
 					if (node != NULL)
 						_battleSave->setUnitPosition(
-													*i,
-													node->getPosition());
+												*i,
+												node->getPosition());
 
 					if (_tileEquipt == NULL)
 					{
@@ -797,8 +716,8 @@ void BattlescapeGenerator::nextStage()
 					_tileEquipt->setUnit(*i);
 					(*i)->setUnitVisible(false);
 
-					if ((*i)->getId() > highestSoldierID)
-						highestSoldierID = (*i)->getId();
+//					if ((*i)->getId() > highestSoldierID)
+//						highestSoldierID = (*i)->getId();
 
 					(*i)->prepUnit(false);
 				}
@@ -3875,8 +3794,8 @@ void BattlescapeGenerator::attachNodeLinks() // private.
 							{
 								if (*l == borDirs_invert[dir])
 								{
-									*l = (*i)->getID();
-									*j = (*k)->getID();
+									*l = (*i)->getId();
+									*j = (*k)->getId();
 								}
 							}
 						}

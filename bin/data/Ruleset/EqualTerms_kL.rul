@@ -877,7 +877,7 @@ armors:
       - 1.2 #melee
       - 1.5 #acid
       - 1.12 #smoke
-    loftempsSet: [3]
+    loftSet: [3]
     agility: 1
 #------------------------------------------------------------------------------
   - type: STR_STREET_JUNGLE_UC
@@ -908,7 +908,7 @@ armors:
       - 1.2 #melee
       - 1.5 #acid
       - 1.12 #smoke
-    loftempsSet: [3]
+    loftSet: [3]
     agility: 1
 #------------------------------------------------------------------------------
   - type: STR_STREET_URBAN_UC
@@ -939,7 +939,7 @@ armors:
       - 1.2 #melee
       - 1.5 #acid
       - 1.12 #smoke
-    loftempsSet: [3]
+    loftSet: [3]
     agility: 1
 #------------------------------------------------------------------------------
   - type: STR_KEVLAR_ARCTIC_UC
@@ -974,7 +974,7 @@ armors:
       - 0.95
       - 1.0
       - 1.0
-    loftempsSet: [3]
+    loftSet: [3]
 #------------------------------------------------------------------------------
   - type: STR_KEVLAR_JUNGLE_UC
     spriteSheet: XCOM_1j.PCK
@@ -1008,7 +1008,7 @@ armors:
       - 0.95
       - 1.0
       - 1.0
-    loftempsSet: [3]
+    loftSet: [3]
 #------------------------------------------------------------------------------
   - type: STR_KEVLAR_URBAN_UC
     spriteSheet: XCOM_1u.PCK
@@ -1042,7 +1042,7 @@ armors:
       - 0.95
       - 1.0
       - 1.0
-    loftempsSet: [3]
+    loftSet: [3]
 #------------------------------------------------------------------------------
   - type: STR_TACTICAL_ARCTIC_UC
     spriteSheet: XCOM_1DSa.PCK
@@ -1076,7 +1076,7 @@ armors:
       - 0.92
       - 1.0
       - 1.0
-    loftempsSet: [3]
+    loftSet: [3]
 #------------------------------------------------------------------------------
   - type: STR_TACTICAL_JUNGLE_UC
     spriteSheet: XCOM_1DSj.PCK
@@ -1110,7 +1110,7 @@ armors:
       - 0.92
       - 1.0
       - 1.0
-    loftempsSet: [3]
+    loftSet: [3]
 #------------------------------------------------------------------------------
   - type: STR_TACTICAL_URBAN_UC
     spriteSheet: XCOM_1DSu.PCK
@@ -1144,7 +1144,7 @@ armors:
       - 0.92
       - 1.0
       - 1.0
-    loftempsSet: [3]
+    loftSet: [3]
 #------------------------------------------------------------------------------
 #------------------------------------------------------------------------------
 ufopaedia:

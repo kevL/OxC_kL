@@ -131,7 +131,7 @@ void RuleArmor::load(const YAML::Node& node)
 		}
 	}
 
-	_loftempsSet		= node["loftempsSet"]		.as<std::vector<int> >(_loftempsSet);
+	_loftSet			= node["loftSet"]			.as<std::vector<size_t> >(_loftSet);
 	_deathFrames		= node["deathFrames"]		.as<int>(_deathFrames);
 	_shootFrames		= node["shootFrames"]		.as<int>(_shootFrames);
 	_firePhase			= node["firePhase"]			.as<int>(_firePhase);
@@ -272,10 +272,10 @@ int RuleArmor::getDrawingRoutine() const
 
 /**
  * Gets the movement type of this armor.
- * Useful for determining whether the armor can fly.
- * @important: do not use this function outside the BattleUnit constructor,
+ * @note Useful for determining whether the armor can fly.
+ * @important: do not use this function outside the BattleUnit constructor
  * unless you are SURE you know what you are doing.
- * For more information, see the BattleUnit constructor.
+ * For more information see the BattleUnit constructor.
  * @return, MovementType enum
  */
 MovementType RuleArmor::getMoveTypeArmor() const
@@ -295,19 +295,20 @@ int RuleArmor::getSize() const
 /**
  * Gets the damage modifier for a certain damage type.
  * @param dt - the damageType
- * @return, damage modifier ( 0.f to 1.f+ )
+ * @return, damage modifier (0.f to 1.f+)
  */
 float RuleArmor::getDamageModifier(ItemDamageType dType) const
 {
 	return _damageModifier[static_cast<size_t>(dType)];
 }
 
-/** Gets the Line Of Fire Template set.
- * @return, address of loftempsSet as a vector of ints
+/**
+ * Gets the Line Of Fire Template set.
+ * @return, address of loftSet as a vector of templates
  */
-const std::vector<int>& RuleArmor::getLoftempsSet() const
+const std::vector<size_t>& RuleArmor::getLoftSet() const
 {
-	return _loftempsSet;
+	return _loftSet;
 }
 
 /**

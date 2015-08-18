@@ -98,8 +98,8 @@ private:
 		_faceColor,
 		_hairColor,
 		_utileColor,
-		_rankColor,
-		_loftempsSet;
+		_rankColor;
+	std::vector<size_t> _loftSet;
 	std::vector<std::string> _corpseBattle;
 
 
@@ -153,8 +153,8 @@ private:
 		/// Gets damage modifier.
 		float getDamageModifier(ItemDamageType dType) const;
 
-		/// Gets loftempSet
-		const std::vector<int>& getLoftempsSet() const;
+		/// Gets loftSet.
+		const std::vector<size_t>& getLoftSet() const;
 
 		/// Gets the armor's stats.
 		const UnitStats* getStats() const;

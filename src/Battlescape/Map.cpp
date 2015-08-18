@@ -2042,7 +2042,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 																|| tileWest->getMapData(O_OBJECT)->getBigWall() == BIGWALL_W_N)
 															&& tileWest->getMapData(O_OBJECT)->getBigWall() != BIGWALL_NWSE)
 														|| (tileWest->getUnit() != NULL
-															&& tileWest->getUnit()->getArmor()->getLoftempsSet()[0] == 5)) // big round thing, eg Silacoid
+															&& tileWest->getUnit()->getLoft(0) == 5)) // big round thing, eg Silacoid
 													{
 														//Log(LOG_INFO) << "[2] . . tileWest object, halfRight TRUE";
 														halfRight = true;
@@ -2066,7 +2066,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 																|| tileNorth->getMapData(O_OBJECT)->getBigWall() == BIGWALL_W_N)
 															&& tileNorth->getMapData(O_OBJECT)->getBigWall() != BIGWALL_NWSE)
 														|| (tileNorth->getUnit() != NULL
-															&& tileNorth->getUnit()->getArmor()->getLoftempsSet()[0] == 5)) // big round thing, eg Silacoid
+															&& tileNorth->getUnit()->getLoft(0) == 5)) // big round thing, eg Silacoid
 													{
 														//Log(LOG_INFO) << "[2] . . tileNorth object, halfLeft TRUE";
 														halfLeft = true;

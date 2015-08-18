@@ -99,13 +99,13 @@ void ArticleState::initLayout(bool contrast)
 	_btnPrev->onMouseClick((ActionHandler)& ArticleState::btnPrevClick);
 	_btnPrev->onKeyboardPress(
 					(ActionHandler)& ArticleState::btnPrevClick,
-					SDLK_LEFT);
+					Options::keyGeoLeft);
 
 	_btnNext->setText(L">");
 	_btnNext->onMouseClick((ActionHandler)& ArticleState::btnNextClick);
 	_btnNext->onKeyboardPress(
 					(ActionHandler)& ArticleState::btnNextClick,
-					SDLK_RIGHT);
+					Options::keyGeoRight);
 
 	if (contrast == true)
 	{

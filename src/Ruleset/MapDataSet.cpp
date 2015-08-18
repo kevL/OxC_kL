@@ -254,9 +254,9 @@ void MapDataSet::loadData()
 				loft != 12;
 				++loft)
 		{
-			to->setLoftID(
-						(int)mcd.LOFT[loft],
-						static_cast<int>(loft));
+			to->setLoftId(
+						static_cast<size_t>(mcd.LOFT[loft]),
+						static_cast<size_t>(loft));
 		}
 
 		// store the 2 tiles of blanks in a static - so they are accessible everywhere
@@ -384,19 +384,19 @@ void MapDataSet::unloadData()
 
 /**
  * Loads the LOFTEMPS.DAT into the ruleset voxeldata.
- * @param filename	- reference the filename of the DAT file
+ * @param file		- reference the filename of the DAT file
  * @param voxelData	- pointer to a vector of voxelDatums
  */
-void MapDataSet::loadLOFTEMPS(
-		const std::string& filename,
+void MapDataSet::loadLoft(
+		const std::string& file,
 		std::vector<Uint16>* voxelData)
 {
 	std::ifstream mapFile( // Load file
-						filename.c_str(),
+						file.c_str(),
 						std::ios::in | std::ios::binary);
 	if (mapFile.fail() == true)
 	{
-		throw Exception(filename + " not found");
+		throw Exception(file + " not found");
 	}
 
 	Uint16 value;

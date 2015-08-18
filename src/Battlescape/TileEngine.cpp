@@ -1057,13 +1057,15 @@ bool TileEngine::canTargetUnit(
 		yOffset = targetUnit->getPosition().y - targetTile->getPosition().y,
 		targetSize = targetUnit->getArmor()->getSize() - 1;
 	int
-		unitRadius = targetUnit->getLoftemps(), // width = LoFT in default LoFTemps set
 		targetMaxHeight = targetMinHeight,
 		targetCenterHeight,
 		heightRange;
 
+	size_t unitRadius;
 	if (targetSize > 0)
-		unitRadius = 3;
+		unitRadius = 3; // width = LoFT in default LoFTemps set
+	else
+		unitRadius = targetUnit->getLoft();
 
 	// origin-to-target vector manipulation to make scan work in voxelspace
 	const Position relPos = targetVoxel - *originVoxel;
@@ -1244,7 +1246,7 @@ bool TileEngine::canTargetUnit(
 		yOffset = targetUnit->getPosition().y - targetTile->getPosition().y,
 		targetSize = targetUnit->getArmor()->getSize() - 1;
 	int
-		unitRadius = targetUnit->getLoftemps(), // width = LoFT in default LoFTemps set
+		unitRadius = targetUnit->getLoft(), // width = LoFT in default LoFTemps set
 		targetMaxHeight = targetMinHeight,
 		targetCenterHeight,
 		heightRange;
@@ -1602,7 +1604,7 @@ bool TileEngine::canTargetTile(
 	// if there is an other unit on target tile, we assume we want to check against this unit's height
 	int heightRange;
 
-	int unitRadius = otherUnit->getLoftemps(); // width == loft in default loftemps set
+	int unitRadius = otherUnit->getLoft(); // width == loft in default loftemps set
 	if (otherUnit->getArmor()->getSize() > 1)
 	{
 		unitRadius = 3;
@@ -4446,7 +4448,7 @@ bool TileEngine::detonate(Tile* const tile) const
 				j != 12;
 				++j)
 		{
-			if (tiles[i]->getMapData(part)->getLoftID(j) != 0)
+			if (tiles[i]->getMapData(part)->getLoftId(j) != 0)
 				++vol;
 		} */ // moved below_
 
@@ -4465,12 +4467,12 @@ bool TileEngine::detonate(Tile* const tile) const
 		{
 			if (explTest == expl) // only once per initial part destroyed.
 			{
-				for (int // get a yes/no volume for the object by checking its loftemps objects.
+				for (size_t // get a yes/no volume for the object by checking its loftemps objects.
 						j = 0;
 						j != 12;
 						++j)
 				{
-					if (tiles[i]->getMapData(part)->getLoftID(j) != 0)
+					if (tiles[i]->getMapData(part)->getLoftId(j) != 0)
 						++vol;
 				}
 			}
@@ -5589,8 +5591,8 @@ int TileEngine::castedShade(const Position& voxel) const
 } */
 
 /**
- * Checks if we hit a targetPos in voxel space.
- * @param targetPos			- reference the Position to check in voxelspace
+ * Checks for a target in voxel space.
+ * @param posTarget			- reference the Position to check in voxelspace
  * @param excludeUnit		- pointer to unit NOT to do checks for (default NULL)
  * @param excludeAllUnits	- true to NOT do checks on any unit (default false)
  * @param onlyVisible		- true to consider only visible units (default false)
@@ -5608,20 +5610,20 @@ int TileEngine::castedShade(const Position& voxel) const
  * VOXEL_OUTOFBOUNDS	//  5
  */
 int TileEngine::voxelCheck(
-		const Position& targetPos,
+		const Position& posTarget,
 		const BattleUnit* const excludeUnit,
 		const bool excludeAllUnits,
 		const bool onlyVisible,
 		const BattleUnit* const excludeAllBut) const
 {
 	//Log(LOG_INFO) << "TileEngine::voxelCheck()"; // massive lag-to-file, Do not use.
-	const Tile* targetTile = _battleSave->getTile(targetPos / Position(16,16,24)); // converts to tilespace -> Tile
+	const Tile* targetTile = _battleSave->getTile(posTarget / Position(16,16,24)); // converts to tilespace -> Tile
 	//Log(LOG_INFO) << ". targetTile " << targetTile->getPosition();
 	// check if we are out of the map
 	if (targetTile == NULL
-		|| targetPos.x < 0
-		|| targetPos.y < 0
-		|| targetPos.z < 0)
+		|| posTarget.x < 0
+		|| posTarget.y < 0
+		|| posTarget.z < 0)
 	{
 		//Log(LOG_INFO) << ". vC() ret VOXEL_OUTOFBOUNDS";
 		return VOXEL_OUTOFBOUNDS;
@@ -5638,7 +5640,7 @@ int TileEngine::voxelCheck(
 	}
 
 	// kL_note: should allow items to be thrown through a gravLift down to the floor below
-	if (targetPos.z % 24 < 2
+	if (posTarget.z % 24 < 2
 		&& targetTile->getMapData(O_FLOOR) != NULL
 		&& targetTile->getMapData(O_FLOOR)->isGravLift() == true)
 	{
@@ -5654,25 +5656,27 @@ int TileEngine::voxelCheck(
 		}
 	}
 
-	// first check TERRAIN tile/voxel data
-	// not to allow 2x2 units to stick through walls
-	for (int // terrain parts [0=floor, 1/2=walls, 3=content-object]
+	// first check TERRAIN tile/voxel data not to allow 2x2 units to stick through walls
+	int parts = static_cast<int>(Tile::PARTS_TILE); // terrain parts [0=floor, 1/2=walls, 3=content-object]
+	for (int
 			i = 0;
-			i != static_cast<int>(Tile::PARTS_TILE);
+			i != parts;
 			++i)
 	{
 		if (targetTile->isUfoDoorOpen(i) == false)
 		{
-			const MapData* const dataTarget = targetTile->getMapData(i);
-			if (dataTarget != NULL)
+			const MapData* const targetData = targetTile->getMapData(i);
+			if (targetData != NULL)
 			{
 				const int
-					x = 15 - targetPos.x % 16,	// x-direction is reversed
-					y = targetPos.y % 16;		// y-direction is standard
+					x = 15 - posTarget.x % 16,	// x-direction is reversed
+					y = posTarget.y % 16;		// y-direction is standard
 
-				const int loftIdx = ((dataTarget->getLoftID((targetPos.z % 24) / 2) * 16) + y);
-				if (loftIdx < static_cast<int>(_voxelData->size()) // davide, http://openxcom.org/forum/index.php?topic=2934.msg32146#msg32146 (x2 _below)
-					&& _voxelData->at(loftIdx) & (1 << x))
+				const size_t loftId = targetData->getLoftId((static_cast<size_t>(posTarget.z) % 24) / 2)
+									* 16
+									+ static_cast<size_t>(y);
+				if (loftId < _voxelData->size() // davide, http://openxcom.org/forum/index.php?topic=2934.msg32146#msg32146 (x2 _below)
+					&& _voxelData->at(loftId) & (1 << x)) // if the voxelData at loftId is "1" solid:
 				{
 					//Log(LOG_INFO) << ". vC() ret = " << i;
 					return i;
@@ -5689,9 +5693,9 @@ int TileEngine::voxelCheck(
 			&& targetTile->hasNoFloor(NULL) == true)
 		{
 			targetTile = _battleSave->getTile(Position( // tileBelow
-													targetPos.x / 16,
-													targetPos.y / 16,
-													targetPos.z / 24 - 1));
+													posTarget.x / 16,
+													posTarget.y / 16,
+													posTarget.z / 24 - 1));
 			if (targetTile != NULL)
 				targetUnit = targetTile->getUnit();
 		}
@@ -5703,37 +5707,43 @@ int TileEngine::voxelCheck(
 			&& (onlyVisible == false
 				|| targetUnit->getUnitVisible() == true))
 		{
-			const Position unitPos = targetUnit->getPosition();
-			const int target_z = unitPos.z * 24 + targetUnit->getFloatHeight() - targetTile->getTerrainLevel(); // floor-level voxel
+			const Position posUnit = targetUnit->getPosition();
+			const int target_z = posUnit.z * 24
+							   + targetUnit->getFloatHeight()
+							   - targetTile->getTerrainLevel(); // floor-level voxel
 
-			if (targetPos.z > target_z
-				&& targetPos.z <= target_z + targetUnit->getHeight()) // if hit is between foot- and hair-level voxel layers (z-axis)
+			if (posTarget.z > target_z
+				&& posTarget.z <= target_z + targetUnit->getHeight()) // if hit is between foot- and hair-level voxel layers (z-axis)
 			{
-				int ent = 0;
-				const int
-					x = targetPos.x % 16, // where on the x-axis
-					y = targetPos.y % 16; // where on the y-axis
-				// That should be (8,8,10) as per BattlescapeGame::handleNonTargetAction(), if (_currentAction.type == BA_HIT)
-
+				size_t layer;
 				if (targetUnit->getArmor()->getSize() > 1) // for large units...
 				{
 					const Position tilePos = targetTile->getPosition();
-					ent = (tilePos.x - unitPos.x) + ((tilePos.y - unitPos.y) * 2);
-					//Log(LOG_INFO) << ". vC, large unit, LoFT entry = " << ent;
+					layer = static_cast<size_t>(tilePos.x - posUnit.x) + ((tilePos.y - posUnit.y) * 2);
+					//Log(LOG_INFO) << ". vC, large unit, LoFT entry = " << layer;
 				}
+				else
+					layer = 0;
 
-//				if (ent > -1)
+//				if (layer > -1)
 //				{
-				const int loftIdx = (targetUnit->getLoftemps(ent) * 16) + y;
-				//Log(LOG_INFO) << "loftIdx = " << loftIdx << " vD-size = " << (int)_voxelData->size();
-				if (loftIdx < static_cast<int>(_voxelData->size()) // davide, http://openxcom.org/forum/index.php?topic=2934.msg32146#msg32146 (x2 ^above)
-					&& _voxelData->at(loftIdx) & (1 << x)) // if the voxelData at loftIdx is "1" solid:
+				const int
+					x = posTarget.x % 16, // where on the x-axis
+					y = posTarget.y % 16; // where on the y-axis
+				// That should be (8,8,10) as per BattlescapeGame::handleNonTargetAction(), if (_currentAction.type == BA_HIT)
+
+				const size_t loftId = targetUnit->getLoft(layer)
+								 * 16
+								 + static_cast<size_t>(y);
+				//Log(LOG_INFO) << "loftId = " << loftId << " vD-size = " << (int)_voxelData->size();
+				if (loftId < _voxelData->size() // davide, http://openxcom.org/forum/index.php?topic=2934.msg32146#msg32146 (x2 ^above)
+					&& _voxelData->at(loftId) & (1 << x)) // if the voxelData at loftId is "1" solid:
 				{
 					//Log(LOG_INFO) << ". vC() ret VOXEL_UNIT";
 					return VOXEL_UNIT;
 				}
 //				}
-//				else Log(LOG_INFO) << "ERROR TileEngine::voxelCheck() LoFT entry = " << ent;
+//				else Log(LOG_INFO) << "ERROR TileEngine::voxelCheck() LoFT entry = " << layer;
 			}
 		}
 	}

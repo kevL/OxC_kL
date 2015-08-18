@@ -173,10 +173,11 @@ private:
 		/// Handles UFO shot down.
 		void ufoShotDown(const Ufo& ufo);
 
-		/// Selects a destination (lon/lat) based on the criteria of our trajectory and desired waypoint.
+		/// Selects a destination (lon/lat) based on the criteria of the trajectory and desired waypoint.
 		std::pair<double, double> getWaypoint(
 				const UfoTrajectory& trajectory,
 				const size_t nextWaypoint,
+				const Globe& globe,
 				const RuleRegion& region);
 		/// Gets a random landing point inside the given region zone.
 		std::pair<double, double> getLandPoint(

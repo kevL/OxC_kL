@@ -108,7 +108,7 @@ armors:
       - 1.2 #melee
       - 1.5 #acid
       - 0.0 #smoke
-    loftempsSet: [3]
+    loftSet: [3]
   - type: WASPITE_ARMOR1
     spriteSheet: WASPITE.PCK
     spriteInv: inventory_WASPITE
@@ -131,7 +131,7 @@ armors:
       - 1.2 #melee
       - 1.5 #acid
       - 0.0 #smoke
-    loftempsSet: [3]
+    loftSet: [3]
   - type: WASPITE_ARMOR2
     spriteSheet: WASPITE.PCK
     spriteInv: inventory_WASPITE
@@ -154,7 +154,7 @@ armors:
       - 1.2 #melee
       - 1.5 #acid
       - 0.0 #smoke
-    loftempsSet: [3]
+    loftSet: [3]
   - type: CYBERMITE_ARMOR
     spriteSheet: CYBERMITE.PCK
     allowInv: false
@@ -176,7 +176,7 @@ armors:
       - 0.7 #melee
       - 1.0 #acid
       - 0.0 #smoke
-    loftempsSet: [2]
+    loftSet: [2]
 units:
   - type: STR_WASPITE_SOLDIER
     race: STR_WASPITE

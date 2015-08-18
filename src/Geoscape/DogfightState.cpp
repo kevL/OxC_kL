@@ -579,9 +579,10 @@ void DogfightState::think()
 		updateDogfight();
 		_craftDamageAnimTimer->think(this, NULL);
 
-		if (_endDogfight == false // value could change in updateDogfight()^
+		if (_endDogfight == false
 			&& (_craft->getDestination() != _ufo
-				|| _ufo->getStatus() == Ufo::LANDED))
+				|| _ufo->getStatus() == Ufo::LANDED
+				|| _craft->isInDogfight() == false))
 		{
 			endDogfight();
 		}
@@ -754,15 +755,13 @@ void DogfightState::updateDogfight()
 {
 	bool outRun = false;
 
-	const Ufo* const ufo = dynamic_cast<Ufo*>(_craft->getDestination());
-	if (ufo != _ufo							// check if Craft's destination has changed
-		|| _craft->getLowFuel() == true		// check if Craft is low on fuel
-		|| (_minimized == true
-			&& _ufo->isCrashed() == true))	// check if UFO gets shot down while window minimized
+	if (_endDogfight == false
+		&& (_ufo != dynamic_cast<Ufo*>(_craft->getDestination())	// check if Craft's destination has changed
+			|| _craft->getLowFuel() == true							// check if Craft is low on fuel
+			|| _ufo->isCrashed() == true // && _minimized == true))	// check if UFO gets shot down while window minimized
+			|| _craft->isInDogfight() == false))
 	{
-		if (_endDogfight == false)
-			endDogfight();
-
+		endDogfight();
 		return;
 	}
 

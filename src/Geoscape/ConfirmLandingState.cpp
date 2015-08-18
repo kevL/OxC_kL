@@ -226,9 +226,14 @@ ConfirmLandingState::ConfirmLandingState(
 						_terrainRule = _game->getRuleset()->getTerrain(terrainList.at(pick));
 					}
 //					else fuck off. Thanks!
-					else Log(LOG_INFO) << ". . . . eligibleTerrain NOT Found";
+					else // trouble: no texture and no deployment terrain, most likely scenario is a UFO landing on water: use the first available terrain
+					{
+						Log(LOG_WARNING) << ". . . . eligibleTerrain NOT Found. Choose first from ruleset list ...";
+						_terrainRule = _game->getRuleset()->getTerrain(_game->getRuleset()->getTerrainList().front());
+					}
 
 					terrainType = _terrainRule->getType();
+					Log(LOG_INFO) << ". . . using: " << terrainType;
 				}
 //				else	// SAFETY: for missionSite that's not at a City.
 						// This should be the same as for NOT City!!!
