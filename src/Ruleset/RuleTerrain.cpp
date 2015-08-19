@@ -136,7 +136,7 @@ std::vector<MapDataSet*>* RuleTerrain::getMapDataSets()
  * Gets the terrain type.
  * @return, the terrain type
  */
-std::string RuleTerrain::getType() const
+const std::string& RuleTerrain::getType() const
 {
 	return _type;
 }
@@ -245,7 +245,7 @@ MapData* RuleTerrain::getMapData(
  * Gets the list of civilian types to use on this terrain.
  * @return, list of civilian types to use (default MALE_CIVILIAN and FEMALE_CIVILIAN)
  */
-std::vector<std::string> RuleTerrain::getCivilianTypes() const
+const std::vector<std::string>& RuleTerrain::getCivilianTypes() const
 {
 	return _civilianTypes;
 }

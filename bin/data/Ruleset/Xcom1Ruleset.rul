@@ -838,7 +838,6 @@ items:
     bigSprite: 16
     floorSprite: 16
     hitSound: 5
-#    hitAnimation: 0
     power: 81
     damageType: 3
     clipSize: 1
@@ -853,7 +852,6 @@ items:
     bigSprite: 17
     floorSprite: 17
     hitSound: 5
-#    hitAnimation: 0
     power: 98
     damageType: 3
     clipSize: 1

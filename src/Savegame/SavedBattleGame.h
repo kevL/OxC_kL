@@ -157,7 +157,7 @@ private:
 		void load(
 				const YAML::Node& node,
 				Ruleset* const rules,
-				SavedGame* savedGame);
+				const SavedGame* const savedGame);
 		/// Saves a saved battle game to YAML.
 		YAML::Node save() const;
 

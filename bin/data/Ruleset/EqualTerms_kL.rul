@@ -468,8 +468,8 @@ items:
     invWidth: 1
     invHeight: 3
     armor: 20
-    damageType: 1 #was 3
-#    blastRadius: 2
+    damageType: 3 #HE
+    blastRadius: 2
 #------------------------------------------------------------------------------
   - type: STR_APFSDS_ROCKET
     listOrder: 3401
@@ -481,7 +481,7 @@ items:
     floorSprite: 521
     hitSound: 5
     power: 142
-    damageType: 1
+    damageType: 1 #AP
     clipSize: 1
     battleType: 2
     invWidth: 1

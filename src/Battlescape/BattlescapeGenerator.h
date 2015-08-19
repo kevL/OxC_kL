@@ -118,12 +118,12 @@ private:
 	/// Places an item on a soldier based on equipment layout.
 	bool placeItemByLayout(BattleItem* const item);
 	/// Sets xCom soldiers' combat clothing style - spritesheets & paperdolls.
-	void setTacticalSprites();
+	void setTacticalSprites() const;
 
 	/// Adds an item to a unit and the game.
 	bool addItem(
-			BattleItem* item,
-			BattleUnit* unit);
+			BattleItem* const item,
+			BattleUnit* const unit);
 
 	/// Deploys the aliens according to the AlienDeployment rule.
 	void deployAliens(AlienDeployment* const deployRule);
@@ -138,7 +138,7 @@ private:
 	/// Spawns civilians on a terror mission.
 	void deployCivilians(int civilians);
 	/// Adds a civlian to the game.
-	BattleUnit* addCivilian(RuleUnit* rules);
+	void addCivilian(RuleUnit* const unitRule);
 
 	/// Loads an XCom MAP file.
 	int loadMAP(
@@ -181,11 +181,11 @@ private:
 	void attachNodeLinks();
 	/// Selects an unused position on the map of a given size.
 	bool selectPosition(
-			const std::vector<SDL_Rect*>* rects,
-			int& X,
-			int& Y,
-			int sizeX,
-			int sizeY);
+			const std::vector<SDL_Rect*>* const rects,
+			int& ret_x,
+			int& ret_y,
+			int size_x,
+			int size_y);
 	/// Adds a craft (either a ufo or an xcom craft) somewhere on the map.
 	bool addCraft(
 			const MapBlock* const craftMap,

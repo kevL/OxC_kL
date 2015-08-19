@@ -149,7 +149,7 @@ private:
 		void load(const YAML::Node& node);
 
 		/// Gets the Alien Deployment's type.
-		std::string getType() const;
+		const std::string& getType() const;
 		/// Gets a pointer to the data.
 		std::vector<DeploymentData>* getDeploymentData();
 
@@ -157,24 +157,25 @@ private:
 		void getDimensions(
 				int* width,
 				int* lenght,
-				int* heigth);
+				int* heigth) const;
 
 		/// Gets civilians.
 		int getCivilians() const;
 
 		/// Gets the terrains for battlescape generation.
-		std::vector<std::string> getDeployTerrains() const;
+		const std::vector<std::string>& getDeployTerrains() const;
 
 		/// Gets the shade level for battlescape generation.
 		int getShade() const;
 
 		/// Gets the next stage of the mission.
-		std::string getNextStage() const;
-		/// Gets the next stage's alien race.
-		std::string getRace() const;
+		const std::string& getNextStage() const;
+
+		/// Gets the alien race.
+		const std::string& getRace() const;
 
 		/// Gets the script to use for this deployment.
-		std::string getScript() const;
+		const std::string& getScript() const;
 
 		/// Checks if aborting this mission will fail the game (all mars and t'leth stages).
 		bool isNoRetreat() const;
@@ -184,13 +185,13 @@ private:
 		bool isFinalMission() const;
 
 		/// Gets the alert message for this mission type.
-		std::string getAlertMessage() const;
+		const std::string& getAlertMessage() const;
 
 		/// Gets the briefing data for this mission type.
 		BriefingData getBriefingData() const;
 
 		/// Gets the marker name for this mission.
-		std::string getMarkerName() const;
+		const std::string& getMarkerName() const;
 		/// Gets the marker icon for this mission.
 		int getMarkerIcon() const;
 
@@ -207,7 +208,7 @@ private:
 		/// Gets a fixed number of objectives required if any.
 		int getObjectivesReqd() const;
 		/// Gets the string to pop up when the mission objectives are complete.
-		std::string getObjectivePopup() const;
+		const std::string& getObjectivePopup() const;
 		/// Fills out the objective complete info.
 		bool getObjectiveCompleteInfo(
 				std::string& text,

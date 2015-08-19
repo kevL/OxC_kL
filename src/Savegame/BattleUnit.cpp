@@ -61,7 +61,7 @@ namespace OpenXcom
  */
 BattleUnit::BattleUnit(
 		Soldier* const soldier,
-		const int diff)
+		const GameDifficulty diff)
 	:
 		_geoscapeSoldier(soldier),
 		_unitRule(NULL),
@@ -224,7 +224,7 @@ BattleUnit::BattleUnit(
 		const UnitFaction faction,
 		const int id,
 		RuleArmor* const armor,
-		const int diff,
+		const GameDifficulty diff,
 		const int month,
 		BattlescapeGame* const battleGame) // for converted Units
 	:
@@ -3923,20 +3923,6 @@ int BattleUnit::getAggroSound() const
 }
 
 /**
- * Halves this unit's armor values for beginner mode.
- */
-void BattleUnit::halveArmor()
-{
-	for (size_t
-			i = 0;
-			i != PARTS_ARMOR;
-			++i)
-	{
-		_armorHp[i] /= 2;
-	}
-}
-
-/**
  * Gets the faction the unit was killed by.
  * @return, UnitFaction
  */
@@ -4136,10 +4122,10 @@ bool BattleUnit::checkViewSector(const Position& pos) const
  * @param month	- the number of months that have progressed
  */
 void BattleUnit::adjustStats(
-		const int diff,
+		const GameDifficulty diff,
 		const int month)
 {
-	// adjust the unit's stats according to the difficulty level. Note, Throwing is not affected.
+	// adjust the unit's stats according to the difficulty level.
 	_stats.tu			+= 4 * diff * _stats.tu / 100;
 	_stats.stamina		+= 4 * diff * _stats.stamina / 100;
 	_stats.reactions	+= 6 * diff * _stats.reactions / 100;
@@ -4150,26 +4136,34 @@ void BattleUnit::adjustStats(
 	_stats.psiStrength	+= 4 * diff * _stats.psiStrength / 100;
 	_stats.psiSkill		+= 4 * diff * _stats.psiSkill / 100;
 
-	if (diff == 0)
+	if (diff == DIFF_BEGINNER)
 	{
-		halveArmor();
 		_stats.firing /= 2;
+
+		for (size_t
+				i = 0;
+				i != PARTS_ARMOR;
+				++i)
+		{
+			_armorHp[i] /= 2;
+		}
 	}
 
 	if (month > 0) // aLiens get tuffer as game progresses:
 	{
-//		_stats.tu += month;
-//		_stats.stamina += month;
 		if (_stats.reactions > 0)	_stats.reactions	+= month;
 		if (_stats.firing > 0)		_stats.firing		+= month;
 		if (_stats.throwing > 0)	_stats.throwing		+= month;
 		if (_stats.melee > 0)		_stats.melee		+= month;
-//		_stats.strength += month;
-		if (_stats.psiStrength > 0)	_stats.psiStrength	+= (month * 2);
-//		if (_stats.psiSkill > 0)
-//			_stats.psiSkill += month;
+		if (_stats.psiStrength > 0)	_stats.psiStrength	+= month * 2;
 
 		_stats.health += (month / 2);
+
+//		_stats.tu += month;
+//		_stats.stamina += month;
+//		_stats.strength += month;
+//		if (_stats.psiSkill > 0)
+//			_stats.psiSkill += month;
 	}
 
 	//Log(LOG_INFO) << "BattleUnit::adjustStats(), unitID = " << getId();

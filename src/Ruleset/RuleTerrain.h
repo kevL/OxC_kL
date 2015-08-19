@@ -69,7 +69,7 @@ private:
 				Ruleset* const rules);
 
 		/// Gets the terrain's type (used for MAP generation).
-		std::string getType() const;
+		const std::string& getType() const;
 
 		/// Gets the terrain's mapblocks.
 		std::vector<MapBlock*>* getMapBlocks();
@@ -90,7 +90,7 @@ private:
 				int* mapDataSetId) const;
 
 		/// Gets the civilian types to use.
-		std::vector<std::string> getCivilianTypes() const;
+		const std::vector<std::string>& getCivilianTypes() const;
 
 		/// Gets the generation script.
 		const std::string& getScript() const;

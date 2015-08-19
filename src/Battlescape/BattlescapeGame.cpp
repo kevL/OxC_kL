@@ -417,7 +417,7 @@ void BattlescapeGame::popState()
 					// after throwing the cursor returns to default cursor;
 					// after shooting it stays in targeting mode and the player
 					// can shoot again in the same mode (autoshot/snap/aimed)
-					// unless he/she is out of tu's
+					// unless he/she is out of tu's and/or ammo
 					if (actionFailed == false)
 					{
 						const int curTu = action.actor->getTimeUnits();
@@ -431,7 +431,7 @@ void BattlescapeGame::popState()
 							break;
 
 							case BA_SNAPSHOT:
-								Log(LOG_INFO) << ". SnapShot, TU percent = " << (float)action.weapon->getRules()->getTUSnap();
+								//Log(LOG_INFO) << ". SnapShot, TU percent = " << (float)action.weapon->getRules()->getTUSnap();
 								if (curTu < action.actor->getActionTUs(
 																	BA_SNAPSHOT,
 																	action.weapon)
@@ -3134,17 +3134,13 @@ BattleUnit* BattlescapeGame::convertUnit(
 	std::ostringstream armorType;
 	armorType << getRuleset()->getUnit(conType)->getArmor();
 
-	const int
-		difficulty = static_cast<int>(_parentState->getGame()->getSavedGame()->getDifficulty()),
-		month = _parentState->getGame()->getSavedGame()->getMonthsPassed();
-
 	BattleUnit* const conUnit = new BattleUnit(
 											getRuleset()->getUnit(conType),
 											FACTION_HOSTILE,
 											_battleSave->getUnits()->back()->getId() + 1,
 											getRuleset()->getArmor(armorType.str()),
-											difficulty,
-											month,
+											_parentState->getGame()->getSavedGame()->getDifficulty(),
+											_parentState->getGame()->getSavedGame()->getMonthsPassed(),
 											this);
 
 	const Position posUnit = unit->getPosition();

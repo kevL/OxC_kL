@@ -226,7 +226,7 @@ void AlienDeployment::load(const YAML::Node& node)
  * @note Each deployment type has a unique name.
  * @return, deployment name
  */
-std::string AlienDeployment::getType() const
+const std::string& AlienDeployment::getType() const
 {
 	return _type;
 }
@@ -249,7 +249,7 @@ std::vector<DeploymentData>* AlienDeployment::getDeploymentData()
 void AlienDeployment::getDimensions(
 		int* width,
 		int* lenght,
-		int* heigth)
+		int* heigth) const
 {
 	*width = _width;
 	*lenght = _length;
@@ -269,7 +269,7 @@ int AlienDeployment::getCivilians() const
  * Gets eligible terrains for battlescape generation.
  * @return, vector of terrain-type strings
  */
-std::vector<std::string> AlienDeployment::getDeployTerrains() const
+const std::vector<std::string>& AlienDeployment::getDeployTerrains() const
 {
 	return _terrains;
 }
@@ -287,7 +287,7 @@ int AlienDeployment::getShade() const
  * Gets the next stage of the mission.
  * @return, the next stage of the mission
  */
-std::string AlienDeployment::getNextStage() const
+const std::string& AlienDeployment::getNextStage() const
 {
 	return _nextStage;
 }
@@ -296,7 +296,7 @@ std::string AlienDeployment::getNextStage() const
  * Gets the next stage's aLien race.
  * @return, the next stage's alien race
  */
-std::string AlienDeployment::getRace() const
+const std::string& AlienDeployment::getRace() const
 {
 	return _race;
 }
@@ -305,7 +305,7 @@ std::string AlienDeployment::getRace() const
  * Gets the script to use to generate a mission of this type.
  * @return, the script to use to generate a mission of this type
  */
-std::string AlienDeployment::getScript() const
+const std::string& AlienDeployment::getScript() const
 {
 	return _script;
 }
@@ -341,7 +341,7 @@ bool AlienDeployment::isFinalMission() const
  * Gets the alert message displayed when this mission spawns.
  * @return, string ID for the message
  */
-std::string AlienDeployment::getAlertMessage() const
+const std::string& AlienDeployment::getAlertMessage() const
 {
 	return _alert;
 }
@@ -359,7 +359,7 @@ BriefingData AlienDeployment::getBriefingData() const
  * Returns the globe marker name for this mission.
  * @return, string ID for marker name
  */
-std::string AlienDeployment::getMarkerName() const
+const std::string& AlienDeployment::getMarkerName() const
 {
 	return _markerName;
 }
@@ -423,7 +423,7 @@ int AlienDeployment::getObjectivesReqd() const
  * are met.
  * @return, string to pop
  */
-std::string AlienDeployment::getObjectivePopup() const
+const std::string& AlienDeployment::getObjectivePopup() const
 {
 	return _objectivePopup;
 }

@@ -211,7 +211,7 @@ SavedBattleGame::~SavedBattleGame()
 void SavedBattleGame::load(
 		const YAML::Node& node,
 		Ruleset* const rules,
-		SavedGame* savedGame)
+		const SavedGame* const savedGame)
 {
 	//Log(LOG_INFO) << "SavedBattleGame::load()";
 	_mapsize_x			= node["width"]			.as<int>(_mapsize_x);
@@ -232,9 +232,6 @@ void SavedBattleGame::load(
 			i != node["mapdatasets"].end();
 			++i)
 	{
-//		const std::string type = i->as<std::string>();
-//		MapDataSet* const mds = rules->getMapDataSet(type);
-//		_mapDataSets.push_back(mds);
 		_mapDataSets.push_back(rules->getMapDataSet(i->as<std::string>()));
 	}
 
@@ -340,13 +337,11 @@ void SavedBattleGame::load(
 			i != node["units"].end();
 			++i)
 	{
-//		id				= (*i)["soldierId"]									.as<int>();
 		id				= (*i)["id"]										.as<int>();
 		faction			= static_cast<UnitFaction>((*i)["faction"]			.as<int>());
 		originalFaction	= static_cast<UnitFaction>((*i)["originalFaction"]	.as<int>(faction));
 
-		const int diff = static_cast<int>(savedGame->getDifficulty());
-
+		const GameDifficulty diff = savedGame->getDifficulty();
 		if (id < BattleUnit::MAX_SOLDIER_ID)	// BattleUnit is linked to a geoscape soldier
 		{
 			unit = new BattleUnit(				// look up the matching soldier
@@ -648,7 +643,7 @@ YAML::Node SavedBattleGame::save() const
 	node["globalshade"]		= _globalShade;
 	node["turn"]			= _turn;
 	node["terrain"]			= _terrain; // kL sza_MusicRules
-	node["selectedUnit"]	= (_selectedUnit ? _selectedUnit->getId() : -1);
+	node["selectedUnit"]	= (_selectedUnit != NULL) ? _selectedUnit->getId() : -1;
 
 	for (std::vector<MapDataSet*>::const_iterator
 			i = _mapDataSets.begin();
@@ -668,12 +663,12 @@ YAML::Node SavedBattleGame::save() const
 			node["tiles"].push_back(_tiles[i]->save());
 	}
 #else
-	// first, write out the field sizes we're going to use to write the tile data
+	// write out the field sizes used to write the tile data
 	node["tileIndexSize"]		= Tile::serializationKey.index;
 	node["tileTotalBytesPer"]	= Tile::serializationKey.totalBytes;
 	node["tileFireSize"]		= Tile::serializationKey._fire;
 	node["tileSmokeSize"]		= Tile::serializationKey._smoke;
-	node["tileOffsetSize"]		= Tile::serializationKey._animOffset; // kL
+	node["tileOffsetSize"]		= Tile::serializationKey._animOffset;
 	node["tileIDSize"]			= Tile::serializationKey._mapDataID;
 	node["tileSetIDSize"]		= Tile::serializationKey._mapDataSetID;
 	node["tileBoolFieldsSize"]	= Tile::serializationKey.boolFields;
@@ -688,7 +683,7 @@ YAML::Node SavedBattleGame::save() const
 			i != _mapSize;
 			++i)
 	{
-		serializeInt( // kL <- save ALL Tiles. (Stop void tiles returning undiscovered postReload.)
+		serializeInt( // <- save ALL Tiles. (Stop void tiles returning undiscovered postReload.)
 				&writeBuffer,
 				Tile::serializationKey.index,
 				static_cast<int>(i));
@@ -740,12 +735,10 @@ YAML::Node SavedBattleGame::save() const
 		node["items"].push_back((*i)->save());
 	}
 
-	node["batReserved"]			= static_cast<int>(_batReserved);
-	node["kneelReserved"]		= _kneelReserved;
-//	node["depth"]				= _depth;
-//	node["ambience"]			= _ambience;
-	node["alienRace"]			= _alienRace;
-	node["operationTitle"]		= Language::wstrToUtf8(_operationTitle);
+	node["batReserved"]		= static_cast<int>(_batReserved);
+	node["kneelReserved"]	= _kneelReserved;
+	node["alienRace"]		= _alienRace;
+	node["operationTitle"]	= Language::wstrToUtf8(_operationTitle);
 
 	if (_controlDestroyed == true)
 		node["controlDestroyed"] = _controlDestroyed;
@@ -791,8 +784,7 @@ void SavedBattleGame::initMap(
 		const int mapsize_y,
 		const int mapsize_z)
 {
-	// Delete old stuff
-	if (_nodes.empty() == false)
+	if (_nodes.empty() == false) // Delete old stuff
 	{
 		_mapSize = static_cast<size_t>(_mapsize_x * _mapsize_y * _mapsize_z);
 		for (size_t
@@ -817,8 +809,7 @@ void SavedBattleGame::initMap(
 		_mapDataSets.clear();
 	}
 
-	// Create tile objects
-	_mapsize_x = mapsize_x;
+	_mapsize_x = mapsize_x; // Create tile objects
 	_mapsize_y = mapsize_y;
 	_mapsize_z = mapsize_z;
 	_mapSize = static_cast<size_t>(mapsize_z * mapsize_y * mapsize_x);

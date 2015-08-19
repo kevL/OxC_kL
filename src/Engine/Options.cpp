@@ -195,7 +195,6 @@ void create()
 	_info.push_back(OptionInfo("battleExplosionHeight", &battleExplosionHeight, 0, "STR_BATTLEEXPLOSIONHEIGHT", "STR_BATTLESCAPE"));
 	_info.push_back(OptionInfo("battleAutoEnd", &battleAutoEnd, false, "STR_BATTLEAUTOEND", "STR_BATTLESCAPE"));
 	_info.push_back(OptionInfo("battleSmoothCamera", &battleSmoothCamera, false, "STR_BATTLESMOOTHCAMERA", "STR_BATTLESCAPE"));
-	_info.push_back(OptionInfo("disableAutoEquip", &disableAutoEquip, false, "STR_DISABLEAUTOEQUIP", "STR_BATTLESCAPE"));
 	_info.push_back(OptionInfo("battleConfirmFireMode", &battleConfirmFireMode, false, "STR_BATTLECONFIRMFIREMODE", "STR_BATTLESCAPE"));
 	_info.push_back(OptionInfo("weaponSelfDestruction", &weaponSelfDestruction, false, "STR_WEAPONSELFDESTRUCTION", "STR_BATTLESCAPE"));
 	_info.push_back(OptionInfo("allowPsionicCapture", &allowPsionicCapture, false, "STR_ALLOWPSIONICCAPTURE", "STR_BATTLESCAPE"));
@@ -587,11 +586,11 @@ void updateOptions()
 
 /**
  * Loads options from a YAML file.
- * @param filename - reference a YAML filename
+ * @param file - reference a YAML filename
  */
-void load(const std::string& filename)
+void load(const std::string& file)
 {
-	const std::string st = _configFolder + filename + ".cfg";
+	const std::string st = _configFolder + file + ".cfg";
 	try
 	{
 		const YAML::Node doc = YAML::LoadFile(st);
@@ -618,18 +617,18 @@ void load(const std::string& filename)
 
 /**
  * Saves options to a YAML file.
- * @param filename - reference a YAML filename
+ * @param file - reference a YAML filename
  */
-void save(const std::string& filename)
+void save(const std::string& file)
 {
-	const std::string st = _configFolder + filename + ".cfg";
+	const std::string st = _configFolder + file + ".cfg";
 	std::ofstream save(st.c_str());
 	if (save.fail() == true)
 	{
-		Log(LOG_WARNING) << "Failed to save " << filename << ".cfg";
+		Log(LOG_WARNING) << "Failed to save " << file << ".cfg";
 		return;
 	}
-	Log(LOG_INFO) << "Saving Options to " << filename << ".cfg";
+	Log(LOG_INFO) << "Saving Options to " << file << ".cfg";
 
 	try
 	{
