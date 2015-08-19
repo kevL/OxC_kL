@@ -1305,8 +1305,8 @@ void BattlescapeState::printTileInventory() // private.
 					if (itRule->getBattleType() == BT_AMMO)
 						wst1 += L" (" + Text::formatNumber(item->getAmmoQuantity()) + L")";
 					else if (itRule->getBattleType() == BT_FIREARM
-						&& item->getAmmoItem() != NULL
-						&& item->getAmmoItem() != item)
+						&& item->selfPowered() == false
+						&& item->getAmmoItem() != NULL)
 					{
 						wst = tr(item->getAmmoItem()->getRules()->getType());
 						wst1 += L" | " + wst + L" (" + Text::formatNumber(item->getAmmoItem()->getAmmoQuantity()) + L")";
@@ -2825,6 +2825,7 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 		const BattleItem
 			* const rtItem = selUnit->getItem("STR_RIGHT_HAND"),
 			* const ltItem = selUnit->getItem("STR_LEFT_HAND");
+		const RuleItem* itRule;
 
 		const std::string activeHand = selUnit->getActiveHand();
 		if (activeHand.empty() == false)
@@ -2835,36 +2836,42 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 				tuAuto = 0,
 				tuSnap = 0;
 
-			if (activeHand == "STR_RIGHT_HAND"
-				&& (rtItem->getRules()->getBattleType() == BT_FIREARM
-					|| rtItem->getRules()->getBattleType() == BT_MELEE))
+			if (activeHand == "STR_RIGHT_HAND")
 			{
-				tuLaunch = selUnit->getActionTUs(BA_LAUNCH, rtItem);
-				tuAim = selUnit->getActionTUs(BA_AIMEDSHOT, rtItem);
-				tuAuto = selUnit->getActionTUs(BA_AUTOSHOT, rtItem);
-				tuSnap = selUnit->getActionTUs(BA_SNAPSHOT, rtItem);
-				if (tuLaunch == 0
-					&& tuAim == 0
-					&& tuAuto == 0
-					&& tuSnap == 0)
+				itRule = rtItem->getRules();
+				if (itRule->getBattleType() == BT_FIREARM
+					|| itRule->getBattleType() == BT_MELEE)
 				{
-					tuSnap = selUnit->getActionTUs(BA_HIT, rtItem);
+					tuLaunch = selUnit->getActionTUs(BA_LAUNCH, rtItem);
+					tuAim = selUnit->getActionTUs(BA_AIMEDSHOT, rtItem);
+					tuAuto = selUnit->getActionTUs(BA_AUTOSHOT, rtItem);
+					tuSnap = selUnit->getActionTUs(BA_SNAPSHOT, rtItem);
+					if (tuLaunch == 0
+						&& tuAim == 0
+						&& tuAuto == 0
+						&& tuSnap == 0)
+					{
+						tuSnap = selUnit->getActionTUs(BA_HIT, rtItem);
+					}
 				}
 			}
-			else if (activeHand == "STR_LEFT_HAND"
-				&& (ltItem->getRules()->getBattleType() == BT_FIREARM
-					|| ltItem->getRules()->getBattleType() == BT_MELEE))
+			else if (activeHand == "STR_LEFT_HAND")
 			{
-				tuLaunch = selUnit->getActionTUs(BA_LAUNCH, ltItem);
-				tuAim = selUnit->getActionTUs(BA_AIMEDSHOT, ltItem);
-				tuAuto = selUnit->getActionTUs(BA_AUTOSHOT, ltItem);
-				tuSnap = selUnit->getActionTUs(BA_SNAPSHOT, ltItem);
-				if (tuLaunch == 0
-					&& tuAim == 0
-					&& tuAuto == 0
-					&& tuSnap == 0)
+				itRule = ltItem->getRules();
+				if (itRule->getBattleType() == BT_FIREARM
+					|| itRule->getBattleType() == BT_MELEE)
 				{
-					tuSnap = selUnit->getActionTUs(BA_HIT, ltItem);
+					tuLaunch = selUnit->getActionTUs(BA_LAUNCH, ltItem);
+					tuAim = selUnit->getActionTUs(BA_AIMEDSHOT, ltItem);
+					tuAuto = selUnit->getActionTUs(BA_AUTOSHOT, ltItem);
+					tuSnap = selUnit->getActionTUs(BA_SNAPSHOT, ltItem);
+					if (tuLaunch == 0
+						&& tuAim == 0
+						&& tuAuto == 0
+						&& tuSnap == 0)
+					{
+						tuSnap = selUnit->getActionTUs(BA_HIT, ltItem);
+					}
 				}
 			}
 
@@ -2895,14 +2902,15 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 
 		if (rtItem != NULL)
 		{
-			rtItem->getRules()->drawHandSprite(
-											_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"),
-											_btnRightHandItem);
+			itRule = rtItem->getRules();
+			itRule->drawHandSprite(
+								_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"),
+								_btnRightHandItem);
 			_btnRightHandItem->setVisible();
 
-			if (rtItem->getRules()->getBattleType() == BT_FIREARM
-				&& (rtItem->usesAmmo() == true
-					|| rtItem->getRules()->getClipSize() > 0))
+			if (itRule->getBattleType() == BT_FIREARM
+				&& (rtItem->selfPowered() == false
+					|| itRule->getClipSize() > 0))
 			{
 				_numAmmoRight->setVisible();
 				if (rtItem->getAmmoItem() != NULL)
@@ -2910,7 +2918,12 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 				else
 					_numAmmoRight->setValue(0);
 			}
-			else if (rtItem->getRules()->getBattleType() == BT_GRENADE
+			else if (itRule->getBattleType() == BT_AMMO)
+			{
+				_numAmmoRight->setVisible();
+				_numAmmoRight->setValue(static_cast<unsigned>(rtItem->getAmmoQuantity()));
+			}
+			else if (itRule->getBattleType() == BT_GRENADE
 				&& rtItem->getFuseTimer() > 0)
 			{
 				_numAmmoRight->setVisible();
@@ -2920,14 +2933,15 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 
 		if (ltItem != NULL)
 		{
-			ltItem->getRules()->drawHandSprite(
-											_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"),
-											_btnLeftHandItem);
+			itRule = ltItem->getRules();
+			itRule->drawHandSprite(
+								_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"),
+								_btnLeftHandItem);
 			_btnLeftHandItem->setVisible();
 
-			if (ltItem->getRules()->getBattleType() == BT_FIREARM
-				&& (ltItem->usesAmmo() == true
-					|| ltItem->getRules()->getClipSize() > 0))
+			if (itRule->getBattleType() == BT_FIREARM
+				&& (ltItem->selfPowered() == false
+					|| itRule->getClipSize() > 0))
 			{
 				_numAmmoLeft->setVisible();
 				if (ltItem->getAmmoItem() != NULL)
@@ -2935,7 +2949,12 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 				else
 					_numAmmoLeft->setValue(0);
 			}
-			else if (ltItem->getRules()->getBattleType() == BT_GRENADE
+			else if (itRule->getBattleType() == BT_AMMO)
+			{
+				_numAmmoRight->setVisible();
+				_numAmmoRight->setValue(static_cast<unsigned>(ltItem->getAmmoQuantity()));
+			}
+			else if (itRule->getBattleType() == BT_GRENADE
 				&& ltItem->getFuseTimer() > 0)
 			{
 				_numAmmoLeft->setVisible();

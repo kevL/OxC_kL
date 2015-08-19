@@ -407,8 +407,8 @@ void ActionMenuState::btnActionMenuClick(Action* action)
 			case BA_LAUNCH:
 				if (_action->TU > _action->actor->getTimeUnits())
 					_action->result = "STR_NOT_ENOUGH_TIME_UNITS";
-				else if (_action->weapon->getAmmoItem() == NULL
-					|| _action->weapon->getAmmoItem()->getAmmoQuantity() == 0)
+				else if (_action->weapon->getAmmoItem() == NULL)
+//					|| _action->weapon->getAmmoItem()->getAmmoQuantity() == 0)
 				{
 					_action->result = "STR_NO_AMMUNITION_LOADED";
 				}

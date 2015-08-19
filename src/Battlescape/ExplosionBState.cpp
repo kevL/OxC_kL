@@ -56,11 +56,11 @@ namespace OpenXcom
 // * @param cosmetic		- new undocumented parameter
  */
 ExplosionBState::ExplosionBState(
-		BattlescapeGame* parent,
+		BattlescapeGame* const parent,
 		Position center,
-		BattleItem* item,
-		BattleUnit* unit,
-		Tile* tile,
+		BattleItem* const item,
+		BattleUnit* const unit,
+		Tile* const tile,
 		bool lowerWeapon,
 		bool meleeSuccess,
 		bool forceCamera)
@@ -179,31 +179,32 @@ void ExplosionBState::init()
 		{
 			Position pos = _center; // voxelspace
 			int
-				frameStart = ResourcePack::EXPLOSION_OFFSET,
-				frameDelay = 0,
+				start,
+				delay = 0,
 				qty = _power,
 				radius,
 				offset;
 
 			if (_item != NULL)
 			{
-				frameStart = _item->getRules()->getHitAnimation();
+				start = _item->getRules()->getHitAnimation();
 				radius = _item->getRules()->getExplosionRadius();
+				if (radius == -1)
+					radius = 0;
 
 				if (_item->getRules()->getDamageType() == DT_SMOKE
 					|| _item->getRules()->getDamageType() == DT_STUN)
 				{
-//					frameStart = 8;
+//					start = 8;
 					qty = qty * 2 / 3; // smoke & stun bombs do fewer anims.
 				}
-				else
-					qty = qty * 3 / 2; // bump this up.
+//				else qty = qty * 3 / 2; // bump this up.
 			}
 			else
+			{
+				start = ResourcePack::EXPLOSION_OFFSET;
 				radius = _power / 9; // <- for cyberdiscs & terrain expl.
-
-			if (radius < 0)
-				radius = 0;
+			}
 
 			offset = radius * 6; // voxelspace
 //			qty = static_cast<int>(sqrt(static_cast<double>(radius) * static_cast<double>(qty))) / 3;
@@ -215,7 +216,7 @@ void ExplosionBState::init()
 			}
 
 //			if (_parent->getDepth() > 0)
-//				frameStart -= Explosion::FRAMES_EXPLODE;
+//				start -= Explosion::FRAMES_EXPLODE;
 
 			for (int
 					i = 0;
@@ -230,13 +231,13 @@ void ExplosionBState::init()
 					pos.y = _center.y + RNG::generate(-offset, offset);
 
 					if (RNG::percent(50) == true)
-						++frameDelay;
+						++delay;
 				}
 
 				Explosion* const explosion = new Explosion( // animation
 														pos + Position(11,11,0), // jogg the anim down a few pixels. Tks.
-														frameStart,
-														frameDelay,
+														start,
+														delay,
 														true);
 
 				_parent->getMap()->getExplosions()->push_back(explosion);
@@ -246,12 +247,9 @@ void ExplosionBState::init()
 //			_parent->getMap()->setBlastFlash(true);
 
 
-			int sound = -1;
+			int sound = -1; // set item's hitSound to -1 for silent.
 			if (_item != NULL)
-			{
-				if (_item->getRules()->getHitSound() != -1) // set item's hitSound to -1 for silent.
-					sound = _item->getRules()->getHitSound();
-			}
+				sound = _item->getRules()->getHitSound();
 			else if (_power < 73)
 				sound = ResourcePack::SMALL_EXPLOSION;
 			else

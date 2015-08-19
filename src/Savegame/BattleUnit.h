@@ -812,7 +812,7 @@ private:
 		/// Calculates and resets this BattleUnit's time units and energy.
 		void initTu(
 				bool preBattle = false,
-				bool lowMorale = false);
+				bool hasPanicked = false);
 
 		/// Changes this unit's morale.
 		void moraleChange(int change);
@@ -1006,7 +1006,7 @@ private:
 		/// Gets this unit's original faction
 		UnitFaction getOriginalFaction() const;
 		/// Converts this unit to a faction.
-		void convertToFaction(UnitFaction faction);
+		void setFaction(UnitFaction faction);
 
 		/// Sets this unit's health to 0 and status to dead.
 		void instaKill();

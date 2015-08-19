@@ -159,7 +159,7 @@ void PsiAttackBState::psiAttack()
 		}
 		else if (_action.type == BA_PSICONTROL)
 		{
-			_target->convertToFaction(_unit->getFaction());
+			_target->setFaction(_unit->getFaction());
 			_parent->getTileEngine()->calculateFOV(_target->getPosition());
 			_parent->getTileEngine()->calculateUnitLighting();
 			_target->setTimeUnits(_target->getBaseStats()->tu);

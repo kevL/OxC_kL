@@ -30,6 +30,7 @@ namespace OpenXcom
 class BattlescapeGame;
 class BattleUnit;
 class BattleItem;
+class SavedBattleGame;
 class Tile;
 
 
@@ -53,6 +54,8 @@ private:
 		* _ammo,
 		* _prjItem;
 	BattleUnit* _unit;
+	SavedBattleGame* _battleSave;
+
 	Position
 		_origin,
 		_originVoxel,
@@ -70,11 +73,11 @@ private:
 	public:
 		/// Creates a new ProjectileFlyB class
 		ProjectileFlyBState(
-				BattlescapeGame* parent,
+				BattlescapeGame* const parent,
 				BattleAction action);
 		/// Creates a new ProjectileFlyB class
 		ProjectileFlyBState(
-				BattlescapeGame* parent,
+				BattlescapeGame* const parent,
 				BattleAction action,
 				Position origin);
 		/// Cleans up the ProjectileFlyB.

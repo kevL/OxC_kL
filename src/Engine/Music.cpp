@@ -99,8 +99,8 @@ void Music::load(
 void Music::play(int loop) const
 {
 #ifndef __NO_MUSIC
-	if (_music != NULL
-		&& Options::mute == false)
+	if (Options::mute == false
+		&& _music != NULL)
 	{
 		stop();
 

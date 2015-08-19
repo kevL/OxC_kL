@@ -31,6 +31,7 @@ namespace OpenXcom
 class BattleUnit;
 class RuleInventory;
 class RuleItem;
+class SavedBattleGame;
 class Tile;
 
 
@@ -44,7 +45,6 @@ private:
 	bool
 		_isLoad,
 		_XCOMProperty;
-//		_droppedOnAlienTurn,
 	int
 		_ammoQty,
 		_fuseTimer,
@@ -87,12 +87,27 @@ private:
 		int getAmmoQuantity() const;
 		/// Sets the item's ammo quantity.
 		void setAmmoQuantity(int qty);
+		/// Gets if the item is a clip in a weapon.
+		bool getIsLoadedAmmo() const;
+		/// Sets if the item is a clip in a weapon.
+		void setIsLoadedAmmo(bool loaded = true);
+
+		/// Gets the item's ammo item.
+		BattleItem* getAmmoItem() const;
+		/// Sets the item's ammo item.
+		int setAmmoItem(BattleItem* const item);
+		/// Checks if this item uses ammo OR is self-powered.
+		bool selfPowered() const;
+		/// Spends a bullet from this BattleItem.
+		void spendBullet(
+				SavedBattleGame& battleSave,
+				BattleItem& weapon);
+
 		/// Gets turns until it explodes.
 		int getFuseTimer() const;
 		/// Sets turns until it explodes.
 		void setFuseTimer(int turn);
-		/// Spends one bullet.
-		bool spendBullet();
+
 		/// Gets the item's owner.
 		BattleUnit* getOwner() const;
 		/// Gets the item's previous owner.
@@ -103,6 +118,7 @@ private:
 		void setPreviousOwner(BattleUnit* owner);
 		/// Removes the item from previous owner and moves to new owner.
 		void moveToOwner(BattleUnit* owner);
+
 		/// Gets the item's inventory slot.
 		RuleInventory* getSlot() const;
 		/// Sets the item's inventory slot.
@@ -120,22 +136,20 @@ private:
 				int x,
 				int y,
 				const BattleItem* const item = NULL) const;
-		/// Gets the item's ammo item.
-		BattleItem* getAmmoItem() const;
-		/// Determines if this item uses ammo.
-		bool usesAmmo() const;
-		/// Sets the item's ammo item.
-		int setAmmoItem(BattleItem* const item);
+
 		/// Gets the item's tile.
 		Tile* getTile() const;
 		/// Sets the tile.
 		void setTile(Tile* tile);
+
 		/// Gets it's unique id.
 		int getId() const;
+
 		/// Gets the corpse's unit.
 		BattleUnit* getUnit() const;
 		/// Sets the corpse's unit.
 		void setUnit(BattleUnit* unit);
+
 		/// Sets medikit Heal quantity
 		void setHealQuantity(int heal);
 		/// Gets medikit heal quantity
@@ -148,21 +162,14 @@ private:
 		void setStimulantQuantity(int stimulant);
 		/// Gets medikit stimulant quantity
 		int getStimulantQuantity() const;
+
 		/// Sets xcom property flag
 		void setXCOMProperty(bool flag = true);
 		/// Gets xcom property flag
 		bool getXCOMProperty() const;
-		/// Gets the flag representing "not dropped on player turn"
-//		bool getTurnFlag() const;
-		/// Sets the flag representing "not dropped on player turn"
-//		void setTurnFlag(bool flag);
+
 		/// Sets the item's ruleset.
 		void convertToCorpse(RuleItem* const itRule);
-
-		/// Sets if the item is a clip in a weapon.
-		void BattleItem::isLoaded(bool loaded);
-		/// Gets if the item is a clip in a weapon.
-		bool BattleItem::isLoaded() const;
 };
 
 }

@@ -1274,7 +1274,7 @@ void DebriefingState::prepareDebriefing() // private.
 									&& ammoItem->getAmmoQuantity() > 0)
 								{
 									int total = ammoItem->getAmmoQuantity();
-									if (itRule->getClipSize() != 0) // meaning this tank can store multiple clips
+									if (itRule->getClipSize() != 0) // meaning this tank can store multiple rounds
 										total /= ammoItem->getRules()->getClipSize();
 
 									_base->getItems()->addItem(
@@ -1294,7 +1294,7 @@ void DebriefingState::prepareDebriefing() // private.
 									&& ammoItem->getAmmoQuantity() > 0)
 								{
 									int total = ammoItem->getAmmoQuantity();
-									if (itRule->getClipSize() != 0) // meaning this tank can store multiple clips
+									if (itRule->getClipSize() != 0) // meaning this tank can store multiple rounds
 										total /= ammoItem->getRules()->getClipSize();
 
 									_base->getItems()->addItem(

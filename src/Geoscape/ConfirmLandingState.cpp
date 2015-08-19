@@ -226,14 +226,10 @@ ConfirmLandingState::ConfirmLandingState(
 						_terrainRule = _game->getRuleset()->getTerrain(terrainList.at(pick));
 					}
 //					else fuck off. Thanks!
-					else // trouble: no texture and no deployment terrain, most likely scenario is a UFO landing on water: use the first available terrain
-					{
-						Log(LOG_WARNING) << ". . . . eligibleTerrain NOT Found. Choose first from ruleset list ...";
-						_terrainRule = _game->getRuleset()->getTerrain(_game->getRuleset()->getTerrainList().front());
-					}
+					else Log(LOG_INFO) << ". . . . eligibleTerrain NOT Found. Must be Cydonia, Base assault/defense ...";
 
 					terrainType = _terrainRule->getType();
-					Log(LOG_INFO) << ". . . using: " << terrainType;
+					Log(LOG_INFO) << ". . . using terrainType: " << terrainType;
 				}
 //				else	// SAFETY: for missionSite that's not at a City.
 						// This should be the same as for NOT City!!!
@@ -300,7 +296,6 @@ ConfirmLandingState::ConfirmLandingState(
 	_txtMessage->setBig();
 
 	std::wostringstream woststr;
-//	woststr << L""; // blank if no UFO.
 	if (ufo != NULL)
 	{
 //		const RuleUfo* const ufoRule = ufo->getRules(); if (ufoRule != NULL)

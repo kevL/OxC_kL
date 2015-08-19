@@ -24,8 +24,6 @@
 
 #include "../Ruleset/MapScript.h"
 
-//#include "../Savegame/SavedBattleGame.h" // TacticalType enum
-
 
 namespace OpenXcom
 {
@@ -45,7 +43,6 @@ class ResourcePack;
 class RuleItem;
 class Ruleset;
 class RuleTerrain;
-//class RuleTexture;
 class RuleUnit;
 class SavedBattleGame;
 class SavedGame;
@@ -64,11 +61,9 @@ class BattlescapeGenerator
 
 private:
 	bool
-//		_allowAutoLoadout,
 		_baseEquipScreen,
 		_craftDeployed,
 		_generateFuel;
-//		_isCity;
 	int
 		_alienItemLevel,
 		_blocksToDo,
@@ -98,17 +93,13 @@ private:
 	MissionSite* _mission;
 	ResourcePack* _res;
 	Ruleset* _rules;
-	RuleTerrain* _terrain;
-//	RuleTexture* _texture;
+	RuleTerrain* _terraRule;
 	SavedBattleGame* _battleSave;
 	SavedGame* _gameSave;
 	Tile* _tileEquipt;
 	Ufo* _ufo;
 
 	std::string _alienRace;
-//		_missionType;
-
-//	TacticalType _tacType;
 
 
 	/// Sets the map size and associated vars.
@@ -117,15 +108,13 @@ private:
 	/// Deploys the XCOM units on the mission.
 	void deployXCOM();
 	/// Adds a vehicle to the game.
-	BattleUnit* addXCOMVehicle(Vehicle* const tank);
+	BattleUnit* addXCOMVehicle(Vehicle* const vehicle);
 	/// Adds a soldier to the game.
 	BattleUnit* addXCOMUnit(BattleUnit* const unit);
 	/// Runs necessary checks before physically setting the position.
 	bool canPlaceXCOMUnit(Tile* const tile);
 	/// Loads a weapon on the inventoryTile.
 	void loadGroundWeapon(BattleItem* const item);
-	/// Load all Xcom weapons.
-//	void loadWeapons();
 	/// Places an item on a soldier based on equipment layout.
 	bool placeItemByLayout(BattleItem* const item);
 	/// Sets xCom soldiers' combat clothing style - spritesheets & paperdolls.
@@ -135,7 +124,6 @@ private:
 	bool addItem(
 			BattleItem* item,
 			BattleUnit* unit);
-//			bool allowSecondClip = false
 
 	/// Deploys the aliens according to the AlienDeployment rule.
 	void deployAliens(AlienDeployment* const deployRule);
@@ -152,21 +140,21 @@ private:
 	/// Adds a civlian to the game.
 	BattleUnit* addCivilian(RuleUnit* rules);
 
-	/// Loads an XCom RMP file.
-	void loadRMP(
-			MapBlock* mapblock,
-			int xoff,
-			int yoff,
-			int segment);
 	/// Loads an XCom MAP file.
 	int loadMAP(
-			MapBlock* const mapblock,
+			MapBlock* const block,
 			int offset_x,
 			int offset_y,
-			RuleTerrain* terrainRule,
+			const RuleTerrain* const terraRule,
 			int dataSetOffset,
 			bool discovered = false,
 			bool craft = false);
+	/// Loads an XCom RMP file.
+	void loadRMP(
+			MapBlock* const block,
+			int xoff,
+			int yoff,
+			int segment);
 
 	/// Fills power sources with an alien fuel object.
 	void fuelPowerSources();
@@ -201,11 +189,11 @@ private:
 	/// Adds a craft (either a ufo or an xcom craft) somewhere on the map.
 	bool addCraft(
 			const MapBlock* const craftMap,
-			MapScript* command,
+			MapScript* const scriptCommand,
 			SDL_Rect& craftPos);
 	/// Adds a line (generally a road) to the map.
 	bool addLine(
-			MapDirection lineType,
+			MapDirection dir,
 			const std::vector<SDL_Rect*>* rects);
 	/// Adds a single block at a given position.
 	bool addBlock(
@@ -218,7 +206,7 @@ private:
 			const std::vector<SDL_Rect*>* rects,
 			MapDirection dir);
 	/// Clears all modules in a rect from a command.
-	bool removeBlocks(MapScript* command);
+	bool removeBlocks(MapScript* const scriptCommand);
 
 
 	public:
@@ -237,12 +225,8 @@ private:
 		void setMissionSite(MissionSite* mission);
 		/// Sets the alien base
 		void setAlienBase(AlienBase* base);
-		/// Sets if Ufo has landed/crashed at a city.
-//		void setIsCity(const bool isCity = true);
 		/// Sets the terrain.
 		void setTacTerrain(RuleTerrain* terrain);
-		/// Sets the polygon texture.
-//		void setTacTexture(RuleTexture* texture);
 		/// Sets the polygon shade.
 		void setTacShade(int shade);
 		/// Sets the alien race.
@@ -262,7 +246,7 @@ private:
 				size_t selUnit = 0);
 
 		/// Sets up the objectives for the map.
-		void setupObjectives(AlienDeployment* const deployRule);
+		void setupObjectives(const AlienDeployment* const deployRule);
 };
 
 }

@@ -25,6 +25,8 @@
 #include "../Ruleset/RuleInventory.h"
 #include "../Ruleset/RuleItem.h"
 
+#include "../Savegame/SavedBattleGame.h"
+
 
 namespace OpenXcom
 {
@@ -73,13 +75,13 @@ BattleItem::BattleItem(
 		_stimulant = _itRule->getStimulantQuantity();
 	}
 	else if (_itRule->getCompatibleAmmo()->empty() == true
-		&& (_itRule->getBattleType() == BT_FIREARM		// These weapons do not need ammo;
-			|| _itRule->getBattleType() == BT_MELEE))	// (ammo)item points to weapon itself.
+		&& (_itRule->getBattleType() == BT_FIREARM // These weapons do not need ammo; '_ammoItem' points to the weapon itself.
+			|| _itRule->getBattleType() == BT_MELEE))
 	{
-		// melee, lasers, etc have clipsize(-1).
+		// lasers, melee, etc have "clipsize -1"
 //		setAmmoQuantity(-1);	// needed for melee-item reaction hits, etc. (can be set in Ruleset but do it here)
-								// But it creates problems w/ TANKS returning to Base. So do it in Ruleset:
-								// melee items need "clipSize: -1" to do reactionFire.
+								// Except that it creates problems w/ TANKS returning to Base. So do it in Ruleset:
+								// melee items need "clipSize -1" to do reactionFire.
 		_ammoItem = this;
 	}
 }
@@ -103,8 +105,6 @@ void BattleItem::load(const YAML::Node& node)
 	_heal		= node["heal"]		.as<int>(_heal);
 	_stimulant	= node["stimulant"]	.as<int>(_stimulant);
 	_fuseTimer	= node["fuseTimer"]	.as<int>(_fuseTimer);
-
-//	_droppedOnAlienTurn	= node["droppedOnAlienTurn"].as<bool>(_droppedOnAlienTurn);
 }
 
 /**
@@ -119,32 +119,28 @@ YAML::Node BattleItem::save() const
 	node["type"]		= _itRule->getType();
 	node["inventoryX"]	= _inventoryX;
 	node["inventoryY"]	= _inventoryY;
-	node["ammoQty"]		= _ammoQty;
-	node["painKiller"]	= _painKiller;
-	node["heal"]		= _heal;
-	node["stimulant"]	= _stimulant;
+
+	if (_ammoQty != 0)
+		node["ammoQty"]		= _ammoQty;
+	if (_painKiller != 0)
+		node["painKiller"]	= _painKiller;
+	if (_heal != 0)
+		node["heal"]		= _heal;
+	if (_stimulant != 0)
+		node["stimulant"]	= _stimulant;
 
 	if (_owner != NULL)			node["owner"]			= _owner->getId();
 	else						node["owner"]			= -1;
-
 	if (_previousOwner != NULL)	node["previousOwner"]	= _previousOwner->getId();
-
 	if (_unit != NULL)			node["unit"]			= _unit->getId();
 	else						node["unit"]			= -1;
-
 	if (_inventorySlot != NULL)	node["inventoryslot"]	= _inventorySlot->getId();
 	else						node["inventoryslot"]	= "NULL";
-
 	if (_tile != NULL)			node["position"]		= _tile->getPosition();
 	else						node["position"]		= Position(-1,-1,-1);
-
 	if (_ammoItem != NULL)		node["ammoItem"]		= _ammoItem->getId();
 	else						node["ammoItem"]		= -1;
-
 	if (_fuseTimer != -1)		node["fuseTimer"]		= _fuseTimer;
-
-//	if (_droppedOnAlienTurn)
-//		node["droppedOnAlienTurn"]	= _droppedOnAlienTurn;
 
 	return node;
 }
@@ -179,18 +175,13 @@ void BattleItem::setFuseTimer(int turn)
 /**
  * Gets the '_ammoQty' of this BattleItem.
  * @return, ammo quantity
- *			0	- item is not ammo
- *			255	- item is its own ammo
+ *			0		- item is not ammo
+ *			INT_MAX	- item is its own ammo
  */
 int BattleItem::getAmmoQuantity() const
 {
-	if (_itRule->getClipSize() == -1)	// is Laser, melee, etc. This could be taken out
-//		|| _ammoQty == -1)				// kL, NOTE: specifying clipSize(-1) in Ruleset should no longer be necessary. BLEH !
-										// This should iron out some ( rare ) reaction & AI problems ....
-										// But it creates problems w/ TANKS returning to Base.
-	{
-		return 255; // TODO: set this to int_max and be done with it. (i hate '255' -- it's so oldschool)
-	}
+	if (_ammoQty == -1)
+		return std::numeric_limits<int>::max();
 
 	return _ammoQty;
 }
@@ -205,25 +196,112 @@ void BattleItem::setAmmoQuantity(int qty)
 }
 
 /**
- * Spends a bullet from this BattleItem.
- * @return, true if there are bullets left
+ * Gets if the item is loaded in a weapon.
+ * @return, true if loaded
  */
-bool BattleItem::spendBullet()
+bool BattleItem::getIsLoadedAmmo() const
 {
+	return _isLoad;
+}
+
+/**
+ * Sets if the item is loaded in a weapon.
+ * @param - true if loaded (default true)
+ */
+void BattleItem::setIsLoadedAmmo(bool loaded)
+{
+	_isLoad = loaded;
+}
+
+/**
+ * Gets an item's currently loaded ammo item.
+ * @return, pointer to BattleItem
+ *			- NULL if this BattleItem is ammo or this BattleItem has no ammo loaded
+ *			- the weapon itself if weapon is its own ammo
+ */
+BattleItem* BattleItem::getAmmoItem() const
+{
+	return _ammoItem;
+}
+
+/**
+ * Sets an ammo item for this BattleItem.
+ * @param item - the ammo item
+ * @return,	 0 = successful load or unload
+ *			-1 = weapon already contains ammo
+ *			-2 = item doesn't fit / weapon is self-powered
+ */
+int BattleItem::setAmmoItem(BattleItem* const item)
+{
+	if (_ammoItem != this)
+	{
+		if (item == NULL) // unload weapon
+		{
+			if (_ammoItem != NULL)
+				_ammoItem->setIsLoadedAmmo(false);
+
+			_ammoItem = NULL;
+			return 0;
+		}
+
+		if (_ammoItem != NULL)
+			return -1;
+
+		for (std::vector<std::string>::const_iterator
+				i = _itRule->getCompatibleAmmo()->begin();
+				i != _itRule->getCompatibleAmmo()->end();
+				++i)
+		{
+			if (*i == item->getRules()->getType())
+			{
+				item->setIsLoadedAmmo();
+				_ammoItem = item;
+
+				return 0;
+			}
+		}
+	}
+
+	return -2;
+}
+
+/**
+ * Determines if this BattleItem uses ammo OR is self-powered.
+ * @note No ammo is needed if the item has itself assigned as its '_ammoItem'.
+ * @return, true if self-powered
+ */
+bool BattleItem::selfPowered() const
+{
+	return (_ammoItem == this);
+}
+
+/**
+ * Spends a bullet from this BattleItem.
+ * @param battleSave	- reference to the SavedBattleGame
+ * @param weapon		- reference to the weapon containing this ammo
+ */
+void BattleItem::spendBullet(
+		SavedBattleGame& battleSave,
+		BattleItem& weapon)
+{
+	if (_ammoQty != -1 // <- infinite ammo
+		&& --_ammoQty == 0)
+	{
+		weapon.setAmmoItem(NULL);
+		battleSave.removeItem(this); // <- could be dangerous.
+	}
+}
 /*	if (_ammoQty == -1)		// the ammo should have gotten deleted if/when it reaches 0;
 		return true;		// less than 0 denotes self-powered weapons. But ...
 							// let ==0 be a fudge-factor.
 	if (--_ammoQty == 0)	// TODO: See about removing the '_ammoItem' from the game here
 		return false;		// so there is *never* a clip w/ 0 qty IG. */
-
-	if (_ammoQty != -1
+/*	if (_ammoQty != -1
 		&& --_ammoQty == 0)
 	{
 		return false;
 	}
-
-	return true;
-}
+	return true; */
 
 /**
  * Gets the item's owner.
@@ -380,68 +458,6 @@ bool BattleItem::occupiesSlot(
 }
 
 /**
- * Gets an item's currently loaded ammo item.
- * @return, pointer to BattleItem
- *			- NULL if this BattleItem is ammo or this BattleItem has no ammo loaded
- *			- the weapon itself if weapon is its own ammo
- */
-BattleItem* BattleItem::getAmmoItem() const
-{
-	return _ammoItem;
-}
-
-/**
- * Determines if this BattleItem uses ammo.
- * @note No ammo is needed if the item has itself assigned as its '_ammoItem'.
- * @return, true if the item uses ammo
- */
-bool BattleItem::usesAmmo() const
-{
-	return (_ammoItem != this);
-}
-
-/**
- * Sets an ammo item.
- * @param item - the ammo item
- * @return,	 0 = success or invalid item
- *			-1 = weapon already contains ammo
- *			-2 = ammo doesn't fit or nothing happened
- */
-int BattleItem::setAmmoItem(BattleItem* const item)
-{
-	if (_ammoItem != this)
-	{
-		if (item == NULL)
-		{
-			if (_ammoItem != NULL)
-				_ammoItem->isLoaded(false);
-
-			_ammoItem = NULL;
-			return 0;
-		}
-
-		if (_ammoItem != NULL)
-			return -1;
-
-		for (std::vector<std::string>::const_iterator
-				i = _itRule->getCompatibleAmmo()->begin();
-				i != _itRule->getCompatibleAmmo()->end();
-				++i)
-		{
-			if (*i == item->getRules()->getType())
-			{
-				item->isLoaded();
-
-				_ammoItem = item;
-				return 0;
-			}
-		}
-	}
-
-	return -2;
-}
-
-/**
  * Gets the item's tile.
  * @return, Pointer to the Tile
  */
@@ -566,31 +582,6 @@ bool BattleItem::getXCOMProperty() const
 }
 
 /**
- * Gets the "dropped on non-player turn" flag.
- * @note This is to determine whether or not aliens should attempt to pick this
- * item up since items dropped by the player may be "honey traps".
- * kL_note: holy shit that's cynical. (or just fascits). Worse than 'honey traps'
- * are players like me who Mc aLiens and make them drop their weapons - on the
- * xCom turn! so in a word or 25 TAKE THIS OUT.
- * @return, true if the aliens dropped the item
- */
-/* bool BattleItem::getTurnFlag() const
-{
-	return _droppedOnAlienTurn;
-} */
-
-/**
- * Sets the "dropped on non-player turn" flag.
- * @note This is set when the item is dropped in the battlescape or picked up in
- * the inventory screen.
- * @param flag - true if the aliens dropped the item
- */
-/* void BattleItem::setTurnFlag(bool flag)
-{
-	_droppedOnAlienTurn = flag;
-} */
-
-/**
  * Converts a carried unconscious body into a battlefield corpse-item.
  * @param itRule - pointer to rules of the corpse item to convert this item into
  */
@@ -602,24 +593,6 @@ void BattleItem::convertToCorpse(RuleItem* const itRule)
 	{
 		_itRule = itRule;
 	}
-}
-
-/**
- * Sets if the item is a clip in a weapon.
- * @param - true if loaded
- */
-void BattleItem::isLoaded(bool loaded)
-{
-	_isLoad = loaded;
-}
-
-/**
- * Gets if the item is a clip in a weapon.
- * @return, true if loaded
- */
-bool BattleItem::isLoaded() const
-{
-	return _isLoad;
 }
 
 }

@@ -392,7 +392,7 @@ void CraftEquipmentState::updateQuantity()
 {
 	const RuleItem* const itemRule = _game->getRuleset()->getItem(_items[_sel]);
 
-	int craftQty = 0;
+	int craftQty;
 	if (itemRule->isFixed() == true)
 		craftQty = _craft->getVehicleCount(_items[_sel]);
 	else

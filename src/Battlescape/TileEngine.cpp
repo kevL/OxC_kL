@@ -1913,7 +1913,7 @@ bool TileEngine::reactionShot(
 	if (action.weapon == NULL
 		|| action.weapon->getRules()->canReactionFire() == false
 		|| action.weapon->getAmmoItem() == NULL						// lasers & melee are their own ammo-items
-		|| action.weapon->getAmmoItem()->getAmmoQuantity() == 0		// lasers & melee return 255
+		|| action.weapon->getAmmoItem()->getAmmoQuantity() == 0		// lasers & melee return INT_MAX
 		|| (action.actor->getFaction() != FACTION_HOSTILE			// is not an aLien and has unresearched weapon.
 			&& _battleSave->getGeoscapeSave()->isResearched(action.weapon->getRules()->getRequirements()) == false))
 	{
@@ -5997,7 +5997,7 @@ bool TileEngine::psiAttack(BattleAction* const action)
 				victim->moraleChange(courage);
 				//Log(LOG_INFO) << ". . . victim morale[2] = " << victim->getMorale();
 
-				victim->convertToFaction(action->actor->getFaction());
+				victim->setFaction(action->actor->getFaction());
 				victim->initTu();
 				victim->allowReselect();
 				victim->setStatus(STATUS_STANDING);

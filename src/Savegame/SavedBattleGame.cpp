@@ -1389,7 +1389,8 @@ bool SavedBattleGame::endBattlePhase()
 			i != _units.end();
 			++i)
 	{
-		if ((*i)->isOut_t(OUT_DEAD) == false)
+		if ((*i)->isOut_t(OUT_DEAD) == false
+			&& (*i)->getStatus() != STATUS_LIMBO)
 		{
 			(*i)->setDashing(false);	// Safety. no longer dashing; dash is effective
 										// vs. Reaction Fire only and is/ought be
@@ -1406,15 +1407,9 @@ bool SavedBattleGame::endBattlePhase()
 
 			if ((*i)->getFaction() == _side)	// This causes an Mc'd unit to lose its turn.
 				(*i)->prepUnit();				// REVERTS FACTION, does tu/stun recovery, Fire damage, etc.
-
 			// if newSide=XCOM, xCom agents DO NOT revert to xCom; MC'd aLiens revert to aLien.
 			// if newSide=Alien, xCom agents revert to xCom; MC'd aLiens DO NOT revert to aLien.
 
-
-//			if ((*i)->isOut(true, true) == true)
-//			if ((*i)->isOut_t(OUT_STAT) == true)	// safety.
-//				(*i)->setExposed(-1);				// That got done when unit went down.
-//			else
 			if ((*i)->getFaction() == FACTION_HOSTILE
 				|| (*i)->getOriginalFaction() == FACTION_HOSTILE
 				|| _cheatAI == true) // aLiens know where xCom is when cheating ~turn20
@@ -1612,7 +1607,6 @@ void SavedBattleGame::randomizeItemLocations(Tile* const tile)
  */
 void SavedBattleGame::removeItem(BattleItem* const item)
 {
-	//Log(LOG_INFO) << "SBG::removeItem() id " << item->getId();
 	Tile* const tile = item->getTile();
 	if (tile != NULL)
 	{
@@ -1659,16 +1653,6 @@ void SavedBattleGame::removeItem(BattleItem* const item)
 
 	_deleted.push_back(item);
 }
-/*	for (int i = 0; i < _mapSize; ++i)
-		for (std::vector<BattleItem*>::const_iterator j = _tiles[i]->getInventory()->begin(); j != _tiles[i]->getInventory()->end();)
-			if ((*j) == item)
-			{
-				j = _tiles[i]->getInventory()->erase(j);
-				return;
-			}
-			++j;
-		}
-	} */
 
 /**
  * Sets whether the mission was aborted or successful.
@@ -1745,20 +1729,20 @@ bool SavedBattleGame::allObjectivesDestroyed() const
 void SavedBattleGame::setNextItemId()
 {
 	int
-		highValue = -1,
-		id;
+		id = -1,
+		idTest;
 
 	for (std::vector<BattleItem*>::const_iterator
 			i = _items.begin();
 			i != _items.end();
 			++i)
 	{
-		id = (*i)->getId();
-		if (id > highValue)
-			highValue = id;
+		idTest = (*i)->getId();
+		if (idTest > id)
+			id = idTest;
 	}
 
-	_itemId = ++highValue;
+	_itemId = ++id;
 }
 
 /**
@@ -1772,7 +1756,7 @@ int* SavedBattleGame::getNextItemId()
 
 /**
  * Finds a fitting node where a unit can spawn.
- * bgen.addAlien() uses a fallback mechanism to test assorted nodeRanks ...
+ * @note bgen.addAlien() uses a fallback mechanism to test assorted nodeRanks.
  * @param unitRank	- rank of the unit attempting to spawn
  * @param unit		- pointer to the unit (to test-set its position)
  * @return, pointer to the chosen node

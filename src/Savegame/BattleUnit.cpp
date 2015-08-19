@@ -1866,10 +1866,11 @@ bool BattleUnit::isOut(
 /**
  *
  * @param test - what to check for (default OUT_ALL)
- *				0 dead or unconscious
- *				1 health or stun
+ *				0 everything
+ *				1 status dead or unconscious or limbo'd
  *				2 health
  *				3 stun
+ *				4 health or stun
  * @return, true if unit is incapacitated
  */
 const bool BattleUnit::isOut_t(const OutCheck test) const
@@ -2365,6 +2366,7 @@ int BattleUnit::getArmor(UnitSide side) const
 int BattleUnit::getFatalWounds() const
 {
 	int ret = 0;
+
 	for (size_t
 			i = 0;
 			i != PARTS_BODY;
@@ -2394,29 +2396,24 @@ int BattleUnit::getInitiative(const int tuSpent) const
 }
 
 /**
- * Prepares this BattleUnit for its turn.
+ * Prepares this BattleUnit for its turn unless it was Mind-controlled.
+ * @note Mind-controlled units call this at the beginning of the opposing
+ * faction's next turn.
  * @param full - true to do the full process (default true)
  */
 void BattleUnit::prepUnit(bool full)
 {
-	if (_status == STATUS_LIMBO)
-		return;
-
-	bool revertMc; // reverting from Mind Control at start of MC-ing faction's turn
-	if (_faction != _originalFaction)
-	{
-		_faction = _originalFaction;
-		revertMc = true;
-	}
-	else
-		revertMc = false;
-
 	_hostileUnitsThisTurn.clear();
-
 	_dontReselect = false;
 	_motionPoints = 0;
 
-	bool lowMorale = false;
+	if (_faction != _originalFaction) // reverting from Mind Control at start of MC-ing faction's next turn
+	{
+		_faction = _originalFaction;
+		return;
+	}
+
+	bool hasPanicked = false;
 
 	if (full == true) // don't do damage or panic when transitioning between stages
 	{
@@ -2424,7 +2421,6 @@ void BattleUnit::prepUnit(bool full)
 			--_fire;
 
 		_health -= getFatalWounds(); // suffer from fatal wounds
-
 		if (_health < 1)
 		{
 			_health = 0;
@@ -2439,9 +2435,6 @@ void BattleUnit::prepUnit(bool full)
 			return;
 		}
 
-/*			&& (_armor->getSize() == 1 // note ... mechanical creatures should no longer be getting stunned.
-				|| isOut_t() == false)
-//				|| isOut() == false) */
 		if (_stunLevel > 0
 			&& (_geoscapeSoldier != NULL
 				|| _unitRule->isMechanical() == false))
@@ -2449,21 +2442,17 @@ void BattleUnit::prepUnit(bool full)
 			healStun(RNG::generate(1,3)); // recover stun
 		}
 
-//		if (isOut() == false)
-		if (isOut_t() == false)
+		if (_status != STATUS_UNCONSCIOUS)
 		{
 			const int pctPanic = 100 - (2 * getMorale());
 			if (RNG::percent(pctPanic) == true)
 			{
-				lowMorale = true;
+				hasPanicked = true;
 
-				if (revertMc == false)
-				{
-					if (RNG::percent(30) == true)
-						_status = STATUS_BERSERK;	// shoot stuff.
-					else
-						_status = STATUS_PANICKING;	// panic is either flee or freeze (determined later)
-				}
+				if (RNG::percent(30) == true)
+					_status = STATUS_BERSERK;	// shoot stuff.
+				else
+					_status = STATUS_PANICKING;	// panic is either flee or freeze - determined later
 			}
 			else if (pctPanic > 0 // else successfully avoided Panic
 				&& _geoscapeSoldier != NULL)
@@ -2473,29 +2462,25 @@ void BattleUnit::prepUnit(bool full)
 		}
 	}
 
-//	if (isOut() == false)
-	if (isOut_t(OUT_STUN) == false)
+	if (_status != STATUS_UNCONSCIOUS)
 		initTu(
 			false,
-			lowMorale);
+			hasPanicked);
 }
 
 /**
  * Calculates and resets this BattleUnit's time units and energy.
- * @param preBattle - true for pre-battle initialization (default false)
- * @param lowMorale - true if unit is reverting from mind-control (default false)
+ * @param preBattle		- true for pre-battle initialization (default false)
+ * @param hasPanicked	- true if unit has just panicked (default false)
  */
 void BattleUnit::initTu(
 		bool preBattle,
-		bool lowMorale)
+		bool hasPanicked)
 {
 	if (_revived == true)
 	{
-		//Log(LOG_INFO) << ". . revived";
-		_revived = false;	// also done at the beginning of SavedBattleGame::endBattlePhase(), ie round rollover.
-							// Together these should account for prepping the unit
-							// at round start, or getting MC'd - both/either.
-		_tu = 0;
+		_revived = false;
+		_tu =
 		_energy = 0;
 	}
 	else
@@ -2506,21 +2491,18 @@ void BattleUnit::initTu(
 		if (underLoad < 1.)
 			tu = static_cast<int>(Round(static_cast<double>(tu) * underLoad));
 
-		// Each fatal wound to the left or right leg reduces a Soldier's TUs by 10%.
-		if (preBattle == false
-			&& _geoscapeSoldier != NULL)
-		{
+//		if (preBattle == false
+		if (_geoscapeSoldier != NULL) // Each fatal wound to the left or right leg reduces a Soldier's TUs by 10%.
 			tu -= (tu * (getFatalWound(BODYPART_LEFTLEG) + getFatalWound(BODYPART_RIGHTLEG) * 10)) / 100;
-		}
 
-		if (lowMorale == true)
+		if (hasPanicked == true) // this is how many TU the unit gets to run around/shoot with.
 			tu = _stats.tu * RNG::generate(0,100) / 100;
 
 		_tu = std::max(12, tu);
 
-		if (preBattle == false)
-		{
-			int energy = _stats.stamina; // advanced Energy recovery
+		if (preBattle == false)				// no energy recovery needed at battle start
+		{									// and none wanted for next stage battles:
+			int energy = _stats.stamina;	// advanced Energy recovery ->
 			if (_geoscapeSoldier != NULL)
 			{
 				if (_kneeled == true)
@@ -2528,7 +2510,7 @@ void BattleUnit::initTu(
 				else
 					energy /= 3;
 			}
-			else // aLiens & Tanks.
+			else // aLiens & Tanks. and Dogs ...
 				energy = energy * _unitRule->getEnergyRecovery() / 100;
 
 			energy = static_cast<int>(Round(static_cast<double>(energy) * getAccuracyModifier()));
@@ -2553,7 +2535,6 @@ void BattleUnit::moraleChange(int change)
 {
 	if (isFearable() == true)
 	{
-		//Log(LOG_INFO) << "moraleChange() isFearable TRUE " << change;
 		_morale += change;
 
 		if (_morale > 100)
@@ -2839,29 +2820,29 @@ BattleItem* BattleUnit::getMainHandWeapon(bool quickest) const
 	//if (lftWeapon != NULL) Log(LOG_INFO) << "left weapon " << lftWeapon->getRules()->getType();
 
 	const bool
-		isRht = rhtWeapon
+		hasRht = rhtWeapon != NULL
 				&& (rhtWeapon->getRules()->getBattleType() == BT_MELEE
 					|| (rhtWeapon->getRules()->getBattleType() == BT_FIREARM
-						&& rhtWeapon->getAmmoItem()
-						&& rhtWeapon->getAmmoItem()->getAmmoQuantity())),
-		isLft = lftWeapon
+						&& rhtWeapon->getAmmoItem() != NULL
+						&& rhtWeapon->getAmmoItem()->getAmmoQuantity() > 0)),
+		hasLft = lftWeapon != NULL
 				&& (lftWeapon->getRules()->getBattleType() == BT_MELEE
 					|| (lftWeapon->getRules()->getBattleType() == BT_FIREARM
-						&& lftWeapon->getAmmoItem()
-						&& lftWeapon->getAmmoItem()->getAmmoQuantity()));
-	//Log(LOG_INFO) << ". isRht = " << isRht;
-	//Log(LOG_INFO) << ". isLft = " << isLft;
+						&& lftWeapon->getAmmoItem() != NULL
+						&& lftWeapon->getAmmoItem()->getAmmoQuantity() > 0));
+	//Log(LOG_INFO) << ". hasRht = " << hasRht;
+	//Log(LOG_INFO) << ". hasLft = " << hasLft;
 
-	if (!isRht && !isLft)
+	if (!hasRht && !hasLft)
 		return NULL;
 
-	if (isRht && !isLft)
+	if (hasRht && !hasLft)
 		return rhtWeapon;
 
-	if (!isRht && isLft)
+	if (!hasRht && hasLft)
 		return lftWeapon;
 
-	//Log(LOG_INFO) << ". . isRht & isLft VALID";
+	//Log(LOG_INFO) << ". . hasRht & hasLft VALID";
 
 	const RuleItem* itRule = rhtWeapon->getRules();
 	int rhtTU = itRule->getTUSnap();
@@ -2896,15 +2877,15 @@ BattleItem* BattleUnit::getMainHandWeapon(bool quickest) const
 	{
 		if (rhtTU <= lftTU)
 			return rhtWeapon;
-		else
-			return lftWeapon;
+
+		return lftWeapon;
 	}
 	else
 	{
 		if (rhtTU >= lftTU)
 			return rhtWeapon;
-		else
-			return lftWeapon;
+
+		return lftWeapon;
 	}
 
 	// kL_note: should exit this by setting ActiveHand.
@@ -3918,7 +3899,7 @@ std::string BattleUnit::getActiveHand() const
  * Converts unit to another faction - original faction is still stored.
  * @param faction - UnitFaction
  */
-void BattleUnit::convertToFaction(UnitFaction faction)
+void BattleUnit::setFaction(UnitFaction faction)
 {
 	_faction = faction;
 }

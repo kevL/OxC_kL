@@ -95,7 +95,7 @@ BriefingState::BriefingState(
 
 	if (deployRule == NULL) // should never happen
 	{
-		Log(LOG_INFO) << "WARNING: no deployment rule for Briefing: " << stType;
+		Log(LOG_WARNING) << "No deployment rule for Briefing: " << stType;
 		bg = "BACK16.SCR";
 		bgColor = _game->getRuleset()->getInterface("briefing")->getElement("palette")->color;
 		music = OpenXcom::res_MUSIC_GEO_BRIEFING;

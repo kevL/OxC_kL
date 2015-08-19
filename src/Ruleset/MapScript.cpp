@@ -343,7 +343,7 @@ void MapScript::init()
 
 /**
  * Gets a random group number from the array accounting for frequencies and max uses.
- * If no groups or blocks are defined this will return the default group;
+ * @note If no groups or blocks are defined this will return the default group;
  * if all the max uses are used up it will return undefined.
  * @return, group number
  */
@@ -389,8 +389,8 @@ const int MapScript::getGroupNumber() // private.
 }
 
 /**
- * Gets a random block number from the array, accounting for frequencies and max uses.
- * If no blocks are defined it will use a group instead.
+ * Gets a random block number from the array accounting for frequencies and max uses.
+ * @note If no blocks are defined it will use a group instead.
  * @return, block number
  */
 const int MapScript::getBlockNumber() // private.
@@ -433,22 +433,22 @@ const int MapScript::getBlockNumber() // private.
 
 /**
  * Gets a random map block from a given terrain using either the groups or the blocks defined.
- * @param terrain - pointer to the RuleTerrain to pick a block from
+ * @param terraRule - pointer to the RuleTerrain to pick a block from
  * @return, pointer to a randomly chosen MapBlock given the options available in this MapScript
  */
-MapBlock* MapScript::getNextBlock(RuleTerrain* const terrain)
+MapBlock* MapScript::getNextBlock(RuleTerrain* const terraRule)
 {
 	if (_blocks.empty() == true)
-		return terrain->getRandomMapBlock(
-									_sizeX * 10,
-									_sizeY * 10,
-									getGroupNumber());
+		return terraRule->getRandomMapBlock(
+										_sizeX * 10,
+										_sizeY * 10,
+										getGroupNumber());
 
 	const int result = getBlockNumber();
-	if (result < static_cast<int>(terrain->getMapBlocks()->size())
-		&& result != static_cast<int>(MBT_UNDEFINED))
+	if (result < static_cast<int>(terraRule->getMapBlocks()->size())
+		&& result != MBT_UNDEFINED)
 	{
-		return terrain->getMapBlocks()->at(static_cast<size_t>(result));
+		return terraRule->getMapBlocks()->at(static_cast<size_t>(result));
 	}
 
 	return NULL;

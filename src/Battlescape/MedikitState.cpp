@@ -416,7 +416,7 @@ void MedikitState::onPainClick(Action*)
 				_game->popState();
 			else if (_action->targetUnit->getFaction() == FACTION_NEUTRAL) // take control of Civies.
 			{
-				_action->targetUnit->convertToFaction(FACTION_PLAYER);
+				_action->targetUnit->setFaction(FACTION_PLAYER);
 				_action->targetUnit->initTu();
 
 				SavedBattleGame* const battleSave = _game->getSavedGame()->getSavedBattle();

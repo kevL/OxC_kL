@@ -71,11 +71,11 @@ private:
 	public:
 		/// Creates a new ExplosionBState class.
 		ExplosionBState(
-				BattlescapeGame* parent,
+				BattlescapeGame* const parent,
 				Position center,
-				BattleItem* item,
-				BattleUnit* unit,
-				Tile* tile = NULL,
+				BattleItem* const item,
+				BattleUnit* const unit,
+				Tile* const tile = NULL,
 				bool lowerWeapon = false,
 				bool meleeSuccess = false,
 				bool forceCamera = false);

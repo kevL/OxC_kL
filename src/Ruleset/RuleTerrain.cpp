@@ -146,14 +146,14 @@ std::string RuleTerrain::getType() const
  * @param maxSizeX	- the maximum X size of the mapblock
  * @param maxSizeY	- the maximum Y size of the mapblock
  * @param group		- the group Type
- * @param force		- true to enforce the max size (default false)
+ * @param force		- true to enforce the max size (default true)
  * @return, pointer to a MapBlock or NULL if not found
  */
 MapBlock* RuleTerrain::getRandomMapBlock(
 		int maxSizeX,
 		int maxSizeY,
 		int group,
-		bool force)
+		bool force) const
 {
 	std::vector<MapBlock*> eligibleBlocks;
 
@@ -177,10 +177,10 @@ MapBlock* RuleTerrain::getRandomMapBlock(
 	if (eligibleBlocks.empty() == true)
 		return NULL;
 
-	const size_t mapBlock = static_cast<size_t>(RNG::generate(
-														0,
-														static_cast<int>(eligibleBlocks.size()) - 1));
-	return eligibleBlocks[mapBlock];
+	const size_t block = static_cast<size_t>(RNG::generate(
+													0,
+													static_cast<int>(eligibleBlocks.size()) - 1));
+	return eligibleBlocks[block];
 }
 
 /**
@@ -188,7 +188,7 @@ MapBlock* RuleTerrain::getRandomMapBlock(
  * @param type - reference the type of a MapBlock
  * @return, pointer to a MapBlock or NULL if not found
  */
-MapBlock* RuleTerrain::getMapBlock(const std::string& type)
+MapBlock* RuleTerrain::getMapBlock(const std::string& type) const
 {
 	for (std::vector<MapBlock*>::const_iterator
 			i = _mapBlocks.begin();
@@ -196,7 +196,7 @@ MapBlock* RuleTerrain::getMapBlock(const std::string& type)
 			++i)
 	{
 		if ((*i)->getType() == type)
-			return (*i);
+			return *i;
 	}
 
 	return NULL;
@@ -263,7 +263,7 @@ const std::string& RuleTerrain::getScript() const
  * Gets the list of musics this terrain has to choose from.
  * @return, list of track names
  */
-const std::vector<std::string>& RuleTerrain::getMusic()
+const std::vector<std::string>& RuleTerrain::getMusic() const
 {
 	return _musics;
 }

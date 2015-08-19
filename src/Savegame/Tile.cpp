@@ -26,7 +26,6 @@
 #include "SerializationHelper.h"
 
 #include "../Battlescape/Pathfinding.h"
-//#include "../Battlescape/Particle.h"
 
 //#include "../Engine/RNG.h"
 //#include "../Engine/Surface.h"
@@ -112,15 +111,6 @@ Tile::Tile(const Position& pos)
 Tile::~Tile()
 {
 	_inventory.clear();
-
-/*	for (std::list<Particle*>::const_iterator
-			i = _particles.begin();
-			i != _particles.end();
-			++i)
-	{
-		delete *i;
-	}
-	_particles.clear(); */
 }
 
 /**
@@ -129,7 +119,6 @@ Tile::~Tile()
  */
 void Tile::load(const YAML::Node& node)
 {
-	//_position = node["position"].as<Position>(_position);
 	for (size_t
 			i = 0;
 			i != PARTS_TILE;
@@ -159,9 +148,6 @@ void Tile::load(const YAML::Node& node)
 
 	if (node["openDoorNorth"])
 		_curFrame[2] = 7;
-
-//	if (_fire || _smoke)
-//		_animationOffset = std::rand() % 4;
 }
 
 /**
@@ -1015,58 +1001,6 @@ int Tile::getSmoke() const
 	return _smoke;
 }
 
-/*
- * Gets the smoke overlap value of this Tile.
- * @return, smoke overlaps
- *
-int Tile::getOverlapsSK() const
-{
-	return _overlapsSMK;
-} */
-
-/*
- * Gets the fire overlap value of this Tile.
- * @return, fire overlaps
- *
-int Tile::getOverlapsIN() const
-{
-	return _overlapsINC;
-} */
-
-/*
- * New turn preparations. Average out any smoke added by the number of overlaps.
- *
-void Tile::resolveOverlaps()
-{
-	Log(LOG_INFO) << "pos " << _pos << " s = " << _smoke << " | " << _overlapsSMK;
-	if (_smoke != 0
-		&& _overlapsSMK != 0)
-	{
-		_smoke = std::max(
-						0,
-						std::min(
-							17,
-							(_smoke + _overlapsSMK - 1) / _overlapsSMK));
-	}
-	Log(LOG_INFO) << ". s = " << _smoke;
-
-	Log(LOG_INFO) << "pos " << _pos << " f = " << _smoke << " | " << _overlapsINC;
-	if (_fire != 0
-		&& _overlapsINC != 0)
-	{
-		_fire = std::max(
-						0,
-						std::min(
-							12,
-							(_fire + _overlapsINC - 1) / _overlapsINC));
-	}
-	Log(LOG_INFO) << ". f = " << _fire;
-
-	_overlapsSMK =
-	_overlapsINC = 0;
-	_danger = false;
-} */
-
 /**
  * Gets if this Tile will accept '_smoke' or '_fire' value.
  * @note diag bigWalls take no smoke/fire. 'Cause I don't want it showing on both sides.
@@ -1224,17 +1158,6 @@ void Tile::hitStuff(SavedBattleGame* const battleSave)
 								unit->instaKill();
 								unit->killedBy(unit->getFaction()); // killed by self ....
 								//Log(LOG_INFO) << "Tile::hitStuff() " << unit->getId() << " killedBy = " << (int)unit->getFaction();
-
-								// This bit should be gtg on return to BattlescapeGame::endTurnPhase().
-/*								if (Options::battleNotifyDeath == true // send Death notice.
-									&& unit->getGeoscapeSoldier() != NULL)
-								{
-									Game* game = battleSave->getBattleState()->getGame();
-									game->pushState(new InfoboxOKState(game->getLanguage()->getString( // "has been killed with Fire ..."
-																								"STR_HAS_BEEN_KILLED",
-																								unit->getGender())
-																							.arg(unit->getName(game->getLanguage()))));
-								} */
 							}
 						}
 
@@ -1279,72 +1202,37 @@ void Tile::animateTile()
 	{
 		if (_objects[i] != NULL)
 		{
-			//const bool debug = _pos == Position(35,48,1) && i == 2;
-			//if (debug) Log(LOG_INFO) << "\n";
-			//if (debug) Log(LOG_INFO) << "Tile::animate()";
-
-			//if (debug) Log(LOG_INFO) << "part VALID = " << (int)i;
-			//if (debug) Log(LOG_INFO) << "curFrame = " << _curFrame[i];
-
 			const int isPsycho = _objects[i]->isPsychedelic();
 			if (isPsycho == 0)
 			{
-				//if (debug) Log(LOG_INFO) << ". isPsycho FALSE";
-				if (_objects[i]->isUfoDoor() == true // ufo door is currently static
-					&& (_curFrame[i] == 0
-						|| _curFrame[i] == 7))
+				if (_objects[i]->isUfoDoor() == false
+					|| (_curFrame[i] != 0
+						&& _curFrame[i] != 7)) // ufo door is currently static
 				{
-					//if (debug) Log(LOG_INFO) << ". . door is Static, continue, frame = " << _curFrame[i];
-					continue;
+					nextFrame = _curFrame[i] + 1;
+
+					if (_objects[i]->isUfoDoor() == true // special handling for Avenger & Lightning doors
+						&& _objects[i]->getSpecialType() == START_POINT
+						&& nextFrame == 3)
+					{
+						nextFrame = 7;
+					}
+
+					if (nextFrame == 8)
+						nextFrame = 0;
+
+					_curFrame[i] = nextFrame;
 				}
-
-				nextFrame = _curFrame[i] + 1;
-
-				if (_objects[i]->isUfoDoor() == true // special handling for Avenger & Lightning doors
-					&& _objects[i]->getSpecialType() == START_POINT
-					&& nextFrame == 3)
-				{
-					//if (debug) Log(LOG_INFO) << ". . door is on Frame 3, skip to Frame 7";
-					nextFrame = 7;
-				}
-
-				if (nextFrame == 8)
-				{
-					//if (debug) Log(LOG_INFO) << ". . door is on Frame 8, reset to Frame 0";
-					nextFrame = 0;
-				}
-
-				_curFrame[i] = nextFrame;
 			}
-			else
+			else if (isPsycho == 1)
 			{
-				//if (debug) Log(LOG_INFO) << ". isPsycho TRUE";
-				if (isPsycho == 1)
-				{
-					if (RNG::seedless(0,2) != 0) //std::rand() % 3 != 0)
-						_curFrame[i] = RNG::seedless(0,7); //SDL_GetTicks() % 8;
-				}
-				else if (RNG::seedless(0,2) == 0) //SDL_GetTicks() % 3 == 0) // isPsycho==2
-					_curFrame[i] = RNG::seedless(0,7); //std::rand() % 8;
+				if (RNG::seedless(0,2) != 0)
+					_curFrame[i] = RNG::seedless(0,7);
 			}
+			else if (RNG::seedless(0,2) == 0) // isPsycho== 2
+				_curFrame[i] = RNG::seedless(0,7);
 		}
 	}
-//	getMapData(O_WESTWALL)->getDataset()->getName() == "U_PODS"
-//	getMapData(O_WESTWALL)->getSprite(0) == 61
-
-/*	for (std::list<Particle*>::const_iterator
-			i = _particles.begin();
-			i != _particles.end();
-			)
-	{
-		if ((*i)->animate() == false)
-		{
-			delete *i;
-			i = _particles.erase(i);
-		}
-		else
-			++i;
-	} */
 }
 
 /**
@@ -1642,23 +1530,5 @@ bool Tile::getDangerous() const
 {
 	return _danger;
 }
-
-/*
- * Adds a particle to this tile's internal storage buffer.
- * @param particle - pointer to a particle to add
- *
-void Tile::addParticle(Particle* particle)
-{
-	_particles.push_back(particle);
-} */
-
-/*
- * Gets a pointer to this tile's particle array.
- * @return, pointer to the internal array of particles
- *
-std::list<Particle*>* Tile::getParticleCloud()
-{
-	return &_particles;
-} */
 
 }

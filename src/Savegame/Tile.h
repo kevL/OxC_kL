@@ -37,7 +37,6 @@ namespace OpenXcom
 class BattleItem;
 class BattleUnit;
 class MapData;
-//class Particle;
 class RuleInventory;
 class SavedBattleGame;
 class Surface;
@@ -81,7 +80,6 @@ protected:
 	Position _pos;
 
 	std::vector<BattleItem*> _inventory;
-//	std::list<Particle*> _particles;
 
 	/// Gets if this Tile will accept '_smoke' value.
 	bool canSmoke() const;
@@ -90,7 +88,6 @@ protected:
 
 
 	public:
-//		static const int NOT_CALCULATED = -1;
 		static const size_t PARTS_TILE = 4;
 
 		static struct SerializationKey
@@ -255,13 +252,6 @@ protected:
 		int getSmoke() const; // kL_note: Made this inline, but may result in UB if say BattleUnit->getFire() conflicts. So ... don't.
 //		{ return _smoke; }
 
-		/// Gets how many times has this tile been overlapped with smoke (runtime only).
-//		int getOverlapsSK() const;
-		/// Gets how many times has this tile been overlapped with fire (runtime only).
-//		int getOverlapsIN() const;
-		/// New turn preparations.
-//		void resolveOverlaps();
-
 		/// Ends this tile's turn. Units catch on fire.
 		void hitStuff(SavedBattleGame* const battleSave = NULL);
 
@@ -321,11 +311,6 @@ protected:
 		void setDangerous(bool danger = true);
 		/// Checks the danger flag on this tile.
 		bool getDangerous() const;
-
-		/// Adds a particle to this tile's array.
-//		void addParticle(Particle* particle);
-		/// Gets a pointer to this tile's particle array.
-//		std::list<Particle*>* getParticleCloud();
 };
 
 }

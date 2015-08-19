@@ -1147,7 +1147,7 @@ void Inventory::mouseClick(Action* action, State* state)
 bool Inventory::unload()
 {
 	if (_selItem == NULL
-		|| _selItem->usesAmmo() == false
+		|| _selItem->selfPowered() == true
 		|| _game->getSavedGame()->isResearched(_selItem->getRules()->getRequirements()) == false)
 	{
 		return false;

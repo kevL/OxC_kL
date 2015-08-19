@@ -377,17 +377,15 @@ void BattlescapeGame::popState()
 		_states.pop_front();
 
 
-		// handle the end of this unit's actions
-		if (action.actor != NULL
+		if (action.actor != NULL // handle the end of this unit's actions
 			&& noActionsPending(action.actor) == true)
 		{
 			//Log(LOG_INFO) << ". noActionsPending for state actor";
 			if (action.actor->getFaction() == FACTION_PLAYER)
 			{
 				//Log(LOG_INFO) << ". actor -> Faction_Player";
-
 				// spend TUs of "target triggered actions" (shooting, throwing) only;
-				// the other actions' TUs (healing,scanning,..) are already take care of.
+				// the other actions' TUs (healing, scanning, etc) are already take care of.
 				// kL_note: But let's do this **before** checkReactionFire(), so aLiens
 				// get a chance .....! Odd thing is, though, that throwing triggers
 				// RF properly while shooting doesn't .... So, I'm going to move this
@@ -416,23 +414,13 @@ void BattlescapeGame::popState()
 				{
 					//Log(LOG_INFO) << ". side -> Faction_Player";
 
-					// after throwing, the cursor returns to default cursor, after shooting it stays in
-					// targeting mode and the player can shoot again in the same mode (autoshot/snap/aimed)
-					// kL_note: unless he/she is out of tu's
-
-					if (actionFailed == false) // kL_begin:
+					// after throwing the cursor returns to default cursor;
+					// after shooting it stays in targeting mode and the player
+					// can shoot again in the same mode (autoshot/snap/aimed)
+					// unless he/she is out of tu's
+					if (actionFailed == false)
 					{
-						//Log(LOG_INFO) << ". popState -> Faction_Player | action.type = " << action.type;
-						//if (action.weapon != NULL)
-						//{
-							//Log(LOG_INFO) << ". popState -> Faction_Player | action.weapon = " << action.weapon->getRules()->getType();
-							//if (action.weapon->getAmmoItem() != NULL)
-							//{
-								//Log(LOG_INFO) << ". popState -> Faction_Player | ammo = " << action.weapon->getAmmoItem()->getRules()->getType();
-								//Log(LOG_INFO) << ". popState -> Faction_Player | ammoQty = " << action.weapon->getAmmoItem()->getAmmoQuantity();
-							//}
-						//}
-						const int curTU = action.actor->getTimeUnits();
+						const int curTu = action.actor->getTimeUnits();
 
 						switch (action.type)
 						{
@@ -441,57 +429,64 @@ void BattlescapeGame::popState()
 							case BA_THROW:
 								cancelCurrentAction(true);
 							break;
+
 							case BA_SNAPSHOT:
-								//Log(LOG_INFO) << ". SnapShot, TU percent = " << (float)action.weapon->getRules()->getTUSnap();
-								if (curTU < action.actor->getActionTUs(
+								Log(LOG_INFO) << ". SnapShot, TU percent = " << (float)action.weapon->getRules()->getTUSnap();
+								if (curTu < action.actor->getActionTUs(
 																	BA_SNAPSHOT,
 																	action.weapon)
-									|| (action.weapon->usesAmmo() == true
-										&& (action.weapon->getAmmoItem() == NULL
-											|| action.weapon->getAmmoItem()->getAmmoQuantity() == 0)))
+									|| action.weapon->getAmmoItem() == NULL)
+//									|| (action.weapon->selfPowered() == false
+//										&& (action.weapon->getAmmoItem() == NULL
+//											|| action.weapon->getAmmoItem()->getAmmoQuantity() == 0)))
 								{
 									cancelCurrentAction(true);
 								}
 							break;
+
 							case BA_AUTOSHOT:
 								//Log(LOG_INFO) << ". AutoShot, TU percent = " << (float)action.weapon->getRules()->getTUAuto();
-								if (curTU < action.actor->getActionTUs(
+								if (curTu < action.actor->getActionTUs(
 																	BA_AUTOSHOT,
 																	action.weapon)
-									|| (action.weapon->usesAmmo() == true
-										&& (action.weapon->getAmmoItem() == NULL
-											|| action.weapon->getAmmoItem()->getAmmoQuantity() == 0)))
+									|| action.weapon->getAmmoItem() == NULL)
+//									|| (action.weapon->selfPowered() == false
+//										&& (action.weapon->getAmmoItem() == NULL
+//											|| action.weapon->getAmmoItem()->getAmmoQuantity() == 0)))
 								{
 									cancelCurrentAction(true);
 								}
 							break;
+
 							case BA_AIMEDSHOT:
 								//Log(LOG_INFO) << ". AimedShot, TU percent = " << (float)action.weapon->getRules()->getTUAimed();
-								if (curTU < action.actor->getActionTUs(
+								if (curTu < action.actor->getActionTUs(
 																	BA_AIMEDSHOT,
 																	action.weapon)
-									|| (action.weapon->usesAmmo() == true
-										&& (action.weapon->getAmmoItem() == NULL
-											|| action.weapon->getAmmoItem()->getAmmoQuantity() == 0)))
+									|| action.weapon->getAmmoItem() == NULL)
+//									|| (action.weapon->selfPowered() == false
+//										&& (action.weapon->getAmmoItem() == NULL
+//											|| action.weapon->getAmmoItem()->getAmmoQuantity() == 0)))
 								{
 									cancelCurrentAction(true);
 								}
 							break;
+
 /*							case BA_PSIPANIC:
-								if (curTU < action.actor->getActionTUs(BA_PSIPANIC, action.weapon))
+								if (curTu < action.actor->getActionTUs(BA_PSIPANIC, action.weapon))
 									cancelCurrentAction(true);
 							break;
 							case BA_PSICONTROL:
-								if (curTU < action.actor->getActionTUs(BA_PSICONTROL, action.weapon))
+								if (curTu < action.actor->getActionTUs(BA_PSICONTROL, action.weapon))
 									cancelCurrentAction(true);
 							break; */
 /*							case BA_USE:
 								if (action.weapon->getRules()->getBattleType() == BT_MINDPROBE
-									&& curTU < action.actor->getActionTUs(BA_PSICONTROL, action.weapon))
+									&& curTu < action.actor->getActionTUs(BA_PSICONTROL, action.weapon))
 									cancelCurrentAction(true);
 							break; */
 						}
-					} // kL_end.
+					}
 
 					setupCursor();
 					_parentState->getGame()->getCursor()->setVisible(); // might not be needed here anymore. But safety.
@@ -1156,11 +1151,14 @@ void BattlescapeGame::executeUnit() // private.
 								-1,
 								getMap()->getSoundAngle(_currentAction.actor->getPosition()));
 
-	if (ammo->spendBullet() == false)
+/*	if (ammo->spendBullet() == false)
 	{
 		_battleSave->removeItem(ammo);
 		_currentAction.weapon->setAmmoItem(NULL);
-	}
+	} */
+	ammo->spendBullet(
+				*_battleSave,
+				*_currentAction.weapon);
 
 	Position posOrigin_voxel = _currentAction.target * Position(16,16,24) + Position(8,8,2);
 	Explosion* const explosion = new Explosion(
@@ -2294,7 +2292,7 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* const unit) // private.
 		_parentState->getMap()->setCursorType(CT_NONE);
 		_battleSave->setSelectedUnit(unit);
 
-		if (Options::alienPanicMessages == true // show panicking message
+		if (Options::alienPanicMessages == true
 			|| unit->getUnitVisible() == true)
 		{
 			getMap()->getCamera()->centerOnPosition(unit->getPosition());
@@ -2314,12 +2312,9 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* const unit) // private.
 		}
 
 		unit->setStatus(STATUS_STANDING);
-
 		BattleAction ba;
 		ba.actor = unit;
-
-		int tu = unit->getBaseStats()->tu;
-		unit->setTimeUnits(tu); // start w/ fresh TUs
+		int tu = unit->getTimeUnits();
 
 		switch (status)
 		{
@@ -2354,14 +2349,13 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* const unit) // private.
 				Pathfinding* const pf = _battleSave->getPathfinding();
 				pf->setPathingUnit(unit);
 
-				tu = RNG::generate(10, tu);
-				std::vector<int> reachable = pf->findReachable(
-															unit,
-															tu);
+				const std::vector<int> reachable = pf->findReachable(
+																	unit,
+																	tu);
 				const size_t
 					pick = static_cast<size_t>(RNG::generate(
 														0,
-														reachable.size() - 1)),
+														static_cast<int>(reachable.size()) - 1)),
 					tileId = static_cast<size_t>(reachable[pick]);
 
 				_battleSave->getTileCoords(
@@ -2380,19 +2374,15 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* const unit) // private.
 					ba.actor->setDashing();
 					ba.dash = true;
 					ba.type = BA_WALK;
-					// wait a sec, if there are two+ units doing panic-movement
-					// won't their paths need to be recalculated as their respective
-					// UnitWalkBStates get taken care of one after the next ...
-					// guess not, they all get different ba-targets.
 					statePushBack(new UnitWalkBState(
 													this,
 													ba));
 				}
 			}
-			break; // End_case_PANICKING.
+			break;
 
-			case STATUS_BERSERK:	// berserk - do some weird turning around and then aggro
-			{						// towards an enemy unit or shoot towards random place
+			case STATUS_BERSERK:
+			{
 				//Log(LOG_INFO) << ". BERSERK";
 				ba.type = BA_TURN;
 				const int pivotQty = RNG::generate(2,5);
@@ -2441,18 +2431,20 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* const unit) // private.
 							const int actionTu = ba.actor->getActionTUs(
 																	ba.type,
 																	ba.weapon);
+							int shots; // tabulate how many shots can be fired before unit runs out of TUs
+							if (actionTu != 0)
+								shots = tu / actionTu;
+							else
+								shots = 0;
 
-							for (int // fire shots until unit runs out of TUs
+							for (int
 									i = 0;
-									i != 10;
+									i != shots;
 									++i)
 							{
-								if (ba.actor->spendTimeUnits(actionTu) == true)
-									statePushBack(new ProjectileFlyBState(
-																		this,
-																		ba));
-								else
-									break;
+								statePushBack(new ProjectileFlyBState(
+																	this,
+																	ba));
 							}
 						}
 					}
@@ -2502,16 +2494,13 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* const unit) // private.
 					}
 				}
 
-				unit->setTimeUnits(unit->getBaseStats()->tu); // replace the TUs from shooting
 				ba.type = BA_NONE;
-			} // End_case_BERSERK.
+			}
 		}
 
-		statePushBack(new UnitPanicBState( // TimeUnits can be reset only after everything else occurs
+		statePushBack(new UnitPanicBState(
 										this,
 										unit));
-
-//		unit->moraleChange(10 + RNG::generate(0,10)); // <- now done in UnitPanicBState
 		return true;
 	}
 

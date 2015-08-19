@@ -829,7 +829,7 @@ bool InventoryState::saveLayout(BattleUnit* const unit) const // private.
 				++i)
 		{
 			std::string ammo;
-			if ((*i)->usesAmmo() == true
+			if ((*i)->selfPowered() == false
 				&& (*i)->getAmmoItem() != NULL)
 			{
 				ammo = (*i)->getAmmoItem()->getRules()->getType();
@@ -991,52 +991,44 @@ void InventoryState::invClick(Action*)
 
 		std::wstring wst;
 
-		if (ammo != NULL
-			&& item->usesAmmo() == true)
-		{
-			wst = tr("STR_AMMO_ROUNDS_LEFT").arg(ammo->getAmmoQuantity());
-
-			SDL_Rect rect;
-			rect.x =
-			rect.y = 0;
-			rect.w = static_cast<Sint16>(RuleInventory::HAND_W * RuleInventory::SLOT_W);
-			rect.h = static_cast<Sint16>(RuleInventory::HAND_H * RuleInventory::SLOT_H);
-			_selAmmo->drawRect(
-							&rect,
-							static_cast<Uint8>(_game->getRuleset()->getInterface("inventory")->getElement("grid")->color));
-
-			++rect.x;
-			++rect.y;
-			rect.w -= 2;
-			rect.h -= 2;
-			_selAmmo->drawRect(
-							&rect,
-							15);
-
-			ammo->getRules()->drawHandSprite(
-										_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"),
-										_selAmmo);
-		}
-		else if (item->getAmmoQuantity() != 0
-			&& item->usesAmmo() == true)
-		{
-			wst = tr("STR_AMMO_ROUNDS_LEFT").arg(item->getAmmoQuantity());
-		}
-		else if (itRule->getBattleType() == BT_MEDIKIT)
+		if (itRule->getBattleType() == BT_MEDIKIT)
 			wst = tr("STR_MEDI_KIT_QUANTITIES_LEFT")
 						.arg(item->getPainKillerQuantity())
 						.arg(item->getStimulantQuantity())
 						.arg(item->getHealQuantity());
+		else if (item->selfPowered() == false)
+		{
+			if (ammo != NULL)
+			{
+				wst = tr("STR_AMMO_ROUNDS_LEFT").arg(ammo->getAmmoQuantity());
+
+				SDL_Rect rect;
+				rect.x =
+				rect.y = 0;
+				rect.w = static_cast<Sint16>(RuleInventory::HAND_W * RuleInventory::SLOT_W);
+				rect.h = static_cast<Sint16>(RuleInventory::HAND_H * RuleInventory::SLOT_H);
+				_selAmmo->drawRect(
+								&rect,
+								static_cast<Uint8>(_game->getRuleset()->getInterface("inventory")->getElement("grid")->color));
+
+				++rect.x;
+				++rect.y;
+				rect.w -= 2;
+				rect.h -= 2;
+				_selAmmo->drawRect(
+								&rect,
+								15);
+
+				ammo->getRules()->drawHandSprite(
+											_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"),
+											_selAmmo);
+			}
+			else if (item->getAmmoQuantity() > 0)
+				wst = tr("STR_AMMO_ROUNDS_LEFT").arg(item->getAmmoQuantity());
+		}
 
 		_txtAmmo->setText(wst);
 	}
-/*	else
-	{
-		_txtItem->setText(L"");
-		_txtAmmo->setText(L"");
-
-		_selAmmo->clear();
-	} */
 
 	updateStats();
 }
@@ -1073,8 +1065,8 @@ void InventoryState::invMouseOver(Action*)
 
 		std::wstring wst;
 
-		if (ammo != NULL
-			&& item->usesAmmo() == true)
+		if (item->selfPowered() == false
+			&& ammo != NULL)
 		{
 			wst = tr("STR_AMMO_ROUNDS_LEFT").arg(ammo->getAmmoQuantity());
 
@@ -1104,8 +1096,8 @@ void InventoryState::invMouseOver(Action*)
 //			_updateTemplateButtons(!_tuMode);
 		}
 
-		if (item->getAmmoQuantity() != 0
-			&& item->usesAmmo() == true)
+		if (item->selfPowered() == false
+			&& item->getAmmoQuantity() > 0)
 		{
 			wst = tr("STR_AMMO_ROUNDS_LEFT").arg(item->getAmmoQuantity());
 		}

@@ -81,9 +81,9 @@ private:
 				int maxSizeX,
 				int maxSizeY,
 				int group,
-				bool force = true);
+				bool force = true) const;
 		/// Gets a mapblock given its type.
-		MapBlock* getMapBlock(const std::string& type);
+		MapBlock* getMapBlock(const std::string& type) const;
 		/// Gets the mapdata object.
 		MapData* getMapData(
 				unsigned int* id,
@@ -96,7 +96,7 @@ private:
 		const std::string& getScript() const;
 
 		/// Gets the list of music to pick from.
-		const std::vector<std::string>& getMusic();
+		const std::vector<std::string>& getMusic() const;
 
 		/// Gets the pyjama type.
 		const std::string& getPyjamaType() const;

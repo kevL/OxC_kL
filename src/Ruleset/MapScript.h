@@ -179,7 +179,7 @@ private:
 		{ return _tunnelData; };
 
 		/// Randomly generate a block from within either the array of groups or blocks.
-		MapBlock* getNextBlock(RuleTerrain* const terrain);
+		MapBlock* getNextBlock(RuleTerrain* const terraRule);
 };
 
 }

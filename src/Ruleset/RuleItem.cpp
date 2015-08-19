@@ -721,7 +721,7 @@ int RuleItem::getStunRecovery() const
  * @note Small explosions don't have a restriction. Larger explosions are
  * restricted using a formula with a maximum of radius 10 no matter how large
  * the explosion. kL_note: nah...
- * @return, the radius (-1 if not explosive)
+ * @return, the radius (-1 if not AoE)
  */
 int RuleItem::getExplosionRadius() const
 {
