@@ -207,7 +207,7 @@ inline std::wostream& operator<< (
 								std::wostream& wostr,
 								const LocalizedText& txt)
 {
-	wostr << static_cast<std::wstring const&>(txt);
+	wostr << static_cast<const std::wstring&>(txt);
 	return wostr;
 }
 

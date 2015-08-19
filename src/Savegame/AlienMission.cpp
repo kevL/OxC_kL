@@ -721,12 +721,12 @@ void AlienMission::ufoReachedWaypoint(
 														&ufo);
 			const RuleTexture* const texture = rules.getGlobe()->getTextureRule(area.texture);
 			const AlienDeployment* const deployRule = rules.getDeployment(texture->getRandomDeployment());
-			MissionSite* const missionSite = spawnMissionSite(
-															deployRule,
-															area);
-			if (missionSite != NULL)
+			MissionSite* const site = spawnMissionSite(
+													deployRule,
+													area);
+			if (site != NULL)
 			{
-				_gameSave.getMissionSites()->push_back(missionSite);
+				_gameSave.getMissionSites()->push_back(site);
 
 				for (std::vector<Target*>::const_iterator
 						i = ufo.getFollowers()->begin();
@@ -736,7 +736,7 @@ void AlienMission::ufoReachedWaypoint(
 					Craft* const craft = dynamic_cast<Craft*>(*i);
 					if (craft != NULL)
 					{
-						craft->setDestination(missionSite);
+						craft->setDestination(site);
 						i = ufo.getFollowers()->begin();
 					}
 					else
@@ -794,20 +794,20 @@ MissionSite* AlienMission::spawnMissionSite( // private.
 {
 	if (deployRule != NULL)
 	{
-		MissionSite* const missionSite = new MissionSite(
-													&_missionRule,
-													deployRule);
-		missionSite->setLongitude(RNG::generate(area.lonMin, area.lonMax));
-		missionSite->setLatitude(RNG::generate(area.latMin, area.latMax));
-		missionSite->setId(_gameSave.getId(deployRule->getMarkerName()));
-		missionSite->setSecondsLeft(RNG::generate(
+		MissionSite* const site = new MissionSite(
+												&_missionRule,
+												deployRule);
+		site->setLongitude(RNG::generate(area.lonMin, area.lonMax));
+		site->setLatitude(RNG::generate(area.latMin, area.latMax));
+		site->setId(_gameSave.getId(deployRule->getMarkerName()));
+		site->setSecondsLeft(RNG::generate(
 											deployRule->getDurationMin(),
 											deployRule->getDurationMax()) * 3600);
-		missionSite->setAlienRace(_race);
-		missionSite->setSiteTextureId(area.texture);
-		missionSite->setCity(area.site);
+		site->setAlienRace(_race);
+		site->setSiteTextureId(area.texture);
+		site->setCity(area.site);
 
-		return missionSite;
+		return site;
 	}
 
 	return NULL;

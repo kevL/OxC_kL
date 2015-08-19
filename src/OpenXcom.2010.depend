@@ -4356,7 +4356,7 @@
 	<string>
 	<iosfwd>
 
-1438135371 f:\git\openxcom\src\engine\localizedtext.h
+1440012868 f:\git\openxcom\src\engine\localizedtext.h
 
 1435633839 f:\git\openxcom\src\savegame\soldier.h
 	"../Ruleset/RuleUnit.h"
@@ -5440,7 +5440,7 @@
 1432984133 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1439984396 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1439989019 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	"AlienBAIState.h"
 	"BattlescapeState.h"

@@ -147,7 +147,7 @@ ConfirmLandingState::ConfirmLandingState(
 //							&& _city == NULL;
 						++j)
 				{
-					if (   AreSame((*j)->getLongitude(), lon)
+					if (AreSame((*j)->getLongitude(), lon)
 						&& AreSame((*j)->getLatitude(), lat))
 					{
 //						_city = *j;
