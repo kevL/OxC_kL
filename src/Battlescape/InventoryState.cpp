@@ -144,7 +144,6 @@ InventoryState::InventoryState(
 											_templateBtnX,
 											_clearInventoryBtnY); */
 
-//	_txtAmmo	= new Text(40, 24, 272, 64);
 	_txtAmmo	= new Text(40, 24, 288, 64);
 	_selAmmo	= new Surface(
 						RuleInventory::HAND_W * RuleInventory::SLOT_W,
@@ -360,7 +359,6 @@ InventoryState::~InventoryState()
 {
 //	_clearInventoryTemplate(_curInventoryTemplate);
 
-	// kL_begin:
 	if (_parent != NULL)
 	{
 		Tile* const tile = _battleSave->getSelectedUnit()->getTile();
@@ -386,7 +384,7 @@ InventoryState::~InventoryState()
 			tileEngine->calculateTerrainLighting();
 			tileEngine->recalculateFOV(true); // <- done in BattlescapeGame::init() -> but without 'spotSound'
 		}
-	} // kL_end.
+	}
 }
 //	if (_battleSave->getTileEngine())
 //	{

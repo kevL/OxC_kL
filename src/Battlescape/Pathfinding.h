@@ -85,7 +85,7 @@ private:
 	/// Determines whether a tile blocks a movementType.
 	bool isBlocked(
 			const Tile* const tile,
-			const int part,
+			const MapDataType part,
 			const BattleUnit* const missileTarget = NULL,
 			const int bigWallExclusion = -1) const;
 	/// Tries to find a straight line path between two positions.
@@ -123,8 +123,7 @@ private:
 	public:
 		static const int
 			DIR_UP		=  8,
-			DIR_DOWN	=  9,
-			O_BIGWALL	= -1;
+			DIR_DOWN	=  9;
 
 		static Uint8
 			red,
@@ -181,12 +180,12 @@ private:
 
 		/// Checks if the movement is valid, for the up/down button.
 		int validateUpDown(
-				Position startPos,
-				int const dir);
+				const Position& startPos,
+				const int dir);
 
 		/// Gets all reachable tiles, based on cost.
 		std::vector<int> findReachable(
-				BattleUnit* const unit,
+				const BattleUnit* const unit,
 				int tuMax);
 
 		/// Previews the path.

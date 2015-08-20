@@ -1472,6 +1472,9 @@ void DebriefingState::prepareDebriefing() // private.
 			// recover items from the earlier stages as well
 			recoverItems(battleSave->getConditionalRecoveredItems());
 
+			const int parts = static_cast<int>(Tile::PARTS_TILE);
+			MapDataType partType;
+
 			for (size_t // get recoverable map data objects from the battlescape map
 					i = 0;
 					i != battleSave->getMapSizeXYZ();
@@ -1479,16 +1482,17 @@ void DebriefingState::prepareDebriefing() // private.
 			{
 				for (int
 						part = 0;
-						part != 4;
+						part != parts;
 						++part)
 				{
-					if (battleSave->getTiles()[i]->getMapData(part))
+					partType = static_cast<MapDataType>(part);
+					if (battleSave->getTiles()[i]->getMapData(partType) != NULL)
 					{
-						const SpecialTileType specialTilePart = battleSave->getTiles()[i]->getMapData(part)->getSpecialType();
-						if (_specialTypes.find(specialTilePart) != _specialTypes.end())
+						const SpecialTileType stt = battleSave->getTiles()[i]->getMapData(partType)->getSpecialType();
+						if (_specialTypes.find(stt) != _specialTypes.end())
 							addStat(
-								_specialTypes[specialTilePart]->type,
-								_specialTypes[specialTilePart]->value);
+								_specialTypes[stt]->type,
+								_specialTypes[stt]->value);
 					}
 				}
 

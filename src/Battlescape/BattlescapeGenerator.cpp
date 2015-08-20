@@ -2207,6 +2207,7 @@ int BattlescapeGenerator::loadMAP( // private.
 	bool revealDone;
 
 	unsigned char array_Parts[Tile::PARTS_TILE];
+	const int parts = static_cast<int>(Tile::PARTS_TILE);
 
 	while (mapFile.read(
 					(char*)&array_Parts,
@@ -2214,7 +2215,6 @@ int BattlescapeGenerator::loadMAP( // private.
 	{
 		revealDone = false;
 
-		const int parts = static_cast<int>(Tile::PARTS_TILE);
 		for (int
 				part = 0;
 				part != parts;
@@ -2227,7 +2227,7 @@ int BattlescapeGenerator::loadMAP( // private.
 				&& partId == 0			// and only if no Craft/Ufo part would overwrite the part
 				&& array_Parts[0] != 0)	// but only if there *is* a floor-part to the Craft/Ufo so it would (have) be(en) inside the Craft/Ufo
 			{
-				_battleSave->getTile(Position(x,y,z))->setMapData(NULL,-1,-1, part);
+				_battleSave->getTile(Position(x,y,z))->setMapData(NULL,-1,-1, static_cast<MapDataType>(part));
 			}
 
 			// Then overwrite previous terrain with Craft or Ufo terrain.
@@ -2247,7 +2247,7 @@ int BattlescapeGenerator::loadMAP( // private.
 																data,
 																static_cast<int>(dataId),
 																dataSetId,
-																part);
+																static_cast<MapDataType>(part));
 			}
 
 /*			// If the part is not a floor and is empty, remove it; this prevents growing grass in UFOs.
@@ -2579,9 +2579,7 @@ void BattlescapeGenerator::runInventory(
 					data,
 					0,0,
 					O_FLOOR);
-		tile->getMapData(O_FLOOR)->setSpecialType(
-												START_POINT,
-												O_FLOOR);
+		tile->getMapData(O_FLOOR)->setSpecialType(START_POINT);
 		tile->getMapData(O_FLOOR)->setTUWalk(0);
 		tile->getMapData(O_FLOOR)->setFlags(
 										false,
@@ -3305,6 +3303,8 @@ void BattlescapeGenerator::clearModule( // private.
 		int sizeX,
 		int sizeY)
 {
+	const int parts = static_cast<int>(Tile::PARTS_TILE);
+
 	for (int
 			z = 0;
 			z != _mapsize_z;
@@ -3321,13 +3321,12 @@ void BattlescapeGenerator::clearModule( // private.
 					++dy)
 			{
 				Tile* const tile = _battleSave->getTile(Position(dx,dy,z));
-				const int parts = static_cast<int>(Tile::PARTS_TILE);
 				for (int
 						i = 0;
 						i != parts;
 						++i)
 				{
-					tile->setMapData(NULL,-1,-1, i);
+					tile->setMapData(NULL,-1,-1, static_cast<MapDataType>(i));
 				}
 			}
 		}
@@ -4176,7 +4175,9 @@ void BattlescapeGenerator::setupObjectives(const AlienDeployment* const deployRu
 	{
 		int
 			reqd = deployRule->getObjectivesReqd(),
-			actual = 0;
+			actual = 0,
+			parts = static_cast<int>(Tile::PARTS_TILE);
+		MapDataType partType;
 
 		for (size_t
 				i = 0;
@@ -4184,12 +4185,13 @@ void BattlescapeGenerator::setupObjectives(const AlienDeployment* const deployRu
 				++i)
 		{
 			for (int
-					j = 0;
-					j != 4;
-					++j)
+					part = 0;
+					part != parts;
+					++part)
 			{
-				if (_battleSave->getTiles()[i]->getMapData(j)
-					&& _battleSave->getTiles()[i]->getMapData(j)->getSpecialType() == targetType)
+				partType = static_cast<MapDataType>(part);
+				if (_battleSave->getTiles()[i]->getMapData(partType)
+					&& _battleSave->getTiles()[i]->getMapData(partType)->getSpecialType() == targetType)
 				{
 					++actual;
 				}

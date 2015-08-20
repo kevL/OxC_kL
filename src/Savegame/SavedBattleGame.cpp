@@ -583,8 +583,10 @@ void SavedBattleGame::loadMapResources(const Game* const game)
 	}
 
 	int
-		mapDataID,
-		mapDataSetID;
+		mapDataId,
+		mapDataSetId,
+		parts = static_cast<int>(Tile::PARTS_TILE);
+	MapDataType partType;
 
 	for (size_t
 			i = 0;
@@ -593,22 +595,23 @@ void SavedBattleGame::loadMapResources(const Game* const game)
 	{
 		for (int
 				part = 0;
-				part != 4;
+				part != parts;
 				++part)
 		{
+			partType = static_cast<MapDataType>(part);
 			_tiles[i]->getMapData(
-								&mapDataID,
-								&mapDataSetID,
-								part);
+								&mapDataId,
+								&mapDataSetId,
+								partType);
 
-			if (mapDataID != -1
-				&& mapDataSetID != -1)
+			if (mapDataId != -1
+				&& mapDataSetId != -1)
 			{
 				_tiles[i]->setMapData(
-								_mapDataSets[static_cast<size_t>(mapDataSetID)]->getObjects()->at(static_cast<size_t>(mapDataID)),
-								mapDataID,
-								mapDataSetID,
-								part);
+								_mapDataSets[static_cast<size_t>(mapDataSetId)]->getObjects()->at(static_cast<size_t>(mapDataId)),
+								mapDataId,
+								mapDataSetId,
+								partType);
 			}
 		}
 	}

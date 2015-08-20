@@ -120,46 +120,46 @@ protected:
 		void saveBinary(Uint8** buffer) const;
 
 		/**
-		 * Gets the MapData pointer of a part of the tile.
+		 * Gets a pointer to MapData for a part of the Tile.
 		 * @param part - the part 0-3
 		 * @return, pointer to MapData
 		 */
-		MapData* getMapData(int part) const
+		MapData* getMapData(MapDataType part) const
 		{ return _objects[part]; }
 
-		/// Sets the pointer to the mapdata for a specific part of the tile.
+		/// Sets the pointer to the mapdata for a specific part of the Tile.
 		void setMapData(
 				MapData* const data,
 				const int dataID,
 				const int dataSetID,
-				const int part);
-		/// Gets the IDs to the mapdata for a specific part of the tile.
+				const MapDataType part);
+		/// Gets the IDs of the mapdata for a specific part of the Tile.
 		void getMapData(
 				int* dataID,
 				int* dataSetID,
-				int part) const;
+				MapDataType part) const;
 
 		/// Gets whether this tile has no objects
 		bool isVoid(
 				const bool testInventory = true,
 				const bool testVolatiles = true) const;
 
-		/// Gets the TU cost to walk over a certain part of the tile.
+		/// Gets the TU cost to walk over a certain part of the Tile.
 		int getTUCostTile(
-				int part,
+				MapDataType part,
 				MovementType moveType) const;
 
 		/// Checks if this tile has a floor.
 		bool hasNoFloor(const Tile* const tileBelow) const;
 
-		/// Checks if this tile is a big wall.
+		/// Checks if the Tile is a big wall.
 		bool isBigWall() const;
 
 		/// Gets terrain level.
 		int getTerrainLevel() const;
 
 		/**
-		 * Gets the tile's position.
+		 * Gets the Tile's position.
 		 * @return, position
 		 */
 		const Position& getPosition() const
@@ -170,7 +170,7 @@ protected:
 
 		/// Opens a door.
 		int openDoor(
-				const int part,
+				const MapDataType part,
 				const BattleUnit* const unit = NULL,
 				const BattleActionType reserved = BA_NONE);
 		/**
@@ -181,11 +181,10 @@ protected:
 		 * @param part		- the tile part to consider
 		 * @return, bool	- true if ufo-door is valid and not closed
 		 */
-		bool isUfoDoorOpen(int part) const
-		{	const size_t i = static_cast<size_t>(part);
-			return _objects[i] != NULL
-				&& _objects[i]->isUfoDoor() == true
-				&& _curFrame[i] != 0; }
+		bool isUfoDoorOpen(MapDataType part) const
+		{	return _objects[part] != NULL
+				&& _objects[part]->isUfoDoor() == true
+				&& _curFrame[part] != 0; }
 		/// Closes ufo door.
 		int closeUfoDoor();
 
@@ -207,11 +206,11 @@ protected:
 
 		/// Destroys a tile part.
 		bool destroy(
-				int part,
+				MapDataType part,
 				SpecialTileType type);
 		/// Damages a tile part.
 		bool damage(
-				int part,
+				MapDataType part,
 				int power,
 				SpecialTileType type);
 
@@ -228,10 +227,10 @@ protected:
 		/// Gets flammability.
 		int getFlammability() const;
 		/// Gets flammability of part.
-		int getFlammability(int part) const;
+		int getFlammability(MapDataType part) const;
 
 		/// Gets turns to burn of part.
-		int getFuel(int part = -1) const;
+		int getFuel(MapDataType part = O_NULTYPE) const;
 
 		/// Tries to start fire on this Tile.
 		bool ignite(int power);

@@ -23,6 +23,8 @@
 //#include <string>
 //#include <yaml-cpp/yaml.h>
 
+#include "MapData.h"
+
 
 namespace OpenXcom
 {
@@ -45,8 +47,6 @@ private:
 		_footstepSounds,
 		_fuels,
 		_HEBlocks,
-		_objectTypes,
-		_specialTypes,
 		_terrainHeight,
 		_TUWalks,
 		_TUFlys,
@@ -55,6 +55,9 @@ private:
 		_noFloors,
 		_stopLOSses;
 	std::vector<std::pair<size_t, std::vector<size_t> > > _LOFTS;
+
+	std::vector<std::pair<size_t, MapDataType> > _objectTypes;
+	std::vector<std::pair<size_t, SpecialTileType> > _specialTypes;
 
 
 	public:
@@ -67,7 +70,7 @@ private:
 		void load(const YAML::Node& node);
 
 		/// Applies an MCD patch to a mapDataSet
-		void modifyData(MapDataSet* dataSet) const;
+		void modifyData(MapDataSet* const dataSet) const;
 };
 
 }

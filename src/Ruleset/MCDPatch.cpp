@@ -19,7 +19,6 @@
 
 #include "MCDPatch.h"
 
-#include "MapData.h"
 #include "MapDataSet.h"
 
 
@@ -57,103 +56,137 @@ void MCDPatch::load(const YAML::Node& node)
 		if ((*i)["bigWall"])
 		{
 			const int bigWall = (*i)["bigWall"].as<int>();
-			_bigWalls.push_back(std::make_pair(MCDIndex, bigWall));
+			_bigWalls.push_back(std::make_pair(
+											MCDIndex,
+											bigWall));
 		}
 
 		if ((*i)["TUWalk"])
 		{
 			const int TUWalk = (*i)["TUWalk"].as<int>();
-			_TUWalks.push_back(std::make_pair(MCDIndex, TUWalk));
+			_TUWalks.push_back(std::make_pair(
+											MCDIndex,
+											TUWalk));
 		}
 
 		if ((*i)["TUFly"])
 		{
 			const int TUFly = (*i)["TUFly"].as<int>();
-			_TUFlys.push_back(std::make_pair(MCDIndex, TUFly));
+			_TUFlys.push_back(std::make_pair(
+										MCDIndex,
+										TUFly));
 		}
 
 		if ((*i)["TUSlide"])
 		{
 			const int TUSlide = (*i)["TUSlide"].as<int>();
-			_TUSlides.push_back(std::make_pair(MCDIndex, TUSlide));
+			_TUSlides.push_back(std::make_pair(
+											MCDIndex,
+											TUSlide));
 		}
 
 		if ((*i)["deathTile"])
 		{
 			const int deathTile = (*i)["deathTile"].as<int>();
-			_deathTiles.push_back(std::make_pair(MCDIndex, deathTile));
+			_deathTiles.push_back(std::make_pair(
+											MCDIndex,
+											deathTile));
 		}
 
 		if ((*i)["terrainHeight"])
 		{
 			const int terrainHeight = (*i)["terrainHeight"].as<int>();
-			_terrainHeight.push_back(std::make_pair(MCDIndex, terrainHeight));
-		}
-
-		if ((*i)["specialType"])
-		{
-			const int specialType = (*i)["specialType"].as<int>();
-			_specialTypes.push_back(std::make_pair(MCDIndex, specialType));
+			_terrainHeight.push_back(std::make_pair(
+												MCDIndex,
+												terrainHeight));
 		}
 
 		if ((*i)["explosive"])
 		{
 			const int explosive = (*i)["explosive"].as<int>();
-			_explosives.push_back(std::make_pair(MCDIndex, explosive));
+			_explosives.push_back(std::make_pair(
+											MCDIndex,
+											explosive));
 		}
 
 		if ((*i)["armor"])
 		{
 			const int armor = (*i)["armor"].as<int>();
-			_armors.push_back(std::make_pair(MCDIndex, armor));
+			_armors.push_back(std::make_pair(
+										MCDIndex,
+										armor));
 		}
 
 		if ((*i)["flammability"])
 		{
 			const int flammability = (*i)["flammability"].as<int>();
-			_flammabilities.push_back(std::make_pair(MCDIndex, flammability));
+			_flammabilities.push_back(std::make_pair(
+												MCDIndex,
+												flammability));
 		}
 
 		if ((*i)["fuel"])
 		{
 			const int fuel = (*i)["fuel"].as<int>();
-			_fuels.push_back(std::make_pair(MCDIndex, fuel));
+			_fuels.push_back(std::make_pair(
+										MCDIndex,
+										fuel));
 		}
 
 		if ((*i)["footstepSound"])
 		{
 			const int footstepSound = (*i)["footstepSound"].as<int>();
-			_footstepSounds.push_back(std::make_pair(MCDIndex, footstepSound));
+			_footstepSounds.push_back(std::make_pair(
+												MCDIndex,
+												footstepSound));
 		}
 
 		if ((*i)["HEBlock"])
 		{
 			const int HEBlock = (*i)["HEBlock"].as<int>();
-			_HEBlocks.push_back(std::make_pair(MCDIndex, HEBlock));
+			_HEBlocks.push_back(std::make_pair(
+											MCDIndex,
+											HEBlock));
 		}
 
 		if ((*i)["noFloor"])
 		{
-			bool noFloor = (*i)["noFloor"].as<bool>();
-			_noFloors.push_back(std::make_pair(MCDIndex, noFloor));
+			const bool noFloor = (*i)["noFloor"].as<bool>();
+			_noFloors.push_back(std::make_pair(
+											MCDIndex,
+											noFloor));
 		}
 
 		if ((*i)["stopLOS"])
 		{
-			bool stopLOS = (*i)["stopLOS"].as<bool>();
-			_stopLOSses.push_back(std::make_pair(MCDIndex, stopLOS));
+			const bool stopLOS = (*i)["stopLOS"].as<bool>();
+			_stopLOSses.push_back(std::make_pair(
+											MCDIndex,
+											stopLOS));
 		}
 
 		if ((*i)["LOFTS"])
 		{
-			std::vector<size_t> lofts = (*i)["LOFTS"].as<std::vector<size_t> >();
-			_LOFTS.push_back(std::make_pair(MCDIndex, lofts));
+			const std::vector<size_t> lofts = (*i)["LOFTS"].as<std::vector<size_t> >();
+			_LOFTS.push_back(std::make_pair(
+										MCDIndex,
+										lofts));
 		}
 
 		if ((*i)["objectType"])
 		{
-			int objectType = (*i)["objectType"].as<int>();
-			_objectTypes.push_back(std::make_pair(MCDIndex, objectType));
+			const MapDataType objectType = static_cast<MapDataType>((*i)["objectType"].as<int>());
+			_objectTypes.push_back(std::make_pair(
+												MCDIndex,
+												objectType));
+		}
+
+		if ((*i)["specialType"])
+		{
+			const SpecialTileType specialType = static_cast<SpecialTileType>((*i)["specialType"].as<int>());
+			_specialTypes.push_back(std::make_pair(
+												MCDIndex,
+												specialType));
 		}
 	}
 }
@@ -162,7 +195,7 @@ void MCDPatch::load(const YAML::Node& node)
  * Applies an MCD patch to a mapDataSet.
  * @param dataSet The MapDataSet we want to modify.
  */
-void MCDPatch::modifyData(MapDataSet* dataSet) const
+void MCDPatch::modifyData(MapDataSet* const dataSet) const
 {
 	for (std::vector<std::pair<size_t, int> >::const_iterator
 			i = _bigWalls.begin();
@@ -210,16 +243,6 @@ void MCDPatch::modifyData(MapDataSet* dataSet) const
 			++i)
 	{
 		dataSet->getObjects()->at(i->first)->setTerrainLevel(i->second);
-	}
-
-	for (std::vector<std::pair<size_t, int> >::const_iterator
-			i = _specialTypes.begin();
-			i != _specialTypes.end();
-			++i)
-	{
-		dataSet->getObjects()->at(i->first)->setSpecialType(
-														i->second,
-														dataSet->getObjects()->at(i->first)->getObjectType());
 	}
 
 	for (std::vector<std::pair<size_t, int> >::const_iterator
@@ -303,12 +326,20 @@ void MCDPatch::modifyData(MapDataSet* dataSet) const
 		}
 	}
 
-	for (std::vector<std::pair<size_t, int> >::const_iterator
+	for (std::vector<std::pair<size_t, MapDataType> >::const_iterator
 			i = _objectTypes.begin();
 			i != _objectTypes.end();
 			++i)
 	{
-		dataSet->getObjects()->at(i->first)->setObjectType(i->second);
+		dataSet->getObjects()->at(i->first)->setObjectType(static_cast<MapDataType>(i->second));
+	}
+
+	for (std::vector<std::pair<size_t, SpecialTileType> >::const_iterator
+			i = _specialTypes.begin();
+			i != _specialTypes.end();
+			++i)
+	{
+		dataSet->getObjects()->at(i->first)->setSpecialType(static_cast<SpecialTileType>(i->second));
 	}
 }
 

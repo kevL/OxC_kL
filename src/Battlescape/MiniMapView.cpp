@@ -116,6 +116,7 @@ void MiniMapView::draw()
 		Surface* srf;
 		const MapData* data;
 		const BattleUnit* unit;
+		const int parts = static_cast<int>(Tile::PARTS_TILE);
 
 		this->lock();
 		for (int
@@ -151,7 +152,7 @@ void MiniMapView::draw()
 						colorGroup,
 						colorOffset;
 
-					if (   px == 0
+					if (px == 0
 						|| px == _battleSave->getMapSizeX() - 1
 						|| py == 0
 						|| py == _battleSave->getMapSizeY() - 1)
@@ -185,11 +186,11 @@ void MiniMapView::draw()
 					else // draw tile parts
 					{
 						for (int
-								i = 0;
-								i != 4;
-								++i)
+								part = 0;
+								part != parts;
+								++part)
 						{
-							data = tile->getMapData(i);
+							data = tile->getMapData(static_cast<MapDataType>(part));
 							if (data != NULL
 								&& data->getMiniMapIndex() != 0)
 							{
@@ -201,7 +202,10 @@ void MiniMapView::draw()
 												colorOffset,
 												false,
 												colorGroup);
-								else Log(LOG_INFO) << "ERROR MiniMapView::draw() no data for Tile[" << i << "] pos " << tile->getPosition() << " frame = " << data->getMiniMapIndex() + 35;
+								else
+									Log(LOG_WARNING) << "MiniMapView::draw() no data for Tile["
+													 << part << "] pos " << tile->getPosition()
+													 << " frame = " << data->getMiniMapIndex() + 35;
 							}
 						}
 					}

@@ -201,19 +201,18 @@ void MapDataSet::loadData()
 
 		// set all the terrain-object properties:
 		for (size_t
-				frame = 0;
-				frame != 8;
-				++frame)
+				i = 0;
+				i != 8; // sprite-frames
+				++i)
 		{
 			to->setSprite(
-					frame,
-					(int)mcd.Frame[frame]);
+						i,
+						(int)mcd.Frame[i]);
 		}
 
+		to->setObjectType(static_cast<MapDataType>(mcd.Tile_Type)); // must come after setSprite() above to set '_isPsychedelic' correctly.
+		to->setSpecialType(static_cast<SpecialTileType>(mcd.Target_Type));
 		to->setYOffset((int)mcd.P_Level);
-		to->setSpecialType(
-				(int)mcd.Target_Type,
-				(int)mcd.Tile_Type);
 		to->setTUCosts(
 				(int)mcd.TU_Walk,
 				(int)mcd.TU_Fly,
@@ -284,7 +283,7 @@ void MapDataSet::loadData()
 			i != _objects.end();
 			++i)
 	{
-		if ((*i)->getObjectType() == O_FLOOR
+		if ((*i)->getPartType() == O_FLOOR
 			&& (*i)->getBlock(DT_HE) == 0)
 		{
 			const int armor = (*i)->getArmor();
@@ -421,7 +420,7 @@ void MapDataSet::loadLoft(
  * Gets a blank floor tile.
  * @return, pointer to blank tile MapData
  */
-MapData* MapDataSet::getBlankFloorTile()
+MapData* MapDataSet::getBlankFloorTile() // static.
 {
 	return MapDataSet::_blankTile;
 }
@@ -430,7 +429,7 @@ MapData* MapDataSet::getBlankFloorTile()
  * Gets a scorched earth tile.
  * @return, pointer to scorched earth tile MapData
  */
-MapData* MapDataSet::getScorchedEarthTile()
+MapData* MapDataSet::getScorchedEarthTile() // static.
 {
 	return MapDataSet::_scorchedTile;
 }

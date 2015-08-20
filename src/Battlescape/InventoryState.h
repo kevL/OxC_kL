@@ -22,8 +22,6 @@
 
 #include "../Engine/State.h"
 
-//#include "../Savegame/EquipmentLayoutItem.h" // moved to .cpp file
-
 
 namespace OpenXcom
 {

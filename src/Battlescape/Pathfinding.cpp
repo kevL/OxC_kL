@@ -1576,14 +1576,14 @@ bool Pathfinding::isBlockedPath( // public
 /**
  * Determines whether a certain part of a tile blocks movement.
  * @param tile				- pointer to a specified Tile, can be NULL
- * @param part				- part of the tile
+ * @param part				- part of the tile (MapData.h)
  * @param missileTarget		- pointer to targeted BattleUnit (default NULL)
  * @param bigWallExclusion	- to exclude diagonal bigWalls (default -1)
  * @return, true if path is blocked
  */
 bool Pathfinding::isBlocked( // private.
 		const Tile* const tile,
-		const int part,
+		const MapDataType part,
 		const BattleUnit* const missileTarget,
 		const int bigWallExclusion) const
 {
@@ -1615,7 +1615,7 @@ BIGWALL_E_S		// 8
 	if (part == O_BIGWALL)
 	{
 		//Log(LOG_INFO) << ". part is Bigwall";
-		if (   tile->getMapData(O_OBJECT)
+		if (tile->getMapData(O_OBJECT)
 			&& tile->getMapData(O_OBJECT)->getBigWall() != bigWallExclusion
 			&& tile->getMapData(O_OBJECT)->getBigWall() != BIGWALL_NONE
 			&& tile->getMapData(O_OBJECT)->getBigWall() < BIGWALL_WEST) // block,NESW,NWSE
@@ -1629,8 +1629,8 @@ BIGWALL_E_S		// 8
 	if (part == O_WESTWALL)
 	{
 		//Log(LOG_INFO) << ". part is Westwall";
-		if (	   tile->getMapData(O_OBJECT)
-			&& (   tile->getMapData(O_OBJECT)->getBigWall() == BIGWALL_WEST
+		if (tile->getMapData(O_OBJECT)
+			&& (tile->getMapData(O_OBJECT)->getBigWall() == BIGWALL_WEST
 				|| tile->getMapData(O_OBJECT)->getBigWall() == BIGWALL_W_N))
 //				|| tile->getMapData(O_OBJECT)->getBigWall() == BIGWALL_BLOCK)) // kL
 		{
@@ -1641,8 +1641,8 @@ BIGWALL_E_S		// 8
 		if (tileWest == NULL)
 			return true; // do not look outside of map
 
-		if (	   tileWest->getMapData(O_OBJECT)
-			&& (   tileWest->getMapData(O_OBJECT)->getBigWall() == BIGWALL_EAST
+		if (tileWest->getMapData(O_OBJECT)
+			&& (tileWest->getMapData(O_OBJECT)->getBigWall() == BIGWALL_EAST
 				|| tileWest->getMapData(O_OBJECT)->getBigWall() == BIGWALL_E_S))
 //				|| tileWest->getMapData(O_OBJECT)->getBigWall() == BIGWALL_BLOCK)) // kL
 		{
@@ -1653,8 +1653,8 @@ BIGWALL_E_S		// 8
 	if (part == O_NORTHWALL)
 	{
 		//Log(LOG_INFO) << ". part is Northwall";
-		if (	   tile->getMapData(O_OBJECT)
-			&& (   tile->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NORTH
+		if (tile->getMapData(O_OBJECT)
+			&& (tile->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NORTH
 				|| tile->getMapData(O_OBJECT)->getBigWall() == BIGWALL_W_N))
 //				|| tile->getMapData(O_OBJECT)->getBigWall() == BIGWALL_BLOCK)) // kL
 		{
@@ -1665,8 +1665,8 @@ BIGWALL_E_S		// 8
 		if (tileNorth == NULL)
 			return true; // do not look outside of map
 
-		if (	   tileNorth->getMapData(O_OBJECT)
-			&& (   tileNorth->getMapData(O_OBJECT)->getBigWall() == BIGWALL_SOUTH
+		if (tileNorth->getMapData(O_OBJECT)
+			&& (tileNorth->getMapData(O_OBJECT)->getBigWall() == BIGWALL_SOUTH
 				|| tileNorth->getMapData(O_OBJECT)->getBigWall() == BIGWALL_E_S))
 //				|| tileNorth->getMapData(O_OBJECT)->getBigWall() == BIGWALL_BLOCK)) // kL
 		{
@@ -1681,27 +1681,27 @@ BIGWALL_E_S		// 8
 
 		if (targetUnit != NULL)
 		{
-			if (   targetUnit == _unit
+			if (targetUnit == _unit
 				|| targetUnit == missileTarget
 				|| targetUnit->isOut(true, true) == true)
 			{
 				return false;
 			}
 
-			if (   _unit != NULL
+			if (_unit != NULL
 				&& _unit->getFaction() == FACTION_PLAYER
 				&& targetUnit->getUnitVisible() == true)
 			{
 				return true; // player knows about visible units only
 			}
 
-			if (   _unit != NULL
+			if (_unit != NULL
 				&& _unit->getFaction() == targetUnit->getFaction())
 			{
 				return true; // AI knows all allied units
 			}
 
-			if (   _unit != NULL
+			if (_unit != NULL
 				&& _unit->getFaction() == FACTION_HOSTILE
 				&& std::find(
 						_unit->getHostileUnitsThisTurn().begin(),
@@ -1720,18 +1720,18 @@ BIGWALL_E_S		// 8
 				const Tile* const testTile = _battleSave->getTile(pos);
 				targetUnit = testTile->getUnit();
 
-				if (   targetUnit != NULL
+				if (targetUnit != NULL
 					&& targetUnit != _unit)
 				{
 					// don't let large units fall on other units
-					if (   _unit != NULL
+					if (_unit != NULL
 						&& _unit->getArmor()->getSize() > 1)
 					{
 						return true;
 					}
 
 					// don't let any units fall on large units
-					if (   targetUnit != missileTarget
+					if (targetUnit != missileTarget
 						&& targetUnit->isOut() == false
 						&& targetUnit->getArmor()->getSize() > 1)
 					{
@@ -1748,7 +1748,7 @@ BIGWALL_E_S		// 8
 		}
 	}
 
-	// missiles can't pathfind through closed doors. kL: neither can proxy mines.
+	// missiles can't pathfind through closed doors. neither can proxy mines.
 	if (missileTarget != NULL
 		&& tile->getMapData(part) != NULL
 		&& (tile->getMapData(part)->isDoor() == true
@@ -1825,8 +1825,8 @@ bool Pathfinding::canFallDown( // private
 			 2 flying (go unless blocked)
  */
 int Pathfinding::validateUpDown(
-		Position startPos,
-		int const dir)
+		const Position& startPos,
+		const int dir)
 {
 	Position destPos;
 	directionToVector(
@@ -2083,7 +2083,7 @@ bool Pathfinding::isPathPreviewed() const
  * the first tile is the start location itself
  */
 std::vector<int> Pathfinding::findReachable(
-		BattleUnit* const unit,
+		const BattleUnit* const unit,
 		int tuMax)
 {
 	for (std::vector<PathfindingNode>::iterator

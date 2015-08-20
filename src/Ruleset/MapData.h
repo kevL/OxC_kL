@@ -72,16 +72,19 @@ enum VoxelType
 
 enum MapDataType
 {
-	O_FLOOR,		// 0
-	O_WESTWALL,		// 1
-	O_NORTHWALL,	// 2
-	O_OBJECT		// 3
+	O_BIGWALL = -1,	// -1
+	O_FLOOR,		//  0
+	O_WESTWALL,		//  1
+	O_NORTHWALL,	//  2
+	O_OBJECT,		//  3
+	O_NULTYPE		//  4
 };
 
 
 /**
- * MapData is the smallest piece of a Battlescape terrain,
- * holding info about a certain object, wall, floor, ...
+ * MapData is the smallest piece of a Battlescape terrain, holding info about a
+ * certain object, wall, floor, etc.
+ * @note A better ident for this class would be 'TileData' or even 'PartData'.
  * @sa MapDataSet.
  */
 class MapData
@@ -110,7 +113,6 @@ private:
 		_fuel,
 		_isPsychedelic,
 		_lightSource,
-		_objectType,
 		_sprite[8],
 		_terrainLevel,
 		_TUWalk,
@@ -124,6 +126,7 @@ private:
 
 	MapDataSet* _dataset;
 
+	MapDataType _objectType;
 	SpecialTileType _specialType;
 
 
@@ -138,11 +141,11 @@ private:
 		MapDataSet* getDataset() const;
 
 		/// Gets the sprite index for a certain frame.
-		int getSprite(int frame) const;
+		int getSprite(int aniFrame) const;
 		/// Sets the sprite index for a certain frame.
 		void setSprite(
-				int frame,
-				int value);
+				size_t aniFrame,
+				int id);
 
 		/// Gets whether this is an animated ufo door.
 		bool isUfoDoor() const;
@@ -195,16 +198,14 @@ private:
 		void setYOffset(int value);
 
 		/// Gets the type of tile.
-		int getObjectType() const;
+		MapDataType getPartType() const;
 		/// Sets the type of tile.
-		void setObjectType(int type);
+		void setObjectType(MapDataType type);
 
 		/// Gets info about special tile types
 		SpecialTileType getSpecialType() const;
 		/// Sets a special tile type and object type.
-		void setSpecialType(
-				int value,
-				int type);
+		void setSpecialType(SpecialTileType type);
 
 		/// Gets the TU cost to move over the object.
 		int getTUCostData(MovementType moveType) const;

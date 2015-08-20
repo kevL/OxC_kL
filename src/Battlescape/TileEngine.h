@@ -26,6 +26,7 @@
 #include "BattlescapeGame.h"
 #include "Position.h"
 
+#include "../Ruleset/MapData.h"
 #include "../Ruleset/RuleItem.h"
 
 
@@ -76,15 +77,19 @@ private:
 	void addLight(
 			const Position& pos,
 			int power,
-			size_t layer);
+			size_t layer) const;
 	/// Calculates blockage of various persuasions.
 	int blockage(
 			const Tile* const tile,
-			const int part,
+			const MapDataType part,
 			const ItemDamageType dType,
 			const int dir = -1,
 			const bool originTest = false,
 			const bool trueDir = false) const;
+	/// Opens any doors this door is connected to.
+	void openAdjacentDoors(
+			Position pos,
+			MapDataType part) const;
 	/// Gets a Tile within melee range.
 	Tile* getVerticalTile(
 			const Position& posOrigin,
@@ -100,13 +105,13 @@ private:
 		~TileEngine();
 
 		/// Calculates sun shading of the whole map.
-		void calculateSunShading();
+		void calculateSunShading() const;
 		/// Calculates sun shading of a single tile.
-		void calculateSunShading(Tile* const tile);
+		void calculateSunShading(Tile* const tile) const;
 		/// Recalculates lighting of the battlescape for terrain.
-		void calculateTerrainLighting();
+		void calculateTerrainLighting() const;
 		/// Recalculates lighting of the battlescape for units.
-		void calculateUnitLighting();
+		void calculateUnitLighting() const;
 
 		/// Turn XCom soldier's personal lighting on or off.
 		void togglePersonalLighting();
@@ -210,12 +215,8 @@ private:
 				Position pos,
 				int part,
 				int dir); */
-		/// Opens any doors this door is connected to.
-		void openAdjacentDoors(
-				Position pos,
-				int part) const;
 		/// Closes ufo doors.
-		int closeUfoDoors();
+		int closeUfoDoors() const;
 
 		/// Calculates a line trajectory.
 		int calculateLine(

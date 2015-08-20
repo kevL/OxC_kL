@@ -25,10 +25,6 @@
 namespace OpenXcom
 {
 
-// Explicit storage for MapData constants.
-// Pathfinding::O_BIGWALL = -1
-
-
 /**
  * Creates a new Map Data Object.
  * @param dataSet - pointer to the MapDataSet this object belongs to
@@ -53,7 +49,7 @@ MapData::MapData(MapDataSet* const dataSet)
 		_footstepSound(0),
 		_dieMCD(0),
 		_altMCD(0),
-		_objectType(0),
+		_objectType(O_FLOOR),
 		_lightSource(0),
 		_armor(0),
 		_flammable(0),
@@ -86,24 +82,24 @@ MapDataSet* MapData::getDataset() const
 
 /**
  * Gets the sprite index.
- * @param frame - animation frame 0-7
+ * @param aniFrame - animation frame 0-7
  * @return, the original sprite index
  */
-int MapData::getSprite(int frame) const
+int MapData::getSprite(int aniFrame) const
 {
-	return _sprite[static_cast<size_t>(frame)];
+	return _sprite[static_cast<size_t>(aniFrame)];
 }
 
 /**
  * Sets the sprite index for a certain frame.
- * @param frame - animation frame
- * @param value - the sprite index in the surfaceset of the mapdataset
+ * @param aniFrame	- animation frame
+ * @param id		- the sprite index in the surfaceset of the mapdataset
  */
 void MapData::setSprite(
-		int frame,
-		int value)
+		size_t aniFrame,
+		int id)
 {
-	_sprite[static_cast<size_t>(frame)] = value;
+	_sprite[aniFrame] = id;
 }
 
 /**
@@ -334,18 +330,36 @@ void MapData::setYOffset(int value)
  * Gets the type of object.
  * @return, the object type (0-3)
  */
-int MapData::getObjectType() const
+MapDataType MapData::getPartType() const
 {
 	return _objectType;
 }
 
 /**
  * Sets the type of object.
+ * @note Sets '_isPsychedelic' also.
  * @param type - the object type (0-3)
  */
-void MapData::setObjectType(int type)
+void MapData::setObjectType(MapDataType type)
 {
 	_objectType = type;
+
+	if (_dataset->getName() == "U_PODS") // kL-> should put this in MCDPatch
+	{
+		if (_sprite[0] == 7			// disco walls, yellow northWall
+			|| _sprite[0] == 8		//  "     "       "    westWall
+			|| _sprite[0] == 17		// disco walls, blue northWall
+			|| _sprite[0] == 18)	//  "     "       "  westWall
+//			|| _sprite[0] == 4)		// disco ball
+		{
+			_isPsychedelic = 1;
+		}
+		else if (_sprite[0] == 0)	// red round energy supply
+//			||   _sprite[0] == 2)	// red oblong  "      "
+		{
+			_isPsychedelic = 2;
+		}
+	}
 }
 
 /**
@@ -360,31 +374,10 @@ SpecialTileType MapData::getSpecialType() const
 /**
  * Sets a special tile type and object type.
  * @param value	- special tile type (MapData.h)
- * @param type	- object type
  */
-void MapData::setSpecialType(
-		int value,
-		int type)
+void MapData::setSpecialType(SpecialTileType type)
 {
-	_specialType = static_cast<SpecialTileType>(value);
-	_objectType = type;
-
-	if (_dataset->getName() == "U_PODS") // kL-> should put this in MCDPatch
-	{
-		if (   _sprite[0] == 7		// disco walls, yellow northWall
-			|| _sprite[0] == 8		//  "     "       "    westWall
-			|| _sprite[0] == 17		// disco walls, blue northWall
-			|| _sprite[0] == 18)	//  "     "       "  westWall
-//			|| _sprite[0] == 4)		// disco ball
-		{
-			_isPsychedelic = 1;
-		}
-		else if (_sprite[0] == 0)	// red round energy supply
-//			||   _sprite[0] == 2)	// red oblong  "      "
-		{
-			_isPsychedelic = 2;
-		}
-	}
+	_specialType = type;
 }
 
 /**

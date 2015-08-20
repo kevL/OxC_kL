@@ -3867,7 +3867,6 @@ void BattlescapeState::updateTileInfo(const Tile* const tile)
 		return;
 	}
 
-
 	size_t rows = 3;
 	int tuCost = 0;
 
@@ -3886,14 +3885,14 @@ void BattlescapeState::updateTileInfo(const Tile* const tile)
 								O_OBJECT,
 								moveType);
 
-		if (   tile->getMapData(O_FLOOR) == NULL
+		if (tile->getMapData(O_FLOOR) == NULL
 			&& tile->getMapData(O_OBJECT) != NULL)
 		{
 			tuCost += 4;
 		}
 		else if (tuCost == 0)
 		{
-			if (   moveType == MT_FLY
+			if (moveType == MT_FLY
 				|| moveType == MT_FLOAT)
 			{
 				tuCost = 4;

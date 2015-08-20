@@ -22,19 +22,14 @@
 //#include <algorithm>
 
 #include "BattleItem.h"
-//#include "BattleUnit.h"
 #include "SerializationHelper.h"
 
 #include "../Battlescape/Pathfinding.h"
 
-//#include "../Engine/RNG.h"
-//#include "../Engine/Surface.h"
 #include "../Engine/SurfaceSet.h"
 
-//#include "../Ruleset/MapData.h"
 #include "../Ruleset/MapDataSet.h"
 #include "../Ruleset/RuleArmor.h"
-//#include "../Ruleset/RuleItem.h"
 
 #include "../Savegame/SavedBattleGame.h"
 
@@ -224,9 +219,9 @@ YAML::Node Tile::save() const
 		}
 	}
 
-	if (isUfoDoorOpen(1) == true)
+	if (isUfoDoorOpen(O_WESTWALL) == true)
 		node["openDoorWest"] = true;
-	if (isUfoDoorOpen(2) == true)
+	if (isUfoDoorOpen(O_NORTHWALL) == true)
 		node["openDoorNorth"] = true;
 
 	return node;
@@ -250,12 +245,12 @@ void Tile::saveBinary(Uint8** buffer) const
 
 	serializeInt(buffer, serializationKey._smoke,		_smoke);
 	serializeInt(buffer, serializationKey._fire,		_fire);
-	serializeInt(buffer, serializationKey._animOffset,	_animOffset); // kL
+	serializeInt(buffer, serializationKey._animOffset,	_animOffset);
 
 	int boolFields = (_discovered[0] ? 0x01 : 0) + (_discovered[1] ? 0x02 : 0) + (_discovered[2] ? 0x04 : 0);
 
-	boolFields |= isUfoDoorOpen(1) ? 0x08 : 0; // west
-	boolFields |= isUfoDoorOpen(2) ? 0x10 : 0; // north
+	boolFields |= isUfoDoorOpen(O_WESTWALL) ? 0x08 : 0;
+	boolFields |= isUfoDoorOpen(O_NORTHWALL) ? 0x10 : 0;
 
 	serializeInt(
 				buffer,
@@ -274,29 +269,27 @@ void Tile::setMapData(
 		MapData* const data,
 		const int dataID,
 		const int dataSetID,
-		const int part)
+		const MapDataType part)
 {
-	const size_t i = static_cast<size_t>(part);
-	_objects[i] = data;
-	_mapDataID[i] = dataID;
-	_mapDataSetID[i] = dataSetID;
+	_objects[part] = data;
+	_mapDataID[part] = dataID;
+	_mapDataSetID[part] = dataSetID;
 }
 
 /**
  * Gets the MapData references of parts 0 to 3.
  * @param dataID	- pointer to dataID
  * @param dataSetID	- pointer to dataSetID
- * @param part		- the part number
+ * @param part		- the part number (MapData.h)
  * @return, the object ID
  */
 void Tile::getMapData(
 		int* dataID,
 		int* dataSetID,
-		int part) const
+		MapDataType part) const
 {
-	const size_t i = static_cast<size_t>(part);
-	*dataID = _mapDataID[i];
-	*dataSetID = _mapDataSetID[i];
+	*dataID = _mapDataID[part];
+	*dataSetID = _mapDataSetID[part];
 }
 
 /**
@@ -335,31 +328,31 @@ bool Tile::isVoid(
 
 /**
  * Gets the TU cost to move over a certain part of the tile.
- * @param part		- the part number
+ * @param part		- the part number (MapData.h)
  * @param moveType	- the movement type
  * @return, TU cost
  */
 int Tile::getTUCostTile(
-		int part,
+		MapDataType part,
 		MovementType moveType) const
 {
-	const size_t i = static_cast<size_t>(part);
+	const size_t partT = static_cast<size_t>(part);
 
-	if (_objects[i] != NULL)
+	if (_objects[partT] != NULL)
 	{
-		if (_objects[i]->isUfoDoor() == true
-			&& _curFrame[i] > 1)
+		if (_objects[partT]->isUfoDoor() == true
+			&& _curFrame[partT] > 1)
 		{
 			return 0;
 		}
 
 		if (part == O_OBJECT
-			&& _objects[i]->getBigWall() > BIGWALL_NWSE)
+			&& _objects[partT]->getBigWall() > BIGWALL_NWSE)
 		{
 			return 0;
 		}
 
-		return _objects[i]->getTUCostData(moveType);
+		return _objects[partT]->getTUCostData(moveType);
 	}
 
 	return 0;
@@ -464,15 +457,13 @@ int Tile::getFootstepSound(const Tile* const tileBelow) const
  *			 4 not enough TUs
  */
 int Tile::openDoor(
-		const int part,
+		const MapDataType part,
 		const BattleUnit* const unit,
 		const BattleActionType reserved)
 {
-	const size_t i = static_cast<size_t>(part);
-
-	if (_objects[i] != NULL)
+	if (_objects[part] != NULL)
 	{
-		if (_objects[i]->isDoor() == true)
+		if (_objects[part]->isDoor() == true)
 		{
 			if (_unit != NULL
 				&& _unit != unit
@@ -482,7 +473,7 @@ int Tile::openDoor(
 			}
 
 			if (unit != NULL
-				&& unit->getTimeUnits() < _objects[i]->getTUCostData(unit->getMoveTypeUnit())
+				&& unit->getTimeUnits() < _objects[part]->getTUCostData(unit->getMoveTypeUnit())
 											+ unit->getActionTUs(
 															reserved,
 															unit->getMainHandWeapon(false)))
@@ -491,10 +482,10 @@ int Tile::openDoor(
 			}
 
 			setMapData(
-					_objects[i]->getDataset()->getObjects()->at(_objects[i]->getAltMCD()),
-					_objects[i]->getAltMCD(),
-					_mapDataSetID[i],
-					_objects[i]->getDataset()->getObjects()->at(_objects[i]->getAltMCD())->getObjectType());
+					_objects[part]->getDataset()->getObjects()->at(_objects[part]->getAltMCD()),
+					_objects[part]->getAltMCD(),
+					_mapDataSetID[part],
+					_objects[part]->getDataset()->getObjects()->at(_objects[part]->getAltMCD())->getPartType());
 
 			setMapData(
 					NULL,
@@ -503,12 +494,12 @@ int Tile::openDoor(
 
 			return 0;
 		}
-		else if (_objects[i]->isUfoDoor() == true)
+		else if (_objects[part]->isUfoDoor() == true)
 		{
-			if (_curFrame[i] == 0) // ufo door part 0 - door is closed
+			if (_curFrame[part] == 0) // ufo door part 0 - door is closed
 			{
 				if (unit != NULL
-					&& unit->getTimeUnits() < _objects[i]->getTUCostData(unit->getMoveTypeUnit())
+					&& unit->getTimeUnits() < _objects[part]->getTUCostData(unit->getMoveTypeUnit())
 												+ unit->getActionTUs(
 																reserved,
 																unit->getMainHandWeapon(false)))
@@ -516,10 +507,10 @@ int Tile::openDoor(
 					return 4;
 				}
 
-				_curFrame[i] = 1; // start opening door
+				_curFrame[part] = 1; // start opening door
 				return 1;
 			}
-			else if (_curFrame[i] != 7) // ufo door != part 7 -> door is still opening
+			else if (_curFrame[part] != 7) // ufo door != part 7 -> door is still opening
 				return 3;
 		}
 	}
@@ -540,7 +531,7 @@ int Tile::closeUfoDoor()
 			i != PARTS_TILE;
 			++i)
 	{
-		if (isUfoDoorOpen(static_cast<int>(i)) == true)
+		if (isUfoDoorOpen(static_cast<MapDataType>(i)) == true)
 		{
 			_curFrame[i] = 0;
 			ret = 1;
@@ -646,30 +637,28 @@ int Tile::getShade() const
  * because the object type of the old and new are not necessarily the same. If
  * the destroyed part is an explosive set the tile's explosive value which will
  * trigger a chained explosion.
- * @param part - this Tile's part for destruction
+ * @param part - this Tile's part for destruction (MapData.h)
  * @param type - SpecialTileType
  * @return, true if an 'objective' was destroyed
  */
 bool Tile::destroy(
-		int part,
+		MapDataType part,
 		SpecialTileType type)
 {
-	const size_t i = static_cast<size_t>(part);
-
 	bool objective = false;
 
-	if (_objects[i])
+	if (_objects[part])
 	{
-		if (_objects[i]->isGravLift() == true
-			|| _objects[i]->getArmor() == 255) // <- set to 255 in MCD for Truly Indestructability.
+		if (_objects[part]->isGravLift() == true
+			|| _objects[part]->getArmor() == 255) // <- set to 255 in MCD for Truly Indestructability.
 		{
 			return false;
 		}
 
-		objective = (_objects[i]->getSpecialType() == type);
+		objective = (_objects[part]->getSpecialType() == type);
 
-		const MapData* const origPart = _objects[i];
-		const int origMapDataSetID = _mapDataSetID[i];
+		const MapData* const origPart = _objects[part];
+		const int origMapDataSetID = _mapDataSetID[part];
 
 		setMapData(
 				 NULL,
@@ -683,7 +672,7 @@ bool Tile::destroy(
 					dead,
 					origPart->getDieMCD(),
 					origMapDataSetID,
-					dead->getObjectType());
+					dead->getPartType());
 		}
 
 		if (origPart->getExplosive() != 0)
@@ -707,20 +696,20 @@ bool Tile::destroy(
 
 /**
  * Damages terrain (check against terrain-part armor/hitpoints/constitution)
- * @param part	- part of tile to check
+ * @param part	- part of tile to check (MapData.h)
  * @param power	- power of the damage
  * @param type	- SpecialTileType
  * @return, true if an objective was destroyed
  */
 bool Tile::damage(
-		int part,
+		MapDataType part,
 		int power,
 		SpecialTileType type)
 {
 	//Log(LOG_INFO) << "Tile::damage() vs part = " << part << ", hp = " << _objects[part]->getArmor();
 	bool objectiveDestroyed = false;
 
-	if (power >= _objects[static_cast<size_t>(part)]->getArmor())
+	if (power >= _objects[part]->getArmor())
 		objectiveDestroyed = destroy(
 									part,
 									type);
@@ -784,7 +773,7 @@ int Tile::getFlammability() const
 			i != PARTS_TILE;
 			++i)
 	{
-		if (   _objects[i] != NULL
+		if (_objects[i] != NULL
 			&& _objects[i]->getFlammable() < burn)
 		{
 			burn = _objects[i]->getFlammable();
@@ -797,11 +786,12 @@ int Tile::getFlammability() const
 /**
  * Gets the flammability of a tile-part.
  * @note I now decree that this returns the inverse of 0..255 as a percentage!
+ * @param part - the part to check (MapData.h)
  * @return, the lower the value the higher the chance the tile-part catches fire - BSZAAST!!!
  */
-int Tile::getFlammability(int part) const
+int Tile::getFlammability(MapDataType part) const
 {
-	return convertBurnToPCT(_objects[static_cast<size_t>(part)]->getFlammable());
+	return convertBurnToPCT(_objects[part]->getFlammable());
 //	return _objects[static_cast<size_t>(part)]->getFlammable();
 }
 
@@ -831,12 +821,12 @@ int Tile::convertBurnToPCT(int burn) const // private.
  * Gets the fuel of a tile-part.
  * @note Fuel of a tile is the highest fuel of its parts/objects.
  * @note This is NOT the sum of the fuel of the objects!
- * @param part - the part to check or -1 to check all parts (default -1)
+ * @param part - the part to check or O_NULTYPE to check all parts (default O_NULTYPE)
  * @return, turns to burn
  */
-int Tile::getFuel(int part) const
+int Tile::getFuel(MapDataType part) const
 {
-	if (part < 0)
+	if (part == O_NULTYPE)
 	{
 		int fuel = 0;
 
@@ -855,10 +845,7 @@ int Tile::getFuel(int part) const
 		return fuel;
 	}
 
-	if (part < PARTS_TILE)
-		return _objects[static_cast<size_t>(part)]->getFuel();
-
-	return 0;
+	return _objects[part]->getFuel();
 }
 
 /**
