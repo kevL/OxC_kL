@@ -699,6 +699,8 @@ private:
 		int getHealth() const;
 		/// Gets this unit's bravery.
 		int getMorale() const;
+		/// Gets this unit's effective strength.
+		int getStrength() const;
 
 		/// Do damage to this unit.
 		int damage(

@@ -93,7 +93,7 @@ private:
 		/// Validates the throwing range.
 		static bool validThrowRange(
 				const BattleAction* const action,
-				const Position& origin,
+				const Position& originVoxel,
 				const Tile* const target);
 		/// Calculates the maximum throwing range.
 		static int getMaxThrowDistance(

@@ -2760,7 +2760,10 @@
 		</Unit>
 		<Unit filename="Ruleset/SoundDefinition.cpp" />
 		<Unit filename="Ruleset/SoundDefinition.h" />
-		<Unit filename="Ruleset/StatString.cpp" />
+		<Unit filename="Ruleset/StatString.cpp">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
 		<Unit filename="Ruleset/StatString.h" />
 		<Unit filename="Ruleset/StatStringCondition.cpp" />
 		<Unit filename="Ruleset/StatStringCondition.h" />

@@ -1396,6 +1396,15 @@ int BattleUnit::getMorale() const
 }
 
 /**
+ * Gets this unit's effective strength.
+ * @return, current strength
+ */
+int BattleUnit::getStrength() const
+{
+	return static_cast<int>(Round(static_cast<double>(_stats.strength) * (getAccuracyModifier() / 2. + 0.5)));
+}
+
+/**
  * Does an amount of damage.
  * TODO: This should be in Battlegame instead of each unit having its own damage routine.
  * @param relPos		- reference a position in voxelspace that defines which
@@ -2486,8 +2495,7 @@ void BattleUnit::initTu(
 	else
 	{
 		int tu = _stats.tu;
-		double underLoad = static_cast<double>(_stats.strength) / static_cast<double>(getCarriedWeight());
-		underLoad *= getAccuracyModifier() / 2. + 0.5;
+		double underLoad = static_cast<double>(getStrength()) / static_cast<double>(getCarriedWeight());
 		if (underLoad < 1.)
 			tu = static_cast<int>(Round(static_cast<double>(tu) * underLoad));
 

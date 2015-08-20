@@ -49,7 +49,7 @@ private:
 	static Position targetVoxel_cache;
 
 
-	bool _reversed;
+//	bool _reversed;
 	int
 		_bulletSprite,
 		_speed;
@@ -89,7 +89,7 @@ private:
 		int calculateTrajectory(double accuracy);
 		int calculateTrajectory(
 				double accuracy,
-				Position originVoxel);
+				const Position& originVoxel);
 		/// Calculates the trajectory for a curved path.
 		int calculateThrow(double accuracy);
 
@@ -120,7 +120,7 @@ private:
 		Position getFinalVector() const;
 
 		/// Gets if this this projectile is being drawn back-to-front or front-to-back.
-		bool isReversed() const;
+//		bool isReversed() const;
 };
 
 }

@@ -559,9 +559,7 @@ void InventoryState::updateStats() // private.
 	{
 		const int
 			weight = unit->getCarriedWeight(_inv->getSelectedItem()),
-			strength = static_cast<int>(Round(
-					   static_cast<double>(unit->getBaseStats()->strength)
-					   * (unit->getAccuracyModifier() / 2. + 0.5)));
+			strength = unit->getStrength();
 
 		_txtWeight->setText(tr("STR_WEIGHT").arg(weight).arg(strength));
 		if (weight > strength)

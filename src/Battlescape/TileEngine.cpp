@@ -5276,28 +5276,6 @@ bool TileEngine::validateThrow(
 	{
 		parabolicCoefficient = 0.81;
 
-		// kL_note: Unfortunately, this prevents weak units from throwing heavy
-		// objects at their own feet. (needs starting arc ~0.8, less if kneeled)
-/*		if (action.type == BA_THROW)
-		{
-			parabolicCoefficient += 0.8;
-//			parabolicCoefficient += std::max(
-//						0.48,
-//						1.73 / sqrt(
-//									sqrt(
-//										static_cast<double>(action.actor->getBaseStats()->strength) * (action.actor->getAccuracyModifier() / 2.0 + 0.5)
-//										/ static_cast<double>(action.weapon->getRules()->getWeight()))));
-		}
-		// kL_note: And arcing shots from targeting their origin tile. ( needs starting arc ~0.1 )
-		else // spit, etc
-		{
-			// arcing projectile weapons assume a fixed strength and weight.(70 and 10 respectively)
-			// curvature should be approximately 1.06358350461 at this point.
-//			parabolicCoefficient = 1.73 / sqrt(sqrt(70.0 / 10.0)) + kneel; // OR ...
-//			parabolicCoefficient += 1.0635835046056873518242669985672;
-			parabolicCoefficient += 1.0;
-		} */
-
 		if (action.actor->isKneeled() == true)
 			parabolicCoefficient += 0.3; // increase the arc reasons.
 	}

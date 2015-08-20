@@ -120,8 +120,7 @@ void ExplosionBState::init()
 				&& (_item->getRules()->getBattleType() == BT_MELEE
 					|| _pistolWhip == true))
 			{
-				int extraPower = static_cast<int>(Round(
-								 static_cast<double>(_unit->getBaseStats()->strength) * (_unit->getAccuracyModifier() / 2. + 0.5)));
+				int extraPower = _unit->getStrength();
 
 				if (_pistolWhip == true)
 					extraPower /= 2; // pistolwhipping adds only 1/2 extraPower.

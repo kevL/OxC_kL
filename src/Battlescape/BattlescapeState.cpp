@@ -2771,9 +2771,7 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 								.arg(static_cast<int>(selUnit->getBattleOrder())));
 		}
 
-		const int strength = static_cast<int>(Round(
-							 static_cast<double>(selUnit->getBaseStats()->strength) * (selUnit->getAccuracyModifier() / 2. + 0.5)));
-		if (selUnit->getCarriedWeight() > strength)
+		if (selUnit->getCarriedWeight() > selUnit->getStrength())
 			_isOverweight = true;
 
 		_numDir->setValue(selUnit->getDirection());

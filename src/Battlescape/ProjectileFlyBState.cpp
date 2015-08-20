@@ -54,24 +54,23 @@ namespace OpenXcom
  * Sets up a ProjectileFlyBState [0].
  * @param parent - pointer to the BattlescapeGame
  * @param action - the current BattleAction struct (BattlescapeGame.h)
- * @param origin - an origin Position
  */
-ProjectileFlyBState::ProjectileFlyBState(
+ProjectileFlyBState::ProjectileFlyBState( // origin is unitTile
 		BattlescapeGame* const parent,
-		BattleAction action,
-		Position origin)
+		BattleAction action)
 	:
 		BattleState(
 			parent,
 			action),
 		_battleSave(parent->getSave()),
-		_origin(origin),
+		_origin(action.actor->getPosition()),
 		_originVoxel(-1,-1,-1), // for BL waypoints
 		_targetVoxel(-1,-1,-1),
 		_unit(NULL),
 		_ammo(NULL),
 		_prjItem(NULL),
 		_prjImpact(0),
+		_prjVector(-1,-1,-1),
 		_initialized(false),
 		_targetFloor(false),
 		_initUnitAnim(0)
@@ -81,16 +80,18 @@ ProjectileFlyBState::ProjectileFlyBState(
  * Sets up a ProjectileFlyBState [1].
  * @param parent - pointer to the BattlescapeGame
  * @param action - the current BattleAction struct (BattlescapeGame.h)
+ * @param origin - an origin Position in tile-space
  */
-ProjectileFlyBState::ProjectileFlyBState( // blaster launch, BattlescapeGame::launchAction() ... or not.
+ProjectileFlyBState::ProjectileFlyBState( // blaster launch, BattlescapeGame::launchAction()
 		BattlescapeGame* const parent,
-		BattleAction action)
+		BattleAction action,
+		Position origin)
 	:
 		BattleState(
 			parent,
 			action),
 		_battleSave(parent->getSave()),
-		_origin(action.actor->getPosition()),
+		_origin(origin),
 		_originVoxel(-1,-1,-1), // for BL waypoints
 		_targetVoxel(-1,-1,-1),
 		_unit(NULL),
@@ -871,7 +872,7 @@ void ProjectileFlyBState::think()
 				ProjectileFlyBState* const nextWp = new ProjectileFlyBState(
 																		_parent,
 																		_action,
-																		_origin); // -> tilePos
+																		_origin); // -> tilePos for BL.
 				nextWp->_originVoxel = _parent->getMap()->getProjectile()->getPosition();
 //				nextWp->setOriginVoxel(_parent->getMap()->getProjectile()->getPosition()); // !getPosition(-1) -> tada, fixed. // -> voxlPos
 
@@ -1140,14 +1141,14 @@ void ProjectileFlyBState::cancel()
 
 /**
  * Validates the throwing range.
- * @param action - pointer to BattleAction struct (BattlescapeGame.h)
- * @param origin - reference the origin in voxelspace
- * @param target - pointer to the targeted Tile
+ * @param action		- pointer to BattleAction struct (BattlescapeGame.h)
+ * @param originVoxel	- reference the origin in voxelspace
+ * @param target		- pointer to the targeted Tile
  * @return, true if the range is valid
  */
 bool ProjectileFlyBState::validThrowRange( // static.
 		const BattleAction* const action,
-		const Position& origin,
+		const Position& originVoxel,
 		const Tile* const target)
 {
 	//Log(LOG_INFO) << "ProjectileFlyBState::validThrowRange()";
@@ -1167,19 +1168,14 @@ bool ProjectileFlyBState::validThrowRange( // static.
 
 	const int
 		offset_z = 2, // kL_note: this is prob +1 (.. +2) to get things up off the lowest voxel of a targetTile.
-//	int delta_z = origin.z
-//					- (((action->target.z * 24)
-//						+ offset_z)
-//						- target->getTerrainLevel());
-		delta_z = origin.z // voxelspace
+		delta_z = originVoxel.z
 				- action->target.z * 24
 				- offset_z
 				+ target->getTerrainLevel();
 	const double maxDist = static_cast<double>(
 						   getMaxThrowDistance( // tilespace
 											weight,
-											static_cast<int>(Round(
-												static_cast<double>(action->actor->getBaseStats()->strength) * (action->actor->getAccuracyModifier() / 2. + 0.5))),
+											action->actor->getStrength(),
 											delta_z)
 										+ 8)
 									/ 16.;

@@ -2288,14 +2288,14 @@ void Map::drawTerrain(Surface* const surface) // private.
 								}
 							}
 						}
-						else // fired projectile ( a bullet-sprite, not a thrown item )
+						else // fired projectile (a bullet-sprite, not a thrown item)
 						{
 							if (   itX >= bulletLowX // draw bullet on the correct tile
 								&& itX <= bulletHighX
 								&& itY >= bulletLowY
 								&& itY <= bulletHighY)
 							{
-								int
+/*								int
 									bulletSprite_start,
 									bulletSprite_end,
 									direction;
@@ -2313,23 +2313,29 @@ void Map::drawTerrain(Surface* const surface) // private.
 									direction = 1;
 								}
 
+								Position posVoxel;
 								for (int
 										i = bulletSprite_start;
 										i != bulletSprite_end;
-										i += direction)
+										i += direction) */
+								Position posVoxel;
+								for (int
+										i = 0;
+										i != BULLET_SPRITES;
+										++i)
 								{
 									srfSprite = _projectileSet->getFrame(_projectile->getParticle(i));
 									if (srfSprite)
 									{
-										Position voxelPos = _projectile->getPosition(1 - i); // draw shadow on the floor
-										voxelPos.z = _battleSave->getTileEngine()->castedShade(voxelPos);
-										if (   voxelPos.x / 16 == itX
-											&& voxelPos.y / 16 == itY
-											&& voxelPos.z / 24 == itZ)
-//											&& _battleSave->getTileEngine()->isVoxelVisible(voxelPos))
+										posVoxel = _projectile->getPosition(1 - i); // draw shadow on the floor
+										posVoxel.z = _battleSave->getTileEngine()->castedShade(posVoxel);
+										if (   posVoxel.x / 16 == itX
+											&& posVoxel.y / 16 == itY
+											&& posVoxel.z / 24 == itZ)
+//											&& _battleSave->getTileEngine()->isVoxelVisible(posVoxel))
 										{
 											_camera->convertVoxelToScreen(
-																		voxelPos,
+																		posVoxel,
 																		&bullet);
 
 											bullet.x -= srfSprite->getWidth() / 2;
@@ -2341,14 +2347,14 @@ void Map::drawTerrain(Surface* const surface) // private.
 													16);
 										}
 
-										voxelPos = _projectile->getPosition(1 - i); // draw bullet itself
-										if (   voxelPos.x / 16 == itX
-											&& voxelPos.y / 16 == itY
-											&& voxelPos.z / 24 == itZ)
-//											&& _battleSave->getTileEngine()->isVoxelVisible(voxelPos))
+										posVoxel = _projectile->getPosition(1 - i); // draw bullet itself
+										if (   posVoxel.x / 16 == itX
+											&& posVoxel.y / 16 == itY
+											&& posVoxel.z / 24 == itZ)
+//											&& _battleSave->getTileEngine()->isVoxelVisible(posVoxel))
 										{
 											_camera->convertVoxelToScreen(
-																		voxelPos,
+																		posVoxel,
 																		&bullet);
 
 											bullet.x -= srfSprite->getWidth() / 2;

@@ -73,8 +73,7 @@ Projectile::Projectile(
 		_origin(origin),
 		_targetVoxel(targetVoxel),
 		_trjId(0),
-		_bulletSprite(-1),
-		_reversed(false)
+		_bulletSprite(-1)
 {
 	//Log(LOG_INFO) << "\n";
 	//Log(LOG_INFO) << "cTor origin = " << origin;
@@ -134,8 +133,10 @@ Projectile::Projectile(
 	if (_speed < 1)
 		_speed = 1;
 
-	if ((targetVoxel.x - origin.x) + (targetVoxel.y - origin.y) > -1)
-		_reversed = true;
+//	if ((targetVoxel.x - origin.x) + (targetVoxel.y - origin.y) > -1)
+//		_reversed = true;
+//	else
+//		_reversed = false;
 /*	NE	 0	reversed
 	ENE		reversed
 	E	 1	reversed
@@ -206,7 +207,7 @@ int Projectile::calculateTrajectory(double accuracy)
  */
 int Projectile::calculateTrajectory(
 		double accuracy,
-		Position originVoxel)
+		const Position& originVoxel)
 {
 	//Log(LOG_INFO) << "Projectile::calculateTrajectory()";
 	const Tile* const targetTile = _battleSave->getTile(_action.target);
@@ -221,58 +222,58 @@ int Projectile::calculateTrajectory(
 			|| Options::forceFire == false))
 	{
 		//Log(LOG_INFO) << ". autoshotCount[0] = " << _action.autoShotCount;
-		const VoxelType testVox = static_cast<VoxelType>(
+		const VoxelType voxelType = static_cast<VoxelType>(
 								  _battleSave->getTileEngine()->calculateLine(
 																		originVoxel,
 																		_targetVoxel,
 																		false,
 																		&_trajectory,
 																		_action.actor));
-		//Log(LOG_INFO) << ". testVox = " << (int)testVox;
+		//Log(LOG_INFO) << ". voxelType = " << (int)voxelType;
 
-		if (testVox != VOXEL_EMPTY
+		if (voxelType != VOXEL_EMPTY
 			&& _trajectory.empty() == false)
 		{
-			Position testPos = Position(
+			Position posTest = Position(
 									_trajectory.at(0).x / 16,
 									_trajectory.at(0).y / 16,
 									_trajectory.at(0).z / 24);
 
-			if (testVox == VOXEL_UNIT)
+			if (voxelType == VOXEL_UNIT)
 			{
-				const Tile* const endTile = _battleSave->getTile(testPos);
+				const Tile* const endTile = _battleSave->getTile(posTest);
 				if (endTile != NULL
 					&& endTile->getUnit() == NULL)
 				{
-					testPos = Position( // must be poking head up from tileBelow
-									testPos.x,
-									testPos.y,
-									testPos.z - 1);
+					posTest = Position( // must be poking head up from tileBelow
+									posTest.x,
+									posTest.y,
+									posTest.z - 1);
 				}
 			}
 
-			if (testPos != _action.target
+			if (posTest != _action.target
 				&& _action.result.empty() == true)
 			{
-				if (testVox == VOXEL_NORTHWALL)
+				if (voxelType == VOXEL_NORTHWALL)
 				{
-					if (testPos.y - 1 != _action.target.y)
+					if (posTest.y - 1 != _action.target.y)
 					{
 						_trajectory.clear();
 						return VOXEL_EMPTY;
 					}
 				}
-				else if (testVox == VOXEL_WESTWALL)
+				else if (voxelType == VOXEL_WESTWALL)
 				{
-					if (testPos.x - 1 != _action.target.x)
+					if (posTest.x - 1 != _action.target.x)
 					{
 						_trajectory.clear();
 						return VOXEL_EMPTY;
 					}
 				}
-				else if (testVox == VOXEL_UNIT)
+				else if (voxelType == VOXEL_UNIT)
 				{
-					const BattleUnit* const testUnit = _battleSave->getTile(testPos)->getUnit();
+					const BattleUnit* const testUnit = _battleSave->getTile(posTest)->getUnit();
 					if (testUnit != targetUnit
 						&& testUnit->getUnitVisible() == true)
 					{
@@ -978,9 +979,9 @@ Position Projectile::getFinalVector() const
  * Gets if this projectile is to be drawn left to right or right to left.
  * @return, true if this is to be drawn in reverse order
  */
-bool Projectile::isReversed() const
+/* bool Projectile::isReversed() const
 {
 	return _reversed;
-}
+} */
 
 }
