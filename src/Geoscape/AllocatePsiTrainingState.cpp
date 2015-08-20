@@ -39,11 +39,12 @@
 
 #include "../Resource/XcomResourcePack.h"
 
+//#include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleSoldier.h"
 
 #include "../Savegame/Base.h"
 #include "../Savegame/SavedGame.h"
-#include "../Savegame/Soldier.h"
+//#include "../Savegame/Soldier.h"
 
 
 namespace OpenXcom

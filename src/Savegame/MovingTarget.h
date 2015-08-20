@@ -57,14 +57,14 @@ protected:
 		virtual ~MovingTarget();
 
 		/// Loads the moving target from YAML.
-		void load(const YAML::Node& node);
+		virtual void load(const YAML::Node& node);
 		/// Saves the moving target to YAML.
 		virtual YAML::Node save() const;
 
 		/// Gets the moving target's destination.
 		Target* getDestination() const;
 		/// Sets the moving target's destination.
-		virtual void setDestination(Target* dest);
+		virtual void setDestination(Target* const dest);
 
 		/// Gets the moving target's speed.
 		int getSpeed() const;

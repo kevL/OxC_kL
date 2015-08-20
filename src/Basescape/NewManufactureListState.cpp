@@ -36,7 +36,9 @@
 
 #include "../Resource/ResourcePack.h"
 
+#include "../Ruleset/RuleInterface.h"
 #include "../Ruleset/RuleManufacture.h"
+#include "../Ruleset/Ruleset.h"
 
 #include "../Savegame/Base.h"
 #include "../Savegame/SavedGame.h"

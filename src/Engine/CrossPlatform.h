@@ -20,10 +20,10 @@
 #ifndef OPENXCOM_CROSSPLATFORM_H
 #define OPENXCOM_CROSSPLATFORM_H
 
-#include <SDL.h>
-#include <string>
-#include <utility>
-#include <vector>
+//#include <SDL.h>
+//#include <string>
+//#include <utility>
+//#include <vector>
 
 
 namespace OpenXcom

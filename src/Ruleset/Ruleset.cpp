@@ -55,7 +55,7 @@
 #include "RuleVideo.h"
 #include "SoldierNamePool.h"
 #include "SoundDefinition.h"
-#include "StatString.h"
+//#include "StatString.h"
 #include "UfoTrajectory.h"
 #include "RuleUnit.h"
 
@@ -395,7 +395,7 @@ Ruleset::~Ruleset()
 		for (std::vector<MapScript*>::const_iterator
 				j = (*i).second.begin();
 				j != (*i).second.end();
-				)
+				++j)
 		{
 			delete *j;
 			j = (*i).second.erase(j);
@@ -417,6 +417,22 @@ Ruleset::~Ruleset()
 	{
 		delete i->second;
 	}
+
+	for (std::map<std::string, SoundDefinition*>::const_iterator
+			i = _soundDefs.begin();
+			i != _soundDefs.end();
+			++i)
+	{
+		delete i->second;
+	}
+
+/*	for (std::vector<StatString*>::const_iterator
+			i = _statStrings.begin();
+			i != _statStrings.end();
+			++i)
+	{
+		delete (*i);
+	} */
 }
 
 /**
@@ -1048,7 +1064,7 @@ void Ruleset::loadFile(const std::string& file) // protected.
 		_commendations[type] = commendations.release();
 	}
 
-	for (YAML::const_iterator
+/*	for (YAML::const_iterator
 			i = doc["statStrings"].begin();
 			i != doc["statStrings"].end();
 			++i)
@@ -1056,7 +1072,7 @@ void Ruleset::loadFile(const std::string& file) // protected.
 		StatString* const statString = new StatString();
 		statString->load(*i);
 		_statStrings.push_back(statString);
-	}
+	} */
 
 	for (YAML::const_iterator
 			i = doc["interfaces"].begin();
@@ -2050,14 +2066,14 @@ std::map<std::string, ExtraStrings*> Ruleset::getExtraStrings() const
 	return _extraStrings;
 }
 
-/**
+/*
  * Gets the list of StatStrings.
  * @return, vector of pointers to StatStrings
- */
+ *
 std::vector<StatString*> Ruleset::getStatStrings() const
 {
 	return _statStrings;
-}
+} */
 
 /**
  * Compares rules based on their list orders.

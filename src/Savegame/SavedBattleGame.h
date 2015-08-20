@@ -20,11 +20,8 @@
 #ifndef OPENXCOM_SAVEDBATTLEGAME_H
 #define OPENXCOM_SAVEDBATTLEGAME_H
 
-//#include <algorithm>
-//#include <iostream>
 //#include <string>
 //#include <vector>
-//#include <SDL.h>
 //#include <yaml-cpp/yaml.h>
 
 #include "BattleUnit.h" // UnitFaction

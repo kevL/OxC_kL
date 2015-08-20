@@ -19,7 +19,7 @@
 
 #include "CraftSoldiersState.h"
 
-//#include <algorithm>
+//#include <climits>
 
 #include "SoldierInfoState.h"
 
@@ -41,6 +41,8 @@
 #include "../Interface/Window.h"
 
 #include "../Ruleset/RuleCraft.h"
+#include "../Ruleset/RuleInterface.h"
+#include "../Ruleset/Ruleset.h"
 
 #include "../Savegame/Base.h"
 #include "../Savegame/Craft.h"

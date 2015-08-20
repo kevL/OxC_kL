@@ -210,7 +210,7 @@ private:
 		{ return *_trajectory; }
 
 		/// Sets the UFO's destination.
-		void setDestination(Target* dest);
+		void setDestination(Target* const dest);
 
 		/// Sets the interceptor engaging this Ufo.
 		void setShootingAt(const size_t target);

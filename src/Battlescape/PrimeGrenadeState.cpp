@@ -32,6 +32,9 @@
 #include "../Interface/Frame.h"
 #include "../Interface/Text.h"
 
+#include "../Ruleset/RuleInterface.h"
+#include "../Ruleset/Ruleset.h"
+
 #include "../Savegame/BattleItem.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/SavedGame.h"

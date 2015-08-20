@@ -20,6 +20,7 @@
 #include "CraftEquipmentState.h"
 
 //#include <algorithm>
+//#include <climits>
 //#include <sstream>
 
 #include "../Battlescape/BattlescapeGenerator.h"
@@ -43,7 +44,9 @@
 
 #include "../Ruleset/RuleArmor.h"
 #include "../Ruleset/RuleCraft.h"
+#include "../Ruleset/RuleInterface.h"
 #include "../Ruleset/RuleItem.h"
+#include "../Ruleset/Ruleset.h"
 
 #include "../Savegame/Base.h"
 #include "../Savegame/Craft.h"

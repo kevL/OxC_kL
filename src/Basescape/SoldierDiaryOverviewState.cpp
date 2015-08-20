@@ -39,7 +39,7 @@
 
 #include "../Savegame/Base.h"
 #include "../Savegame/SavedGame.h"
-#include "../Savegame/Soldier.h"
+//#include "../Savegame/Soldier.h"
 #include "../Savegame/SoldierDead.h"
 #include "../Savegame/SoldierDiary.h"
 

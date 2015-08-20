@@ -38,8 +38,10 @@
 #include "../Resource/ResourcePack.h"
 
 #include "../Ruleset/RuleCraft.h"
+#include "../Ruleset/RuleInterface.h"
 #include "../Ruleset/RuleItem.h"
 #include "../Ruleset/RuleManufacture.h"
+#include "../Ruleset/Ruleset.h"
 
 #include "../Savegame/Base.h"
 #include "../Savegame/Production.h"
@@ -83,7 +85,7 @@ ManufactureInfoState::ManufactureInfoState(
 }
 
 /**
- * Cleans up the ManufactureInfo state.
+ * Frees up memory that's not automatically cleaned on exit.
  */
 ManufactureInfoState::~ManufactureInfoState()
 {

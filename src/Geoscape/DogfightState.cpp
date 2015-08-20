@@ -29,7 +29,6 @@
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
 //#include "../Engine/LocalizedText.h"
-//#include "../Engine/Options.h" // in PCH.
 //#include "../Engine/RNG.h"
 //#include "../Engine/Screen.h"
 #include "../Engine/Sound.h"
@@ -44,12 +43,13 @@
 #include "../Ruleset/RuleCountry.h"
 #include "../Ruleset/RuleCraft.h"
 #include "../Ruleset/RuleCraftWeapon.h"
+#include "../Ruleset/RuleInterface.h"
 #include "../Ruleset/RuleRegion.h"
+#include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleTerrain.h"
 #include "../Ruleset/RuleUfo.h"
 
 #include "../Savegame/AlienMission.h"
-#include "../Savegame/AlienStrategy.h"
 #include "../Savegame/Base.h"
 #include "../Savegame/Country.h"
 #include "../Savegame/Craft.h"

@@ -19,7 +19,7 @@
 #ifndef OPENXCOM_DELETEGAMESTATE_H
 #define OPENXCOM_DELETEGAMESTATE_H
 
-#include <string>
+//#include <string>
 
 #include "OptionsBaseState.h"
 
@@ -35,7 +35,7 @@ class Window;
 
 
 /**
- * window used to confirm save game deletion.
+ * Window used to confirm save game deletion.
  */
 class DeleteGameState
 	:
@@ -50,14 +50,14 @@ private:
 		* _btnYes;
 	Window* _window;
 
-	std::string _filename;
+	std::string _file;
 
 
 	public:
 		/// Creates the Confirm state.
 		DeleteGameState(
 				OptionsOrigin origin,
-				const std::string& save);
+				const std::string& file);
 		/// Cleans up the Confirm state.
 		~DeleteGameState();
 

@@ -35,7 +35,8 @@
 #include "../Interface/Cursor.h"
 #include "../Interface/Text.h"
 
-#include "../Savegame/SavedGame.h"
+#include "../Ruleset/RuleInterface.h"
+#include "../Ruleset/Ruleset.h"
 
 
 namespace OpenXcom
@@ -44,16 +45,16 @@ namespace OpenXcom
 /**
  * Initializes all the elements in the Save Game screen.
  * @param origin	- game section that originated this state
- * @param filename	- reference to name of the save file without extension
+ * @param file	- reference to name of the save file without extension
  * @param palette	- pointer to parent state palette
  */
 SaveGameState::SaveGameState(
 		OptionsOrigin origin,
-		const std::string& filename,
+		const std::string& file,
 		SDL_Color* palette)
 	:
 		_origin(origin),
-		_filename(filename),
+		_file(file),
 		_type(SAVE_DEFAULT),
 		_firstRun(0)
 {
@@ -78,20 +79,20 @@ SaveGameState::SaveGameState(
 	switch (type)
 	{
 		case SAVE_QUICK:
-			_filename = SavedGame::QUICKSAVE;
+			_file = SavedGame::QUICKSAVE;
 		break;
 
 		case SAVE_AUTO_GEOSCAPE:
-			_filename = SavedGame::AUTOSAVE_GEOSCAPE;
+			_file = SavedGame::AUTOSAVE_GEOSCAPE;
 		break;
 
 		case SAVE_AUTO_BATTLESCAPE:
-			_filename = SavedGame::AUTOSAVE_BATTLESCAPE;
+			_file = SavedGame::AUTOSAVE_BATTLESCAPE;
 		break;
 
 		case SAVE_IRONMAN:
 		case SAVE_IRONMAN_END:
-			_filename = CrossPlatform::sanitizeFilename(Language::wstrToFs(_game->getSavedGame()->getName())) + ".sav";
+			_file = CrossPlatform::sanitizeFilename(Language::wstrToFs(_game->getSavedGame()->getName())) + ".sav";
 	}
 
 	buildUi(palette);
@@ -159,17 +160,17 @@ void SaveGameState::think()
 			case SAVE_QUICK: // automatic save - Give it a default name.
 			case SAVE_AUTO_GEOSCAPE:
 			case SAVE_AUTO_BATTLESCAPE:
-				_game->getSavedGame()->setName(Language::fsToWstr(_filename));
+				_game->getSavedGame()->setName(Language::fsToWstr(_file));
 		}
 
 
 		try // Save the game
 		{
-			const std::string backup = _filename + ".bak";
+			const std::string backup = _file + ".bak";
 			_game->getSavedGame()->save(backup);
 
 			const std::string
-				fullPath = Options::getUserFolder() + _filename,
+				fullPath = Options::getUserFolder() + _file,
 				backPath = Options::getUserFolder() + backup;
 			if (CrossPlatform::moveFile(
 									backPath,

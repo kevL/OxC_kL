@@ -143,7 +143,7 @@ private:
 		std::string getAltitude() const;
 
 		/// Sets the craft's destination.
-		void setDestination(Target* dest);
+		void setDestination(Target* const dest);
 
 		/// Gets the craft's amount of weapons.
 		int getNumWeapons() const;

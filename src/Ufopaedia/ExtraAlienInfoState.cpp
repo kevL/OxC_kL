@@ -33,6 +33,7 @@
 
 #include "../Ruleset/ArticleDefinition.h"
 #include "../Ruleset/RuleArmor.h"
+#include "../Ruleset/Ruleset.h"
 
 
 namespace OpenXcom

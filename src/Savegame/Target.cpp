@@ -43,7 +43,7 @@ Target::Target()
 /**
  * Make sure no crafts are chasing this target.
  */
-Target::~Target()
+Target::~Target() // virtual.
 {
 	for (size_t
 			i = 0;
@@ -60,7 +60,7 @@ Target::~Target()
  * Loads the target from a YAML file.
  * @param node - YAML node
  */
-void Target::load(const YAML::Node& node)
+void Target::load(const YAML::Node& node) // virtual.
 {
 	_lon	= node["lon"]	.as<double>(_lon);
 	_lat	= node["lat"]	.as<double>(_lat);
@@ -71,7 +71,7 @@ void Target::load(const YAML::Node& node)
  * Saves the target to a YAML file.
  * @return, YAML node
  */
-YAML::Node Target::save() const
+YAML::Node Target::save() const // virtual.
 {
 	YAML::Node node;
 
@@ -87,7 +87,7 @@ YAML::Node Target::save() const
  * Saves the target's unique identifiers to a YAML file.
  * @return, YAML node
  */
-YAML::Node Target::saveId() const
+YAML::Node Target::saveId() const // virtual.
 {
 	YAML::Node node;
 
@@ -138,12 +138,12 @@ void Target::setLatitude(double lat)
 {
 	_lat = lat;
 
-	if (_lat < -(M_PI_2)) // keep it between -pi/2 and pi/2
+	if (_lat < -M_PI_2) // keep it between -pi/2 and pi/2
 	{
 		_lat = -M_PI - _lat;
 		setLongitude(_lon + M_PI);
 	}
-	else if (_lat > (M_PI_2))
+	else if (_lat > M_PI_2)
 	{
 		_lat = M_PI - _lat;
 		setLongitude(_lon - M_PI);
@@ -173,23 +173,5 @@ double Target::getDistance(const Target* const target) const
 			+ std::sin(_lat)
 				* std::sin(target->getLatitude()));
 }
-
-/**
- * Gets a mission site's depth.
- * @return, the depth of the site
- */
-/* int Target::getSiteDepth() const
-{
-	return _depth;
-} */
-
-/**
- * Sets a mission site's depth.
- * @param depth - the depth to set
- */
-/* void Target::setSiteDepth(int depth)
-{
-	_depth = depth;
-} */
 
 }

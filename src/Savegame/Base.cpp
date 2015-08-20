@@ -861,22 +861,25 @@ double Base::getUsedStores() const
 }
 
 /**
- * Checks if a base's stores are overfilled.
+ * Checks if this Base's stores are over their limit.
  * @note Supplying an offset will add/subtract to the used capacity before
  * performing the check. A positive offset simulates adding items to the stores
  * whereas a negative offset can be used to check whether sufficient items have
  * been removed to stop stores from overflowing.
  * @param offset - adjusts used capacity (default 0.)
- * @return, true if this Base's stores are over their limit
+ * @return, true if overfull
  */
 bool Base::storesOverfull(double offset) const
 {
 	const double
 		total = static_cast<double>(getAvailableStores()),
-		used = getUsedStores();
+		used = getUsedStores() + offset;
 
-	return (used + offset > total + 0.05);
+	return (used > total + 0.05);
 }
+/*	int total = getAvailableStores() * 100;
+	double used = (getUsedStores() + offset) * 100;
+	return (int)used > total; */
 
 /**
  * Returns the total amount of stores available in this Base.

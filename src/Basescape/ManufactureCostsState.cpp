@@ -29,8 +29,10 @@
 #include "../Resource/ResourcePack.h"
 
 #include "../Ruleset/RuleCraft.h"
+#include "../Ruleset/RuleInterface.h"
 #include "../Ruleset/RuleItem.h"
 #include "../Ruleset/RuleManufacture.h"
+#include "../Ruleset/Ruleset.h"
 
 #include "../Savegame/SavedGame.h"
 

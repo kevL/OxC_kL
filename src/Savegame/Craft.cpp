@@ -535,7 +535,7 @@ std::string Craft::getAltitude() const
  * Sets the destination this Craft is heading to.
  * @param dest - pointer to Target destination
  */
-void Craft::setDestination(Target* dest)
+void Craft::setDestination(Target* const dest)
 {
 	if (_status != "STR_OUT")
 		_takeOff = 75;

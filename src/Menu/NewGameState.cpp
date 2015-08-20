@@ -33,6 +33,10 @@
 
 #include "../Resource/XcomResourcePack.h"
 
+#include "../Ruleset/Ruleset.h"
+
+#include "../Savegame/SavedGame.h"
+
 
 namespace OpenXcom
 {

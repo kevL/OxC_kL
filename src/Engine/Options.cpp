@@ -498,9 +498,9 @@ bool init(
 }
 
 /**
- * Sets up the game's Data folder from which the data files are loaded and
- * the User folder and Config folder where saves and settings are stored.
- * As well as the Picture folder for screenshots.
+ * Sets up the game's Data folder from which the data files are loaded and the
+ * User folder and Config folder where saves and settings are stored.
+ * @note As well as the Picture folder for screenshots.
  */
 void setFolders()
 {
@@ -543,7 +543,7 @@ void setFolders()
 		}
 	}
 
-	if (_picFolder.empty() == true)
+	if (_picFolder.empty() == true) // set up Picture folder
 	{
 		_picFolder = _userFolder + "pic\\";
 		if (CrossPlatform::folderExists(_picFolder) == false)
@@ -555,8 +555,8 @@ void setFolders()
 }
 
 /**
- * Updates the game's options with those in the configuration file,
- * if it exists yet, and any supplied on the command line.
+ * Updates the game's options with those in the configuration file if it exists
+ * yet plus any options supplied on the command line.
  */
 void updateOptions()
 {
@@ -661,8 +661,8 @@ void save(const std::string& file)
 }
 
 /**
- * Returns the game's current Data folder where resources
- * and X-Com files are loaded from.
+ * Returns the game's current Data folder where resources and X-Com files are
+ * loaded from.
  * @return, full path to Data folder
  */
 std::string getDataFolder()
@@ -671,8 +671,8 @@ std::string getDataFolder()
 }
 
 /**
- * Changes the game's current Data folder where resources
- * and X-Com files are loaded from.
+ * Changes the game's current Data folder where resources and X-Com files are
+ * loaded from.
  * @param folder - reference full path to Data folder
  */
 void setDataFolder(const std::string& folder)
@@ -709,7 +709,7 @@ std::string getPictureFolder()
 
 /**
  * Returns the game's Config folder where settings are stored.
- * Normally the same as the User folder.
+ * @note Normally the same as the User folder.
  * @return, full path to Config folder
  */
 std::string getConfigFolder()

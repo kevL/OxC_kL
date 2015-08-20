@@ -20,8 +20,6 @@
 #ifndef OPENXCOM_NEWGAMESTATE_H
 #define OPENXCOM_NEWGAMESTATE_H
 
-#include "../Savegame/SavedGame.h"
-
 #include "../Engine/State.h"
 
 

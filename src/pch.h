@@ -3,76 +3,23 @@
 
 // kL: heads up!
 #pragma message("kL: Compiling PCH.H")
+#pragma message("Or ... how to play ping-pong.")
+#pragma message("...")
+#pragma message("jerking off ... please wait")
+#pragma message("...")
 
+// note: Something before <cmath>/<math.h> has defined M_PI along with
+// _MATH_DEFINES_DEFINED, so M_PI_2 etc. does not get defined. Or maybe somebody
+// merely jacked off all over their keyboard without using a keyboard-guard
+// somewhere. Also,
+// NOTE that the math-constants are defined *outside* the header-guard in
+// 'math.h' ....
+#define _USE_MATH_DEFINES
 
-// To check memory leaks in VS:
+// To check memory leaks in VS (more below):
 //#define _CRTDBG_MAP_ALLOC
 //#include <stdlib.h> // done below_
 //#include <crtdbg.h>
-
-#include <algorithm>
-#include <bitset>
-#include <cassert>
-#include <cctype>
-#include <climits>
-#define _USE_MATH_DEFINES
-#include <cmath>
-#include <cstdarg>
-#include <cstring>
-#include <cstdio>
-#include <cstdlib>
-#include <ctime>
-#include <deque>
-#include <errno.h>
-#include <exception>
-#include <fstream>
-#include <functional>
-#include <iomanip>
-#include <iostream>
-#include <limits>
-#include <list>
-#include <locale>
-#include <map>
-#include <queue>
-#include <set>
-#include <sstream>
-#include <stack>
-#include <string>
-#include <stdint.h>
-#ifndef __APPLE__
-	#include <stdlib.h>
-#endif
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <typeinfo>
-#include <utility>
-#include <vector>
-
-// kL_reinstate begin: see Engine/CrossPlatform.cpp & Engine/Language.cpp
-/*
-#ifdef _WIN32
-	#ifndef NOMINMAX
-		#define NOMINMAX
-	#endif
-
-	#define WIN32_LEAN_AND_MEAN
-	#include <windows.h>
-//	#include <shlobj.h>		// kL_reinstate: No, causes conflict OR
-//	#include <shlwapi.h>	// kL_reinstate: this causes conflict ...
-	#include <direct.h>
-#else */ // kL_reinstate end.
-#ifndef _WIN32
-	#include <unistd.h>
-	#include <sys/param.h>
-	#include <pwd.h>
-#endif
-
-#ifdef __MORPHOS__
-	#undef Insert
-#endif
-
-
-#include <yaml-cpp/yaml.h>
 
 
 #ifndef __NO_OPENGL
@@ -86,6 +33,7 @@
 	#include <SDL_opengl.h>
 #endif
 
+
 #include <SDL.h>
 #include <SDL_endian.h>
 #include <SDL_gfxPrimitives.h>
@@ -94,16 +42,129 @@
 #include <SDL_mixer.h>
 //#include <SDL_opengl.h> // done above^
 #include <SDL_syswm.h>
+//#include <SDL_thread.h>
 #include <SDL_types.h>
+//#include <SDL_video.h>
+
+
+#include <yaml-cpp/yaml.h>
+
+
+#include <algorithm>
+//#include <assert.h>
+#include <bitset>
+#include <cassert>
+#include <cctype>
+#include <climits>
+#include <cmath>
+#include <cstdarg>
+#include <cstddef>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <ctime>
+#include <deque>
+#include <errno.h>
+#include <exception>
+#include <fstream>
+#include <functional>
+#include <iomanip>
+#include <iostream>
+//#include <limits.h>
+#include <limits>
+#include <list>
+#include <locale>
+#include <map>
+//#include <math.h>
+//#include <memory.h>
+#include <queue>
+#include <set>
+#include <sstream>
+#include <stack>
+//#include <stdarg.h>
+//#include <stdint.h>
+//#include <stdio.h>
+#include <stdlib.h>
+//#include <string.h>
+#include <string>
+#include <sys/stat.h>
+#include <sys/types.h>
+//#include <time.h>
+#include <typeinfo>
+#include <utility>
+#include <vector>
+//#include <wchar.h>
+
+
+// kL_reinstate begin: see Engine/CrossPlatform.cpp & Engine/Language.cpp
+/*
+#ifdef _WIN32
+	#ifndef NOMINMAX
+		#define NOMINMAX
+	#endif
+
+	#define WIN32_LEAN_AND_MEAN
+	#include <windows.h>
+//	#include <shlobj.h>		// kL_reinstate: No, causes conflict OR
+//	#include <shlwapi.h>	// kL_reinstate: this causes conflict ...
+	#include <direct.h>
+	#include <malloc.h>
+#else */ // kL_reinstate end.
+#ifndef _WIN32
+	#include <alloca.h>
+//	#if HAVE_CONFIG_H
+//		#include <config.h>
+//	#endif
+	#include <dirent.h>
+	#include <pwd.h>
+	#include <sys/param.h>
+	#include <unistd.h>
+#endif
+
+
+#ifdef __MORPHOS__
+	#include <ppcinline/exec.h>
+#endif
+
+
+#if (_MSC_VER >= 1400) || (defined(__MINGW32__) && defined(__SSE2__))
+	#ifndef __SSE2__
+		#define __SSE2__ true
+	#endif
+	// probably Visual Studio (or Intel C++ which should also work)
+	#include <intrin.h>
+#endif
+
+#ifdef __GNUC__
+	#if (__i386__ || __x86_64__)
+		#include <cpuid.h>
+	#endif
+#endif
+
+#ifdef __SSE2__
+	// for SSE2 intrinsics; see http://msdn.microsoft.com/en-us/library/has3d153%28v=vs.71%29.aspx
+	#include <emmintrin.h>
+#endif
+
+
+// To check memory leaks in VS (more above)
+//#ifndef DBG_NEW
+//	#define DBG_NEW new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
+//	#define new DBG_NEW
+//#endif
+
 
 #include "./dirent.h"
-#include "./fmath.h"
 #include "./lodepng.h"
+
+#include "./fmath.h"
 #include "./version.h"
 
-#include "./Engine/AdlibMusic.h"
+
 #include "./Engine/Adlib/adlplayer.h"
 #include "./Engine/Adlib/fmopl.h"
+
+#include "./Engine/AdlibMusic.h"
 #include "./Engine/CatFile.h"
 #include "./Engine/CrossPlatform.h"
 #include "./Engine/Exception.h"
@@ -122,6 +183,7 @@
 #include "./Engine/Options.h"
 #include "./Engine/Palette.h"
 #include "./Engine/RNG.h"
+
 #include "./Engine/Scalers/common.h"
 #include "./Engine/Scalers/config.h"
 #include "./Engine/Scalers/hqx.h"
@@ -129,6 +191,7 @@
 #include "./Engine/Scalers/scale3x.h"
 #include "./Engine/Scalers/scalebit.h"
 #include "./Engine/Scalers/xbrz.h"
+
 #include "./Engine/Screen.h"
 #include "./Engine/ShaderDraw.h"
 #include "./Engine/ShaderDrawHelper.h"
@@ -136,14 +199,6 @@
 #include "./Engine/ShaderRepeat.h"
 #include "./Engine/Timer.h"
 #include "./Engine/Zoom.h"
-
-// To check memory leaks in VS
-////#ifdef _DEBUG
-//	#ifndef DBG_NEW
-//		#define DBG_NEW new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
-//		#define new DBG_NEW
-//	#endif
-////#endif
 
 /*
 #include "./Engine/Action.h"
@@ -398,8 +453,8 @@
 #include "./Savegame/Target.h"
 #include "./Savegame/SerializationHelper.h"
 #include "./Savegame/Soldier.h"
-#include "./Savegame/SoldierDeath.h" // kL
-#include "./Savegame/SoldierDead.h" // kL
+#include "./Savegame/SoldierDeath.h"
+#include "./Savegame/SoldierDead.h"
 #include "./Savegame/AlienStrategy.h"
 #include "./Savegame/EquipmentLayoutItem.h"
 */

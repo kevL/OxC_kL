@@ -41,7 +41,7 @@
 #include "../Ruleset/RuleCommendations.h"
 
 #include "../Savegame/Base.h"
-#include "../Savegame/Soldier.h"
+//#include "../Savegame/Soldier.h"
 #include "../Savegame/SoldierDead.h"
 #include "../Savegame/SoldierDiary.h"
 

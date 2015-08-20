@@ -20,8 +20,6 @@
 #ifndef OPENXCOM_CRAFTWEAPON_H
 #define OPENXCOM_CRAFTWEAPON_H
 
-#include <string>
-
 #include <yaml-cpp/yaml.h>
 
 

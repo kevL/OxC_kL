@@ -46,6 +46,7 @@ class Globe;
 class ImageButton;
 class InteractiveSurface;
 class MissionSite;
+class RuleMissionScript;
 class Ruleset;
 class SavedGame;
 class Sound;

@@ -22,7 +22,6 @@
 
 //#include <string>
 //#include <map>
-//#include <SDL.h>
 //#include <yaml-cpp/yaml.h>
 
 
@@ -34,7 +33,7 @@ struct Element
 	/// defines inversion behaviour
 	bool TFTDMode;
 
-	/// basic rect info, and 3 colors.
+	/// basic rect info and 3 colors.
 	int
 		x,y,
 		w,h;

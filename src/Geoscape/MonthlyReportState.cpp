@@ -41,6 +41,8 @@
 #include "../Resource/XcomResourcePack.h"
 
 #include "../Ruleset/RuleCountry.h"
+#include "../Ruleset/RuleInterface.h"
+#include "../Ruleset/Ruleset.h"
 
 #include "../Savegame/Base.h"
 #include "../Savegame/Country.h"

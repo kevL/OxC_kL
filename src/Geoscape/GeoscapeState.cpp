@@ -19,11 +19,9 @@
 
 #include "GeoscapeState.h"
 
-//#include <assert.h>
 //#include <algorithm>
 //#define _USE_MATH_DEFINES
 //#include <cmath>
-//#include <ctime>
 //#include <functional>
 //#include <iomanip>
 //#include <sstream>
@@ -66,16 +64,13 @@
 //#include "../Engine/Exception.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-//#include "../Engine/Options.h" // in PCH.
-//#include "../Engine/Palette.h"
+//#include "../Engine/Options.h"
 //#include "../Engine/RNG.h"
 //#include "../Engine/Screen.h"
 #include "../Engine/Sound.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Engine/Timer.h"
 
-#include "../Interface/Cursor.h"
-#include "../Interface/FpsCounter.h"
 #include "../Interface/ImageButton.h"
 //#include "../Interface/NumberText.h"
 #include "../Interface/Text.h"
@@ -96,6 +91,7 @@
 #include "../Ruleset/RuleCountry.h"
 #include "../Ruleset/RuleCraft.h"
 #include "../Ruleset/RuleGlobe.h"
+#include "../Ruleset/RuleInterface.h"
 #include "../Ruleset/RuleManufacture.h"
 #include "../Ruleset/RuleMissionScript.h"
 #include "../Ruleset/RuleRegion.h"
@@ -119,7 +115,7 @@
 #include "../Savegame/ResearchProject.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/SavedGame.h"
-#include "../Savegame/Soldier.h"
+//#include "../Savegame/Soldier.h"
 #include "../Savegame/SoldierDead.h"
 #include "../Savegame/SoldierDeath.h"
 #include "../Savegame/SoldierDiary.h"

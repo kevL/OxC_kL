@@ -55,7 +55,7 @@ RuleMissionScript::~RuleMissionScript()
 	for (std::vector<std::pair<size_t, WeightedOptions*> >::const_iterator
 			i = _missionWeights.begin();
 			i != _missionWeights.end();
-			)
+			++i)
 	{
 		delete i->second;
 		i = _missionWeights.erase(i);
@@ -64,7 +64,7 @@ RuleMissionScript::~RuleMissionScript()
 	for (std::vector<std::pair<size_t, WeightedOptions*> >::const_iterator
 			i = _raceWeights.begin();
 			i != _raceWeights.end();
-			)
+			++i)
 	{
 		delete i->second;
 		i = _raceWeights.erase(i);
@@ -73,7 +73,7 @@ RuleMissionScript::~RuleMissionScript()
 	for (std::vector<std::pair<size_t, WeightedOptions*> >::const_iterator
 			i = _regionWeights.begin();
 			i != _regionWeights.end();
-			)
+			++i)
 	{
 		delete i->second;
 		i = _regionWeights.erase(i);

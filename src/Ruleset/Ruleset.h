@@ -73,7 +73,7 @@ class SavedGame;
 class Soldier;
 class SoldierNamePool;
 class SoundDefinition;
-class StatString;
+//class StatString;
 class UfoTrajectory;
 
 
@@ -148,7 +148,7 @@ protected:
 
 	std::vector<OperationPool*> _operationTitles;
 	std::vector<SoldierNamePool*> _names;
-	std::vector<StatString*> _statStrings;
+//	std::vector<StatString*> _statStrings;
 
 	std::map<std::string, AlienDeployment*>		_alienDeployments;
 	std::map<std::string, AlienRace*>			_alienRaces;
@@ -354,7 +354,7 @@ protected:
 		std::map<std::string, ExtraStrings*> getExtraStrings() const;
 
 		/// Gets the list of StatStrings.
-		std::vector<StatString*> getStatStrings() const;
+//		std::vector<StatString*> getStatStrings() const;
 
 		/// Sorts all the lists according to their weight.
 		void sortLists();

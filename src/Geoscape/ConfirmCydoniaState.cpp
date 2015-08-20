@@ -33,6 +33,8 @@
 
 #include "../Resource/ResourcePack.h"
 
+#include "../Ruleset/Ruleset.h"
+
 #include "../Ruleset/AlienDeployment.h"
 
 #include "../Savegame/SavedBattleGame.h"

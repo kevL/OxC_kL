@@ -43,15 +43,17 @@
 
 #include "../Ruleset/RuleArmor.h"
 #include "../Ruleset/RuleInventory.h"
+#include "../Ruleset/RuleInterface.h"
 #include "../Ruleset/RuleItem.h"
+#include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleSoldier.h"
 
 #include "../Savegame/BattleItem.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/EquipmentLayoutItem.h"
 #include "../Savegame/SavedBattleGame.h"
-#include "../Savegame/SavedGame.h"
-#include "../Savegame/Soldier.h"
+//#include "../Savegame/SavedGame.h"
+//#include "../Savegame/Soldier.h"
 #include "../Savegame/Tile.h"
 
 

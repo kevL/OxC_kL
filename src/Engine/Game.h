@@ -39,10 +39,11 @@ class State;
 
 
 /**
- * The core of the game engine, manages the game's entire contents and structure.
- * Takes care of encapsulating all the core SDL commands, provides access to all
- * the game's resources and contains a stack state machine to handle all the
- * initializations, events and blits of each state, as well as transitions.
+ * The core of the game engine.
+ * @note Manages the game's entire contents and structure.
+ * @note Takes care of encapsulating all the core SDL commands, provides access
+ * to all the game's resources and contains a stack state machine to handle all
+ * the initializations, events and blits of each state, as well as transitions.
  */
 class Game
 {
@@ -55,8 +56,8 @@ private:
 		_inputActive,
 		_quit;
 	int
-		_debugCycle, // for debugging country areas.
-		_debugCycle_b,
+		_debugCycle,	// for debugging country areas.
+		_debugCycle_b,	// for debugging country areas.
 		_timeUntilNextFrame;
 	unsigned int _timeOfLastFrame;
 

@@ -20,7 +20,7 @@
 #ifndef OPENXCOM_TILE_H
 #define OPENXCOM_TILE_H
 
-//#include <string>
+//#include <list>
 //#include <vector>
 //#include <SDL_types.h>
 

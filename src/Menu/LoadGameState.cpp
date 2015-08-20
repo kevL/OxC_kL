@@ -37,6 +37,9 @@
 #include "../Interface/Cursor.h"
 #include "../Interface/Text.h"
 
+#include "../Ruleset/RuleInterface.h"
+#include "../Ruleset/Ruleset.h"
+
 #include "../Savegame/SavedBattleGame.h"
 
 

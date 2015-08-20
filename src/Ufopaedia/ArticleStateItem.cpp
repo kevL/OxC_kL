@@ -33,7 +33,7 @@
 
 #include "../Ruleset/ArticleDefinition.h"
 #include "../Ruleset/RuleItem.h"
-//#include "../Ruleset/Ruleset.h"
+#include "../Ruleset/Ruleset.h"
 
 //#include "../Interface/Text.h"
 #include "../Interface/TextButton.h"

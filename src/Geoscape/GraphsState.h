@@ -20,8 +20,6 @@
 #ifndef OPENXCOM_GRAPHSSTATE_H
 #define OPENXCOM_GRAPHSSTATE_H
 
-//#include <string>
-
 #include "../Engine/State.h"
 
 

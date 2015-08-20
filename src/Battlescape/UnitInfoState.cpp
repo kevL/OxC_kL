@@ -39,6 +39,8 @@
 #include "../Resource/ResourcePack.h"
 
 #include "../Ruleset/RuleArmor.h"
+#include "../Ruleset/RuleInterface.h"
+#include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleSoldier.h"
 #include "../Ruleset/RuleUnit.h"
 
@@ -71,8 +73,7 @@ UnitInfoState::UnitInfoState(
 		_mindProbe(mindProbe),
 		_preBattle(preBattle)
 {
-/*kL
-	if (Options::maximizeInfoScreens)
+/*	if (Options::maximizeInfoScreens)
 	{
 		Options::baseXResolution = Screen::ORIGINAL_WIDTH;
 		Options::baseYResolution = Screen::ORIGINAL_HEIGHT;

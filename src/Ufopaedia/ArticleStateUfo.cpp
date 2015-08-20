@@ -33,6 +33,7 @@
 #include "../Resource/ResourcePack.h"
 
 #include "../Ruleset/ArticleDefinition.h"
+//#include "../Ruleset/RuleInterface.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleUfo.h"
 

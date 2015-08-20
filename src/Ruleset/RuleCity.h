@@ -21,7 +21,6 @@
 #define OPENXCOM_RULECITY_H
 
 //#include <string>
-//#include <yaml-cpp/yaml.h>
 
 #include "../Savegame/Target.h"
 

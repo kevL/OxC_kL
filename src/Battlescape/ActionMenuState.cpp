@@ -37,6 +37,7 @@
 #include "../Resource/ResourcePack.h"
 
 #include "../Ruleset/RuleArmor.h"
+#include "../Ruleset/Ruleset.h"
 
 #include "../Savegame/BattleItem.h"
 //#include "../Savegame/BattleUnit.h"

@@ -19,8 +19,9 @@
 
 #include "AlienContainmentState.h"
 
-//#include <sstream>
 //#include <algorithm>
+//#include <climits>
+//#include <sstream>
 
 #include "SellState.h"
 
@@ -38,8 +39,10 @@
 #include "../Resource/ResourcePack.h"
 
 #include "../Ruleset/RuleArmor.h"
+//#include "../Ruleset/RuleInterface.h"
 #include "../Ruleset/RuleItem.h"
 #include "../Ruleset/RuleResearch.h"
+#include "../Ruleset/Ruleset.h"
 
 #include "../Savegame/Base.h"
 #include "../Savegame/ItemContainer.h"

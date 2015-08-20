@@ -20,7 +20,6 @@
 #ifndef OPENXCOM_MAP_H
 #define OPENXCOM_MAP_H
 
-//#include <set>
 //#include <vector>
 
 #include "Position.h"

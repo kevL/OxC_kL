@@ -46,7 +46,7 @@ class SaveGameState
 
 private:
 	int _firstRun;
-	std::string _filename;
+	std::string _file;
 
 	OptionsOrigin _origin;
 	SaveType _type;
@@ -58,7 +58,7 @@ private:
 		/// Creates the Save Game state.
 		SaveGameState(
 				OptionsOrigin origin,
-				const std::string& filename,
+				const std::string& file,
 				SDL_Color* palette);
 		/// Creates the Save Game state.
 		SaveGameState(

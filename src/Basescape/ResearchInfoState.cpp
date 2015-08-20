@@ -35,6 +35,7 @@
 #include "../Resource/ResourcePack.h"
 
 #include "../Ruleset/RuleResearch.h"
+#include "../Ruleset/Ruleset.h"
 
 #include "../Savegame/Base.h"
 #include "../Savegame/ItemContainer.h"
@@ -79,7 +80,7 @@ ResearchInfoState::ResearchInfoState(
 }
 
 /**
- * Cleans up the ResearchInfo state.
+ * Frees up memory that's not automatically cleaned on exit.
  */
 ResearchInfoState::~ResearchInfoState()
 {

@@ -28,7 +28,7 @@
 namespace OpenXcom
 {
 
-//class Base;
+class Base;
 class GeoscapeState;
 class Text;
 class TextButton;

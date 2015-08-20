@@ -781,7 +781,7 @@ const std::string& Ufo::getUfoMissionType() const
  * Handle destination changes, making sure to delete old waypoint destinations.
  * @param dest - pointer to a new destination
  */
-void Ufo::setDestination(Target* dest)
+void Ufo::setDestination(Target* const dest)
 {
 	const Waypoint* const old = dynamic_cast<Waypoint*>(_dest);
 	MovingTarget::setDestination(dest);

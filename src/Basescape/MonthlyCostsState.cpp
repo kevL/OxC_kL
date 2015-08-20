@@ -33,6 +33,7 @@
 #include "../Resource/ResourcePack.h"
 
 #include "../Ruleset/RuleCraft.h"
+#include "../Ruleset/Ruleset.h"
 
 #include "../Savegame/Base.h"
 #include "../Savegame/SavedGame.h"

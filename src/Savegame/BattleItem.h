@@ -22,8 +22,6 @@
 
 //#include <yaml-cpp/yaml.h>
 
-#include "../Battlescape/Position.h"
-
 
 namespace OpenXcom
 {

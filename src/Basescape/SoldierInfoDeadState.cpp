@@ -35,8 +35,9 @@
 
 #include "../Resource/ResourcePack.h"
 
-#include "../Ruleset/Ruleset.h"
-#include "../Ruleset/RuleSoldier.h"
+//#include "../Ruleset/RuleInterface.h"
+//#include "../Ruleset/Ruleset.h"
+//#include "../Ruleset/RuleSoldier.h"
 
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/SoldierDead.h"

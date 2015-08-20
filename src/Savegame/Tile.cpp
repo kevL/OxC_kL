@@ -336,27 +336,35 @@ int Tile::getTUCostTile(
 		MapDataType part,
 		MovementType moveType) const
 {
-	const size_t partT = static_cast<size_t>(part);
-
-	if (_objects[partT] != NULL)
+	if (_objects[part] != NULL
+		&& !(_objects[part]->isUfoDoor() == true
+			&& _curFrame[part] > 1)
+		&& !(part == O_OBJECT
+			&& _objects[part]->getBigWall() > BIGWALL_NWSE)) // ie. side-walls
 	{
-		if (_objects[partT]->isUfoDoor() == true
-			&& _curFrame[partT] > 1)
+		return _objects[part]->getTUCostData(moveType);
+	}
+
+	return 0;
+}
+/*	if (_objects[part] != NULL)
+	{
+		if (_objects[part]->isUfoDoor() == true
+			&& _curFrame[part] > 1)
 		{
 			return 0;
 		}
 
 		if (part == O_OBJECT
-			&& _objects[partT]->getBigWall() > BIGWALL_NWSE)
+			&& _objects[part]->getBigWall() > BIGWALL_NWSE) // ie. side-walls
 		{
 			return 0;
 		}
 
-		return _objects[partT]->getTUCostData(moveType);
+		return _objects[part]->getTUCostData(moveType);
 	}
 
-	return 0;
-}
+	return 0; */
 
 /**
  * Gets whether this tile has a floor or not.

@@ -39,6 +39,7 @@
 #include "../Ruleset/RuleCity.h"
 #include "../Ruleset/RuleGlobe.h"
 #include "../Ruleset/RuleRegion.h"
+#include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleTerrain.h"
 #include "../Ruleset/RuleTexture.h"
 #include "../Ruleset/RuleUfo.h"

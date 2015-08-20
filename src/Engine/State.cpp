@@ -19,6 +19,8 @@
 
 #include "State.h"
 
+//#include <climits>
+
 #include "Game.h"
 #include "InteractiveSurface.h"
 #include "Language.h"
@@ -39,6 +41,9 @@
 #include "../Interface/Window.h"
 
 #include "../Resource/ResourcePack.h"
+
+#include "../Ruleset/RuleInterface.h"
+#include "../Ruleset/Ruleset.h"
 
 
 namespace OpenXcom

@@ -76,8 +76,10 @@
 #include "../Ruleset/AlienDeployment.h"
 #include "../Ruleset/RuleArmor.h"
 #include "../Ruleset/RuleCountry.h"
+#include "../Ruleset/RuleInterface.h"
 #include "../Ruleset/RuleItem.h"
 #include "../Ruleset/RuleRegion.h"
+#include "../Ruleset/Ruleset.h"
 
 #include "../Savegame/AlienBase.h"
 #include "../Savegame/Base.h"
@@ -2380,13 +2382,16 @@ void BattlescapeState::btnLaunchClick(Action* action)
 }
 
 /**
- * Uses psionics.
+ * Player uses aLien psionics.
  * @param action - pointer to an Action
  */
 void BattlescapeState::btnPsiClick(Action* action)
 {
-	_battleGame->psiButtonAction();
-	action->getDetails()->type = SDL_NOEVENT; // consume the event
+	if (_battleGame->getCurrentAction()->waypoints.empty() == true)
+	{
+		_battleGame->psiButtonAction();
+		action->getDetails()->type = SDL_NOEVENT; // consume the event
+	}
 }
 
 /**

@@ -32,28 +32,32 @@
 
 #include "../Resource/ResourcePack.h"
 
+#include "../Ruleset/RuleInterface.h"
+#include "../Ruleset/Ruleset.h"
+
 
 namespace OpenXcom
 {
 
 /**
  * Initializes all the elements in the Confirmation screen.
- * @param origin Game section that originated this state.
- * @param save Name of the save file to delete.
+ * @param origin	- game section that originated this state
+ * @param file		- name of the save file to delete
  */
 DeleteGameState::DeleteGameState(
 		OptionsOrigin origin,
-		const std::string& save)
+		const std::string& file)
 	:
 		_origin(origin),
-		_filename(Options::getUserFolder() + save)
+		_file(Options::getUserFolder() + file)
 {
 	_screen = false;
 
 	_window		= new Window(this, 256, 100, 32, 50, POPUP_BOTH);
+
 	_txtMessage	= new Text(246, 32, 37, 70);
 
-	_btnNo		= new TextButton(60, 18, 60, 122);
+	_btnNo		= new TextButton(60, 18,  60, 122);
 	_btnYes		= new TextButton(60, 18, 200, 122);
 
 	setInterface(
@@ -73,15 +77,15 @@ DeleteGameState::DeleteGameState(
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
 	_btnYes->setText(tr("STR_YES"));
-	_btnYes->onMouseClick((ActionHandler)&DeleteGameState::btnYesClick);
+	_btnYes->onMouseClick((ActionHandler)& DeleteGameState::btnYesClick);
 	_btnYes->onKeyboardPress(
-					(ActionHandler)&DeleteGameState::btnYesClick,
+					(ActionHandler)& DeleteGameState::btnYesClick,
 					Options::keyOk);
 
 	_btnNo->setText(tr("STR_NO"));
-	_btnNo->onMouseClick((ActionHandler)&DeleteGameState::btnNoClick);
+	_btnNo->onMouseClick((ActionHandler)& DeleteGameState::btnNoClick);
 	_btnNo->onKeyboardPress(
-					(ActionHandler)&DeleteGameState::btnNoClick,
+					(ActionHandler)& DeleteGameState::btnNoClick,
 					Options::keyCancel);
 
 	_txtMessage->setAlign(ALIGN_CENTER);
@@ -114,7 +118,7 @@ void DeleteGameState::btnYesClick(Action*)
 {
 	_game->popState();
 
-	if (CrossPlatform::deleteFile(_filename) == false)
+	if (CrossPlatform::deleteFile(_file) == false)
 	{
 		std::wstring error = tr("STR_DELETE_UNSUCCESSFUL");
 

@@ -34,7 +34,7 @@
 
 #include "../Ruleset/RuleManufacture.h"
 
-#include "../Savegame/Base.h" // kL
+#include "../Savegame/Base.h"
 
 
 namespace OpenXcom
@@ -88,7 +88,7 @@ NewPossibleManufactureState::NewPossibleManufactureState(
 	_btnManufacture->onKeyboardPress(
 					(ActionHandler)& NewPossibleManufactureState::btnManufactureClick,
 					Options::keyOk);
-	_btnManufacture->setVisible(base->getAvailableWorkshops() > 0); // kL
+	_btnManufacture->setVisible(base->getAvailableWorkshops() > 0);
 
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);

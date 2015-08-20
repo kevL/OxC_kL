@@ -44,6 +44,9 @@
 
 #include "../Resource/XcomResourcePack.h"
 
+#include "../Ruleset/RuleInterface.h"
+#include "../Ruleset/Ruleset.h"
+
 
 namespace OpenXcom
 {

@@ -35,6 +35,8 @@
 
 #include "../Resource/ResourcePack.h"
 
+//#include "../Ruleset/Ruleset.h"
+
 
 namespace OpenXcom
 {

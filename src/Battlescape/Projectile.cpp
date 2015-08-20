@@ -36,6 +36,7 @@
 
 //#include "../Ruleset/MapData.h"
 //#include "../Ruleset/RuleItem.h"
+#include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleSoldier.h"
 
 #include "../Savegame/BattleItem.h"

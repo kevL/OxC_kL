@@ -20,29 +20,26 @@
 #ifndef OPENXCOM_STATE_H
 #define OPENXCOM_STATE_H
 
-//#include <climits>
 //#include <string>
 //#include <vector>
 //#include <SDL.h>
-
-#include "../Ruleset/Ruleset.h"
-#include "../Ruleset/RuleInterface.h"
 
 
 namespace OpenXcom
 {
 
-class Action;
-class Game;
+class Action;	// wtf why doesn't a guy just define all this crap globally
+class Game;		// and be done with it.
 class InteractiveSurface;
 class LocalizedText;
+class RuleInterface;
 class Surface;
 
 
 /**
  * A game state that receives user input and reacts accordingly.
  * @note Game states typically represent a whole window or screen that the user
- * interacts with, making the game... well, interactive. They automatically
+ * interacts with, making the game ... well, interactive. They automatically
  * handle child elements used to transmit information from/to the user and are
  * linked to the core game engine which manages them.
  */

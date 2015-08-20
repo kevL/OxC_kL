@@ -35,6 +35,7 @@
 #include "../Resource/ResourcePack.h"
 
 #include "../Ruleset/RuleResearch.h"
+#include "../Ruleset/Ruleset.h"
 
 #include "../Savegame/SavedGame.h"
 

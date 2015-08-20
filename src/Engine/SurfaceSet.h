@@ -22,7 +22,6 @@
 
 //#include <map>
 //#include <string>
-//#include <vector>
 //#include <SDL.h>
 
 
@@ -34,7 +33,7 @@ class Surface;
 
 /**
  * Container of a set of surfaces.
- * Used to manage single images that contain series of frames inside, like
+ * @note Used to manage single images that contain series of frames inside like
  * animated sprites, making them easier to access without constant cropping.
  */
 class SurfaceSet

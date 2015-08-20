@@ -47,7 +47,7 @@ MovingTarget::MovingTarget()
 /**
  * Make sure to cleanup the target's destination followers.
  */
-MovingTarget::~MovingTarget()
+MovingTarget::~MovingTarget() // virtual.
 {
 	if (_dest != NULL
 		&& _dest->getFollowers()->empty() == false)
@@ -70,7 +70,7 @@ MovingTarget::~MovingTarget()
  * Loads the moving target from a YAML file.
  * @param node - reference a YAML node
  */
-void MovingTarget::load(const YAML::Node& node)
+void MovingTarget::load(const YAML::Node& node) // virtual.
 {
 	Target::load(node);
 
@@ -84,7 +84,7 @@ void MovingTarget::load(const YAML::Node& node)
  * Saves the moving target to a YAML file.
  * @return, YAML node
  */
-YAML::Node MovingTarget::save() const
+YAML::Node MovingTarget::save() const // virtual.
 {
 	YAML::Node node = Target::save();
 
@@ -113,7 +113,7 @@ Target* MovingTarget::getDestination() const
  * Changes the destination the moving target is heading to.
  * @param dest - pointer to Target destination
  */
-void MovingTarget::setDestination(Target* dest)
+void MovingTarget::setDestination(Target* const dest) // virtual.
 {
 	if (_dest != NULL) // remove moving target from old destination's followers
 	{
