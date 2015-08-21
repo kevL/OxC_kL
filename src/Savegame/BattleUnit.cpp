@@ -3444,25 +3444,22 @@ int BattleUnit::getTurretType() const
 
 /**
  * Gets the amount of fatal wounds for a body part.
- * @param part - the body part (in the range 0-5)
- * @return, the quantity of fatal wounds of a body part
+ * @param part - the body part in the range 0-5 (BattleUnit.h)
+ * @return, fatal wounds @a part has
  */
-int BattleUnit::getFatalWound(size_t part) const
+int BattleUnit::getFatalWound(UnitBodyPart part) const
 {
-	if (part > 5)
-		return 0;
-
 	return _fatalWounds[part];
 }
 
 /**
  * Heals a fatal wound of the soldier.
- * @param part		- the body part to heal
- * @param wounds	- the amount of fatal wound healed
+ * @param part		- the body part to heal (BattleUnit.h)
+ * @param wounds	- the amount of fatal wounds to heal
  * @param health	- the amount of health to add to soldier health
  */
 void BattleUnit::heal(
-		size_t part,
+		UnitBodyPart part,
 		int wounds,
 		int health)
 {

@@ -2549,12 +2549,11 @@ bool BattlescapeGame::cancelCurrentAction(bool force)
 					return true;
 				}
 
-//				_currentAction.clearAction(); // kL
+//				_currentAction.clearAction();
 				_currentAction.targeting = false;
 				_currentAction.type = BA_NONE;
-//				_currentAction.TU = 0; // kL
 
-				if (_battleSave->getSide() == FACTION_PLAYER) // kL
+				if (_battleSave->getSide() == FACTION_PLAYER)
 				{
 					setupCursor();
 					_parentState->getGame()->getCursor()->setVisible();

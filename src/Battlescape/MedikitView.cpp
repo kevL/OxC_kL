@@ -31,8 +31,6 @@
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleInterface.h"
 
-#include "../Savegame/BattleUnit.h"
-
 
 namespace OpenXcom
 {
@@ -76,7 +74,7 @@ MedikitView::MedikitView(
 			w,h,
 			x,y),
 		_game(game),
-		_selectedPart(BattleUnit::PARTS_BODY),
+		_selectedPart(BODYPART_NONE),
 		_unit(unit),
 		_txtPart(part),
 		_txtWound(wound)
@@ -96,10 +94,10 @@ void MedikitView::draw()
 	this->lock();
 	for (size_t
 			i = 0;
-			i != BattleUnit::PARTS_BODY; //static_cast<int>(srt->getTotalFrames());
+			i != BattleUnit::PARTS_BODY;
 			++i)
 	{
-		if (_unit->getFatalWound(i) != 0)
+		if (_unit->getFatalWound(static_cast<UnitBodyPart>(i)) != 0)
 			color = _game->getRuleset()->getInterface("medikit")->getElement("body")->color2;
 		else
 			color = _game->getRuleset()->getInterface("medikit")->getElement("body")->color;
@@ -118,7 +116,7 @@ void MedikitView::draw()
 	_redraw = false;
 
 
-	if (_selectedPart != BattleUnit::PARTS_BODY)
+	if (_selectedPart != BODYPART_NONE)
 	{
 		_txtPart->setText(_game->getLanguage()->getString(BODY_PARTS[_selectedPart]));
 
@@ -150,7 +148,7 @@ void MedikitView::mouseClick(Action* action, State*)
 		srf = srt->getFrame(static_cast<int>(i));
 		if (srf->getPixelColor(x,y) != 0)
 		{
-			_selectedPart = i;
+			_selectedPart = static_cast<UnitBodyPart>(i);
 			_redraw = true;
 
 			break;
@@ -162,7 +160,7 @@ void MedikitView::mouseClick(Action* action, State*)
  * Gets the selected body part.
  * @return, the selected body part
  */
-size_t MedikitView::getSelectedPart() const
+UnitBodyPart MedikitView::getSelectedPart() const
 {
 	return _selectedPart;
 }
@@ -177,9 +175,9 @@ void MedikitView::autoSelectPart()
 			i != BattleUnit::PARTS_BODY;
 			++i)
 	{
-		if (_unit->getFatalWound(i) != 0)
+		if (_unit->getFatalWound(static_cast<UnitBodyPart>(i)) != 0)
 		{
-			_selectedPart = i;
+			_selectedPart = static_cast<UnitBodyPart>(i);
 			return;
 		}
 	}

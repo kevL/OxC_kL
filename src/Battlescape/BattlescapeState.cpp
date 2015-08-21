@@ -2184,8 +2184,10 @@ void BattlescapeState::btnLeftHandLeftClick(Action*)
 		_map->cacheUnits();
 		_map->draw();
 
-		BattleItem* const leftHandItem = _battleSave->getSelectedUnit()->getItem("STR_LEFT_HAND");
-		handClick(leftHandItem);
+		const BattleUnit* const unit = _battleSave->getSelectedUnit();
+		handAction(
+				unit->getItem("STR_LEFT_HAND"),
+				unit->getFatalWound(BODYPART_LEFTARM) != 0);
 	}
 }
 
@@ -2221,8 +2223,10 @@ void BattlescapeState::btnRightHandLeftClick(Action*)
 		_map->cacheUnits();
 		_map->draw();
 
-		BattleItem* const rightHandItem = _battleSave->getSelectedUnit()->getItem("STR_RIGHT_HAND");
-		handClick(rightHandItem);
+		const BattleUnit* const unit = _battleSave->getSelectedUnit();
+		handAction(
+				unit->getItem("STR_RIGHT_HAND"),
+				unit->getFatalWound(BODYPART_LEFTARM) != 0);
 	}
 }
 
@@ -3270,21 +3274,24 @@ void BattlescapeState::doExecutionExpl() // private.
 /**
  * Pops up a context sensitive list of actions the player can choose from.
  * @note Some actions result in a change of gamestate.
- * @param item - pointer to the clicked BattleItem (righthand/lefthand)
+ * @param item		- pointer to the BattleItem (righthand/lefthand)
+ * @param injured	- true if the arm using @a item is injured (default false)
  */
-void BattlescapeState::handClick(BattleItem* const item) // private.
+void BattlescapeState::handAction( // private.
+		BattleItem* const item,
+		bool injured)
 {
-	if (_battleGame->isBusy() == false) // battlescape is in an idle state
+	if (_battleGame->isBusy() == false)
 	{
 		BattleAction* const action = _battleGame->getCurrentAction();
 		action->weapon = NULL; // safety.
 
-		if (item != NULL) // make sure there is an item
+		if (item != NULL)
 			action->weapon = item;
-		else if (action->actor->getUnitRules() != NULL // so player can hit w/ MC'd melee aLiens that are not 'livingWeapons'
+		else if (action->actor->getUnitRules() != NULL
 			&& action->actor->getUnitRules()->getMeleeWeapon() == "STR_FIST")
 		{
-			// TODO: This can be generalized later; right now the only 'meleeWeapon' is "STR_FIST" - the Universal Fist!!
+			// TODO: This can be generalized later; right now the only 'meleeWeapon' is "STR_FIST" - the Universal Fist!!!
 //			const RuleItem* const itRule = _rules->getItem(action->actor->getUnitRules()->getMeleeWeapon());
 			action->weapon = _battleGame->getFist();
 		}
@@ -3293,23 +3300,10 @@ void BattlescapeState::handClick(BattleItem* const item) // private.
 			popup(new ActionMenuState(
 									action,
 									_icons->getX(),
-									_icons->getY() + 16));
+									_icons->getY() + 16,
+									injured));
 	}
 }
-/*	if (_battleGame->isBusy() == false	// battlescape is in an idle state
-		&& item != NULL)				// make sure there is an item
-	{
-		if (_gameSave->isResearched(item->getRules()->getRequirements())
-			|| _battleSave->getSelectedUnit()->getOriginalFaction() == FACTION_HOSTILE)
-		{
-			_battleGame->getCurrentAction()->weapon = item;
-			popup(new ActionMenuState(
-									_battleGame->getCurrentAction(),
-									_icons->getX(),
-									_icons->getY() + 16));
-		}
-		else warning("STR_UNABLE_TO_USE_ALIEN_ARTIFACT_UNTIL_RESEARCHED");
-	} */
 
 /**
  * Handles the top battle game state.

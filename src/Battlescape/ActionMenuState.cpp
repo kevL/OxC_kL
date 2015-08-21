@@ -51,14 +51,16 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Action Menu window.
- * @param action	- pointer to a BattleAction (BattlescapeGame.h)
+ * @param action	- pointer to the BattleAction (BattlescapeGame.h)
  * @param x			- position on the x-axis
  * @param y			- position on the y-axis
+ * @param injured	- true if the arm using the item is injured
  */
 ActionMenuState::ActionMenuState(
 		BattleAction* const action,
 		int x,
-		int y)
+		int y,
+		bool injured)
 	:
 		_action(action)
 {
@@ -92,11 +94,14 @@ ActionMenuState::ActionMenuState(
 				"STR_DROP",
 				&id);
 
-		if (_action->actor->getBaseStats()->throwing != 0)
+		if (_action->actor->getBaseStats()->throwing != 0
+			&& injured == false)
+		{
 			addItem(
 					BA_THROW,
 					"STR_THROW",
 					&id);
+		}
 	}
 
 	if (_game->getSavedGame()->isResearched(itRule->getRequirements()) == true)
@@ -104,7 +109,8 @@ ActionMenuState::ActionMenuState(
 		if (itRule->getTUMelee() != 0) // TODO: remove 'HIT' action-items if no target in range.
 		{
 			if (itRule->getBattleType() == BT_MELEE
-				&& itRule->getDamageType() == DT_STUN)
+				&& itRule->getDamageType() == DT_STUN
+				&& injured == false)
 			{
 				addItem( // stun rod
 						BA_HIT,
@@ -122,7 +128,7 @@ ActionMenuState::ActionMenuState(
 						"STR_DOGE_BARK",
 						&id);
 			}
-			else
+			else if (injured == false)
 				addItem( // melee weapon
 						BA_HIT,
 						"STR_HIT_MELEE",
@@ -142,18 +148,25 @@ ActionMenuState::ActionMenuState(
 						"STR_DEFUSE_GRENADE",
 						&id);
 		}
-		else if (itRule->getBattleType() == BT_MEDIKIT) // special items
+		else if (itRule->getBattleType() == BT_MEDIKIT // special items
+			&& injured == false)
+		{
 			addItem(
 					BA_USE,
 					"STR_USE_MEDI_KIT",
 					&id);
-		else if (itRule->getBattleType() == BT_SCANNER)
+		}
+		else if (itRule->getBattleType() == BT_SCANNER
+			&& injured == false)
+		{
 			addItem(
 					BA_USE,
 					"STR_USE_SCANNER",
 					&id);
+		}
 		else if (itRule->getBattleType() == BT_PSIAMP
-			&& _action->actor->getBaseStats()->psiSkill != 0)
+			&& _action->actor->getBaseStats()->psiSkill != 0
+			&& injured == false)
 		{
 			addItem(
 					BA_PSICONTROL,
@@ -172,12 +185,16 @@ ActionMenuState::ActionMenuState(
 					"STR_ENCOURAGE_UNIT",
 					&id);
 		}
-		else if (itRule->getBattleType() == BT_MINDPROBE)
+		else if (itRule->getBattleType() == BT_MINDPROBE
+			&& injured == false)
+		{
 			addItem(
 					BA_USE,
 					"STR_USE_MIND_PROBE",
 					&id);
-		else if (itRule->getBattleType() == BT_FIREARM)
+		}
+		else if (itRule->getBattleType() == BT_FIREARM
+			&& injured == false)
 		{
 			if (_action->weapon->getAmmoItem() != NULL)
 			{
@@ -200,9 +217,10 @@ ActionMenuState::ActionMenuState(
 							&id);
 			}
 
-			if (itRule->isWaypoints() != 0
-				|| (_action->weapon->getAmmoItem() != NULL
-					&& _action->weapon->getAmmoItem()->getRules()->isWaypoints() != 0))
+			if ((itRule->isWaypoints() != 0
+					|| (_action->weapon->getAmmoItem() != NULL
+						&& _action->weapon->getAmmoItem()->getRules()->isWaypoints() != 0))
+				&& injured == false)
 			{
 				addItem(
 						BA_LAUNCH,
@@ -213,7 +231,8 @@ ActionMenuState::ActionMenuState(
 
 		if (_action->weapon->getAmmoItem() != NULL // is loaded or self-loaded.
 			&& _action->weapon->getAmmoItem()->getRules()->canExecute() == true
-			&& canExecuteTarget() == true)
+			&& canExecuteTarget() == true
+			&& injured == false)
 		{
 			addItem(
 					BA_EXECUTE,

@@ -214,8 +214,9 @@ private:
 //	void drawWoundIndicator();
 
 	/// Popups a context sensitive list of actions the player can choose from.
-	void handClick(BattleItem* const item);
-
+	void handAction(
+			BattleItem* const item,
+			bool injured = false);
 
 
 	public:

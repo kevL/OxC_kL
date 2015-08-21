@@ -72,7 +72,7 @@ enum UnitStatus
 
 enum UnitFaction
 {
-	FACTION_NONE = -1,	//-1 kL
+	FACTION_NONE = -1,	//-1
 	FACTION_PLAYER,		// 0
 	FACTION_HOSTILE,	// 1
 	FACTION_NEUTRAL		// 2
@@ -94,7 +94,8 @@ enum UnitBodyPart
 	BODYPART_RIGHTARM,	// 2
 	BODYPART_LEFTARM,	// 3
 	BODYPART_RIGHTLEG,	// 4
-	BODYPART_LEFTLEG	// 5
+	BODYPART_LEFTLEG,	// 5
+	BODYPART_NONE		// 6
 };
 
 enum OutCheck
@@ -918,10 +919,10 @@ private:
 		int getTurretType() const;
 
 		/// Gets fatal wound amount of a body part.
-		int getFatalWound(size_t part) const;
+		int getFatalWound(UnitBodyPart part) const;
 		/// Heals fatal wounds.
 		void heal(
-				size_t part,
+				UnitBodyPart part,
 				int wounds,
 				int health);
 		/// Gives pain killers to this unit.

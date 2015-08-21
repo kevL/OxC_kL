@@ -60,7 +60,8 @@ private:
 		ActionMenuState(
 				BattleAction* const action,
 				int x,
-				int y);
+				int y,
+				bool injured);
 		/// Cleans up the Action Menu state.
 		~ActionMenuState();
 

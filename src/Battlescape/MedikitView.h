@@ -22,6 +22,8 @@
 
 #include "../Engine/InteractiveSurface.h"
 
+#include "../Savegame/BattleUnit.h"
+
 
 namespace OpenXcom
 {
@@ -41,7 +43,7 @@ class MedikitView
 private:
 	static const std::string BODY_PARTS[];
 
-	size_t _selectedPart;
+	UnitBodyPart _selectedPart;
 
 	BattleUnit* _unit;
 	Game* _game;
@@ -69,7 +71,7 @@ private:
 		void draw();
 
 		/// Gets the selected body part.
-		size_t getSelectedPart() const;
+		UnitBodyPart getSelectedPart() const;
 		/// Automatically selects a wounded body part.
 		void autoSelectPart();
 };

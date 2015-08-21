@@ -4641,7 +4641,7 @@
 1440096001 f:\git\openxcom\src\savegame\savedbattlegame.h
 	"BattleUnit.h"
 
-1440117226 f:\git\openxcom\src\savegame\battleunit.h
+1440119869 f:\git\openxcom\src\savegame\battleunit.h
 	"SavedGame.h"
 	"Soldier.h"
 	"../Battlescape/BattlescapeGame.h"
@@ -5335,7 +5335,7 @@
 1431047771 f:\git\openxcom\src\battlescape\abortmissionstate.h
 	"../Engine/State.h"
 
-1439755686 f:\git\openxcom\src\battlescape\battlescapestate.h
+1440120417 f:\git\openxcom\src\battlescape\battlescapestate.h
 	"Position.h"
 	"../Engine/State.h"
 
@@ -5358,7 +5358,7 @@
 1430149550 f:\git\openxcom\src\interface\frame.h
 	"../Engine/Surface.h"
 
-1440116237 source:f:\git\openxcom\src\battlescape\actionmenustate.cpp
+1440120707 source:f:\git\openxcom\src\battlescape\actionmenustate.cpp
 	"ActionMenuState.h"
 	"ActionMenuItem.h"
 	"ExecuteState.h"
@@ -5379,7 +5379,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1440113159 f:\git\openxcom\src\battlescape\actionmenustate.h
+1440118822 f:\git\openxcom\src\battlescape\actionmenustate.h
 	"BattlescapeGame.h"
 	"../Engine/State.h"
 
@@ -5467,7 +5467,7 @@
 1432984133 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1439989019 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1440118167 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	"AlienBAIState.h"
 	"BattlescapeState.h"
@@ -5633,7 +5633,7 @@
 1430149550 f:\git\openxcom\src\battlescape\battlescapemessage.h
 	"../Engine/Surface.h"
 
-1440105271 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1440120417 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	"AbortMissionState.h"
 	"ActionMenuState.h"
@@ -6020,10 +6020,11 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1439310146 f:\git\openxcom\src\battlescape\medikitview.h
+1440120105 f:\git\openxcom\src\battlescape\medikitview.h
 	"../Engine/InteractiveSurface.h"
+	"../Savegame/BattleUnit.h"
 
-1439310028 source:f:\git\openxcom\src\battlescape\medikitview.cpp
+1440121491 source:f:\git\openxcom\src\battlescape\medikitview.cpp
 	"MedikitView.h"
 	"../Engine/Action.h"
 	"../Engine/Game.h"
@@ -6033,7 +6034,6 @@
 	"../Resource/ResourcePack.h"
 	"../Ruleset/Ruleset.h"
 	"../Ruleset/RuleInterface.h"
-	"../Savegame/BattleUnit.h"
 
 1438167097 source:f:\git\openxcom\src\battlescape\minimapstate.cpp
 	"MiniMapState.h"
