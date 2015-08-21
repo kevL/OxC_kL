@@ -751,7 +751,7 @@ private:
 				const BattleItem* item) const;
 		int getActionTUs(
 				const BattleActionType& bat,
-				const RuleItem* item = NULL) const;
+				const RuleItem* itRule = NULL) const;
 
 		/// Spends time units if possible.
 		bool spendTimeUnits(int tu);
@@ -783,7 +783,9 @@ private:
 //		void clearVisibleTiles();
 
 		/// Calculates firing or throwing accuracy.
-		double getAccuracy(const BattleAction& action) const;
+		double getAccuracy(
+				const BattleAction& action,
+				const BattleActionType bat = BA_NONE) const;
 		/// Calculates this unit's accuracy modifier.
 		double getAccuracyModifier(const BattleItem* const item = NULL) const;
 

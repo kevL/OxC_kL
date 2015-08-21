@@ -1951,13 +1951,13 @@ int BattleUnit::getActionTUs(
 
 /**
  * Gets the number of time units a certain action takes for this BattleUnit.
- * @param bat	- BattleActionType (BattlescapeGame.h)
- * @param rule	- pointer to RuleItem for TU-cost (default NULL)
+ * @param bat		- BattleActionType (BattlescapeGame.h)
+ * @param itRule	- pointer to RuleItem for TU-cost (default NULL)
  * @return, TUs to perform action
  */
 int BattleUnit::getActionTUs(
 		const BattleActionType& bat,
-		const RuleItem* const rule) const
+		const RuleItem* const itRule) const
 {
 	if (bat == BA_NONE)
 		return 0;
@@ -1981,9 +1981,9 @@ int BattleUnit::getActionTUs(
 		break;
 
 		case BA_PRIME:
-			if (rule == NULL)
+			if (itRule == NULL)
 				return 0;
-			cost = rule->getTUPrime();
+			cost = itRule->getTUPrime();
 		break;
 
 		case BA_THROW:
@@ -1991,33 +1991,33 @@ int BattleUnit::getActionTUs(
 		break;
 
 		case BA_LAUNCH:
-			if (rule == NULL)
+			if (itRule == NULL)
 				return 0;
-			cost = rule->getTULaunch();
+			cost = itRule->getTULaunch();
 		break;
 
 		case BA_AIMEDSHOT:
-			if (rule == NULL)
+			if (itRule == NULL)
 				return 0;
-			cost = rule->getTUAimed();
+			cost = itRule->getTUAimed();
 		break;
 
 		case BA_AUTOSHOT:
-			if (rule == NULL)
+			if (itRule == NULL)
 				return 0;
-			cost = rule->getTUAuto();
+			cost = itRule->getTUAuto();
 		break;
 
 		case BA_SNAPSHOT:
-			if (rule == NULL)
+			if (itRule == NULL)
 				return 0;
-			cost = rule->getTUSnap();
+			cost = itRule->getTUSnap();
 		break;
 
 		case BA_HIT:
-			if (rule == NULL)
+			if (itRule == NULL)
 				return 0;
-			cost = rule->getTUMelee();
+			cost = itRule->getTUMelee();
 		break;
 
 		case BA_EXECUTE:
@@ -2029,9 +2029,9 @@ int BattleUnit::getActionTUs(
 		case BA_PSIPANIC:
 		case BA_PSICONFUSE:
 		case BA_PSICOURAGE:
-			if (rule == NULL)
+			if (itRule == NULL)
 				return 0;
-			cost = rule->getTUUse();
+			cost = itRule->getTUUse();
 		break;
 
 		default:
@@ -2044,8 +2044,8 @@ int BattleUnit::getActionTUs(
 
 
 	if (cost > 0
-		&& ((rule != NULL
-				&& rule->getFlatRate() == false) // it's a percentage, apply to TUs
+		&& ((itRule != NULL
+				&& itRule->getFlatRate() == false) // it's a percentage, apply to TUs
 			|| bat == BA_THROW)
 		&& bat != BA_DEFUSE
 		&& bat != BA_DROP
@@ -2244,14 +2244,23 @@ void BattleUnit::clearVisibleTiles()
 
 /**
  * Calculates firing or throwing accuracy.
- * @param action - reference the current BattleAction (BattlescapeGame.h)
+ * @param action	- reference the current BattleAction (BattlescapeGame.h)
+ * @param bat		- BattleActionType (default BA_NONE) (BattlescapeGame.h)
  * @return, accuracy
  */
-double BattleUnit::getAccuracy(const BattleAction& action) const
+double BattleUnit::getAccuracy(
+		const BattleAction& action,
+		const BattleActionType bat) const
 {
 	double ret;
 
-	switch (action.type)
+	BattleActionType baType;
+	if (bat == BA_NONE)
+		baType = action.type;
+	else
+		baType = bat;
+
+	switch (baType)
 	{
 		case BA_LAUNCH:
 		return 1.;
@@ -2270,7 +2279,7 @@ double BattleUnit::getAccuracy(const BattleAction& action) const
 		break;
 
 		default:
-			switch (action.type)
+			switch (baType)
 			{
 				case BA_AIMEDSHOT:
 					ret = static_cast<double>(action.weapon->getRules()->getAccuracyAimed()) / 100.;

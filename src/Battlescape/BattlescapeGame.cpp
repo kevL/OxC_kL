@@ -2989,14 +2989,14 @@ void BattlescapeGame::launchAction()
 
 /**
  * Handler for the psi button.
+ * @note Additional data gets assigned in primaryAction().
  */
 void BattlescapeGame::psiButtonAction()
 {
 	_currentAction.weapon = NULL;
 	_currentAction.targeting = true;
 	_currentAction.type = BA_PSIPANIC;
-//	_currentAction.TU = 25;	// kL_note: this is just a default i guess; otherwise it
-							// should be getActionTUs(). It gets overridden later ...
+
 	setupCursor();
 }
 

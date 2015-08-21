@@ -255,6 +255,10 @@ BattlescapeState::BattlescapeState()
 					32,24,
 					screenWidth - 32,
 					45);
+	_bigBtnBorder	= new Surface(
+						32,24,
+						screenWidth - 32,
+						0);
 
 	_txtName		= new Text(136, 9, x + 135, y + 32);
 
@@ -411,6 +415,12 @@ BattlescapeState::BattlescapeState()
 	_game->getResourcePack()->getSurfaceSet("SPICONS.DAT")->getFrame(1)->blit(_btnPsi);
 	_btnPsi->onMouseClick((ActionHandler)& BattlescapeState::btnPsiClick);
 	_btnPsi->setVisible(false);
+
+	add(_bigBtnBorder);
+
+	_bigBtnBorder->drawRect(0,0, 32,24, 1);
+	_bigBtnBorder->drawRect(1,1, 30,22, 0);
+	_bigBtnBorder->setVisible(false);
 
 //	add(_txtTooltip, "textTooltip", "battlescape", _icons);
 //	_txtTooltip->setHighContrast();
@@ -1944,7 +1954,7 @@ void BattlescapeState::btnInventoryClick(Action*)
 			{
 				_battleGame->getCurrentAction()->waypoints.clear();
 				_map->getWaypoints()->clear();
-				showLaunchButton(false);
+				_btnLaunch->setVisible(false);
 			}
 
 			_battleGame->getPathfinding()->removePreview();
@@ -2158,7 +2168,7 @@ void BattlescapeState::btnStatsClick(Action* action)
 		{
 			_battleGame->getCurrentAction()->waypoints.clear();
 			_map->getWaypoints()->clear();
-			showLaunchButton(false);
+			_btnLaunch->setVisible(false);
 		}
 
 		_battleGame->cancelCurrentAction(true);
@@ -2381,6 +2391,9 @@ void BattlescapeState::btnWoundedPress(Action* action)
  */
 void BattlescapeState::btnLaunchClick(Action* action)
 {
+	_bigBtnBorder->setY(20);
+	_bigBtnBorder->setVisible();
+
 	_battleGame->launchAction();
 	action->getDetails()->type = SDL_NOEVENT; // consume the event
 }
@@ -2391,11 +2404,16 @@ void BattlescapeState::btnLaunchClick(Action* action)
  */
 void BattlescapeState::btnPsiClick(Action* action)
 {
-	if (_battleGame->getCurrentAction()->waypoints.empty() == true)
+	if (_map->getCursorType() != CT_PSI
+		&& _battleGame->getCurrentAction()->waypoints.empty() == true)
 	{
+		_bigBtnBorder->setY(45);
+		_bigBtnBorder->setVisible();
+
 		_battleGame->psiButtonAction();
-		action->getDetails()->type = SDL_NOEVENT; // consume the event
 	}
+
+	action->getDetails()->type = SDL_NOEVENT; // consume the event
 }
 
 /**
@@ -3067,6 +3085,16 @@ void BattlescapeState::animate()
 				&& RNG::seedless(0,3) == 0)
 			{
 				_overWeight->setVisible(!_overWeight->getVisible());
+			}
+
+			static int stickyTiks; // inits to 0.
+			if (_bigBtnBorder->getVisible() == true)
+				++stickyTiks;
+
+			if (stickyTiks == 4)
+			{
+				stickyTiks = 0;
+				_bigBtnBorder->setVisible(false);
 			}
 		}
 	}

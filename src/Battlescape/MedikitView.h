@@ -45,8 +45,8 @@ private:
 
 	UnitBodyPart _selectedPart;
 
-	BattleUnit* _unit;
-	Game* _game;
+	const BattleUnit* _unit;
+	const Game* _game;
 	Text
 		* _txtPart,
 		* _txtWound;
@@ -62,10 +62,10 @@ private:
 				int h,
 				int x,
 				int y,
-				Game* game,
-				BattleUnit* unit,
-				Text* part,
-				Text* wound);
+				const Game* const game,
+				const BattleUnit* const unit,
+				Text* const part,
+				Text* const wound);
 
 		/// Draws the body view.
 		void draw();

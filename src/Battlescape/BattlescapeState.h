@@ -155,6 +155,7 @@ private:
 	SavedGame* _gameSave;
 	Surface
 		* _alienMark,
+		* _bigBtnBorder,
 		* _iconsLayer,
 		* _kneel,
 		* _rank,

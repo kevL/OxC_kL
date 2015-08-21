@@ -94,8 +94,8 @@ ActionMenuState::ActionMenuState(
 				"STR_DROP",
 				&id);
 
-		if (_action->actor->getBaseStats()->throwing != 0
-			&& injured == false)
+		if (injured == false
+			&& _action->actor->getBaseStats()->throwing != 0)
 		{
 			addItem(
 					BA_THROW,
@@ -108,9 +108,9 @@ ActionMenuState::ActionMenuState(
 	{
 		if (itRule->getTUMelee() != 0) // TODO: remove 'HIT' action-items if no target in range.
 		{
-			if (itRule->getBattleType() == BT_MELEE
-				&& itRule->getDamageType() == DT_STUN
-				&& injured == false)
+			if (injured == false
+				&& itRule->getBattleType() == BT_MELEE
+				&& itRule->getDamageType() == DT_STUN)
 			{
 				addItem( // stun rod
 						BA_HIT,
@@ -148,25 +148,25 @@ ActionMenuState::ActionMenuState(
 						"STR_DEFUSE_GRENADE",
 						&id);
 		}
-		else if (itRule->getBattleType() == BT_MEDIKIT // special items
-			&& injured == false)
+		else if (injured == false // special items
+			&& itRule->getBattleType() == BT_MEDIKIT)
 		{
 			addItem(
 					BA_USE,
 					"STR_USE_MEDI_KIT",
 					&id);
 		}
-		else if (itRule->getBattleType() == BT_SCANNER
-			&& injured == false)
+		else if (injured == false
+			&& itRule->getBattleType() == BT_SCANNER)
 		{
 			addItem(
 					BA_USE,
 					"STR_USE_SCANNER",
 					&id);
 		}
-		else if (itRule->getBattleType() == BT_PSIAMP
-			&& _action->actor->getBaseStats()->psiSkill != 0
-			&& injured == false)
+		else if (injured == false
+			&& itRule->getBattleType() == BT_PSIAMP
+			&& _action->actor->getBaseStats()->psiSkill != 0)
 		{
 			addItem(
 					BA_PSICONTROL,
@@ -185,16 +185,16 @@ ActionMenuState::ActionMenuState(
 					"STR_ENCOURAGE_UNIT",
 					&id);
 		}
-		else if (itRule->getBattleType() == BT_MINDPROBE
-			&& injured == false)
+		else if (injured == false
+			&& itRule->getBattleType() == BT_MINDPROBE)
 		{
 			addItem(
 					BA_USE,
 					"STR_USE_MIND_PROBE",
 					&id);
 		}
-		else if (itRule->getBattleType() == BT_FIREARM
-			&& injured == false)
+		else if (injured == false
+			&& itRule->getBattleType() == BT_FIREARM)
 		{
 			if (_action->weapon->getAmmoItem() != NULL)
 			{
@@ -217,10 +217,10 @@ ActionMenuState::ActionMenuState(
 							&id);
 			}
 
-			if ((itRule->isWaypoints() != 0
+			if (injured == false
+				&& (itRule->isWaypoints() != 0
 					|| (_action->weapon->getAmmoItem() != NULL
-						&& _action->weapon->getAmmoItem()->getRules()->isWaypoints() != 0))
-				&& injured == false)
+						&& _action->weapon->getAmmoItem()->getRules()->isWaypoints() != 0)))
 			{
 				addItem(
 						BA_LAUNCH,
@@ -229,10 +229,10 @@ ActionMenuState::ActionMenuState(
 			}
 		}
 
-		if (_action->weapon->getAmmoItem() != NULL // is loaded or self-loaded.
+		if (injured == false
+			&& _action->weapon->getAmmoItem() != NULL // is loaded or self-loaded.
 			&& _action->weapon->getAmmoItem()->getRules()->canExecute() == true
-			&& canExecuteTarget() == true
-			&& injured == false)
+			&& canExecuteTarget() == true)
 		{
 			addItem(
 					BA_EXECUTE,
@@ -255,7 +255,7 @@ ActionMenuState::~ActionMenuState()
  * @param id	- pointer to the new item-action ID
  */
 void ActionMenuState::addItem( // private.
-		BattleActionType bat,
+		const BattleActionType bat,
 		const std::string& desc,
 		size_t* id)
 {
@@ -270,7 +270,9 @@ void ActionMenuState::addItem( // private.
 		|| bat == BA_AUTOSHOT
 		|| bat == BA_HIT)
 	{
-		var = static_cast<int>(Round(_action->actor->getAccuracy(*_action) * 100.));
+		var = static_cast<int>(Round(_action->actor->getAccuracy(
+															*_action,
+															bat) * 100.));
 		wst1 = tr("STR_ACCURACY_SHORT_KL").arg(var);
 	}
 

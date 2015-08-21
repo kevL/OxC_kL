@@ -65,19 +65,19 @@ MedikitView::MedikitView(
 		int h,
 		int x,
 		int y,
-		Game* game,
-		BattleUnit* unit,
-		Text* part,
-		Text* wound)
+		const Game* const game,
+		const BattleUnit* const unit,
+		Text* const part,
+		Text* const wound)
 	:
 		InteractiveSurface(
 			w,h,
 			x,y),
 		_game(game),
-		_selectedPart(BODYPART_NONE),
 		_unit(unit),
 		_txtPart(part),
-		_txtWound(wound)
+		_txtWound(wound),
+		_selectedPart(BODYPART_NONE)
 {
 	autoSelectPart();
 	_redraw = true;
