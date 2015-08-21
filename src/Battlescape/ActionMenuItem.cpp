@@ -42,7 +42,7 @@ namespace OpenXcom
  */
 ActionMenuItem::ActionMenuItem(
 		size_t id,
-		Game* game,
+		const Game* const game,
 		int x,
 		int y)
 	:
@@ -52,6 +52,7 @@ ActionMenuItem::ActionMenuItem(
 			x + 24,
 			y - (static_cast<int>(id) * 40)),
 		_highlighted(false),
+		_highlightModifier(5),
 		_action(BA_NONE),
 		_tu(0)
 {
@@ -61,10 +62,6 @@ ActionMenuItem::ActionMenuItem(
 	Language* const lang = game->getLanguage();
 
 	const Element* const actionMenu = game->getRuleset()->getInterface("battlescape")->getElement("actionMenu");
-	if (actionMenu->TFTDMode == true)
-		_highlightModifier = 12;
-	else
-		_highlightModifier = 5;
 
 	_frame		= new Frame(
 						getWidth(),

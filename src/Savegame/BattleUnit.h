@@ -781,12 +781,8 @@ private:
 		/// Clears this unit's visible tiles.
 //		void clearVisibleTiles();
 
-		/// Calculates firing accuracy.
-		double getFiringAccuracy(
-				const BattleActionType actionType,
-				const BattleItem* const item) const;
-		/// Calculates throwing accuracy.
-		double getThrowingAccuracy() const;
+		/// Calculates firing or throwing accuracy.
+		double getAccuracy(const BattleAction& action) const;
 		/// Calculates this unit's accuracy modifier.
 		double getAccuracyModifier(const BattleItem* const item = NULL) const;
 

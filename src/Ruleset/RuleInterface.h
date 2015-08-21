@@ -30,10 +30,6 @@ namespace OpenXcom
 
 struct Element
 {
-	/// defines inversion behaviour
-	bool TFTDMode;
-
-	/// basic rect info and 3 colors.
 	int
 		x,y,
 		w,h;
@@ -66,7 +62,7 @@ private:
 		void load(const YAML::Node& node);
 
 		/// Gets an element.
-		const Element* const getElement(const std::string id) const;
+		const Element* const getElement(const std::string& id) const;
 
 		/// Gets palette.
 		const std::string& getPalette() const;

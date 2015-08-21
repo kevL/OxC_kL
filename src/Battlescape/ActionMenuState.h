@@ -48,7 +48,7 @@ private:
 
 	/// Adds a new menu item for an action.
 	void addItem(
-			BattleActionType batType,
+			BattleActionType bat,
 			const std::string& desc,
 			size_t* id);
 	/// Checks if there is a viable execution target nearby.

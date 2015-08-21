@@ -2205,31 +2205,31 @@ std::vector<BattleUnit*>& BattleUnit::getHostileUnitsThisTurn()
 	return _hostileUnitsThisTurn;
 }
 
-/**
+/*
  * Adds a tile to the list of visible tiles.
  * @param tile - pointer to a tile to add
  * @return, true or CTD
- */
-/* bool BattleUnit::addToVisibleTiles(Tile* const tile)
+ *
+bool BattleUnit::addToVisibleTiles(Tile* const tile)
 {
 	_visibleTiles.push_back(tile);
 
 	return true;
 } */
 
-/**
+/*
  * Gets the pointer to the vector of visible tiles.
  * @return, pointer to a vector of pointers to visible tiles
- */
-/* std::vector<Tile*>* BattleUnit::getVisibleTiles()
+ *
+std::vector<Tile*>* BattleUnit::getVisibleTiles()
 {
 	return &_visibleTiles;
 } */
 
-/**
+/*
  * Clears visible tiles.
- */
-/* void BattleUnit::clearVisibleTiles()
+ *
+void BattleUnit::clearVisibleTiles()
 {
 	for (std::vector<Tile*>::const_iterator
 			j = _visibleTiles.begin();
@@ -2243,70 +2243,62 @@ std::vector<BattleUnit*>& BattleUnit::getHostileUnitsThisTurn()
 } */
 
 /**
- * Calculates firing accuracy.
- * Formula = accuracyStat * weaponAccuracy * kneelingbonus(1.15) * one-handPenalty(0.8) * woundsPenalty(% health) * critWoundsPenalty (-10%/wound)
- * @param actionType	-
- * @param item			-
- * @return, firing accuracy
+ * Calculates firing or throwing accuracy.
+ * @param action - reference the current BattleAction (BattlescapeGame.h)
+ * @return, accuracy
  */
-double BattleUnit::getFiringAccuracy(
-		const BattleActionType actionType,
-		const BattleItem* const item) const
+double BattleUnit::getAccuracy(const BattleAction& action) const
 {
-	//Log(LOG_INFO) << "BattleUnit::getFiringAccuracy() ID " << getId();
-	if (actionType == BA_LAUNCH)
-		return 1.;
-
 	double ret;
 
-	if (actionType == BA_HIT)
+	switch (action.type)
 	{
-		ret = static_cast<double>(item->getRules()->getAccuracyMelee()) * getAccuracyModifier(item) / 100.;
-		//Log(LOG_INFO) << ". weaponACU = " << item->getRules()->getAccuracyMelee() << " ret[1] = " << ret;
+		case BA_LAUNCH:
+		return 1.;
 
-		if (item->getRules()->isSkillApplied() == true)
-		{
-			ret = ret * static_cast<double>(getBaseStats()->melee) / 100.;
-			//Log(LOG_INFO) << ". meleeStat = " << getBaseStats()->melee << " ret[2] = " << ret;
-		}
+		case BA_HIT:
+			ret = static_cast<double>(action.weapon->getRules()->getAccuracyMelee()) / 100.;
+
+			if (action.weapon->getRules()->isSkillApplied() == true)
+				ret *= static_cast<double>(_stats.melee) / 100.;
+		break;
+
+		case BA_THROW:
+			ret = static_cast<double>(_stats.throwing) / 100.;
+			if (_kneeled == true)
+				ret *= 0.86;
+		break;
+
+		default:
+			switch (action.type)
+			{
+				case BA_AIMEDSHOT:
+					ret = static_cast<double>(action.weapon->getRules()->getAccuracyAimed()) / 100.;
+				break;
+
+				case BA_AUTOSHOT:
+					ret = static_cast<double>(action.weapon->getRules()->getAccuracyAuto()) / 100.;
+				break;
+
+				default:
+					ret = static_cast<double>(action.weapon->getRules()->getAccuracySnap()) / 100;
+			}
+
+			ret *= static_cast<double>(_stats.firing) / 100.;
+			if (_kneeled == true)
+				ret *= 1.16;
 	}
-	else
-	{
-		int acu;
-		if (actionType == BA_AIMEDSHOT)
-			acu = item->getRules()->getAccuracyAimed();
-		else if (actionType == BA_AUTOSHOT)
-			acu = item->getRules()->getAccuracyAuto();
-		else
-			acu = item->getRules()->getAccuracySnap();
 
-		ret = static_cast<double>(acu * getBaseStats()->firing) / 10000.;
+	ret *= getAccuracyModifier(action.weapon);
 
-		if (_kneeled == true)
-			ret *= 1.16;
-
-		ret *= getAccuracyModifier();
-	}
-
-
-	if (item->getRules()->isTwoHanded() == true
+	if (action.weapon->getRules()->isTwoHanded() == true
 		&& getItem("STR_RIGHT_HAND") != NULL
 		&& getItem("STR_LEFT_HAND") != NULL)
 	{
 		ret *= 0.79;
 	}
 
-	//Log(LOG_INFO) << ". fire ACU ret[0] = " << ret;
 	return ret;
-}
-
-/**
- * Calculates this BattleUnit's throwing accuracy.
- * @return, throwing accuracy
- */
-double BattleUnit::getThrowingAccuracy() const
-{
-	return static_cast<double>(getBaseStats()->throwing) * getAccuracyModifier() / 100.;
 }
 
 /**
@@ -2318,11 +2310,9 @@ double BattleUnit::getThrowingAccuracy() const
  */
 double BattleUnit::getAccuracyModifier(const BattleItem* const item) const
 {
-	//Log(LOG_INFO) << "BattleUnit::getAccuracyModifier()";
-	double ret = static_cast<double>(_health) / static_cast<double>(getBaseStats()->health);
+	double ret = static_cast<double>(_health) / static_cast<double>(_stats.health);
 
-	int wounds = _fatalWounds[BODYPART_HEAD];
-
+	int wounds = _fatalWounds[BODYPART_HEAD] * 2;
 	if (item != NULL)
 	{
 		if (item->getRules()->isTwoHanded() == true)
@@ -2336,12 +2326,11 @@ double BattleUnit::getAccuracyModifier(const BattleItem* const item) const
 		}
 	}
 
-	ret *= 1. - 0.1 * static_cast<double>(wounds);
+	ret *= std::max(
+				0.,
+				1. - 0.1 * static_cast<double>(wounds));
 
-	if (ret < 0.1) // limit low @ 10%
-		ret = 0.1;
-
-	//Log(LOG_INFO) << ". . ACU modi = " << ret;
+	if (ret < 0.1) ret = 0.1;
 	return ret;
 }
 
@@ -2494,12 +2483,11 @@ void BattleUnit::initTu(
 	}
 	else
 	{
-		int tu = _stats.tu;
-		double underLoad = static_cast<double>(getStrength()) / static_cast<double>(getCarriedWeight());
-		if (underLoad < 1.)
-			tu = static_cast<int>(Round(static_cast<double>(tu) * underLoad));
+		int tu = std::min(
+					_stats.tu,
+					static_cast<int>(Round(static_cast<double>(_stats.tu * getStrength())
+										 / static_cast<double>(getCarriedWeight()))));
 
-//		if (preBattle == false
 		if (_geoscapeSoldier != NULL) // Each fatal wound to the left or right leg reduces a Soldier's TUs by 10%.
 			tu -= (tu * (getFatalWound(BODYPART_LEFTLEG) + getFatalWound(BODYPART_RIGHTLEG) * 10)) / 100;
 

@@ -505,7 +505,7 @@ bool ProjectileFlyBState::createNewProjectile() // private.
 
 	if (_action.type == BA_THROW)
 	{
-		_prjImpact = projectile->calculateThrow(_unit->getThrowingAccuracy());
+		_prjImpact = projectile->calculateThrow(_unit->getAccuracy(_action));
 		//Log(LOG_INFO) << ". BA_THROW, part = " << _prjImpact;
 
 		if (_prjImpact == VOXEL_FLOOR
@@ -549,9 +549,7 @@ bool ProjectileFlyBState::createNewProjectile() // private.
 	}
 	else if (_action.weapon->getRules()->getArcingShot() == true) // special code for the "spit" trajectory
 	{
-		_prjImpact = projectile->calculateThrow(_unit->getFiringAccuracy(
-																	_action.type,
-																	_action.weapon));
+		_prjImpact = projectile->calculateThrow(_unit->getAccuracy(_action));
 		//Log(LOG_INFO) << ". acid spit, part = " << _prjImpact;
 
 		if (_prjImpact != VOXEL_EMPTY
@@ -599,17 +597,13 @@ bool ProjectileFlyBState::createNewProjectile() // private.
 		if (_originVoxel != Position(-1,-1,-1)) // here, origin is a BL waypoint
 		{
 			_prjImpact = projectile->calculateTrajectory(
-													_unit->getFiringAccuracy(
-																		_action.type,
-																		_action.weapon),
+													_unit->getAccuracy(_action),
 													_originVoxel);
 			//Log(LOG_INFO) << ". shoot weapon[0], voxelType = " << _prjImpact;
 		}
 		else // this is non-BL weapon shooting
 		{
-			_prjImpact = projectile->calculateTrajectory(_unit->getFiringAccuracy(
-																			_action.type,
-																			_action.weapon));
+			_prjImpact = projectile->calculateTrajectory(_unit->getAccuracy(_action));
 			//Log(LOG_INFO) << ". shoot weapon[1], voxelType = " << _prjImpact;
 		}
 		//Log(LOG_INFO) << ". shoot weapon, voxelType = " << _prjImpact;
@@ -980,13 +974,10 @@ void ProjectileFlyBState::think()
 																	_origin,
 																	_targetVoxel);
 
-								_prjImpact = prj->calculateTrajectory(
-																	std::max(
-																			0.,
-																			_unit->getFiringAccuracy(
-																								_action.type,
-																								_action.weapon)
-																							- i * 0.023)); // pellet spread.
+								const double acu = std::max(
+														0.,
+														_unit->getAccuracy(_action) - i * 0.023);
+								_prjImpact = prj->calculateTrajectory(acu); // pellet spread.
 								if (_prjImpact != VOXEL_EMPTY)
 								{
 									prj->skipTrajectory(); // as above: skip the shot to the end of its path
@@ -1061,12 +1052,8 @@ void ProjectileFlyBState::think()
 									if (dist > 30)
 										++statsUnit->longDistanceHitCounter;
 
-									if (dist > static_cast<int>(_unit->getFiringAccuracy(
-																					_action.type,
-																					_action.weapon) * 35.))
-									{
+									if (dist > static_cast<int>(_unit->getAccuracy(_action) * 35.))
 										++statsUnit->lowAccuracyHitCounter;
-									}
 								}
 							}
 						}
@@ -1273,44 +1260,21 @@ void ProjectileFlyBState::targetFloor() // private.
  */
 void ProjectileFlyBState::performMeleeAttack()
 {
-	//Log(LOG_INFO) << "ProjectileFlyBState::performMeleeAttack()";
-	const BattleUnit* const buTarget = _battleSave->getTile(_action.target)->getUnit();
-	const int height = buTarget->getFloatHeight() + (buTarget->getHeight() / 2);
-
-	Position voxel;
-	_battleSave->getPathfinding()->directionToVector(
-												_unit->getDirection(),
-												&voxel);
-	voxel = _action.target * Position(16,16,24) + Position(
-														8,8,
-														height - _battleSave->getTile(_action.target)->getTerrainLevel())
-													- voxel;
-
 	_unit->aim();
 	_unit->setCache(NULL);
 	_parent->getMap()->cacheUnit(_unit);
 
-	//Log(LOG_INFO) << ". meleeAttack, weapon = " << _action.weapon->getRules()->getType();
-	//Log(LOG_INFO) << ". meleeAttack, ammo = " << _ammo->getRules()->getType();
-	// kL: from ExplosionBState, moved here to play a proper hit/miss sFx
-	const int pct = static_cast<int>(Round(_unit->getFiringAccuracy(
-																BA_HIT,
-//																_ammo) // Ammo is the weapon since (melee==true). Not necessarily ...
-																_action.weapon) * 100.));
-	//Log(LOG_INFO) << ". ID " << _unit->getId() << " weapon " << _action.weapon->getRules()->getType() << " hit percent = " << pct;
+	// moved here from ExplosionBState to play a proper hit/miss sFx
 	bool success;
+	const int pct = static_cast<int>(Round(_unit->getAccuracy(_action) * 100.));
 	if (RNG::percent(pct) == true)
-	{
-		//Log(LOG_INFO) << ". success";
 		success = true;
-	}
 	else
 		success = false;
 
 	int sound = -1;
 	if (success == false)
 	{
-		//Log(LOG_INFO) << ". meleeAttack MISS, unitID " << _unit->getId();
 		if (_ammo->getRules()->getBattleType() == BT_MELEE
 			&& _ammo->getRules()->getMeleeSound() != -1		// if there is a hitSound play attackSound, else ITEM_THROW;
 			&& _ammo->getRules()->getMeleeHitSound() != -1)	// the hitSound will be used for success.
@@ -1322,7 +1286,6 @@ void ProjectileFlyBState::performMeleeAttack()
 	}
 	else
 	{
-		//Log(LOG_INFO) << ". meleeAttack HIT, unitID " << _unit->getId();
 		if (_ammo->getRules()->getBattleType() == BT_MELEE)
 		{
 			sound = _ammo->getRules()->getMeleeHitSound();
@@ -1341,15 +1304,6 @@ void ProjectileFlyBState::performMeleeAttack()
 										-1,
 										_parent->getMap()->getSoundAngle(_action.target));
 
-/*	if (_battleSave->getDebugMode() == false
-		&& _action.weapon->getRules()->getBattleType() == BT_MELEE
-		&& _ammo != NULL
-		&& _ammo->spendBullet() == false)
-	{
-		_battleSave->removeItem(_ammo);
-//		if (_action.weapon != NULL) // kL, in case the weapon just spent itself as a bullet -- jic.
-		_action.weapon->setAmmoItem(NULL);
-	} */
 	if (_action.weapon->getRules()->getBattleType() == BT_MELEE
 		&& _ammo != NULL)
 	{
@@ -1363,15 +1317,29 @@ void ProjectileFlyBState::performMeleeAttack()
 
 	_parent->getMap()->setCursorType(CT_NONE); // might be already done in primaryAction()
 
+
+	const BattleUnit* const targetUnit = _battleSave->getTile(_action.target)->getUnit();
+	const int height = targetUnit->getFloatHeight()
+					 + (targetUnit->getHeight() / 2)
+					 - _battleSave->getTile(_action.target)->getTerrainLevel();
+
+	Position posVoxel;
+	_battleSave->getPathfinding()->directionToVector(
+												_unit->getDirection(),
+												&posVoxel);
+	posVoxel = _action.target * Position(16,16,24) + Position(
+															8,8,
+															height)
+													- posVoxel;
+
 	_parent->statePushNext(new ExplosionBState(
 											_parent,
-											voxel,
+											posVoxel,
 											_action.weapon,
 											_unit,
 											NULL,
 											true,
-											success)); // kL_add.
-	//Log(LOG_INFO) << "ProjectileFlyBState::performMeleeAttack() EXIT";
+											success));
 }
 
 }

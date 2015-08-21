@@ -33,9 +33,11 @@ class Text;
 
 
 /**
- * A class that represents a single box in the action popup menu on the battlescape.
- * It shows the possible actions of an item, their TU cost and accuracy.
- * Mouse over highlights the action, when clicked the action is sent to the parent state.
+ * A class that represents a single box in the action popup menu on the
+ * battlescape.
+ * @note It shows the possible actions of an item along with the TU cost and
+ * accuracy. Mouse over highlights the action and when clicked the action is
+ * sent to the parent state.
  */
 class ActionMenuItem
 	:
@@ -59,7 +61,7 @@ private:
 		/// Creates a new ActionMenuItem.
 		ActionMenuItem(
 				size_t id,
-				Game* game,
+				const Game* const game,
 				int x,
 				int y);
 		/// Cleans up the ActionMenuItem.

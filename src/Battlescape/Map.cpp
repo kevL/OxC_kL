@@ -3964,20 +3964,17 @@ void Map::drawTerrain(Surface* const surface) // private.
 								// to turn accuracy to 'red 0' if target is out of LoS/LoF.
 								const BattleAction* const action = _battleSave->getBattleGame()->getCurrentAction();
 
-								int accuracy = static_cast<int>(Round(
-													action->actor->getFiringAccuracy(
-																				action->type,
-																				action->weapon) * 100.));
+								int accuracy = static_cast<int>(Round(action->actor->getAccuracy(*action) * 100.));
 
 								const RuleItem* const weaponRule = action->weapon->getRules();
 								const int
 									lowerLimit = weaponRule->getMinRange(),
 									distance = _battleSave->getTileEngine()->distance(
-																			Position(
-																					itX,
-																					itY,
-																					itZ),
-																			action->actor->getPosition());
+																					Position(
+																							itX,
+																							itY,
+																							itZ),
+																					action->actor->getPosition());
 								int upperLimit;
 								switch (action->type)
 								{
@@ -4043,12 +4040,12 @@ void Map::drawTerrain(Surface* const surface) // private.
 								Uint8 color = Palette::blockOffset(2)+3; // red
 
 								const bool canThrow = _battleSave->getTileEngine()->validateThrow(
-																						*action,
-																						originVoxel,
-																						targetVoxel);
+																							*action,
+																							originVoxel,
+																							targetVoxel);
 								if (canThrow == true)
 								{
-									accuracy = static_cast<unsigned int>(Round(_battleSave->getSelectedUnit()->getThrowingAccuracy() * 100.));
+									accuracy = static_cast<unsigned int>(Round(_battleSave->getSelectedUnit()->getAccuracy(*action) * 100.));
 									color = Palette::blockOffset(3)+3; // green
 								}
 

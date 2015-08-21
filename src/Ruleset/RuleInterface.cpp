@@ -26,8 +26,8 @@ namespace OpenXcom
 {
 
 /**
- * Creates a blank ruleset for a certain type of interface,
- * containing an index of elements that make it up.
+ * Creates a blank ruleset for a certain type of interface containing an index
+ * of elements that make it up.
  * @param type - reference the string defining the type
  */
 RuleInterface::RuleInterface(const std::string& type)
@@ -77,10 +77,9 @@ void RuleInterface::load(const YAML::Node& node)
 			element.w =
 			element.h = -1;
 
-		element.color		= (*i)["color"]		.as<int>(-1);
-		element.color2		= (*i)["color2"]	.as<int>(-1);
-		element.border		= (*i)["border"]	.as<int>(-1);
-		element.TFTDMode	= (*i)["TFTDMode"]	.as<bool>(false);
+		element.color	= (*i)["color"]	.as<int>(-1);
+		element.color2	= (*i)["color2"].as<int>(-1);
+		element.border	= (*i)["border"].as<int>(-1);
 
 		std::string id = (*i)["id"].as<std::string>("");
 		_elements[id] = element;
@@ -89,10 +88,10 @@ void RuleInterface::load(const YAML::Node& node)
 
 /**
  * Retrieves info on an element
- * @param id - a string defining the element
+ * @param id - reference a string defining the element
  * @return, pointer to Element
  */
-const Element* const RuleInterface::getElement(const std::string id) const // <- why i hate const. There is likely NO optimization done despite this.
+const Element* const RuleInterface::getElement(const std::string& id) const // <- why i hate const. There is likely NO optimization done despite this.
 {
 	const std::map<std::string, Element>::const_iterator i = _elements.find(id);
 	if (i != _elements.end())

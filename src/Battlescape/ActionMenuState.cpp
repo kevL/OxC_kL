@@ -231,49 +231,43 @@ ActionMenuState::~ActionMenuState()
 
 /**
  * Adds a new menu item for an action.
- * @param batType	- action type (BattlescapeGame.h)
- * @param desc		- reference the action description
- * @param id		- pointer to the new item-action ID
+ * @param bat	- action type (BattlescapeGame.h)
+ * @param desc	- reference the action description
+ * @param id	- pointer to the new item-action ID
  */
 void ActionMenuState::addItem( // private.
-		BattleActionType batType,
+		BattleActionType bat,
 		const std::string& desc,
 		size_t* id)
 {
+	int var;
 	std::wstring
 		wst1, // acu
 		wst2; // tu
 
-	if (batType == BA_THROW
-		|| batType == BA_AIMEDSHOT
-		|| batType == BA_SNAPSHOT
-		|| batType == BA_AUTOSHOT
-		|| batType == BA_HIT)
+	if (bat == BA_THROW
+		|| bat == BA_AIMEDSHOT
+		|| bat == BA_SNAPSHOT
+		|| bat == BA_AUTOSHOT
+		|| bat == BA_HIT)
 	{
-		int acu;
-		if (batType == BA_THROW)
-			acu = static_cast<int>(Round(_action->actor->getThrowingAccuracy() * 100.));
-		else
-			acu = static_cast<int>(Round(_action->actor->getFiringAccuracy(
-																		batType,
-																		_action->weapon) * 100.));
-
-		wst1 = tr("STR_ACCURACY_SHORT_KL").arg(acu);
+		var = static_cast<int>(Round(_action->actor->getAccuracy(*_action) * 100.));
+		wst1 = tr("STR_ACCURACY_SHORT_KL").arg(var);
 	}
 
-	const int tu = _action->actor->getActionTUs(
-											batType,
-											_action->weapon);
+	var = _action->actor->getActionTUs(
+									bat,
+									_action->weapon);
 
-	if (batType != BA_NONE) // ie. everything but doggie bark
-		wst2 = tr("STR_TIME_UNITS_SHORT").arg(tu);
+	if (bat != BA_NONE) // ie. everything but doggie bark
+		wst2 = tr("STR_TIME_UNITS_SHORT").arg(var);
 
 	_menuSelect[*id]->setAction(
-							batType,
+							bat,
 							tr(desc),
 							wst1,
 							wst2,
-							tu);
+							var);
 	_menuSelect[*id]->setVisible();
 
 	++(*id);
