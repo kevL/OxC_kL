@@ -1930,41 +1930,41 @@ const bool BattleUnit::isOut_t(const OutCheck test) const
 
 /**
  * Gets the number of time units a certain action takes for this BattleUnit.
- * @param batType	- type of battle action (BattlescapeGame.h)
- * @param item		- pointer to BattleItem for TU-cost
+ * @param bat	- BattleActionType (BattlescapeGame.h)
+ * @param item	- pointer to BattleItem for TU-cost
  * @return, TUs to perform action
  */
 int BattleUnit::getActionTUs(
-		const BattleActionType batType,
-		const BattleItem* item) const
+		const BattleActionType& bat,
+		const BattleItem* const item) const
 {
-	if (batType == BA_NONE
+	if (bat == BA_NONE
 		|| item == NULL)
 	{
 		return 0;
 	}
 
 	return getActionTUs(
-					batType,
+					bat,
 					item->getRules());
 }
 
 /**
  * Gets the number of time units a certain action takes for this BattleUnit.
- * @param batType	- type of battle action (BattlescapeGame.h)
- * @param item		- pointer to RuleItem for TU-cost (default NULL)
+ * @param bat	- BattleActionType (BattlescapeGame.h)
+ * @param rule	- pointer to RuleItem for TU-cost (default NULL)
  * @return, TUs to perform action
  */
 int BattleUnit::getActionTUs(
-		const BattleActionType batType,
-		const RuleItem* rule) const
+		const BattleActionType& bat,
+		const RuleItem* const rule) const
 {
-	if (batType == BA_NONE)
+	if (bat == BA_NONE)
 		return 0;
 
 	int cost;
 
-	switch (batType)
+	switch (bat)
 	{
 		// note: Should put "tuDefuse" & "tuThrow" yaml-entry in Xcom1Ruleset under various grenade-types etc.
 		case BA_DROP:
@@ -2046,10 +2046,10 @@ int BattleUnit::getActionTUs(
 	if (cost > 0
 		&& ((rule != NULL
 				&& rule->getFlatRate() == false) // it's a percentage, apply to TUs
-			|| batType == BA_THROW)
-		&& batType != BA_DEFUSE
-		&& batType != BA_DROP
-		&& batType != BA_EXECUTE)
+			|| bat == BA_THROW)
+		&& bat != BA_DEFUSE
+		&& bat != BA_DROP
+		&& bat != BA_EXECUTE)
 	{
 		cost = std::max(
 					1,
