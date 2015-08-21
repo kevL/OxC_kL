@@ -48,8 +48,8 @@ class RuleItem;
 
 
 /**
- * Represents a specific section of the inventory, containing
- * information like available slots and screen position.
+ * Represents a specific section of the inventory.
+ * @note This contains information like available slots and screen position.
  */
 class RuleInventory
 {

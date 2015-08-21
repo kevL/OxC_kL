@@ -747,10 +747,10 @@ private:
 
 		/// Gets the number of time units a certain action takes.
 		int getActionTUs(
-				const BattleActionType& bat,
+				const BattleActionType bat,
 				const BattleItem* item) const;
 		int getActionTUs(
-				const BattleActionType& bat,
+				const BattleActionType bat,
 				const RuleItem* itRule = NULL) const;
 
 		/// Spends time units if possible.
@@ -851,7 +851,7 @@ private:
 
 		/// Gets the item in the specified slot of this unit's inventory.
 		BattleItem* getItem(
-				RuleInventory* slot,
+				const RuleInventory* const slot,
 				int x = 0,
 				int y = 0) const;
 		/// Gets the item in the specified slot of this unit's inventory.

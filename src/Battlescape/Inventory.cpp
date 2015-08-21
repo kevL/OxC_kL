@@ -525,7 +525,7 @@ bool Inventory::overlapItems( // static.
  * Gets the inventory slot located in the specified mouse position.
  * @param x - pointer to mouse X position; returns the slot's X position
  * @param y - pointer to mouse Y position; returns the slot's Y position
- * @return, pointer to slot rules, or NULL if none
+ * @return, pointer to slot rules or NULL if none
  */
 RuleInventory* Inventory::getSlotInPosition( // private.
 		int* x,
@@ -722,7 +722,7 @@ void Inventory::mouseClick(Action* action, State* state)
 		if (_selUnit == NULL)
 			return;
 
-		if (_selItem == NULL) // Pickup item
+		if (_selItem == NULL) // Pickup item.
 		{
 			int
 				x = static_cast<int>(std::floor(action->getAbsoluteXMouse())) - getX(),
@@ -750,7 +750,7 @@ void Inventory::mouseClick(Action* action, State* state)
 						if (slot->getType() == INV_HAND
 							|| (slot->getType() != INV_GROUND
 								&& (_tuMode == false
-									|| _selUnit->getOriginalFaction() != FACTION_PLAYER))) // aLien units drop-to-ground on Ctrl+LMB.
+									|| _selUnit->getOriginalFaction() != FACTION_PLAYER))) // aLien units drop-to-ground on Ctrl+LMB
 						{
 							slotRule = _game->getRuleset()->getInventory("STR_GROUND");
 						}
@@ -811,7 +811,7 @@ void Inventory::mouseClick(Action* action, State* state)
 
 						if (placed == true)
 						{
-							_mouseOverItem = NULL; // remove cursor info 'cause item is no longer under the cursor.
+							_mouseOverItem = NULL; // remove cursor info 'cause item is no longer under the cursor
 							mouseOver(action, state);
 						}
 					}
@@ -838,7 +838,7 @@ void Inventory::mouseClick(Action* action, State* state)
 				}
 			}
 		}
-		else // Drop item or Load weapon
+		else // Drop item or Load weapon.
 		{
 			int
 				x = _selection->getX()
@@ -866,7 +866,7 @@ void Inventory::mouseClick(Action* action, State* state)
 												item,
 												_selItem) == true;
 
-				if (item == NULL // Put item in empty slot, or stack it, if possible.
+				if (item == NULL // Put item in empty slot or stack it if possible.
 					|| item == _selItem
 					|| canStack == true)
 				{
@@ -900,11 +900,7 @@ void Inventory::mouseClick(Action* action, State* state)
 														->play();
 						}
 						else
-						{
 							_warning->showMessage(_game->getLanguage()->getString("STR_NOT_ENOUGH_TIME_UNITS"));
-//							mouseOver(action, state);	// kL, refresh tuCost visibility.
-//							arrangeGround(false);		// kL, refresh tuCost visibility.
-						}
 					}
 					else if (canStack == true)
 					{
@@ -927,14 +923,10 @@ void Inventory::mouseClick(Action* action, State* state)
 														->play();
 						}
 						else
-						{
 							_warning->showMessage(_game->getLanguage()->getString("STR_NOT_ENOUGH_TIME_UNITS"));
-//							mouseOver(action, state); // kL, refresh tuCost visibility.
-//							arrangeGround(false); // kL, refresh tuCost visibility.
-						}
 					}
 				}
-				else if (item->getRules()->getCompatibleAmmo()->empty() == false) // Put item in weapon
+				else if (item->getRules()->getCompatibleAmmo()->empty() == false) // Put item in weapon.
 				{
 					bool wrong = true;
 					for (std::vector<std::string>::const_iterator
@@ -950,19 +942,11 @@ void Inventory::mouseClick(Action* action, State* state)
 					}
 
 					if (wrong == true)
-					{
 						_warning->showMessage(_game->getLanguage()->getString("STR_WRONG_AMMUNITION_FOR_THIS_WEAPON"));
-//						mouseOver(action, state); // kL, refresh tuCost visibility.
-//						arrangeGround(false); // kL, refresh tuCost visibility.
-					}
 					else
 					{
 						if (item->getAmmoItem() != NULL)
-						{
 							_warning->showMessage(_game->getLanguage()->getString("STR_WEAPON_IS_ALREADY_LOADED"));
-//							mouseOver(action, state); // kL, refresh tuCost visibility.
-//							arrangeGround(false); // kL, refresh tuCost visibility.
-						}
 						else if (_tuMode == false
 							|| _selUnit->spendTimeUnits(item->getRules()->getTUReload()) == true)
 						{
@@ -985,18 +969,14 @@ void Inventory::mouseClick(Action* action, State* state)
 								arrangeGround(false);
 						}
 						else
-						{
 							_warning->showMessage(_game->getLanguage()->getString("STR_NOT_ENOUGH_TIME_UNITS"));
-//							mouseOver(action, state);	// kL, refresh tuCost visibility.
-//							arrangeGround(false);		// kL, refresh tuCost visibility.
-						}
 					}
 				}
-				// else swap the item positions?
+				// else swap the item positions ...
 			}
 			else
 			{
-				// try again, using the position of the mouse cursor, not the item (slightly more intuitive for stacking)
+				// try again using the position of the mouse cursor not the item (slightly more intuitive for stacking)
 				x = static_cast<int>(std::floor(action->getAbsoluteXMouse())) - getX();
 				y = static_cast<int>(std::floor(action->getAbsoluteYMouse())) - getY();
 
@@ -1029,11 +1009,7 @@ void Inventory::mouseClick(Action* action, State* state)
 														->play();
 						}
 						else
-						{
 							_warning->showMessage(_game->getLanguage()->getString("STR_NOT_ENOUGH_TIME_UNITS"));
-//							mouseOver(action, state); // kL, refresh tuCost visibility.
-//							arrangeGround(false); // kL, refresh tuCost visibility.
-						}
 					}
 				}
 			}
@@ -1043,23 +1019,18 @@ void Inventory::mouseClick(Action* action, State* state)
 	{
 		_tuCost = -1;
 
-		//Log(LOG_INFO) << "Inventory: SDL_BUTTON_RIGHT";
 		if (_selItem == NULL)
 		{
-			//Log(LOG_INFO) << ". no selected item";
-			if (_atBase == false
-				|| Options::includePrimeStateInSavedLayout == true)
+			if (Options::includePrimeStateInSavedLayout == true
+				|| _atBase == false) // Priming is allowed only on the field or in preBattle, or if fuse-state can save to Layouts.
 			{
-				//Log(LOG_INFO) << ". not at base";
-				if (_tuMode == false)	// kL_note: ie. TurnUnits have not been instantiated yet:
-										// ergo preBattlescape inventory screen is active.
+				if (_tuMode == false)
 				{
-					//Log(LOG_INFO) << ". preBattle screen";
 					int
 						x = static_cast<int>(std::floor(action->getAbsoluteXMouse())) - getX(),
 						y = static_cast<int>(std::floor(action->getAbsoluteYMouse())) - getY();
 
-					RuleInventory* const slot = getSlotInPosition(&x,&y);
+					const RuleInventory* const slot = getSlotInPosition(&x,&y);
 					if (slot != NULL)
 					{
 						if (slot->getType() == INV_GROUND)
@@ -1068,7 +1039,7 @@ void Inventory::mouseClick(Action* action, State* state)
 						BattleItem* const item = _selUnit->getItem(slot, x,y);
 						if (item != NULL)
 						{
-							const RuleItem* itRule = item->getRules();
+							const RuleItem* const itRule = item->getRules();
 							if (itRule->isGrenade() == true)
 							{
 								if (item->getFuseTimer() == -1) // Prime that grenade!
@@ -1088,15 +1059,14 @@ void Inventory::mouseClick(Action* action, State* state)
 																			item,
 																			this));
 								}
-								else // deFuse grenade.
+								else // deFuse grenade
 								{
 									_warning->showMessage(_game->getLanguage()->getString("STR_GRENADE_IS_DEACTIVATED"));
 									item->setFuseTimer(-1);
-//									drawItems(); // kL, de-vector the Fuse graphic.
 									arrangeGround(false);
 								}
 							}
-							else if (slot->getType() != INV_GROUND) // move item to Ground.
+							else if (slot->getType() != INV_GROUND) // move item to Ground
 							{
 								moveItem(
 										item,
@@ -1109,14 +1079,14 @@ void Inventory::mouseClick(Action* action, State* state)
 																ResourcePack::ITEM_DROP)
 															->play();
 
-								_mouseOverItem = NULL; // remove cursor info 'cause item is no longer under the cursor.
+								_mouseOverItem = NULL; // remove cursor info 'cause item is no longer under the cursor
 								mouseOver(action, state);
 							}
 						}
 					}
 				}
 				else
-					_game->popState(); // Closes the inventory window on right-click (if not in preBattle equip screen!)
+					_game->popState(); // Close the inventory window on right-click if not in preBattle equip screen!
 			}
 		}
 		else
@@ -1125,14 +1095,13 @@ void Inventory::mouseClick(Action* action, State* state)
 				_stackLevel[static_cast<size_t>(_selItem->getSlotX())]
 						   [static_cast<size_t>(_selItem->getSlotY())] += 1;
 
-			setSelectedItem(NULL); // Return item to original position
+			setSelectedItem(NULL); // Return item to original position.
 		}
 	}
 
 	InteractiveSurface::mouseClick(action, state);
 
-/*	int
-		x,y;
+/*	int x,y;
 	SDL_GetMouseState(&x,&y);
 
 	SDL_WarpMouse(x + 1, y);	// send a mouse motion event to refresh any hover actions

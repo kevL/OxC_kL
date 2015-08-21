@@ -1935,7 +1935,7 @@ const bool BattleUnit::isOut_t(const OutCheck test) const
  * @return, TUs to perform action
  */
 int BattleUnit::getActionTUs(
-		const BattleActionType& bat,
+		const BattleActionType bat,
 		const BattleItem* const item) const
 {
 	if (bat == BA_NONE
@@ -1956,7 +1956,7 @@ int BattleUnit::getActionTUs(
  * @return, TUs to perform action
  */
 int BattleUnit::getActionTUs(
-		const BattleActionType& bat,
+		const BattleActionType bat,
 		const RuleItem* const itRule) const
 {
 	if (bat == BA_NONE)
@@ -2726,7 +2726,7 @@ Tile* BattleUnit::getTile() const
  * @return, pointer to BattleItem in slot or NULL if none
  */
 BattleItem* BattleUnit::getItem(
-		RuleInventory* slot,
+		const RuleInventory* const slot,
 		int x,
 		int y) const
 {
@@ -2738,7 +2738,7 @@ BattleItem* BattleUnit::getItem(
 				++i)
 		{
 			if ((*i)->getSlot() == slot
-				&& (*i)->occupiesSlot(x, y))
+				&& (*i)->occupiesSlot(x,y))
 			{
 				return *i;
 			}
@@ -2751,7 +2751,7 @@ BattleItem* BattleUnit::getItem(
 				i != _tile->getInventory()->end();
 				++i)
 		{
-			if ((*i)->occupiesSlot(x, y))
+			if ((*i)->occupiesSlot(x,y))
 			{
 				return *i;
 			}

@@ -3089,12 +3089,13 @@ void BattlescapeState::animate()
 
 			static int stickyTiks; // inits to 0.
 			if (_bigBtnBorder->getVisible() == true)
-				++stickyTiks;
-
-			if (stickyTiks == 4)
 			{
-				stickyTiks = 0;
-				_bigBtnBorder->setVisible(false);
+				++stickyTiks;
+				if (stickyTiks == 4)
+				{
+					stickyTiks = 0;
+					_bigBtnBorder->setVisible(false);
+				}
 			}
 		}
 	}

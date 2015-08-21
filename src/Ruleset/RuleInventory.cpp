@@ -65,7 +65,7 @@ namespace OpenXcom
 
 /**
  * Creates a blank ruleset for a certain type of inventory section.
- * @param id String defining the id.
+ * @param id - string defining the id
  */
 RuleInventory::RuleInventory(const std::string& id)
 	:
@@ -103,8 +103,8 @@ void RuleInventory::load(
 
 /**
  * Gets the language string that names this inventory section.
- * Each section has a unique name.
- * @return, the section name
+ * @note Each section has a unique name.
+ * @return, section name
  */
 std::string RuleInventory::getId() const
 {
@@ -113,7 +113,7 @@ std::string RuleInventory::getId() const
 
 /**
  * Gets the X position of the inventory section on the screen.
- * @return, the X position in pixels
+ * @return, X position in pixels
  */
 int RuleInventory::getX() const
 {
@@ -122,7 +122,7 @@ int RuleInventory::getX() const
 
 /**
  * Gets the Y position of the inventory section on the screen.
- * @return, the Y position in pixels
+ * @return, Y position in pixels
  */
 int RuleInventory::getY() const
 {
@@ -131,10 +131,10 @@ int RuleInventory::getY() const
 
 /**
  * Gets the type of the inventory section.
- * Slot-based contain a limited number of slots.
- * Hands only contain one slot but can hold any item.
- * Ground can hold infinite items but it doesn't attach to soldiers.
- * @return, the InventoryType
+ * @note Slot-based contain a limited number of slots. Hands only contain one
+ * slot but can hold any item. Ground can hold infinite items but it doesn't
+ * attach to soldiers.
+ * @return, InventoryType (RuleInventory.h)
  */
 InventoryType RuleInventory::getType() const
 {
@@ -164,64 +164,65 @@ bool RuleInventory::checkSlotInPosition(
 		mouseX = *x,
 		mouseY = *y;
 
-	if (_type == INV_HAND)
+	switch (_type)
 	{
-		for (int
-				xx = 0;
-				xx < HAND_W;
-				++xx)
-		{
+		case INV_HAND:
 			for (int
-					yy = 0;
-					yy < HAND_H;
-					++yy)
+					xx = 0;
+					xx < HAND_W;
+					++xx)
 			{
-				if (   mouseX >= _x + xx * SLOT_W
-					&& mouseX < _x + (xx + 1) * SLOT_W
-					&& mouseY >= _y + yy * SLOT_H
-					&& mouseY < _y + (yy + 1) * SLOT_H)
+				for (int
+						yy = 0;
+						yy < HAND_H;
+						++yy)
 				{
-					*x = 0;
-					*y = 0;
+					if (   mouseX >= _x + xx * SLOT_W
+						&& mouseX < _x + (xx + 1) * SLOT_W
+						&& mouseY >= _y + yy * SLOT_H
+						&& mouseY < _y + (yy + 1) * SLOT_H)
+					{
+						*x =
+						*y = 0;
+
+						return true;
+					}
+				}
+			}
+		break;
+
+		case INV_GROUND:
+			if (   mouseX >= _x
+				&& mouseX < 320
+				&& mouseY >= _y
+				&& mouseY < 200)
+			{
+				*x = static_cast<int>(std::floor(
+					 static_cast<double>(mouseX - _x) / static_cast<double>(SLOT_W)));
+				*y = static_cast<int>(std::floor(
+					 static_cast<double>(mouseY - _y) / static_cast<double>(SLOT_H)));
+
+				return true;
+			}
+		break;
+
+		default:
+			for (std::vector<RuleSlot>::const_iterator
+					i = _slots.begin();
+					i != _slots.end();
+					++i)
+			{
+				if (   mouseX >= _x + i->x * SLOT_W
+					&& mouseX < _x + (i->x + 1) * SLOT_W
+					&& mouseY >= _y + i->y * SLOT_H
+					&& mouseY < _y + (i->y + 1) * SLOT_H)
+				{
+					*x = i->x;
+					*y = i->y;
 
 					return true;
 				}
 			}
-		}
-	}
-	else if (_type == INV_GROUND)
-	{
-		if (   mouseX >= _x
-			&& mouseX < 320
-			&& mouseY >= _y
-			&& mouseY < 200)
-		{
-			*x = static_cast<int>(std::floor(
-				 static_cast<double>(mouseX - _x) / static_cast<double>(SLOT_W)));
-			*y = static_cast<int>(std::floor(
-				 static_cast<double>(mouseY - _y) / static_cast<double>(SLOT_H)));
-
-			return true;
-		}
-	}
-	else
-	{
-		for (std::vector<RuleSlot>::const_iterator
-				i = _slots.begin();
-				i != _slots.end();
-				++i)
-		{
-			if (   mouseX >= _x + i->x * SLOT_W
-				&& mouseX < _x + (i->x + 1) * SLOT_W
-				&& mouseY >= _y + i->y * SLOT_H
-				&& mouseY < _y + (i->y + 1) * SLOT_H)
-			{
-				*x = i->x;
-				*y = i->y;
-
-				return true;
-			}
-		}
 	}
 
 	return false;
@@ -239,69 +240,71 @@ bool RuleInventory::fitItemInSlot(
 		int x,
 		int y) const
 {
-	if (_type == INV_HAND)
-		return true;
-	else if (_type == INV_GROUND)
+	switch (_type)
 	{
-		const int
-			width = (320 - _x) / SLOT_W,
-			height = (200 - _y) / SLOT_H;
-		int xOffset = 0;
-
-		while (x >= xOffset + width)
-			xOffset += width;
-
-		for (int
-				find_x = x;
-				find_x != x + item->getInventoryWidth();
-				++find_x)
+		case INV_GROUND:
 		{
+			const int
+				width = (320 - _x) / SLOT_W,
+				height = (200 - _y) / SLOT_H;
+			int xOffset = 0;
+
+			while (x >= xOffset + width)
+				xOffset += width;
+
 			for (int
-					find_y = y;
-					find_y != y + item->getInventoryHeight();
-					++find_y)
+					find_x = x;
+					find_x != x + item->getInventoryWidth();
+					++find_x)
 			{
-				if (!
-						(  find_x >= xOffset
-						&& find_x < xOffset + width
-						&& find_y > -1
-						&& find_y < height))
+				for (int
+						find_y = y;
+						find_y != y + item->getInventoryHeight();
+						++find_y)
 				{
-					return false;
+					if (!
+							(  find_x >= xOffset
+							&& find_x < xOffset + width
+							&& find_y > -1
+							&& find_y < height))
+					{
+						return false;
+					}
 				}
 			}
 		}
-
+		case INV_HAND:
 		return true;
-	}
-	else
-	{
-		const int totalSlots = item->getInventoryWidth() * item->getInventoryHeight();
-		int foundSlots = 0;
 
-		for (std::vector<RuleSlot>::const_iterator
-				i = _slots.begin();
-				i != _slots.end()
-					&& foundSlots < totalSlots;
-				++i)
+		default:
 		{
-			if (   i->x >= x
-				&& i->x < x + item->getInventoryWidth()
-				&& i->y >= y
-				&& i->y < y + item->getInventoryHeight())
-			{
-				++foundSlots;
-			}
-		}
+			const int slotsTotal = item->getInventoryWidth() * item->getInventoryHeight();
+			int slotsFound = 0;
 
-		return (foundSlots == totalSlots);
+			for (std::vector<RuleSlot>::const_iterator
+					i = _slots.begin();
+					i != _slots.end()
+						&& slotsFound < slotsTotal;
+					++i)
+			{
+				if (   i->x >= x
+					&& i->x < x + item->getInventoryWidth()
+					&& i->y >= y
+					&& i->y < y + item->getInventoryHeight())
+				{
+					++slotsFound;
+				}
+			}
+
+			return (slotsFound == slotsTotal);
+		}
 	}
 }
 
 /**
  * Gets the time unit cost to place an item in this slot to another.
  * @param slot - the new slot id
- * @return, the time unit cost
+ * @return, tu cost
  */
 int RuleInventory::getCost(const RuleInventory* const slot) const
 {
