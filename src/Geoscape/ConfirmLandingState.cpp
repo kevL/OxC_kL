@@ -410,13 +410,13 @@ void ConfirmLandingState::btnYesClick(Action*)
 
 /**
  * Returns the craft to base and closes the window.
- * kL CHANGE: the craft goes into Patrol mode.
+ * @note CHANGE: the craft goes into Patrol mode.
  * @param action - pointer to an Action
  */
 void ConfirmLandingState::btnNoClick(Action*)
 {
 //	_craft->returnToBase();
-	_craft->setDestination(NULL); // kL
+	_craft->setDestination(NULL);
 	_game->popState();
 }
 

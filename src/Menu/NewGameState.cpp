@@ -50,16 +50,16 @@ NewGameState::NewGameState()
 
 	_txtTitle		= new Text(192, 17, 64, 18);
 
-	_btnBeginner	= new TextButton(160, 18, 80, 35);
-	_btnExperienced	= new TextButton(160, 18, 80, 55);
-	_btnVeteran		= new TextButton(160, 18, 80, 75);
-	_btnGenius		= new TextButton(160, 18, 80, 95);
+	_btnBeginner	= new TextButton(160, 18, 80,  35);
+	_btnExperienced	= new TextButton(160, 18, 80,  55);
+	_btnVeteran		= new TextButton(160, 18, 80,  75);
+	_btnGenius		= new TextButton(160, 18, 80,  95);
 	_btnSuperhuman	= new TextButton(160, 18, 80, 115);
 
 	_btnIronman		= new ToggleTextButton(78, 18, 80, 139);
 	_txtIronman		= new Text(90, 24, 162, 135);
 
-	_btnCancel		= new TextButton(78, 16, 80, 164);
+	_btnCancel		= new TextButton(78, 16,  80, 164);
 	_btnOk			= new TextButton(78, 16, 162, 164);
 
 	_difficulty = _btnBeginner;

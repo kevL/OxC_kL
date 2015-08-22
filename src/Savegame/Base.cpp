@@ -78,7 +78,8 @@ Base::Base(const Ruleset* const rules)
 		_cashIncome(0),
 		_cashSpent(0),
 		_defenseResult(0),
-		_curSoldier(0)
+		_curSoldier(0),
+		_placed(false)
 {
 	_items = new ItemContainer();
 }
@@ -181,6 +182,7 @@ void Base::load(
 	Target::load(node);
 
 	_name = Language::utf8ToWstr(node["name"].as<std::string>(""));
+	_placed = true;
 
 	if (newGame == false
 		|| Options::customInitialBase == false
@@ -441,8 +443,7 @@ void Base::setName(const std::wstring& name)
  */
 int Base::getMarker() const
 {
-	// cheap hack to hide Bases when they haven't been placed yet
-	if (AreSame(_lon, 0.) && AreSame(_lat, 0.))
+	if (_placed == false)
 		return -1;
 
 	return Globe::GLM_BASE;
@@ -1228,7 +1229,7 @@ int Base::getShortRangeTotal() const
 			{
 				total += (*i)->getRules()->getRadarChance();
 
-				if (total > 99)
+				if (total > 100)
 					return 100;
 			}
 		}
@@ -1281,7 +1282,7 @@ int Base::getLongRangeTotal() const
 		{
 			total += (*i)->getRules()->getRadarChance();
 
-			if (total > 99)
+			if (total > 100)
 				return 100;
 		}
 	}
@@ -1998,8 +1999,8 @@ void Base::setInBattlescape(bool inTactical)
 }
 
 /**
- * Marks this Base as a valid alien retaliation target.
- * @param exposed - exposed (if @c true) or unexposed (if @c false) the base (default true)
+ * Sets if this Base is a valid alien retaliation target.
+ * @param exposed - true if eligible for retaliation (default true)
  */
 void Base::setBaseExposed(bool exposed)
 {
@@ -2007,12 +2008,30 @@ void Base::setBaseExposed(bool exposed)
 }
 
 /**
- * Gets this Base's retaliation status.
- * @return, true if valid target for alien retaliation
+ * Gets if this Base is a valid alien retaliation target.
+ * @return, true if eligible for retaliation
  */
 bool Base::getBaseExposed() const
 {
 	return _exposed;
+}
+
+/**
+ * Sets if this Base has been placed and is in operation.
+ * @param placed - true if placed (default true)
+ */
+void Base::setBasePlaced(bool placed)
+{
+	_placed = placed;
+}
+
+/**
+ * Gets if this Base has been placed and is in operation.
+ * @return, true if placed
+ */
+bool Base::getBasePlaced() const
+{
+	return _placed;
 }
 
 
@@ -2173,13 +2192,11 @@ void Base::setupDefenses()
 			i = _facilities.begin();
 			i != _facilities.end();
 			++i)
-	{
 		if ((*i)->getBuildTime() == 0
 			&& (*i)->getRules()->getDefenseValue() > 0)
 		{
 			_defenses.push_back(*i);
 		}
-	}
 
 	for (std::vector<Craft*>::const_iterator
 			i = getCrafts()->begin();
@@ -2193,13 +2210,11 @@ void Base::setupDefenses()
 					k = _vehicles.begin();
 					k != _vehicles.end();
 					++k)
-			{
 				if (*k == *j) // to avoid calling a Vehicle's destructor for tanks on crafts
 				{
 					_vehicles.erase(k);
 					break;
 				}
-			}
 
 	for (std::vector<Vehicle*>::const_iterator
 			i = _vehicles.begin();
@@ -2214,18 +2229,12 @@ void Base::setupDefenses()
 			i = getCrafts()->begin();
 			i != getCrafts()->end();
 			++i)
-	{
 		if ((*i)->getStatus() != "STR_OUT")
-		{
 			for (std::vector<Vehicle*>::const_iterator
 					j = (*i)->getVehicles()->begin();
 					j != (*i)->getVehicles()->end();
 					++j)
-			{
 				_vehicles.push_back(*j);
-			}
-		}
-	}
 
 	for (std::map<std::string, int>::const_iterator // add vehicles left on the base
 			i = _items->getContents()->begin();
@@ -2235,23 +2244,25 @@ void Base::setupDefenses()
 		const std::string itemId = (i)->first;
 		const int itemQty = (i)->second;
 
-		RuleItem* const itemRule = _rules->getItem(itemId);
-		if (itemRule->isFixed() == true)
+		RuleItem* const itRule = _rules->getItem(itemId);
+		if (itRule->isFixed() == true)
 		{
-			int unitSize = 4;
-			if (_rules->getUnit(itemId))
+			int unitSize;
+			if (_rules->getUnit(itemId) != NULL)
 				unitSize = _rules->getArmor(_rules->getUnit(itemId)->getArmor())->getSize();
+			else
+				unitSize = 4;
 
-			if (itemRule->getCompatibleAmmo()->empty() == true) // so this vehicle does not need ammo
+			if (itRule->getCompatibleAmmo()->empty() == true) // this vehicle does not need ammo
 			{
 				for (int
 						j = 0;
-						j < itemQty;
+						j != itemQty;
 						++j)
 				{
 					_vehicles.push_back(new Vehicle(
-												itemRule,
-												itemRule->getClipSize(),
+												itRule,
+												itRule->getClipSize(),
 												unitSize));
 				}
 
@@ -2261,39 +2272,41 @@ void Base::setupDefenses()
 			}
 			else // this vehicle needs ammo
 			{
-				const RuleItem* const ammoRule = _rules->getItem(itemRule->getCompatibleAmmo()->front());
+				const RuleItem* const ammoRule = _rules->getItem(itRule->getCompatibleAmmo()->front());
 				const int ammoPerVehicle = ammoRule->getClipSize();
 
 				const int baseQty = _items->getItemQty(ammoRule->getType()) / ammoPerVehicle;
-				if (baseQty == 0)
+				if (baseQty != 0)
+				{
+					const int canBeAdded = std::min(
+												itemQty,
+												baseQty);
+					for (int
+							j = 0;
+							j != canBeAdded;
+							++j)
+					{
+						_vehicles.push_back(new Vehicle(
+													itRule,
+													ammoPerVehicle,
+													unitSize));
+						_items->removeItem(
+										ammoRule->getType(),
+										ammoPerVehicle);
+					}
+
+					_items->removeItem(
+									itemId,
+									canBeAdded);
+				}
+				else
 				{
 					++i;
 					continue;
 				}
-
-				const int canBeAdded = std::min(
-											itemQty,
-											baseQty);
-				for (int
-						j = 0;
-						j < canBeAdded;
-						++j)
-				{
-					_vehicles.push_back(new Vehicle(
-												itemRule,
-												ammoPerVehicle,
-												unitSize));
-					_items->removeItem(
-									ammoRule->getType(),
-									ammoPerVehicle);
-				}
-
-				_items->removeItem(
-								itemId,
-								canBeAdded);
 			}
 
-			i = _items->getContents()->begin(); // we have to start over because iterator is broken because of the removeItem
+			i = _items->getContents()->begin(); // start over because iterator is broken due to removeItem()
 		}
 		else
 			++i;

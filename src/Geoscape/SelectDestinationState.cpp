@@ -262,8 +262,7 @@ void SelectDestinationState::globeClick(Action* action)
 
 			std::vector<Target*> targets = _globe->getTargets(
 															mouseX,
-															mouseY,
-															true);
+															mouseY);
 			std::vector<Target*>::const_iterator i = std::find( // remove Craft's current target
 															targets.begin(),
 															targets.end(),
@@ -430,7 +429,7 @@ void SelectDestinationState::resize(
 	{
 		(*i)->setX((*i)->getX() + dX / 2);
 
-		if (   *i != _window
+		if (*i != _window
 			&& *i != _btnCancel
 //			&& *i != _txtTitle
 			&& *i != _btnCydonia)

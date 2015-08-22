@@ -81,8 +81,8 @@ namespace OpenXcom
  * @param globe	- pointer to the geoscape Globe
  */
 BasescapeState::BasescapeState(
-		Base* base,
-		Globe* globe)
+		Base* const base,
+		Globe* const globe)
 	:
 		_base(base),
 		_globe(globe),

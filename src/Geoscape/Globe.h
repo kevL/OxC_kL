@@ -143,21 +143,21 @@ private:
 			double lon,
 			double lat) const;
 	/// Return latitude of last visible-to-player point on given longitude.
-	double lastVisibleLat(double lon) const;
+//	double lastVisibleLat(double lon) const;
 	/// Checks if a point is inside a polygon.
 	bool insidePolygon(
 			double lon,
 			double lat,
-			Polygon* poly) const;
+			const Polygon* const poly) const;
 	/// Checks if a target is near a point.
 	bool targetNear(
-			Target* target,
+			const Target* const target,
 			int x,
 			int y) const;
 	/// Caches a set of polygons.
 	void cache(
-			std::list<Polygon*>* polygons,
-			std::list<Polygon*>* cache);
+			std::list<Polygon*>* const polygons,
+			std::list<Polygon*>* const cache);
 	/// Get position of sun relative to given position in polar cords and date.
 	Cord getSunDirection(
 			double lon,
@@ -195,8 +195,8 @@ private:
 			double lat2);
 	/// Draw target marker.
 	void drawTarget(
-			Target* target,
-			Surface* surface);
+			const Target* const target,
+			Surface* const surface);
 
 
 	public:
@@ -302,12 +302,14 @@ private:
 
 		/// Turns on/off the globe detail.
 		void toggleDetail();
+		/// Turns on/off the radar lines.
+		void toggleRadarLines();
 
 		/// Gets all the targets near a point on the globe.
 		std::vector<Target*> getTargets(
 				int x,
 				int y,
-				bool craftOnly) const;
+				bool craftOnly = true) const;
 
 		/// Caches visible globe polygons.
 		void cachePolygons();
@@ -381,14 +383,11 @@ private:
 				double lon,
 				double lat);
 		/// Turns on new base hover mode.
-		void setNewBaseHover(void);
+		void setNewBaseHover();
 		/// Turns off new base hover mode.
-		void unsetNewBaseHover(void);
+		void unsetNewBaseHover();
 		/// Gets state of base hover mode
-		bool getNewBaseHover(void);
-
-		/// set the _radarLines variable
-		void toggleRadarLines();
+		bool getNewBaseHover() const;
 
 		/// Update the resolution settings, we just resized the window.
 		void resize();

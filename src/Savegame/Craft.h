@@ -94,8 +94,8 @@ private:
 	public:
 		/// Creates a craft of the specified type.
 		Craft(
-				RuleCraft* crRule,
-				Base* base,
+				RuleCraft* const crRule,
+				Base* const base,
 				int id = 0);
 		/// Cleans up the craft.
 		~Craft();
@@ -103,8 +103,8 @@ private:
 		/// Loads the craft from YAML.
 		void load(
 				const YAML::Node& node,
-				const Ruleset* rules,
-				SavedGame* save);
+				const Ruleset* const rules,
+				SavedGame* const save);
 		/// Saves the craft to YAML.
 		YAML::Node save() const;
 		/// Saves the craft's ID to YAML.
@@ -115,7 +115,7 @@ private:
 		/// Gets the craft's ruleset.
 		RuleCraft* getRules() const;
 		/// Sets the craft's ruleset.
-		void changeRules(RuleCraft* crRule);
+		void changeRules(RuleCraft* const crRule);
 
 		/// Gets the craft's ID.
 		int getId() const;
@@ -131,7 +131,7 @@ private:
 		Base* getBase() const;
 		/// Sets the craft's base.
 		void setBase(
-				Base* base,
+				Base* const base,
 				bool transfer = true);
 
 		/// Gets the craft's status.

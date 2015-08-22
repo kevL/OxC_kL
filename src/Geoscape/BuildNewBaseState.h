@@ -46,7 +46,7 @@ class BuildNewBaseState
 private:
 	bool
 		_firstBase,
-		_oldshowradar;
+		_showRadar;
 	int
 		_mousex,
 		_mousey;
@@ -66,8 +66,8 @@ private:
 	public:
 		/// Creates the Build New Base state.
 		BuildNewBaseState(
-				Base* base,
-				Globe* globe,
+				Base* const base,
+				Globe* const globe,
 				bool firstBase = false);
 		/// Cleans up the Build New Base state.
 		~BuildNewBaseState();
@@ -84,7 +84,7 @@ private:
 		/// Handler for mouse hovering the globe.
 		void globeHover(Action* action);
 		/// Handler for redrawing hover (delayed)
-		void hoverRedraw(void);
+		void hoverRedraw();
 
 		/// Handler for pressing the Rotate Left arrow.
 //		void btnRotateLeftPress(Action* action);

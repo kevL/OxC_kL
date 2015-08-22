@@ -164,8 +164,8 @@ void MovingTarget::setSpeed(const int speed)
 }
 
 /**
- * Calculates the speed vector based on the great circle
- * distance to destination and current raw speed.
+ * Calculates the speed vector based on the great circle distance to destination
+ * and current raw speed.
  */
 void MovingTarget::calculateSpeed()
 {
@@ -187,13 +187,13 @@ void MovingTarget::calculateSpeed()
 		if (_speedLon != _speedLon
 			|| _speedLat != _speedLat)
 		{
-			_speedLon = 0.;
+			_speedLon =
 			_speedLat = 0.;
 		}
 	}
 	else
 	{
-		_speedLon = 0.;
+		_speedLon =
 		_speedLat = 0.;
 	}
 }
@@ -204,11 +204,11 @@ void MovingTarget::calculateSpeed()
  */
 bool MovingTarget::reachedDestination() const
 {
-	if (_dest == NULL)
-		return false;
+	if (_dest != NULL)
+		return AreSame(_lon, _dest->getLongitude())
+			&& AreSame(_lat, _dest->getLatitude());
 
-	return AreSame(_lon, _dest->getLongitude())
-		&& AreSame(_lat, _dest->getLatitude());
+	return false;
 }
 
 /**

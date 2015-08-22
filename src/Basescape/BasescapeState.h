@@ -78,8 +78,8 @@ private:
 	public:
 		/// Creates the Basescape state.
 		BasescapeState(
-				Base* base,
-				Globe* globe);
+				Base* const base,
+				Globe* const globe);
 		/// Cleans up the Basescape state.
 		~BasescapeState();
 

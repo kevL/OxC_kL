@@ -60,8 +60,8 @@ namespace OpenXcom
  * @param firstBase	- true if this the first base in the game (default false)
  */
 BuildNewBaseState::BuildNewBaseState(
-		Base* base,
-		Globe* globe,
+		Base* const base,
+		Globe* const globe,
 		bool firstBase)
 	:
 		_base(base),
@@ -73,10 +73,6 @@ BuildNewBaseState::BuildNewBaseState(
 		_mousey(0)
 {
 	_screen = false;
-
-	_oldshowradar = Options::globeRadarLines;
-	if (_oldshowradar == false)
-		Options::globeRadarLines = true;
 
 	const int dx = _game->getScreen()->getDX();
 //	int dy = _game->getScreen()->getDY();
@@ -150,19 +146,20 @@ BuildNewBaseState::BuildNewBaseState(
 
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
+	_txtTitle->setText(tr("STR_SELECT_SITE_FOR_NEW_BASE"));
+	_txtTitle->setAlign(ALIGN_CENTER);
+
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)& BuildNewBaseState::btnCancelClick);
 	_btnCancel->onKeyboardPress(
 					(ActionHandler)& BuildNewBaseState::btnCancelClick,
 					Options::keyCancel);
 
-	_txtTitle->setText(tr("STR_SELECT_SITE_FOR_NEW_BASE"));
-	_txtTitle->setAlign(ALIGN_CENTER);
-//	_txtTitle->setVerticalAlign(ALIGN_MIDDLE);
-//	_txtTitle->setWordWrap();
-
 	if (_firstBase == true)
 		_btnCancel->setVisible(false);
+
+	_showRadar = Options::globeRadarLines;
+	Options::globeRadarLines = true;
 }
 
 /**
@@ -170,7 +167,7 @@ BuildNewBaseState::BuildNewBaseState(
  */
 BuildNewBaseState::~BuildNewBaseState()
 {
-	if (Options::globeRadarLines != _oldshowradar)
+	if (Options::globeRadarLines != _showRadar)
 		Options::globeRadarLines = false;
 
 	delete _hoverTimer;
@@ -224,7 +221,7 @@ void BuildNewBaseState::globeHover(Action* action)
 /**
  * Redraws stuff as the cursor is moved over the Globe.
  */
-void BuildNewBaseState::hoverRedraw(void)
+void BuildNewBaseState::hoverRedraw()
 {
 	double
 		lon,
@@ -252,7 +249,6 @@ void BuildNewBaseState::hoverRedraw(void)
 		_oldlon = lon;
 
 		_globe->invalidate();
-//		_globe->draw(); // kL
 	}
 }
 
@@ -280,6 +276,7 @@ void BuildNewBaseState::globeClick(Action* action)
 		{
 			if (_globe->insideLand(lon, lat) == true)
 			{
+				_base->setBasePlaced();
 				_base->setLongitude(lon);
 				_base->setLatitude(lat);
 
@@ -311,6 +308,16 @@ void BuildNewBaseState::globeClick(Action* action)
 												_game->getRuleset()->getInterface("geoscape")->getElement("palette")->color));
 		}
 	}
+}
+
+/**
+ * Returns to the previous screen.
+ * @param action - pointer to an Action
+ */
+void BuildNewBaseState::btnCancelClick(Action*)
+{
+	delete _base;
+	_game->popState();
 }
 
 /**
@@ -420,16 +427,6 @@ void BuildNewBaseState::globeClick(Action* action)
 {
 	_globe->zoomMin();
 } */
-
-/**
- * Returns to the previous screen.
- * @param action - pointer to an Action
- */
-void BuildNewBaseState::btnCancelClick(Action*)
-{
-	delete _base;
-	_game->popState();
-}
 
 /**
  * Updates the scale.

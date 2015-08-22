@@ -55,8 +55,9 @@ class Base
 
 private:
 	bool
+		_exposed,
 		_inTactical,
-		_exposed;
+		_placed;
 	int
 		_cashSpent,
 		_cashIncome,
@@ -261,10 +262,15 @@ private:
 		/// Gets if a craft is in the battlescape.
 		bool isInBattlescape() const;
 
-		/// Marks this base for alien retaliation.
+		/// Sets this base as eligible for alien retaliation.
 		void setBaseExposed(bool exposed = true);
-		/// Gets the retaliation status of this base.
+		/// Gets if this Base is eligible for alien retaliation.
 		bool getBaseExposed() const;
+
+		/// Sets this base as placed and in operation.
+		void setBasePlaced(bool placed = true);
+		/// Gets if this base has been placed on the Globe.
+		bool getBasePlaced() const;
 
 		/// Gets the detection chance for this base.
 		int getDetectionChance(

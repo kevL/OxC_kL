@@ -238,7 +238,7 @@
 	"begin_code.h"
 	"close_code.h"
 
-1434595028 f:\git\openxcom\src\basescape\basescapestate.h
+1440212115 f:\git\openxcom\src\basescape\basescapestate.h
 	"../Engine/State.h"
 
 1430213397 f:\git\openxcom\src\basescape\minibaseview.h
@@ -4385,7 +4385,7 @@
 
 1440175853 f:\git\openxcom\src\resource\resourcepack.h
 
-1438914783 f:\git\openxcom\src\savegame\base.h
+1440212531 f:\git\openxcom\src\savegame\base.h
 	"Target.h"
 
 1440096079 f:\git\openxcom\src\savegame\target.h
@@ -4396,7 +4396,7 @@
 	"Soldier.h"
 	"../Ruleset/RuleAlienMission.h"
 
-1440097409 source:f:\git\openxcom\src\basescape\basescapestate.cpp
+1440212105 source:f:\git\openxcom\src\basescape\basescapestate.cpp
 	"BasescapeState.h"
 	"AlienContainmentState.h"
 	"BaseDetectionState.h"
@@ -4485,7 +4485,7 @@
 1431469892 f:\git\openxcom\src\geoscape\allocatepsitrainingstate.h
 	"../Engine/State.h"
 
-1431626587 f:\git\openxcom\src\geoscape\buildnewbasestate.h
+1440212072 f:\git\openxcom\src\geoscape\buildnewbasestate.h
 	"../Engine/State.h"
 
 1440096860 f:\git\openxcom\src\geoscape\geoscapestate.h
@@ -4503,7 +4503,7 @@
 
 1436388140 f:\git\openxcom\src\savegame\basefacility.h
 
-1440097270 f:\git\openxcom\src\savegame\craft.h
+1440210313 f:\git\openxcom\src\savegame\craft.h
 	"CraftId.h"
 	"MovingTarget.h"
 
@@ -4737,7 +4737,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Ufo.h"
 
-1439811636 f:\git\openxcom\src\geoscape\globe.h
+1440217975 f:\git\openxcom\src\geoscape\globe.h
 	"Cord.h"
 	"../Engine/FastLineClip.h"
 	"../Engine/InteractiveSurface.h"
@@ -6733,7 +6733,7 @@
 	"../Engine/State.h"
 	"Globe.h"
 
-1440098123 source:f:\git\openxcom\src\geoscape\buildnewbasestate.cpp
+1440213109 source:f:\git\openxcom\src\geoscape\buildnewbasestate.cpp
 	"BuildNewBaseState.h"
 	"BaseNameState.h"
 	"ConfirmNewBaseState.h"

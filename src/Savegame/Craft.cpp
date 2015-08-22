@@ -59,8 +59,8 @@ namespace OpenXcom
  * @param id		- ID to assign to the craft; 0 for no id (default 0)
  */
 Craft::Craft(
-		RuleCraft* crRule,
-		Base* base,
+		RuleCraft* const crRule,
+		Base* const base,
 		int id)
 	:
 		MovingTarget(),
@@ -129,8 +129,8 @@ Craft::~Craft()
  */
 void Craft::load(
 		const YAML::Node& node,
-		const Ruleset* rules,
-		SavedGame* gameSave)
+		const Ruleset* const rules,
+		SavedGame* const gameSave)
 {
 	MovingTarget::load(node);
 
@@ -342,7 +342,7 @@ CraftId Craft::loadId(const YAML::Node& node)
 {
 	return std::make_pair(
 						node["type"].as<std::string>(),
-						node["id"].as<int>());
+						node["id"]	.as<int>());
 }
 
 /**
@@ -375,7 +375,7 @@ RuleCraft* Craft::getRules() const
  * @param crRule - pointer to a different RuleCraft
  * @warning ONLY FOR NEW BATTLE USE!
  */
-void Craft::changeRules(RuleCraft* crRule)
+void Craft::changeRules(RuleCraft* const crRule)
 {
 	_crRule = crRule;
 	_weapons.clear();
@@ -451,7 +451,7 @@ Base* Craft::getBase() const
  * @param transfer	- true to move the craft to the Base coordinates (default true)
  */
 void Craft::setBase(
-		Base* base,
+		Base* const base,
 		bool transfer)
 {
 	_base = base;
