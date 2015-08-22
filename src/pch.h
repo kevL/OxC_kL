@@ -96,7 +96,7 @@
 //#include <wchar.h>
 
 
-// kL_reinstate begin: see Engine/CrossPlatform.cpp & Engine/Language.cpp
+// see also: Engine/CrossPlatform.cpp & Engine/Language.cpp & Engine/Logger.h
 /*
 #ifdef _WIN32
 	#ifndef NOMINMAX
@@ -105,11 +105,11 @@
 
 	#define WIN32_LEAN_AND_MEAN
 	#include <windows.h>
-//	#include <shlobj.h>		// kL_reinstate: No, causes conflict OR
-//	#include <shlwapi.h>	// kL_reinstate: this causes conflict ...
+//	#include <shlobj.h>		// No, causes conflict OR
+//	#include <shlwapi.h>	// this causes conflict ....
 	#include <direct.h>
 	#include <malloc.h>
-#else */ // kL_reinstate end.
+#else */
 #ifndef _WIN32
 	#include <alloca.h>
 //	#if HAVE_CONFIG_H

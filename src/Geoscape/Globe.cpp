@@ -567,9 +567,9 @@ void Globe::cartToPolar( // Orthographic Projection
 	}
 
 	while (*lon < 0.) // keep between 0 and 2xPI
-		*lon += 2. * M_PI;
-	while (*lon > 2. * M_PI)
-		*lon -= 2. * M_PI;
+		*lon += M_PI * 2.;
+	while (*lon > M_PI * 2.)
+		*lon -= M_PI * 2.;
 }
 
 /**

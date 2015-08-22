@@ -25,8 +25,7 @@
 //#include "../Engine/LocalizedText.h"
 //#include "../Engine/Options.h"
 
-#include "../Interface/Cursor.h"
-#include "../Interface/Text.h"
+//#include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/TextList.h"
 #include "../Interface/Window.h"
@@ -126,14 +125,14 @@ void UfopaediaSelectState::lstSelectionClick(Action*)
 void UfopaediaSelectState::loadSelectionList()
 {
 	_article_list.clear();
+
 	Ufopaedia::list(
 				_game->getSavedGame(),
 				_game->getRuleset(),
 				_section,
 				_article_list);
 
-	ArticleDefinitionList::const_iterator i;
-	for (
+	for (ArticleDefinitionList::const_iterator
 			i = _article_list.begin();
 			i != _article_list.end();
 			++i)

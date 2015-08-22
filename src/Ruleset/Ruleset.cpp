@@ -844,34 +844,28 @@ void Ruleset::loadFile(const std::string& file) // protected.
 			i != doc["ufopaedia"].end();
 			++i)
 	{
-		//Log(LOG_INFO) << "uFoPed rul entry++";
 		if ((*i)["id"])
 		{
 			const std::string id = (*i)["id"].as<std::string>();
-			//Log(LOG_INFO) << ". id = " << id;
 
 			ArticleDefinition* articleRule;
 			if (_ufopaediaArticles.find(id) != _ufopaediaArticles.end())
-			{
 				articleRule = _ufopaediaArticles[id];
-				//Log(LOG_INFO) << ". . article Found";
-			}
 			else
 			{
 				const UfopaediaTypeId type = static_cast<UfopaediaTypeId>((*i)["type_id"].as<int>());
-				//Log(LOG_INFO) << ". . type = " << (int)type;
 				switch (type)
 				{
-					case UFOPAEDIA_TYPE_CRAFT:				articleRule = new ArticleDefinitionCraft();			break;
-					case UFOPAEDIA_TYPE_CRAFT_WEAPON:		articleRule = new ArticleDefinitionCraftWeapon();	break;
-					case UFOPAEDIA_TYPE_VEHICLE:			articleRule = new ArticleDefinitionVehicle();		break;
-					case UFOPAEDIA_TYPE_ITEM:				articleRule = new ArticleDefinitionItem();			break;
-					case UFOPAEDIA_TYPE_ARMOR:				articleRule = new ArticleDefinitionArmor();			break;
-					case UFOPAEDIA_TYPE_BASE_FACILITY:		articleRule = new ArticleDefinitionBaseFacility();	break;
-					case UFOPAEDIA_TYPE_TEXTIMAGE:			articleRule = new ArticleDefinitionTextImage();		break;
-					case UFOPAEDIA_TYPE_TEXT:				articleRule = new ArticleDefinitionText();			break;
-					case UFOPAEDIA_TYPE_UFO:				articleRule = new ArticleDefinitionUfo();			break;
-					case UFOPAEDIA_TYPE_AWARD:				articleRule = new ArticleDefinitionAward();			break;
+					case UFOPAEDIA_TYPE_CRAFT:			articleRule = new ArticleDefinitionCraft();			break;
+					case UFOPAEDIA_TYPE_CRAFT_WEAPON:	articleRule = new ArticleDefinitionCraftWeapon();	break;
+					case UFOPAEDIA_TYPE_VEHICLE:		articleRule = new ArticleDefinitionVehicle();		break;
+					case UFOPAEDIA_TYPE_ITEM:			articleRule = new ArticleDefinitionItem();			break;
+					case UFOPAEDIA_TYPE_ARMOR:			articleRule = new ArticleDefinitionArmor();			break;
+					case UFOPAEDIA_TYPE_BASE_FACILITY:	articleRule = new ArticleDefinitionBaseFacility();	break;
+					case UFOPAEDIA_TYPE_TEXTIMAGE:		articleRule = new ArticleDefinitionTextImage();		break;
+					case UFOPAEDIA_TYPE_TEXT:			articleRule = new ArticleDefinitionText();			break;
+					case UFOPAEDIA_TYPE_UFO:			articleRule = new ArticleDefinitionUfo();			break;
+					case UFOPAEDIA_TYPE_AWARD:			articleRule = new ArticleDefinitionAward();			break;
 
 					default:
 						articleRule = NULL;
@@ -882,16 +876,14 @@ void Ruleset::loadFile(const std::string& file) // protected.
 			}
 
 			_ufopaediaListOrder += 100;
-			//Log(LOG_INFO) << id << " uPed listOrder = " << _ufopaediaListOrder;
-			//Log(LOG_INFO) << ". . . load...";
+			//Log(LOG_INFO) << id << " uPed listOrder = " << _ufopaediaListOrder; // Prints listOrder to LOG.
 			articleRule->load(
-						*i,
-						_ufopaediaListOrder);
+							*i,
+							_ufopaediaListOrder);
 		}
 		else if ((*i)["delete"])
 		{
 			const std::string type = (*i)["delete"].as<std::string>();
-			//Log(LOG_INFO) << ". delete: " << type;
 			const std::map<std::string, ArticleDefinition*>::const_iterator i = _ufopaediaArticles.find(type);
 			if (i != _ufopaediaArticles.end())
 				_ufopaediaArticles.erase(i);
@@ -1118,7 +1110,6 @@ void Ruleset::loadFile(const std::string& file) // protected.
 		ResourcePack::ITEM_DROP					= (*i)["itemDrop"]				.as<int>(ResourcePack::ITEM_DROP);
 		ResourcePack::ITEM_THROW				= (*i)["itemThrow"]				.as<int>(ResourcePack::ITEM_THROW);
 		ResourcePack::SMOKE_OFFSET				= (*i)["smokeOffset"]			.as<int>(ResourcePack::SMOKE_OFFSET);
-		ResourcePack::UNDERWATER_SMOKE_OFFSET	= (*i)["underwaterSmokeOffset"]	.as<int>(ResourcePack::UNDERWATER_SMOKE_OFFSET);
 
 		if ((*i)["maleScream"])
 		{
@@ -2078,7 +2069,7 @@ std::vector<StatString*> Ruleset::getStatStrings() const
 /**
  * Compares rules based on their list orders.
  */
-template <typename T>
+template<typename T>
 struct compareRule
 	:
 		public std::binary_function<const std::string&, const std::string&, bool>
@@ -2110,7 +2101,7 @@ struct compareRule
 /**
  * Craft weapons use the list order of their launcher item.
  */
-template <>
+template<>
 struct compareRule<RuleCraftWeapon>
 	:
 		public std::binary_function<const std::string&, const std::string&, bool>
@@ -2138,7 +2129,7 @@ struct compareRule<RuleCraftWeapon>
  * Armor uses the list order of their store item.
  * @note Itemless armor comes before all else.
  */
-template <>
+template<>
 struct compareRule<RuleArmor>
 	:
 		public std::binary_function<const std::string&, const std::string&, bool>
@@ -2184,17 +2175,21 @@ struct compareRule<RuleArmor>
 /**
  * Ufopaedia articles use section and list order.
  */
-template <>
+template<>
 struct compareRule<ArticleDefinition>
 	:
 		public std::binary_function<const std::string&, const std::string&, bool>
 {
 	Ruleset* _ruleset;
 	static std::map<std::string, int> _sections;
+	bool _listOrder;
 
-	compareRule(Ruleset* const ruleset)
+	compareRule(
+			Ruleset* const ruleset,
+			bool listOrder)
 		:
-			_ruleset(ruleset)
+			_ruleset(ruleset),
+			_listOrder(listOrder)
 	{
 		_sections[UFOPAEDIA_XCOM_CRAFT_ARMAMENT]		=  0;
 		_sections[UFOPAEDIA_HEAVY_WEAPONS_PLATFORMS]	=  1;
@@ -2217,13 +2212,13 @@ struct compareRule<ArticleDefinition>
 			* const rule1 = _ruleset->getUfopaediaArticle(r1),
 			* const rule2 = _ruleset->getUfopaediaArticle(r2);
 
-		if (_sections[rule1->section] == _sections[rule2->section])
+//		if (_sections[rule1->section] == _sections[rule2->section])
+		if (_listOrder == true)
 			return (rule1->getListOrder() < rule2->getListOrder());
 
 		return (_sections[rule1->section] < _sections[rule2->section]);
 	}
 };
-
 
 std::map<std::string, int> compareRule<ArticleDefinition>::_sections;
 
@@ -2278,10 +2273,19 @@ void Ruleset::sortLists()
 			_armorsIndex.begin(),
 			_armorsIndex.end(),
 			compareRule<RuleArmor>(this));
-	std::sort(
+
+	std::sort( // sort by listOrder first
 			_ufopaediaIndex.begin(),
 			_ufopaediaIndex.end(),
-			compareRule<ArticleDefinition>(this));
+			compareRule<ArticleDefinition>(
+										this,
+										true));
+/*	std::sort( // sort by sectionOrder second
+			_ufopaediaIndex.begin(),
+			_ufopaediaIndex.end(),
+			compareRule<ArticleDefinition>(
+										this,
+										false)); */
 }
 
 /**

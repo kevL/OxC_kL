@@ -44,7 +44,6 @@ int
 	ResourcePack::WINDOW_POPUP[3]			= {1,2,3},
 
 	ResourcePack::EXPLOSION_OFFSET			= 0,
-	ResourcePack::UNDERWATER_SMOKE_OFFSET	= 0,
 	ResourcePack::SMOKE_OFFSET				= 7,
 
 	ResourcePack::SMALL_EXPLOSION			= 2,

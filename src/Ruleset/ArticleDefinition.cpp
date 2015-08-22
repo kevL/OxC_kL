@@ -97,16 +97,17 @@ void ArticleDefinition::load(
 {
 	id			=
 	title		= node["id"]		.as<std::string>(id);
+	title		= node["title"]		.as<std::string>(title);
 	section		= node["section"]	.as<std::string>(section);
 	requires	= node["requires"]	.as<std::vector<std::string> >(requires);
 
-	title = node["title"].as<std::string>(title);
-//	_type_id = (UfopaediaTypeId)node["type_id"].as<int>(_type_id);	// looks like unused here; still in ruleset though.
-																	// Could be for TFTD stuff. ps, commented by them
+//	_type_id	= (UfopaediaTypeId)node["type_id"].as<int>(_type_id); // This got set in the cTor.
 
 	_listOrder = node["listOrder"].as<int>(_listOrder);
 	if (_listOrder == 0)
 		_listOrder = listOrder;
+
+	//Log(LOG_INFO) << "load " << id << " - " << _listOrder; // Prints listOrder to LOG.
 }
 
 /**
@@ -250,35 +251,6 @@ void ArticleDefinitionTextImage::load(
 	text		= node["text"]		.as<std::string>(text);
 	text_width	= node["text_width"].as<int>(text_width);
 }
-
-/*
- * Constructor (only setting type of base class).
- *
-ArticleDefinitionTFTD::ArticleDefinitionTFTD()
-	:
-		ArticleDefinition(UFOPAEDIA_TYPE_TFTD),
-		text_width(0)
-{} */
-
-/*
- * Loads the article definition from a YAML file.
- * @param node		- reference a YAML node
- * @param listOrder	- the list weight for this article
- *
-void ArticleDefinitionTFTD::load(
-		const YAML::Node& node,
-		int listOrder)
-{
-	ArticleDefinition::load(
-						node,
-						listOrder);
-
-	_type_id	= static_cast<UfopaediaTypeId>(node["type_id"].as<int>(_type_id));
-	image_id	= node["image_id"]	.as<std::string>(image_id);
-	text		= node["text"]		.as<std::string>(text);
-	text_width	= node["text_width"].as<int>(150); // 95% of these won't need to be defined, so give it a default
-	weapon		= node["weapon"]	.as<std::string>(weapon);
-} */
 
 /**
  * Constructor (only setting type of base class).

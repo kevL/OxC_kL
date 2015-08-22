@@ -5168,7 +5168,6 @@ int TileEngine::calculateParabola(
 		const double arc,
 		const Position& delta) const
 {
-	//Log(LOG_INFO) << "TileEngine::calculateParabola()";
 	const double ro = std::sqrt(static_cast<double>(
 					 (target.x - origin.x) * (target.x - origin.x)
 				   + (target.y - origin.y) * (target.y - origin.y)
@@ -5179,13 +5178,11 @@ int TileEngine::calculateParabola(
 				static_cast<double>(target.y - origin.y),
 				static_cast<double>(target.x - origin.x));
 
-	if (AreSame(ro, 0.)) // just in case.
+	if (AreSame(ro, 0.)) // jic.
 		return VOXEL_EMPTY;
 
-//	te *= acu;
-//	fi *= acu;
-	te += (delta.x / ro) / 2. * M_PI;						// horizontal magic value
-	fi += ((delta.z + delta.y) / ro) / 14. * M_PI * arc;	// another magic value (vertical), to make it in line with fire spread
+	te += delta.x * M_PI / (ro * 2.);						// horizontal
+	fi += (delta.z + delta.y) * M_PI * arc / (ro * 14.);	// vertical
 
 	const double
 		zA = std::sqrt(ro) * arc,
@@ -5197,7 +5194,9 @@ int TileEngine::calculateParabola(
 		z = origin.z,
 		i = 8;
 
-	Position lastPosition = Position(x, y, z);
+	Position
+		pos1 = Position(x,y,z),
+		pos2;
 
 	while (z > 0)
 	{
@@ -5213,42 +5212,38 @@ int TileEngine::calculateParabola(
 			trajectory->push_back(Position(x,y,z));
 		}
 
-		const Position nextPosition = Position(x,y,z);
+		pos2 = Position(x,y,z);
 		int test = calculateLine(
-							lastPosition,
-							nextPosition,
+							pos1,
+							pos2,
 							false,
 							NULL,
 							excludeUnit);
-//		int test = voxelCheck(
-//							Position(x,y,z),
-//							excludeUnit);
+
 		if (test != VOXEL_EMPTY)
 		{
-			if (lastPosition.z < nextPosition.z)
+			if (pos1.z < pos2.z)
 				test = VOXEL_OUTOFBOUNDS;
 
-			if (storeTrajectory == false // store only the position of impact
+			if (storeTrajectory == false
 				&& trajectory != NULL)
 			{
-				trajectory->push_back(nextPosition);
+				trajectory->push_back(pos2);
 			}
 
-			//Log(LOG_INFO) << ". cP() ret = " << test;
 			return test;
 		}
 
-		lastPosition = Position(x,y,z);
+		pos1 = Position(x,y,z);
 		++i;
 	}
 
-	if (storeTrajectory == false // store only the position of impact
+	if (storeTrajectory == false
 		&& trajectory != NULL)
 	{
 		trajectory->push_back(Position(x,y,z));
 	}
 
-	//Log(LOG_INFO) << ". cP() ret VOXEL_EMTPY";
 	return VOXEL_EMPTY;
 }
 

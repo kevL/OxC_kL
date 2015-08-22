@@ -48,7 +48,7 @@ protected:
 	static const size_t ped_SECTIONS = 10;
 	static const std::string ped_TITLES[ped_SECTIONS];
 
-	bool _battle;
+	bool _tactical;
 
 	Text* _txtTitle;
 	TextButton
@@ -65,7 +65,7 @@ protected:
 
 	public:
 		/// cTor.
-		explicit UfopaediaStartState(bool battle = false);
+		explicit UfopaediaStartState(bool tactical = false);
 		/// dTor.
 		virtual ~UfopaediaStartState();
 };

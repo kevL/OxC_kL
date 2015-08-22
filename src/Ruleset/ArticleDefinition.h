@@ -31,32 +31,24 @@ namespace OpenXcom
 /// Defines article types.
 enum UfopaediaTypeId
 {
-	UFOPAEDIA_TYPE_UNKNOWN,				//  0
-	UFOPAEDIA_TYPE_CRAFT,				//  1
-	UFOPAEDIA_TYPE_CRAFT_WEAPON,		//  2
-	UFOPAEDIA_TYPE_VEHICLE,				//  3
-	UFOPAEDIA_TYPE_ITEM,				//  4
-	UFOPAEDIA_TYPE_ARMOR,				//  5
-	UFOPAEDIA_TYPE_BASE_FACILITY,		//  6
-	UFOPAEDIA_TYPE_TEXTIMAGE,			//  7
-	UFOPAEDIA_TYPE_TEXT,				//  8
-	UFOPAEDIA_TYPE_UFO,					//  9
-	UFOPAEDIA_TYPE_AWARD				// 10
-//	UFOPAEDIA_TYPE_TFTD,				// 10
-//	UFOPAEDIA_TYPE_TFTD_CRAFT,			// 11
-//	UFOPAEDIA_TYPE_TFTD_CRAFT_WEAPON,	// 12
-//	UFOPAEDIA_TYPE_TFTD_VEHICLE,		// 13
-//	UFOPAEDIA_TYPE_TFTD_ITEM,			// 14
-//	UFOPAEDIA_TYPE_TFTD_ARMOR,			// 15
-//	UFOPAEDIA_TYPE_TFTD_BASE_FACILITY,	// 16
-//	UFOPAEDIA_TYPE_TFTD_USO,			// 17
+	UFOPAEDIA_TYPE_UNKNOWN,			//  0
+	UFOPAEDIA_TYPE_CRAFT,			//  1
+	UFOPAEDIA_TYPE_CRAFT_WEAPON,	//  2
+	UFOPAEDIA_TYPE_VEHICLE,			//  3
+	UFOPAEDIA_TYPE_ITEM,			//  4
+	UFOPAEDIA_TYPE_ARMOR,			//  5
+	UFOPAEDIA_TYPE_BASE_FACILITY,	//  6
+	UFOPAEDIA_TYPE_TEXTIMAGE,		//  7
+	UFOPAEDIA_TYPE_TEXT,			//  8
+	UFOPAEDIA_TYPE_UFO,				//  9
+	UFOPAEDIA_TYPE_AWARD			// 10
 };
 
 
 /**
  * ArticleDefinition is the base class for all article types.
  * @note This class is used to store all information about articles required to
- * generate an ArticleState from.
+ * generate an ArticleState.
  */
 class ArticleDefinition
 {
@@ -206,28 +198,6 @@ class ArticleDefinitionTextImage
 				int listOrder);
 };
 
-
-/*
- * ArticleDefinitionTFTD
- *
-class ArticleDefinitionTFTD
-	:
-		public ArticleDefinition
-{
-	public:
-		int text_width;
-		std::string
-			image_id,
-			text,
-			weapon;
-
-		/// Constructor.
-		ArticleDefinitionTFTD();
-		/// Loads the article from YAML.
-		void load(
-				const YAML::Node& node,
-				int listOrder);
-}; */
 
 /**
  * ArticleDefinitionBaseFacility defines articles for base facilities, e.g. Access lift.

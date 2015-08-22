@@ -50,6 +50,8 @@
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Tile.h"
 
+#include "../Ufopaedia/Ufopaedia.h"
+
 
 namespace OpenXcom
 {
@@ -717,12 +719,14 @@ void Inventory::mouseOver(Action* action, State* state)
  */
 void Inventory::mouseClick(Action* action, State* state)
 {
+	int sound = -1;
+
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
 		if (_selUnit == NULL)
 			return;
 
-		if (_selItem == NULL) // Pickup item.
+		if (_selItem == NULL) // Pickup or Move item.
 		{
 			int
 				x = static_cast<int>(std::floor(action->getAbsoluteXMouse())) - getX(),
@@ -739,83 +743,79 @@ void Inventory::mouseClick(Action* action, State* state)
 														x,y);
 				if (item != NULL)
 				{
-					if (SDL_GetModState() & KMOD_CTRL)
+					if ((SDL_GetModState() & KMOD_CTRL) != 0) // Move item.
 					{
 						bool
 							placed = false,
 							toGround = true;
 
-						RuleInventory* slotRule = NULL;
+						RuleInventory* toSlot = NULL;
 
 						if (slot->getType() == INV_HAND
 							|| (slot->getType() != INV_GROUND
 								&& (_tuMode == false
 									|| _selUnit->getOriginalFaction() != FACTION_PLAYER))) // aLien units drop-to-ground on Ctrl+LMB
 						{
-							slotRule = _game->getRuleset()->getInventory("STR_GROUND");
+							toSlot = _game->getRuleset()->getInventory("STR_GROUND");
 						}
 						else
 						{
 							if (_selUnit->getItem("STR_RIGHT_HAND") == NULL)
 							{
 								toGround = false;
-								slotRule = _game->getRuleset()->getInventory("STR_RIGHT_HAND");
+								toSlot = _game->getRuleset()->getInventory("STR_RIGHT_HAND");
 							}
 							else if (_selUnit->getItem("STR_LEFT_HAND") == NULL)
 							{
 								toGround = false;
-								slotRule = _game->getRuleset()->getInventory("STR_LEFT_HAND");
+								toSlot = _game->getRuleset()->getInventory("STR_LEFT_HAND");
 							}
 							else if (slot->getType() != INV_GROUND)
-								slotRule = _game->getRuleset()->getInventory("STR_GROUND");
+								toSlot = _game->getRuleset()->getInventory("STR_GROUND");
 						}
 
-						if (slotRule == NULL)
-							return;
-
-						if (toGround == true)
+						if (toSlot != NULL)
 						{
-							if (_tuMode == false
-								|| _selUnit->spendTimeUnits(item->getSlot()->getCost(slotRule)) == true)
+							if (toGround == true)
 							{
-								placed = true;
-								moveItem(
-										item,
-										slotRule);
+								if (_tuMode == false
+									|| _selUnit->spendTimeUnits(item->getSlot()->getCost(toSlot)) == true)
+								{
+									placed = true;
+									moveItem(
+											item,
+											toSlot);
+									arrangeGround(false);
 
-								arrangeGround(false);
-
-								_game->getResourcePack()->getSound(
-																"BATTLE.CAT",
-																ResourcePack::ITEM_DROP)
-															->play();
+									sound = ResourcePack::ITEM_DROP;
+								}
+								else
+									_warning->showMessage(_game->getLanguage()->getString("STR_NOT_ENOUGH_TIME_UNITS"));
 							}
 							else
-								_warning->showMessage(_game->getLanguage()->getString("STR_NOT_ENOUGH_TIME_UNITS"));
-						}
-						else
-						{
-							_stackLevel[static_cast<size_t>(item->getSlotX())]
-									   [static_cast<size_t>(item->getSlotY())] -= 1;
-
-							if (fitItem(
-									slotRule,
-									item) == true)
 							{
-								placed = true;
-							}
-							else
 								_stackLevel[static_cast<size_t>(item->getSlotX())]
-										   [static_cast<size_t>(item->getSlotY())] += 1;
-						}
+										   [static_cast<size_t>(item->getSlotY())] -= 1;
 
-						if (placed == true)
-						{
-							_mouseOverItem = NULL; // remove cursor info 'cause item is no longer under the cursor
-							mouseOver(action, state);
+								if (fitItem(
+										toSlot,
+										item) == true)
+								{
+									placed = true;
+								}
+								else
+									_stackLevel[static_cast<size_t>(item->getSlotX())]
+											   [static_cast<size_t>(item->getSlotY())] += 1;
+							}
+
+							if (placed == true)
+							{
+								_mouseOverItem = NULL; // remove cursor info 'cause item is no longer under the cursor
+								mouseOver(action, state);
+							}
 						}
 					}
-					else
+					else // Pickup item.
 					{
 						setSelectedItem(item);
 
@@ -892,12 +892,9 @@ void Inventory::mouseClick(Action* action, State* state)
 							if (slot->getType() == INV_GROUND)
 								_stackLevel[static_cast<size_t>(x)]
 										   [static_cast<size_t>(y)] += 1;
-
 							setSelectedItem(NULL);
-							_game->getResourcePack()->getSound(
-															"BATTLE.CAT",
-															ResourcePack::ITEM_DROP)
-														->play();
+
+							sound = ResourcePack::ITEM_DROP;
 						}
 						else
 							_warning->showMessage(_game->getLanguage()->getString("STR_NOT_ENOUGH_TIME_UNITS"));
@@ -917,10 +914,8 @@ void Inventory::mouseClick(Action* action, State* state)
 							_stackLevel[static_cast<size_t>(item->getSlotX())]
 									   [static_cast<size_t>(item->getSlotY())] += 1;
 							setSelectedItem(NULL);
-							_game->getResourcePack()->getSound(
-															"BATTLE.CAT",
-															ResourcePack::ITEM_DROP)
-														->play();
+
+							sound = ResourcePack::ITEM_DROP;
 						}
 						else
 							_warning->showMessage(_game->getLanguage()->getString("STR_NOT_ENOUGH_TIME_UNITS"));
@@ -960,10 +955,7 @@ void Inventory::mouseClick(Action* action, State* state)
 							_selItem->moveToOwner(NULL);
 							setSelectedItem(NULL);
 
-							_game->getResourcePack()->getSound(
-															"BATTLE.CAT",
-															ResourcePack::ITEM_RELOAD)
-														->play();
+							sound = ResourcePack::ITEM_RELOAD;
 
 							if (item->getSlot()->getType() == INV_GROUND)
 								arrangeGround(false);
@@ -1003,10 +995,7 @@ void Inventory::mouseClick(Action* action, State* state)
 									   [static_cast<size_t>(item->getSlotY())] += 1;
 							setSelectedItem(NULL);
 
-							_game->getResourcePack()->getSound(
-															"BATTLE.CAT",
-															ResourcePack::ITEM_DROP)
-														->play();
+							sound = ResourcePack::ITEM_DROP;
 						}
 						else
 							_warning->showMessage(_game->getLanguage()->getString("STR_NOT_ENOUGH_TIME_UNITS"));
@@ -1021,91 +1010,122 @@ void Inventory::mouseClick(Action* action, State* state)
 
 		if (_selItem == NULL)
 		{
-			if (Options::includePrimeStateInSavedLayout == true
-				|| _atBase == false) // Priming is allowed only on the field or in preBattle, or if fuse-state can save to Layouts.
+			if ((SDL_GetModState() & KMOD_CTRL) == 0)
 			{
-				if (_tuMode == false)
+				if (Options::includePrimeStateInSavedLayout == true
+					|| _atBase == false) // Priming is allowed only on the field or in preBattle, or if fuse-state can save to Layouts.
 				{
-					int
-						x = static_cast<int>(std::floor(action->getAbsoluteXMouse())) - getX(),
-						y = static_cast<int>(std::floor(action->getAbsoluteYMouse())) - getY();
-
-					const RuleInventory* const slot = getSlotInPosition(&x,&y);
-					if (slot != NULL)
+					if (_tuMode == false)
 					{
-						if (slot->getType() == INV_GROUND)
-							x += _groundOffset;
+						int
+							x = static_cast<int>(std::floor(action->getAbsoluteXMouse())) - getX(),
+							y = static_cast<int>(std::floor(action->getAbsoluteYMouse())) - getY();
 
-						BattleItem* const item = _selUnit->getItem(slot, x,y);
-						if (item != NULL)
+						const RuleInventory* const slot = getSlotInPosition(&x,&y);
+						if (slot != NULL)
 						{
-							const RuleItem* const itRule = item->getRules();
-							if (itRule->isGrenade() == true)
+							if (slot->getType() == INV_GROUND)
+								x += _groundOffset;
+
+							BattleItem* const item = _selUnit->getItem(
+																	slot,
+																	x,y);
+							if (item != NULL)
 							{
-								if (item->getFuseTimer() == -1) // Prime that grenade!
+								const RuleItem* const itRule = item->getRules();
+								if (itRule->isGrenade() == true)
 								{
-									if (itRule->getBattleType() == BT_PROXYGRENADE)
+									if (item->getFuseTimer() == -1) // Prime that grenade!
 									{
-										item->setFuseTimer(0);
-										arrangeGround(false);
+										if (itRule->getBattleType() == BT_PROXYGRENADE)
+										{
+											item->setFuseTimer(0);
+											arrangeGround(false);
 
-										const std::wstring activated = _game->getLanguage()->getString("STR_GRENADE_IS_ACTIVATED");
-										_warning->showMessage(activated);
+											const std::wstring activated = _game->getLanguage()->getString("STR_GRENADE_IS_ACTIVATED");
+											_warning->showMessage(activated);
+										}
+										else // This is where activation warning for nonProxy preBattle grenades goes.
+											_game->pushState(new PrimeGrenadeState(
+																				NULL,
+																				true,
+																				item,
+																				this));
 									}
-									else // This is where activation warning for nonProxy preBattle grenades goes.
-										_game->pushState(new PrimeGrenadeState(
-																			NULL,
-																			true,
-																			item,
-																			this));
+									else // deFuse grenade
+									{
+										_warning->showMessage(_game->getLanguage()->getString("STR_GRENADE_IS_DEACTIVATED"));
+										item->setFuseTimer(-1);
+										arrangeGround(false);
+									}
 								}
-								else // deFuse grenade
+								else if (slot->getType() != INV_GROUND) // move item to Ground
 								{
-									_warning->showMessage(_game->getLanguage()->getString("STR_GRENADE_IS_DEACTIVATED"));
-									item->setFuseTimer(-1);
+									moveItem(
+											item,
+											_game->getRuleset()->getInventory("STR_GROUND"));
+
 									arrangeGround(false);
+									sound = ResourcePack::ITEM_DROP;
+
+									_mouseOverItem = NULL; // remove cursor info 'cause item is no longer under the cursor
+									mouseOver(action, state);
 								}
-							}
-							else if (slot->getType() != INV_GROUND) // move item to Ground
-							{
-								moveItem(
-										item,
-										_game->getRuleset()->getInventory("STR_GROUND"));
-
-								arrangeGround(false);
-
-								_game->getResourcePack()->getSound(
-																"BATTLE.CAT",
-																ResourcePack::ITEM_DROP)
-															->play();
-
-								_mouseOverItem = NULL; // remove cursor info 'cause item is no longer under the cursor
-								mouseOver(action, state);
 							}
 						}
 					}
+					else
+						_game->popState(); // Close the inventory window on right-click if not in preBattle equip screen!
 				}
-				else
-					_game->popState(); // Close the inventory window on right-click if not in preBattle equip screen!
+			}
+			else // Open Ufopaedia article.
+			{
+				int
+					x = static_cast<int>(std::floor(action->getAbsoluteXMouse())) - getX(),
+					y = static_cast<int>(std::floor(action->getAbsoluteYMouse())) - getY();
+
+				RuleInventory* const slot = getSlotInPosition(&x,&y);
+				if (slot != NULL)
+				{
+					if (slot->getType() == INV_GROUND)
+						x += _groundOffset;
+
+					BattleItem* const item = _selUnit->getItem(
+															slot,
+															x,y);
+					if (item != NULL)
+					{
+						std::string article = item->getRules()->getType(); // strip const. yay,
+						Ufopaedia::openArticle(
+											_game,
+											article);
+					}
+				}
 			}
 		}
-		else
+		else // RMB w/ item on cursor
 		{
 			if (_selItem->getSlot()->getType() == INV_GROUND)
 				_stackLevel[static_cast<size_t>(_selItem->getSlotX())]
 						   [static_cast<size_t>(_selItem->getSlotY())] += 1;
 
 			setSelectedItem(NULL); // Return item to original position.
+			sound = ResourcePack::ITEM_DROP;
 		}
 	}
+
+	if (sound != -1)
+		_game->getResourcePack()->getSound(
+										"BATTLE.CAT",
+										sound)
+									->play();
 
 	InteractiveSurface::mouseClick(action, state);
 
 /*	int x,y;
 	SDL_GetMouseState(&x,&y);
-
-	SDL_WarpMouse(x + 1, y);	// send a mouse motion event to refresh any hover actions
-	SDL_WarpMouse(x,y);			// move the mouse back to avoid cursor creep */
+	SDL_WarpMouse(x + 1,y);	// send a mouse motion event to refresh any hover actions
+	SDL_WarpMouse(x,y);		// move the mouse back to avoid cursor creep */
 }
 
 /**

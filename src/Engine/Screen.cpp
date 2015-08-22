@@ -181,22 +181,24 @@ void Screen::handle(Action* action)
 	else if (action->getDetails()->type == SDL_KEYDOWN
 		&& action->getDetails()->key.keysym.sym == Options::keyScreenshot)
 	{
+#ifdef _WIN32
+		MessageBeep(MB_ICONASTERISK); // start ->
+#endif
 		std::ostringstream oststr;
 /*		int i = 0;
-		do
-		{
+		do {
 			oststr.str("");
 			oststr << Options::getPictureFolder() << "oxc_" << CrossPlatform::timeString() << "_" << i << ".png";
-
-			++i;
-		}
+			++i; }
 		while (CrossPlatform::fileExists(oststr.str()) == true); */
 		// ... too slow to take & write more than one screenshot per second @ 1920x1080 ...
 		// Skip the do-while Loop:
-		oststr << Options::getPictureFolder() << "oxc_" << CrossPlatform::timeString() << ".png";
+		oststr << Options::getPictureFolder() << "0xC_kL_" << CrossPlatform::timeString() << ".png";
 		screenshot(oststr.str());
-/*kL
-		std::ostringstream oststr;
+#ifdef _WIN32
+		MessageBeep(MB_OK); // end.
+#endif
+/*		std::ostringstream oststr;
 		int i = 0;
 		do
 		{
@@ -599,13 +601,13 @@ int Screen::getCursorLeftBlackBand() const
 
 /**
  * Saves a screenshot of the screen's contents.
- * @param filename - filename of the PNG file
+ * @param file - name of the PNG output file
  */
-void Screen::screenshot(const std::string& filename) const
+void Screen::screenshot(const std::string& file) const
 {
 	SDL_Surface* const screenshot = SDL_AllocSurface(
 												0,
-												getWidth() - getWidth() %4,
+												getWidth() - getWidth() % 4,
 												getHeight(),
 												24,
 												0xff,
@@ -626,7 +628,7 @@ void Screen::screenshot(const std::string& filename) const
 			glReadPixels(
 					0,
 					getHeight() - (y + 1),
-					getWidth() - getWidth() %4,
+					getWidth() - getWidth() % 4,
 					1,
 					screenFormat,
 					GL_UNSIGNED_BYTE,
@@ -637,21 +639,19 @@ void Screen::screenshot(const std::string& filename) const
 #endif
 	}
 	else
-	{
 		SDL_BlitSurface(
 					_screen,
 					0,
 					screenshot,
 					0);
-	}
 
 	unsigned error = lodepng::encode(
-								filename,
+								file,
 								(const unsigned char*)(screenshot->pixels),
 								getWidth() - getWidth() % 4,
 								getHeight(),
 								LCT_RGB);
-	if (error)
+	if (error != 0)
 	{
 		Log(LOG_ERROR) << "Saving to PNG failed: " << lodepng_error_text(error);
 	}

@@ -28,14 +28,6 @@
 #include "ArticleStateItem.h"
 #include "ArticleStateText.h"
 #include "ArticleStateTextImage.h"
-//#include "ArticleStateTFTD.h"
-//#include "ArticleStateTFTDArmor.h"
-//#include "ArticleStateTFTDVehicle.h"
-//#include "ArticleStateTFTDItem.h"
-//#include "ArticleStateTFTDFacility.h"
-//#include "ArticleStateTFTDCraft.h"
-//#include "ArticleStateTFTDCraftWeapon.h"
-//#include "ArticleStateTFTDUso.h"
 #include "ArticleStateUfo.h"
 #include "ArticleStateVehicle.h"
 #include "UfopaediaStartState.h"
@@ -51,8 +43,7 @@
 namespace OpenXcom
 {
 
-//size_t Ufopaedia::_current_index = 0;
-int Ufopaedia::_current_index = 0; // kL
+int Ufopaedia::_current_index = 0;
 
 
 /**
@@ -61,7 +52,7 @@ int Ufopaedia::_current_index = 0; // kL
  * @param article	- ArticleDefinition to release
  * @returns, true if the article is available
  */
-bool Ufopaedia::isArticleAvailable(
+bool Ufopaedia::isArticleAvailable( // static.
 		const SavedGame* const gameSave,
 		const ArticleDefinition* const article)
 {
@@ -70,22 +61,20 @@ bool Ufopaedia::isArticleAvailable(
 
 /**
  * Gets the index of the selected article_id in the visible list.
- * If the ID is not found returns -1.
  * @param gameSave		- pointer to SavedGame
  * @param rules			- pointer to Ruleset
  * @param article_id	- reference the article ID to find
- * @return, index of the given article ID in the internal list, -1 if not found
+ * @return, index of the given article ID in the internal list (-1 if not found)
  */
-//size_t Ufopaedia::getArticleIndex(Game *game, std::string &article_id)
-int Ufopaedia::getArticleIndex( // kL
-		SavedGame* gameSave,
-		Ruleset* rules,
+int Ufopaedia::getArticleIndex( // static.
+		const SavedGame* const gameSave,
+		const Ruleset* const rules,
 		std::string& article_id)
 {
-	const std::string UC_ID = article_id + "_UC";
 	const ArticleDefinitionList articles = getAvailableArticles(
 															gameSave,
 															rules);
+	const std::string UC_Id = article_id + "_UC";
 
 	for (size_t
 			i = 0;
@@ -97,7 +86,7 @@ int Ufopaedia::getArticleIndex( // kL
 				j != articles[i]->requires.end();
 				++j)
 		{
-			if (article_id == *j)
+			if (*j == article_id)
 			{
 				article_id = articles[i]->id;
 				return i;
@@ -107,9 +96,9 @@ int Ufopaedia::getArticleIndex( // kL
 		if (articles[i]->id == article_id)
 			return i;
 
-		if (articles[i]->id == UC_ID)
+		if (articles[i]->id == UC_Id)
 		{
-			article_id = UC_ID;
+			article_id = UC_Id;
 			return i;
 		}
 	}
@@ -120,66 +109,41 @@ int Ufopaedia::getArticleIndex( // kL
 /**
  * Creates a new article State dependent on the given ArticleDefinition.
  * @param article - pointer to ArticleDefinition to create from
- * @return, pointer to ArticleState object if created, NULL otherwise
+ * @return, pointer to ArticleState object if created or NULL otherwise
  */
-ArticleState* Ufopaedia::createArticleState(ArticleDefinition* article)
+ArticleState* Ufopaedia::createArticleState(ArticleDefinition* const article) // static.
 {
-	//Log(LOG_INFO) << "Ufopaedia::createArticleState() " << (int)article->getType();
 	switch (article->getType())
 	{
 		case UFOPAEDIA_TYPE_CRAFT:
-			return new ArticleStateCraft(dynamic_cast<ArticleDefinitionCraft*>(article));
+		return new ArticleStateCraft(dynamic_cast<ArticleDefinitionCraft*>(article));
 
 		case UFOPAEDIA_TYPE_CRAFT_WEAPON:
-			return new ArticleStateCraftWeapon(dynamic_cast<ArticleDefinitionCraftWeapon*>(article));
+		return new ArticleStateCraftWeapon(dynamic_cast<ArticleDefinitionCraftWeapon*>(article));
 
 		case UFOPAEDIA_TYPE_VEHICLE:
-			return new ArticleStateVehicle(dynamic_cast<ArticleDefinitionVehicle*>(article));
+		return new ArticleStateVehicle(dynamic_cast<ArticleDefinitionVehicle*>(article));
 
 		case UFOPAEDIA_TYPE_ITEM:
-			return new ArticleStateItem(dynamic_cast<ArticleDefinitionItem*>(article));
+		return new ArticleStateItem(dynamic_cast<ArticleDefinitionItem*>(article));
 
 		case UFOPAEDIA_TYPE_ARMOR:
-			return new ArticleStateArmor(dynamic_cast<ArticleDefinitionArmor*>(article));
+		return new ArticleStateArmor(dynamic_cast<ArticleDefinitionArmor*>(article));
 
 		case UFOPAEDIA_TYPE_BASE_FACILITY:
-			return new ArticleStateBaseFacility(dynamic_cast<ArticleDefinitionBaseFacility*>(article));
+		return new ArticleStateBaseFacility(dynamic_cast<ArticleDefinitionBaseFacility*>(article));
 
 		case UFOPAEDIA_TYPE_TEXT:
-			return new ArticleStateText(dynamic_cast<ArticleDefinitionText*>(article));
+		return new ArticleStateText(dynamic_cast<ArticleDefinitionText*>(article));
 
 		case UFOPAEDIA_TYPE_TEXTIMAGE:
-			return new ArticleStateTextImage(dynamic_cast<ArticleDefinitionTextImage*>(article));
+		return new ArticleStateTextImage(dynamic_cast<ArticleDefinitionTextImage*>(article));
 
 		case UFOPAEDIA_TYPE_UFO:
-			return new ArticleStateUfo(dynamic_cast<ArticleDefinitionUfo*>(article));
-
-/*		case UFOPAEDIA_TYPE_TFTD:
-			return new ArticleStateTFTD(dynamic_cast<ArticleDefinitionTFTD*>(article));
-
-		case UFOPAEDIA_TYPE_TFTD_CRAFT:
-			return new ArticleStateTFTDCraft(dynamic_cast<ArticleDefinitionTFTD*>(article));
-
-		case UFOPAEDIA_TYPE_TFTD_CRAFT_WEAPON:
-			return new ArticleStateTFTDCraftWeapon(dynamic_cast<ArticleDefinitionTFTD*>(article));
-
-		case UFOPAEDIA_TYPE_TFTD_VEHICLE:
-			return new ArticleStateTFTDVehicle(dynamic_cast<ArticleDefinitionTFTD*>(article));
-
-		case UFOPAEDIA_TYPE_TFTD_ITEM:
-			return new ArticleStateTFTDItem(dynamic_cast<ArticleDefinitionTFTD*>(article));
-
-		case UFOPAEDIA_TYPE_TFTD_ARMOR:
-			return new ArticleStateTFTDArmor(dynamic_cast<ArticleDefinitionTFTD*>(article));
-
-		case UFOPAEDIA_TYPE_TFTD_BASE_FACILITY:
-			return new ArticleStateTFTDFacility(dynamic_cast<ArticleDefinitionTFTD*>(article));
-
-		case UFOPAEDIA_TYPE_TFTD_USO:
-			return new ArticleStateTFTDUso(dynamic_cast<ArticleDefinitionTFTD*>(article)); */
+		return new ArticleStateUfo(dynamic_cast<ArticleDefinitionUfo*>(article));
 
 		case UFOPAEDIA_TYPE_AWARD:
-			return new ArticleStateAward(dynamic_cast<ArticleDefinitionAward*>(article));
+		return new ArticleStateAward(dynamic_cast<ArticleDefinitionAward*>(article));
 	}
 
 	return NULL;
@@ -190,16 +154,15 @@ ArticleState* Ufopaedia::createArticleState(ArticleDefinition* article)
  * @param game		- pointer to actual Game
  * @param article	- pointer to ArticleDefinition of the article to open
  */
-void Ufopaedia::openArticle(
-		Game* game,
-		ArticleDefinition* article)
+void Ufopaedia::openArticle( // static.
+		Game* const game,
+		ArticleDefinition* const article)
 {
 	_current_index = getArticleIndex(
 								game->getSavedGame(),
 								game->getRuleset(),
 								article->id);
-//	if (_current_index != (size_t)-1)
-	if (_current_index != -1) // kL
+	if (_current_index != -1)
 		game->pushState(createArticleState(article));
 }
 
@@ -208,18 +171,17 @@ void Ufopaedia::openArticle(
  * @param game			- pointer to actual Game
  * @param article_id	- reference the article id to find
  */
-void Ufopaedia::openArticle(
-		Game* game,
+void Ufopaedia::openArticle( // static.
+		Game* const game,
 		std::string& article_id)
 {
 	_current_index = getArticleIndex(
 								game->getSavedGame(),
 								game->getRuleset(),
 								article_id);
-//	if (_current_index != (size_t) -1)
-	if (_current_index != -1) // kL
+	if (_current_index != -1)
 	{
-		ArticleDefinition* article = game->getRuleset()->getUfopaediaArticle(article_id);
+		ArticleDefinition* const article = game->getRuleset()->getUfopaediaArticle(article_id);
 		game->pushState(createArticleState(article));
 	}
 }
@@ -227,26 +189,25 @@ void Ufopaedia::openArticle(
 /**
  * Open Ufopaedia start state, presenting the section selection buttons.
  * @param game		- pointer to the Game
- * @param battle	- true if opening Ufopaedia from battlescape
+ * @param tactical	- true if opening Ufopaedia from battlescape (default false)
  */
-void Ufopaedia::open(
-		Game* game,
-		bool battle)
+void Ufopaedia::open( // static.
+		Game* const game,
+		bool tactical)
 {
-	game->pushState(new UfopaediaStartState(battle));
+	game->pushState(new UfopaediaStartState(tactical));
 }
 
 /**
  * Open the next article in the list. Loops to the first.
  * @param game - pointer to actual Game
  */
-void Ufopaedia::next(Game* game)
+void Ufopaedia::next(Game* const game) // static.
 {
 	ArticleDefinitionList articles = getAvailableArticles(
 														game->getSavedGame(),
 														game->getRuleset());
-//	if (_current_index >= articles.size() - 1)
-	if (_current_index >= static_cast<int>(articles.size()) - 1) // kL
+	if (_current_index >= static_cast<int>(articles.size()) - 1)
 		_current_index = 0; // goto first
 	else
 		++_current_index;
@@ -259,14 +220,13 @@ void Ufopaedia::next(Game* game)
  * Open the previous article in the list. Loops to the last.
  * @param game - pointer to actual Game
  */
-void Ufopaedia::prev(Game* game)
+void Ufopaedia::prev(Game* const game) // static.
 {
 	ArticleDefinitionList articles = getAvailableArticles(
 														game->getSavedGame(),
 														game->getRuleset());
 	if (_current_index == 0)
-//		_current_index = articles.size() - 1; // goto last
-		_current_index = static_cast<int>(articles.size()) - 1; // kL
+		_current_index = static_cast<int>(articles.size()) - 1;
 	else
 		--_current_index;
 
@@ -281,9 +241,9 @@ void Ufopaedia::prev(Game* game)
  * @param section	- reference the article section to find, e.g. "XCOM Crafts & Armaments", "Alien Lifeforms", etc.
  * @param data		- reference the article definition list object to fill data in
  */
-void Ufopaedia::list(
-		SavedGame* gameSave,
-		Ruleset* rules,
+void Ufopaedia::list( // static.
+		const SavedGame* const gameSave,
+		const Ruleset* const rules,
 		const std::string& section,
 		ArticleDefinitionList& data)
 {
@@ -306,9 +266,9 @@ void Ufopaedia::list(
  * @param rules		- pointer to Ruleset
  * @return, ArticleDefinitionList of visible articles
  */
-ArticleDefinitionList Ufopaedia::getAvailableArticles(
-		SavedGame* gameSave,
-		Ruleset* rules)
+ArticleDefinitionList Ufopaedia::getAvailableArticles( // static.
+		const SavedGame* const gameSave,
+		const Ruleset* const rules)
 {
 	const std::vector<std::string>& pedList = rules->getUfopaediaList();
 	ArticleDefinitionList articles;

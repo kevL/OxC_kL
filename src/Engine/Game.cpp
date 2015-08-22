@@ -772,8 +772,31 @@ void Game::loadRuleset()
 		throw Exception("Failed to load ruleset");
 	}
 
+	// Prints listOrder to LOG.
+/*	Log(LOG_INFO) << "\n";
+	std::vector<std::string> pedList = _rules->getUfopaediaList();
+	for (std::vector<std::string>::const_iterator
+			i = pedList.begin();
+			i != pedList.end();
+			++i)
+	{
+		Log(LOG_INFO) << *i;
+	} */
+
 	_rules->validateMissionScripts();
 	_rules->sortLists();
+
+	// Prints listOrder to LOG.
+/*	Log(LOG_INFO) << "\n";
+	std::vector<std::string> pedList = _rules->getUfopaediaList();
+	for (std::vector<std::string>::const_iterator
+			i = pedList.begin();
+			i != pedList.end();
+			++i)
+	{
+		Log(LOG_INFO) << *i;
+	}
+	Log(LOG_INFO) << "\n"; */
 }
 
 /**

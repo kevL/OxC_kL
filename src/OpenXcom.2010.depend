@@ -4383,7 +4383,7 @@
 	"Text.h"
 	"../Engine/InteractiveSurface.h"
 
-1439088719 f:\git\openxcom\src\resource\resourcepack.h
+1440175853 f:\git\openxcom\src\resource\resourcepack.h
 
 1438914783 f:\git\openxcom\src\savegame\base.h
 	"Target.h"
@@ -4632,7 +4632,7 @@
 1440015853 f:\git\openxcom\src\battlescape\inventorystate.h
 	"../Engine/State.h"
 
-1440093477 f:\git\openxcom\src\engine\logger.h
+1440174951 f:\git\openxcom\src\engine\logger.h
 	<windows.h>
 	<time.h>
 
@@ -4877,7 +4877,7 @@
 1434649505 f:\git\openxcom\src\basescape\newmanufactureliststate.h
 	"../Engine/State.h"
 
-1439802877 f:\git\openxcom\src\engine\screen.h
+1440182499 f:\git\openxcom\src\engine\screen.h
 	"OpenGL.h"
 
 1431803558 f:\git\openxcom\src\engine\opengl.h
@@ -5108,7 +5108,7 @@
 	"../Savegame/Base.h"
 	"../Savegame/BaseFacility.h"
 
-1440097685 source:f:\git\openxcom\src\basescape\sellstate.cpp
+1440186931 source:f:\git\openxcom\src\basescape\sellstate.cpp
 	"SellState.h"
 	"../Engine/Action.h"
 	"../Engine/Game.h"
@@ -5235,7 +5235,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Soldier.h"
 
-1440097726 source:f:\git\openxcom\src\basescape\storesstate.cpp
+1440186922 source:f:\git\openxcom\src\basescape\storesstate.cpp
 	"StoresState.h"
 	"TransfersState.h"
 	"../Engine/Game.h"
@@ -5905,7 +5905,7 @@
 	"../Interface/Frame.h"
 	"../Interface/Text.h"
 
-1439902291 source:f:\git\openxcom\src\battlescape\inventory.cpp
+1440172129 source:f:\git\openxcom\src\battlescape\inventory.cpp
 	"Inventory.h"
 	"PrimeGrenadeState.h"
 	"TileEngine.h"
@@ -5928,6 +5928,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
+	"../Ufopaedia/Ufopaedia.h"
 
 1420130445 f:\git\openxcom\src\engine\font.h
 	<map>
@@ -5935,7 +5936,7 @@
 	<SDL.h>
 	<yaml-cpp/yaml.h>
 
-1440105413 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
+1440166693 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
 	"InventoryState.h"
 	"BattlescapeState.h"
 	"Inventory.h"
@@ -6207,7 +6208,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1440105483 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1440184412 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	"AlienBAIState.h"
 	"BattlescapeState.h"
@@ -6357,7 +6358,7 @@
 
 1433206006 f:\git\openxcom\src\engine\catfile.h
 
-1440089286 source:f:\git\openxcom\src\engine\crossplatform.cpp
+1440174909 source:f:\git\openxcom\src\engine\crossplatform.cpp
 	"Language.h"
 	<shlobj.h>
 	<shlwapi.h>
@@ -6416,7 +6417,7 @@
 	"DosFont.h"
 	"Surface.h"
 
-1438171696 source:f:\git\openxcom\src\engine\game.cpp
+1440203519 source:f:\git\openxcom\src\engine\game.cpp
 	"Game.h"
 	<windows.h>
 	<SDL_syswm.h>
@@ -6458,7 +6459,7 @@
 	"InteractiveSurface.h"
 	"Action.h"
 
-1438135855 source:f:\git\openxcom\src\engine\language.cpp
+1440174993 source:f:\git\openxcom\src\engine\language.cpp
 	"Language.h"
 	"../Interface/TextList.h"
 	"../Ruleset/ExtraStrings.h"
@@ -6549,7 +6550,7 @@
 	<assert.h>
 	<stdlib.h>
 
-1439803325 source:f:\git\openxcom\src\engine\screen.cpp
+1440185159 source:f:\git\openxcom\src\engine\screen.cpp
 	"Screen.h"
 	"Action.h"
 	"CrossPlatform.h"
@@ -7088,9 +7089,9 @@
 
 1439866399 f:\git\openxcom\src\ruleset\ufotrajectory.h
 
-1435005791 f:\git\openxcom\src\ufopaedia\ufopaedia.h
+1440173244 f:\git\openxcom\src\ufopaedia\ufopaedia.h
 
-1439821939 source:f:\git\openxcom\src\geoscape\globe.cpp
+1440183668 source:f:\git\openxcom\src\geoscape\globe.cpp
 	"Globe.h"
 	"GeoscapeState.h"
 	"../Engine/Action.h"
@@ -7321,7 +7322,7 @@
 	"../Ruleset/RuleResearch.h"
 	"../Ufopaedia/Ufopaedia.h"
 
-1436417182 f:\git\openxcom\src\ruleset\articledefinition.h
+1440185748 f:\git\openxcom\src\ruleset\articledefinition.h
 
 1438170205 source:f:\git\openxcom\src\geoscape\researchrequiredstate.cpp
 	"ResearchRequiredState.h"
@@ -8172,7 +8173,7 @@
 1431494826 f:\git\openxcom\src\ufopaedia\articlestatevehicle.h
 	"ArticleState.h"
 
-1433248653 f:\git\openxcom\src\ufopaedia\ufopaediastartstate.h
+1440169279 f:\git\openxcom\src\ufopaedia\ufopaediastartstate.h
 	"../Engine/State.h"
 
 1430149550 f:\git\openxcom\src\ruleset\soldiernamepool.h
@@ -8180,7 +8181,7 @@
 
 1430149550 f:\git\openxcom\src\savegame\serializationhelper.h
 
-1439088912 source:f:\git\openxcom\src\resource\resourcepack.cpp
+1440175838 source:f:\git\openxcom\src\resource\resourcepack.cpp
 	"ResourcePack.h"
 	"../Engine/Game.h"
 	"../Engine/Sound.h"
@@ -8219,7 +8220,7 @@
 	"Armor.h"
 	"../Savegame/Soldier.h"
 
-1436410483 source:f:\git\openxcom\src\ruleset\articledefinition.cpp
+1440203480 source:f:\git\openxcom\src\ruleset\articledefinition.cpp
 	"ArticleDefinition.h"
 
 1425905405 source:f:\git\openxcom\src\ruleset\city.cpp
@@ -8290,7 +8291,7 @@
 1432579417 source:f:\git\openxcom\src\ruleset\ruleresearch.cpp
 	"RuleResearch.h"
 
-1440089867 source:f:\git\openxcom\src\ruleset\ruleset.cpp
+1440204565 source:f:\git\openxcom\src\ruleset\ruleset.cpp
 	"Ruleset.h"
 	"AlienRace.h"
 	"AlienDeployment.h"
@@ -8782,7 +8783,7 @@
 	"../Ruleset/Ruleset.h"
 	"../Ruleset/RuleUnit.h"
 
-1436410763 source:f:\git\openxcom\src\ufopaedia\ufopaedia.cpp
+1440180220 source:f:\git\openxcom\src\ufopaedia\ufopaedia.cpp
 	"Ufopaedia.h"
 	"ArticleState.h"
 	"ArticleStateArmor.h"
@@ -8801,19 +8802,17 @@
 	"../Ruleset/Ruleset.h"
 	"../Savegame/SavedGame.h"
 
-1438173129 source:f:\git\openxcom\src\ufopaedia\ufopaediaselectstate.cpp
+1440173442 source:f:\git\openxcom\src\ufopaedia\ufopaediaselectstate.cpp
 	"UfopaediaSelectState.h"
 	"Ufopaedia.h"
 	"../Engine/Game.h"
-	"../Interface/Cursor.h"
-	"../Interface/Text.h"
 	"../Interface/TextButton.h"
 	"../Interface/TextList.h"
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 	"../Ruleset/ArticleDefinition.h"
 
-1438173169 source:f:\git\openxcom\src\ufopaedia\ufopaediastartstate.cpp
+1440173352 source:f:\git\openxcom\src\ufopaedia\ufopaediastartstate.cpp
 	"UfopaediaStartState.h"
 	"Ufopaedia.h"
 	"UfopaediaSelectState.h"

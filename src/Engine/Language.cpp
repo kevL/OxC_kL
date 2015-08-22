@@ -35,7 +35,7 @@
 
 #include "../Ruleset/ExtraStrings.h"
 
-#ifdef _WIN32 // kL_note: see pch.h ... & Language.cpp
+#ifdef _WIN32 // see also: pch.h ... & Engine/CrossPlatform.cpp & Engine/Logger.h
 	#ifndef NOMINMAX
 		#define NOMINMAX
 	#endif

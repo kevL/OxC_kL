@@ -76,7 +76,7 @@ StoresState::StoresState(Base* base)
 	add(_window,		"window",	"storesInfo");
 	add(_txtTitle,		"text",		"storesInfo");
 	add(_txtBaseLabel,	"text",		"storesInfo");
-	add(_txtTotal);//,		"text",		"storesInfo");
+	add(_txtTotal);//,	"text",		"storesInfo");
 	add(_txtItem,		"text",		"storesInfo");
 	add(_txtQuantity,	"text",		"storesInfo");
 	add(_txtSpaceUsed,	"text",		"storesInfo");
@@ -145,7 +145,7 @@ StoresState::StoresState(Base* base)
 			i != items.end();
 			++i)
 	{
-		//Log(LOG_INFO) << *i << " listOrder = " << rules->getItem(*i)->getListOrder();
+		//Log(LOG_INFO) << *i << " stores listOrder = " << rules->getItem(*i)->getListOrder(); // Prints listOrder to LOG.
 		if (rules->getItem(*i)->isAlien() == false)
 		{
 			qty = _base->getItems()->getItemQty(*i);

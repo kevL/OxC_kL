@@ -27,7 +27,7 @@
 #include "../Engine/LocalizedText.h"
 //#include "../Engine/Options.h"
 
-#include "../Geoscape/GeoscapeState.h"	// kL_geoMusicPlaying
+#include "../Geoscape/GeoscapeState.h"
 
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
@@ -56,14 +56,14 @@ const std::string UfopaediaStartState::ped_TITLES[] =
 
 /**
  * cTor.
- * @param battle - true if opening UfoPaedia from battlescape (default false)
+ * @param tactical - true if opening UfoPaedia from battlescape (default false)
  */
-UfopaediaStartState::UfopaediaStartState(bool battle)
+UfopaediaStartState::UfopaediaStartState(bool tactical)
 	:
-		_battle(battle)
+		_tactical(tactical)
 {
 	bool toggle;
-	if (_battle == true)
+	if (_tactical == true)
 		toggle = false;
 	else
 	{
@@ -138,7 +138,7 @@ void UfopaediaStartState::btnOkClick(Action*)
 
 	_game->popState();
 
-	if (_battle == false)
+	if (_tactical == false)
 		_game->getResourcePack()->fadeMusic(_game, 228);
 }
 

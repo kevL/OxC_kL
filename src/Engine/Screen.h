@@ -133,7 +133,7 @@ private:
 		int getCursorLeftBlackBand() const;
 
 		/// Takes a screenshot.
-		void screenshot(const std::string& filename) const;
+		void screenshot(const std::string& file) const;
 
 		/// Checks whether a 32bit scaler is requested and works for the selected resolution.
 		static bool is32bitEnabled();

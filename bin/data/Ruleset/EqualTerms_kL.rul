@@ -1205,11 +1205,11 @@ ufopaedia:
     section: STR_WEAPONS_AND_EQUIPMENT
     text: STR_SSRL_UFOPEDIA
     listOrder: 3201
-  - id: STR_ROCKET_LAUNCHER
-    type_id: 4
-    section: STR_WEAPONS_AND_EQUIPMENT
-    text: STR_ROCKET_LAUNCHER_UFOPEDIA
-    listOrder: 3301
+#  - id: STR_ROCKET_LAUNCHER
+#    type_id: 4
+#    section: STR_WEAPONS_AND_EQUIPMENT
+#    text: STR_ROCKET_LAUNCHER_UFOPEDIA
+#    listOrder: 3301
   - id: STR_SHOTGUN
     type_id: 4
     section: STR_WEAPONS_AND_EQUIPMENT
@@ -1270,32 +1270,32 @@ ufopaedia:
   - id: STR_KEVLAR_ARCTIC_UC
     type_id: 5
     section: STR_WEAPONS_AND_EQUIPMENT
-    listOrder: 7699
+    listOrder: 1970
     text: STR_KEVLAR_ARCTIC_UFOPEDIA
   - id: STR_KEVLAR_JUNGLE_UC
     type_id: 5
     section: STR_WEAPONS_AND_EQUIPMENT
-    listOrder: 7699
+    listOrder: 1971
     text: STR_KEVLAR_JUNGLE_UFOPEDIA
   - id: STR_KEVLAR_URBAN_UC
     type_id: 5
     section: STR_WEAPONS_AND_EQUIPMENT
-    listOrder: 7699
+    listOrder: 1972
     text: STR_KEVLAR_URBAN_UFOPEDIA
   - id: STR_TACTICAL_ARCTIC_UC
     type_id: 5
     section: STR_WEAPONS_AND_EQUIPMENT
-    listOrder: 6799
+    listOrder: 1960
     text: STR_TACTICAL_ARCTIC_UFOPEDIA
   - id: STR_TACTICAL_JUNGLE_UC
     type_id: 5
     section: STR_WEAPONS_AND_EQUIPMENT
-    listOrder: 6799
+    listOrder: 1961
     text: STR_TACTICAL_JUNGLE_UFOPEDIA
   - id: STR_TACTICAL_URBAN_UC
     type_id: 5
     section: STR_WEAPONS_AND_EQUIPMENT
-    listOrder: 6799
+    listOrder: 1962
     text: STR_TACTICAL_URBAN_UFOPEDIA
 #------------------------------------------------------------------------------
 # Disable deleted weapons

@@ -34,17 +34,17 @@
 //#include "Logger.h"
 //#include "Options.h"
 
-#ifdef _WIN32 // kL_note: see pch.h ... & Language.cpp
+#ifdef _WIN32 // see also: pch.h ... & Engine/Language.cpp & Engine/Logger.h
 	#ifndef NOMINMAX
 		#define NOMINMAX
 	#endif
 
 	#define WIN32_LEAN_AND_MEAN
 
-//kL	#include <direct.h>
+//	#include <direct.h>
 	#include <shlobj.h>
 	#include <shlwapi.h>
-//kL	#include <windows.h>
+//	#include <windows.h>
 
 	#ifndef SHGFP_TYPE_CURRENT
 		#define SHGFP_TYPE_CURRENT 0

@@ -296,7 +296,7 @@ SellState::SellState(Base* const base)
 			std::wstring item = tr(*i);
 
 			itRule = rules->getItem(*i);
-			//Log(LOG_INFO) << (*i) << " list# " << itRule->getListOrder(); // Prints listOrder to LOG.
+			//Log(LOG_INFO) << (*i) << " sell listOrder " << itRule->getListOrder(); // Prints listOrder to LOG.
 
 			bool craftOrdnance = false;
 			const std::vector<std::string>& cwList = rules->getCraftWeaponsList();

@@ -61,12 +61,14 @@ manufacture:
       STR_ELERIUM_115: 3
 ufopaedia:
   - id: STR_FUSION_TORCH
+    listOrder: 3903
     type_id: 4
     section: STR_WEAPONS_AND_EQUIPMENT
     text: STR_FUSION_TORCH_UFOPEDIA
     requires:
       - STR_FUSION_TORCH
   - id: STR_FUSION_TORCH_POWER_CELL
+    listOrder: 3904
     type_id: 4
     section: STR_WEAPONS_AND_EQUIPMENT
     text: STR_FUSION_TORCH_POWER_CELL_UFOPEDIA

@@ -78,6 +78,7 @@ armors:
     agility: 2
 ufopaedia:
   - id: STR_DOGE
+    listOrder: 1650
     type_id: 3
     section: STR_HEAVY_WEAPONS_PLATFORMS
     text: STR_DOGE_UFOPEDIA
