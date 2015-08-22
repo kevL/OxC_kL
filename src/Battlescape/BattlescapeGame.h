@@ -247,8 +247,8 @@ private:
 				bool terrainExpl = false,
 				bool execution = false);
 		/// Checks reserved tu.
-		bool checkReservedTU(
-				BattleUnit* bu,
+		bool checkReservedTu(
+				const BattleUnit* const unit,
 				int tu,
 				bool test = false);
 
@@ -306,8 +306,7 @@ private:
 		bool getPanicHandled() const
 		{ return _playerPanicHandled; }
 		/// Sets var to start handling panic for Player.
-		void setPlayerPanic()
-		{ _playerPanicHandled = false; }
+		void setPlayerPanic() { _playerPanicHandled = false; }
 
 		/// Tries to find an item and pick it up if possible.
 		void findItem(BattleAction* const action) const;

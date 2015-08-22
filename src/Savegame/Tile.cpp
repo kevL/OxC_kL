@@ -328,7 +328,7 @@ bool Tile::isVoid(
 
 /**
  * Gets the TU cost to move over a certain part of the tile.
- * @param part		- the part number (MapData.h)
+ * @param part		- the part type (MapData.h)
  * @param moveType	- the movement type
  * @return, TU cost
  */

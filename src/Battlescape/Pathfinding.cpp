@@ -121,7 +121,7 @@ void Pathfinding::calculate(
 
 	// i'm DONE with these out of bounds errors.
 	// kL_note: I really don't care what you're "DONE" with.....
-	if (   destPos.x < 0
+	if (destPos.x < 0
 		|| destPos.y < 0
 		|| destPos.x > _battleSave->getMapSizeX() - unit->getArmor()->getSize()
 		|| destPos.y > _battleSave->getMapSizeY() - unit->getArmor()->getSize())
@@ -244,7 +244,7 @@ void Pathfinding::calculate(
 					else if (testTile->getUnit() != NULL)
 					{
 						testUnit = testTile->getUnit();
-						if (   testUnit != unit
+						if (testUnit != unit
 							&& testUnit != missileTarget
 							&& testUnit->getUnitVisible() == true)
 						{
@@ -456,7 +456,7 @@ bool Pathfinding::bresenhamPath( // private.
 					dir != 8;
 					++dir)
 			{
-				if (   xd[dir] == cx - lastPoint.x
+				if (xd[dir] == cx - lastPoint.x
 					&& yd[dir] == cy - lastPoint.y)
 				{
 					break;
@@ -728,7 +728,7 @@ int Pathfinding::getTUCostPF(
 			destTile = _battleSave->getTile(*destPos + unitOffset);
 
 			//bool debug = true;
-			//if (   *destPos == Position(14,23,0)
+			//if (*destPos == Position(14,23,0)
 				//|| *destPos == Position(14,22,0)
 				//|| *destPos == Position(15,23,0)
 				//|| *destPos == Position(15,22,0))
@@ -993,7 +993,7 @@ int Pathfinding::getTUCostPF(
 						wallCost += wallTU;
 						++sides;
 
-						if (   startTile->getMapData(O_NORTHWALL)->isDoor() == true
+						if (startTile->getMapData(O_NORTHWALL)->isDoor() == true
 							|| startTile->getMapData(O_NORTHWALL)->isUfoDoor() == true)
 						{
 							//Log(LOG_INFO) << ". . . _openDoor[N] = TRUE, wallTU = " << wallTU;
@@ -1003,7 +1003,7 @@ int Pathfinding::getTUCostPF(
 					}
 				}
 
-				if (   dir == 1 // && !fellDown
+				if (dir == 1 // && !fellDown
 					|| dir == 2
 					|| dir == 3)
 				{
@@ -1023,7 +1023,7 @@ int Pathfinding::getTUCostPF(
 							wallCost += wallTU;
 							++sides;
 
-							if (   destTile->getMapData(O_WESTWALL)->isDoor() == true
+							if (destTile->getMapData(O_WESTWALL)->isDoor() == true
 								|| destTile->getMapData(O_WESTWALL)->isUfoDoor() == true)
 							{
 								//Log(LOG_INFO) << ". . . _openDoor[E] = TRUE, wallTU = " << wallTU;
@@ -1044,7 +1044,7 @@ int Pathfinding::getTUCostPF(
 							wallCost += wallTU;
 							++sides;
 
-							if (   aboveDestTile->getMapData(O_WESTWALL)->isDoor() == true
+							if (aboveDestTile->getMapData(O_WESTWALL)->isDoor() == true
 								|| aboveDestTile->getMapData(O_WESTWALL)->isUfoDoor() == true)
 							{
 								//Log(LOG_INFO) << ". . . _openDoor[E] = TRUE (down), wallTU = " << wallTU;
@@ -1074,7 +1074,7 @@ int Pathfinding::getTUCostPF(
 							wallCost += wallTU;
 							++sides;
 
-							if (   destTile->getMapData(O_NORTHWALL)->isDoor() == true
+							if (destTile->getMapData(O_NORTHWALL)->isDoor() == true
 								|| destTile->getMapData(O_NORTHWALL)->isUfoDoor() == true)
 							{
 								//Log(LOG_INFO) << ". . . _openDoor[S] = TRUE, wallTU = " << wallTU;
@@ -1095,7 +1095,7 @@ int Pathfinding::getTUCostPF(
 							wallCost += wallTU;
 							++sides;
 
-							if (   aboveDestTile->getMapData(O_NORTHWALL)->isDoor() == true
+							if (aboveDestTile->getMapData(O_NORTHWALL)->isDoor() == true
 								|| aboveDestTile->getMapData(O_NORTHWALL)->isUfoDoor() == true)
 							{
 								//Log(LOG_INFO) << ". . . _openDoor[S] = TRUE (down), wallTU = " << wallTU;
@@ -1119,7 +1119,7 @@ int Pathfinding::getTUCostPF(
 						wallCost += wallTU;
 						++sides;
 
-						if (   startTile->getMapData(O_WESTWALL)->isDoor() == true
+						if (startTile->getMapData(O_WESTWALL)->isDoor() == true
 							|| startTile->getMapData(O_WESTWALL)->isUfoDoor() == true)
 						{
 							//Log(LOG_INFO) << ". . . _openDoor[W] = TRUE, wallTU = " << wallTU;
@@ -1974,12 +1974,6 @@ bool Pathfinding::previewPath(bool discard)
 					else
 						unitEnergy += _openDoor - tileTU;
 
-	//				if (bodySuit == true)
-	//					unitEnergy -= 1;
-	//				else if (powerSuit == true)
-	//					unitEnergy += 1;
-	//				else if (flightSuit == true)
-	//					unitEnergy += 2;
 					unitEnergy += agility;
 
 					if (unitEnergy > energyLimit)
@@ -1990,7 +1984,7 @@ bool Pathfinding::previewPath(bool discard)
 			}
 
 			tuSpent += tileTU;
-			reserveOk = _battleSave->getBattleGame()->checkReservedTU(
+			reserveOk = _battleSave->getBattleGame()->checkReservedTu(
 																_unit,
 																tuSpent,
 																true);

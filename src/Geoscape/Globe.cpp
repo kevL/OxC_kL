@@ -340,7 +340,8 @@ Globe::Globe(
 		_latPreMouseScroll(0.),
 		_radius(0.),
 		_radiusStep(0.),
-		_debugType(0)
+		_debugType(0),
+		_radarDetail(2)
 {
 	_texture	= new SurfaceSet(*_game->getResourcePack()->getSurfaceSet("TEXTURE.DAT"));
 	_markerSet	= new SurfaceSet(*_game->getResourcePack()->getSurfaceSet("GlobeMarkers"));
@@ -1011,7 +1012,26 @@ void Globe::toggleDetail()
  */
 void Globe::toggleRadarLines()
 {
-	Options::globeRadarLines = !Options::globeRadarLines;
+	switch (_radarDetail)
+	{
+		case 0:
+			_radarDetail = 1;
+			Options::globeRadarLines = true;
+		break;
+
+		case 1:
+			_radarDetail = 2;
+		break;
+
+		case 2:
+			_radarDetail = 3;
+		break;
+
+		case 3:
+			_radarDetail = 0;
+			Options::globeRadarLines = false;
+	}
+
 	drawRadars();
 }
 
@@ -1604,33 +1624,39 @@ void Globe::drawRadars()
 {
 	_radars->clear();
 
-	if (Options::globeRadarLines == true)
+	_radars->lock();
+	if (_hover == true // placing new Base.
+		&& Options::globeAllRadarsOnBaseBuild == true)
 	{
 		double range;
 
-		_radars->lock();
-		if (_hover == true // placing new Base.
-			&& Options::globeAllRadarsOnBaseBuild == true)
+		const std::vector<std::string>& facilities = _game->getRuleset()->getBaseFacilitiesList();
+		for (std::vector<std::string>::const_iterator
+				i = facilities.begin();
+				i != facilities.end();
+				++i)
 		{
-			const std::vector<std::string>& facilities = _game->getRuleset()->getBaseFacilitiesList();
-			for (std::vector<std::string>::const_iterator
-					i = facilities.begin();
-					i != facilities.end();
-					++i)
+			range = static_cast<double>(_game->getRuleset()->getBaseFacility(*i)->getRadarRange());
+			if (range > 0.)
 			{
-				range = static_cast<double>(_game->getRuleset()->getBaseFacility(*i)->getRadarRange());
-				if (range > 0.)
-				{
-					range *= unitToRads;
-					drawGlobeCircle(
-								_hoverLat,
-								_hoverLon,
-								range,
-								48);
-//								CLO_RADAR1);
-				}
+				range *= unitToRads;
+				drawGlobeCircle(
+							_hoverLat,
+							_hoverLon,
+							range,
+							48);
+//							CLO_RADAR1);
 			}
 		}
+	}
+
+	if (_radarDetail > 0
+		&& Options::globeRadarLines == true)
+	{
+		double
+			lon,lat,
+			range,
+			rangeBest;
 
 		for (std::vector<Base*>::const_iterator
 				i = _game->getSavedGame()->getBases()->begin();
@@ -1639,52 +1665,73 @@ void Globe::drawRadars()
 		{
 			if ((*i)->getBasePlaced() == true)
 			{
-				for (std::vector<BaseFacility*>::const_iterator
-						j = (*i)->getFacilities()->begin();
-						j != (*i)->getFacilities()->end();
+				if (_radarDetail > 1)
+				{
+					rangeBest = 0.;
+					lat = (*i)->getLatitude();
+					lon = (*i)->getLongitude();
+
+					for (std::vector<BaseFacility*>::const_iterator
+							j = (*i)->getFacilities()->begin();
+							j != (*i)->getFacilities()->end();
+							++j)
+					{
+						if ((*j)->getBuildTime() == 0)
+						{
+							range = static_cast<double>((*j)->getRules()->getRadarRange());
+							if (_radarDetail > 2)
+							{
+								if (range > 0.)
+								{
+									range *= unitToRads;
+									drawGlobeCircle( // Base radars.
+												lat,lon,
+												range,
+												64);
+//												CLO_RADAR1);
+								}
+							}
+							else if (range > rangeBest)
+								rangeBest = range;
+						}
+					}
+
+					if (rangeBest > 0.)
+					{
+						rangeBest *= unitToRads;
+						drawGlobeCircle( // largest Base radar.
+									lat,lon,
+									rangeBest,
+									64);
+//									CLO_RADAR1)
+					}
+				}
+
+				for (std::vector<Craft*>::const_iterator
+						j = (*i)->getCrafts()->begin();
+						j != (*i)->getCrafts()->end();
 						++j)
 				{
-					if ((*j)->getBuildTime() == 0)
+					if ((*j)->getStatus() == "STR_OUT"
+						&& (*j)->getTakeoff() == true)
 					{
 						range = static_cast<double>((*j)->getRules()->getRadarRange());
 						if (range > 0.)
 						{
 							range *= unitToRads;
-							drawGlobeCircle( // Base radars.
-										(*i)->getLatitude(),
-										(*i)->getLongitude(),
+							drawGlobeCircle( // Craft radars.
+										(*j)->getLatitude(),
+										(*j)->getLongitude(),
 										range,
-										48);
-//										CLO_RADAR1);
+										24,
+										CLO_RADAR2);
 						}
 					}
 				}
 			}
-
-			for (std::vector<Craft*>::const_iterator
-					j = (*i)->getCrafts()->begin();
-					j != (*i)->getCrafts()->end();
-					++j)
-			{
-				if ((*j)->getStatus() == "STR_OUT"
-					&& (*j)->getTakeoff() == true)
-				{
-					range = static_cast<double>((*j)->getRules()->getRadarRange());
-					if (range > 0.)
-					{
-						range *= unitToRads;
-						drawGlobeCircle( // Craft radars.
-									(*j)->getLatitude(),
-									(*j)->getLongitude(),
-									range,
-									24,
-									CLO_RADAR2);
-					}
-				}
-			}
 		}
-		_radars->unlock();
 	}
+	_radars->unlock();
 }
 
 /**

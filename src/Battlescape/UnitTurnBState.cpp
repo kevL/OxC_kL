@@ -158,7 +158,7 @@ void UnitTurnBState::think()
 
 	if (_chargeTUs == true
 		&& _action.targeting == false
-		&& _parent->checkReservedTU(
+		&& _parent->checkReservedTu(
 								_unit,
 								tu) == false)
 	{

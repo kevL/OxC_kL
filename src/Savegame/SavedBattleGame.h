@@ -383,9 +383,9 @@ private:
 		bool isCheating();
 
 		/// Gets the reserved fire mode.
-		BattleActionType getBATReserved() const;
+		BattleActionType getBatReserved() const;
 		/// Sets the reserved fire mode.
-		void setBATReserved(BattleActionType reserved);
+		void setBatReserved(BattleActionType reserved);
 		/// Gets whether we are reserving TUs to kneel.
 		bool getKneelReserved() const;
 		/// Sets whether we are reserving TUs to kneel.

@@ -208,8 +208,11 @@ void UnitWalkBState::think()
 				//Log(LOG_INFO) << ". . doStatusStand_end() FALSE return";
 				return;
 			}
-			else if (_parent->getPanicHandled() == true)
+			else if (_unit->getFaction() == FACTION_PLAYER
+				&& _parent->getPanicHandled() == true)
+			{
 				_parent->getBattlescapeState()->updateHostileHotcons();
+			}
 		}
 		else if (_onScreen == true) // still walking ... make sure the unit sprites are up to date
 		{
@@ -491,7 +494,8 @@ bool UnitWalkBState::doStatusStand() // private.
 		if (tuCost - _pf->getOpenDoor() > _unit->getTimeUnits())
 		{
 			//Log(LOG_INFO) << ". . tuCost > _unit->TU()";
-			if (_parent->getPanicHandled() == true
+			if (_unit->getFaction() == FACTION_PLAYER
+				&& _parent->getPanicHandled() == true
 				&& tuTest < 255)
 			{
 				//Log(LOG_INFO) << ". send warning: not enough TU";
@@ -509,8 +513,11 @@ bool UnitWalkBState::doStatusStand() // private.
 		else if (staCost > _unit->getEnergy())
 		{
 			//Log(LOG_INFO) << ". . staCost > _unit->getEnergy()";
-			if (_parent->getPanicHandled() == true)
+			if (_unit->getFaction() == FACTION_PLAYER
+				&& _parent->getPanicHandled() == true)
+			{
 				_action.result = "STR_NOT_ENOUGH_ENERGY";
+			}
 
 			_unit->setCache(NULL);
 			_parent->getMap()->cacheUnit(_unit);
@@ -520,13 +527,13 @@ bool UnitWalkBState::doStatusStand() // private.
 
 			return false;
 		}
-		else if (_parent->getPanicHandled() == true
-			&& _parent->checkReservedTU(
-									_unit,
-									tuCost) == false)
-		{
-			//Log(LOG_INFO) << ". . checkReservedTU(_unit, tuCost) == false";
-			_unit->setCache(NULL);
+		else if (_parent->getPanicHandled() == true	// note this operates differently for player-units and non-player units;
+			&& _parent->checkReservedTu(			// Only player's units will *bypass* abortPath() due to panicking ....
+									_unit,			// Tbh, other code should have rendered the getPanicHandled() redundant.
+									tuCost) == false)	// That is to say this should kick in *only* when player has actively
+		{												// clicked to move but tries to go further than TUs allow; because
+			//Log(LOG_INFO) << ". . checkReservedTu(_unit, tuCost) == false";	// either the AI or the panic-code should not try to
+			_unit->setCache(NULL);												// move a unit farther than its [reserved] TUs allow
 			_parent->getMap()->cacheUnit(_unit);
 
 			_pf->abortPath();
@@ -996,8 +1003,11 @@ void UnitWalkBState::doStatusTurn() // private.
 
 		_parent->popState();
 	}
-	else if (_parent->getPanicHandled() == true)
+	else if (_unit->getFaction() == FACTION_PLAYER
+		&& _parent->getPanicHandled() == true)
+	{
 		_parent->getBattlescapeState()->updateHostileHotcons();
+	}
 }
 
 /**
@@ -1127,7 +1137,7 @@ void UnitWalkBState::postPathProcedures() // private.
 			}
 		}
 	}
-	else if (_parent->getPanicHandled() == false) // TODO: set the unit to aggrostate and try to find cover
+	else if (_parent->getPanicHandled() == false) // is Faction_Player
 		_unit->setTimeUnits(0);
 
 
@@ -1201,8 +1211,8 @@ int UnitWalkBState::getFinalDirection() const // private.
 bool UnitWalkBState::visForUnits() const // private.
 {
 	if (_falling == true
-		|| _parent->getPanicHandled() == false)
-	{
+		|| _parent->getPanicHandled() == false)	// note: _playerPanicHandled can be false only on Player's turn
+	{											// so if that expression== TRUE then it's a player's turn.
 		return false;
 	}
 

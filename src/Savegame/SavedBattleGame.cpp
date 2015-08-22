@@ -2758,7 +2758,7 @@ bool SavedBattleGame::isCheating()
  * Gets the TU reserved type.
  * @return, a BattleActionType
  */
-BattleActionType SavedBattleGame::getBATReserved() const
+BattleActionType SavedBattleGame::getBatReserved() const
 {
 	return _batReserved;
 }
@@ -2767,7 +2767,7 @@ BattleActionType SavedBattleGame::getBATReserved() const
  * Sets the TU reserved type.
  * @param reserved - a BattleActionType
  */
-void SavedBattleGame::setBATReserved(BattleActionType reserved)
+void SavedBattleGame::setBatReserved(BattleActionType reserved)
 {
 	_batReserved = reserved;
 }

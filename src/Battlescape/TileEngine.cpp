@@ -1668,7 +1668,7 @@ bool TileEngine::checkReactionFire(
 		|| triggerUnit->getFaction() != _battleSave->getSide()			// spotted unit must be current side's faction
 		|| triggerUnit->getTile() == NULL								// and must be on map
 		|| triggerUnit->isOut(true, true) == true)						// and must be conscious
-//		|| _battleSave->getBattleGame()->getPanicHandled() == false)	// and ... nahhh.
+//		|| _battleSave->getBattleGame()->getPanicHandled() == false)	// and ... nahhh. Note that doesn't affect aLien RF anyway.
 	{
 		return false;
 	}
@@ -4723,7 +4723,7 @@ int TileEngine::unitOpensDoor(
 
 	if (tuCost != 0)
 	{
-		if (_battleSave->getBattleGame()->checkReservedTU(
+		if (_battleSave->getBattleGame()->checkReservedTu(
 														unit,
 														tuCost) == true)
 		{

@@ -1007,7 +1007,7 @@ void BattlescapeState::init()
 
 	updateSoldierInfo();
 
-/*	switch (_battleSave->getBATReserved())
+/*	switch (_battleSave->getBatReserved())
 	{
 		case BA_SNAPSHOT: _reserve = _btnReserveSnap; break;
 		case BA_AIMEDSHOT: _reserve = _btnReserveAimed; break;

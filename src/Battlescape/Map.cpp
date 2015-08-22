@@ -1574,7 +1574,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 						if (itZ > 0
 							&& tile->hasNoFloor(tileBelow) == false
 							&& (tile->getMapData(O_OBJECT) == NULL
-								|| tile->getMapData(O_OBJECT)->getTUCostData(MT_WALK) < 6))
+								|| tile->getMapData(O_OBJECT)->getTUCostData(MT_WALK) < 6)) // -> tile->getTUCostTile(O_OBJECT,MT_WALK)
 						{
 							for (std::vector<BattleUnit*>::const_iterator
 									i = _battleSave->getUnits()->begin();
@@ -1753,7 +1753,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 											//Log(LOG_INFO) << "[1] . dir 2/6";
 											if ((tile->getMapData(O_WESTWALL) == NULL			// redundant [not exactly it appears], due to
 //													|| tile->isUfoDoorOpen(O_WESTWALL) == true	// this. <- checks if westWall is valid
-													|| (tile->getMapData(O_WESTWALL)->getTUCostData(MT_WALK) != 255
+													|| (tile->getMapData(O_WESTWALL)->getTUCostData(MT_WALK) != 255 // -> tile->getTUCostTile(O_OBJECT,MT_WALK)
 														&& (tile->getMapData(O_WESTWALL)->isUfoDoor() == false
 															|| tile->isUfoDoorOpen(O_WESTWALL) == true)))
 												&& (tile->getMapData(O_OBJECT) == NULL
@@ -1786,7 +1786,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 															&& (tileSouthWest->getMapData(O_OBJECT) == NULL
 																|| (tileSouthWest->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NONE
 //																	&& tileSouthWest->getMapData(O_OBJECT)->getTUCostData(MT_WALK) != 255 // <- maybe
-																	&& tileSouthWest->getMapData(O_OBJECT)->getTUCostData(MT_WALK) < 6 // from Dir=1/5
+																	&& tileSouthWest->getMapData(O_OBJECT)->getTUCostData(MT_WALK) < 6 // from Dir=1/5 // -> tile->getTUCostTile(O_OBJECT,MT_WALK)
 																	// that needs to change. Use, say, a TU cost in MCDs of 6+ to denote big bushy objects that act like chairs & other non-walkable objects.
 																	&& tileSouthWest->getMapData(O_OBJECT)->getDataset()->getName() != "LIGHTNIN"
 																	&& tileSouthWest->getMapData(O_OBJECT)->getSprite(0) != 42)
@@ -1816,7 +1816,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 													|| (tile->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NONE
 														&& tileWest->getTerrainLevel() - tile->getTerrainLevel() < 13 // positive means Tile is higher
 //														&& tile->getMapData(O_OBJECT)->getTUCostData(MT_WALK) != 255)))
-														&& tile->getMapData(O_OBJECT)->getTUCostData(MT_WALK) < 6))) // ie. not a big bushy object or chair etc.
+														&& tile->getMapData(O_OBJECT)->getTUCostData(MT_WALK) < 6))) // ie. not a big bushy object or chair etc. // -> tile->getTUCostTile(O_OBJECT,MT_WALK)
 											{
 												//Log(LOG_INFO) << "[1] . . tile No westwall OR object";
 												const Tile* const tileNorth = _battleSave->getTile(posMap + Position(0,-1,0));
@@ -1856,7 +1856,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 																&& (tileSouthWest->getMapData(O_OBJECT) == NULL
 																	|| (tileSouthWest->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NONE
 //																		&& tileSouthWest->getMapData(O_OBJECT)->getTUCostData(MT_WALK) != 255
-																		&& tileSouthWest->getMapData(O_OBJECT)->getTUCostData(MT_WALK) < 6
+																		&& tileSouthWest->getMapData(O_OBJECT)->getTUCostData(MT_WALK) < 6 // -> tile->getTUCostTile(O_OBJECT,MT_WALK)
 																		// that needs to change. Use, say, a TU cost in MCDs of 6+ to denote big bushy objects that act like chairs & other non-walkable objects.
 																		&& tileSouthWest->getMapData(O_OBJECT)->getDataset()->getName() != "LIGHTNIN"
 																		&& tileSouthWest->getMapData(O_OBJECT)->getSprite(0) != 42)
@@ -1872,7 +1872,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 															if ((tileSouthWest != NULL
 																	&& (tileSouthWest->getMapData(O_OBJECT) != NULL
 																	&& ((tileSouthWest->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NONE
-																			&& tileSouthWest->getMapData(O_OBJECT)->getTUCostData(MT_WALK) == 255) // or terrainLevel < 0 perhaps
+																			&& tileSouthWest->getMapData(O_OBJECT)->getTUCostData(MT_WALK) == 255) // or terrainLevel < 0 perhaps // -> tile->getTUCostTile(O_OBJECT,MT_WALK)
 																		|| tileSouthWest->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NWSE)))
 																|| (tileSouthSouthWest != NULL
 																	&& tileSouthSouthWest->getMapData(O_NORTHWALL) != NULL)) // <- needs more ...
@@ -2015,7 +2015,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 												if (tile->getMapData(O_OBJECT) == NULL // exposed floor, basically.
 													|| (tile->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NONE
 														&& std::abs(tileNorthWest->getTerrainLevel() - tile->getTerrainLevel()) < 13 // positive means Tile is higher
-														&& tile->getMapData(O_OBJECT)->getTUCostData(MT_WALK) != 255)
+														&& tile->getMapData(O_OBJECT)->getTUCostData(MT_WALK) != 255) // -> tile->getTUCostTile(O_OBJECT,MT_WALK)
 													|| tile->getMapData(O_OBJECT)->getBigWall() == BIGWALL_EAST
 													|| tile->getMapData(O_OBJECT)->getBigWall() == BIGWALL_E_S)
 												{
@@ -2033,7 +2033,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 														|| (tileWest->getMapData(O_OBJECT) != NULL
 															&& ((tileWest->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NONE
 																	&& tileWest->getTerrainLevel() - tile->getTerrainLevel() > 12) // positive means Tile is higher
-																|| tileWest->getMapData(O_OBJECT)->getTUCostData(MT_WALK) == 255 // tentative: good for some objects, prob. not for others
+																|| tileWest->getMapData(O_OBJECT)->getTUCostData(MT_WALK) == 255 // tentative: good for some objects, prob. not for others // -> tile->getTUCostTile(O_OBJECT,MT_WALK)
 																|| tileWest->getMapData(O_OBJECT)->getBigWall() == BIGWALL_BLOCK
 																|| tileWest->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NESW
 																|| tileWest->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NORTH
@@ -2053,11 +2053,11 @@ void Map::drawTerrain(Surface* const surface) // private.
 														|| (tileNorth->getMapData(O_WESTWALL) != NULL	// AND tu == 255, ie. isWalkable rubble that lets sight pass over it
 															&& ((tileNorth->getMapData(O_WESTWALL)->isUfoDoor() == true
 																	&& tileNorth->isUfoDoorOpen(O_WESTWALL) == false)
-																|| tileNorth->getMapData(O_WESTWALL)->getTUCostData(MT_WALK) == 255))
+																|| tileNorth->getMapData(O_WESTWALL)->getTUCostData(MT_WALK) == 255)) // -> tile->getTUCostTile(O_OBJECT,MT_WALK)
 														|| (tileNorth->getMapData(O_OBJECT) != NULL
 															&& ((tileNorth->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NONE
 																	&& tileNorth->getTerrainLevel() - tile->getTerrainLevel() > 12) // positive means Tile is higher
-																|| tileNorth->getMapData(O_OBJECT)->getTUCostData(MT_WALK) == 255 // tentative: good for some objects, prob. not for others
+																|| tileNorth->getMapData(O_OBJECT)->getTUCostData(MT_WALK) == 255 // tentative: good for some objects, prob. not for others // -> tile->getTUCostTile(O_OBJECT,MT_WALK)
 																|| tileNorth->getMapData(O_OBJECT)->getBigWall() == BIGWALL_BLOCK
 																|| tileNorth->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NESW
 																|| tileNorth->getMapData(O_OBJECT)->getBigWall() == BIGWALL_WEST
@@ -3184,7 +3184,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 												&& tileBelowSouthEast->getTerrainLevel() - tileBelow->getTerrainLevel() < 1 // positive -> Tile is higher
 												&& tileBelowSouthEast->getMapData(O_OBJECT) != NULL
 												&& tileBelowSouthEast->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NONE
-												&& tileBelowSouthEast->getMapData(O_OBJECT)->getTUCostData(MT_WALK) == 255)	// generally only nonwalkable content-objects
+												&& tileBelowSouthEast->getMapData(O_OBJECT)->getTUCostData(MT_WALK) == 255)	// generally only nonwalkable content-objects // -> tile->getTUCostTile(O_OBJECT,MT_WALK)
 											{																				// rise high enough to cause an overblit.
 												srfSprite = tileBelowSouthEast->getSprite(O_OBJECT);
 //												srfSprite = NULL;

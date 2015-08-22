@@ -306,9 +306,10 @@ void ProjectileFlyBState::init()
 
 
 	if (_action.type == BA_LAUNCH
-		|| (_unit->getFaction() == FACTION_PLAYER	//_battleSave->getSide() -> note: don't let ReactionFire in here by holding CRTL.
-			&& (SDL_GetModState() & KMOD_CTRL) != 0	// force fire by pressing CTRL but not SHIFT
+		|| (_unit->getFaction() == FACTION_PLAYER		//_battleSave->getSide() -> note: don't let aLien ReactionFire in here by holding CRTL.
+			&& (SDL_GetModState() & KMOD_CTRL) != 0		// force fire by pressing CTRL but not SHIFT
 			&& (SDL_GetModState() & KMOD_SHIFT) == 0
+			&& _parent->getPanicHandled() == true		// don't let player alter this when berserking.
 			&& Options::forceFire == true)
 		|| _parent->getPanicHandled() == false)
 	{

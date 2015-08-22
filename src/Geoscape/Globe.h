@@ -76,6 +76,7 @@ private:
 		_blink,
 //		_blinkVal,
 		_debugType,
+		_radarDetail,
 		_totalMouseMoveX,
 		_totalMouseMoveY;
 //		_xBeforeMouseScrolling,

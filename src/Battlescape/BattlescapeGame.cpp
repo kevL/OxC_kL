@@ -158,12 +158,6 @@ void BattlescapeGame::init()
 		_firstInit = false;
 		_battleSave->getTileEngine()->recalculateFOV();
 	}
-
-/*	if (_battleSave->getSide() == FACTION_PLAYER
-		&& _battleSave->getTurn() > 1)
-	{
-		_playerPanicHandled = false;
-	} */ // -> moved to NextTurnState::nextTurn()
 }
 
 /**
@@ -1270,7 +1264,7 @@ bool BattlescapeGame::kneel(BattleUnit* const bu)
 			else
 				tu = 3;
 
-			if (checkReservedTU(bu, tu) == true
+			if (checkReservedTu(bu, tu) == true
 				|| (tu == 3
 					&& _battleSave->getKneelReserved() == true))
 			{
@@ -2095,48 +2089,50 @@ void BattlescapeGame::showInfoBoxQueue() // private.
 
 /**
  * Checks against reserved time units.
- * @param bu	- pointer to a unit
+ * @param unit	- pointer to a unit
  * @param tu	- # of time units to check against
  * @param test	- true to suppress error messages (default false)
  * @return, true if unit has enough time units - go!
  */
-bool BattlescapeGame::checkReservedTU(
-		BattleUnit* bu,
+bool BattlescapeGame::checkReservedTu(
+		const BattleUnit* const unit,
 		int tu,
 		bool test)
 {
-	if (bu->getFaction() != _battleSave->getSide()
-		|| _battleSave->getSide() == FACTION_NEUTRAL)
+	if (unit->getFaction() != _battleSave->getSide()	// is RF.
+		|| _battleSave->getSide() == FACTION_NEUTRAL)	// or Civies
 	{
-		return tu <= bu->getTimeUnits();
+		return tu <= unit->getTimeUnits();
 	}
 
 
-	BattleActionType actReserved = _battleSave->getBATReserved(); // avoid changing _batReserved here.
+	BattleActionType batReserved = _battleSave->getBatReserved(); // avoid changing _batReserved here.
 
 	if (_battleSave->getSide() == FACTION_HOSTILE
 		&& _debugPlay == false)
 	{
-		const AlienBAIState* const ai = dynamic_cast<AlienBAIState*>(bu->getCurrentAIState());
+		const AlienBAIState* const ai = dynamic_cast<AlienBAIState*>(unit->getCurrentAIState());
 		if (ai != NULL)
-			actReserved = ai->getReservedAIAction();
+			batReserved = ai->getReservedAIAction();
+		else
+			batReserved = BA_NONE; // something went ... wrong. Should always be an AI for non-player units.
 
-		const int extraReserve = RNG::generate(0,10); // kL, added in below ->
+		const int extraReserve = RNG::generate(0,13); // kL, added in below ->
 
 		// kL_note: This could use some tweaking, for the poor aLiens:
-		switch (actReserved) // aLiens reserve TUs as a percentage rather than just enough for a single action.
+		switch (batReserved) // aLiens reserve TUs as a percentage rather than just enough for a single action.
 		{
 			case BA_SNAPSHOT:
-				return (tu + extraReserve + (bu->getBaseStats()->tu / 3) <= bu->getTimeUnits());		// 33%
+			return (tu + extraReserve + (unit->getBaseStats()->tu / 3) <= unit->getTimeUnits());		// 33%
 
 			case BA_AUTOSHOT:
-				return (tu + extraReserve + (bu->getBaseStats()->tu * 2 / 5) <= bu->getTimeUnits());	// 40%
+			return (tu + extraReserve + (unit->getBaseStats()->tu * 2 / 5) <= unit->getTimeUnits());	// 40%
 
 			case BA_AIMEDSHOT:
-				return (tu + extraReserve + (bu->getBaseStats()->tu / 2) <= bu->getTimeUnits());		// 50%
+			return (tu + extraReserve + (unit->getBaseStats()->tu / 2) <= unit->getTimeUnits());		// 50%
 
 			default:
-				return (tu <= bu->getTimeUnits()); // + extraReserve
+			return (tu <= unit->getTimeUnits()); // + extraReserve
 		}
 	}
 
@@ -2144,50 +2140,50 @@ bool BattlescapeGame::checkReservedTU(
 	// ( which i don't care about - except that this is also used for pathPreviews in Pathfinding object )
 
 	// check TUs against slowest weapon if we have two weapons
-//	const BattleItem* const weapon = bu->getMainHandWeapon(false);
+//	const BattleItem* const weapon = unit->getMainHandWeapon(false);
 	// kL: Use getActiveHand() instead, if xCom wants to reserve TU & for pathPreview.
-	const BattleItem* const weapon = bu->getItem(bu->getActiveHand());
+	const BattleItem* const weapon = unit->getItem(unit->getActiveHand());
 
 	// if reserved for Aimed shot drop to Auto shot
-	if (actReserved == BA_AIMEDSHOT
-		&& bu->getActionTUs(
+	if (batReserved == BA_AIMEDSHOT
+		&& unit->getActionTUs(
 						BA_AIMEDSHOT,
 						weapon) == 0)
 	{
-		actReserved = BA_AUTOSHOT;
+		batReserved = BA_AUTOSHOT;
 	}
 
 	// if reserved for Auto shot drop to Snap shot
-	if (actReserved == BA_AUTOSHOT
-		&& bu->getActionTUs(
+	if (batReserved == BA_AUTOSHOT
+		&& unit->getActionTUs(
 						BA_AUTOSHOT,
 						weapon) == 0)
 	{
-		actReserved = BA_SNAPSHOT;
+		batReserved = BA_SNAPSHOT;
 	}
 
 	// if reserved for Snap shot try Auto shot
-	if (actReserved == BA_SNAPSHOT
-		&& bu->getActionTUs(
+	if (batReserved == BA_SNAPSHOT
+		&& unit->getActionTUs(
 						BA_SNAPSHOT,
 						weapon) == 0)
 	{
-		actReserved = BA_AUTOSHOT;
+		batReserved = BA_AUTOSHOT;
 	}
 
 	// if reserved for Auto shot try Aimed shot
-	if (actReserved == BA_AUTOSHOT
-		&& bu->getActionTUs(
+	if (batReserved == BA_AUTOSHOT
+		&& unit->getActionTUs(
 						BA_AUTOSHOT,
 						weapon) == 0)
 	{
-		actReserved = BA_AIMEDSHOT;
+		batReserved = BA_AIMEDSHOT;
 	}
 
 	int tuKneel;
 	if (_battleSave->getKneelReserved() == true
-		&& bu->getGeoscapeSoldier() != NULL
-		&& bu->isKneeled() == false)
+		&& unit->getGeoscapeSoldier() != NULL
+		&& unit->isKneeled() == false)
 	{
 		tuKneel = 3;
 	}
@@ -2195,32 +2191,32 @@ bool BattlescapeGame::checkReservedTU(
 		tuKneel = 0;
 
 	// if no Aimed shot is available revert to bat_NONE
-	if (actReserved == BA_AIMEDSHOT
-		&& bu->getActionTUs(
+	if (batReserved == BA_AIMEDSHOT
+		&& unit->getActionTUs(
 						BA_AIMEDSHOT,
 						weapon) == 0)
 	{
 		if (tuKneel != 0)
-			actReserved = BA_NONE;
+			batReserved = BA_NONE;
 		else
 			return true;
 	}
 
-	if ((actReserved != BA_NONE
+	if ((batReserved != BA_NONE
 			|| _battleSave->getKneelReserved() == true)
-		&& tu + tuKneel + bu->getActionTUs(
-										actReserved,
-										weapon) > bu->getTimeUnits()
-		&& (tuKneel + bu->getActionTUs(
-									actReserved,
-									weapon) <= bu->getTimeUnits()
+		&& tu + tuKneel + unit->getActionTUs(
+										batReserved,
+										weapon) > unit->getTimeUnits()
+		&& (tuKneel + unit->getActionTUs(
+									batReserved,
+									weapon) <= unit->getTimeUnits()
 			|| test == true))
 	{
 		if (test == false)
 		{
 			if (tuKneel != 0)
 			{
-				switch (actReserved)
+				switch (batReserved)
 				{
 					case BA_NONE:
 						_parentState->warning("STR_TIME_UNITS_RESERVED_FOR_KNEELING");
@@ -2232,7 +2228,7 @@ bool BattlescapeGame::checkReservedTU(
 			}
 			else
 			{
-				switch (_battleSave->getBATReserved())
+				switch (_battleSave->getBatReserved())
 				{
 					case BA_SNAPSHOT:
 						_parentState->warning("STR_TIME_UNITS_RESERVED_FOR_SNAP_SHOT");
@@ -2254,6 +2250,7 @@ bool BattlescapeGame::checkReservedTU(
 
 /**
  * Picks the first soldier that is panicking.
+ * @note Called from BattlescapeGame::think() at start of player's turn.
  * @return, true when all panicking is over
  */
 bool BattlescapeGame::handlePanickingPlayer() // private.
@@ -2279,6 +2276,7 @@ bool BattlescapeGame::handlePanickingPlayer() // private.
 
 /**
  * Handles panicking units.
+ * @note Called from BattlescapeGame::think() at start of non-player turn.
  * @return, true if unit is panicking
  */
 bool BattlescapeGame::handlePanickingUnit(BattleUnit* const unit) // private.
@@ -3282,6 +3280,7 @@ void BattlescapeGame::findItem(BattleAction* const action) const
 BattleItem* BattlescapeGame::surveyItems(BattleUnit* const unit) const
 {
 	//Log(LOG_INFO) << "BattlescapeGame::surveyItems()";
+	const Tile* tile;
 	std::vector<BattleItem*> groundItems;
 	for (std::vector<BattleItem*>::const_iterator
 			i = _battleSave->getItems()->begin();
@@ -3290,15 +3289,20 @@ BattleItem* BattlescapeGame::surveyItems(BattleUnit* const unit) const
 	{
 		if ((*i)->getSlot() != NULL
 			&& (*i)->getSlot()->getId() == "STR_GROUND"
-			&& (*i)->getTile() != NULL
-			&& ((*i)->getTile()->getUnit() == NULL
-				|| (*i)->getTile()->getUnit() == unit)
-			&& (*i)->getRules()->getAttraction() != 0
-			&& worthTaking(
-						*i,
-						unit) == true)
+			&& (*i)->getRules()->getAttraction() != 0)
 		{
-			groundItems.push_back(*i);
+			tile = (*i)->getTile();
+			if (tile != NULL
+				&& (tile->getUnit() == NULL
+					|| tile->getUnit() == unit)
+				&& tile->getTUCostTile(O_FLOOR, MT_WALK) != 255 // TODO:: pathfind.
+				&& tile->getTUCostTile(O_OBJECT, MT_WALK) != 255
+				&& worthTaking(
+							*i,
+							unit) == true)
+			{
+				groundItems.push_back(*i);
+			}
 		}
 	}
 
@@ -3583,7 +3587,7 @@ bool BattlescapeGame::takeItem( // TODO: rewrite & rework into rest of pickup co
  */
 void BattlescapeGame::setReservedAction(BattleActionType bat)
 {
-	_battleSave->setBATReserved(bat);
+	_battleSave->setBatReserved(bat);
 }
 
 /**
@@ -3592,7 +3596,7 @@ void BattlescapeGame::setReservedAction(BattleActionType bat)
  */
 BattleActionType BattlescapeGame::getReservedAction() const
 {
-	return _battleSave->getBATReserved();
+	return _battleSave->getBatReserved();
 }
 
 /**

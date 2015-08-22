@@ -1896,7 +1896,7 @@ alienMissions:
   - type: STR_ALIEN_TERROR
     points: 200
     objective: 3
-    specialZone: 3 #Mission zone for terror missions
+    specialZone: 3 # Mission zone for terror missions
 #    specialUfo: STR_TERROR_SHIP
 #    deployment: STR_TERROR_MISSION
 #    markerName: STR_TERROR_SITE
