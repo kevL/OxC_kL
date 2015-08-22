@@ -1096,22 +1096,9 @@ std::vector<Target*> Globe::getTargets(
 			++i)
 	{
 		if ((*i)->getDetected() == true
-			&& ((*i)->getAlienMission()->getRules().getObjective() != alm_SITE // see note. UNTESTED.
-				|| (*i)->getAlienMission()->getRules().getWave((*i)->getAlienMission()->getWaveCount()).objective == false)
-//			&& ((*i)->reachedDestination() == false
-//				|| (*i)->getAlienMission()->getRules().getObjective() != alm_SITE
-//				|| (*i)->getAlienMission()->getRules().getWave().objective == false)
+			&& (*i)->getStatus() != Ufo::DESTROYED // ah, here's the workaround.
 			&& targetNear(*i, x,y) == true)
 		{
-			// kL_NOTE: this is a kludge; the UFO should be / have been deleted
-			// before invoking SelectDestinationState or MultipleTargetsState.
-			// **** see: GeoscapeState::time5Seconds(), case Ufo::FLYING ****
-			// Under certain circumstances (i forget) player can target, or be
-			// offered to target, a UFO that is effectively already a MissionSite,
-			// but the UFO itself then immediately disappears, which causes the
-			// Craft to go back to base or bleh.
-			//
-			// It's not game-breaking; just awkward.
 			targets.push_back(*i);
 		}
 	}

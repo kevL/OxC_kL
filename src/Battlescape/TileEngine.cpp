@@ -1664,10 +1664,11 @@ bool TileEngine::checkReactionFire(
 {
 	//Log(LOG_INFO) << "TileEngine::checkReactionFire() vs id-" << triggerUnit->getId();
 	//Log(LOG_INFO) << ". tuSpent = " << tuSpent;
-	if (_battleSave->getSide() == FACTION_NEUTRAL				// no reaction on civilian turn.
-		|| triggerUnit->getFaction() != _battleSave->getSide()	// spotted unit must be current side's faction
-		|| triggerUnit->getTile() == NULL						// and must be on map
-		|| triggerUnit->isOut(true, true) == true)				// and must be conscious
+	if (_battleSave->getSide() == FACTION_NEUTRAL						// no reaction on civilian turn.
+		|| triggerUnit->getFaction() != _battleSave->getSide()			// spotted unit must be current side's faction
+		|| triggerUnit->getTile() == NULL								// and must be on map
+		|| triggerUnit->isOut(true, true) == true)						// and must be conscious
+//		|| _battleSave->getBattleGame()->getPanicHandled() == false)	// and ... nahhh.
 	{
 		return false;
 	}

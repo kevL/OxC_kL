@@ -6882,7 +6882,7 @@
 	"../Resource/XcomResourcePack.h"
 	"../Savegame/SavedGame.h"
 
-1440098170 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
+1440258414 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
 	"DogfightState.h"
 	"GeoscapeCraftState.h"
 	"GeoscapeState.h"
@@ -7091,7 +7091,7 @@
 
 1440173244 f:\git\openxcom\src\ufopaedia\ufopaedia.h
 
-1440183668 source:f:\git\openxcom\src\geoscape\globe.cpp
+1440259017 source:f:\git\openxcom\src\geoscape\globe.cpp
 	"Globe.h"
 	"GeoscapeState.h"
 	"../Engine/Action.h"
@@ -7182,7 +7182,7 @@
 	"../Savegame/Target.h"
 	"../Savegame/Ufo.h"
 
-1440097067 source:f:\git\openxcom\src\geoscape\itemsarrivingstate.cpp
+1440249022 source:f:\git\openxcom\src\geoscape\itemsarrivingstate.cpp
 	"ItemsArrivingState.h"
 	"GeoscapeState.h"
 	"../Basescape/BasescapeState.h"
@@ -8210,7 +8210,7 @@
 1430149550 f:\git\openxcom\src\ruleset\extrasounds.h
 	<yaml-cpp/yaml.h>
 
-1439981881 source:f:\git\openxcom\src\ruleset\aliendeployment.cpp
+1440253323 source:f:\git\openxcom\src\ruleset\aliendeployment.cpp
 	"AlienDeployment.h"
 
 1437431771 source:f:\git\openxcom\src\ruleset\alienrace.cpp
@@ -8358,7 +8358,7 @@
 	"../Engine/Language.h"
 	"../Savegame/Soldier.h"
 
-1435625434 source:f:\git\openxcom\src\ruleset\ufotrajectory.cpp
+1440252887 source:f:\git\openxcom\src\ruleset\ufotrajectory.cpp
 	"UfoTrajectory.h"
 
 1431490878 source:f:\git\openxcom\src\ruleset\unit.cpp
@@ -8646,7 +8646,7 @@
 	"../Engine/Language.h"
 	"../Ruleset/Ruleset.h"
 
-1440097308 source:f:\git\openxcom\src\savegame\ufo.cpp
+1440255408 source:f:\git\openxcom\src\savegame\ufo.cpp
 	"Ufo.h"
 	"AlienMission.h"
 	"Craft.h"
@@ -11112,7 +11112,7 @@
 	"../Ruleset/AlienDeployment.h"
 	"../Savegame/MissionSite.h"
 
-1439089679 source:f:\git\openxcom\src\savegame\missionsite.cpp
+1440253323 source:f:\git\openxcom\src\savegame\missionsite.cpp
 	"MissionSite.h"
 	"../Engine/Language.h"
 	"../Geoscape/Globe.h"

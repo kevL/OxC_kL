@@ -1542,7 +1542,6 @@ void GeoscapeState::time5Seconds()
 		switch ((*i)->getStatus())
 		{
 			case Ufo::FLYING:
-				//Log(LOG_INFO) << "GeoscapeState::time5Seconds(), Ufo::FLYING";
 				if (_dfZoomInTimer->isRunning() == false
 					&& _dfZoomOutTimer->isRunning() == false)
 				{
@@ -1568,7 +1567,7 @@ void GeoscapeState::time5Seconds()
 									j != _dogfights.end();
 									++j)
 							{
-								if ((*j)->getUfo() != *i)
+								if ((*j)->getUfo() != *i) // huh, sometimes I wonder what the hell i code.
 								{
 									_dfZoomOut = true;
 									break;
@@ -1589,33 +1588,17 @@ void GeoscapeState::time5Seconds()
 							}
 						}
 
-						//Log(LOG_INFO) << ". qtySites = " << (int)qtySites;
-						if (qtySites < _gameSave->getMissionSites()->size())
+						if (qtySites < _gameSave->getMissionSites()->size()) // new MissionSite appeared when UFO reached waypoint, above^
 						{
-							//Log(LOG_INFO) << ". create terrorSite";
-
 							MissionSite* const site = _gameSave->getMissionSites()->back();
 							site->setDetected();
-//							const RuleCity* const city = _rules->locateCity(
-//																		site->getLongitude(),
-//																		site->getLatitude());
-//							assert(city);
-							// kL_note: need to delete the UFO here, before attempting to target w/ Craft.
-							// see: Globe::getTargets() for the workaround...
-							// or try something like this, latr:
-							//
-							//delete *i;
-							//i = _gameSave->getUfos()->erase(i);
-								// still need to handle minimized dogfights etc.
 
 							popup(new MissionDetectedState(
 														site,
 														this));
 						}
-						//Log(LOG_INFO) << ". create terrorSite DONE";
 
-						// If UFO was destroyed, don't spawn missions
-						if ((*i)->getStatus() == Ufo::DESTROYED)
+						if ((*i)->getStatus() == Ufo::DESTROYED) // if UFO was destroyed don't spawn missions
 							return;
 
 						if (Base* const base = dynamic_cast<Base*>((*i)->getDestination()))
@@ -1671,10 +1654,6 @@ void GeoscapeState::time5Seconds()
 					(*i)->setDetected(false);
 					(*i)->setStatus(Ufo::DESTROYED);
 				}
-/*			break;
-
-			case Ufo::DESTROYED: // Nothing to do
-			break; */
 		}
 	}
 
@@ -1702,9 +1681,7 @@ void GeoscapeState::time5Seconds()
 						k != _gameSave->getCountries()->end();
 						++k)
 				{
-					if ((*k)->getRules()->insideCountry(
-															lon,
-															lat) == true)
+					if ((*k)->getRules()->insideCountry(lon,lat) == true)
 					{
 						(*k)->addActivityAlien((*j)->getRules()->getScore());
 						(*k)->recentActivity();
@@ -1717,9 +1694,7 @@ void GeoscapeState::time5Seconds()
 						k != _gameSave->getRegions()->end();
 						++k)
 				{
-					if ((*k)->getRules()->insideRegion(
-														lon,
-														lat) == true)
+					if ((*k)->getRules()->insideRegion(lon,lat) == true)
 					{
 						(*k)->addActivityAlien((*j)->getRules()->getScore());
 						(*k)->recentActivity();
@@ -1727,8 +1702,7 @@ void GeoscapeState::time5Seconds()
 					}
 				}
 
-				// if a transport craft has been shot down kill all soldiers on board.
-				if ((*j)->getRules()->getSoldiers() > 0)
+				if ((*j)->getRules()->getSoldiers() > 0) // if a transport craft has been shot down all soldiers onboard are dead.
 				{
 					for (std::vector<Soldier*>::const_iterator
 							k = (*i)->getSoldiers()->begin();
@@ -1770,7 +1744,7 @@ void GeoscapeState::time5Seconds()
 						{
 							(*j)->returnToBase();
 						}
-						else // note: this is near where that targeting-terrorUfo/Site glitch should also be taken care of.
+						else
 						{
 							(*j)->setDestination(NULL);
 
@@ -1837,7 +1811,6 @@ void GeoscapeState::time5Seconds()
 													(*j)->getLatitude());
 
 										if (_dogfights.empty() == true // first dogfight, start music
-//											&& initDfMusic == false
 											&& _game->getResourcePack()->isMusicPlaying(OpenXcom::res_MUSIC_GEO_INTERCEPT) == false) // unless reloading to another dogfight ...
 										{
 											_game->getResourcePack()->fadeMusic(_game, 425);
