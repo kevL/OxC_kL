@@ -213,7 +213,7 @@ void CivilianBAIState::think(BattleAction* action)
 			action->target	= _patrolAction->target;
 	}
 
-	if (action->type == BA_WALK
+	if (action->type == BA_MOVE
 		&& action->target != _unit->getPosition())
 	{
 		_escapeTUs = 0;
@@ -511,7 +511,7 @@ void CivilianBAIState::setupEscape()
 	else
 	{
 		//if (_traceAI) Log(LOG_INFO) << "Escape estimation completed after " << tries << " tries, " << _battleSave->getTileEngine()->distance(_unit->getPosition(), bestTilePos) << " squares or so away.";
-		_escapeAction->type = BA_WALK;
+		_escapeAction->type = BA_MOVE;
 	}
 }
 
@@ -590,7 +590,7 @@ void CivilianBAIState::setupPatrol()
 	if (_toNode != NULL)
 	{
 		_patrolAction->actor = _unit;
-		_patrolAction->type = BA_WALK;
+		_patrolAction->type = BA_MOVE;
 		_patrolAction->target = _toNode->getPosition();
 	}
 	else

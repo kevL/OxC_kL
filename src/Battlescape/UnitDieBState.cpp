@@ -441,9 +441,9 @@ void UnitDieBState::convertToCorpse() // private.
 													_parent->getSave()->getNextItemId());
 				corpse->setUnit(_unit);
 
-				if (tile != NULL					// kL, safety. ( had a CTD when ethereal dies on water ).
-					&& tile->getUnit() == _unit)	// <- check in case unit was displaced by another unit
-				{
+				if (tile != NULL					// kL, safety. (had a CTD when ethereal dies on water).
+					&& tile->getUnit() == _unit)	// <- check in case unit was displaced by another unit ... that sounds pretty darn shakey.
+				{									// TODO: iterate over all mapTiles searching for the unit and NULLing any tile's association to it.
 					tile->setUnit(NULL);
 				}
 

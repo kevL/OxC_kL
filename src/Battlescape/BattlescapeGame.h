@@ -48,7 +48,7 @@ enum BattleActionType
 {
 	BA_NONE,		//  0
 	BA_TURN,		//  1
-	BA_WALK,		//  2
+	BA_MOVE,		//  2
 	BA_PRIME,		//  3
 	BA_THROW,		//  4
 	BA_AUTOSHOT,	//  5
@@ -310,21 +310,21 @@ private:
 		{ _playerPanicHandled = false; }
 
 		/// Tries to find an item and pick it up if possible.
-		void findItem(BattleAction* action);
+		void findItem(BattleAction* const action) const;
 		/// Checks through all the items on the ground and picks one.
-		BattleItem* surveyItems(BattleAction* action);
+		BattleItem* surveyItems(BattleUnit* const unit) const;
 		/// Evaluates if it's worthwhile to take this item.
 		bool worthTaking(
-				BattleItem* item,
-				BattleAction* action);
+				BattleItem* const item,
+				BattleUnit* const unit) const;
 		/// Picks the item up from the ground.
 		int takeItemFromGround(
-				BattleItem* item,
-				BattleAction* action);
+				BattleItem* const item,
+				BattleUnit* const unit) const;
 		/// Assigns the item to a slot (stolen from battlescapeGenerator::addItem()).
 		bool takeItem(
-				BattleItem* item,
-				BattleAction* action);
+				BattleItem* const item,
+				BattleUnit* const unit) const;
 
 		/// Sets the TU reserved type.
 		void setReservedAction(BattleActionType bat);

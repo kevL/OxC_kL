@@ -1526,7 +1526,7 @@ void GeoscapeState::timeAdvance()
 void GeoscapeState::time5Seconds()
 {
 	//Log(LOG_INFO) << "GeoscapeState::time5Seconds()";
-	if (_gameSave->getBases()->empty() == true) // Game over if there are no more bases.
+	if (_gameSave->getBases()->empty() == true) // Game Over if there are no more bases.
 	{
 		popup(new DefeatState());
 		return;
@@ -1702,7 +1702,7 @@ void GeoscapeState::time5Seconds()
 					}
 				}
 
-				if ((*j)->getRules()->getSoldiers() > 0) // if a transport craft has been shot down all soldiers onboard are dead.
+				if ((*j)->getRules()->getSoldiers() > 0) // if a transport craft has been shot down all soldiers aboard are dead.
 				{
 					for (std::vector<Soldier*>::const_iterator
 							k = (*i)->getSoldiers()->begin();

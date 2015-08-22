@@ -111,11 +111,11 @@ private:
 		/// Gets the item's previous owner.
 		BattleUnit* getPreviousOwner() const;
 		/// Sets the owner.
-		void setOwner(BattleUnit* owner);
+		void setOwner(BattleUnit* const owner);
 		/// Sets the item's previous owner.
-		void setPreviousOwner(BattleUnit* owner);
+		void setPreviousOwner(BattleUnit* const owner);
 		/// Removes the item from previous owner and moves to new owner.
-		void moveToOwner(BattleUnit* owner);
+		void moveToOwner(BattleUnit* const owner);
 
 		/// Gets the item's inventory slot.
 		RuleInventory* getSlot() const;

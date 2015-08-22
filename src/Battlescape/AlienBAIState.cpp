@@ -492,7 +492,7 @@ void AlienBAIState::think(BattleAction* action)
 
 //			_battleSave->getBattleGame()->setReservedAction(BA_NONE, false);	// don't worry about reserving TUs, we've factored that in already.
 
-			if (action->type == BA_WALK											// if this is a "find fire point" action, don't increment the AI counter.
+			if (action->type == BA_MOVE											// if this is a "find fire point" action, don't increment the AI counter.
 				&& _rifle == true
 				&& _unit->getTimeUnits() > _unit->getActionTUs(
 															BA_SNAPSHOT,
@@ -516,7 +516,7 @@ void AlienBAIState::think(BattleAction* action)
 	}
 
 	//Log(LOG_INFO) << ". . pos 9";
-	if (action->type == BA_WALK)
+	if (action->type == BA_MOVE)
 	{
 		if (action->target != _unit->getPosition()) // if we're moving, we'll have to re-evaluate our escape/ambush position.
 		{
@@ -741,7 +741,7 @@ void AlienBAIState::setupPatrol() // private.
 
 		_patrolAction->actor = _unit;
 		_patrolAction->target = _toNode->getPosition();
-		_patrolAction->type = BA_WALK;
+		_patrolAction->type = BA_MOVE;
 	}
 	else
 		_patrolAction->type = BA_RETHINK;
@@ -860,7 +860,7 @@ void AlienBAIState::setupAmbush() // private.
 
 		if (bestScore > 0)
 		{
-			_ambushAction->type = BA_WALK;
+			_ambushAction->type = BA_MOVE;
 
 			origin = _ambushAction->target * Position(16,16,24) // i should really make a function for this. But you didn't. gratz.
 				   + Position(
@@ -980,7 +980,7 @@ void AlienBAIState::setupAttack() // private.
 	{
 		case  0: BA_NONE;		st = "none";		break;
 		case  1: BA_TURN,		st = "turn";		break;
-		case  2: BA_WALK,		st = "walk";		break;
+		case  2: BA_MOVE,		st = "walk";		break;
 		case  3: BA_PRIME,		st = "prime";		break;
 		case  4: BA_THROW,		st = "throw";		break;
 		case  5: BA_AUTOSHOT,	st = "autoshot";	break;
@@ -1001,7 +1001,7 @@ void AlienBAIState::setupAttack() // private.
 
 	if (_attackAction->type != BA_RETHINK)
 	{
-		//if (_attackAction->type == BA_WALK) Log(LOG_INFO) << ". . walk to " << _attackAction->target;
+		//if (_attackAction->type == BA_MOVE) Log(LOG_INFO) << ". . walk to " << _attackAction->target;
 		//else Log(LOG_INFO) << ". . shoot at " << _attackAction->target;
 
 		return;
@@ -1221,7 +1221,7 @@ void AlienBAIState::setupEscape() // private.
 	{
 		//if (_traceAI) Log(LOG_INFO) << "Escape estimation completed after " << tries << " tries, "
 		//		<< _battleSave->getTileEngine()->distance(_unit->getPosition(), bestTile) << " squares or so away.";
-		_escapeAction->type = BA_WALK;
+		_escapeAction->type = BA_MOVE;
 	}
 }
 
@@ -1927,7 +1927,7 @@ bool AlienBAIState::findFirePoint() // private.
 	if (bestTileScore > 70)
 	{
 		//if (_traceAI) Log(LOG_INFO) << "Firepoint found at " << _attackAction->target << ", with a tileScore of: " << bestTileScore;
-		_attackAction->type = BA_WALK;
+		_attackAction->type = BA_MOVE;
 		return true;
 	}
 
@@ -2143,7 +2143,7 @@ void AlienBAIState::meleeAction() // private.
 											tuPreMelee) == true))
 			{
 				_aggroTarget = *i;
-				_attackAction->type = BA_WALK;
+				_attackAction->type = BA_MOVE;
 				_unit->setChargeTarget(_aggroTarget);
 
 				dist = distTest;

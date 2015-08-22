@@ -325,7 +325,7 @@ BattleUnit* BattleItem::getPreviousOwner() const
  * Sets the item's owner.
  * @param owner - pointer to BattleUnit
  */
-void BattleItem::setOwner(BattleUnit* owner)
+void BattleItem::setOwner(BattleUnit* const owner)
 {
 	_previousOwner = _owner;
 	_owner = owner;
@@ -335,7 +335,7 @@ void BattleItem::setOwner(BattleUnit* owner)
  * Sets the item's previous owner.
  * @param owner - pointer to a Battleunit
  */
-void BattleItem::setPreviousOwner(BattleUnit* owner)
+void BattleItem::setPreviousOwner(BattleUnit* const owner)
 {
 	_previousOwner = owner;
 }
@@ -344,7 +344,7 @@ void BattleItem::setPreviousOwner(BattleUnit* owner)
  * Removes the item from the previous owner and moves it to the new owner.
  * @param owner - pointer to BattleUnit
  */
-void BattleItem::moveToOwner(BattleUnit* owner)
+void BattleItem::moveToOwner(BattleUnit* const owner)
 {
 	if (_owner != NULL)
 		_previousOwner = _owner;
