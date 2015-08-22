@@ -191,7 +191,7 @@ private:
 		BriefingData getBriefingData() const;
 
 		/// Gets the marker name for this mission.
-		const std::string& getMarkerName() const;
+		const std::string& getMarkerId() const;
 		/// Gets the marker icon for this mission.
 		int getMarkerIcon() const;
 

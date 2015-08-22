@@ -192,19 +192,19 @@ void Ufo::load(
 	if (game.getMonthsPassed() != -1)
 	{
 		const int missionId = node["mission"].as<int>();
-		std::vector<AlienMission*>::const_iterator found = std::find_if(
+		std::vector<AlienMission*>::const_iterator mission = std::find_if(
 																	game.getAlienMissions().begin(),
 																	game.getAlienMissions().end(),
 																	matchMissionID(missionId));
-		if (found == game.getAlienMissions().end())
+		if (mission == game.getAlienMissions().end())
 		{
 			throw Exception("Unknown mission, save file is corrupt.");
 		}
 
-		_mission = *found;
+		_mission = *mission;
 
-		const std::string tid	= node["trajectory"]		.as<std::string>();
-		_trajectory				= ruleset.getUfoTrajectory(tid);
+		const std::string trjId	= node["trajectory"]		.as<std::string>();
+		_trajectory				= ruleset.getUfoTrajectory(trjId);
 		_trajectoryPoint		= node["trajectoryPoint"]	.as<size_t>(_trajectoryPoint);
 	}
 
@@ -219,7 +219,7 @@ void Ufo::load(
  * Saves the UFO to a YAML file.
  * @return, YAML node
  */
-YAML::Node Ufo::save(bool newBattle) const
+YAML::Node Ufo::save(bool skirmish) const
 {
 	YAML::Node node = MovingTarget::save();
 
@@ -248,7 +248,7 @@ YAML::Node Ufo::save(bool newBattle) const
 	if (_inTactical == true)
 		node["inTactical"]		= _inTactical;
 
-	if (newBattle == false)
+	if (skirmish == false)
 	{
 		node["mission"]			= _mission->getId();
 		node["trajectory"]		= _trajectory->getId();
@@ -750,14 +750,15 @@ int Ufo::getDetectors() const
 
 /**
  * Sets the mission information of this Ufo.
- * The UFO will start at the first point of the trajectory. The actual UFO information
- * is not changed here; this only sets the information kept on behalf of the mission.
+ * @note The UFO will start at the first point of the trajectory. The actual UFO
+ * information is not changed here; this only sets the information kept on
+ * behalf of the mission.
  * @param mission		- pointer to the actual mission object
  * @param trajectory	- pointer to the actual mission trajectory
  */
 void Ufo::setUfoMissionInfo(
-		AlienMission* mission,
-		const UfoTrajectory* trajectory)
+		AlienMission* const mission,
+		const UfoTrajectory* const trajectory)
 {
 	assert(!_mission && mission && trajectory);
 
@@ -770,7 +771,9 @@ void Ufo::setUfoMissionInfo(
 
 /**
  * Returns the mission type of this Ufo.
- * @return, address of the mission type
+ * @note Used only for hyperwave decoder info; has been superceded by
+ * getAlienMission()->getRules().getObjective()
+ * @return, reference to the type
  */
 const std::string& Ufo::getUfoMissionType() const
 {

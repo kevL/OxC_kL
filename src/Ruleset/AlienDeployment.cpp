@@ -359,7 +359,7 @@ BriefingData AlienDeployment::getBriefingData() const
  * Returns the globe marker name for this mission.
  * @return, string ID for marker name
  */
-const std::string& AlienDeployment::getMarkerName() const
+const std::string& AlienDeployment::getMarkerId() const
 {
 	return _markerName;
 }

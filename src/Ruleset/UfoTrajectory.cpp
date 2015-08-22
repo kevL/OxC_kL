@@ -94,7 +94,7 @@ UfoTrajectory::UfoTrajectory(const std::string& id)
 /**
  * Overwrites trajectory data with the data stored in @a node.
  * @note Only the fields contained in the node will be overwritten.
- * @param node - reference the node containing the new values
+ * @param node - reference the node containing new values
  */
 void UfoTrajectory::load(const YAML::Node& node)
 {
@@ -105,12 +105,12 @@ void UfoTrajectory::load(const YAML::Node& node)
 
 /**
  * Gets the altitude at a waypoint.
- * @param wpId - the waypoint ID
+ * @param pt - the waypoint ID
  * @return, altitude string
  */
-const std::string UfoTrajectory::getAltitude(size_t wpId) const // does not like return &ref
+const std::string UfoTrajectory::getAltitude(size_t pt) const // does not like return &ref
 {
-	return stAltitude[_waypoints[wpId].altitude];
+	return stAltitude[_waypoints[pt].altitude];
 }
 
 }

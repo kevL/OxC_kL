@@ -1037,10 +1037,8 @@ bool Globe::targetNear(
 			tx,ty;
 
 		polarToCart(
-				target->getLongitude(),
-				target->getLatitude(),
+				lon,lat,
 				&tx,&ty);
-
 		int
 			dx = x - tx,
 			dy = y - ty;
@@ -1082,7 +1080,7 @@ std::vector<Target*> Globe::getTargets(
 						j != (*i)->getCrafts()->end();
 						++j)
 				{
-					if ((*j)->getStatus() == "STR_OUT" // don't list craft in hangars
+					if ((*j)->getStatus() == "STR_OUT"
 						&& targetNear(*j, x,y))
 					{
 						targets.push_back(*j);
@@ -1098,8 +1096,11 @@ std::vector<Target*> Globe::getTargets(
 			++i)
 	{
 		if ((*i)->getDetected() == true
-			&& ((*i)->reachedDestination() == false									// see note.
-				|| (*i)->getAlienMission()->getRules().getObjective() != alm_SITE)	// see note.
+			&& ((*i)->getAlienMission()->getRules().getObjective() != alm_SITE // see note. UNTESTED.
+				|| (*i)->getAlienMission()->getRules().getWave((*i)->getAlienMission()->getWaveCount()).objective == false)
+//			&& ((*i)->reachedDestination() == false
+//				|| (*i)->getAlienMission()->getRules().getObjective() != alm_SITE
+//				|| (*i)->getAlienMission()->getRules().getWave().objective == false)
 			&& targetNear(*i, x,y) == true)
 		{
 			// kL_NOTE: this is a kludge; the UFO should be / have been deleted
@@ -1107,7 +1108,8 @@ std::vector<Target*> Globe::getTargets(
 			// **** see: GeoscapeState::time5Seconds(), case Ufo::FLYING ****
 			// Under certain circumstances (i forget) player can target, or be
 			// offered to target, a UFO that is effectively already a MissionSite,
-			// which then immediately causes the Craft to go back to base or bleh.
+			// but the UFO itself then immediately disappears, which causes the
+			// Craft to go back to base or bleh.
 			//
 			// It's not game-breaking; just awkward.
 			targets.push_back(*i);

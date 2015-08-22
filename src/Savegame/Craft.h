@@ -73,7 +73,6 @@ private:
 		_damage,
 		_fuel,
 		_id,
-//		_flightOrder,
 		_takeOff,
 
 		_kills;

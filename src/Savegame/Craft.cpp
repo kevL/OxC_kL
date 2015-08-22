@@ -69,7 +69,6 @@ Craft::Craft(
 		_id(id),
 		_fuel(0),
 		_damage(0),
-//		_flightOrder(0),
 		_takeOff(0),
 		_status("STR_READY"),
 		_lowFuel(false),
@@ -197,11 +196,10 @@ void Craft::load(
 		}
 	}
 
-	_status			= node["status"]		.as<std::string>(_status);
-	_lowFuel		= node["lowFuel"]		.as<bool>(_lowFuel);
-	_mission		= node["mission"]		.as<bool>(_mission);
-	_kills			= node["kills"]			.as<int>(_kills);
-//	_flightOrder	= node["flightOrder"]	.as<int>(_flightOrder);
+	_status			= node["status"]	.as<std::string>(_status);
+	_lowFuel		= node["lowFuel"]	.as<bool>(_lowFuel);
+	_mission		= node["mission"]	.as<bool>(_mission);
+	_kills			= node["kills"]		.as<int>(_kills);
 
 	if (const YAML::Node name = node["name"])
 		_name = Language::utf8ToWstr(name.as<std::string>());
@@ -264,7 +262,7 @@ void Craft::load(
 					++i)
 			{
 				if ((*i)->getId() == id
-					&& (*i)->getDeployment()->getMarkerName() == type)
+					&& (*i)->getDeployment()->getMarkerId() == type)
 				{
 					setDestination(*i);
 					break;
@@ -326,7 +324,6 @@ YAML::Node Craft::save() const
 	if (_mission == true)		node["mission"]		= _mission;
 	if (_inTactical == true)	node["inTactical"]	= _inTactical;
 	if (_kills != 0)			node["kills"]		= _kills;
-//	if (_flightOrder != 0)		node["flightOrder"]	= _flightOrder;
 	if (_takeOff != 0)			node["takeOff"]		= _takeOff;
 	if (_name.empty() == false)	node["name"]		= Language::wstrToUtf8(_name);
 
@@ -1124,25 +1121,6 @@ void Craft::setInDogfight(const bool inDogfight)
 {
 	_inDogfight = inDogfight;
 }
-
-/**
- * Sets flight order.
- * @note First craft airborne gets 1, second 2, etc.
- * @param order - flight order
- */
-/*void Craft::setFlightOrder(const int order)
-{
-	_flightOrder = order;
-} */
-
-/**
- * Gets flight order.
- * @return, flight order
- */
-/*int Craft::getFlightOrder() const
-{
-	return _flightOrder;
-} */
 
 /**
  * Gets this Craft's unique id.

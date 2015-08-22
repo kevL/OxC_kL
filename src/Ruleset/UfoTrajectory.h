@@ -90,22 +90,22 @@ private:
 
 		/**
 		 * Gets the zone index at a waypoint.
-		 * @param wp - the waypoint
+		 * @param pt - the waypoint index
 		 * @return, the zone index
 		 */
-		size_t getZone(size_t wpId) const
-		{ return _waypoints[wpId].zone; }
+		size_t getZone(size_t pt) const
+		{ return _waypoints[pt].zone; }
 
 		/// Gets the altitude at a waypoint.
-		const std::string getAltitude(size_t wpId) const; // does not like return &ref
+		const std::string getAltitude(size_t pt) const; // does not like return &ref
 
 		/**
 		 * Gets the speed percentage at a waypoint.
-		 * @param wp - the waypoint
+		 * @param pt - the waypoint index
 		 * @return, the speed as a percentage
 		 */
-		float getSpeedPercentage(size_t wpId) const
-		{ return _waypoints[wpId].speed / 100.f; }
+		float getSpeedPct(size_t pt) const
+		{ return _waypoints[pt].speed / 100.f; }
 
 		/**
 		 * Gets the number of seconds UFOs should spend on the ground.

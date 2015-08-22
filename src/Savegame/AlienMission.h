@@ -187,6 +187,10 @@ private:
 
 		/// Tracks the target site.
 		void setMissionSiteZone(size_t zone);
+
+		/// Gets the wave of a/the UFO in the total scheme of this Mission.
+		size_t getWaveCount()
+		{ return _waveCount; }
 };
 
 }

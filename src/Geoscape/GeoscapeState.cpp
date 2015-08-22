@@ -2061,7 +2061,7 @@ bool DetectXCOMBase::operator() (const Ufo* ufo) const
 		return false;
 	}
 
-	if (ufo->getAlienMission()->getRules().getObjective() != alm_RETAL //ufo->getUfoMissionType() != "STR_ALIEN_RETALIATION"
+	if (ufo->getAlienMission()->getRules().getObjective() != alm_RETAL
 		&& Options::aggressiveRetaliation == false)
 	{
 		//Log(LOG_INFO) << ". . Only uFo's on retaliation missions scan for bases unless 'aggressiveRetaliation' option is TRUE";
@@ -2084,8 +2084,8 @@ bool DetectXCOMBase::operator() (const Ufo* ufo) const
 
 	const double inverseFactor = dist * 12. / range; // should use log() ...
 	int pct = static_cast<int>(Round(
-					static_cast<double>(_base.getDetectionChance(_diff) + ufo->getDetectors()) / inverseFactor));
-	if (ufo->getUfoMissionType() == "STR_ALIEN_RETALIATION"
+			  static_cast<double>(_base.getDetectionChance(_diff) + ufo->getDetectors()) / inverseFactor));
+	if (ufo->getAlienMission()->getRules().getObjective() == alm_RETAL
 		&& Options::aggressiveRetaliation == true)
 	{
 		//Log(LOG_INFO) << ". . uFo's on retaliation missions scan for bases 'aggressively'";

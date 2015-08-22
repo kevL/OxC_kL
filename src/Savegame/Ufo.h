@@ -106,7 +106,7 @@ private:
 				const Ruleset& ruleset,
 				SavedGame& game);
 		/// Saves the UFO to YAML.
-		YAML::Node save(bool newBattle) const;
+		YAML::Node save(bool skirmish) const;
 		/// Saves the UFO's ID to YAML.
 		YAML::Node saveId() const;
 
@@ -191,8 +191,8 @@ private:
 
 		/// Sets the UFO's mission information.
 		void setUfoMissionInfo(
-				AlienMission* mission,
-				const UfoTrajectory* trajectory);
+				AlienMission* const mission,
+				const UfoTrajectory* const trajectory);
 		/// Gets the UFO's Mission type.
 		const std::string& getUfoMissionType() const;
 		/// Gets the UFO's mission object.

@@ -34,7 +34,8 @@ class WeightedOptions;
 
 /**
  * @brief Information about a mission wave.
- * Mission waves control the UFOs that will be generated during an alien mission.
+ * @note Mission waves control the UFOs that will be generated during an alien
+ * mission.
  */
 struct MissionWave
 {
@@ -46,7 +47,7 @@ struct MissionWave
 	size_t spawnTimer;		// Number of minutes between UFOs in the wave. Or seconds.
 							// The actual value used is (spawnTimer*1/4) or (spawnTimer*3/4.)
 	bool objective;			// This wave performs the mission objective.
-							// The UFO executes a special action based on the mission objective.
+							// The UFO executes a special action based on its MissionObjective.
 };
 
 
@@ -80,7 +81,7 @@ private:
 	std::vector<std::pair<size_t, WeightedOptions*> > _raceDistribution;	// The race distribution over game time.
 	std::map<size_t, int> _weights;											// The mission's weights.
 
-	MissionObjective _objective; // The mission's objective type (enum).
+	MissionObjective _objective; // The mission's objective type.
 
 
 	public:

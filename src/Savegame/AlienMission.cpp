@@ -285,7 +285,7 @@ void AlienMission::think(
 				_gameSave.getUfos()->push_back(ufo);
 			else if ((rules.getUfo(wave.ufoType) == NULL // a mission site to spawn directly
 					&& rules.getDeployment(wave.ufoType) != NULL
-					&& rules.getDeployment(wave.ufoType)->getMarkerName().empty() == false)
+					&& rules.getDeployment(wave.ufoType)->getMarkerId().empty() == false)
 				|| (_missionRule.getObjective() == alm_SITE // or spawn one at random according to the terrain
 					&& wave.objective == true))
 			{
@@ -384,7 +384,7 @@ void AlienMission::think(
 /**
  * Calculates time remaining until the next wave spawns.
  * @note These come in increments of 30sec (or min?) apiece.
- * @param nextWave - the wave to check for
+ * @param nextWave - the wave to check
  */
 void AlienMission::calcSpawnTime(size_t nextWave) // private.
 {
@@ -502,7 +502,7 @@ Ufo* AlienMission::spawnUfo( // private.
 
 			ufo->setAltitude(trjBattleship.getAltitude(0));
 			ufo->setSpeed(static_cast<int>(std::ceil(
-						  static_cast<double>(trjBattleship.getSpeedPercentage(0))
+						  static_cast<double>(trjBattleship.getSpeedPct(0))
 						* static_cast<double>(battleshipRule.getMaxSpeed()))));
 			ufo->setLongitude(coord.first);
 			ufo->setLatitude(coord.second);
@@ -538,7 +538,7 @@ Ufo* AlienMission::spawnUfo( // private.
 
 			ufo->setAltitude(trajectory.getAltitude(0));
 			ufo->setSpeed(static_cast<int>(std::ceil(
-						  static_cast<double>(trajectory.getSpeedPercentage(0))
+						  static_cast<double>(trajectory.getSpeedPct(0))
 						* static_cast<double>(ufoRule.getMaxSpeed()))));
 			ufo->setLongitude(coord.first);
 			ufo->setLatitude(coord.second);
@@ -590,7 +590,7 @@ Ufo* AlienMission::spawnUfo( // private.
 			ufo->setSecondsLeft(trajectory.groundTimer() * 5);
 
 		ufo->setSpeed(static_cast<int>(std::ceil(
-					  static_cast<double>(trajectory.getSpeedPercentage(0))
+					  static_cast<double>(trajectory.getSpeedPct(0))
 					* static_cast<double>(ufoRule.getMaxSpeed()))));
 		ufo->setLongitude(coord.first);
 		ufo->setLatitude(coord.second);
@@ -616,8 +616,8 @@ Ufo* AlienMission::spawnUfo( // private.
 
 /**
  * @brief Match a base from its coordinates.
- * This function object uses coordinates to match a base.
- * @note Helper for ufoReachedWaypoint().
+ * @note This function object uses coordinates to match a base. Helper for
+ * ufoReachedWaypoint().
  */
 class MatchBaseCoordinates
 	:
@@ -656,7 +656,7 @@ private:
  * way that the rest of the code understands what to do.
  * @param ufo	- reference the Ufo that reached its waypoint
  * @param rules	- reference the Ruleset
- * @param globe	- the earth globe required to get access to land checks
+ * @param globe	- reference the earth globe required to get access to land checks
  */
 void AlienMission::ufoReachedWaypoint(
 		Ufo& ufo,
@@ -664,128 +664,128 @@ void AlienMission::ufoReachedWaypoint(
 		const Globe& globe)
 {
 	const size_t
-		curWaypoint = ufo.getTrajectoryPoint(),
-		nextWaypoint = curWaypoint + 1;
+		pt = ufo.getTrajectoryPoint(),
+		ptNext = pt + 1;
 	const UfoTrajectory& trajectory = ufo.getTrajectory();
 
-	if (nextWaypoint >= trajectory.getWaypointTotal()) // UFO leaves Earth's atmosphere
+	if (ptNext < trajectory.getWaypointTotal())
+	{
+		ufo.setAltitude(trajectory.getAltitude(ptNext));
+		ufo.setTrajectoryPoint(ptNext);
+
+		const RuleRegion& regionRule = *rules.getRegion(_region);
+		const std::pair<double, double> coord = getWaypoint(
+														trajectory,
+														ptNext,
+														globe,
+														regionRule);
+
+		Waypoint* const wayPoint = new Waypoint();
+		wayPoint->setLongitude(coord.first);
+		wayPoint->setLatitude(coord.second);
+		ufo.setDestination(wayPoint);
+
+		if (ufo.getAltitude() != "STR_GROUND")
+		{
+			ufo.setLandId(0);
+			ufo.setSpeed(static_cast<int>(std::ceil(
+						 static_cast<double>(trajectory.getSpeedPct(ptNext))
+					   * static_cast<double>(ufo.getRules()->getMaxSpeed()))));
+		}
+		else // UFO landed.
+		{
+			size_t wave;
+			if (_waveCount != 0)
+				wave = _waveCount - 1;
+			else // -> if (RNG::percent(static_cast<int>(_gameSave.getDifficulty()) * 20) == false)
+				wave = _missionRule.getWaveTotal() - 1;
+			// note, 'wave' has to be reduced by one because think() has already advanced it past current, I suppose.
+
+			if (_missionRule.getWave(wave).objective == true // destroy UFO & replace with MissionSite.
+				&& trajectory.getZone(pt) == _missionRule.getSpawnZone()) // note Supply bypasses this although it has (objective==true) because it does not have a 'specialZone'
+			{
+				addScore( // alm_SITE
+					ufo.getLongitude(),
+					ufo.getLatitude());
+
+				ufo.setStatus(Ufo::DESTROYED);
+
+				const MissionArea area = regionRule.getMissionPoint(
+															trajectory.getZone(pt),
+															&ufo);
+				const RuleTexture* const texture = rules.getGlobe()->getTextureRule(area.texture);
+				const AlienDeployment* const deployRule = rules.getDeployment(texture->getRandomDeployment());
+				MissionSite* const site = spawnMissionSite(
+														deployRule,
+														area);
+				if (site != NULL)
+				{
+					_gameSave.getMissionSites()->push_back(site);
+
+					for (std::vector<Target*>::const_iterator
+							i = ufo.getFollowers()->begin();
+							i != ufo.getFollowers()->end();
+							)
+					{
+						Craft* const craft = dynamic_cast<Craft*>(*i);
+						if (craft != NULL)
+						{
+							craft->setDestination(site);
+							i = ufo.getFollowers()->begin();
+						}
+						else
+							++i;
+					}
+				}
+			}
+			else if (trajectory.getId() == UfoTrajectory::RETALIATION_ASSAULT_RUN)	// remove UFO, replace with Base defense.
+			{																		// Ignore what the trajectory might say, this is a base defense.
+				ufo.setDetected(false);
+
+				const std::vector<Base*>::const_iterator xcomBase = std::find_if(
+																			_gameSave.getBases()->begin(),
+																			_gameSave.getBases()->end(),
+																			MatchBaseCoordinates(
+																							ufo.getLongitude(),
+																							ufo.getLatitude()));
+				if (xcomBase == _gameSave.getBases()->end())
+				{
+					ufo.setStatus(Ufo::DESTROYED);
+					return; // Only spawn mission if the base is still there.
+				}
+
+				ufo.setDestination(*xcomBase);
+			}
+			else // Set timer for UFO on the ground.
+			{
+				if (globe.insideLand(
+								ufo.getLongitude(),
+								ufo.getLatitude()) == true)
+				{
+					ufo.setSecondsLeft(trajectory.groundTimer() * 5);
+
+					if (ufo.getDetected() == true
+						&& ufo.getLandId() == 0)
+					{
+						ufo.setLandId(_gameSave.getId("STR_LANDING_SITE"));
+					}
+				}
+				else // there's nothing to land on
+					ufo.setSecondsLeft(5);
+			}
+		}
+	}
+	else // UFO leaving atmosphere.
 	{
 		ufo.setDetected(false);
 		ufo.setStatus(Ufo::DESTROYED);
-
-		return;
-	}
-
-	ufo.setAltitude(trajectory.getAltitude(nextWaypoint));
-	ufo.setTrajectoryPoint(nextWaypoint);
-
-	const RuleRegion& regionRule = *rules.getRegion(_region);
-	const std::pair<double, double> pos = getWaypoint(
-												trajectory,
-												nextWaypoint,
-												globe,
-												regionRule);
-
-	Waypoint* const wayPoint = new Waypoint();
-	wayPoint->setLongitude(pos.first);
-	wayPoint->setLatitude(pos.second);
-	ufo.setDestination(wayPoint);
-
-	if (ufo.getAltitude() != "STR_GROUND")
-	{
-		ufo.setLandId(0);
-		ufo.setSpeed(static_cast<int>(std::ceil(
-					 static_cast<double>(trajectory.getSpeedPercentage(nextWaypoint))
-				   * static_cast<double>(ufo.getRules()->getMaxSpeed()))));
-	}
-	else // UFO landed.
-	{
-		size_t wave;
-		if (_waveCount != 0)
-			wave = _waveCount - 1;
-		else // -> if (RNG::percent(static_cast<int>(_gameSave.getDifficulty()) * 20) == false)
-			wave = _missionRule.getWaveTotal() - 1;
-		// note, 'wave' has to be reduced by one because think() has already advanced it past current, I suppose.
-
-		if (_missionRule.getWave(wave).objective == true // destroy UFO & replace with MissionSite.
-			&& trajectory.getZone(curWaypoint) == _missionRule.getSpawnZone()) // note Supply bypasses this although it has (objective==true) because it does not have a 'specialZone'
-		{
-			addScore( // alm_SITE
-				ufo.getLongitude(),
-				ufo.getLatitude());
-
-			ufo.setStatus(Ufo::DESTROYED);
-
-			const MissionArea area = regionRule.getMissionPoint(
-														trajectory.getZone(curWaypoint),
-														&ufo);
-			const RuleTexture* const texture = rules.getGlobe()->getTextureRule(area.texture);
-			const AlienDeployment* const deployRule = rules.getDeployment(texture->getRandomDeployment());
-			MissionSite* const site = spawnMissionSite(
-													deployRule,
-													area);
-			if (site != NULL)
-			{
-				_gameSave.getMissionSites()->push_back(site);
-
-				for (std::vector<Target*>::const_iterator
-						i = ufo.getFollowers()->begin();
-						i != ufo.getFollowers()->end();
-						)
-				{
-					Craft* const craft = dynamic_cast<Craft*>(*i);
-					if (craft != NULL)
-					{
-						craft->setDestination(site);
-						i = ufo.getFollowers()->begin();
-					}
-					else
-						++i;
-				}
-			}
-		}
-		else if (trajectory.getId() == UfoTrajectory::RETALIATION_ASSAULT_RUN)	// remove UFO, replace with Base defense.
-		{																		// Ignore what the trajectory might say, this is a base defense.
-			ufo.setDetected(false);
-
-			const std::vector<Base*>::const_iterator xcomBase = std::find_if(
-																		_gameSave.getBases()->begin(),
-																		_gameSave.getBases()->end(),
-																		MatchBaseCoordinates(
-																						ufo.getLongitude(),
-																						ufo.getLatitude()));
-			if (xcomBase == _gameSave.getBases()->end())
-			{
-				ufo.setStatus(Ufo::DESTROYED);
-				return; // Only spawn mission if the base is still there.
-			}
-
-			ufo.setDestination(*xcomBase);
-		}
-		else // Set timer for UFO on the ground.
-		{
-			if (globe.insideLand(
-							ufo.getLongitude(),
-							ufo.getLatitude()) == true)
-			{
-				ufo.setSecondsLeft(trajectory.groundTimer() * 5);
-
-				if (ufo.getDetected() == true
-					&& ufo.getLandId() == 0)
-				{
-					ufo.setLandId(_gameSave.getId("STR_LANDING_SITE"));
-				}
-			}
-			else // there's nothing to land on
-				ufo.setSecondsLeft(5);
-		}
 	}
 }
 
 /**
  * Attempts to spawn a Mission Site at a given location.
  * @param deployRule	- pointer to the AlienDeployment
- * @param area			- reference the point on the globe at which to spawn a site
+ * @param area			- reference an area of the globe
  * @return, pointer to the site
  */
 MissionSite* AlienMission::spawnMissionSite( // private.
@@ -799,10 +799,10 @@ MissionSite* AlienMission::spawnMissionSite( // private.
 												deployRule);
 		site->setLongitude(RNG::generate(area.lonMin, area.lonMax));
 		site->setLatitude(RNG::generate(area.latMin, area.latMax));
-		site->setId(_gameSave.getId(deployRule->getMarkerName()));
+		site->setId(_gameSave.getId(deployRule->getMarkerId()));
 		site->setSecondsLeft(RNG::generate(
-											deployRule->getDurationMin(),
-											deployRule->getDurationMax()) * 3600);
+										deployRule->getDurationMin(),
+										deployRule->getDurationMax()) * 3600);
 		site->setAlienRace(_race);
 		site->setSiteTextureId(area.texture);
 		site->setCity(area.site);
@@ -956,7 +956,7 @@ void AlienMission::ufoLifting(
 			ufo.setUfoTerrainType("");
 			ufo.setAltitude("STR_VERY_LOW");
 			ufo.setSpeed(static_cast<int>(std::ceil(
-						 static_cast<double>(ufo.getTrajectory().getSpeedPercentage(ufo.getTrajectoryPoint()))
+						 static_cast<double>(ufo.getTrajectory().getSpeedPct(ufo.getTrajectoryPoint()))
 					   * static_cast<double>(ufo.getRules()->getMaxSpeed()))));
 		break;
 
@@ -1017,12 +1017,12 @@ std::pair<double, double> AlienMission::getWaypoint(
 						trajectory.getZone(nextWaypoint));
  	}
 
-	size_t waveNumber = _waveCount - 1;
-	if (waveNumber == std::numeric_limits<size_t>::max())
-		waveNumber = _missionRule.getWaveTotal() - 1;
+	size_t wave = _waveCount - 1;
+	if (wave == std::numeric_limits<size_t>::max())
+		wave = _missionRule.getWaveTotal() - 1;
 
 	if (_siteZone != std::numeric_limits<size_t>::max()
-		&& _missionRule.getWave(waveNumber).objective == true
+		&& _missionRule.getWave(wave).objective == true
 		&& trajectory.getZone(nextWaypoint) == _missionRule.getSpawnZone())
 	{
 		const MissionArea* const area = &region.getMissionZones().at(_missionRule.getObjective()).areas.at(_siteZone);

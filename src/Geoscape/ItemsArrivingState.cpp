@@ -286,13 +286,12 @@ void ItemsArrivingState::btnOk5SecsClick(Action*)
 
 /**
  * LMB or RMB opens the Basescape for the pressed row.
- * Do not pop the state here.
+ * @note Do not pop the state here.
  * @param action - pointer to an Action
  */
 void ItemsArrivingState::lstGoToBasePress(Action* action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT
-		|| action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
 		Base* const base = _bases.at(_lstTransfers->getSelectedRow());
 		if (base != NULL) // make sure player hasn't deconstructed a base, when jumping back & forth between bases and the list.
