@@ -997,7 +997,7 @@ void BattlescapeGame::handleNonTargetAction()
 				}
 				else
 				{
-					_currentAction.weapon->setFuseTimer(_currentAction.value);
+					_currentAction.weapon->setFuse(_currentAction.value);
 
 					if (_currentAction.value == -1)
 					{
@@ -1369,8 +1369,8 @@ void BattlescapeGame::endTurnPhase() // private.
 				)
 		{
 			if ((*j)->getRules()->getBattleType() == BT_GRENADE
-				&& (*j)->getFuseTimer() != -1
-				&& (*j)->getFuseTimer() < 2) // it's a grenade to explode now
+				&& (*j)->getFuse() != -1
+				&& (*j)->getFuse() < 2) // it's a grenade to explode now
 			{
 				pos.x = _battleSave->getTiles()[i]->getPosition().x * 16 + 8;
 				pos.y = _battleSave->getTiles()[i]->getPosition().y * 16 + 8;
@@ -1444,9 +1444,9 @@ void BattlescapeGame::endTurnPhase() // private.
 		{
 			if ((*i)->getOwner() == NULL
 				&& (*i)->getRules()->getBattleType() == BT_GRENADE
-				&& (*i)->getFuseTimer() > 1)
+				&& (*i)->getFuse() > 1)
 			{
-				(*i)->setFuseTimer((*i)->getFuseTimer() - 1);
+				(*i)->setFuse((*i)->getFuse() - 1);
 			}
 		}
 	}
@@ -2448,8 +2448,8 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* const unit) // private.
 					}
 					else if (ba.weapon->getRules()->getBattleType() == BT_GRENADE)
 					{
-						if (ba.weapon->getFuseTimer() == -1)
-							ba.weapon->setFuseTimer(0); // yeh set timer even if throw is invalid.
+						if (ba.weapon->getFuse() == -1)
+							ba.weapon->setFuse(0); // yeh set timer even if throw is invalid.
 
 						for (int // try a few times to get a tile to throw to.
 								i = 0;
@@ -3714,7 +3714,7 @@ bool BattlescapeGame::checkForProximityGrenades(BattleUnit* const unit)
 								++i)
 						{
 							if ((*i)->getRules()->getBattleType() == BT_PROXYGRENADE
-								&& (*i)->getFuseTimer() != -1)
+								&& (*i)->getFuse() != -1)
 							{
 								int dir; // cred: animal310 - http://openxcom.org/bugs/openxcom/issues/765
 								_battleSave->getPathfinding()->vectorToDirection(

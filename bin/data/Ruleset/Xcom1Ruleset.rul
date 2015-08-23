@@ -1265,6 +1265,7 @@ items:
     invHeight: 2
     recoveryPoints: 1
     blastRadius: 9
+    defusePulse: true
     attraction: 7
   - type: STR_SMALL_LAUNCHER
     requires:

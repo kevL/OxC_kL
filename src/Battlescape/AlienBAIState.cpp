@@ -474,7 +474,7 @@ void AlienBAIState::think(BattleAction* action)
 				const RuleInventory* const rule = action->weapon->getSlot();
 				int costTU = rule->getCost(_battleSave->getBattleGame()->getRuleset()->getInventory("STR_RIGHT_HAND"));
 
-				if (action->weapon->getFuseTimer() == -1)
+				if (action->weapon->getFuse() == -1)
 				{
 					costTU += _unit->getActionTUs(
 												BA_PRIME,
@@ -2521,14 +2521,14 @@ void AlienBAIState::grenadeAction() // private.
 						_unit,
 						grenade->getRules()->getExplosionRadius(),
 						_attackAction->diff) == true)
-	//					true))
+//						true))
 		{
-	//		if (_unit->getFaction() == FACTION_HOSTILE)
-	//		{
+//			if (_unit->getFaction() == FACTION_HOSTILE)
+//			{
 			const RuleInventory* const invRule = grenade->getSlot();
 			int tuCost = invRule->getCost(_battleSave->getBattleGame()->getRuleset()->getInventory("STR_RIGHT_HAND"));
 
-			if (grenade->getFuseTimer() == -1)
+			if (grenade->getFuse() == -1)
 				tuCost += _unit->getActionTUs(
 											BA_PRIME,
 											grenade);
@@ -2565,7 +2565,7 @@ void AlienBAIState::grenadeAction() // private.
 					_melee = false;
 				}
 			}
-	//		}
+//			}
 		}
 	}
 }

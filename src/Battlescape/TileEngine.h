@@ -182,12 +182,13 @@ private:
 				const bool melee = false);
 		/// Handles explosions.
 		void explode(
-				const Position& voxelTarget,
+				const Position& targetVoxel,
 				int power,
 				ItemDamageType dType,
 				int maxRadius,
 				BattleUnit* const attacker = NULL,
-				bool grenade = false);
+				bool grenade = false,
+				bool defusePulse = false);
 		/// Checks the horizontal blockage of a tile.
 		int horizontalBlockage(
 				const Tile* const startTile,

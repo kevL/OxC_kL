@@ -1324,9 +1324,9 @@ void BattlescapeState::printTileInventory() // private.
 						wst1 += L" | " + wst + L" (" + Text::formatNumber(item->getAmmoItem()->getAmmoQuantity()) + L")";
 					}
 					else if (itRule->isGrenade() == true
-						&& item->getFuseTimer() > -1)
+						&& item->getFuse() > -1)
 					{
-						wst1 += L" (" + Text::formatNumber(item->getFuseTimer()) + L")";
+						wst1 += L" (" + Text::formatNumber(item->getFuse()) + L")";
 					}
 				}
 				else
@@ -2968,10 +2968,10 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 				_numAmmoRight->setValue(static_cast<unsigned>(rtItem->getAmmoQuantity()));
 			}
 			else if (itRule->getBattleType() == BT_GRENADE
-				&& rtItem->getFuseTimer() > 0)
+				&& rtItem->getFuse() > 0)
 			{
 				_numAmmoRight->setVisible();
-				_numAmmoRight->setValue(static_cast<unsigned>(rtItem->getFuseTimer()));
+				_numAmmoRight->setValue(static_cast<unsigned>(rtItem->getFuse()));
 			}
 		}
 
@@ -2999,10 +2999,10 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 				_numAmmoRight->setValue(static_cast<unsigned>(ltItem->getAmmoQuantity()));
 			}
 			else if (itRule->getBattleType() == BT_GRENADE
-				&& ltItem->getFuseTimer() > 0)
+				&& ltItem->getFuse() > 0)
 			{
 				_numAmmoLeft->setVisible();
-				_numAmmoLeft->setValue(static_cast<unsigned>(ltItem->getFuseTimer()));
+				_numAmmoLeft->setValue(static_cast<unsigned>(ltItem->getFuse()));
 			}
 		}
 
@@ -3136,7 +3136,7 @@ void BattlescapeState::drawFuse() // private.
 	const BattleItem* item = selUnit->getItem("STR_LEFT_HAND");
 	if (item != NULL
 		&& item->getRules()->isGrenade() == true
-		&& item->getFuseTimer() != -1)
+		&& item->getFuse() != -1)
 	{
 		_btnLeftHandItem->lock();
 		srf->blitNShade(
@@ -3152,7 +3152,7 @@ void BattlescapeState::drawFuse() // private.
 	item = selUnit->getItem("STR_RIGHT_HAND");
 	if (item != NULL
 		&& item->getRules()->isGrenade() == true
-		&& item->getFuseTimer() != -1)
+		&& item->getFuse() != -1)
 	{
 		_btnRightHandItem->lock();
 		srf->blitNShade(

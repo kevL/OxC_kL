@@ -78,6 +78,7 @@ private:
 	bool
 		_arcingShot,
 		_canExecute,
+		_defusePulse,
 		_fixedWeapon,
 		_flatRate,
 		_liveAlien,
@@ -389,6 +390,9 @@ private:
 
 		/// Checks if this item is capable of executing a BattleUnit.
 		bool canExecute() const;
+
+		/// Gets if an explosion of the item causes an electro-magnetic pulse.
+		bool defusePulse() const;
 };
 
 }

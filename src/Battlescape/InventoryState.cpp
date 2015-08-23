@@ -841,7 +841,7 @@ bool InventoryState::saveLayout(BattleUnit* const unit) const // private.
 													(*i)->getSlotX(),
 													(*i)->getSlotY(),
 													ammo,
-													(*i)->getFuseTimer()));
+													(*i)->getFuse()));
 		}
 
 		return true;
@@ -1207,7 +1207,7 @@ void InventoryState::setExtraInfo( // private.
 
 
 	const BattleUnit* const unit = _battleSave->getSelectedUnit();
-	const BattleActionType bat = itRule->getDefaultAction(item->getFuseTimer() > -1);
+	const BattleActionType bat = itRule->getDefaultAction(item->getFuse() > -1);
 
 	if (unit != NULL
 		&& isArt == false
@@ -1345,7 +1345,7 @@ void InventoryState::setExtraInfo( // private.
 															(*j)->getSlotX(),
 															(*j)->getSlotY(),
 															ammo,
-															(*j)->getFuseTimer()));
+															(*j)->getFuse()));
 	}
 
 	_game->getResourcePack()->getSoundByDepth(
@@ -1445,7 +1445,7 @@ void InventoryState::setExtraInfo( // private.
 					(*groundItem)->setSlot(_game->getRuleset()->getInventory((*templateIt)->getSlot()));
 					(*groundItem)->setSlotX((*templateIt)->getSlotX());
 					(*groundItem)->setSlotY((*templateIt)->getSlotY());
-					(*groundItem)->setFuseTimer((*templateIt)->getFuseTimer());
+					(*groundItem)->setFuse((*templateIt)->getFuse());
 
 					unitInv->push_back(*groundItem);
 					groundInv->erase(groundItem);

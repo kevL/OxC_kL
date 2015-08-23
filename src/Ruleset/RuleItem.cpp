@@ -108,7 +108,8 @@ RuleItem::RuleItem(const std::string& type)
 		_meleeAnimation(0),
 		_meleeHitSound(-1),
 		_specialType(-1),
-		_canExecute(false)
+		_canExecute(false),
+		_defusePulse(false)
 {}
 
 /**
@@ -267,6 +268,7 @@ void RuleItem::load(
 	_noResearch			= node["noResearch"]		.as<bool>(_noResearch);
 	_meleePower			= node["meleePower"]		.as<int>(_meleePower);
 	_specialType		= node["specialType"]		.as<int>(_specialType);
+	_defusePulse		= node["defusePulse"]		.as<bool>(_defusePulse);
 
 	switch (_damageType)
 	{
@@ -1136,6 +1138,15 @@ bool RuleItem::isResearchExempt() const
 bool RuleItem::canExecute() const
 {
 	return (_canExecute == true);
+}
+
+/**
+ * Gets if an explosion of the item causes an electro-magnetic pulse.
+ * @return, true if EM pulse
+ */
+bool RuleItem::defusePulse() const
+{
+	return (_defusePulse == true);
 }
 
 }

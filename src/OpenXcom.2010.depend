@@ -4595,7 +4595,7 @@
 1440030893 f:\git\openxcom\src\ruleset\mapdata.h
 	"RuleItem.h"
 
-1439447223 f:\git\openxcom\src\ruleset\ruleitem.h
+1440360309 f:\git\openxcom\src\ruleset\ruleitem.h
 	"../Battlescape/BattlescapeGame.h"
 
 1440097473 source:f:\git\openxcom\src\basescape\craftequipmentstate.cpp
@@ -4922,7 +4922,7 @@
 	"../Savegame/Base.h"
 	"../Savegame/SavedGame.h"
 
-1440344632 source:f:\git\openxcom\src\basescape\newmanufactureliststate.cpp
+1440350268 source:f:\git\openxcom\src\basescape\newmanufactureliststate.cpp
 	"NewManufactureListState.h"
 	"ManufactureCostsState.h"
 	"ManufactureStartState.h"
@@ -5398,13 +5398,13 @@
 1433916034 f:\git\openxcom\src\battlescape\scannerstate.h
 	"../Engine/State.h"
 
-1440032079 f:\git\openxcom\src\battlescape\tileengine.h
+1440358582 f:\git\openxcom\src\battlescape\tileengine.h
 	"BattlescapeGame.h"
 	"Position.h"
 	"../Ruleset/MapData.h"
 	"../Ruleset/RuleItem.h"
 
-1440269251 f:\git\openxcom\src\savegame\battleitem.h
+1440359613 f:\git\openxcom\src\savegame\battleitem.h
 
 1440096169 f:\git\openxcom\src\savegame\tile.h
 	"BattleUnit.h"
@@ -5621,7 +5621,7 @@
 1432527848 f:\git\openxcom\src\savegame\alienbase.h
 	"Target.h"
 
-1433810267 f:\git\openxcom\src\savegame\equipmentlayoutitem.h
+1440359453 f:\git\openxcom\src\savegame\equipmentlayoutitem.h
 
 1421694989 f:\git\openxcom\src\savegame\terrorsite.h
 	"Target.h"
@@ -5870,7 +5870,7 @@
 1434252297 f:\git\openxcom\src\battlescape\explosion.h
 	"Position.h"
 
-1440105304 source:f:\git\openxcom\src\battlescape\explosionbstate.cpp
+1440359978 source:f:\git\openxcom\src\battlescape\explosionbstate.cpp
 	"ExplosionBState.h"
 	"BattlescapeState.h"
 	"Camera.h"
@@ -6209,7 +6209,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1440293241 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1440359613 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	"AlienBAIState.h"
 	"BattlescapeState.h"
@@ -8277,7 +8277,7 @@
 	"RuleInventory.h"
 	"RuleItem.h"
 
-1439927226 source:f:\git\openxcom\src\ruleset\ruleitem.cpp
+1440360318 source:f:\git\openxcom\src\ruleset\ruleitem.cpp
 	"RuleItem.h"
 	"RuleInventory.h"
 	"../Engine/SurfaceSet.h"

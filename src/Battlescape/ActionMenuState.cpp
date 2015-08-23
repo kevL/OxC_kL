@@ -137,7 +137,7 @@ ActionMenuState::ActionMenuState(
 
 		if (itRule->isGrenade() == true)
 		{
-			if (_action->weapon->getFuseTimer() == -1) // canPrime
+			if (_action->weapon->getFuse() == -1) // canPrime
 				addItem(
 						BA_PRIME,
 						"STR_PRIME_GRENADE",

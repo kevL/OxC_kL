@@ -45,7 +45,7 @@ private:
 		_XCOMProperty;
 	int
 		_ammoQty,
-		_fuseTimer,
+		_fuse,
 		_id,
 		_inventoryX,
 		_inventoryY,
@@ -102,9 +102,9 @@ private:
 				BattleItem& weapon);
 
 		/// Gets turns until it explodes.
-		int getFuseTimer() const;
+		int getFuse() const;
 		/// Sets turns until it explodes.
-		void setFuseTimer(int turn);
+		void setFuse(int turn);
 
 		/// Gets the item's owner.
 		BattleUnit* getOwner() const;

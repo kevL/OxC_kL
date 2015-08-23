@@ -1335,7 +1335,7 @@ int Tile::getTopItemSprite(bool* ptrPrimed) const
 			++i)
 	{
 		if ((*i)->getRules()->getBattleType() == BT_PROXYGRENADE
-			&& (*i)->getFuseTimer() > -1)
+			&& (*i)->getFuse() > -1)
 		{
 			proxGrenade = *i;
 
@@ -1344,7 +1344,7 @@ int Tile::getTopItemSprite(bool* ptrPrimed) const
 		}
 
 		if ((*i)->getRules()->getBattleType() == BT_GRENADE
-			&& (*i)->getFuseTimer() > -1)
+			&& (*i)->getFuse() > -1)
 		{
 			fuseGrenade = *i;
 

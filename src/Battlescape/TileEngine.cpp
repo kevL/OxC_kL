@@ -2067,15 +2067,15 @@ void TileEngine::selectFireMethod(BattleAction& action)
 /**
  * Handles bullet/weapon hits. A bullet/weapon hits a voxel.
  * @note Called from ExplosionBState::explode().
- * @param targetPos_voxel	- reference the center of hit in voxelspace
- * @param power				- power of the hit/explosion
- * @param dType				- damage type of the hit (RuleItem.h)
- * @param attacker			- pointer to BattleUnit that caused the hit
- * @param melee				- true if no projectile, trajectory, etc. is needed
+ * @param targetVoxel	- reference the center of hit in voxelspace
+ * @param power			- power of the hit/explosion
+ * @param dType			- damage type of the hit (RuleItem.h)
+ * @param attacker		- pointer to BattleUnit that caused the hit
+ * @param melee			- true if no projectile, trajectory, etc. is needed
  * @return, pointer to the BattleUnit that got hit
  */
 BattleUnit* TileEngine::hit(
-		const Position& targetPos_voxel,
+		const Position& targetVoxel,
 		int power,
 		ItemDamageType dType,
 		BattleUnit* const attacker,
@@ -2087,15 +2087,15 @@ BattleUnit* TileEngine::hit(
 	if (dType != DT_NONE) // bypass Psi-attacks. Psi-attacks don't get this far anymore .... But leave it in for safety.
 	{
 		//Log(LOG_INFO) << "DT_ dType = " << static_cast<int>(dType);
-		Position targetPos_tile = Position(
-										targetPos_voxel.x / 16,
-										targetPos_voxel.y / 16,
-										targetPos_voxel.z / 24);
-		Tile* const tile = _battleSave->getTile(targetPos_tile);
-		//Log(LOG_INFO) << ". targetTile " << tile->getPosition() << " targetVoxel " << targetPos_voxel;
+		Position posTarget = Position(
+									targetVoxel.x / 16,
+									targetVoxel.y / 16,
+									targetVoxel.z / 24);
+		Tile* const tile = _battleSave->getTile(posTarget);
+		//Log(LOG_INFO) << ". targetTile " << tile->getPosition() << " targetVoxel " << targetVoxel;
 		if (tile == NULL)
 		{
-			//Log(LOG_INFO) << ". Position& targetPos_voxel : NOT Valid, return NULL";
+			//Log(LOG_INFO) << ". Position& targetVoxel : NOT Valid, return NULL";
 			return NULL;
 		}
 
@@ -2107,7 +2107,7 @@ BattleUnit* TileEngine::hit(
 		else
 		{
 			voxelType = voxelCheck(
-								targetPos_voxel,
+								targetVoxel,
 								attacker,
 								false,
 								false,
@@ -2180,8 +2180,8 @@ BattleUnit* TileEngine::hit(
 				{
 					//Log(LOG_INFO) << ". . . vs Object hp  = " << tile->getMapData(O_OBJECT)->getArmor();
 					_battleSave->getModuleMap()
-										[(targetPos_voxel.x / 16) / 10]
-										[(targetPos_voxel.y / 16) / 10].second--;
+										[(targetVoxel.x / 16) / 10]
+										[(targetVoxel.y / 16) / 10].second--;
 				}
 
 				if (tile->damage(
@@ -2210,7 +2210,7 @@ BattleUnit* TileEngine::hit(
 				// it's possible we have a unit below the actual tile, when it
 				// stands on a stairs and sticks its head up into the above tile.
 				// kL_note: yeah, just like in LoS calculations!!!! cf. visible() etc etc .. idiots.
-				const Tile* const tileBelow = _battleSave->getTile(targetPos_tile + Position(0,0,-1));
+				const Tile* const tileBelow = _battleSave->getTile(posTarget + Position(0,0,-1));
 				if (tileBelow != NULL
 					&& tileBelow->getUnit() != NULL)
 				{
@@ -2255,13 +2255,13 @@ BattleUnit* TileEngine::hit(
 
 				const int unitSize = targetUnit->getArmor()->getSize() * 8;
 				const Position
-					targetPos = targetUnit->getPosition() * Position(16,16,24) // convert tilespace to voxelspace
+					pos = targetUnit->getPosition() * Position(16,16,24) // convert tilespace to voxelspace
 							  + Position(
 										unitSize,
 										unitSize,
 										targetUnit->getFloatHeight() - tile->getTerrainLevel()),
-					relPos = targetPos_voxel
-						   - targetPos
+					relPos = targetVoxel
+						   - pos
 						   - Position(
 									0,0,
 									vertOffset);
@@ -2366,7 +2366,7 @@ BattleUnit* TileEngine::hit(
 							// kL_note: wait a second. hit() creates an ExplosionBState,
 							// but ExplosionBState::explode() creates a hit() ! -> terrain..
 
-							const Position unitPos = Position(
+							const Position posUnit = Position(
 //														targetUnit->getPosition().x * 16,
 //														targetUnit->getPosition().y * 16,
 //														targetUnit->getPosition().z * 24);
@@ -2375,7 +2375,7 @@ BattleUnit* TileEngine::hit(
 														targetUnit->getPosition().z * 24 + 12);	// kL
 							_battleSave->getBattleGame()->statePushNext(new ExplosionBState(
 																						_battleSave->getBattleGame(),
-																						unitPos,
+																						posUnit,
 																						NULL,
 																						targetUnit));
 						}
@@ -2403,7 +2403,7 @@ BattleUnit* TileEngine::hit(
 		calculateTerrainLighting();	// fires could have been started
 //		calculateUnitLighting();	// units could have collapsed <- done in UnitDieBState
 		calculateFOV(
-				targetPos_tile,
+				posTarget,
 				true);
 
 		//if (targetUnit) Log(LOG_INFO) << "TileEngine::hit() EXIT, return targetUnit";
@@ -2425,20 +2425,22 @@ BattleUnit* TileEngine::hit(
  * HE destroys an object if its power is higher than the object's armor
  * then HE blockage is applied for further propagation.
  * See http://www.ufopaedia.org/index.php?title=Explosions for more info.
- * @param voxelTarget	- reference to the center of explosion in voxelspace
+ * @param targetVoxel	- reference to the center of explosion in voxelspace
  * @param power			- power of explosion
  * @param dType			- damage type of explosion (RuleItem.h)
  * @param maxRadius		- maximum radius of explosion
  * @param attacker		- pointer to a unit that caused explosion (default NULL)
  * @param grenade		- true if explosion is caused by a grenade for throwing XP (default false)
+ * @param defusePulse	- true if explosion item caused an electo-magnetic pulse that defuses primed grenades (default false)
  */
 void TileEngine::explode(
-			const Position& voxelTarget,
+			const Position& targetVoxel,
 			int power,
 			ItemDamageType dType,
 			int maxRadius,
 			BattleUnit* const attacker,
-			bool grenade)
+			bool grenade,
+			bool defusePulse)
 {
 /*	int iFalse = 0;
 	for (int
@@ -2495,9 +2497,9 @@ void TileEngine::explode(
 		* destTile = NULL;
 
 	int // convert voxel-space to tile-space
-		centerX = voxelTarget.x / 16,
-		centerY = voxelTarget.y / 16,
-		centerZ = voxelTarget.z / 24,
+		centerX = targetVoxel.x / 16,
+		centerY = targetVoxel.y / 16,
+		centerZ = targetVoxel.z / 24,
 
 		tileX,
 		tileY,
@@ -2877,10 +2879,10 @@ void TileEngine::explode(
 												&& bu->getTakenExpl() == false)))
 									{
 										//Log(LOG_INFO) << ". . . vs Item armor";
-										if ((*i)->getFuseTimer() > -1)
+										if ((*i)->getFuse() > -1)
 										{
 											//Log(LOG_INFO) << ". . . . INVENTORY: primed grenade";
-											(*i)->setFuseTimer(-2);
+											(*i)->setFuse(-2);
 
 											const Position pos = Position(
 																		destTile->getPosition().x * 16 + 8,
@@ -2892,7 +2894,7 @@ void TileEngine::explode(
 																										*i,
 																										attacker));
 										}
-										else if ((*i)->getFuseTimer() != -2)
+										else if ((*i)->getFuse() != -2)
 										{
 											//Log(LOG_INFO) << ". . . . INVENTORY: removeItem = " << (*i)->getRules()->getType();
 											_battleSave->removeItem(*i);
@@ -3098,9 +3100,9 @@ void TileEngine::explode(
 											|| (bu->getStatus() == STATUS_DEAD
 												&& bu->getTakenExpl() == false)))
 									{
-										if ((*i)->getFuseTimer() > -1)
+										if ((*i)->getFuse() > -1)
 										{
-											(*i)->setFuseTimer(-2);
+											(*i)->setFuse(-2);
 
 											const Position pos = Position(
 																		destTile->getPosition().x * 16 + 8,
@@ -3112,7 +3114,7 @@ void TileEngine::explode(
 																										*i,
 																										attacker));
 										}
-										else if ((*i)->getFuseTimer() != -2)
+										else if ((*i)->getFuse() != -2)
 										{
 											_battleSave->removeItem(*i);
 											break;
@@ -3214,6 +3216,18 @@ void TileEngine::explode(
 		//Log(LOG_INFO) << ". explode Tiles DONE";
 	}
 	_trueTile = NULL;
+
+
+	if (defusePulse == true)
+	{
+		for (std::vector<BattleItem*>::const_iterator
+				i = _battleSave->getItems()->begin();
+				i != _battleSave->getItems()->end();
+				++i)
+		{
+			(*i)->setFuse(-1);
+		}
+	}
 
 
 	calculateSunShading();		// roofs could have been destroyed

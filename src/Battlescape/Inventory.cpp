@@ -334,7 +334,7 @@ void Inventory::drawItems()
 //					srt->getFrame((*i)->getRules()->getBigSprite())->blit(_items);
 					srf->blit(_items);
 
-					if ((*i)->getFuseTimer() > -1) // grenade primer indicators
+					if ((*i)->getFuse() > -1) // grenade primer indicators
 						_grenadeFuses.push_back(std::make_pair(
 															srf->getX(),
 															srf->getY()));
@@ -374,7 +374,7 @@ void Inventory::drawItems()
 //					srt->getFrame((*i)->getRules()->getBigSprite())->blit(_items);
 					srf->blit(_items);
 
-					if ((*i)->getFuseTimer() > -1) // grenade primer indicators
+					if ((*i)->getFuse() > -1) // grenade primer indicators
 						_grenadeFuses.push_back(std::make_pair(
 															srf->getX(),
 															srf->getY()));
@@ -819,7 +819,7 @@ void Inventory::mouseClick(Action* action, State* state)
 					{
 						setSelectedItem(item);
 
-						const int explTurn = item->getFuseTimer();
+						const int explTurn = item->getFuse();
 						if (explTurn > -1)
 						{
 							std::wstring activated;
@@ -1035,11 +1035,11 @@ void Inventory::mouseClick(Action* action, State* state)
 								const RuleItem* const itRule = item->getRules();
 								if (itRule->isGrenade() == true)
 								{
-									if (item->getFuseTimer() == -1) // Prime that grenade!
+									if (item->getFuse() == -1) // Prime that grenade!
 									{
 										if (itRule->getBattleType() == BT_PROXYGRENADE)
 										{
-											item->setFuseTimer(0);
+											item->setFuse(0);
 											arrangeGround(false);
 
 											const std::wstring activated = _game->getLanguage()->getString("STR_GRENADE_IS_ACTIVATED");
@@ -1055,7 +1055,7 @@ void Inventory::mouseClick(Action* action, State* state)
 									else // deFuse grenade
 									{
 										_warning->showMessage(_game->getLanguage()->getString("STR_GRENADE_IS_DEACTIVATED"));
-										item->setFuseTimer(-1);
+										item->setFuse(-1);
 										arrangeGround(false);
 									}
 								}
@@ -1408,7 +1408,7 @@ bool Inventory::canBeStacked(
 			|| (itemA->getAmmoItem() && itemB->getAmmoItem()											// or they both have ammo
 				&& itemA->getAmmoItem()->getRules() == itemB->getAmmoItem()->getRules()					// and the same ammo type
 				&& itemA->getAmmoItem()->getAmmoQuantity() == itemB->getAmmoItem()->getAmmoQuantity()))	// and the same ammo quantity
-		&& itemA->getFuseTimer() == -1 && itemB->getFuseTimer() == -1									// and neither is set to explode
+		&& itemA->getFuse() == -1 && itemB->getFuse() == -1												// and neither is set to explode
 		&& itemA->getUnit() == NULL && itemB->getUnit() == NULL											// and neither is a corpse or unconscious unit
 		&& itemA->getPainKillerQuantity() == itemB->getPainKillerQuantity()								// and if it's a medkit, it has the same number of charges
 		&& itemA->getHealQuantity() == itemB->getHealQuantity()

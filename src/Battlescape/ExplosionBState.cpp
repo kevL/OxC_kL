@@ -498,7 +498,8 @@ void ExplosionBState::explode() // private.
 							itRule->getDamageType(),
 							itRule->getExplosionRadius(),
 							_unit,
-							itRule->isGrenade() == true);
+							itRule->isGrenade() == true,
+							itRule->defusePulse() == true);
 //			tileEngine->setProjectileDirection(-1);
 		}
 		else // -> if !_cosmetics
@@ -517,12 +518,9 @@ void ExplosionBState::explode() // private.
 
 			if (itRule->getZombieUnit().empty() == false
 				&& victim != NULL
-//				&& victim->getArmor()->getSize() == 1
 				&& (victim->getGeoscapeSoldier() != NULL
 					|| victim->getUnitRules()->getRace() == "STR_CIVILIAN")
-//					|| victim->getUnitRules()->isMechanical() == false)
 				&& victim->getSpawnUnit().empty() == true)
-//				&& victim->getOriginalFaction() != FACTION_HOSTILE)
 			{
 				//Log(LOG_INFO) << victim->getId() << " murderer has zombieUnit string";
 				victim->setSpawnUnit(itRule->getZombieUnit());

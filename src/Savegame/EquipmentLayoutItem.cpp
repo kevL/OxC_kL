@@ -30,7 +30,7 @@ namespace OpenXcom
  * @param slotX		- position-X in the occupied slot
  * @param slotY		- position-Y in the occupied slot
  * @param ammoItem	- reference to the ammo that has to be loaded into the item (its type)
- * @param fuseTimer	- the turn until explosion of the item (if it's an activated grenade-type)
+ * @param fuse		- the turn until explosion of the item (if it's an activated grenade-type)
  */
 EquipmentLayoutItem::EquipmentLayoutItem(
 		const std::string& itemType,
@@ -38,14 +38,14 @@ EquipmentLayoutItem::EquipmentLayoutItem(
 		int slotX,
 		int slotY,
 		const std::string& ammoItem,
-		int fuseTimer)
+		int fuse)
 	:
 		_itemType(itemType),
 		_slot(slot),
 		_slotX(slotX),
 		_slotY(slotY),
 		_ammoItem(ammoItem),
-		_fuseTimer(fuseTimer)
+		_fuse(fuse)
 {}
 
 /**
@@ -69,12 +69,12 @@ EquipmentLayoutItem::~EquipmentLayoutItem()
  */
 void EquipmentLayoutItem::load(const YAML::Node& node)
 {
-	_itemType		= node["itemType"]	.as<std::string>(_itemType);
-	_slot			= node["slot"]		.as<std::string>(_slot);
-	_slotX			= node["slotX"]		.as<int>(0);
-	_slotY			= node["slotY"]		.as<int>(0);
-	_ammoItem		= node["ammoItem"]	.as<std::string>("NONE");
-	_fuseTimer		= node["fuseTimer"]	.as<int>(-1);
+	_itemType	= node["itemType"]	.as<std::string>(_itemType);
+	_slot		= node["slot"]		.as<std::string>(_slot);
+	_slotX		= node["slotX"]		.as<int>(0);
+	_slotY		= node["slotY"]		.as<int>(0);
+	_ammoItem	= node["ammoItem"]	.as<std::string>("NONE");
+	_fuse		= node["fuse"]		.as<int>(-1);
 }
 
 /**
@@ -92,7 +92,7 @@ YAML::Node EquipmentLayoutItem::save() const
 	if (_slotX != 0)			node["slotX"]		= _slotX;
 	if (_slotY != 0)			node["slotY"]		= _slotY;
 	if (_ammoItem != "NONE")	node["ammoItem"]	= _ammoItem;
-	if (_fuseTimer > -1)		node["fuseTimer"]	= _fuseTimer;
+	if (_fuse > -1)				node["fuse"]		= _fuse;
 
 	return node;
 }
@@ -146,9 +146,9 @@ std::string EquipmentLayoutItem::getAmmoItem() const
  * Returns the turn until explosion of the item (if it's an activated grenade-type).
  * @return, turn count
  */
-int EquipmentLayoutItem::getFuseTimer() const
+int EquipmentLayoutItem::getFuse() const
 {
-	return _fuseTimer;
+	return _fuse;
 }
 
 }

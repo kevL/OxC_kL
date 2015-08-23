@@ -517,7 +517,7 @@ bool ProjectileFlyBState::createNewProjectile() // private.
 				&& _prjItem->getRules()->isGrenade() == true)
 			{
 				//Log(LOG_INFO) << ". . auto-prime for AI, unitID " << _unit->getId();
-				_prjItem->setFuseTimer(0);
+				_prjItem->setFuse(0);
 			}
 
 			_prjItem->moveToOwner(NULL);
@@ -823,7 +823,7 @@ void ProjectileFlyBState::think()
 
 				BattleItem* const item = _parent->getMap()->getProjectile()->getItem();
 				if (item->getRules()->getBattleType() == BT_GRENADE
-					&& item->getFuseTimer() == 0)
+					&& item->getFuse() == 0)
 					// && Options::battleInstantGrenade == true // -> moved to PrimeGrenadeState (0 cannot be set w/out InstantGrenades)
 				{
 					_parent->statePushFront(new ExplosionBState( // it's a hot potato set to explode on contact

@@ -1463,7 +1463,7 @@ bool BattlescapeGenerator::placeItemByLayout(BattleItem* const item) // private.
 							if (item->getRules()->isGrenade() == true
 								&& Options::includePrimeStateInSavedLayout == true)
 							{
-								item->setFuseTimer((*j)->getFuseTimer());
+								item->setFuse((*j)->getFuse());
 							}
 
 							_battleSave->getItems()->push_back(item);

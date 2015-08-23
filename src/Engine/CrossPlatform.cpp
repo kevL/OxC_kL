@@ -112,13 +112,11 @@ void showError(const std::string& error)
 static char const* getHome()
 {
 	char const* home = getenv("HOME");
-#ifndef _WIN32 // kL_note: wot.
 	if (!home)
 	{
 		struct passwd* const pwd = getpwuid(getuid());
 		home = pwd->pw_dir;
 	}
-#endif
 
 	return home;
 }

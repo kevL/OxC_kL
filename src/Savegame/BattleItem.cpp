@@ -52,7 +52,7 @@ BattleItem::BattleItem(
 		_inventoryY(0),
 		_ammoItem(NULL),
 		_ammoQty(itRule->getClipSize()),
-		_fuseTimer(-1),
+		_fuse(-1),
 		_painKiller(0),
 		_heal(0),
 		_stimulant(0),
@@ -104,7 +104,7 @@ void BattleItem::load(const YAML::Node& node)
 	_painKiller	= node["painKiller"].as<int>(_painKiller);
 	_heal		= node["heal"]		.as<int>(_heal);
 	_stimulant	= node["stimulant"]	.as<int>(_stimulant);
-	_fuseTimer	= node["fuseTimer"]	.as<int>(_fuseTimer);
+	_fuse		= node["fuse"]		.as<int>(_fuse);
 }
 
 /**
@@ -140,7 +140,7 @@ YAML::Node BattleItem::save() const
 	else						node["position"]		= Position(-1,-1,-1);
 	if (_ammoItem != NULL)		node["ammoItem"]		= _ammoItem->getId();
 	else						node["ammoItem"]		= -1;
-	if (_fuseTimer != -1)		node["fuseTimer"]		= _fuseTimer;
+	if (_fuse != -1)			node["fuse"]			= _fuse;
 
 	return node;
 }
@@ -158,18 +158,18 @@ RuleItem* BattleItem::getRules() const
  * Gets the turns until detonation. -1 = unprimed grenade
  * @return, turns until detonation
  */
-int BattleItem::getFuseTimer() const
+int BattleItem::getFuse() const
 {
-	return _fuseTimer;
+	return _fuse;
 }
 
 /**
  * Sets the turns until detonation.
  * @param turns - turns until detonation (player/alien turns, not game turns)
  */
-void BattleItem::setFuseTimer(int turn)
+void BattleItem::setFuse(int turn)
 {
-	_fuseTimer = turn;
+	_fuse = turn;
 }
 
 /**

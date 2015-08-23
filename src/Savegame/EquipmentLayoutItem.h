@@ -36,7 +36,7 @@ class EquipmentLayoutItem
 
 private:
 	int
-		_fuseTimer,
+		_fuse,
 		_slotX,
 		_slotY;
 
@@ -54,7 +54,7 @@ private:
 				int slotX,
 				int slotY,
 				const std::string& ammoItem,
-				int fuseTimer);
+				int fuse);
 		/// Creates a new soldier-equipment layout item and loads its contents from YAML.
 		explicit EquipmentLayoutItem(const YAML::Node& node);
 		/// Cleans up the soldier-equipment layout item.
@@ -78,7 +78,7 @@ private:
 		std::string getAmmoItem() const;
 
 		/// Gets the turn until explosion.
-		int getFuseTimer() const;
+		int getFuse() const;
 };
 
 }
