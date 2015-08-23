@@ -1640,7 +1640,8 @@ void BattlescapeState::mapIn(Action*)
  */
 inline void BattlescapeState::handle(Action* action)
 {
-	if (_firstInit == true) return;
+	if (_firstInit == true)
+		return;
 
 	if (_game->getCursor()->getVisible() == true
 		|| (action->getDetails()->button.button == SDL_BUTTON_RIGHT
@@ -1673,12 +1674,15 @@ inline void BattlescapeState::handle(Action* action)
 
 		if (action->getDetails()->type == SDL_KEYDOWN)
 		{
+			bool beep = false;
+
 			if (Options::debug == true)
 			{
 				if ((SDL_GetModState() & KMOD_CTRL) != 0)
 				{
 					if (action->getDetails()->key.keysym.sym == SDLK_d)				// "ctrl-d" - enable debug mode
 					{
+						beep = true;
 						_battleSave->setDebugMode();
 //						_txtOperationTitle->setVisible(false);
 						debug(L"Debug Mode");
@@ -1687,6 +1691,7 @@ inline void BattlescapeState::handle(Action* action)
 					{
 						if (action->getDetails()->key.keysym.sym == SDLK_v)			// "ctrl-v" - reset tile visibility
 						{
+							beep = true;
 							debug(L"Resetting tile visibility");
 							_battleSave->resetTiles();
 						}
@@ -1696,6 +1701,7 @@ inline void BattlescapeState::handle(Action* action)
 
 							if (action->getDetails()->key.keysym.sym == SDLK_k)		// "ctrl-k" - kill all aliens
 							{
+								beep = true; //MB_ICONERROR
 								debug(L"Influenza bacterium dispersed");
 								for (std::vector<BattleUnit*>::const_iterator
 										i = _battleSave->getUnits()->begin();
@@ -1713,6 +1719,7 @@ inline void BattlescapeState::handle(Action* action)
 							}
 							else if (action->getDetails()->key.keysym.sym == SDLK_j)	// "ctrl-j" - stun all aliens
 							{
+								beep = true; //MB_ICONWARNING
 								debug(L"Deploying Celine Dione album");
 								for (std::vector<BattleUnit*>::const_iterator
 									i = _battleSave->getUnits()->begin();
@@ -1739,10 +1746,14 @@ inline void BattlescapeState::handle(Action* action)
 					}
 				}
 				else if (action->getDetails()->key.keysym.sym == SDLK_F10)	// f10 - voxel map dump
+				{
+					beep = true;
 					saveVoxelMap();
+				}
 				else if (action->getDetails()->key.keysym.sym == SDLK_F9)	// f9 - ai dump
 //					&& Options::traceAI == true)
 				{
+					beep = true;
 					saveAIMap();
 				}
 			}
@@ -1762,7 +1773,15 @@ inline void BattlescapeState::handle(Action* action)
 			}
 
 			if (action->getDetails()->key.keysym.sym == Options::keyBattleVoxelView)	// f11 - voxel view pic
+			{
+				beep = true;
 				saveVoxelView();
+			}
+
+#ifdef _WIN32
+			if (beep == true)
+				MessageBeep(MB_OK);
+#endif
 		}
 	}
 }

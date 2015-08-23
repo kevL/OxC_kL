@@ -160,6 +160,9 @@ void Screen::handle(Action* action)
 	if (action->getDetails()->type == SDL_KEYDOWN
 		&& action->getDetails()->key.keysym.sym == SDLK_F8)
 	{
+#ifdef _WIN32
+		MessageBeep(MB_OK);
+#endif
 		switch (Timer::gameSlowSpeed)
 		{
 			case 1: Timer::gameSlowSpeed = 5;	break;

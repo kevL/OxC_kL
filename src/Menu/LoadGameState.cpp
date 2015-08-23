@@ -49,16 +49,16 @@ namespace OpenXcom
 /**
  * Initializes all the elements in the Load Game screen.
  * @param origin	- game section that originated this state
- * @param filename	- reference the name of the save file without extension
+ * @param file		- reference the name of the save file without extension
  * @param palette	- pointer to parent state palette
  */
 LoadGameState::LoadGameState(
 		OptionsOrigin origin,
-		const std::string& filename,
+		const std::string& file,
 		SDL_Color* palette)
 	:
 		_origin(origin),
-		_filename(filename),
+		_file(file),
 		_firstRun(0)
 {
 	buildUi(palette);
@@ -81,15 +81,15 @@ LoadGameState::LoadGameState(
 	switch (type) // can't auto-load ironman games
 	{
 		case SAVE_QUICK:
-			_filename = SavedGame::QUICKSAVE;
+			_file = SavedGame::QUICKSAVE;
 		break;
 
 		case SAVE_AUTO_GEOSCAPE:
-			_filename = SavedGame::AUTOSAVE_GEOSCAPE;
+			_file = SavedGame::AUTOSAVE_GEOSCAPE;
 		break;
 
 		case SAVE_AUTO_BATTLESCAPE:
-			_filename = SavedGame::AUTOSAVE_BATTLESCAPE;
+			_file = SavedGame::AUTOSAVE_BATTLESCAPE;
 	}
 
 	buildUi(palette);
@@ -99,7 +99,11 @@ LoadGameState::LoadGameState(
  * dTor.
  */
 LoadGameState::~LoadGameState()
-{}
+{
+#ifdef _WIN32
+	MessageBeep(MB_OK);
+#endif
+}
 
 /**
  * Builds the interface.
@@ -107,6 +111,9 @@ LoadGameState::~LoadGameState()
  */
 void LoadGameState::buildUi(SDL_Color* palette)
 {
+#ifdef _WIN32
+	MessageBeep(MB_ICONASTERISK);
+#endif
 	_screen = false;
 
 	_txtStatus = new Text(320, 17, 0, 92);
@@ -138,8 +145,8 @@ void LoadGameState::init()
 {
 	State::init();
 
-	if (_filename == SavedGame::QUICKSAVE
-		&& CrossPlatform::fileExists(Options::getUserFolder() + _filename) == false)
+	if (_file == SavedGame::QUICKSAVE
+		&& CrossPlatform::fileExists(Options::getUserFolder() + _file) == false)
 	{
 		_game->popState();
 		_game->getCursor()->setVisible();
@@ -165,7 +172,7 @@ void LoadGameState::think()
 		{
 			Log(LOG_INFO) << "LoadGameState: loading";
 			gameSave->load(
-						_filename,
+						_file,
 						_game->getRuleset());
 			_game->setSavedGame(gameSave);
 

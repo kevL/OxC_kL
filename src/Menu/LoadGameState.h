@@ -46,7 +46,7 @@ class LoadGameState
 
 private:
 	int _firstRun;
-	std::string _filename;
+	std::string _file;
 
 	Text* _txtStatus;
 
@@ -57,7 +57,7 @@ private:
 		/// Creates the Load Game state.
 		LoadGameState(
 				OptionsOrigin origin,
-				const std::string& filename,
+				const std::string& file,
 				SDL_Color* palette);
 		/// Creates the Load Game state.
 		LoadGameState(

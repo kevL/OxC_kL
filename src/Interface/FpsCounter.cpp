@@ -102,6 +102,9 @@ void FpsCounter::handle(Action* action)
 	if (action->getDetails()->type == SDL_KEYDOWN
 		&& action->getDetails()->key.keysym.sym == Options::keyFps)
 	{
+#ifdef _WIN32
+		MessageBeep(MB_OK);
+#endif
 		_visible = !_visible;
 		Options::fpsCounter = _visible;
 	}

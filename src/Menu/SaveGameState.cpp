@@ -45,7 +45,7 @@ namespace OpenXcom
 /**
  * Initializes all the elements in the Save Game screen.
  * @param origin	- game section that originated this state
- * @param file	- reference to name of the save file without extension
+ * @param file		- reference to name of the save file without extension
  * @param palette	- pointer to parent state palette
  */
 SaveGameState::SaveGameState(
@@ -102,7 +102,11 @@ SaveGameState::SaveGameState(
  * dTor.
  */
 SaveGameState::~SaveGameState()
-{}
+{
+#ifdef _WIN32
+	MessageBeep(MB_OK);
+#endif
+}
 
 /**
  * Builds the interface.
@@ -110,6 +114,9 @@ SaveGameState::~SaveGameState()
  */
 void SaveGameState::buildUi(SDL_Color* palette)
 {
+#ifdef _WIN32
+	MessageBeep(MB_ICONASTERISK);
+#endif
 	_screen = false;
 
 	_txtStatus = new Text(320, 17, 0, 92);
