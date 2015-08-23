@@ -104,7 +104,7 @@ SaveGameState::SaveGameState(
 SaveGameState::~SaveGameState()
 {
 #ifdef _WIN32
-	MessageBeep(MB_OK);
+	MessageBeep(MB_ICONASTERISK);
 #endif
 }
 
@@ -115,7 +115,7 @@ SaveGameState::~SaveGameState()
 void SaveGameState::buildUi(SDL_Color* palette)
 {
 #ifdef _WIN32
-	MessageBeep(MB_ICONASTERISK);
+//	MessageBeep(MB_OK);
 #endif
 	_screen = false;
 

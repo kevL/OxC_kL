@@ -4552,7 +4552,7 @@
 	"Text.h"
 	"../Engine/InteractiveSurface.h"
 
-1438919042 f:\git\openxcom\src\interface\window.h
+1440346956 f:\git\openxcom\src\interface\window.h
 	"../Engine/Surface.h"
 
 1440089835 f:\git\openxcom\src\ruleset\ruleset.h
@@ -4874,7 +4874,7 @@
 	"../Savegame/Production.h"
 	"../Savegame/SavedGame.h"
 
-1434649505 f:\git\openxcom\src\basescape\newmanufactureliststate.h
+1440342181 f:\git\openxcom\src\basescape\newmanufactureliststate.h
 	"../Engine/State.h"
 
 1440182499 f:\git\openxcom\src\engine\screen.h
@@ -4922,11 +4922,12 @@
 	"../Savegame/Base.h"
 	"../Savegame/SavedGame.h"
 
-1440097623 source:f:\git\openxcom\src\basescape\newmanufactureliststate.cpp
+1440344632 source:f:\git\openxcom\src\basescape\newmanufactureliststate.cpp
 	"NewManufactureListState.h"
 	"ManufactureCostsState.h"
 	"ManufactureStartState.h"
 	"../Engine/Game.h"
+	"../Interface/ComboBox.h"
 	"../Interface/Text.h"
 	"../Interface/TextButton.h"
 	"../Interface/TextList.h"
@@ -7480,7 +7481,7 @@
 	"NumberText.h"
 	"../Engine/Palette.h"
 
-1438919128 source:f:\git\openxcom\src\interface\window.cpp
+1440346949 source:f:\git\openxcom\src\interface\window.cpp
 	"Window.h"
 	"../Engine/Sound.h"
 	"../Engine/Timer.h"
@@ -10392,10 +10393,10 @@
 1432287660 source:f:\git\openxcom\src\engine\optioninfo.cpp
 	"OptionInfo.h"
 
-1430149550 f:\git\openxcom\src\interface\combobox.h
+1440344842 f:\git\openxcom\src\interface\combobox.h
 	"../Engine/InteractiveSurface.h"
 
-1432273922 source:f:\git\openxcom\src\interface\combobox.cpp
+1440348248 source:f:\git\openxcom\src\interface\combobox.cpp
 	"ComboBox.h"
 	"TextButton.h"
 	"TextList.h"
@@ -10596,7 +10597,7 @@
 	"../Engine/State.h"
 	"../Savegame/SavedGame.h"
 
-1440305512 source:f:\git\openxcom\src\menu\loadgamestate.cpp
+1440339182 source:f:\git\openxcom\src\menu\loadgamestate.cpp
 	"LoadGameState.h"
 	"ErrorMessageState.h"
 	"../Battlescape/BattlescapeState.h"
@@ -10609,7 +10610,7 @@
 	"../Ruleset/Ruleset.h"
 	"../Savegame/SavedBattleGame.h"
 
-1440305503 source:f:\git\openxcom\src\menu\savegamestate.cpp
+1440339175 source:f:\git\openxcom\src\menu\savegamestate.cpp
 	"SaveGameState.h"
 	"ErrorMessageState.h"
 	"MainMenuState.h"

@@ -72,7 +72,8 @@ Window::Window(
 		_screen(false),
 		_thinBorder(false),
 		_bgX(0),
-		_bgY(0)
+		_bgY(0),
+		_colorFill(0)
 {
 	_timer = new Timer(13);
 	_timer->onTimer((SurfaceHandler)& Window::popup);
@@ -121,6 +122,16 @@ void Window::setBackground(
 	_bgY = dy;
 
 	_redraw = true;
+}
+
+/**
+ * Sets the background to a solid color instead of transparent.
+ * @note A background picture will override a background fill.
+ * @param color - fill color (0 is transparent)
+ */
+void Window::setBackgroundFill(Uint8 color)
+{
+	_colorFill = color;
 }
 
 /**
@@ -341,10 +352,8 @@ void Window::draw()
 
 		_bg->blit(this);
 	}
-	else // surface inside frame -> transparent
-		drawRect(
-				&rect,
-				0);
+	else
+		drawRect(&rect, _colorFill);
 }
 
 /**

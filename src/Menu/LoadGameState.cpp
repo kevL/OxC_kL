@@ -101,7 +101,7 @@ LoadGameState::LoadGameState(
 LoadGameState::~LoadGameState()
 {
 #ifdef _WIN32
-	MessageBeep(MB_OK);
+	MessageBeep(MB_ICONASTERISK);
 #endif
 }
 
@@ -112,7 +112,7 @@ LoadGameState::~LoadGameState()
 void LoadGameState::buildUi(SDL_Color* palette)
 {
 #ifdef _WIN32
-	MessageBeep(MB_ICONASTERISK);
+//	MessageBeep(MB_OK);
 #endif
 	_screen = false;
 

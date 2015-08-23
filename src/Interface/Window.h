@@ -68,7 +68,9 @@ private:
 		_bgX,_bgY;
 	double _popupStep;
 
-	Uint8 _color;
+	Uint8
+		_color,
+		_colorFill;
 
 	State* _state;
 	Surface* _bg;
@@ -96,6 +98,8 @@ private:
 				Surface* const bg,
 				int dx = 0,
 				int dy = 0);
+		/// Sets the background to a solid color instead of transparent.
+		void setBackgroundFill(Uint8 color);
 
 		/// Sets the border color.
 		void setColor(Uint8 color);

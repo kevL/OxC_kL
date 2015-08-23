@@ -46,8 +46,8 @@ class ComboBox
 
 private:
 	static const int
-		HORIZONTAL_MARGIN,
-		VERTICAL_MARGIN,
+		MARGIN_HORIZONTAL,
+		MARGIN_VERTICAL,
 		MAX_ITEMS,
 		BUTTON_WIDTH,
 		TEXT_HEIGHT;
@@ -101,6 +101,8 @@ private:
 
 		/// Sets the background surface.
 		void setBackground(Surface* bg);
+		/// Sets the color to fill the background.
+		void setBackgroundFill(Uint8 color);
 
 		/// Sets the border color.
 		void setColor(Uint8 color);
@@ -135,7 +137,7 @@ private:
 		/// Toggles the combo box state.
 		void toggle(bool init = false);
 
-		/// Hooks an action handler to when the slider changes.
+		/// Hook to an action handler when the content changes.
 		void onChange(ActionHandler handler);
 };
 
