@@ -347,7 +347,7 @@ units:
     livingWeapon: true
     mechanical: true
     psiImmune: true
-    canOpenDoor: false
+    hasHands: false
 alienRaces:
   - id: STR_WASPITE
     members:

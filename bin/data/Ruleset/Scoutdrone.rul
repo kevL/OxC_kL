@@ -92,7 +92,7 @@ units:
     energyRecovery: 100
     mechanical: true
     psiImmune: true
-    canOpenDoor: false
+    hasHands: false
 ufopaedia:
   - id: STR_SCOUT_DRONE
     type_id: 3

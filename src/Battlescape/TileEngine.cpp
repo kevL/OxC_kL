@@ -4542,7 +4542,7 @@ int TileEngine::unitOpensDoor(
 	if (rtClick == true // RMB works only for cardinal directions, and not for dogs.
 		&& (dir % 2 == 1
 			|| (unit->getUnitRules() != NULL
-				&& unit->getUnitRules()->canOpenDoor() == false)))
+				&& unit->getUnitRules()->hasHands() == false)))
 	{
 		return -1;
 	}

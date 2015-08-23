@@ -198,11 +198,11 @@ struct FallXCOM2
 
 
 /**
- * Initializes the resource pack by loading all the
- * resources contained in the original game folder.
+ * Initializes the resource pack by loading all the resources contained in the
+ * original game folder.
  * @param rules - pointer to the Ruleset
  */
-XcomResourcePack::XcomResourcePack(Ruleset* rules)
+XcomResourcePack::XcomResourcePack(const Ruleset* const rules)
 	:
 		ResourcePack(),
 		_ruleset(rules)
@@ -496,24 +496,24 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 			i < sizeof(sets) / sizeof(sets[0]);
 			++i)
 	{
-		std::ostringstream s;
-		s << "GEOGRAPH/" << sets[i];
+		std::ostringstream oststr;
+		oststr << "GEOGRAPH/" << sets[i];
 
 		const std::string ext = sets[i].substr(sets[i].find_last_of('.') + 1, sets[i].length());
 		if (ext == "PCK")
 		{
 			const std::string tab = CrossPlatform::noExt(sets[i]) + ".TAB";
-			std::ostringstream s2;
-			s2 << "GEOGRAPH/" << tab;
+			std::ostringstream oststr2;
+			oststr2 << "GEOGRAPH/" << tab;
 			_sets[sets[i]] = new SurfaceSet(32, 40);
 			_sets[sets[i]]->loadPck(
-								CrossPlatform::getDataFile(s.str()),
-								CrossPlatform::getDataFile(s2.str()));
+								CrossPlatform::getDataFile(oststr.str()),
+								CrossPlatform::getDataFile(oststr2.str()));
 		}
 		else
 		{
 			_sets[sets[i]] = new SurfaceSet(32, 32);
-			_sets[sets[i]]->loadDat(CrossPlatform::getDataFile(s.str()));
+			_sets[sets[i]]->loadDat(CrossPlatform::getDataFile(oststr.str()));
 		}
 	}
 
@@ -545,24 +545,24 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 			if (mode == "replace")
 			{
 				for (std::vector<std::string>::const_iterator
-						terrain = terrains.begin();
-						terrain != terrains.end();
-						++terrain)
+						j = terrains.begin();
+						j != terrains.end();
+						++j)
 				{
 					ClearMusicAssignment(
 										type,
-										*terrain);
+										*j);
 				}
 			}
 
 			for (std::vector<std::string>::const_iterator
-					terrain = terrains.begin();
-					terrain != terrains.end();
-					++terrain)
+					j = terrains.begin();
+					j != terrains.end();
+					++j)
 			{
 				MakeMusicAssignment(
 								type,
-								*terrain,
+								*j,
 								musicRule->getFiles(),
 								musicRule->getIndexes());
 			}
@@ -654,21 +654,21 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 					j != assignment.end();
 					++j)
 			{
-				const std::vector<std::pair<std::string, int> > filenames = j->second;
+				const std::vector<std::pair<std::string, int> > files = j->second;
 				for (std::vector<std::pair<std::string, int> >::const_iterator
-						k = filenames.begin();
-						k != filenames.end();
+						k = files.begin();
+						k != files.end();
 						++k)
 				{
-					const std::string filename = k->first;
+					const std::string file = k->first;
 
 //					const int midiIndex = k->second;
-//					LoadMusic(filename, midiIndex):
+//					LoadMusic(file, midiIndex):
 
 					bool loaded = false;
 
 					// The file may have already been loaded because of an other assignment.
-					if (_musicFile.find(filename) != _musicFile.end())
+					if (_musicFile.find(file) != _musicFile.end())
 						loaded = true;
 
 					if (loaded == false) // Try digital tracks.
@@ -723,18 +723,18 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 						};
 
 						for (size_t
-								ext = 0;
-								ext < sizeof(exts) / sizeof(exts[0]);
-								++ext)
+								l = 0;
+								l != sizeof(exts) / sizeof(exts[0]);
+								++l)
 						{
-							std::ostringstream s;
-							s << "SOUND/" << filename << exts[ext];
+							std::ostringstream oststr;
+							oststr << "SOUND/" << file << exts[l];
 
-							if (CrossPlatform::fileExists(CrossPlatform::getDataFile(s.str())) == true)
+							if (CrossPlatform::fileExists(CrossPlatform::getDataFile(oststr.str())) == true)
 							{
-								Log(LOG_INFO) << "Music: load file " << filename << exts[ext];
-								_musicFile[filename] = new Music();
-								_musicFile[filename]->load(CrossPlatform::getDataFile(s.str()));
+								Log(LOG_INFO) << "Music: load file " << file << exts[l];
+								_musicFile[file] = new Music();
+								_musicFile[file]->load(CrossPlatform::getDataFile(oststr.str()));
 
 								loaded = true;
 								break;
@@ -749,11 +749,11 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 						if (adlibcat != NULL // Try Adlib music
 							&& Options::audioBitDepth == 16)
 						{
-							_musicFile[filename] = new AdlibMusic();
+							_musicFile[file] = new AdlibMusic();
 
-//							if (tracks[i] < adlibcat->getAmount()) // kL_note: tracks[i] -> filename .....
+//							if (tracks[i] < adlibcat->getAmount()) // kL_note: tracks[i] -> file .....
 //							{
-							_musicFile[filename]->load(
+							_musicFile[file]->load(
 													adlibcat->load(midiIndex, true),
 													adlibcat->getObjectSize(midiIndex));
 							loaded = true;
@@ -768,19 +768,19 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 						}
 						else if (gmcat != NULL) // Try GM music
 						{
-							_musicFile[filename] = gmcat->loadMIDI(midiIndex);
+							_musicFile[file] = gmcat->loadMIDI(midiIndex);
 
 							loaded = true;
 						}
 						else // Try MIDI music
 						{
 							std::ostringstream s;
-							s << "SOUND/" << filename << ".mid";
+							s << "SOUND/" << file << ".mid";
 
 							if (CrossPlatform::fileExists(CrossPlatform::getDataFile(s.str())) == true)
 							{
-								_musicFile[filename] = new Music();
-								_musicFile[filename]->load(CrossPlatform::getDataFile(s.str()));
+								_musicFile[file] = new Music();
+								_musicFile[file]->load(CrossPlatform::getDataFile(s.str()));
 
 								loaded = true;
 							}
@@ -789,7 +789,7 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 
 					if (loaded == false)
 					{
-						throw Exception(filename + " music not found");
+						throw Exception(file + " music not found");
 					}
 				}
 			}
@@ -988,33 +988,36 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 
 			for (size_t
 					i = 0;
-					i < sizeof(catsId) / sizeof(catsId[0]);
+					i != sizeof(catsId) / sizeof(catsId[0]);
 					++i)
 			{
 				SoundSet* sound = NULL;
 
 				for (size_t
 						j = 0;
-						j < sizeof(cats) / sizeof(cats[0])
+						j != sizeof(cats) / sizeof(cats[0])
 							&& sound == NULL;
 						++j)
 				{
-					bool wav = true;
-
-					if (cats[j] == 0)
-						continue;
-					else if (cats[j] == catsDos)
-						wav = false;
-
-					std::ostringstream s;
-					s << "SOUND/" << cats[j][i];
-					const std::string file = CrossPlatform::getDataFile(s.str());
-					if (CrossPlatform::fileExists(file) == true)
+					if (cats[j] != NULL)
 					{
-						sound = new SoundSet();
-						sound->loadCat(file, wav);
+						bool wav;
+						if (cats[j] == catsDos)
+							wav = false;
+						else
+							wav = true;
 
-						Options::currentSound = (wav)? SOUND_14: SOUND_10;
+						std::ostringstream oststr;
+						oststr << "SOUND/" << cats[j][i];
+						const std::string file = CrossPlatform::getDataFile(oststr.str());
+
+						if (CrossPlatform::fileExists(file) == true)
+						{
+							sound = new SoundSet();
+							sound->loadCat(file, wav);
+
+							Options::currentSound = (wav) ? SOUND_14 : SOUND_10;
+						}
 					}
 				}
 
@@ -1033,9 +1036,9 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 					i != rules->getSoundDefinitions()->end();
 					++i)
 			{
-				std::ostringstream s;
-				s << "SOUND/" << (*i).second->getCATFile();
-				const std::string file = CrossPlatform::getDataFile(s.str());
+				std::ostringstream oststr;
+				oststr << "SOUND/" << (*i).second->getCATFile();
+				const std::string file = CrossPlatform::getDataFile(oststr.str());
 
 				if (CrossPlatform::fileExists(file) == true)
 				{
@@ -1052,8 +1055,8 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 				}
 				else
 				{
-					s << " not found";
-					throw Exception(s.str());
+					oststr << " not found";
+					throw Exception(oststr.str());
 				}
 			}
 		}
@@ -1144,7 +1147,7 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 	//Log(LOG_DEBUG) << "Loading extra resources from ruleset...";
 	Log(LOG_INFO) << "Loading extra sprites ...";
 
-	std::ostringstream s;
+	std::ostringstream oststr;
 
 	const std::vector<std::pair<std::string, ExtraSprites*> > extraSprites = rules->getExtraSprites();
 	for (std::vector<std::pair<std::string, ExtraSprites*> >::const_iterator
@@ -1182,9 +1185,9 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 												spritePack->getHeight());
 			}
 
-			s.str("");
-			s << CrossPlatform::getDataFile(spritePack->getSprites()->operator[](0));
-			_surfaces[sheetName]->loadImage(s.str());
+			oststr.str("");
+			oststr << CrossPlatform::getDataFile(spritePack->getSprites()->operator[](0));
+			_surfaces[sheetName]->loadImage(oststr.str());
 		}
 		else // not SingleImage
 		{
@@ -1224,7 +1227,7 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 					j != spritePack->getSprites()->end();
 					++j)
 			{
-				s.str("");
+				oststr.str("");
 				const int startFrame = j->first;
 
 				const std::string fileName = j->second;
@@ -1248,26 +1251,26 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 
 						try
 						{
-							s.str("");
-							s << folder.str() << CrossPlatform::getDataFile(*k);
+							oststr.str("");
+							oststr << folder.str() << CrossPlatform::getDataFile(*k);
 
 							if (_sets[sheetName]->getFrame(offset))
 							{
 								//Log(LOG_DEBUG) << "Replacing frame: " << offset;
 								//Log(LOG_INFO) << "Replacing frame: " << offset;
 
-								_sets[sheetName]->getFrame(offset)->loadImage(s.str());
+								_sets[sheetName]->getFrame(offset)->loadImage(oststr.str());
 							}
 							else
 							{
 								if (adding == true)
-									_sets[sheetName]->addFrame(offset)->loadImage(s.str());
+									_sets[sheetName]->addFrame(offset)->loadImage(oststr.str());
 								else
 								{
 									//Log(LOG_DEBUG) << "Adding frame: " << offset + spritePack->getModIndex();
 									//Log(LOG_INFO) << "Adding frame: " << offset + spritePack->getModIndex();
 
-									_sets[sheetName]->addFrame(offset + spritePack->getModIndex())->loadImage(s.str());
+									_sets[sheetName]->addFrame(offset + spritePack->getModIndex())->loadImage(oststr.str());
 								}
 							}
 
@@ -1284,21 +1287,21 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 					if (   spritePack->getSubX() == 0
 						&& spritePack->getSubY() == 0)
 					{
-						s << CrossPlatform::getDataFile(fileName);
+						oststr << CrossPlatform::getDataFile(fileName);
 
 						if (_sets[sheetName]->getFrame(startFrame))
 						{
 							//Log(LOG_DEBUG) << "Replacing frame: " << startFrame;
 							//Log(LOG_INFO) << "Replacing frame: " << startFrame;
 
-							_sets[sheetName]->getFrame(startFrame)->loadImage(s.str());
+							_sets[sheetName]->getFrame(startFrame)->loadImage(oststr.str());
 						}
 						else
 						{
 							//Log(LOG_DEBUG) << "Adding frame: " << startFrame << ", using index: " << startFrame + spritePack->getModIndex();
 							//Log(LOG_INFO) << "Adding frame: " << startFrame << ", using index: " << startFrame + spritePack->getModIndex();
 
-							_sets[sheetName]->addFrame(startFrame + spritePack->getModIndex())->loadImage(s.str());
+							_sets[sheetName]->addFrame(startFrame + spritePack->getModIndex())->loadImage(oststr.str());
 						}
 					}
 					else
@@ -1306,9 +1309,9 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 						Surface* const temp = new Surface(
 														spritePack->getWidth(),
 														spritePack->getHeight());
-						s.str("");
-						s << CrossPlatform::getDataFile(spritePack->getSprites()->operator[](startFrame));
-						temp->loadImage(s.str());
+						oststr.str("");
+						oststr << CrossPlatform::getDataFile(spritePack->getSprites()->operator[](startFrame));
+						temp->loadImage(oststr.str());
 						const int
 							xDivision = spritePack->getWidth() / spritePack->getSubX(),
 							yDivision = spritePack->getHeight() / spritePack->getSubY();
@@ -1465,7 +1468,7 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 		{
 			const int startSound = j->first;
 			std::string fileName = j->second;
-			s.str("");
+			oststr.str("");
 
 			if (fileName.substr(fileName.length() - 1, 1) == "/")
 			{
@@ -1476,19 +1479,19 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 				folder << CrossPlatform::getDataFolder(fileName);
 				std::vector<std::string> contents = CrossPlatform::getFolderContents(folder.str());
 
-				for (std::vector<std::string>::iterator
+				for (std::vector<std::string>::const_iterator
 						k = contents.begin();
 						k != contents.end();
 						++k)
 				{
 					try
 					{
-						s.str("");
-						s << folder.str() << CrossPlatform::getDataFile(*k);
+						oststr.str("");
+						oststr << folder.str() << CrossPlatform::getDataFile(*k);
 						if (_sounds[setName]->getSound(offset))
-							_sounds[setName]->getSound(offset)->load(s.str());
+							_sounds[setName]->getSound(offset)->load(oststr.str());
 						else
-							_sounds[setName]->addSound(offset + soundPack->getModIndex())->load(s.str());
+							_sounds[setName]->addSound(offset + soundPack->getModIndex())->load(oststr.str());
 
 						++offset;
 					}
@@ -1500,16 +1503,16 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 			}
 			else
 			{
-				s << CrossPlatform::getDataFile(fileName);
+				oststr << CrossPlatform::getDataFile(fileName);
 				if (_sounds[setName]->getSound(startSound))
 				{
 					Log(LOG_DEBUG) << "Replacing index: " << startSound;
-					_sounds[setName]->getSound(startSound)->load(s.str());
+					_sounds[setName]->getSound(startSound)->load(oststr.str());
 				}
 				else
 				{
 					Log(LOG_DEBUG) << "Adding index: " << startSound;
-					_sounds[setName]->addSound(startSound + soundPack->getModIndex())->load(s.str());
+					_sounds[setName]->addSound(startSound + soundPack->getModIndex())->load(oststr.str());
 				}
 			}
 		}

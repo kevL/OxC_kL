@@ -91,12 +91,12 @@ class XcomResourcePack
 {
 
 private:
-	Ruleset* _ruleset;
+	const Ruleset* _ruleset;
 
 
 	public:
 		/// Creates the X-Com Resource Pack.
-		explicit XcomResourcePack(Ruleset* rules);
+		explicit XcomResourcePack(const Ruleset* const rules);
 		/// Cleans up the X-Com Resource Pack.
 		~XcomResourcePack();
 

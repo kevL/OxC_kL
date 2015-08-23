@@ -1052,25 +1052,25 @@ const int RuleItem::getSpecialType() const
  * Gets the item's default BattleAction.
  * Used to show a TU cost in InventoryState. Lifted from ActionMenuState cTor.
  * @param isPrimed - true if checking a grenade and it's primed (default false)
- * @return, BattleActionType enum
+ * @return, BattleActionType (BattlescapeGame.h)
  */
 BattleActionType RuleItem::getDefaultAction(const bool isPrimed) const
 {
-	if (_fixedWeapon == true)		// isFixed()
+	if (_fixedWeapon == true)
 		return BA_NONE;
 
-	if (_battleType == BT_FIREARM)	// getBattleType()
+	if (_battleType == BT_FIREARM)
 	{
-		if (_waypoint != 0)			// isWaypoints()
+		if (_waypoint != 0)
 			return BA_LAUNCH;
 
-		if (_accuracySnap != 0)		// getAccuracySnap()
+		if (_accuracySnap != 0)
 			return BA_SNAPSHOT;
 
-		if (_accuracyAuto != 0)		// getAccuracyAuto()
+		if (_accuracyAuto != 0)
 			return BA_AUTOSHOT;
 
-		if (_accuracyAimed != 0)	// getAccuracyAimed()
+		if (_accuracyAimed != 0)
 			return BA_AIMEDSHOT;
 	}
 
@@ -1093,7 +1093,7 @@ BattleActionType RuleItem::getDefaultAction(const bool isPrimed) const
 	if (_battleType == BT_PSIAMP)
 		return BA_PSIPANIC;
 
-	if (_tuMelee != 0)				// getTUMelee()
+	if (_tuMelee != 0)
 		return BA_HIT;
 
 	return BA_NONE;

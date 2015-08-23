@@ -50,7 +50,7 @@ units:
     deathSound: 211
     aggroSound: 210
     energyRecovery: 80
-    canOpenDoor: false
+    hasHands: false
     dog: true
 armors:
   - type: DOGE_ARMOR

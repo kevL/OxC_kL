@@ -3,18 +3,10 @@
 
 // kL: heads up!
 #pragma message("kL: Compiling PCH.H")
-#pragma message("Or ... how to play ping-pong.")
+#pragma message("Or, how to play ping-pong.")
 #pragma message("...")
 #pragma message("jerking off ... please wait")
-#pragma message("...")
 
-// note: Something before <cmath>/<math.h> has defined M_PI along with
-// _MATH_DEFINES_DEFINED, so M_PI_2 etc. does not get defined. Or maybe somebody
-// merely jacked off all over their keyboard without using a keyboard-guard
-// somewhere. Also,
-// NOTE that the math-constants are defined *outside* the header-guard in
-// 'math.h' ....
-#define _USE_MATH_DEFINES
 
 // To check memory leaks in VS (more below):
 //#define _CRTDBG_MAP_ALLOC
@@ -22,33 +14,15 @@
 //#include <crtdbg.h>
 
 
-#ifndef __NO_OPENGL
-	#ifdef __APPLE__
-		#include <OpenGL/gl.h>
-		#include <OpenGL/glu.h>
-		#include <OpenGL/glext.h>
-		#include <GLUT/glut.h>
-	#endif
-
-	#include <SDL_opengl.h>
-#endif
-
-
-#include <SDL.h>
-#include <SDL_endian.h>
-#include <SDL_gfxPrimitives.h>
-#include <SDL_image.h>
-#include <SDL_keysym.h>
-#include <SDL_mixer.h>
-//#include <SDL_opengl.h> // done above^
-#include <SDL_syswm.h>
-//#include <SDL_thread.h>
-#include <SDL_types.h>
-//#include <SDL_video.h>
-
-
-#include <yaml-cpp/yaml.h>
-
+// c++ headers
+//
+// note: Something before <cmath>/<math.h> has defined M_PI along with
+// _MATH_DEFINES_DEFINED, so M_PI_2 etc. does not get defined. Or maybe somebody
+// merely jacked off all over their keyboard without using a keyboard-guard
+// somewhere. Also,
+// NOTE that the math-constants are defined *outside* the header-guard in
+// 'math.h' ....
+#define _USE_MATH_DEFINES
 
 #include <algorithm>
 //#include <assert.h>
@@ -147,6 +121,39 @@
 #endif
 
 
+// library headers
+//
+#ifndef __NO_OPENGL
+	#ifdef __APPLE__
+		#include <OpenGL/gl.h>
+		#include <OpenGL/glu.h>
+		#include <OpenGL/glext.h>
+		#include <GLUT/glut.h>
+	#endif
+
+	#include <SDL_opengl.h>
+#endif
+
+
+#include <SDL.h>
+#include <SDL_endian.h>
+#include <SDL_gfxPrimitives.h>
+#include <SDL_image.h>
+#include <SDL_keysym.h>
+#include <SDL_mixer.h>
+//#include <SDL_opengl.h> // done above^
+#include <SDL_syswm.h>
+//#include <SDL_thread.h>
+#include <SDL_types.h>
+//#include <SDL_video.h>
+
+
+#include <yaml-cpp/yaml.h>
+
+#include "./dirent.h"
+#include "./lodepng.h"
+
+
 // To check memory leaks in VS (more above)
 //#ifndef DBG_NEW
 //	#define DBG_NEW new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
@@ -154,9 +161,8 @@
 //#endif
 
 
-#include "./dirent.h"
-#include "./lodepng.h"
-
+// openxcom headers
+//
 #include "./fmath.h"
 #include "./version.h"
 

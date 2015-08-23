@@ -871,11 +871,6 @@
 			<Option target="Release Win32" />
 			<Option target="Release x64" />
 		</Unit>
-		<Unit filename="Battlescape/MeleeAttackBState.cpp">
-			<Option compile="0" />
-			<Option link="0" />
-		</Unit>
-		<Unit filename="Battlescape/MeleeAttackBState.h" />
 		<Unit filename="Battlescape/MiniMapState.cpp">
 			<Option target="Debug Win32" />
 			<Option target="Debug x64" />
@@ -924,11 +919,6 @@
 			<Option target="Release Win32" />
 			<Option target="Release x64" />
 		</Unit>
-		<Unit filename="Battlescape/Particle.cpp">
-			<Option compile="0" />
-			<Option link="0" />
-		</Unit>
-		<Unit filename="Battlescape/Particle.h" />
 		<Unit filename="Battlescape/Pathfinding.cpp">
 			<Option target="Debug Win32" />
 			<Option target="Debug x64" />
@@ -1025,11 +1015,6 @@
 			<Option target="Release Win32" />
 			<Option target="Release x64" />
 		</Unit>
-		<Unit filename="Battlescape/PsiAttackBState.cpp">
-			<Option compile="0" />
-			<Option link="0" />
-		</Unit>
-		<Unit filename="Battlescape/PsiAttackBState.h" />
 		<Unit filename="Battlescape/ScannerState.cpp">
 			<Option target="Debug Win32" />
 			<Option target="Debug x64" />
@@ -2240,11 +2225,6 @@
 		<Unit filename="Menu/IntroState.h" />
 		<Unit filename="Menu/ListGamesState.cpp" />
 		<Unit filename="Menu/ListGamesState.h" />
-		<Unit filename="Menu/ListLoadOriginalState.cpp">
-			<Option compile="0" />
-			<Option link="0" />
-		</Unit>
-		<Unit filename="Menu/ListLoadOriginalState.h" />
 		<Unit filename="Menu/ListLoadState.cpp" />
 		<Unit filename="Menu/ListLoadState.h" />
 		<Unit filename="Menu/ListSaveState.cpp" />

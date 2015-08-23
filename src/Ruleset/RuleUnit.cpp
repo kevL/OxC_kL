@@ -48,7 +48,7 @@ RuleUnit::RuleUnit(const std::string& type)
 		_dog(false),
 		_mechanical(false), // kL: these two should perhaps go to Armor class.
 		_psiImmune(false),
-		_canOpenDoor(true)
+		_hasHands(true)
 {}
 
 /**
@@ -73,26 +73,26 @@ void RuleUnit::load(
 	_armor			= node["armor"]				.as<std::string>(_armor);
 	_standHeight	= node["standHeight"]		.as<int>(_standHeight);
 	_kneelHeight	= node["kneelHeight"]		.as<int>(_kneelHeight);
-
 	_floatHeight	= node["floatHeight"]		.as<int>(_floatHeight);
+
 	if (_floatHeight + _standHeight > 24)
 	{
-		throw Exception("Error with unit " + _type + ": Unit height may not exceed 25");
+		throw Exception("Error with unit " + _type + ": Unit height + float height may not exceed 24");
 	}
 
-	_value			= node["value"]				.as<int>(_value);
-	_intelligence	= node["intelligence"]		.as<int>(_intelligence);
-	_aggression		= node["aggression"]		.as<int>(_aggression);
-	_energyRecovery	= node["energyRecovery"]	.as<int>(_energyRecovery);
-	_livingWeapon	= node["livingWeapon"]		.as<bool>(_livingWeapon);
-	_meleeWeapon	= node["meleeWeapon"]		.as<std::string>(_meleeWeapon);
-	_builtInWeapons	= node["builtInWeapons"]	.as<std::vector<std::string> >(_builtInWeapons);
-	_female			= node["female"]			.as<bool>(_female);
-	_dog			= node["dog"]				.as<bool>(_dog);
-	_mechanical		= node["mechanical"]		.as<bool>(_mechanical);
-	_psiImmune		= node["psiImmune"]			.as<bool>(_psiImmune);
-	_canOpenDoor	= node["canOpenDoor"]		.as<bool>(_canOpenDoor);
-	_spawnUnit		= node["spawnUnit"]			.as<std::string>(_spawnUnit);
+	_value			= node["value"]			.as<int>(_value);
+	_intelligence	= node["intelligence"]	.as<int>(_intelligence);
+	_aggression		= node["aggression"]	.as<int>(_aggression);
+	_energyRecovery	= node["energyRecovery"].as<int>(_energyRecovery);
+	_livingWeapon	= node["livingWeapon"]	.as<bool>(_livingWeapon);
+	_meleeWeapon	= node["meleeWeapon"]	.as<std::string>(_meleeWeapon);
+	_builtInWeapons	= node["builtInWeapons"].as<std::vector<std::string> >(_builtInWeapons);
+	_female			= node["female"]		.as<bool>(_female);
+	_dog			= node["dog"]			.as<bool>(_dog);
+	_mechanical		= node["mechanical"]	.as<bool>(_mechanical);
+	_psiImmune		= node["psiImmune"]		.as<bool>(_psiImmune);
+	_hasHands		= node["hasHands"]		.as<bool>(_hasHands);
+	_spawnUnit		= node["spawnUnit"]		.as<std::string>(_spawnUnit);
 	_specab			= static_cast<SpecialAbility>(node["specab"].as<int>(_specab));
 
 	if (node["deathSound"])
@@ -349,13 +349,15 @@ const bool RuleUnit::isPsiImmune() const
 }
 
 /**
- * Gets if this unit can open a door w/ RMB click.
- * @note Units can always open doors by moving through them if space permits.
+ * Gets if this unit can open a door w/ RMB click or prime a grenade during
+ * battle.
+ * @note Units can always open doors by moving through them if space permits as
+ * well as prime grenades if in preBattle inventory.
  * @return, true if this unit can open doors
  */
-const bool RuleUnit::canOpenDoor() const
+const bool RuleUnit::hasHands() const
 {
-	return _canOpenDoor;
+	return _hasHands;
 }
 
 }

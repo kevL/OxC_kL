@@ -87,6 +87,10 @@ ActionMenuState::ActionMenuState(
 	const RuleItem* const itRule = _action->weapon->getRules();
 	size_t id = 0;
 
+	const bool hasHands = _action->actor->getGeoscapeSoldier() != NULL
+					   || _action->actor->getUnitRules()->hasHands() == true
+					   || _action->weapon->getRules()->isFixed() == true;
+
 	if (itRule->isFixed() == false) // Throw & Drop (if not a fixed weapon)
 	{
 		addItem(
@@ -95,6 +99,7 @@ ActionMenuState::ActionMenuState(
 				&id);
 
 		if (injured == false
+			&& hasHands == true
 			&& _action->actor->getBaseStats()->throwing != 0)
 		{
 			addItem(
@@ -109,6 +114,7 @@ ActionMenuState::ActionMenuState(
 		if (itRule->getTUMelee() != 0) // TODO: remove 'HIT' action-items if no target in range.
 		{
 			if (injured == false
+				&& hasHands == true
 				&& itRule->getBattleType() == BT_MELEE
 				&& itRule->getDamageType() == DT_STUN)
 			{
@@ -117,7 +123,9 @@ ActionMenuState::ActionMenuState(
 						"STR_STUN",
 						&id);
 			}
-			else if (itRule->getType() == "STR_DOGE")
+//			else if (itRule->getType() == "STR_DOGE")
+			else if (_action->actor->getUnitRules() != NULL
+				&& _action->actor->getUnitRules()->isDog() == true)
 			{
 				addItem( // doggie bite
 						BA_HIT,
@@ -128,104 +136,112 @@ ActionMenuState::ActionMenuState(
 						"STR_DOGE_BARK",
 						&id);
 			}
-			else if (injured == false)
+			else if (injured == false
+				&& hasHands == true)
+			{
 				addItem( // melee weapon
 						BA_HIT,
 						"STR_HIT_MELEE",
 						&id);
+			}
 		}
 
-		if (itRule->isGrenade() == true)
+		if (hasHands == true)
 		{
-			if (_action->weapon->getFuse() == -1) // canPrime
-				addItem(
-						BA_PRIME,
-						"STR_PRIME_GRENADE",
-						&id);
-			else
-				addItem(
-						BA_DEFUSE,
-						"STR_DEFUSE_GRENADE",
-						&id);
-		}
-		else if (injured == false // special items
-			&& itRule->getBattleType() == BT_MEDIKIT)
-		{
-			addItem(
-					BA_USE,
-					"STR_USE_MEDI_KIT",
-					&id);
-		}
-		else if (injured == false
-			&& itRule->getBattleType() == BT_SCANNER)
-		{
-			addItem(
-					BA_USE,
-					"STR_USE_SCANNER",
-					&id);
-		}
-		else if (injured == false
-			&& itRule->getBattleType() == BT_PSIAMP
-			&& _action->actor->getBaseStats()->psiSkill != 0)
-		{
-			addItem(
-					BA_PSICONTROL,
-					"STR_MIND_CONTROL",
-					&id);
-			addItem(
-					BA_PSIPANIC,
-					"STR_PANIC_UNIT",
-					&id);
-			addItem(
-					BA_PSICONFUSE,
-					"STR_CONFUSE_UNIT",
-					&id);
-			addItem(
-					BA_PSICOURAGE,
-					"STR_ENCOURAGE_UNIT",
-					&id);
-		}
-		else if (injured == false
-			&& itRule->getBattleType() == BT_MINDPROBE)
-		{
-			addItem(
-					BA_USE,
-					"STR_USE_MIND_PROBE",
-					&id);
-		}
-		else if (injured == false
-			&& itRule->getBattleType() == BT_FIREARM)
-		{
-			if (_action->weapon->getAmmoItem() != NULL)
+			if (itRule->isGrenade() == true)
 			{
-				if (itRule->getAccuracySnap() != 0)
+				if (_action->weapon->getFuse() == -1) // canPrime
 					addItem(
-							BA_SNAPSHOT,
-							"STR_SNAP_SHOT",
+							BA_PRIME,
+							"STR_PRIME_GRENADE",
 							&id);
-
-				if (itRule->getAccuracyAuto() != 0)
+				else
 					addItem(
-							BA_AUTOSHOT,
-							"STR_AUTO_SHOT",
-							&id);
-
-				if (itRule->getAccuracyAimed() != 0)
-					addItem(
-							BA_AIMEDSHOT,
-							"STR_AIMED_SHOT",
+							BA_DEFUSE,
+							"STR_DEFUSE_GRENADE",
 							&id);
 			}
-
-			if (injured == false
-				&& (itRule->isWaypoints() != 0
-					|| (_action->weapon->getAmmoItem() != NULL
-						&& _action->weapon->getAmmoItem()->getRules()->isWaypoints() != 0)))
+			else if (injured == false) // special items
 			{
-				addItem(
-						BA_LAUNCH,
-						"STR_LAUNCH_MISSILE",
-						&id);
+				if (itRule->getBattleType() == BT_MEDIKIT)
+				{
+					addItem(
+							BA_USE,
+							"STR_USE_MEDI_KIT",
+							&id);
+				}
+				else if (injured == false
+					&& itRule->getBattleType() == BT_SCANNER)
+				{
+					addItem(
+							BA_USE,
+							"STR_USE_SCANNER",
+							&id);
+				}
+				else if (injured == false
+					&& itRule->getBattleType() == BT_PSIAMP
+					&& _action->actor->getBaseStats()->psiSkill != 0)
+				{
+					addItem(
+							BA_PSICONTROL,
+							"STR_MIND_CONTROL",
+							&id);
+					addItem(
+							BA_PSIPANIC,
+							"STR_PANIC_UNIT",
+							&id);
+					addItem(
+							BA_PSICONFUSE,
+							"STR_CONFUSE_UNIT",
+							&id);
+					addItem(
+							BA_PSICOURAGE,
+							"STR_ENCOURAGE_UNIT",
+							&id);
+				}
+				else if (injured == false
+					&& itRule->getBattleType() == BT_MINDPROBE)
+				{
+					addItem(
+							BA_USE,
+							"STR_USE_MIND_PROBE",
+							&id);
+				}
+				else if (injured == false
+					&& itRule->getBattleType() == BT_FIREARM)
+				{
+					if (_action->weapon->getAmmoItem() != NULL)
+					{
+						if (itRule->getAccuracySnap() != 0)
+							addItem(
+									BA_SNAPSHOT,
+									"STR_SNAP_SHOT",
+									&id);
+
+						if (itRule->getAccuracyAuto() != 0)
+							addItem(
+									BA_AUTOSHOT,
+									"STR_AUTO_SHOT",
+									&id);
+
+						if (itRule->getAccuracyAimed() != 0)
+							addItem(
+									BA_AIMEDSHOT,
+									"STR_AIMED_SHOT",
+									&id);
+					}
+
+					if (injured == false
+						&& (itRule->isWaypoints() != 0
+							|| (_action->weapon->getAmmoItem() != NULL
+								&& _action->weapon->getAmmoItem()->getRules()->isWaypoints() != 0)))
+					{
+						addItem(
+								BA_LAUNCH,
+								"STR_LAUNCH_MISSILE",
+								&id);
+					}
+				}
 			}
 		}
 
