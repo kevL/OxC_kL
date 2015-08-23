@@ -115,7 +115,7 @@ ProjectileFlyBState::~ProjectileFlyBState()
 /**
  * Initializes the sequence:
  * - checks if the shot is valid
- * - calculates the base accuracy
+ * - determines the target voxel
  */
 void ProjectileFlyBState::init()
 {
@@ -124,54 +124,51 @@ void ProjectileFlyBState::init()
 		return;
 
 	_initialized = true;
-
-
-	_parent->getCurrentAction()->takenXP = false;
+	_parent->getCurrentAction()->takenXp = false;
 
 	_unit = _action.actor;
 
-	if (_action.weapon != NULL)
-		_ammo = _action.weapon->getAmmoItem(); // the weapon itself if not-req'd. eg, lasers/melee
-
-
-	const bool targetTileValid = (_battleSave->getTile(_action.target) != NULL);
-	bool
-		reactionValid = false,
-		popThis = false;
-
-	if (targetTileValid == true)
-	{
-		const BattleUnit* const targetUnit = _battleSave->getTile(_action.target)->getUnit();
-		reactionValid = targetUnit != NULL
-//					 && targetUnit->isOut(true, true) == false
-					 && targetUnit->isOut_t() == false
-					 && targetUnit == _battleSave->getSelectedUnit()
-					 && _ammo != NULL;
-	}
-
+	bool popThis = false;
 
 	if (_unit->isOut_t() == true
-//		_unit->isOut(true, true) == true
 		|| _action.weapon == NULL
-		|| targetTileValid == false)
+		|| _battleSave->getTile(_action.target) == NULL)
 	{
 		popThis = true;
 	}
-	else if (_parent->getPanicHandled() == true
-		&& _action.type != BA_HIT // done in ActionMenuState -> Exactly. So do NOT re-evaluate it here.
-		&& _unit->getTimeUnits() < _action.TU)
+	else
 	{
-		_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
-		popThis = true;
-	}
-	else if (_unit->getStopShot() == true
-		|| (_unit->getFaction() != _battleSave->getSide()
-			&& reactionValid == false))
-	{
-		_unit->setTimeUnits(_unit->getTimeUnits() + _action.TU);
-		popThis = true;
-	}
+		_ammo = _action.weapon->getAmmoItem();
 
+		if (_ammo == NULL)
+			popThis = true;
+		else
+		{
+			if (_unit->getFaction() == FACTION_PLAYER
+				&& _parent->getPanicHandled() == true
+				&& _action.type != BA_HIT
+				&& _unit->getTimeUnits() < _action.TU)
+			{
+				_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
+				popThis = true;
+			}
+			else
+			{
+				const BattleUnit* const targetUnit = _battleSave->getTile(_action.target)->getUnit();
+				const bool rfValid = targetUnit != NULL
+								  && targetUnit->isOut_t() == false
+								  && targetUnit == _battleSave->getSelectedUnit()
+								  && _unit->getFaction() != _battleSave->getSide();
+
+				if (rfValid == false
+					|| _unit->getStopShot() == true)
+				{
+					_unit->setTimeUnits(_unit->getTimeUnits() + _action.TU);
+					popThis = true;
+				}
+			}
+		}
+	}
 
 	if (popThis == true)
 	{
@@ -223,56 +220,47 @@ void ProjectileFlyBState::init()
 			{
 				//Log(LOG_INFO) << ". . . no ammo, EXIT";
 				_action.result = "STR_NO_AMMUNITION_LOADED";
-
-				_parent->popState();
-				return;
+				popThis = true;
 			}
 			else if (_ammo->getAmmoQuantity() == 0)
 			{
 				//Log(LOG_INFO) << ". . . no ammo Quantity, EXIT";
 				_action.result = "STR_NO_ROUNDS_LEFT";
-
-				_parent->popState();
-				return;
+				popThis = true;
 			}
-			else if ( //_action.weapon->getRules()->getMaxRange() > 0 &&	// in case -1 gets used for infinite, or no shot allowed.
-																			// But this is just stupid. RuleItem defaults _maxRange @ 200
-				_parent->getTileEngine()->distance(
-												_unit->getPosition(),
-												_action.target) > _action.weapon->getRules()->getMaxRange())
+			else if (_parent->getTileEngine()->distance(
+													_unit->getPosition(),
+													_action.target) > _action.weapon->getRules()->getMaxRange())
 			{
 				//Log(LOG_INFO) << ". . . out of range, EXIT";
 				_action.result = "STR_OUT_OF_RANGE";
-
-				_parent->popState();
-				return;
+				popThis = true;
 			}
 		break;
 
 		case BA_THROW:
 		{
 			//Log(LOG_INFO) << ". . BA_THROW panic = " << (int)(_parent->getPanicHandled() == false);
-			const Position originVoxel = _parent->getTileEngine()->getOriginVoxel(_action);
 			if (validThrowRange(
 							&_action,
-							originVoxel,
+							_parent->getTileEngine()->getOriginVoxel(_action),
 							destTile) == false)
 			{
 				//Log(LOG_INFO) << ". . . not valid throw range, EXIT";
 				_action.result = "STR_OUT_OF_RANGE";
-
-				_parent->popState();
-				return;
+				popThis = true;
 			}
-
-			if (destTile != NULL
-				&& destTile->getTerrainLevel() == -24
-				&& destTile->getPosition().z + 1 < _battleSave->getMapSizeZ())
+			else
 			{
-				_action.target.z += 1;
-			}
+				_prjItem = _action.weapon;
 
-			_prjItem = _action.weapon;
+				if (destTile != NULL
+					&& destTile->getTerrainLevel() == -24
+					&& destTile->getPosition().z + 1 < _battleSave->getMapSizeZ())
+				{
+					_action.target.z += 1;
+				}
+			}
 		}
 		break;
 
@@ -300,18 +288,23 @@ void ProjectileFlyBState::init()
 
 		default:
 			//Log(LOG_INFO) << ". . default, EXIT";
-			_parent->popState();
+			popThis = true;
+	}
+
+	if (popThis == true)
+	{
+		_parent->popState();
 		return;
 	}
 
 
-	if (_action.type == BA_LAUNCH
-		|| (_unit->getFaction() == FACTION_PLAYER		//_battleSave->getSide() -> note: don't let aLien ReactionFire in here by holding CRTL.
-			&& (SDL_GetModState() & KMOD_CTRL) != 0		// force fire by pressing CTRL but not SHIFT
-			&& (SDL_GetModState() & KMOD_SHIFT) == 0
-			&& _parent->getPanicHandled() == true		// don't let player alter this when berserking.
-			&& Options::forceFire == true)
-		|| _parent->getPanicHandled() == false)
+	// ** TARGETING ** ->
+	if ((_unit->getFaction() == FACTION_PLAYER // force fire by pressing CTRL(center) [+ ALT(floor)] but *not* SHIFT
+			&& (SDL_GetModState() & KMOD_CTRL) != 0
+			&& Options::forceFire == true
+			&& (SDL_GetModState() & KMOD_SHIFT) == 0)
+		|| _parent->getPanicHandled() == false // note that nonPlayer berserk bypasses this and targets according to targetUnit OR tileParts below_
+		|| _action.type == BA_LAUNCH)
 	{
 		//Log(LOG_INFO) << "projFlyB init() targetPosTile[0] = " << _action.target;
 		_targetVoxel = Position( // target nothing, targets the middle of the tile
@@ -330,7 +323,8 @@ void ProjectileFlyBState::init()
 			//Log(LOG_INFO) << "projFlyB init() targetPosVoxel[0].y = " << static_cast<float>(_targetVoxel.y) / 16.f;
 			//Log(LOG_INFO) << "projFlyB init() targetPosVoxel[0].z = " << static_cast<float>(_targetVoxel.z) / 24.f;
 		}
-		else if ((SDL_GetModState() & KMOD_ALT) != 0) // CTRL+ALT targets floor even if a unit is at targetTile.
+		else if (_parent->getPanicHandled() == true
+			&& (SDL_GetModState() & KMOD_ALT) != 0) // CTRL+ALT targets floor even if a unit is at targetTile.
 		{
 			//Log(LOG_INFO) << "projFlyB targetPos[1] = " << _action.target;
 			_targetVoxel.z -= 10; // force fire at floor (useful for HE ammo-types)
@@ -357,15 +351,17 @@ void ProjectileFlyBState::init()
 		const Position originVoxel = _parent->getTileEngine()->getOriginVoxel(
 																		_action,
 																		_battleSave->getTile(_origin));
-		const Tile* const targetTile = _battleSave->getTile(_action.target);
+		const Tile* const tileTarget = _battleSave->getTile(_action.target);
 
-		if (targetTile->getUnit() != NULL
-			&& (SDL_GetModState() & KMOD_SHIFT) == 0
-			&& (SDL_GetModState() & KMOD_CTRL) == 0)
+		if (tileTarget->getUnit() != NULL
+			&& (_unit->getFaction() != FACTION_PLAYER
+				|| (((SDL_GetModState() & KMOD_SHIFT) == 0
+						&& (SDL_GetModState() & KMOD_CTRL) == 0)
+					|| Options::forceFire == false)))
 		{
-			//Log(LOG_INFO) << ". targetTile has unit";
+			//Log(LOG_INFO) << ". tileTarget has unit";
 			if (_origin == _action.target
-				|| targetTile->getUnit() == _unit)
+				|| tileTarget->getUnit() == _unit)
 			{
 				//Log(LOG_INFO) << "projFlyB targetPos[2] = " << _action.target;
 				_targetVoxel = Position( // don't shoot yourself but shoot at the floor
@@ -377,17 +373,19 @@ void ProjectileFlyBState::init()
 			else
 				_parent->getTileEngine()->canTargetUnit( // <- this is a normal shot by xCom or aLiens.
 													&originVoxel,
-													targetTile,
+													tileTarget,
 													&_targetVoxel,
 													_unit);
 		}
-		else if (targetTile->getMapData(O_OBJECT) != NULL	// bypass Content-Object when pressing SHIFT
-			&& (SDL_GetModState() & KMOD_SHIFT) == 0)		// force vs. Object by using CTRL above^
+		else if (tileTarget->getMapData(O_OBJECT) != NULL	// bypass Content-Object when pressing SHIFT
+			&& (_unit->getFaction() != FACTION_PLAYER		// non-Player units cannot target tileParts ... but they might someday.
+				|| (SDL_GetModState() & KMOD_SHIFT) == 0	// force vs. Object by using CTRL above^
+				|| Options::forceFire == false))
 		{
-			//Log(LOG_INFO) << ". targetTile has content-object";
+			//Log(LOG_INFO) << ". tileTarget has content-object";
 			if (_parent->getTileEngine()->canTargetTile(
 													&originVoxel,
-													targetTile,
+													tileTarget,
 													O_OBJECT,
 													&_targetVoxel,
 													_unit) == false)
@@ -398,13 +396,15 @@ void ProjectileFlyBState::init()
 									_action.target.z * 24 + 10);
 			}
 		}
-		else if (targetTile->getMapData(O_NORTHWALL) != NULL // force Northwall when pressing SHIFT but not CTRL
-			&& (SDL_GetModState() & KMOD_CTRL) == 0)
+		else if (tileTarget->getMapData(O_NORTHWALL) != NULL // force Northwall when pressing SHIFT but not CTRL
+			&& (_unit->getFaction() != FACTION_PLAYER
+				|| (SDL_GetModState() & KMOD_CTRL) == 0
+				|| Options::forceFire == false))
 		{
-			//Log(LOG_INFO) << ". targetTile has northwall";
+			//Log(LOG_INFO) << ". tileTarget has northwall";
 			if (_parent->getTileEngine()->canTargetTile(
 													&originVoxel,
-													targetTile,
+													tileTarget,
 													O_NORTHWALL,
 													&_targetVoxel,
 													_unit) == false)
@@ -415,12 +415,12 @@ void ProjectileFlyBState::init()
 									_action.target.z * 24 + 10);
 			}
 		}
-		else if (targetTile->getMapData(O_WESTWALL) != NULL) // force Westwall when pressing SHIFT+CTRL
+		else if (tileTarget->getMapData(O_WESTWALL) != NULL) // force Westwall when pressing SHIFT+CTRL
 		{
-			//Log(LOG_INFO) << ". targetTile has westwall";
+			//Log(LOG_INFO) << ". tileTarget has westwall";
 			if (_parent->getTileEngine()->canTargetTile(
 													&originVoxel,
-													targetTile,
+													tileTarget,
 													O_WESTWALL,
 													&_targetVoxel,
 													_unit) == false)
@@ -431,12 +431,12 @@ void ProjectileFlyBState::init()
 									_action.target.z * 24 + 10);
 			}
 		}
-		else if (targetTile->getMapData(O_FLOOR) != NULL) // CTRL+ALT forced-shot is handled above^
+		else if (tileTarget->getMapData(O_FLOOR) != NULL) // CTRL+ALT forced-shot is handled above^
 		{
-			//Log(LOG_INFO) << ". targetTile has floor";
+			//Log(LOG_INFO) << ". tileTarget has floor";
 			if (_parent->getTileEngine()->canTargetTile(
 													&originVoxel,
-													targetTile,
+													tileTarget,
 													O_FLOOR,
 													&_targetVoxel,
 													_unit) == false)
@@ -449,7 +449,7 @@ void ProjectileFlyBState::init()
 		}
 		else // target nothing, targets the middle of the tile
 		{
-			//Log(LOG_INFO) << ". targetTile is void";
+			//Log(LOG_INFO) << ". tileTarget is void";
 			_targetVoxel = Position(
 								_action.target.x * 16 + 8,
 								_action.target.y * 16 + 8,

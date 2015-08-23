@@ -2384,14 +2384,14 @@ BattleUnit* TileEngine::hit(
 
 
 				if (melee == false
-					&& _battleSave->getBattleGame()->getCurrentAction()->takenXP == false
+					&& _battleSave->getBattleGame()->getCurrentAction()->takenXp == false
 					&& targetUnit->getOriginalFaction() == FACTION_HOSTILE
 					&& attacker != NULL
 					&& attacker->getGeoscapeSoldier() != NULL
 					&& attacker->getFaction() == attacker->getOriginalFaction()
 					&& _battleSave->getBattleGame()->getPanicHandled() == true)
 				{
-					_battleSave->getBattleGame()->getCurrentAction()->takenXP = true;
+					_battleSave->getBattleGame()->getCurrentAction()->takenXp = true;
 					attacker->addFiringExp();
 				}
 			}
@@ -2516,7 +2516,7 @@ void TileEngine::explode(
 		sin_fi,
 		cos_fi;
 
-	bool takenXP = false;
+	bool takenXp = false;
 
 //	int testIter = 0; // TEST.
 	//Log(LOG_INFO) << ". r_Max = " << r_Max;
@@ -3145,14 +3145,14 @@ void TileEngine::explode(
 								//Log(LOG_INFO) << "TE::explode() " << targetUnit->getId() << " killedBy = " << (int)attacker->getFaction();
 							}
 
-							if (takenXP == false
+							if (takenXp == false
 								&& attacker->getGeoscapeSoldier() != NULL
 								&& attacker->getFaction() == attacker->getOriginalFaction()
 								&& targetUnit->getOriginalFaction() == FACTION_HOSTILE
 								&& dType != DT_SMOKE
 								&& _battleSave->getBattleGame()->getPanicHandled() == true)
 							{
-								takenXP = true;
+								takenXp = true;
 
 								if (grenade == false)
 									attacker->addFiringExp();

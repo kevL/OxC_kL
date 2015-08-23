@@ -2308,7 +2308,7 @@ double BattleUnit::getAccuracy(
 	}
 
 	if (_battleGame->getPanicHandled() == false) // berserk xCom agents get lowered accuracy.
-		ret *= 0.66;
+		ret *= 0.68;
 
 	return ret;
 }

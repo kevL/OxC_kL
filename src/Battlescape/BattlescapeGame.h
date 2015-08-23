@@ -77,7 +77,7 @@ struct BattleAction
 		finalAction,
 		dash,
 		strafe,
-		takenXP,
+		takenXp,
 		targeting;
 	int
 		autoShotCount,
@@ -119,7 +119,7 @@ struct BattleAction
 			finalFacing(-1),
 			finalAction(false),
 			number(0),
-			takenXP(false)
+			takenXp(false)
 	{}
 
 	public:
@@ -144,7 +144,7 @@ struct BattleAction
 			finalFacing = -1;
 			finalAction = false;
 			number = 0;
-			takenXP = false;
+			takenXp = false;
 			waypoints.clear();
 		}
 };

@@ -4650,7 +4650,7 @@
 	"../Ruleset/RuleItem.h"
 	"../Ruleset/RuleUnit.h"
 
-1440280317 f:\git\openxcom\src\battlescape\battlescapegame.h
+1440293241 f:\git\openxcom\src\battlescape\battlescapegame.h
 	"Position.h"
 
 1432586518 f:\git\openxcom\src\battlescape\position.h
@@ -7091,7 +7091,7 @@
 
 1440173244 f:\git\openxcom\src\ufopaedia\ufopaedia.h
 
-1440282272 source:f:\git\openxcom\src\geoscape\globe.cpp
+1440284354 source:f:\git\openxcom\src\geoscape\globe.cpp
 	"Globe.h"
 	"GeoscapeState.h"
 	"../Engine/Action.h"
