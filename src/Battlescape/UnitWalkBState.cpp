@@ -423,10 +423,10 @@ bool UnitWalkBState::doStatusStand() // private.
 		}
 		//else Log(LOG_INFO) << ". STANDING no strafe.";
 
-		//Log(LOG_INFO) << ". getTUCostPF() & dest";
+		//Log(LOG_INFO) << ". getTuCostPf() & dest";
 		Position dest;
 		int
-			tuCost = _pf->getTUCostPF( // gets tu cost but also sets the destination position.
+			tuCost = _pf->getTuCostPf( // gets tu cost but also sets the destination position.
 								_unit->getPosition(),
 								dir,
 								&dest),
@@ -442,9 +442,9 @@ bool UnitWalkBState::doStatusStand() // private.
 			&& _unit->getArmor()->getDamageModifier(DT_IN) > 0.f)
 		{
 			//Log(LOG_INFO) << ". . subtract tu inflation for a fireTile";
-			// The TU cost was artificially inflated by 32 points in getTUCostPF
+			// The TU cost was artificially inflated by 32 points in getTuCostPf
 			// so it has to be deflated again here under the same conditions.
-			// See: Pathfinding::getTUCostPF(), where TU cost was inflated.
+			// See: Pathfinding::getTuCostPf(), where TU cost was inflated.
 			tuCost -= 32;
 			//Log(LOG_INFO) << ". . subtract tu inflation for a fireTile DONE";
 		}

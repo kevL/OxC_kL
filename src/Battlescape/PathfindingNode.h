@@ -71,7 +71,7 @@ private:
 		{ _checked = true; }
 
 		/// Gets this Node's TU cost.
-		int getTUCostNode(bool missile = false) const;
+		int getTuCostNode(bool missile = false) const;
 		/// Gets the approximate cost to reach the target position.
 		int getTUGuess() const
 		{ return _tuGuess; }
@@ -118,7 +118,7 @@ public:
 	 */
 	bool operator() (const PathfindingNode* a, const PathfindingNode* b) const
 	{
-		return (a->getTUCostNode() < b->getTUCostNode());
+		return (a->getTuCostNode() < b->getTuCostNode());
 	}
 };
 

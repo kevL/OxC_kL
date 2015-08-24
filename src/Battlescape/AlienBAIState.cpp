@@ -879,7 +879,7 @@ void AlienBAIState::setupAmbush() // private.
 			{
 				--tries;
 
-				pf->getTUCostPF(
+				pf->getTuCostPf(
 							pos,
 							path.back(),
 							&nextPos);

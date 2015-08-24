@@ -78,7 +78,7 @@ bool PathfindingNode::getChecked() const
  * @param missile - true if this is a missile (default false)
  * @return, TU cost
  */
-int PathfindingNode::getTUCostNode(bool missile) const
+int PathfindingNode::getTuCostNode(bool missile) const
 {
 	if (missile == true)
 		return 0;

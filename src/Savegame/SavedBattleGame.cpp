@@ -2294,7 +2294,7 @@ bool SavedBattleGame::setUnitPosition(
 				if (tile == NULL
 					|| (tile->getUnit() != NULL
 						&& tile->getUnit() != unit)
-					|| tile->getTUCostTile(
+					|| tile->getTuCostTile(
 										O_OBJECT,
 										unit->getMoveTypeUnit()) == 255
 					|| (tile->hasNoFloor(tileBelow) == true

@@ -3923,10 +3923,10 @@ void BattlescapeState::updateTileInfo(const Tile* const tile)
 
 		MovementType moveType = unit->getMoveTypeUnit();
 
-		tuCost = tile->getTUCostTile(
+		tuCost = tile->getTuCostTile(
 								O_FLOOR,
 								moveType)
-			   + tile->getTUCostTile(
+			   + tile->getTuCostTile(
 								O_OBJECT,
 								moveType);
 
@@ -4117,8 +4117,8 @@ void BattlescapeState::saveAIMap()
 			rect.x = static_cast<Sint16>(x) * static_cast<Sint16>(rect.w);
 			rect.y = static_cast<Sint16>(y) * static_cast<Sint16>(rect.h);
 
-			if (t->getTUCostTile(O_FLOOR, MT_FLY) != 255
-				&& t->getTUCostTile(O_OBJECT, MT_FLY) != 255)
+			if (t->getTuCostTile(O_FLOOR, MT_FLY) != 255
+				&& t->getTuCostTile(O_OBJECT, MT_FLY) != 255)
 			{
 				SDL_FillRect(
 						img,
@@ -4215,7 +4215,7 @@ void BattlescapeState::saveAIMap()
 			}
 
 			if (t->getMapData(O_NORTHWALL)
-				&& t->getMapData(O_NORTHWALL)->getTUCostData(MT_FLY) == 255)
+				&& t->getMapData(O_NORTHWALL)->getTuCostPart(MT_FLY) == 255)
 			{
 				lineRGBA(
 						img,
@@ -4230,7 +4230,7 @@ void BattlescapeState::saveAIMap()
 			}
 
 			if (t->getMapData(O_WESTWALL)
-				&& t->getMapData(O_WESTWALL)->getTUCostData(MT_FLY) == 255)
+				&& t->getMapData(O_WESTWALL)->getTuCostPart(MT_FLY) == 255)
 			{
 				lineRGBA(
 						img,

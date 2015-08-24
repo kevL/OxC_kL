@@ -4592,7 +4592,7 @@
 	"MapData.h"
 	"Unit.h"
 
-1440030893 f:\git\openxcom\src\ruleset\mapdata.h
+1440429890 f:\git\openxcom\src\ruleset\mapdata.h
 	"RuleItem.h"
 
 1440360309 f:\git\openxcom\src\ruleset\ruleitem.h
@@ -5359,7 +5359,7 @@
 1430149550 f:\git\openxcom\src\interface\frame.h
 	"../Engine/Surface.h"
 
-1440382311 source:f:\git\openxcom\src\battlescape\actionmenustate.cpp
+1440385194 source:f:\git\openxcom\src\battlescape\actionmenustate.cpp
 	"ActionMenuState.h"
 	"ActionMenuItem.h"
 	"ExecuteState.h"
@@ -5387,7 +5387,7 @@
 1439006904 f:\git\openxcom\src\battlescape\medikitstate.h
 	"../Engine/State.h"
 
-1440023670 f:\git\openxcom\src\battlescape\pathfinding.h
+1440444360 f:\git\openxcom\src\battlescape\pathfinding.h
 	"PathfindingNode.h"
 	"Position.h"
 	"../Ruleset/MapData.h"
@@ -5406,12 +5406,12 @@
 
 1440359613 f:\git\openxcom\src\savegame\battleitem.h
 
-1440096169 f:\git\openxcom\src\savegame\tile.h
+1440429801 f:\git\openxcom\src\savegame\tile.h
 	"BattleUnit.h"
 	"../Battlescape/Position.h"
 	"../Ruleset/MapData.h"
 
-1440359493 source:f:\git\openxcom\src\battlescape\alienbaistate.cpp
+1440429860 source:f:\git\openxcom\src\battlescape\alienbaistate.cpp
 	"AlienBAIState.h"
 	"../Battlescape/BattlescapeState.h"
 	"../Battlescape/Map.h"
@@ -5468,7 +5468,7 @@
 1432984133 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1440359613 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1440429801 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	"AlienBAIState.h"
 	"BattlescapeState.h"
@@ -5553,7 +5553,7 @@
 
 1440163450 f:\git\openxcom\src\ruleset\ruleinventory.h
 
-1440379499 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
+1440429890 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
 	"BattlescapeGenerator.h"
 	"AlienBAIState.h"
 	"CivilianBAIState.h"
@@ -5593,7 +5593,7 @@
 	"../Savegame/Ufo.h"
 	"../Savegame/Vehicle.h"
 
-1439823584 f:\git\openxcom\src\battlescape\inventory.h
+1440429801 f:\git\openxcom\src\battlescape\inventory.h
 	"../Engine/InteractiveSurface.h"
 
 1440037317 f:\git\openxcom\src\engine\crossplatform.h
@@ -5634,7 +5634,7 @@
 1430149550 f:\git\openxcom\src\battlescape\battlescapemessage.h
 	"../Engine/Surface.h"
 
-1440379499 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1440429890 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	"AbortMissionState.h"
 	"ActionMenuState.h"
@@ -5906,7 +5906,7 @@
 	"../Interface/Frame.h"
 	"../Interface/Text.h"
 
-1440379754 source:f:\git\openxcom\src\battlescape\inventory.cpp
+1440429801 source:f:\git\openxcom\src\battlescape\inventory.cpp
 	"Inventory.h"
 	"PrimeGrenadeState.h"
 	"TileEngine.h"
@@ -5937,7 +5937,7 @@
 	<SDL.h>
 	<yaml-cpp/yaml.h>
 
-1440379499 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
+1440429801 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
 	"InventoryState.h"
 	"BattlescapeState.h"
 	"Inventory.h"
@@ -5963,7 +5963,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1440379500 source:f:\git\openxcom\src\battlescape\map.cpp
+1440429890 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	"BattlescapeMessage.h"
 	"BattlescapeState.h"
@@ -6097,7 +6097,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1440275402 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
+1440442472 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
 	"Pathfinding.h"
 	"PathfindingNode.h"
 	"PathfindingOpenSet.h"
@@ -6107,15 +6107,15 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1433285277 f:\git\openxcom\src\battlescape\pathfindingnode.h
+1440429801 f:\git\openxcom\src\battlescape\pathfindingnode.h
 	"Position.h"
 
 1433285430 f:\git\openxcom\src\battlescape\pathfindingopenset.h
 
-1433285277 source:f:\git\openxcom\src\battlescape\pathfindingnode.cpp
+1440429801 source:f:\git\openxcom\src\battlescape\pathfindingnode.cpp
 	"PathfindingNode.h"
 
-1432973886 source:f:\git\openxcom\src\battlescape\pathfindingopenset.cpp
+1440429801 source:f:\git\openxcom\src\battlescape\pathfindingopenset.cpp
 	"PathfindingOpenSet.h"
 	"PathfindingNode.h"
 
@@ -6136,7 +6136,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1440108312 source:f:\git\openxcom\src\battlescape\projectile.cpp
+1440429890 source:f:\git\openxcom\src\battlescape\projectile.cpp
 	"Projectile.h"
 	"Map.h"
 	"Camera.h"
@@ -6209,7 +6209,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1440363098 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1440429890 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	"AlienBAIState.h"
 	"BattlescapeState.h"
@@ -6324,7 +6324,7 @@
 	"../Savegame/BattleUnit.h"
 	"../Savegame/SavedBattleGame.h"
 
-1440381070 source:f:\git\openxcom\src\battlescape\unitwalkbstate.cpp
+1440429860 source:f:\git\openxcom\src\battlescape\unitwalkbstate.cpp
 	"UnitWalkBState.h"
 	"BattlescapeState.h"
 	"Camera.h"
@@ -7135,7 +7135,7 @@
 	<vector>
 	"ShaderDraw.h"
 
-1440098212 source:f:\git\openxcom\src\geoscape\graphsstate.cpp
+1440386614 source:f:\git\openxcom\src\geoscape\graphsstate.cpp
 	"GraphsState.h"
 	"../Engine/Action.h"
 	"../Engine/Game.h"
@@ -8241,7 +8241,7 @@
 	"MapBlock.h"
 	"../Battlescape/Position.h"
 
-1440030893 source:f:\git\openxcom\src\ruleset\mapdata.cpp
+1440429890 source:f:\git\openxcom\src\ruleset\mapdata.cpp
 	"MapData.h"
 	"MapDataSet.h"
 
@@ -8542,7 +8542,7 @@
 	"../Interface/Text.h"
 	"../Ruleset/RuleResearch.h"
 
-1440384714 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
+1440429801 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
 	"SavedBattleGame.h"
 	"BattleItem.h"
 	"Node.h"
@@ -8628,7 +8628,7 @@
 	"TerrorSite.h"
 	"../Engine/Language.h"
 
-1440359454 source:f:\git\openxcom\src\savegame\tile.cpp
+1440435370 source:f:\git\openxcom\src\savegame\tile.cpp
 	"Tile.h"
 	"BattleItem.h"
 	"SerializationHelper.h"

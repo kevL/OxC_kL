@@ -385,7 +385,7 @@ void MapData::setSpecialType(SpecialTileType type)
  * @param moveType - the movement type
  * @return, the TU cost
  */
-int MapData::getTUCostData(MovementType moveType) const
+int MapData::getTuCostPart(MovementType moveType) const
 {
 	switch (moveType)
 	{

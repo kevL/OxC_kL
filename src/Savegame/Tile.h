@@ -145,7 +145,7 @@ protected:
 				const bool testVolatiles = true) const;
 
 		/// Gets the TU cost to walk over a certain part of the Tile.
-		int getTUCostTile(
+		int getTuCostTile(
 				MapDataType part,
 				MovementType moveType) const;
 

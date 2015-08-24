@@ -208,7 +208,7 @@ private:
 		void setSpecialType(SpecialTileType type);
 
 		/// Gets the TU cost to move over the object.
-		int getTUCostData(MovementType moveType) const;
+		int getTuCostPart(MovementType moveType) const;
 		/// Sets the TU cost to move over the object.
 		void setTUCosts(
 				int walk,

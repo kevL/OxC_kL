@@ -4718,7 +4718,7 @@ int TileEngine::unitOpensDoor(
 					else
 						part = O_WESTWALL;
 
-					tuCost = tile->getTUCostTile(
+					tuCost = tile->getTuCostTile(
 											part,
 											unit->getMoveTypeUnit());
 					//Log(LOG_INFO) << ". normal door, RMB, part = " << part << ", TUcost = " << tuCost;
@@ -4726,7 +4726,7 @@ int TileEngine::unitOpensDoor(
 				else if (door == 1
 					|| door == 4)
 				{
-					tuCost = tile->getTUCostTile(
+					tuCost = tile->getTuCostTile(
 											part,
 											unit->getMoveTypeUnit());
 					//Log(LOG_INFO) << ". UFO door, part = " << part << ", TUcost = " << tuCost;
@@ -5311,7 +5311,7 @@ bool TileEngine::validateThrow(
 			|| targetTile->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NWSE))
 //		&& (action.weapon->getRules()->getBattleType() == BT_GRENADE
 //			|| action.weapon->getRules()->getBattleType() == BT_PROXYGRENADE)
-//		&& targetTile->getMapData(O_OBJECT)->getTUCostData(MT_WALK) == 255)
+//		&& targetTile->getMapData(O_OBJECT)->getTuCostPart(MT_WALK) == 255)
 	{
 		return false; // prevent Grenades from landing on diagonal BigWalls.
 	}

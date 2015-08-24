@@ -124,7 +124,7 @@ GraphsState::GraphsState(int curGraph)
 	_btnFinance		= new InteractiveSurface(31, 24, 257);
 	_btnGeoscape	= new InteractiveSurface(31, 24, 289);
 
-	_btnReset		= new TextButton(40, 16, 97, 26);
+	_btnReset		= new TextButton(40, 16, 96, 26);
 
 	_txtTitle		= new Text(220, 17, 100, 28);
 	_txtFactor		= new Text( 35,  9,  96, 28);

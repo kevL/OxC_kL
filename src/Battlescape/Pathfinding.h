@@ -52,7 +52,8 @@ enum bigWallTypes
 
 
 /**
- * A utility class that calculates the shortest path between two points on the battlescape map.
+ * A utility class that calculates the shortest path between two points on the
+ * battlescape map.
  */
 class Pathfinding
 {
@@ -64,8 +65,8 @@ private:
 		_previewed,
 		_strafe;
 	int
-		_openDoor, // kL, to give accurate preview # when dashing through doors.
-		_totalTuCost;
+		_openDoor, // to get an accurate preview when dashing through doors.
+		_tuCostTotal;
 
 	BattleUnit* _unit;
 	SavedBattleGame* _battleSave;
@@ -144,7 +145,7 @@ private:
 				int maxTuCost = 1000,
 				bool strafeRejected = false);
 
-		/// Determines whether or not movement between starttile and endtile is possible in the direction.
+		/// Determines whether or not movement between startTile and endTile is possible in the direction.
 		bool isBlockedPath(
 				const Tile* const startTile,
 				const int dir,
@@ -156,7 +157,7 @@ private:
 		/// Converts direction to a unit-vector.
 		static void directionToVector(
 				const int dir,
-				Position* unitVect);
+				Position* const unitVect);
 		/// Converts a unit-vector to a direction.
 		static void vectorToDirection(
 				const Position& unitVect,
@@ -168,15 +169,15 @@ private:
 		int dequeuePath();
 
 		/// Gets the TU cost to move from 1 tile to the other.
-		int getTUCostPF(
-				const Position& startPos,
-				const int dir,
-				Position* destPos,
+		int getTuCostPf(
+				const Position& posStart,
+				int dir,
+				Position* const posDest,
 				const BattleUnit* const missileTarget = NULL,
 				bool missile = false);
-		/// Gets _totalTuCost; finds out whether we can hike somewhere in this turn or not.
+		/// Gets _tuCostTotal; finds out whether we can hike somewhere in this turn or not.
 		int getTotalTUCost() const
-		{ return _totalTuCost; }
+		{ return _tuCostTotal; }
 
 		/// Checks if the movement is valid, for the up/down button.
 		int validateUpDown(

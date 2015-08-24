@@ -1039,9 +1039,9 @@ void InventoryState::invMouseOver(Action*)
 {
 	if (_inv->getSelectedItem() != NULL)
 	{
-		_tuCost->setValue(static_cast<unsigned>(_inv->getTUCostInventory()));
+		_tuCost->setValue(static_cast<unsigned>(_inv->getTuCostInventory()));
 		_tuCost->setVisible(_tuMode
-						 && _inv->getTUCostInventory() > 0);
+						 && _inv->getTuCostInventory() > 0);
 
 //		_updateTemplateButtons(false);
 		return;

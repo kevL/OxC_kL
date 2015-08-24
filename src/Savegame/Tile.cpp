@@ -332,7 +332,7 @@ bool Tile::isVoid(
  * @param moveType	- the movement type
  * @return, TU cost
  */
-int Tile::getTUCostTile(
+int Tile::getTuCostTile(
 		MapDataType part,
 		MovementType moveType) const
 {
@@ -342,7 +342,7 @@ int Tile::getTUCostTile(
 		&& !(part == O_OBJECT
 			&& _objects[part]->getBigWall() > BIGWALL_NWSE)) // ie. side-walls
 	{
-		return _objects[part]->getTUCostData(moveType);
+		return _objects[part]->getTuCostPart(moveType);
 	}
 
 	return 0;
@@ -361,7 +361,7 @@ int Tile::getTUCostTile(
 			return 0;
 		}
 
-		return _objects[part]->getTUCostData(moveType);
+		return _objects[part]->getTuCostPart(moveType);
 	}
 
 	return 0; */
@@ -382,6 +382,9 @@ bool Tile::hasNoFloor(const Tile* const tileBelow) const
 
 	if (_objects[O_FLOOR] != NULL)
 		return _objects[O_FLOOR]->isNoFloor();
+
+	// NOTE: Technically a bigWallBlock object-part could be a valid floor
+	// but it's also bad form to place an object without a floor in the same Tile.
 
 	return true;
 }
@@ -481,7 +484,7 @@ int Tile::openDoor(
 			}
 
 			if (unit != NULL
-				&& unit->getTimeUnits() < _objects[part]->getTUCostData(unit->getMoveTypeUnit())
+				&& unit->getTimeUnits() < _objects[part]->getTuCostPart(unit->getMoveTypeUnit())
 											+ unit->getActionTUs(
 															reserved,
 															unit->getMainHandWeapon(false)))
@@ -507,7 +510,7 @@ int Tile::openDoor(
 			if (_curFrame[part] == 0) // ufo door part 0 - door is closed
 			{
 				if (unit != NULL
-					&& unit->getTimeUnits() < _objects[part]->getTUCostData(unit->getMoveTypeUnit())
+					&& unit->getTimeUnits() < _objects[part]->getTuCostPart(unit->getMoveTypeUnit())
 												+ unit->getActionTUs(
 																reserved,
 																unit->getMainHandWeapon(false)))

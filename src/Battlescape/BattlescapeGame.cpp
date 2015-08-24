@@ -3291,8 +3291,8 @@ BattleItem* BattlescapeGame::surveyItems(BattleUnit* const unit) const
 			if (tile != NULL
 				&& (tile->getUnit() == NULL
 					|| tile->getUnit() == unit)
-				&& tile->getTUCostTile(O_FLOOR, MT_WALK) != 255 // TODO:: pathfind.
-				&& tile->getTUCostTile(O_OBJECT, MT_WALK) != 255
+				&& tile->getTuCostTile(O_FLOOR, MT_WALK) != 255 // TODO:: pathfind.
+				&& tile->getTuCostTile(O_OBJECT, MT_WALK) != 255
 				&& worthTaking(
 							*i,
 							unit) == true)
