@@ -3085,7 +3085,7 @@ SpecialTileType SavedBattleGame::getObjectiveType() const
 
 /**
  * Sets the aLiens as having been pacified.
- * @note Experience gains are not longer allowed once this is set.
+ * @note Experience gains are no longer allowed once this is set.
  */
 void SavedBattleGame::setPacified()
 {
@@ -3094,7 +3094,7 @@ void SavedBattleGame::setPacified()
 
 /**
  * Gets whether the aLiens have been pacified yet.
- * @note Experience gains are not longer allowed if this is set.
+ * @note Experience gains are no longer allowed if this is set.
  * @return, true if pacified
  */
 bool SavedBattleGame::getPacified() const

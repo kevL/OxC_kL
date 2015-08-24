@@ -136,14 +136,11 @@ ActionMenuState::ActionMenuState(
 							"STR_STUN",
 							&id);
 				}
-				else if (injured == false
-					&& hasHands == true)
-				{
+				else
 					addItem( // melee weapon
 							BA_HIT,
 							"STR_HIT_MELEE",
 							&id);
-				}
 			}
 		}
 

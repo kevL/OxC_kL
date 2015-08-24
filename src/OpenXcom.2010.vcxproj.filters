@@ -1836,9 +1836,6 @@
     <ClInclude Include="Basescape\BaseDetectionState.h">
       <Filter>Basescape</Filter>
     </ClInclude>
-    <ClInclude Include="Battlescape\Particle.h">
-      <Filter>Battlescape</Filter>
-    </ClInclude>
     <ClInclude Include="Ruleset\MapScript.h">
       <Filter>Ruleset</Filter>
     </ClInclude>
