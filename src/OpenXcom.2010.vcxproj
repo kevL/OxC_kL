@@ -302,9 +302,6 @@
     <ClCompile Include="Battlescape\MedikitState.cpp" />
     <ClCompile Include="Battlescape\MedikitView.cpp" />
     <ClCompile Include="Battlescape\MediTargetState.cpp" />
-    <ClCompile Include="Battlescape\MeleeAttackBState.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="Battlescape\MiniMapState.cpp" />
     <ClCompile Include="Battlescape\MiniMapView.cpp" />
     <ClCompile Include="Battlescape\NextTurnState.cpp" />
@@ -318,9 +315,6 @@
     <ClCompile Include="Battlescape\Projectile.cpp" />
     <ClCompile Include="Battlescape\ProjectileFlyBState.cpp" />
     <ClCompile Include="Battlescape\PromotionsState.cpp" />
-    <ClCompile Include="Battlescape\PsiAttackBState.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="Battlescape\ScannerState.cpp" />
     <ClCompile Include="Battlescape\ScannerView.cpp" />
     <ClCompile Include="Battlescape\UnitFallBState.cpp" />
@@ -331,7 +325,6 @@
     <ClCompile Include="Battlescape\UnitSprite.cpp" />
     <ClCompile Include="Battlescape\UnitTurnBState.cpp" />
     <ClCompile Include="Battlescape\UnitWalkBState.cpp" />
-    <ClCompile Include="Battlescape\Particle.cpp" />
     <ClCompile Include="Battlescape\WarningMessage.cpp" />
     <ClCompile Include="Engine\Action.cpp" />
     <ClCompile Include="Engine\AdlibMusic.cpp" />
@@ -432,9 +425,6 @@
     <ClCompile Include="Menu\ConfirmLoadState.cpp" />
     <ClCompile Include="Menu\IntroState.cpp" />
     <ClCompile Include="Menu\ListGamesState.cpp" />
-    <ClCompile Include="Menu\ListLoadOriginalState.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="Menu\ListLoadState.cpp" />
     <ClCompile Include="Menu\ListSaveState.cpp" />
     <ClCompile Include="Menu\LoadGameState.cpp" />
@@ -527,9 +517,6 @@
     <ClCompile Include="Savegame\Production.cpp" />
     <ClCompile Include="Savegame\Region.cpp" />
     <ClCompile Include="Savegame\ResearchProject.cpp" />
-    <ClCompile Include="Savegame\SaveConverter.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="Savegame\SavedBattleGame.cpp" />
     <ClCompile Include="Savegame\SavedGame.cpp" />
     <ClCompile Include="Savegame\SerializationHelper.cpp" />
@@ -636,9 +623,6 @@
     <ClInclude Include="Battlescape\MedikitState.h" />
     <ClInclude Include="Battlescape\MedikitView.h" />
     <ClInclude Include="Battlescape\MediTargetState.h" />
-    <ClInclude Include="Battlescape\MeleeAttackBState.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClInclude>
     <ClInclude Include="Battlescape\MiniMapState.h" />
     <ClInclude Include="Battlescape\MiniMapView.h" />
     <ClInclude Include="Battlescape\NextTurnState.h" />
@@ -652,9 +636,6 @@
     <ClInclude Include="Battlescape\Projectile.h" />
     <ClInclude Include="Battlescape\ProjectileFlyBState.h" />
     <ClInclude Include="Battlescape\PromotionsState.h" />
-    <ClInclude Include="Battlescape\PsiAttackBState.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClInclude>
     <ClInclude Include="Battlescape\ScannerState.h" />
     <ClInclude Include="Battlescape\ScannerView.h" />
     <ClInclude Include="Battlescape\UnitFallBState.h" />
@@ -665,7 +646,6 @@
     <ClInclude Include="Battlescape\UnitSprite.h" />
     <ClInclude Include="Battlescape\UnitTurnBState.h" />
     <ClInclude Include="Battlescape\UnitWalkBState.h" />
-    <ClInclude Include="Battlescape\Particle.h" />
     <ClInclude Include="Battlescape\WarningMessage.h" />
     <ClInclude Include="dirent.h" />
     <ClInclude Include="Engine\Action.h" />
@@ -775,9 +755,6 @@
     <ClInclude Include="Menu\ConfirmLoadState.h" />
     <ClInclude Include="Menu\IntroState.h" />
     <ClInclude Include="Menu\ListGamesState.h" />
-    <ClInclude Include="Menu\ListLoadOriginalState.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClInclude>
     <ClInclude Include="Menu\ListLoadState.h" />
     <ClInclude Include="Menu\ListSaveState.h" />
     <ClInclude Include="Menu\LoadGameState.h" />
@@ -867,12 +844,6 @@
     <ClInclude Include="Savegame\Production.h" />
     <ClInclude Include="Savegame\Region.h" />
     <ClInclude Include="Savegame\ResearchProject.h" />
-    <ClInclude Include="Savegame\SaveConverter.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="Savegame\SaveConverterXcom1.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClInclude>
     <ClInclude Include="Savegame\SavedBattleGame.h" />
     <ClInclude Include="Savegame\SavedGame.h" />
     <ClInclude Include="Savegame\SerializationHelper.h" />

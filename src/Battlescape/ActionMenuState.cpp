@@ -113,18 +113,7 @@ ActionMenuState::ActionMenuState(
 	{
 		if (itRule->getTUMelee() != 0) // TODO: remove 'HIT' action-items if no target in range.
 		{
-			if (injured == false
-				&& hasHands == true
-				&& itRule->getBattleType() == BT_MELEE
-				&& itRule->getDamageType() == DT_STUN)
-			{
-				addItem( // stun rod
-						BA_HIT,
-						"STR_STUN",
-						&id);
-			}
-//			else if (itRule->getType() == "STR_DOGE")
-			else if (_action->actor->getUnitRules() != NULL
+			if (_action->actor->getUnitRules() != NULL
 				&& _action->actor->getUnitRules()->isDog() == true)
 			{
 				addItem( // doggie bite
@@ -139,10 +128,22 @@ ActionMenuState::ActionMenuState(
 			else if (injured == false
 				&& hasHands == true)
 			{
-				addItem( // melee weapon
-						BA_HIT,
-						"STR_HIT_MELEE",
-						&id);
+				if (itRule->getBattleType() == BT_MELEE
+					&& itRule->getDamageType() == DT_STUN)
+				{
+					addItem( // stun rod
+							BA_HIT,
+							"STR_STUN",
+							&id);
+				}
+				else if (injured == false
+					&& hasHands == true)
+				{
+					addItem( // melee weapon
+							BA_HIT,
+							"STR_HIT_MELEE",
+							&id);
+				}
 			}
 		}
 
@@ -170,16 +171,14 @@ ActionMenuState::ActionMenuState(
 							"STR_USE_MEDI_KIT",
 							&id);
 				}
-				else if (injured == false
-					&& itRule->getBattleType() == BT_SCANNER)
+				else if (itRule->getBattleType() == BT_SCANNER)
 				{
 					addItem(
 							BA_USE,
 							"STR_USE_SCANNER",
 							&id);
 				}
-				else if (injured == false
-					&& itRule->getBattleType() == BT_PSIAMP
+				else if (itRule->getBattleType() == BT_PSIAMP
 					&& _action->actor->getBaseStats()->psiSkill != 0)
 				{
 					addItem(
@@ -199,16 +198,14 @@ ActionMenuState::ActionMenuState(
 							"STR_ENCOURAGE_UNIT",
 							&id);
 				}
-				else if (injured == false
-					&& itRule->getBattleType() == BT_MINDPROBE)
+				else if (itRule->getBattleType() == BT_MINDPROBE)
 				{
 					addItem(
 							BA_USE,
 							"STR_USE_MIND_PROBE",
 							&id);
 				}
-				else if (injured == false
-					&& itRule->getBattleType() == BT_FIREARM)
+				else if (itRule->getBattleType() == BT_FIREARM)
 				{
 					if (_action->weapon->getAmmoItem() != NULL)
 					{
@@ -231,10 +228,9 @@ ActionMenuState::ActionMenuState(
 									&id);
 					}
 
-					if (injured == false
-						&& (itRule->isWaypoints() != 0
-							|| (_action->weapon->getAmmoItem() != NULL
-								&& _action->weapon->getAmmoItem()->getRules()->isWaypoints() != 0)))
+					if (itRule->isWaypoints() != 0
+						|| (_action->weapon->getAmmoItem() != NULL
+							&& _action->weapon->getAmmoItem()->getRules()->isWaypoints() != 0))
 					{
 						addItem(
 								BA_LAUNCH,

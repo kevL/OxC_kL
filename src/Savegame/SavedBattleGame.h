@@ -75,6 +75,7 @@ private:
 		_debugMode,
 		_cheatAI,
 		_kneelReserved,
+		_pacified,
 		_unitsFalling;
 	int
 		_globalShade,
@@ -458,6 +459,11 @@ private:
 		void setObjectiveType(int type);
 		/// Gets the objective type of this mission.
 		SpecialTileType getObjectiveType() const;
+
+		/// Sets the aLiens as having been pacified.
+		void setPacified();
+		/// Gets whether the aLiens have been pacified yet.
+		bool getPacified() const;
 };
 
 }

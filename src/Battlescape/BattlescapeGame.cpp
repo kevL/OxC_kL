@@ -1567,6 +1567,9 @@ void BattlescapeGame::endTurnPhase() // private.
 			getMap()->getCamera()->centerOnPosition(_battleSave->getSelectedUnit()->getPosition());
 			setupCursor();
 		}
+
+		if (hostilesPacified == true)
+			_battleSave->setPacified();
 	}
 
 	if (_endTurnRequested == true

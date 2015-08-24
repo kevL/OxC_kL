@@ -3215,7 +3215,8 @@ int BattleUnit::getExpPsiStrength() const
  */
 void BattleUnit::addReactionExp()
 {
-	++_expReactions;
+	if (_battleGame->getBattleSave()->getPacified() == false)
+		++_expReactions;
 }
 
 /**
@@ -3223,7 +3224,8 @@ void BattleUnit::addReactionExp()
  */
 void BattleUnit::addFiringExp()
 {
-	++_expFiring;
+	if (_battleGame->getBattleSave()->getPacified() == false)
+		++_expFiring;
 }
 
 /**
@@ -3231,7 +3233,8 @@ void BattleUnit::addFiringExp()
  */
 void BattleUnit::addThrowingExp()
 {
-	++_expThrowing;
+	if (_battleGame->getBattleSave()->getPacified() == false)
+		++_expThrowing;
 }
 
 /**
@@ -3240,7 +3243,8 @@ void BattleUnit::addThrowingExp()
  */
 void BattleUnit::addPsiSkillExp(int qty)
 {
-	_expPsiSkill += qty;
+	if (_battleGame->getBattleSave()->getPacified() == false)
+		_expPsiSkill += qty;
 }
 
 /**
@@ -3249,7 +3253,8 @@ void BattleUnit::addPsiSkillExp(int qty)
  */
 void BattleUnit::addPsiStrengthExp(int qty)
 {
-	_expPsiStrength += qty;
+	if (_battleGame->getBattleSave()->getPacified() == false)
+		_expPsiStrength += qty;
 }
 
 /**
@@ -3258,7 +3263,8 @@ void BattleUnit::addPsiStrengthExp(int qty)
  */
 void BattleUnit::addMeleeExp(int qty)
 {
-	_expMelee += qty;
+	if (_battleGame->getBattleSave()->getPacified() == false)
+		_expMelee += qty;
 }
 
 /**

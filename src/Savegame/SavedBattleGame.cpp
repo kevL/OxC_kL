@@ -87,7 +87,8 @@ SavedBattleGame::SavedBattleGame(const std::vector<OperationPool*>* titles)
 		_groundLevel(-1),
 		_tacType(TCT_DEFAULT),
 		_controlDestroyed(false),
-		_tiles(NULL)
+		_tiles(NULL),
+		_pacified(false)
 //		_dragInvert(false),
 //		_dragTimeTolerance(0),
 //		_dragPixelTolerance(0)
@@ -3080,6 +3081,25 @@ void SavedBattleGame::setObjectiveType(int type)
 SpecialTileType SavedBattleGame::getObjectiveType() const
 {
 	return static_cast<SpecialTileType>(_objectiveType);
+}
+
+/**
+ * Sets the aLiens as having been pacified.
+ * @note Experience gains are not longer allowed once this is set.
+ */
+void SavedBattleGame::setPacified()
+{
+	_pacified = true;
+}
+
+/**
+ * Gets whether the aLiens have been pacified yet.
+ * @note Experience gains are not longer allowed if this is set.
+ * @return, true if pacified
+ */
+bool SavedBattleGame::getPacified() const
+{
+	return _pacified;
 }
 
 }

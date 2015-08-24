@@ -886,17 +886,8 @@
     <ClCompile Include="Basescape\BaseDetectionState.cpp">
       <Filter>Basescape</Filter>
     </ClCompile>
-    <ClCompile Include="Battlescape\Particle.cpp">
-      <Filter>Battlescape</Filter>
-    </ClCompile>
     <ClCompile Include="Ruleset\MapScript.cpp">
       <Filter>Ruleset</Filter>
-    </ClCompile>
-    <ClCompile Include="Savegame\SaveConverter.cpp">
-      <Filter>Savegame</Filter>
-    </ClCompile>
-    <ClCompile Include="Menu\ListLoadOriginalState.cpp">
-      <Filter>Menu</Filter>
     </ClCompile>
     <ClCompile Include="Engine\FlcPlayer.cpp">
       <Filter>Engine</Filter>
@@ -918,12 +909,6 @@
     </ClCompile>
     <ClCompile Include="Ruleset\OperationPool.cpp">
       <Filter>Ruleset</Filter>
-    </ClCompile>
-    <ClCompile Include="Battlescape\MeleeAttackBState.cpp">
-      <Filter>Battlescape</Filter>
-    </ClCompile>
-    <ClCompile Include="Battlescape\PsiAttackBState.cpp">
-      <Filter>Battlescape</Filter>
     </ClCompile>
     <ClCompile Include="version.cpp" />
     <ClCompile Include="Ruleset\RuleCity.cpp">
@@ -1857,15 +1842,6 @@
     <ClInclude Include="Ruleset\MapScript.h">
       <Filter>Ruleset</Filter>
     </ClInclude>
-    <ClInclude Include="Savegame\SaveConverter.h">
-      <Filter>Savegame</Filter>
-    </ClInclude>
-    <ClInclude Include="Menu\ListLoadOriginalState.h">
-      <Filter>Menu</Filter>
-    </ClInclude>
-    <ClInclude Include="Savegame\SaveConverterXcom1.h">
-      <Filter>Savegame</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\FlcPlayer.h">
       <Filter>Engine</Filter>
     </ClInclude>
@@ -1886,12 +1862,6 @@
     </ClInclude>
     <ClInclude Include="Ruleset\OperationPool.h">
       <Filter>Ruleset</Filter>
-    </ClInclude>
-    <ClInclude Include="Battlescape\MeleeAttackBState.h">
-      <Filter>Battlescape</Filter>
-    </ClInclude>
-    <ClInclude Include="Battlescape\PsiAttackBState.h">
-      <Filter>Battlescape</Filter>
     </ClInclude>
     <ClInclude Include="Geoscape\Cord.h" />
     <ClInclude Include="Savegame\CraftId.h" />
