@@ -263,7 +263,7 @@ private:
 		bool getMapHidden() const;
 
 		/// Gets the SavedBattleGame.
-		SavedBattleGame* getSavedBattle() const;
+		SavedBattleGame* getBattleSave() const;
 
 		/// Tells the map to reveal because there's a waypoint action going down.
 		void setWaypointAction(bool wp = true);

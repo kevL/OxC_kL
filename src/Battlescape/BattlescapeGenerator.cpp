@@ -83,7 +83,7 @@ BattlescapeGenerator::BattlescapeGenerator(Game* game)
 	:
 		_game(game),
 		_gameSave(game->getSavedGame()),
-		_battleSave(game->getSavedGame()->getSavedBattle()),
+		_battleSave(game->getSavedGame()->getBattleSave()),
 		_rules(game->getRuleset()),
 		_res(game->getResourcePack()),
 		_craft(NULL),

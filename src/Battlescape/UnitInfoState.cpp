@@ -71,7 +71,8 @@ UnitInfoState::UnitInfoState(
 		_parent(parent),
 		_fromInventory(fromInventory),
 		_mindProbe(mindProbe),
-		_preBattle(preBattle)
+		_preBattle(preBattle),
+		_battleGame(_game->getSavedGame()->getBattleSave())
 {
 /*	if (Options::maximizeInfoScreens)
 	{
@@ -79,8 +80,6 @@ UnitInfoState::UnitInfoState(
 		Options::baseYResolution = Screen::ORIGINAL_HEIGHT;
 		_game->getScreen()->resetDisplay(false);
 	} */
-
-	_battleGame = _game->getSavedGame()->getSavedBattle();
 
 	_bg			= new Surface(320, 200);
 

@@ -125,7 +125,7 @@ Map::Map(
 		_mapIsHidden(false),
 		_noDraw(false),
 		_showProjectile(true),
-		_battleSave(game->getSavedGame()->getSavedBattle()),
+		_battleSave(game->getSavedGame()->getBattleSave()),
 		_res(game->getResourcePack()),
 		_fuseColor(31)
 {
@@ -5350,7 +5350,7 @@ bool Map::getMapHidden() const
  * Gets the SavedBattleGame.
  * @return, pointer to SavedBattleGame
  */
-SavedBattleGame* Map::getSavedBattle() const
+SavedBattleGame* Map::getBattleSave() const
 {
 	return _battleSave;
 }

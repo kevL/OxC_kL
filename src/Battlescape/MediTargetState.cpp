@@ -131,7 +131,7 @@ void MediTargetState::init()
 		addToList,
 		actorFound = false; // adds actor to top of MediTargetList.
 
-	SavedBattleGame* const battleSave = _game->getSavedGame()->getSavedBattle();
+	SavedBattleGame* const battleSave = _game->getSavedGame()->getBattleSave();
 
 	const std::vector<BattleUnit*>* const targetUnits = battleSave->getUnits();
 	for (std::vector<BattleUnit*>::const_iterator

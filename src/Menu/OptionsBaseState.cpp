@@ -176,7 +176,7 @@ void OptionsBaseState::restart(OptionsOrigin origin)
 
 		BattlescapeState* bs = new BattlescapeState();
 		_game->pushState(bs);
-		_game->getSavedGame()->getSavedBattle()->setBattleState(bs);
+		_game->getSavedGame()->getBattleSave()->setBattleState(bs);
 	}
 }
 

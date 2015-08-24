@@ -62,7 +62,7 @@ ProjectileFlyBState::ProjectileFlyBState( // origin is unitTile
 		BattleState(
 			parent,
 			action),
-		_battleSave(parent->getSave()),
+		_battleSave(parent->getBattleSave()),
 		_origin(action.actor->getPosition()),
 		_originVoxel(-1,-1,-1), // for BL waypoints
 		_targetVoxel(-1,-1,-1),
@@ -90,7 +90,7 @@ ProjectileFlyBState::ProjectileFlyBState( // blaster launch, BattlescapeGame::la
 		BattleState(
 			parent,
 			action),
-		_battleSave(parent->getSave()),
+		_battleSave(parent->getBattleSave()),
 		_origin(origin),
 		_originVoxel(-1,-1,-1), // for BL waypoints
 		_targetVoxel(-1,-1,-1),

@@ -129,7 +129,7 @@ SavedGame::SavedGame(const Ruleset* const rules)
 		_dfLon(0.),
 		_dfLat(0.),
 		_dfZoom(0),
-		_battleGame(NULL),
+		_battleSave(NULL),
 		_debug(false),
 		_warned(false),
 //		_detail(true),
@@ -242,7 +242,7 @@ SavedGame::~SavedGame()
 		delete *i;
 	}
 
-	delete _battleGame;
+	delete _battleSave;
 }
 
 /**
@@ -647,8 +647,8 @@ void SavedGame::load(
 	if (const YAML::Node& battle = doc["battleGame"])
 	{
 		Log(LOG_INFO) << "SavedGame: loading battlegame";
-		_battleGame = new SavedBattleGame();
-		_battleGame->load(
+		_battleSave = new SavedBattleGame();
+		_battleSave->load(
 						battle,
 						rules,
 						this);
@@ -682,10 +682,10 @@ void SavedGame::save(const std::string& file) const
 	const Base* const base	= _bases.front();
 	brief["base"]			= Language::wstrToUtf8(base->getName());
 
-	if (_battleGame != NULL)
+	if (_battleSave != NULL)
 	{
-		brief["mission"]	= _battleGame->getMissionType();
-		brief["turn"]		= _battleGame->getTurn();
+		brief["mission"]	= _battleSave->getMissionType();
+		brief["turn"]		= _battleSave->getTurn();
 		brief["mode"]		= static_cast<int>(MODE_BATTLESCAPE);
 	}
 	else
@@ -820,8 +820,8 @@ void SavedGame::save(const std::string& file) const
 		node["missionStatistics"].push_back((*i)->save());
 	}
 
-	if (_battleGame != NULL)
-		node["battleGame"] = _battleGame->save();
+	if (_battleSave != NULL)
+		node["battleGame"] = _battleSave->save();
 
 	emit << node;
 	ofstr << emit.c_str();
@@ -1250,19 +1250,19 @@ std::vector<MissionSite*>* SavedGame::getMissionSites()
  * Get pointer to the SavedBattleGame object.
  * @return, pointer to the SavedBattleGame object
  */
-SavedBattleGame* SavedGame::getSavedBattle()
+SavedBattleGame* SavedGame::getBattleSave()
 {
-	return _battleGame;
+	return _battleSave;
 }
 
 /**
  * Set SavedBattleGame object.
- * @param battleGame - pointer to a new SavedBattleGame object
+ * @param battleSave - pointer to a new SavedBattleGame object
  */
-void SavedGame::setBattleGame(SavedBattleGame* battleGame)
+void SavedGame::setBattleSave(SavedBattleGame* battleSave)
 {
-	delete _battleGame;
-	_battleGame = battleGame;
+	delete _battleSave;
+	_battleSave = battleSave;
 }
 
 /**

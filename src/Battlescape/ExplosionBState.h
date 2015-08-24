@@ -32,6 +32,7 @@ namespace OpenXcom
 class BattlescapeGame;
 class BattleUnit;
 class BattleItem;
+class SavedBattleGame;
 class Tile;
 
 
@@ -59,6 +60,7 @@ private:
 
 	BattleItem* _item;
 	BattleUnit* _unit;
+	SavedBattleGame* _battleSave;
 	Tile* _tile;
 
 	Position _center;

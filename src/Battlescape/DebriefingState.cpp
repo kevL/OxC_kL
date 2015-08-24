@@ -113,8 +113,8 @@ DebriefingState::DebriefingState()
 	// ( was done in ~BattlescapeGame, but that causes CTD under reLoad situation )
 	// Now done here and in NextTurnState. (not ideal: should find a safe place
 	// when BattlescapeGame is really dTor'd, and not reLoaded ...... ) uh, i guess.
-//	if (_gameSave->getSavedBattle()->getBattleGame())
-	_gameSave->getSavedBattle()->getBattleGame()->cleanupDeleted();
+//	if (_gameSave->getBattleSave()->getBattleGame())
+	_gameSave->getBattleSave()->getBattleGame()->cleanupDeleted();
 
 	_missionStatistics = new MissionStatistics();
 
@@ -165,8 +165,8 @@ DebriefingState::DebriefingState()
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
 	std::wstring wst;
-	if (_gameSave->getSavedBattle()->getOperation().empty() == false)
-		wst = _gameSave->getSavedBattle()->getOperation();
+	if (_gameSave->getBattleSave()->getOperation().empty() == false)
+		wst = _gameSave->getBattleSave()->getOperation();
 	else
 		wst = tr("STR_OK");
 	_btnOk->setText(wst);
@@ -368,7 +368,7 @@ DebriefingState::DebriefingState()
 
 
 	// Soldier Diary ->
-	SavedBattleGame* const battle = _gameSave->getSavedBattle();
+	SavedBattleGame* const battle = _gameSave->getBattleSave();
 
 	_missionStatistics->id = _gameSave->getMissionStatistics()->size();
 	_missionStatistics->shade = battle->getGlobalShade();
@@ -480,7 +480,7 @@ DebriefingState::DebriefingState()
 DebriefingState::~DebriefingState()
 {
 	if (_game->isQuitting() == true)
-		_gameSave->setBattleGame(NULL);
+		_gameSave->setBattleSave(NULL);
 
 	for (std::vector<DebriefingStat*>::const_iterator
 			i = _stats.begin();
@@ -524,15 +524,15 @@ void DebriefingState::btnOkClick(Action*)
 
 	std::vector<Soldier*> participants;
 	for (std::vector<BattleUnit*>::const_iterator
-			i = _gameSave->getSavedBattle()->getUnits()->begin();
-			i != _gameSave->getSavedBattle()->getUnits()->end();
+			i = _gameSave->getBattleSave()->getUnits()->begin();
+			i != _gameSave->getBattleSave()->getUnits()->end();
 			++i)
 	{
 		if ((*i)->getGeoscapeSoldier() != NULL)
 			participants.push_back((*i)->getGeoscapeSoldier());
 	}
 
-	_gameSave->setBattleGame(NULL);
+	_gameSave->setBattleSave(NULL);
 	_game->popState();
 
 	if (_skirmish == true)
@@ -702,7 +702,7 @@ void DebriefingState::prepareDebriefing() // private.
 		objectiveCompleteScore = 0,	// dang vc++ compiler warnings.
 		objectiveFailedScore = 0;	// dang vc++ compiler warnings.
 
-	SavedBattleGame* const battleSave = _gameSave->getSavedBattle();
+	SavedBattleGame* const battleSave = _gameSave->getBattleSave();
 	const AlienDeployment* const deployRule = _rules->getDeployment(battleSave->getMissionType());
 	// kL_note: I have a strong suspicion that although checks are made for
 	// a valid deployRule below if there isn't one you're borked anyway.

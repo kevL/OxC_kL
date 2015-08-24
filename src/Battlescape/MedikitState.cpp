@@ -419,7 +419,7 @@ void MedikitState::onPainClick(Action*)
 				_action->targetUnit->setFaction(FACTION_PLAYER);
 				_action->targetUnit->initTu();
 
-				SavedBattleGame* const battleSave = _game->getSavedGame()->getSavedBattle();
+				SavedBattleGame* const battleSave = _game->getSavedGame()->getBattleSave();
 
 				battleSave->setSelectedUnit(_action->targetUnit);
 				battleSave->getBattleState()->updateSoldierInfo();

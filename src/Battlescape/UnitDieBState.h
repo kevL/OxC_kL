@@ -30,6 +30,7 @@ namespace OpenXcom
 
 class BattlescapeGame;
 class BattleUnit;
+class SavedBattleGame;
 
 
 /**
@@ -47,6 +48,8 @@ private:
 	int _extraTicks;
 
 	BattleUnit* _unit;
+	SavedBattleGame* _battleSave;
+
 	ItemDamageType _dType;
 
 	/// Converts a unit to a corpse.

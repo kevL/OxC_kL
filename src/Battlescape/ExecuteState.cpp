@@ -111,7 +111,7 @@ void ExecuteState::init()
 
 	BattleUnit* targetUnit;
 
-	const SavedBattleGame* const battleSave = _game->getSavedGame()->getSavedBattle();
+	const SavedBattleGame* const battleSave = _game->getSavedGame()->getBattleSave();
 	const Position pos = _action->actor->getPosition();
 	Tile* tile = battleSave->getTile(pos);
 
@@ -203,7 +203,7 @@ void ExecuteState::lstTargetPress(Action* action)
 
 			if (sound != -1)
 			{
-				const Map* const battleMap = _game->getSavedGame()->getSavedBattle()->getBattleGame()->getMap();
+				const Map* const battleMap = _game->getSavedGame()->getBattleSave()->getBattleGame()->getMap();
 				_game->getResourcePack()->getSound(
 												"BATTLE.CAT",
 												sound)

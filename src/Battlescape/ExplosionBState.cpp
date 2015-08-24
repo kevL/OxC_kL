@@ -75,6 +75,7 @@ ExplosionBState::ExplosionBState(
 		_hitSuccess(meleeSuccess),
 		_forceCamera(forceCamera),
 //		_cosmetic(cosmetic),
+		_battleSave(parent->getBattleSave()),
 		_power(0),
 		_areaOfEffect(true),
 		_pistolWhip(false),
@@ -336,9 +337,9 @@ void ExplosionBState::init()
 		Camera* const exploCam = _parent->getMap()->getCamera(); // -> apply more cosmetics
 		if (_forceCamera == true
 			|| (exploCam->isOnScreen(targetPos) == false
-				&& (_parent->getSave()->getSide() != FACTION_PLAYER
+				&& (_battleSave->getSide() != FACTION_PLAYER
 					|| _item->getRules()->getBattleType() != BT_PSIAMP))
-			|| (_parent->getSave()->getSide() != FACTION_PLAYER
+			|| (_battleSave->getSide() != FACTION_PLAYER
 				&& _item->getRules()->getBattleType() == BT_PSIAMP))
 		{
 			exploCam->centerOnPosition(
@@ -439,7 +440,7 @@ void ExplosionBState::explode() // private.
 
 	// melee Hit success/failure, and hit/miss sound-FX, are determined in ProjectileFlyBState.
 
-	const SavedBattleGame* const save = _parent->getSave();
+	const SavedBattleGame* const save = _battleSave;
 	TileEngine* const tileEngine = save->getTileEngine();
 
 	if (_hit == true)
@@ -602,13 +603,13 @@ void ExplosionBState::explode() // private.
 		&& (itRule->isGrenade() == true))
 	{
 		for (std::vector<BattleItem*>::const_iterator
-				i = _parent->getSave()->getItems()->begin();
-				i != _parent->getSave()->getItems()->end();
+				i = _battleSave->getItems()->begin();
+				i != _battleSave->getItems()->end();
 				++i)
 		{
 			if ((*i)->getId() == _item->getId())
 			{
-				_parent->getSave()->removeItem(_item);
+				_battleSave->removeItem(_item);
 				break;
 			}
 		}

@@ -1338,9 +1338,6 @@ bool BattlescapeGame::kneel(BattleUnit* const bu)
 /**
  * Ends the turn.
  * @note This starts the switchover.
- *	- popState()
- *	- handleState()
- *	- statePushBack()
  */
 void BattlescapeGame::endTurnPhase() // private.
 {
@@ -1391,17 +1388,16 @@ void BattlescapeGame::endTurnPhase() // private.
 		}
 	}
 
-	if (_battleSave->getTileEngine()->closeUfoDoors() != 0
-		&& ResourcePack::SLIDING_DOOR_CLOSE != -1) // try, close doors between grenade & terrain explosions
+	if (_battleSave->getTileEngine()->closeUfoDoors() != 0 // close doors between grenade & terrain explosions
+		&& ResourcePack::SLIDING_DOOR_CLOSE != -1)
 	{
-		getResourcePack()->getSound( // ufo door closed
+		getResourcePack()->getSound(
 								"BATTLE.CAT",
 								ResourcePack::SLIDING_DOOR_CLOSE)
 							->play();
 	}
 //	}
 
-	// check for terrain explosions
 	Tile* tile = _battleSave->getTileEngine()->checkForTerrainExplosions();
 	if (tile != NULL)
 	{
@@ -1465,9 +1461,6 @@ void BattlescapeGame::endTurnPhase() // private.
 			if (tile != NULL
 				&& (tile->getSmoke() != 0
 					|| tile->getFire() != 0))
-//				&& (*i)->getHealth() > 0
-//				&& ((*i)->getGeoscapeSoldier() != NULL
-//					|| (*i)->getUnitRules()->isMechanical() == false))
 			{
 				tile->hitStuff(); // Damage tile's unit w/ Smoke & Fire at end of unit's faction's Turn-phase.
 			}
@@ -1487,7 +1480,7 @@ void BattlescapeGame::endTurnPhase() // private.
 				&& (tile->getSmoke() != 0
 					|| tile->getFire() != 0))
 			{
-				tile->hitStuff(_battleSave); // Damage tile's items w/ Fire at end of each full-turn.
+				tile->hitStuff(_battleSave); // Damage tile's items w/ Fire at beginning of each full-turn.
 			}
 		}
 
@@ -3199,7 +3192,7 @@ Map* BattlescapeGame::getMap() const
  * Gets the battle game save data object.
  * @return, pointer to SavedBattleGame
  */
-SavedBattleGame* BattlescapeGame::getSave() const
+SavedBattleGame* BattlescapeGame::getBattleSave() const
 {
 	return _battleSave;
 }
@@ -3619,7 +3612,8 @@ bool BattlescapeGame::tallyUnits(
 			j != _battleSave->getUnits()->end();
 			++j)
 	{
-		if ((*j)->isOut() == false)
+//		if ((*j)->isOut() == false)
+		if ((*j)->isOut_t(OUT_STAT) == false)
 		{
 			if ((*j)->getOriginalFaction() == FACTION_HOSTILE)
 			{

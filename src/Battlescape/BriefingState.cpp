@@ -77,9 +77,9 @@ BriefingState::BriefingState(
 		bg,		// default defined in Ruleset/AlienDeployment.h: "BACK16.SCR",
 		music;	// default defined in Ruleset/AlienDeployment.h: OpenXcom::res_MUSIC_GEO_BRIEFING,
 
-	const TacticalType tacType = _game->getSavedGame()->getSavedBattle()->getTacticalType();
+	const TacticalType tacType = _game->getSavedGame()->getBattleSave()->getTacticalType();
 
-	const std::string stType = _game->getSavedGame()->getSavedBattle()->getMissionType();
+	const std::string stType = _game->getSavedGame()->getBattleSave()->getMissionType();
 	const AlienDeployment* deployRule = _game->getRuleset()->getDeployment(stType); // check, Xcom1Ruleset->alienDeployments for a missionType
 
 	if (deployRule == NULL // landing site or crash site -> define BG & Music by ufoType instead
@@ -229,9 +229,9 @@ void BriefingState::btnOkClick(Action*)
 	if (liveAliens > 0)
 	{
 		_game->pushState(battleState);
-		_game->getSavedGame()->getSavedBattle()->setBattleState(battleState);
+		_game->getSavedGame()->getBattleSave()->setBattleState(battleState);
 		_game->pushState(new NextTurnState(
-										_game->getSavedGame()->getSavedBattle(),
+										_game->getSavedGame()->getBattleSave(),
 										battleState));
 		_game->pushState(new InventoryState(
 										false,

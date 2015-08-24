@@ -62,6 +62,7 @@ UnitDieBState::UnitDieBState(
 		_unit(unit),
 		_dType(dType),
 		_noSound(noSound),
+		_battleSave(parent->getBattleSave()),
 		_doneScream(false),
 		_extraTicks(0)
 {
@@ -98,7 +99,7 @@ UnitDieBState::UnitDieBState(
 
 	if (_unit->getFaction() == FACTION_HOSTILE)
 	{
-		const std::vector<Node*>* const nodeList = _parent->getSave()->getNodes();
+		const std::vector<Node*>* const nodeList = _battleSave->getNodes();
 		if (nodeList != NULL) // this better not happen.
 		{
 			for (std::vector<Node*>::const_iterator
@@ -106,10 +107,10 @@ UnitDieBState::UnitDieBState(
 					i != nodeList->end();
 					++i)
 			{
-				if (_parent->getSave()->getTileEngine()->distanceSq(
-																(*i)->getPosition(),
-																_unit->getPosition(),
-																false) < 5)
+				if (_battleSave->getTileEngine()->distanceSq(
+														(*i)->getPosition(),
+														_unit->getPosition(),
+														false) < 5)
 				{
 					(*i)->setNodeType((*i)->getNodeType() | Node::TYPE_DANGEROUS);
 				}
@@ -194,8 +195,8 @@ void UnitDieBState::think()
 	{
 		bool moreDead = false;
 		for (std::vector<BattleUnit*>::const_iterator
-				i = _parent->getSave()->getUnits()->begin();
-				i != _parent->getSave()->getUnits()->end();
+				i = _battleSave->getUnits()->begin();
+				i != _battleSave->getUnits()->end();
 				++i)
 		{
 			if ((*i)->getAboutToDie() == true)
@@ -211,7 +212,7 @@ void UnitDieBState::think()
 		_parent->popState();
 
 		// need to freshen visUnit-indicators in case other units were hiding behind the one who just fell
-		_parent->getSave()->getBattleState()->updateSoldierInfo(false);
+		_battleSave->getBattleState()->updateSoldierInfo(false);
 
 		if (_unit->getGeoscapeSoldier() != NULL
 			&& _unit->getOriginalFaction() == FACTION_PLAYER)
@@ -232,7 +233,7 @@ void UnitDieBState::think()
 
 			if (stInfo.empty() == false)
 			{
-				Game* const game = _parent->getSave()->getBattleState()->getGame();
+				Game* const game = _battleSave->getBattleState()->getGame();
 				const Language* const lang = game->getLanguage();
 				game->pushState(new InfoboxOKState(lang->getString(
 																stInfo,
@@ -242,7 +243,7 @@ void UnitDieBState::think()
 		}
 /*		// if all units from either faction are killed - auto-end the mission.
 		if (Options::battleAutoEnd == true
-			&& _parent->getSave()->getSide() == FACTION_PLAYER)
+			&& _battleSave->getSide() == FACTION_PLAYER)
 		{
 			int
 				liveAliens,
@@ -254,7 +255,7 @@ void UnitDieBState::think()
 			if (liveAliens == 0
 				|| liveSoldiers == 0)
 			{
-				_parent->getSave()->setSelectedUnit(NULL);
+				_battleSave->setSelectedUnit(NULL);
 				_parent->cancelCurrentAction(true);
 
 				_parent->requestEndTurn();
@@ -304,7 +305,7 @@ void UnitDieBState::think()
  */
 void UnitDieBState::convertToCorpse() // private.
 {
-	_parent->getSave()->getBattleState()->showPsiButton(false);
+	_battleSave->getBattleState()->showPsiButton(false);
 
 	const Position pos = _unit->getPosition();
 
@@ -312,7 +313,7 @@ void UnitDieBState::convertToCorpse() // private.
 	// and if it was being carried, keep track of what slot it was in
 	const bool carried = (pos == Position(-1,-1,-1));
 	if (carried == false)
-		_parent->getSave()->removeCorpse(_unit);
+		_battleSave->removeCorpse(_unit);
 
 	const int unitSize = _unit->getArmor()->getSize() - 1;
 
@@ -359,8 +360,8 @@ void UnitDieBState::convertToCorpse() // private.
 	{
 		// replace the unconscious body item with a corpse in the carrying unit's inventory
 		for (std::vector<BattleItem*>::const_iterator
-				i = _parent->getSave()->getItems()->begin();
-				i != _parent->getSave()->getItems()->end();
+				i = _battleSave->getItems()->begin();
+				i != _battleSave->getItems()->end();
 				++i)
 		{
 			if ((*i)->getUnit() == _unit) // unit is in an inventory so unit must be a 1x1 unit
@@ -389,7 +390,7 @@ void UnitDieBState::convertToCorpse() // private.
 					x != -1;
 					--x)
 			{
-				tile = _parent->getSave()->getTile(pos + Position(x,y,0));
+				tile = _battleSave->getTile(pos + Position(x,y,0));
 
 				// This block is lifted from TileEngine::explode(), switch(DT_IN).
 				if (_unit->getUnitRules() != NULL
@@ -398,7 +399,7 @@ void UnitDieBState::convertToCorpse() // private.
 					if (RNG::percent(6) == true)
 					{
 						explTile = tile;
-						explTile_b = _parent->getSave()->getTile(explTile->getPosition() + Position(0,0,-1));
+						explTile_b = _battleSave->getTile(explTile->getPosition() + Position(0,0,-1));
 
 						while (explTile != NULL // safety.
 							&& explTile->getPosition().z > 0
@@ -407,7 +408,7 @@ void UnitDieBState::convertToCorpse() // private.
 							&& explTile->hasNoFloor(explTile_b) == true)
 						{
 							explTile = explTile_b;
-							explTile_b = _parent->getSave()->getTile(explTile->getPosition() + Position(0,0,-1));
+							explTile_b = _battleSave->getTile(explTile->getPosition() + Position(0,0,-1));
 						}
 
 						if (explTile != NULL // safety.
@@ -438,7 +439,7 @@ void UnitDieBState::convertToCorpse() // private.
 
 				BattleItem* const corpse = new BattleItem(
 													_parent->getRuleset()->getItem(_unit->getArmor()->getCorpseBattlescape()[--part]),
-													_parent->getSave()->getNextItemId());
+													_battleSave->getNextItemId());
 				corpse->setUnit(_unit);
 
 				if (tile != NULL					// kL, safety. (had a CTD when ethereal dies on water).

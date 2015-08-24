@@ -161,9 +161,9 @@ void SoldiersState::init()
 	State::init();
 
 	// Reset stuff when coming back from pre-battle Inventory.
-	if (_game->getSavedGame()->getSavedBattle() != NULL)
+	if (_game->getSavedGame()->getBattleSave() != NULL)
 	{
-		_game->getSavedGame()->setBattleGame(NULL);
+		_game->getSavedGame()->setBattleSave(NULL);
 		_base->setInBattlescape(false);
 	}
 
@@ -249,7 +249,7 @@ void SoldiersState::btnEquipClick(Action*)
 	_base->setCurrentSoldierSlot(_lstSoldiers->getScroll());
 
 	SavedBattleGame* battle = new SavedBattleGame();
-	_game->getSavedGame()->setBattleGame(battle);
+	_game->getSavedGame()->setBattleSave(battle);
 	BattlescapeGenerator bgen = BattlescapeGenerator(_game);
 
 	bgen.runInventory(NULL, _base);

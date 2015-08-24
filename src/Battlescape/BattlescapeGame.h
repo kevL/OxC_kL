@@ -292,7 +292,7 @@ private:
 		/// Gets the map.
 		Map* getMap() const;
 		/// Gets the save.
-		SavedBattleGame* getSave() const;
+		SavedBattleGame* getBattleSave() const;
 		/// Gets the tilengine.
 		TileEngine* getTileEngine() const;
 		/// Gets the pathfinding.

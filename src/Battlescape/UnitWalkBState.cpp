@@ -65,6 +65,7 @@ UnitWalkBState::UnitWalkBState(
 		_unit(action.actor),
 		_pf(parent->getPathfinding()),
 		_terrain(parent->getTileEngine()),
+		_battleSave(parent->getBattleSave()),
 		_falling(false),
 		_preStepTurn(false),
 		_unitsSpotted(0),
@@ -300,7 +301,7 @@ void UnitWalkBState::think()
  */
 void UnitWalkBState::cancel()
 {
-	if (_parent->getSave()->getSide() == FACTION_PLAYER
+	if (_battleSave->getSide() == FACTION_PLAYER
 		&& _parent->getPanicHandled() == true)
 	{
 		if (_preStepTurn == true)
@@ -326,7 +327,7 @@ bool UnitWalkBState::doStatusStand() // private.
 	int dir = _pf->getStartDirection();
 	//Log(LOG_INFO) << ". StartDirection = " << dir;
 
-	const Tile* const tile = _parent->getSave()->getTile(_unit->getPosition());
+	const Tile* const tile = _battleSave->getTile(_unit->getPosition());
 	const bool gravLift = dir >= _pf->DIR_UP // Assumes tops & bottoms of gravLifts always have floors/ceilings.
 					   && tile->getMapData(O_FLOOR) != NULL
 					   && tile->getMapData(O_FLOOR)->isGravLift();
@@ -433,7 +434,7 @@ bool UnitWalkBState::doStatusStand() // private.
 			staCost;
 		//Log(LOG_INFO) << ". tuCost = " << tuCost;
 
-		const Tile* const destTile = _parent->getSave()->getTile(dest);
+		const Tile* const destTile = _battleSave->getTile(dest);
 		// kL_note: should this include neutrals? (ie != FACTION_PLAYER; see also 32tu inflation...)
 		if (   destTile != NULL
 			&& destTile->getFire() > 0
@@ -621,10 +622,10 @@ bool UnitWalkBState::doStatusStand() // private.
 			{
 				//Log(LOG_INFO) << ". . check obstacle(unit)";
 				const BattleUnit
-					* const unitInMyWay = _parent->getSave()->getTile(dest + Position(x,y,0))->getUnit(),
+					* const unitInMyWay = _battleSave->getTile(dest + Position(x,y,0))->getUnit(),
 					* unitBelowMyWay = NULL;
 
-				const Tile* const belowDest = _parent->getSave()->getTile(dest + Position(x,y,-1));
+				const Tile* const belowDest = _battleSave->getTile(dest + Position(x,y,-1));
 				if (belowDest != NULL)
 					unitBelowMyWay = belowDest->getUnit();
 
@@ -668,7 +669,7 @@ bool UnitWalkBState::doStatusStand() // private.
 			&& _unit->spendEnergy(staCost) == true)	// be checked again here. Only subtract is required. but whatver
 		{
 			//Log(LOG_INFO) << ". . WalkBState: spend TU & Energy";
-			const Tile* const tileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(0,0,-1));
+			const Tile* const tileBelow = _battleSave->getTile(_unit->getPosition() + Position(0,0,-1));
 			//Log(LOG_INFO) << ". . WalkBState: startWalking()";
 			_unit->startWalking(
 							dir,
@@ -714,11 +715,11 @@ bool UnitWalkBState::doStatusWalk() // private.
 	const Tile* tileBelow;
 //	Position pos = _unit->getPosition();
 
-	if (_parent->getSave()->getTile(_unit->getDestination())->getUnit() == NULL  // next tile must be not occupied
+	if (_battleSave->getTile(_unit->getDestination())->getUnit() == NULL  // next tile must be not occupied
 		// kL_note: and, if not flying, the position directly below the tile must not be occupied...
 		// Had that happen with a sectoid left standing in the air because a cyberdisc was 2 levels below it.
 		// btw, these have probably been already checked...
-		|| _parent->getSave()->getTile(_unit->getDestination())->getUnit() == _unit)
+		|| _battleSave->getTile(_unit->getDestination())->getUnit() == _unit)
 	{
 		//Log(LOG_INFO) << ". WalkBState, keepWalking()";
 //		if (_unit->getMoveSound() == -1)
@@ -726,7 +727,7 @@ bool UnitWalkBState::doStatusWalk() // private.
 
 //		bool onScreenBoundary = (_unit->getVisible() && _parent->getMap()->getCamera()->isOnScreen(_unit->getPosition(), true, size, true));
 //		_unit->keepWalking(tileBelow, onScreenBoundary); // advances the phase
-		tileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(0,0,-1));
+		tileBelow = _battleSave->getTile(_unit->getPosition() + Position(0,0,-1));
 		_unit->keepWalking( // advances _walkPhase
 						tileBelow,
 						_onScreen);
@@ -774,15 +775,15 @@ bool UnitWalkBState::doStatusWalk() // private.
 					--y)
 			{
 //				posSized = pos + Position(x,y,0);
-				tileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(x,y,-1));
-				if (_parent->getSave()->getTile(_unit->getPosition() + Position(x,y,0))->hasNoFloor(tileBelow) == false) // _unit->getMovementType() == MT_FLY ||
+				tileBelow = _battleSave->getTile(_unit->getPosition() + Position(x,y,-1));
+				if (_battleSave->getTile(_unit->getPosition() + Position(x,y,0))->hasNoFloor(tileBelow) == false) // _unit->getMovementType() == MT_FLY ||
 				{
 					//Log(LOG_INFO) << ". . . hasFloor ( fallCheck set FALSE )";
 					fallCheck = false;
 				}
 
 				//Log(LOG_INFO) << ". . remove unit from previous tile";
-				_parent->getSave()->getTile(_unit->getLastPosition() + Position(x,y,0))->setUnit(NULL);
+				_battleSave->getTile(_unit->getLastPosition() + Position(x,y,0))->setUnit(NULL);
 			}
 		} // -> might move to doStatusStand_end()
 
@@ -798,16 +799,16 @@ bool UnitWalkBState::doStatusWalk() // private.
 			{
 				//Log(LOG_INFO) << ". . set unit on new tile";
 //				posSized = pos + Position(x,y,0);
-				_parent->getSave()->getTile(_unit->getPosition() + Position(x,y,0))
+				_battleSave->getTile(_unit->getPosition() + Position(x,y,0))
 										->setUnit(
 												_unit,
-												_parent->getSave()->getTile(_unit->getPosition() + Position(x,y,-1)));
+												_battleSave->getTile(_unit->getPosition() + Position(x,y,-1)));
 				//Log(LOG_INFO) << ". . . NEW unitPos " << _unit->getPosition();
 
-//				Tile* const nextTile = _parent->getSave()->getTile(_unit->getPosition() + Position(x,y,0));
+//				Tile* const nextTile = _battleSave->getTile(_unit->getPosition() + Position(x,y,0));
 //				nextTile->setUnit(
 //								_unit,
-//								_parent->getSave()->getTile(_unit->getPosition() + Position(x,y,-1)));
+//								_battleSave->getTile(_unit->getPosition() + Position(x,y,-1)));
 
 //				if (_unit->getFaction() == FACTION_PLAYER)	// This ensures that a unit getting hit by RF will be in a discovered/visible Tile.
 //				{											// ... although CalcFOV should handle it, the latter has problems especially on top-level tiling.
@@ -836,7 +837,7 @@ bool UnitWalkBState::doStatusWalk() // private.
 						y != -1;
 						--y)
 				{
-					tileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(x,y,-1));
+					tileBelow = _battleSave->getTile(_unit->getPosition() + Position(x,y,-1));
 					//if (tileBelow) Log(LOG_INFO) << ". . otherTileBelow exists";
 					if (tileBelow != NULL
 						&& tileBelow->getUnit() != NULL)
@@ -845,7 +846,7 @@ bool UnitWalkBState::doStatusWalk() // private.
 						_falling = false;
 
 						_pf->dequeuePath();
-						_parent->getSave()->addFallingUnit(_unit);
+						_battleSave->addFallingUnit(_unit);
 
 						//Log(LOG_INFO) << "UnitWalkBState::think(), addFallingUnit() ID " << _unit->getId();
 						_parent->statePushFront(new UnitFallBState(_parent));
@@ -874,7 +875,7 @@ bool UnitWalkBState::doStatusStand_end() // private.
 		_unit->setUnitVisible(false);
 	else
 	{
-		const BattlescapeState* const battleState = _parent->getSave()->getBattleState();
+		const BattlescapeState* const battleState = _battleSave->getBattleState();
 
 		double stat = static_cast<double>(_unit->getBaseStats()->tu);
 		const int tu = _unit->getTimeUnits();
@@ -1085,7 +1086,7 @@ void UnitWalkBState::postPathProcedures() // private.
 						instaWeapon = true;
 						action.weapon = new BattleItem(
 													_parent->getRuleset()->getItem(meleeWeapon),
-													_parent->getSave()->getNextItemId());
+													_battleSave->getNextItemId());
 						action.weapon->setOwner(_unit);
 					}
 				}
@@ -1111,7 +1112,7 @@ void UnitWalkBState::postPathProcedures() // private.
 																action));
 
 					if (instaWeapon == true)
-						_parent->getSave()->removeItem(action.weapon);
+						_battleSave->removeItem(action.weapon);
 				}
 			}
 		}
@@ -1177,8 +1178,8 @@ int UnitWalkBState::getFinalDirection() const // private.
 
 	int testDist = 255;
 	for (std::vector<BattleUnit*>::const_iterator
-			i = _parent->getSave()->getUnits()->begin();
-			i != _parent->getSave()->getUnits()->end();
+			i = _battleSave->getUnits()->begin();
+			i != _battleSave->getUnits()->end();
 			++i)
 	{
 		if ((*i)->getFaction() == FACTION_PLAYER
@@ -1187,7 +1188,7 @@ int UnitWalkBState::getFinalDirection() const // private.
 			&& (*i)->getExposed() != -1
 			&& (*i)->getExposed() <= _unit->getIntelligence())
 		{
-			const int dist = _parent->getSave()->getTileEngine()->distance(
+			const int dist = _battleSave->getTileEngine()->distance(
 																	(*i)->getPosition(),
 																	_unit->getPosition());
 			if (dist < testDist)
@@ -1262,7 +1263,7 @@ void UnitWalkBState::setWalkSpeed(bool gravLift) const // private.
 void UnitWalkBState::playMovementSound() const // private.
 {
 	if (_unit->getUnitVisible() == false
-		&& _parent->getSave()->getDebugMode() == false)
+		&& _battleSave->getDebugMode() == false)
 	{
 		return;
 	}
@@ -1293,7 +1294,7 @@ void UnitWalkBState::playMovementSound() const // private.
 			{
 				const Tile
 					* const tile = _unit->getTile(),
-					* const belowTile = _parent->getSave()->getTile(tile->getPosition() + Position(0,0,-1));
+					* const belowTile = _battleSave->getTile(tile->getPosition() + Position(0,0,-1));
 
 				const int stepSound = tile->getFootstepSound(belowTile);
 				if (stepSound > -1)
@@ -1386,8 +1387,8 @@ bool UnitWalkBState::groundCheck() const // private.
 				--y)
 		{
 			pos = _unit->getPosition() + Position(x,y,0);
-			tileBelow = _parent->getSave()->getTile(pos + Position(0,0,-1));
-			if (_parent->getSave()->getTile(pos + Position(0,0,0))
+			tileBelow = _battleSave->getTile(pos + Position(0,0,-1));
+			if (_battleSave->getTile(pos + Position(0,0,0))
 										->hasNoFloor(tileBelow) == false)
 			{
 				return true;

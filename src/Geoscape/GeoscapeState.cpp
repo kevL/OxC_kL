@@ -4019,7 +4019,7 @@ void GeoscapeState::handleBaseDefense(
 	if (base->getAvailableSoldiers(true) > 0)
 	{
 		SavedBattleGame* const battle = new SavedBattleGame(&_rules->getOperations());
-		_gameSave->setBattleGame(battle);
+		_gameSave->setBattleSave(battle);
 		battle->setMissionType("STR_BASE_DEFENSE");
 
 		BattlescapeGenerator bGen = BattlescapeGenerator(_game);
@@ -4675,7 +4675,7 @@ void GeoscapeState::resize(
 		int& dX,
 		int& dY)
 {
-	if (_gameSave->getSavedBattle() != NULL)
+	if (_gameSave->getBattleSave() != NULL)
 		return;
 
 	dX = Options::baseXResolution;

@@ -28,6 +28,7 @@ namespace OpenXcom
 
 class BattlescapeGame;
 class BattleUnit;
+class SavedBattleGame;
 class Tile;
 class TileEngine;
 
@@ -44,6 +45,7 @@ private:
 	std::vector<BattleUnit*> _unitsToMove;
 	std::vector<Tile*> _tilesToFallInto;
 
+	SavedBattleGame* _battleSave;
 	TileEngine* _terrain;
 
 

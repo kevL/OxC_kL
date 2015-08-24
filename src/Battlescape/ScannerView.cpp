@@ -86,10 +86,10 @@ void ScannerView::draw()
 		{
 			for (int
 					z = 0;
-					z < _game->getSavedGame()->getSavedBattle()->getMapSizeZ();
+					z < _game->getSavedGame()->getBattleSave()->getMapSizeZ();
 					++z)
 			{
-				tile = _game->getSavedGame()->getSavedBattle()->getTile(Position(x,y,z)
+				tile = _game->getSavedGame()->getBattleSave()->getTile(Position(x,y,z)
 					 + Position(
 							_unit->getPosition().x,
 							_unit->getPosition().y,

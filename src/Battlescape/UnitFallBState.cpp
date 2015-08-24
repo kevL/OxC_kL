@@ -44,7 +44,8 @@ namespace OpenXcom
 UnitFallBState::UnitFallBState(BattlescapeGame* const parent)
 	:
 		BattleState(parent),
-		_terrain(parent->getTileEngine())
+		_terrain(parent->getTileEngine()),
+		_battleSave(parent->getBattleSave())
 {}
 
 /**
@@ -63,7 +64,7 @@ void UnitFallBState::init()
 //	_terrain = _parent->getTileEngine();
 
 	Uint32 interval;
-	if (_parent->getSave()->getSide() == FACTION_PLAYER)
+	if (_battleSave->getSide() == FACTION_PLAYER)
 		interval = static_cast<Uint32>(Options::battleXcomSpeed);
 	else
 		interval = static_cast<Uint32>(Options::battleAlienSpeed);
@@ -84,8 +85,8 @@ void UnitFallBState::think()
 	Position startPos;
 
 	for (std::list<BattleUnit*>::const_iterator
-			i = _parent->getSave()->getFallingUnits()->begin();
-			i != _parent->getSave()->getFallingUnits()->end();
+			i = _battleSave->getFallingUnits()->begin();
+			i != _battleSave->getFallingUnits()->end();
 			)
 	{
 		//Log(LOG_INFO) << ". falling ID " << (*i)->getId();
@@ -94,7 +95,7 @@ void UnitFallBState::think()
 //			|| (*i)->getStun() >= (*i)->getHealth())
 		{
 			//Log(LOG_INFO) << ". dead OR stunned, Erase & cont";
-			i = _parent->getSave()->getFallingUnits()->erase(i);
+			i = _battleSave->getFallingUnits()->erase(i);
 			continue;
 		}
 
@@ -122,8 +123,8 @@ void UnitFallBState::think()
 					y != -1;
 					--y)
 			{
-				tileBelow = _parent->getSave()->getTile((*i)->getPosition() + Position(x,y,-1));
-				if (_parent->getSave()->getTile((*i)->getPosition() + Position(x,y,0))
+				tileBelow = _battleSave->getTile((*i)->getPosition() + Position(x,y,-1));
+				if (_battleSave->getTile((*i)->getPosition() + Position(x,y,0))
 												->hasNoFloor(tileBelow) == false
 					|| (*i)->getMoveTypeUnit() == MT_FLY)
 				{
@@ -133,7 +134,7 @@ void UnitFallBState::think()
 			}
 		}
 
-		tileBelow = _parent->getSave()->getTile((*i)->getPosition() + Position(0,0,-1));
+		tileBelow = _battleSave->getTile((*i)->getPosition() + Position(0,0,-1));
 
 		falling = fallCheck
 			   && (*i)->getPosition().z != 0
@@ -153,7 +154,7 @@ void UnitFallBState::think()
 						y != -1;
 						--y)
 				{
-					tileBelow = _parent->getSave()->getTile((*i)->getPosition() + Position(x,y,-1));
+					tileBelow = _battleSave->getTile((*i)->getPosition() + Position(x,y,-1));
 					_tilesToFallInto.push_back(tileBelow);
 				}
 			}
@@ -211,10 +212,10 @@ void UnitFallBState::think()
 						--y)
 				{
 					// Another falling unit might have already taken up this position so check that that unit is still there.
-					if (*i == _parent->getSave()->getTile((*i)->getLastPosition() + Position(x,y,0))->getUnit())
+					if (*i == _battleSave->getTile((*i)->getLastPosition() + Position(x,y,0))->getUnit())
 					{
 						//Log(LOG_INFO) << ". Tile is not occupied";
-						_parent->getSave()->getTile((*i)->getLastPosition() + Position(x,y,0))->setUnit(NULL);
+						_battleSave->getTile((*i)->getLastPosition() + Position(x,y,0))->setUnit(NULL);
 					}
 				}
 			}
@@ -230,10 +231,10 @@ void UnitFallBState::think()
 						--y)
 				{
 					//Log(LOG_INFO) << ". setUnit to belowTile";
-					_parent->getSave()->getTile((*i)->getPosition() + Position(x,y,0))
+					_battleSave->getTile((*i)->getPosition() + Position(x,y,0))
 									->setUnit(
 											*i,
-											_parent->getSave()->getTile((*i)->getPosition() + Position(x,y,-1)));
+											_battleSave->getTile((*i)->getPosition() + Position(x,y,-1)));
 				}
 			}
 
@@ -289,8 +290,8 @@ void UnitFallBState::think()
 						{
 							//Log(LOG_INFO) << ". . . checking bodysections";
 							startPos = *k;
-							tile = _parent->getSave()->getTile(startPos + unitVect);
-							tileBelow = _parent->getSave()->getTile(startPos + unitVect + Position(0,0,-1));
+							tile = _battleSave->getTile(startPos + unitVect);
+							tileBelow = _battleSave->getTile(startPos + unitVect + Position(0,0,-1));
 
 							bool
 								aboutToBeOccupiedFromAbove = tile != NULL
@@ -308,10 +309,10 @@ void UnitFallBState::think()
 											   && tile->getUnit() != unitBelow,
 								hasFloor = tile != NULL
 										&& tile->hasNoFloor(tileBelow) == false,
-								blocked = _parent->getSave()->getPathfinding()->isBlockedPath(
-																						_parent->getSave()->getTile(startPos),
-																						dir,
-																						unitBelow),
+								blocked = _battleSave->getPathfinding()->isBlockedPath(
+																					_battleSave->getTile(startPos),
+																					dir,
+																					unitBelow),
 								unitCanFly = unitBelow->getMoveTypeUnit() == MT_FLY,
 								canMoveToTile = tile != NULL
 											 && alreadyOccupied == false
@@ -331,7 +332,7 @@ void UnitFallBState::think()
 							if (k == bodyPositions.end())
 							{
 								//Log(LOG_INFO) << ". . . . move unit";
-								if (_parent->getSave()->addFallingUnit(unitBelow) == true)
+								if (_battleSave->addFallingUnit(unitBelow) == true)
 								{
 									//Log(LOG_INFO) << ". . . . . add Falling Unit";
 									escape = true;
@@ -348,7 +349,7 @@ void UnitFallBState::think()
 												--y)
 										{
 											//Log(LOG_INFO) << ". . . . . . check for more escape units?";
-											escapeTiles.push_back(_parent->getSave()->getTile(tile->getPosition() + Position(x,y,0)));
+											escapeTiles.push_back(_battleSave->getTile(tile->getPosition() + Position(x,y,0)));
 										}
 									}
 
@@ -356,7 +357,7 @@ void UnitFallBState::think()
 									unitBelow->startWalking(
 														dir,
 														unitBelow->getPosition() + unitVect,
-														_parent->getSave()->getTile(startPos + Position(0,0,-1)));
+														_battleSave->getTile(startPos + Position(0,0,-1)));
 //														onScreen);
 
 									j = _unitsToMove.erase(j);
@@ -386,7 +387,7 @@ void UnitFallBState::think()
 				//Log(LOG_INFO) << ". . still falling -> startWalking()";
 				Position destination = (*i)->getPosition() + Position(0,0,-1);
 
-				tileBelow = _parent->getSave()->getTile(destination);
+				tileBelow = _battleSave->getTile(destination);
 				(*i)->startWalking(
 								Pathfinding::DIR_DOWN,
 								destination,
@@ -433,7 +434,7 @@ void UnitFallBState::think()
 				if (_parent->getTileEngine()->checkReactionFire(*i))
 					_parent->getPathfinding()->abortPath();
 
-				i = _parent->getSave()->getFallingUnits()->erase(i);
+				i = _battleSave->getFallingUnits()->erase(i);
 			}
 		}
 		else
@@ -445,7 +446,7 @@ void UnitFallBState::think()
 
 
 	//Log(LOG_INFO) << ". done main recursion";
-	if (_parent->getSave()->getFallingUnits()->empty() == true)
+	if (_battleSave->getFallingUnits()->empty() == true)
 	{
 		//Log(LOG_INFO) << ". Falling units EMPTY";
 //		_tilesToFallInto.clear();

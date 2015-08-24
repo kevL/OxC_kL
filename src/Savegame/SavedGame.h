@@ -276,7 +276,7 @@ private:
 	AlienStrategy* _alienStrategy;
 	GameTime* _time;
 	const Ruleset* const _rules;
-	SavedBattleGame* _battleGame;
+	SavedBattleGame* _battleSave;
 
 	std::wstring _name;
 	std::string
@@ -432,10 +432,10 @@ private:
 		/// Gets the list of mission sites.
 		std::vector<MissionSite*>* getMissionSites();
 
-		/// Gets the current battle game.
-		SavedBattleGame* getSavedBattle();
-		/// Sets the current battle game.
-		void setBattleGame(SavedBattleGame* battleGame);
+		/// Gets the current battle save.
+		SavedBattleGame* getBattleSave();
+		/// Sets the current battle save.
+		void setBattleSave(SavedBattleGame* battleSave);
 
 		/// Adds a finished ResearchProject.
 		void addFinishedResearch(

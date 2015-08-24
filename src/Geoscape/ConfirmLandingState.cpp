@@ -361,7 +361,7 @@ void ConfirmLandingState::btnYesClick(Action*)
 	AlienBase* const alienBase = dynamic_cast<AlienBase*>(_craft->getDestination());
 
 	SavedBattleGame* battleSave = new SavedBattleGame(&_game->getRuleset()->getOperations());
-	_game->getSavedGame()->setBattleGame(battleSave);
+	_game->getSavedGame()->setBattleSave(battleSave);
 
 	BattlescapeGenerator bGen (_game); // init.
 	bGen.setCraft(_craft);

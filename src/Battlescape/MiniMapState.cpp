@@ -140,7 +140,7 @@ MiniMapState::MiniMapState(
 	_timerAnimate->onTimer((StateHandler)& MiniMapState::animate);
 	_timerAnimate->start();
 
-	_game->getSavedGame()->getSavedBattle()->getBattleState()->getMap()->setNoDraw(true);
+	_game->getSavedGame()->getBattleSave()->getBattleState()->getMap()->setNoDraw(true);
 	_miniView->draw();
 }
 
@@ -168,7 +168,7 @@ void MiniMapState::handle(Action* action)
 			btnLevelUpClick(action);
 //		else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) // kL->
 //		{
-//			_game->getSavedGame()->getSavedBattle()->getBattleState()->getMap()->setNoDraw(false);
+//			_game->getSavedGame()->getBattleSave()->getBattleState()->getMap()->setNoDraw(false);
 //			_game->popState();
 //		}
 	}
@@ -192,7 +192,7 @@ void MiniMapState::btnOkClick(Action*)
 		_game->getScreen()->resetDisplay(false);
 	} */
 
-	_game->getSavedGame()->getSavedBattle()->getBattleState()->getMap()->setNoDraw(false);
+	_game->getSavedGame()->getBattleSave()->getBattleState()->getMap()->setNoDraw(false);
 	_game->popState();
 }
 

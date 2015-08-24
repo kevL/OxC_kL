@@ -107,7 +107,7 @@ namespace OpenXcom
 BattlescapeState::BattlescapeState()
 	:
 		_gameSave(_game->getSavedGame()),
-		_battleSave(_game->getSavedGame()->getSavedBattle()),
+		_battleSave(_game->getSavedGame()->getBattleSave()),
 		_rules(_game->getRuleset()),
 //		_reserve(0),
 //		_xBeforeMouseScrolling(0),

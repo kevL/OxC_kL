@@ -79,7 +79,7 @@ InventoryState::InventoryState(
 		_parent(parent),
 		_flarePower(0)
 {
-	_battleSave = _game->getSavedGame()->getSavedBattle();
+	_battleSave = _game->getSavedGame()->getBattleSave();
 
 /*	if (Options::maximizeInfoScreens)
 	{
@@ -321,7 +321,7 @@ InventoryState::InventoryState(
 
 	_inv->draw();
 	_inv->setTuMode(_tuMode);
-	_inv->setSelectedUnit(_game->getSavedGame()->getSavedBattle()->getSelectedUnit());
+	_inv->setSelectedUnit(_game->getSavedGame()->getBattleSave()->getSelectedUnit());
 	_inv->onMouseClick((ActionHandler)& InventoryState::invClick, 0);
 	_inv->onMouseOver((ActionHandler)& InventoryState::invMouseOver);
 	_inv->onMouseOut((ActionHandler)& InventoryState::invMouseOut);

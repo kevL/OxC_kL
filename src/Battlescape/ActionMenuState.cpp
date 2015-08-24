@@ -334,7 +334,7 @@ void ActionMenuState::handle(Action* action)
  */
 void ActionMenuState::btnActionMenuClick(Action* action)
 {
-	_game->getSavedGame()->getSavedBattle()->getPathfinding()->removePreview();
+	_game->getSavedGame()->getBattleSave()->getPathfinding()->removePreview();
 
 	size_t btnId = MENU_ITEMS;
 
@@ -367,7 +367,7 @@ void ActionMenuState::btnActionMenuClick(Action* action)
 												itRule->getMeleeSound())
 											->play(
 												-1,
-												_game->getSavedGame()->getSavedBattle()->getBattleGame()->getMap()
+												_game->getSavedGame()->getBattleSave()->getBattleGame()->getMap()
 													->getSoundAngle(_action->actor->getPosition()));
 			break;
 
@@ -453,7 +453,7 @@ void ActionMenuState::btnActionMenuClick(Action* action)
 			case BA_HIT:
 				if (_action->TU > _action->actor->getTimeUnits())
 					_action->result = "STR_NOT_ENOUGH_TIME_UNITS";
-				else if (_game->getSavedGame()->getSavedBattle()->getTileEngine()
+				else if (_game->getSavedGame()->getBattleSave()->getTileEngine()
 										->validMeleeRange(_action->actor) == false)
 				{
 					_action->result = "STR_THERE_IS_NO_ONE_THERE";
@@ -480,7 +480,7 @@ void ActionMenuState::btnActionMenuClick(Action* action)
  */
 bool ActionMenuState::canExecuteTarget() // private.
 {
-	const SavedBattleGame* const battleSave = _game->getSavedGame()->getSavedBattle();
+	const SavedBattleGame* const battleSave = _game->getSavedGame()->getBattleSave();
 	const Position pos = _action->actor->getPosition();
 	const Tile* tile = battleSave->getTile(pos);
 

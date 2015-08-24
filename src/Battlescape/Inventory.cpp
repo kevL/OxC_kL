@@ -88,8 +88,6 @@ Inventory::Inventory(
 		_prime(-1),
 		_tuCost(-1)
 {
-//	_depth = _game->getSavedGame()->getSavedBattle()->getDepth();
-
 	_grid			= new Surface(width, height, x,y);
 	_items			= new Surface(width, height, x,y);
 	_selection		= new Surface(

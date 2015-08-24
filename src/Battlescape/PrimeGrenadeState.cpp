@@ -89,10 +89,7 @@ PrimeGrenadeState::PrimeGrenadeState(
 							y + ((static_cast<int>(i) / 8) * 24) - 3);
 	}
 
-//	if (inInventoryView == true)
 	setPalette("PAL_BATTLESCAPE");
-//	else
-//		_game->getSavedGame()->getSavedBattle()->setPaletteByDepth(this);
 
 	const Element* const bgElem = _game->getRuleset()->getInterface("battlescape")->getElement("grenadeBackground");
 

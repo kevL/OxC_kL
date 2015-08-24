@@ -32,6 +32,7 @@ namespace OpenXcom
 class BattleUnit;
 class Camera;
 class Pathfinding;
+class SavedBattleGame;
 class TileEngine;
 
 
@@ -58,6 +59,7 @@ private:
 	BattleUnit* _unit;
 	Camera* _walkCam;
 	Pathfinding* _pf;
+	SavedBattleGame* _battleSave;
 	TileEngine* _terrain;
 
 	/// This function begins unit movement.

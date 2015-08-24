@@ -182,10 +182,10 @@ void LoadGameState::think()
 			_game->getScreen()->resetDisplay(false);
 			_game->setState(new GeoscapeState());
 
-			if (_game->getSavedGame()->getSavedBattle() != NULL)
+			if (_game->getSavedGame()->getBattleSave() != NULL)
 			{
 				Log(LOG_INFO) << "LoadGameState: loading battlescape map";
-				_game->getSavedGame()->getSavedBattle()->loadMapResources(_game);
+				_game->getSavedGame()->getBattleSave()->loadMapResources(_game);
 
 				Options::baseXResolution = Options::baseXBattlescape;
 				Options::baseYResolution = Options::baseYBattlescape;
@@ -194,7 +194,7 @@ void LoadGameState::think()
 
 				BattlescapeState* const bs = new BattlescapeState();
 				_game->pushState(bs);
-				_game->getSavedGame()->getSavedBattle()->setBattleState(bs);
+				_game->getSavedGame()->getBattleSave()->setBattleState(bs);
 			}
 		}
 		catch (Exception& e)

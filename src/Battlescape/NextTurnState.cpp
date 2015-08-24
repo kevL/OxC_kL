@@ -86,7 +86,6 @@ NextTurnState::NextTurnState(
 //							_game->getScreen()->getHeight(),
 //							0,0);
 
-//	_battleSave->setPaletteByDepth(this);
 	setPalette("PAL_BATTLESCAPE");
 
 	add(_window);

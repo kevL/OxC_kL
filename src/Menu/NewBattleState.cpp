@@ -532,7 +532,7 @@ void NewBattleState::btnOkClick(Action*)
 	}
 
 	SavedBattleGame* const battleSave = new SavedBattleGame();
-	_game->getSavedGame()->setBattleGame(battleSave);
+	_game->getSavedGame()->setBattleSave(battleSave);
 	battleSave->setMissionType(_missionTypes[_cbxMission->getSelected()]);
 	BattlescapeGenerator bGen = BattlescapeGenerator(_game);
 	Base* base = NULL;
