@@ -75,8 +75,8 @@ private:
 	public:
 		/// Creates the Manufacture state.
 		ManufactureState(
-				Base* base,
-				BasescapeState* state = NULL);
+				Base* const base,
+				BasescapeState* const state = NULL);
 		/// Cleans up the Manufacture state.
 		~ManufactureState();
 

@@ -36,7 +36,7 @@ class Window;
 
 /**
  * Window which inform the player of new possible manufacture projects.
- * Also allow to go to the ManufactureState to dispatch available engineers.
+ * @note Also lets the player to go to ManufactureState to dispatch engineers.
  */
 class NewPossibleManufactureState
 	:
@@ -56,9 +56,9 @@ private:
 	public:
 		/// Creates the NewPossibleManufacture state.
 		NewPossibleManufactureState(
-				Base* base,
+				Base* const base,
 				const std::vector<RuleManufacture*>& possibilities,
-				bool showManufactureButton); // myk002_add.
+				bool showManufactureButton);
 
 		/// Handler for clicking the OK button.
 		void btnOkClick(Action* action);

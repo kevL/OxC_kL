@@ -4464,7 +4464,7 @@
 1440459791 f:\git\openxcom\src\menu\optionsbasestate.h
 	"../Engine/State.h"
 
-1430208088 f:\git\openxcom\src\basescape\manufacturestate.h
+1440476320 f:\git\openxcom\src\basescape\manufacturestate.h
 	"../Engine/State.h"
 
 1431469874 f:\git\openxcom\src\basescape\purchasestate.h
@@ -4857,7 +4857,7 @@
 1432678018 f:\git\openxcom\src\basescape\manufacturestartstate.h
 	"../Engine/State.h"
 
-1438163679 source:f:\git\openxcom\src\basescape\manufacturestate.cpp
+1440476320 source:f:\git\openxcom\src\basescape\manufacturestate.cpp
 	"ManufactureState.h"
 	"BasescapeState.h"
 	"ManufactureInfoState.h"
@@ -6936,7 +6936,7 @@
 1430149550 f:\git\openxcom\src\geoscape\fundingstate.h
 	"../Engine/State.h"
 
-1438532124 source:f:\git\openxcom\src\geoscape\geoscapecraftstate.cpp
+1440474800 source:f:\git\openxcom\src\geoscape\geoscapecraftstate.cpp
 	"GeoscapeCraftState.h"
 	"GeoscapeState.h"
 	"Globe.h"
@@ -6960,7 +6960,7 @@
 1432346700 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1440458270 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1440479769 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	"AlienBaseState.h"
 	"BaseDefenseState.h"
@@ -7045,7 +7045,7 @@
 	"../Savegame/Waypoint.h"
 	"../Ufopaedia/Ufopaedia.h"
 
-1440094854 f:\git\openxcom\src\geoscape\graphsstate.h
+1440475121 f:\git\openxcom\src\geoscape\graphsstate.h
 	"../Engine/State.h"
 
 1440097049 f:\git\openxcom\src\geoscape\itemsarrivingstate.h
@@ -7060,10 +7060,10 @@
 1430149550 f:\git\openxcom\src\geoscape\multipletargetsstate.h
 	"../Engine/State.h"
 
-1430149550 f:\git\openxcom\src\geoscape\newpossiblemanufacturestate.h
+1440480123 f:\git\openxcom\src\geoscape\newpossiblemanufacturestate.h
 	"../Engine/State.h"
 
-1430149550 f:\git\openxcom\src\geoscape\newpossibleresearchstate.h
+1440480134 f:\git\openxcom\src\geoscape\newpossibleresearchstate.h
 	"../Engine/State.h"
 
 1435963986 f:\git\openxcom\src\geoscape\productioncompletestate.h
@@ -8190,7 +8190,7 @@
 	"../Engine/SurfaceSet.h"
 	"../Resource/XcomResourcePack.h"
 
-1440471681 source:f:\git\openxcom\src\resource\xcomresourcepack.cpp
+1440475201 source:f:\git\openxcom\src\resource\xcomresourcepack.cpp
 	"XcomResourcePack.h"
 	"../Engine/Language.h"
 	"../Engine/Sound.h"
@@ -8292,7 +8292,7 @@
 1440461473 source:f:\git\openxcom\src\ruleset\ruleresearch.cpp
 	"RuleResearch.h"
 
-1440461974 source:f:\git\openxcom\src\ruleset\ruleset.cpp
+1440472417 source:f:\git\openxcom\src\ruleset\ruleset.cpp
 	"Ruleset.h"
 	"AlienRace.h"
 	"AlienDeployment.h"
@@ -8400,7 +8400,7 @@
 	"../Ruleset/RuleRegion.h"
 	"../Ruleset/Ruleset.h"
 
-1440215137 source:f:\git\openxcom\src\savegame\base.cpp
+1440472511 source:f:\git\openxcom\src\savegame\base.cpp
 	"Base.h"
 	"BaseFacility.h"
 	"Craft.h"

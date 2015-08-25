@@ -422,20 +422,26 @@ XcomResourcePack::XcomResourcePack(const Ruleset* const rules)
 	{
 #ifndef __NO_MUSIC // sza_MusicRules
 		Log(LOG_INFO) << "Loading music ...";
+		// Load musics!
 
-		// Load musics
 		// gather the assignments first.
+		const RuleMusic* musicRule;
+		std::vector<std::string> terrains;
+		std::string
+			type,
+			mode;
+
 		const std::vector<std::pair<std::string, RuleMusic*> > musicRules = rules->getMusic();
 		for (std::vector<std::pair<std::string, RuleMusic*> >::const_iterator
 				i = musicRules.begin();
 				i != musicRules.end();
 				++i)
 		{
-			const std::string type = i->first;
-			const RuleMusic* const musicRule = i->second;
+			type = i->first;
+			musicRule = i->second;
 
-			const std::vector<std::string> terrains = musicRule->getMusicalTerrains();
-			const std::string mode = musicRule->getMode();
+			terrains = musicRule->getMusicalTerrains();
+			mode = musicRule->getMode();
 			if (mode == "replace")
 			{
 				for (std::vector<std::string>::const_iterator
@@ -461,25 +467,38 @@ XcomResourcePack::XcomResourcePack(const Ruleset* const rules)
 		}
 
 		// have the assignments, load the required files.
+		const std::string exts[] =
+		{
+			".ogg" //,".flac",".mp3",".mod",".wav"
+		};
+
+		std::string file;
+		std::ostringstream oststr;
+
+		std::map<std::string, std::vector<std::pair<std::string, int> > > assignment;
+		std::vector<std::pair<std::string, int> > files;
+
+		bool loaded;
+
 		for (std::map<std::string, std::map<std::string, std::vector<std::pair<std::string, int> > > >::const_iterator
 				i = _musicAssignment.begin();
 				i != _musicAssignment.end();
 				++i)
 		{
-			const std::map<std::string, std::vector<std::pair<std::string, int> > > assignment = i->second;
+			assignment = i->second;
 			for (std::map<std::string, std::vector<std::pair<std::string, int> > >::const_iterator
 					j = assignment.begin();
 					j != assignment.end();
 					++j)
 			{
-				const std::vector<std::pair<std::string, int> > files = j->second;
+				files = j->second;
 				for (std::vector<std::pair<std::string, int> >::const_iterator
 						k = files.begin();
 						k != files.end();
 						++k)
 				{
-					bool loaded = false;
-					const std::string file = k->first;
+					loaded = false;
+					file = k->first;
 
 					// The file may have already been loaded because of an other assignment.
 					if (_musicFile.find(file) != _musicFile.end())
@@ -487,17 +506,12 @@ XcomResourcePack::XcomResourcePack(const Ruleset* const rules)
 
 					if (loaded == false) // Try digital tracks.
 					{
-						const std::string exts[] =
-						{
-							".ogg" //,".flac",".mp3",".mod",".wav"
-						};
-
 						for (size_t
 								l = 0;
 								l != sizeof(exts) / sizeof(exts[0]);
 								++l)
 						{
-							std::ostringstream oststr;
+							oststr.str("");
 							oststr << "SOUND/" << file << exts[l];
 
 							if (CrossPlatform::fileExists(CrossPlatform::getDataFile(oststr.str())) == true)
@@ -961,17 +975,17 @@ XcomResourcePack::XcomResourcePack(const Ruleset* const rules)
 	for (int y = 172; y >= 152; --y)
 		for (int x = 5; x <= 314; ++x)
 			altBack07->setPixelColor(
-									x,y + 4,
+									x, y + 4,
 									altBack07->getPixelColor(x,y));
 	for (int y = 147; y >= 134; --y)
 		for (int x = 5; x <= 314; ++x)
 			altBack07->setPixelColor(
-									x,y + 9,
+									x, y + 9,
 									altBack07->getPixelColor(x,y));
 	for (int y = 132; y >= 109; --y)
 		for (int x = 5; x <= 314; ++x)
 			altBack07->setPixelColor(
-									x,y + 10,
+									x, y + 10,
 									altBack07->getPixelColor(x,y));
 	_surfaces["ALTBACK07.SCR"] = altBack07; // kL_end.
 

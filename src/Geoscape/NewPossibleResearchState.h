@@ -36,7 +36,7 @@ class Window;
 
 /**
  * Window which inform the player of new possible research projects.
- * Also allow to go to the ResearchState to dispatch available scientist.
+ * @note Also allows the player to go to ResearchState to dispatch scientists.
  */
 class NewPossibleResearchState
 	:
@@ -56,9 +56,9 @@ private:
 	public:
 		/// Creates the NewPossibleResearch state.
 		NewPossibleResearchState(
-				Base* base,
+				Base* const base,
 				const std::vector<RuleResearch*>& possibilities,
-				bool showResearchButton); // myk002_add.
+				bool showResearchButton);
 
 		/// Handler for clicking the OK button.
 		void btnOkClick(Action* action);

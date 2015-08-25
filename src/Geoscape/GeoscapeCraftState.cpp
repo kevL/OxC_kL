@@ -469,7 +469,8 @@ void GeoscapeCraftState::btnCancelClick(Action*)
  */
 void GeoscapeCraftState::transposeWindow() // private.
 {
-	_window->setBackground(NULL);
+//	_window->setBackground(NULL);
+	_window->setVisible(false);
 
 	_txtRedirect->setVisible(false);
 	_txtSpeed->setVisible(false);

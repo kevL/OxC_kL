@@ -46,71 +46,67 @@ namespace OpenXcom
  * @param showManufactureButton	- true to show the goto manufacture button
  */
 NewPossibleManufactureState::NewPossibleManufactureState(
-		Base* base,
+		Base* const base,
 		const std::vector<RuleManufacture*>& possibilities,
-		bool showManufactureButton) // myk002_add.
+		bool showManufactureButton)
 	:
 		_base(base)
 {
 	_screen = false;
 
 	_window				= new Window(this, 288, 180, 16, 10);
-	_txtTitle			= new Text(288, 40, 16, 20);
+	_txtTitle			= new Text(288, 17, 16, 20);
 
 	_lstPossibilities	= new TextList(253, 81, 24, 56);
 
-	_btnOk				= new TextButton(160, 14, 80, 149);
-	_btnManufacture		= new TextButton(160, 14, 80, 165);
+	_btnManufacture		= new TextButton(160, 14, 80, 149);
+	_btnOk				= new TextButton(160, 14, 80, 165);
 
 	setInterface("geoManufacture");
 
 	add(_window,			"window",	"geoManufacture");
 	add(_txtTitle,			"text1",	"geoManufacture");
 	add(_lstPossibilities,	"text2",	"geoManufacture");
-	add(_btnOk,				"button",	"geoManufacture");
 	add(_btnManufacture,	"button",	"geoManufacture");
+	add(_btnOk,				"button",	"geoManufacture");
 
 	centerAllSurfaces();
 
 
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK17.SCR"));
 
-//myk002	_btnOk->setText(tr("STR_OK"));
-	_btnOk->setText(tr(showManufactureButton? "STR_OK": "STR_MORE")); // myk002
+	_btnOk->setText(tr(showManufactureButton ? "STR_OK" : "STR_MORE"));
 	_btnOk->onMouseClick((ActionHandler)& NewPossibleManufactureState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& NewPossibleManufactureState::btnOkClick,
 					Options::keyCancel);
 
 	_btnManufacture->setText(tr("STR_ALLOCATE_MANUFACTURE"));
-	_btnManufacture->setVisible(showManufactureButton); // myk002
 	_btnManufacture->onMouseClick((ActionHandler)& NewPossibleManufactureState::btnManufactureClick);
 	_btnManufacture->onKeyboardPress(
 					(ActionHandler)& NewPossibleManufactureState::btnManufactureClick,
 					Options::keyOk);
-	_btnManufacture->setVisible(base->getAvailableWorkshops() > 0);
+	_btnManufacture->setVisible(showManufactureButton && base->getAvailableWorkshops() != 0);
 
-	_txtTitle->setBig();
-	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_WE_CAN_NOW_PRODUCE"));
+	_txtTitle->setAlign(ALIGN_CENTER);
+	_txtTitle->setBig();
 
-	_lstPossibilities->setColumns(1, 288);
-	_lstPossibilities->setBig();
+	_lstPossibilities->setColumns(1, 260);
 	_lstPossibilities->setAlign(ALIGN_CENTER);
+	_lstPossibilities->setBig();
 
 	for (std::vector<RuleManufacture*>::const_iterator
 			i = possibilities.begin();
 			i != possibilities.end();
 			++i)
 	{
-		_lstPossibilities->addRow(
-								1,
-								tr((*i)->getName()).c_str());
+		_lstPossibilities->addRow(1, tr((*i)->getName()).c_str());
 	}
 }
 
 /**
- * return to the previous screen
+ * Returns to the previous screen.
  * @param action - pointer to an Action
  */
 void NewPossibleManufactureState::btnOkClick(Action*)
@@ -119,7 +115,7 @@ void NewPossibleManufactureState::btnOkClick(Action*)
 }
 
 /**
- * Open the ManufactureState so the player can dispatch available engineers.
+ * Opens the ManufactureState so the player can dispatch available engineers.
  * @param action - pointer to an Action
  */
 void NewPossibleManufactureState::btnManufactureClick(Action*)

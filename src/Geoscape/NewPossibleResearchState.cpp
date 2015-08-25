@@ -49,7 +49,7 @@ namespace OpenXcom
  * @param showResearchButton	- true to show new research button
  */
 NewPossibleResearchState::NewPossibleResearchState(
-		Base* base,
+		Base* const base,
 		const std::vector<RuleResearch*>& possibilities,
 		bool showResearchButton) // myk002_add.
 	:
@@ -58,46 +58,45 @@ NewPossibleResearchState::NewPossibleResearchState(
 	_screen = false;
 
 	_window				= new Window(this, 288, 180, 16, 10);
-	_txtTitle			= new Text(288, 40, 16, 20);
+	_txtTitle			= new Text(288, 17, 16, 20);
 
 	_lstPossibilities	= new TextList(253, 81, 24, 56);
 
-	_btnOk				= new TextButton(160, 14, 80, 149);
-	_btnResearch		= new TextButton(160, 14, 80, 165);
+	_btnResearch		= new TextButton(160, 14, 80, 149);
+	_btnOk				= new TextButton(160, 14, 80, 165);
 
 	setInterface("geoResearch");
 
 	add(_window,			"window",	"geoResearch");
 	add(_txtTitle,			"text1",	"geoResearch");
 	add(_lstPossibilities,	"text2",	"geoResearch");
-	add(_btnOk,				"button",	"geoResearch");
 	add(_btnResearch,		"button",	"geoResearch");
+	add(_btnOk,				"button",	"geoResearch");
 
 	centerAllSurfaces();
 
 
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK05.SCR"));
 
-//myk002	_btnOk->setText(tr("STR_OK"));
-	_btnOk->setText(tr(showResearchButton? "STR_OK": "STR_MORE")); // myk002
+	_btnOk->setText(tr(showResearchButton ? "STR_OK" : "STR_MORE"));
 	_btnOk->onMouseClick((ActionHandler)& NewPossibleResearchState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& NewPossibleResearchState::btnOkClick,
 					Options::keyCancel);
 
 	_btnResearch->setText(tr("STR_ALLOCATE_RESEARCH"));
-	_btnResearch->setVisible(showResearchButton); // myk002
+	_btnResearch->setVisible(showResearchButton);
 	_btnResearch->onMouseClick((ActionHandler)& NewPossibleResearchState::btnResearchClick);
 	_btnResearch->onKeyboardPress(
 					(ActionHandler)& NewPossibleResearchState::btnResearchClick,
 					Options::keyOk);
 
-	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
+	_txtTitle->setBig();
 
-	_lstPossibilities->setColumns(1, 288);
-	_lstPossibilities->setBig();
+	_lstPossibilities->setColumns(1, 260);
 	_lstPossibilities->setAlign(ALIGN_CENTER);
+	_lstPossibilities->setBig();
 
 	size_t tally (0); // init.
 
@@ -111,24 +110,21 @@ NewPossibleResearchState::NewPossibleResearchState(
 			&& _game->getRuleset()->getUnit((*i)->getName()) == NULL)
 		{
 			_game->getSavedGame()->addPoppedResearch((*i));
-			_lstPossibilities->addRow(
-									1,
-									tr((*i)->getName ()).c_str());
+			_lstPossibilities->addRow(1, tr((*i)->getName ()).c_str());
 		}
 		else
 			++tally;
 	}
 
-	if (!
-		(tally == possibilities.size()
-			|| possibilities.empty()))
+	if (possibilities.empty() == false
+		&& possibilities.size() != tally)
 	{
 		_txtTitle->setText(tr("STR_WE_CAN_NOW_RESEARCH"));
 	}
 }
 
 /**
- * return to the previous screen
+ * Returns to the previous screen.
  * @param action - pointer to an Action
  */
 void NewPossibleResearchState::btnOkClick(Action*)
@@ -137,7 +133,7 @@ void NewPossibleResearchState::btnOkClick(Action*)
 }
 
 /**
- * Open the ResearchState so the player can dispatch available scientist.
+ * Opens the ResearchState so the player can dispatch available scientists.
  * @param action - pointer to an Action
  */
 void NewPossibleResearchState::btnResearchClick(Action*)

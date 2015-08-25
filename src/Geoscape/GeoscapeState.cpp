@@ -3019,7 +3019,7 @@ void GeoscapeState::time1Day()
 							l != _gameSave->getDiscoveredResearch().end();
 							++l)
 					{
-						if (*k == (*l)->getName())
+						if ((*l)->getName() == *k)
 							oneFree = false;
 					}
 
@@ -3044,14 +3044,16 @@ void GeoscapeState::time1Day()
 				}
 			}
 
-			const RuleResearch* newResearch = research;
+			const RuleResearch* newResearch;
 
-			std::string name = research->getLookup();
-			if (name.empty() == true)
-				name = research->getName();
+			std::string lookUp = research->getLookup();
+			if (lookUp.empty() == true)
+				lookUp = research->getName();
 
-			if (_gameSave->isResearched(name) == true)
+			if (_gameSave->isResearched(lookUp) == true)
 				newResearch = NULL;
+			else
+				newResearch = research;
 
 			_gameSave->addFinishedResearch( // this adds the actual research project to _discovered vector.
 										research,

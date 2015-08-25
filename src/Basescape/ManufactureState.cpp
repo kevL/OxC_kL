@@ -53,8 +53,8 @@ namespace OpenXcom
  * @param state	- pointer to the BasescapeState (default NULL when geoscape-invoked)
  */
 ManufactureState::ManufactureState(
-		Base* base,
-		BasescapeState* state)
+		Base* const base,
+		BasescapeState* const state)
 	:
 		_base(base),
 		_state(state),

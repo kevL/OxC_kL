@@ -40,8 +40,8 @@ struct GraphBtnInfo;
 
 
 /**
- * Graphs screen for displaying graphs of various
- * monthly game data like activity and funding.
+ * Graphs screen for displaying graphs of various monthly game data like
+ * activity and funding.
  */
 class GraphsState
 	:
