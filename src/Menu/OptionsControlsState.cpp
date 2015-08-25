@@ -63,9 +63,9 @@ OptionsControlsState::OptionsControlsState(OptionsOrigin origin)
 	_lstControls->onMouseClick((ActionHandler)& OptionsControlsState::lstControlsClick, 0);
 	_lstControls->onKeyboardPress((ActionHandler)& OptionsControlsState::lstControlsKeyPress);
 	_lstControls->setFocus(true);
-	_lstControls->setTooltip("STR_CONTROLS_DESC");
-	_lstControls->onMouseIn((ActionHandler)& OptionsControlsState::txtTooltipIn);
-	_lstControls->onMouseOut((ActionHandler)& OptionsControlsState::txtTooltipOut);
+//	_lstControls->setTooltip("STR_CONTROLS_DESC");
+//	_lstControls->onMouseIn((ActionHandler)& OptionsControlsState::txtTooltipIn);
+//	_lstControls->onMouseOut((ActionHandler)& OptionsControlsState::txtTooltipOut);
 
 	_colorGroup = _lstControls->getSecondaryColor();
 	_colorSel = _lstControls->getScrollbarColor();

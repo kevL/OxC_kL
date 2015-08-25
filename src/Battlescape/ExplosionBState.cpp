@@ -410,8 +410,7 @@ void ExplosionBState::think()
 /**
  * Explosions cannot be cancelled.
  */
-void ExplosionBState::cancel()
-{}
+//void ExplosionBState::cancel(){}
 
 /**
  * Calculates the effects of an attack.

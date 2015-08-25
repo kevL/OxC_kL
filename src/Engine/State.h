@@ -139,7 +139,7 @@ protected:
 				const std::string& palette,
 				int backpal = -1);
 		/// Gets the state's 8bpp palette.
-		SDL_Color* const getPalette();
+		SDL_Color* getPalette();
 
 		/// Let the state know the window has been resized.
 		virtual void resize(

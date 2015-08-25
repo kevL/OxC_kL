@@ -128,7 +128,7 @@ const std::vector<std::string>& RuleResearch::getGetOneFree() const
  * Gets what article to look up in the Ufopedia.
  * @return, article to look up
  */
-const std::string RuleResearch::getLookup() const
+std::string RuleResearch::getLookup() const
 {
 	return _lookup;
 }

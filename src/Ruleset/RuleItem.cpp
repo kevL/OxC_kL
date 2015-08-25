@@ -1039,18 +1039,18 @@ bool RuleItem::isLOSRequired() const
 
 /**
  * Gets the associated special type of this item.
- * Note that type 14 is the alien brain, and types 0 and 1 are "regular tile"
- * and "starting point" so try not to use those ones.
+ * @note Type 14 is the alien brain and types 0 and 1 are "regular tile" and
+ ( "starting point" so try not to use those ones.
  * @return, special type
  */
-const int RuleItem::getSpecialType() const
+int RuleItem::getSpecialType() const
 {
 	return _specialType;
 }
 
 /**
  * Gets the item's default BattleAction.
- * Used to show a TU cost in InventoryState. Lifted from ActionMenuState cTor.
+ * @note Used to show a TU cost in InventoryState. Lifted from ActionMenuState cTor.
  * @param isPrimed - true if checking a grenade and it's primed (default false)
  * @return, BattleActionType (BattlescapeGame.h)
  */

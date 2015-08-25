@@ -239,15 +239,15 @@ private:
 		void setWidth(int width);
 
 		/// Gets the vertical position of the hidden movement screen.
-		const int getMessageY() const;
+		int getMessageY() const;
 
 		/// Gets the icon height.
-		const int getIconHeight() const;
+		int getIconHeight() const;
 		/// Gets the icon width.
-		const int getIconWidth() const;
+		int getIconWidth() const;
 
 		/// Converts a map position to a sound angle.
-		const int getSoundAngle(const Position& pos) const;
+		int getSoundAngle(const Position& pos) const;
 
 		/// Resets the camera smoothing bool.
 //		void resetCameraSmoothing();

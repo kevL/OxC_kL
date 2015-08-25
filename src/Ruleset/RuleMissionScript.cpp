@@ -29,8 +29,9 @@ namespace OpenXcom
  * RuleMissionScript. The rules for Alien Mission propagation.
  * @note Each script element is independent and the saved game will probe the
  * list of these each month to determine what's going to happen.
+ * @param type - reference the type ID
  */
-RuleMissionScript::RuleMissionScript(const std::string type)
+RuleMissionScript::RuleMissionScript(const std::string& type)
 	:
 		_type(type),
 		_firstMonth(0),
@@ -158,7 +159,7 @@ void RuleMissionScript::load(const YAML::Node& node)
  * Gets the type of this command.
  * @return, type
  */
-const std::string RuleMissionScript::getType() const
+std::string RuleMissionScript::getType() const
 {
 	return _type;
 }
@@ -167,7 +168,7 @@ const std::string RuleMissionScript::getType() const
  * Gets the first month this script should run.
  * @return, first month
  */
-const int RuleMissionScript::getFirstMonth() const
+int RuleMissionScript::getFirstMonth() const
 {
 	return _firstMonth;
 }
@@ -176,7 +177,7 @@ const int RuleMissionScript::getFirstMonth() const
  * Gets the last month this script should run.
  * @return, last month
  */
-const int RuleMissionScript::getLastMonth() const
+int RuleMissionScript::getLastMonth() const
 {
 	return _lastMonth;
 }
@@ -185,7 +186,7 @@ const int RuleMissionScript::getLastMonth() const
  * Gets the label this command uses for conditional tracking.
  * @return, label
  */
-const int RuleMissionScript::getLabel() const
+int RuleMissionScript::getLabel() const
 {
 	return _label;
 }
@@ -194,7 +195,7 @@ const int RuleMissionScript::getLabel() const
  * Gets the odds of this command's execution.
  * @return, odds
  */
-const int RuleMissionScript::getExecutionOdds() const
+int RuleMissionScript::getExecutionOdds() const
 {
 	return _executionOdds;
 }
@@ -203,7 +204,7 @@ const int RuleMissionScript::getExecutionOdds() const
  * Gets the odds of this command targetting a base.
  * @return, odds
  */
-const int RuleMissionScript::getTargetBaseOdds() const
+int RuleMissionScript::getTargetBaseOdds() const
 {
 	return _targetBaseOdds;
 }
@@ -212,7 +213,7 @@ const int RuleMissionScript::getTargetBaseOdds() const
  * Gets the minimum difficulty for this script to run.
  * @return, minimum difficulty
  */
-const int RuleMissionScript::getMinDifficulty() const
+int RuleMissionScript::getMinDifficulty() const
 {
 	return _minDifficulty;
 }
@@ -221,7 +222,7 @@ const int RuleMissionScript::getMinDifficulty() const
  * Gets the maximum runs for scripts tracking our varName.
  * @return, maximum runs
  */
-const int RuleMissionScript::getMaxRuns() const
+int RuleMissionScript::getMaxRuns() const
 {
 	return _maxRuns;
 }
@@ -230,7 +231,7 @@ const int RuleMissionScript::getMaxRuns() const
  * Gets the number of sites to avoid repeating missions.
  * @return, repeat avoidance
  */
-const int RuleMissionScript::getRepeatAvoidance() const
+int RuleMissionScript::getRepeatAvoidance() const
 {
 	return _avoidRepeats;
 }
@@ -241,7 +242,7 @@ const int RuleMissionScript::getRepeatAvoidance() const
  * @note Overrides the spawn delay defined in the mission waves.
  * @return, delay
  */
-const int RuleMissionScript::getDelay() const
+int RuleMissionScript::getDelay() const
 {
 	return _delay;
 }
@@ -259,7 +260,7 @@ const std::vector<int>& RuleMissionScript::getConditionals() const
  * Gets if this command uses a weighted distribution to pick a race.
  * @return, true if race-weights
  */
-const bool RuleMissionScript::hasRaceWeights() const
+bool RuleMissionScript::hasRaceWeights() const
 {
 	return (_raceWeights.empty() == false);
 }
@@ -268,7 +269,7 @@ const bool RuleMissionScript::hasRaceWeights() const
  * Gets if this command uses a weighted distribution to pick a mission.
  * @return, true if mission-weights
  */
-const bool RuleMissionScript::hasMissionWeights() const
+bool RuleMissionScript::hasMissionWeights() const
 {
 	return (_missionWeights.empty() == false);
 }
@@ -277,7 +278,7 @@ const bool RuleMissionScript::hasMissionWeights() const
  * Gets if this command uses a weighted distribution to pick a region.
  * @return, true if region-weights
  */
-const bool RuleMissionScript::hasRegionWeights() const
+bool RuleMissionScript::hasRegionWeights() const
 {
 	return (_regionWeights.empty() == false);
 }
@@ -298,7 +299,7 @@ const std::map<std::string, bool>& RuleMissionScript::getResearchTriggers() cons
  * calls it by name.
  * @return, true to use table
  */
-const bool RuleMissionScript::usesTable() const
+bool RuleMissionScript::usesTable() const
 {
 	return _useTable;
 }
@@ -307,7 +308,7 @@ const bool RuleMissionScript::usesTable() const
  * Gets the name of the variable to use to track in the saved game.
  * @return, string-id
  */
-const std::string RuleMissionScript::getVarName() const
+std::string RuleMissionScript::getVarName() const
 {
 	return _varName;
 }
@@ -409,7 +410,7 @@ const std::vector<std::string> RuleMissionScript::getRegions(const size_t month)
  * @param type			- type of thing to generate; region, mission or race
  * @return, string-id of the it generated
  */
-const std::string RuleMissionScript::genMissionDatum(
+std::string RuleMissionScript::genMissionDatum(
 		const size_t monthsPassed,
 		const GenerationType type) const
 {
@@ -448,7 +449,7 @@ void RuleMissionScript::setSiteType(const bool siteType)
  * Gets if this is a mission site type command or not.
  * @return, true if site
  */
-const bool RuleMissionScript::getSiteType() const
+bool RuleMissionScript::getSiteType() const
 {
 	return _siteType;
 }

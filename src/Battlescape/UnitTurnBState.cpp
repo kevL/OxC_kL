@@ -215,7 +215,6 @@ void UnitTurnBState::think()
 /**
  * Unit turning cannot be cancelled.
  */
-void UnitTurnBState::cancel()
-{}
+//void UnitTurnBState::cancel(){}
 
 }

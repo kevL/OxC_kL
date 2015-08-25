@@ -47,8 +47,7 @@ UnitPanicBState::~UnitPanicBState()
 /**
  *
  */
-/* void UnitPanicBState::init()
-{} */
+//void UnitPanicBState::init(){}
 
 /**
  * Runs state functionality every cycle.
@@ -76,7 +75,6 @@ void UnitPanicBState::think()
 /**
  * Panicking cannot be cancelled.
  */
-/* void UnitPanicBState::cancel()
-{} */
+//void UnitPanicBState::cancel(){}
 
 }

@@ -2630,11 +2630,11 @@ void BattlescapeState::btnConsoleToggle(Action*)
 	}
 }
 
-/**
+/*
 * Shows a tooltip for the appropriate button.
 * @param action - pointer to an Action
-*/
-/* void BattlescapeState::txtTooltipIn(Action* action)
+*
+void BattlescapeState::txtTooltipIn(Action* action)
 {
 	if (allowButtons() && Options::battleTooltips)
 	{
@@ -2643,11 +2643,11 @@ void BattlescapeState::btnConsoleToggle(Action*)
 	}
 } */
 
-/**
+/*
 * Clears the tooltip text.
 * @param action - pointer to an Action
-*/
-/* void BattlescapeState::txtTooltipOut(Action* action)
+*
+void BattlescapeState::txtTooltipOut(Action* action)
 {
 	if (allowButtons() && Options::battleTooltips)
 	{

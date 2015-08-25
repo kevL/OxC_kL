@@ -369,12 +369,12 @@ protected:
 		Soldier* genSoldier(SavedGame* const save) const;
 
 		/// Gets the item to be used as fuel for ships.
-		const std::string getAlienFuelType() const;
+		std::string getAlienFuelType() const;
 		/// Gets the amount of alien fuel to recover
-		const int getAlienFuelQuantity() const;
+		int getAlienFuelQuantity() const;
 
 		/// Gets the font name.
-		const std::string getFontName() const;
+		std::string getFontName() const;
 
 		/// Gets the minimum radar's range.
 //		int getMinRadarRange() const;
@@ -410,7 +410,7 @@ protected:
 		RuleMissionScript* getMissionScript(const std::string& id) const;
 
 		/// Gets the final research Id.
-		const std::string getFinalResearch() const;
+		std::string getFinalResearch() const;
 
 		/// Gets the current Game.
 		const Game* const getGame() const;

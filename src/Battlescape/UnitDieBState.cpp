@@ -130,8 +130,7 @@ UnitDieBState::~UnitDieBState()
 /**
  * Initializes this state.
  */
-//void UnitDieBState::init()
-//{}
+//void UnitDieBState::init(){}
 
 /**
  * Runs state functionality every cycle.
@@ -290,12 +289,6 @@ void UnitDieBState::think()
 	_unit->setCache(NULL);
 	_parent->getMap()->cacheUnit(_unit);
 }
-
-/**
- * Unit dying cannot be cancelled.
- */
-//void UnitDieBState::cancel()
-//{}
 
 /**
  * Converts unit to a corpse-item.
@@ -461,5 +454,11 @@ void UnitDieBState::convertToCorpse() // private.
 											true);
 	}
 }
+
+/**
+ * Unit dying cannot be cancelled.
+ */
+//void UnitDieBState::cancel()
+//{}
 
 }

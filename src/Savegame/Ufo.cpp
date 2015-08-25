@@ -286,8 +286,8 @@ const RuleUfo* const Ufo::getRules() const
 
 /**
  * Changes the ruleset for the UFO's type.
- * @param rules - pointer to RuleUfo
  * @warning ONLY FOR NEW BATTLE USE!
+ * @param rules - pointer to RuleUfo
  */
 void Ufo::changeRules(const RuleUfo* const rules)
 {
@@ -324,13 +324,13 @@ std::wstring Ufo::getName(const Language* const lang) const
 	{
 		case FLYING:
 		case DESTROYED: // Destroyed also means leaving Earth.
-			return lang->getString("STR_UFO_").arg(_id);
+		return lang->getString("STR_UFO_").arg(_id);
 
 		case LANDED:
-			return lang->getString("STR_LANDING_SITE_").arg(_landId);
+		return lang->getString("STR_LANDING_SITE_").arg(_landId);
 
 		case CRASHED:
-			return lang->getString("STR_CRASH_SITE_").arg(_crashId);
+		return lang->getString("STR_CRASH_SITE_").arg(_crashId);
 	}
 
 	return L"";

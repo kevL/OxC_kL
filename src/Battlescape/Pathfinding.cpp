@@ -84,7 +84,8 @@ Pathfinding::Pathfinding(SavedBattleGame* const battleSave)
 
 /**
  * Deletes the Pathfinding.
- * @internal This is required to be here because it requires the PathfindingNode class definition.
+ * @internal This is required to be here because it requires the PathfindingNode
+ * class definition.
  */
 Pathfinding::~Pathfinding()
 {}
@@ -100,7 +101,7 @@ PathfindingNode* Pathfinding::getNode(const Position& pos) // private.
 }
 
 /**
- * Calculates the shortest path; tries bresenham then A* paths.
+ * Calculates the shortest path; tries bresenham then A* algorithms.
  * @note 'missileTarget' is required only when called by AlienBAIState::pathWaypoints().
  * @param unit				- pointer to a BattleUnit
  * @param destPos			- destination Position
@@ -109,7 +110,7 @@ PathfindingNode* Pathfinding::getNode(const Position& pos) // private.
  * @param strafeRejected	- true if path needs to be recalculated w/out strafe (default false)
  */
 void Pathfinding::calculate(
-		BattleUnit* const unit, // -> should not need 'unit' here anymore; done in setPathingUnit() unless FACTION_PLAYER ...
+		const BattleUnit* const unit, // -> should not need 'unit' here anymore; done in setPathingUnit() unless FACTION_PLAYER ...
 		Position destPos,
 		const BattleUnit* const missileTarget,
 		int maxTuCost,
@@ -121,10 +122,11 @@ void Pathfinding::calculate(
 
 	// i'm DONE with these out of bounds errors.
 	// kL_note: I really don't care what you're "DONE" with.....
+	int armorSize = unit->getArmor()->getSize();
 	if (destPos.x < 0
 		|| destPos.y < 0
-		|| destPos.x > _battleSave->getMapSizeX() - unit->getArmor()->getSize()
-		|| destPos.y > _battleSave->getMapSizeY() - unit->getArmor()->getSize())
+		|| destPos.x > _battleSave->getMapSizeX() - armorSize
+		|| destPos.y > _battleSave->getMapSizeY() - armorSize)
 	{
 		return;
 	}
@@ -192,7 +194,7 @@ void Pathfinding::calculate(
 	{
 		while (canFallDown( // for large & small units.
 						tileDest,
-						unit->getArmor()->getSize()))
+						armorSize))
 		{
 			--destPos.z;
 			tileDest = _battleSave->getTile(destPos);
@@ -210,10 +212,10 @@ void Pathfinding::calculate(
 				O_OBJECT,
 				missileTarget) == false)
 	{
-		const int armorSize = unit->getArmor()->getSize() - 1;
-		if (armorSize > 0)
+		--armorSize;
+		if (armorSize != 0)
 		{
-			const int dir[3] = {4, 2, 3};
+			const int dir[3] = {4,2,3};
 			size_t i = 0;
 
 			const Tile* tileTest;
@@ -229,10 +231,10 @@ void Pathfinding::calculate(
 						y <= armorSize;
 						y += armorSize)
 				{
-					if (x || y)
+					if (x != 0 || y != 0)
 					{
 						tileTest = _battleSave->getTile(destPos + Position(x,y,0));
-						if (x && y
+						if (x != 0 && y != 0
 							&& ((tileTest->getMapData(O_NORTHWALL) != NULL
 									&& tileTest->getMapData(O_NORTHWALL)->isDoor() == true)
 								|| (tileTest->getMapData(O_WESTWALL) != NULL
@@ -810,7 +812,7 @@ int Pathfinding::getTuCostPf(
 					++posOffsetVertical.z;
 					++posDest->z;
 					tileDest = _battleSave->getTile(*posDest + posOffset);
-//					tileDestBelow = _battleSave->getTile(*posDest + Position(x,y,-1)); // note no offset; NOT USED.
+//					tileDestBelow = _battleSave->getTile(*posDest + Position(x,y,-1)); // NOT USED.
 				}
 			}
 			else if (fall == false // for safely walking down ramps or stairs ...
@@ -832,7 +834,7 @@ int Pathfinding::getTuCostPf(
 
 					--posDest->z;
 					tileDest = _battleSave->getTile(*posDest + posOffset);
-//					tileDestBelow = _battleSave->getTile(*posDest + Position(x,y,-1)); // note no offset; NOT USED.
+//					tileDestBelow = _battleSave->getTile(*posDest + Position(x,y,-1)); // NOT USED.
 				}
 			}
 			else if (_moveType == MT_FLY
@@ -866,12 +868,7 @@ int Pathfinding::getTuCostPf(
 								dir,
 								missileTarget) == true)
 					{
-						//if (debug)
-						//{
-							//Log(LOG_INFO) << "same Z, blocked, dir = " << dir;
-							//Log(LOG_INFO) << "posStart " << tileStart->getPosition();
-							//Log(LOG_INFO) << "posDest  " << (*posDest);
-						//}
+						//Log(LOG_INFO) << "same Z, blocked, dir = " << dir;
 						return 255;
 					}
 
@@ -906,13 +903,13 @@ int Pathfinding::getTuCostPf(
 				if (dir != DIR_DOWN
 					&& partsFalling == (armorSize + 1) * (armorSize + 1))
 				{
-//					return false;	// <- fuck you.
-					return 255;		// did he just make it so that even xCom can't walk off of a building ......
+//					return false; // <- fuck you.
+					return 255;
 
 //					fall = true;
 //					*posDest = posStart + Position(0,0,-1);
 //					tileDest = _battleSave->getTile(*posDest + posOffset);
-//					tileDestBelow = _battleSave->getTile(*posDest + Position(x,y,-1)); // note no offset; NOT USED.
+//					tileDestBelow = _battleSave->getTile(*posDest + Position(x,y,-1)); // NOT USED.
 //					dir = DIR_DOWN;
 				}
 			}

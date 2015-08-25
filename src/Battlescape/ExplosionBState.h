@@ -87,12 +87,10 @@ private:
 
 		/// Initializes the state.
 		void init();
-		/// Handles a cancel request.
-		void cancel();
 		/// Runs state functionality every cycle.
 		void think();
-		/// Gets the result of the state.
-//		std::string getResult() const;
+		/// Handles a cancel request.
+//		void cancel();
 };
 
 }

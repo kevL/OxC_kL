@@ -842,7 +842,7 @@ void Surface::setY(int y) // virtual.
  * @note An nonvisible surface isn't blitted nor does it receive events.
  * @param visible - visibility (default true)
  */
-void Surface::setVisible(bool visible)
+void Surface::setVisible(bool visible) // virtual.
 {
 	_visible = visible;
 }
@@ -1061,23 +1061,23 @@ void Surface::invalidate(bool redraw)
 	_redraw = redraw;
 }
 
-/**
- * Returns the help description of this surface, for example for showing in tooltips.
- * @return String ID.
- */
+/*
+ * Returns the help description of this surface for showing in tooltips eg.
+ * @return, string ID
+ *
 std::string Surface::getTooltip() const
 {
 	return _tooltip;
-}
+} */
 
-/**
-* Changes the help description of this surface, for example for showing in tooltips.
-* @param tooltip String ID.
-*/
+/*
+* Changes the help description of this surface for showing in tooltips eg.
+* @param tooltip - reference a string ID
+*
 void Surface::setTooltip(const std::string& tooltip)
 {
 	_tooltip = tooltip;
-}
+} */
 
 /**
  * Recreates the surface with a new size.
@@ -1163,23 +1163,5 @@ void Surface::setHeight(int height) // virtual.
 
 	_redraw = true;
 }
-
-/*
- * TFTD mode: much like click inversion but does a color swap rather than a palette shift.
- * @param mode - set TFTD mode to this
- *
-void Surface::setTFTDMode(bool mode)
-{
-	_tftdMode = mode;
-} */
-
-/*
- * Checks TFTD mode.
- * @return, true if TFTD mode
- *
-bool Surface::isTFTDMode()
-{
-	return _tftdMode;
-} */
 
 }

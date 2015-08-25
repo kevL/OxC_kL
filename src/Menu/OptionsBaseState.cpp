@@ -256,7 +256,7 @@ void OptionsBaseState::btnOkClick(Action*)
 	else
 	{
 		// Confirm any video option changes
-		if (   Options::displayWidth != Options::newDisplayWidth
+		if (Options::displayWidth != Options::newDisplayWidth
 			|| Options::displayHeight != Options::newDisplayHeight
 			|| Options::useOpenGL != Options::newOpenGL
 			|| Options::useScaleFilter != Options::newScaleFilter
@@ -345,25 +345,25 @@ void OptionsBaseState::btnGroupPress(Action* action)
 //	}
 }
 
-/**
+/*
 * Shows a tooltip for the appropriate button.
 * @param action Pointer to an action.
-*/
+*
 void OptionsBaseState::txtTooltipIn(Action* action)
 {
 	_currentTooltip = action->getSender()->getTooltip();
 	_txtTooltip->setText(tr(_currentTooltip));
-}
+} */
 
-/**
+/*
 * Clears the tooltip text.
 * @param action Pointer to an action.
-*/
+*
 void OptionsBaseState::txtTooltipOut(Action* action)
 {
 	if (_currentTooltip == action->getSender()->getTooltip())
 		_txtTooltip->setText(L"");
-}
+} */
 
 /**
  * Updates the scale.

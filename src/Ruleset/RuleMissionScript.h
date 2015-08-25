@@ -78,7 +78,7 @@ private:
 
 	public:
 		/// Creates a new mission script.
-		RuleMissionScript(const std::string type);
+		RuleMissionScript(const std::string& type);
 		/// Deletes a mission script.
 		~RuleMissionScript();
 
@@ -86,9 +86,9 @@ private:
 		void load(const YAML::Node& node);
 
 		/// Gets the name of the script command.
-		const std::string getType() const;
+		std::string getType() const;
 		/// Gets the name of the variable to use for keeping track of ... things.
-		const std::string getVarName() const;
+		std::string getVarName() const;
 
 		/// Gets a complete and unique list of all the mission types contained within this command.
 		const std::set<std::string> getAllMissionTypes() const;
@@ -98,52 +98,52 @@ private:
 		const std::vector<std::string> getRegions(const size_t month) const;
 
 		/// Gets the first month this command will run.
-		const int getFirstMonth() const;
+		int getFirstMonth() const;
 		/// Gets the last month this command will run.
-		const int getLastMonth() const;
+		int getLastMonth() const;
 
 		/// Gets the label of this command, used for conditionals.
-		const int getLabel() const;
+		int getLabel() const;
 
 		/// Gets the odds of this command executing.
-		const int getExecutionOdds() const;
+		int getExecutionOdds() const;
 		/// Gets the odds of this mission targetting an xcom base.
-		const int getTargetBaseOdds() const;
+		int getTargetBaseOdds() const;
 
 		/// Gets the minimum difficulty for this command to run
-		const int getMinDifficulty() const;
+		int getMinDifficulty() const;
 		/// Gets the maximum number of times to run a command with this varName
-		const int getMaxRuns() const;
+		int getMaxRuns() const;
 		/// Gets how many previous mission sites to track.
-		const int getRepeatAvoidance() const;
+		int getRepeatAvoidance() const;
 		/// Gets the number of minutes to delay spawning the first wave.
-		const int getDelay() const;
+		int getDelay() const;
 
 		/// Gets the list of conditions this command requires in order to run.
 		const std::vector<int>& getConditionals() const;
 
 		/// Checks if this command has race weights.
-		const bool hasRaceWeights() const;
+		bool hasRaceWeights() const;
 		/// Checks if this command has mission weights.
-		const bool hasMissionWeights() const;
+		bool hasMissionWeights() const;
 		/// Checks if this command has region weights.
-		const bool hasRegionWeights() const;
+		bool hasRegionWeights() const;
 
 		/// Gets the research triggers that may apply to this command.
 		const std::map<std::string, bool>& getResearchTriggers() const;
 
 		/// Checks if this mission uses the table.
-		const bool usesTable() const;
+		bool usesTable() const;
 
 		/// Generates either a region, a mission, or a race based on the month.
-		const std::string genMissionDatum(
+		std::string genMissionDatum(
 				const size_t monthsPassed,
 				const GenerationType type) const;
 
 		/// Sets this script to a terror mission type command or not.
 		void setSiteType(const bool siteType);
 		/// Checks if this is a terror-type mission or not.
-		const bool getSiteType() const;
+		bool getSiteType() const;
 };
 
 }

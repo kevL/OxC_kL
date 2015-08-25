@@ -321,6 +321,7 @@ private:
 //		void btnReserveClick(Action* action);
 		/// Handler for clicking the reserve TUs to kneel button.
 //		void btnReserveKneelClick(Action* action);
+
 		/// Handler for clicking the reload button.
 		void btnReloadClick(Action* action);
 		/// Handler for clicking the expend all TUs button.
@@ -332,6 +333,7 @@ private:
 		/// Handler for toggling the console.
 		void btnConsoleToggle(Action* action);
 		/// Handler for showing tooltip.
+
 //		void txtTooltipIn(Action* action);
 		/// Handler for hiding tooltip.
 //		void txtTooltipOut(Action* action);

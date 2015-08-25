@@ -112,9 +112,9 @@ private:
 	std::vector<SDL_Rect*> _rects;
 
 	/// Randomly generate a group from within the array.
-	const int getGroupNumber();
+	int getGroupNumber();
 	/// Randomly generate a block number from within the array.
-	const int getBlockNumber();
+	int getBlockNumber();
 
 
 	public:
@@ -138,25 +138,25 @@ private:
 		{ return &_rects; };
 
 		/// Gets the X size for this command.
-		const int getSizeX() const
+		int getSizeX() const
 		{ return _sizeX; };
 		/// Gets the Y size for this command.
-		const int getSizeY() const
+		int getSizeY() const
 		{ return _sizeY; };
 		/// Gets the Z size for this command.
-		const int getSizeZ() const
+		int getSizeZ() const
 		{ return _sizeZ; };
 
 		/// Get the chances of this command executing.
-		const int getChancesOfExecution() const
+		int getChancesOfExecution() const
 		{ return _executionChances; };
 
 		/// Gets the label for this command.
-		const int getLabel() const
+		int getLabel() const
 		{ return _label; };
 
 		/// Gets how many times this command repeats (1 repeat means 2 executions)
-		const int getExecutions() const
+		int getExecutions() const
 		{ return _executions; };
 
 		/// Gets what conditions apply to this command.
@@ -171,7 +171,7 @@ private:
 		{ return &_blocks; };
 
 		/// Gets the direction this command goes (for lines and tunnels).
-		const MapDirection getDirection() const
+		MapDirection getDirection() const
 		{ return _direction; };
 
 		/// Gets the MCD replacement data for tunnel replacements.

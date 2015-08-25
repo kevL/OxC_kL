@@ -147,11 +147,12 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin)
 
 	centerAllSurfaces();
 
+
 	_txtDisplayResolution->setText(tr("STR_DISPLAY_RESOLUTION"));
 
-	_displaySurface->setTooltip("STR_DISPLAY_RESOLUTION_DESC");
-	_displaySurface->onMouseIn((ActionHandler)& OptionsVideoState::txtTooltipIn);
-	_displaySurface->onMouseOut((ActionHandler)& OptionsVideoState::txtTooltipOut);
+//	_displaySurface->setTooltip("STR_DISPLAY_RESOLUTION_DESC");
+//	_displaySurface->onMouseIn((ActionHandler)& OptionsVideoState::txtTooltipIn);
+//	_displaySurface->onMouseOut((ActionHandler)& OptionsVideoState::txtTooltipOut);
 
 	_txtDisplayWidth->setAlign(ALIGN_CENTER);
 	_txtDisplayWidth->setBig();
@@ -183,16 +184,16 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin)
 	_btnLetterbox->setText(tr("STR_LETTERBOXED"));
 	_btnLetterbox->setPressed(Options::keepAspectRatio);
 	_btnLetterbox->onMouseClick((ActionHandler)& OptionsVideoState::btnLetterboxClick);
-	_btnLetterbox->setTooltip("STR_LETTERBOXED_DESC");
-	_btnLetterbox->onMouseIn((ActionHandler)& OptionsVideoState::txtTooltipIn);
-	_btnLetterbox->onMouseOut((ActionHandler)& OptionsVideoState::txtTooltipOut);
+//	_btnLetterbox->setTooltip("STR_LETTERBOXED_DESC");
+//	_btnLetterbox->onMouseIn((ActionHandler)& OptionsVideoState::txtTooltipIn);
+//	_btnLetterbox->onMouseOut((ActionHandler)& OptionsVideoState::txtTooltipOut);
 
 	_btnLockMouse->setText(tr("STR_LOCK_MOUSE"));
 	_btnLockMouse->setPressed(Options::captureMouse == SDL_GRAB_ON);
 	_btnLockMouse->onMouseClick((ActionHandler)& OptionsVideoState::btnLockMouseClick);
-	_btnLockMouse->setTooltip("STR_LOCK_MOUSE_DESC");
-	_btnLockMouse->onMouseIn((ActionHandler)& OptionsVideoState::txtTooltipIn);
-	_btnLockMouse->onMouseOut((ActionHandler)& OptionsVideoState::txtTooltipOut);
+//	_btnLockMouse->setTooltip("STR_LOCK_MOUSE_DESC");
+//	_btnLockMouse->onMouseIn((ActionHandler)& OptionsVideoState::txtTooltipIn);
+//	_btnLockMouse->onMouseOut((ActionHandler)& OptionsVideoState::txtTooltipOut);
 
 	_txtLanguage->setText(tr("STR_DISPLAY_LANGUAGE"));
 
@@ -211,9 +212,9 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin)
 		}
 	}
 	_cbxLanguage->onChange((ActionHandler)& OptionsVideoState::cbxLanguageChange);
-	_cbxLanguage->setTooltip("STR_DISPLAY_LANGUAGE_DESC");
-	_cbxLanguage->onMouseIn((ActionHandler)& OptionsVideoState::txtTooltipIn);
-	_cbxLanguage->onMouseOut((ActionHandler)& OptionsVideoState::txtTooltipOut);
+//	_cbxLanguage->setTooltip("STR_DISPLAY_LANGUAGE_DESC");
+//	_cbxLanguage->onMouseIn((ActionHandler)& OptionsVideoState::txtTooltipIn);
+//	_cbxLanguage->onMouseOut((ActionHandler)& OptionsVideoState::txtTooltipOut);
 
 	std::vector<std::wstring> filterNames;
 	filterNames.push_back(tr("STR_DISABLED"));
@@ -268,9 +269,9 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin)
 	_cbxFilter->setOptions(filterNames);
 	_cbxFilter->setSelected(selFilter);
 	_cbxFilter->onChange((ActionHandler)& OptionsVideoState::cbxFilterChange);
-	_cbxFilter->setTooltip("STR_DISPLAY_FILTER_DESC");
-	_cbxFilter->onMouseIn((ActionHandler)& OptionsVideoState::txtTooltipIn);
-	_cbxFilter->onMouseOut((ActionHandler)& OptionsVideoState::txtTooltipOut);
+//	_cbxFilter->setTooltip("STR_DISPLAY_FILTER_DESC");
+//	_cbxFilter->onMouseIn((ActionHandler)& OptionsVideoState::txtTooltipIn);
+//	_cbxFilter->onMouseOut((ActionHandler)& OptionsVideoState::txtTooltipOut);
 
 	std::vector<std::string> displayModes;
 	displayModes.push_back("STR_WINDOWED");
@@ -291,9 +292,9 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin)
 	_cbxDisplayMode->setOptions(displayModes);
 	_cbxDisplayMode->setSelected(displayMode);
 	_cbxDisplayMode->onChange((ActionHandler)& OptionsVideoState::updateDisplayMode);
-	_cbxDisplayMode->setTooltip("STR_DISPLAY_MODE_DESC");
-	_cbxDisplayMode->onMouseIn((ActionHandler)& OptionsVideoState::txtTooltipIn);
-	_cbxDisplayMode->onMouseOut((ActionHandler)& OptionsVideoState::txtTooltipOut);
+//	_cbxDisplayMode->setTooltip("STR_DISPLAY_MODE_DESC");
+//	_cbxDisplayMode->onMouseIn((ActionHandler)& OptionsVideoState::txtTooltipIn);
+//	_cbxDisplayMode->onMouseOut((ActionHandler)& OptionsVideoState::txtTooltipOut);
 
 	_txtGeoScale->setText(tr("STR_GEOSCAPE_SCALE"));
 
@@ -308,18 +309,18 @@ OptionsVideoState::OptionsVideoState(OptionsOrigin origin)
 	_cbxGeoScale->setOptions(scales);
 	_cbxGeoScale->setSelected(Options::geoscapeScale);
 	_cbxGeoScale->onChange((ActionHandler)& OptionsVideoState::updateGeoscapeScale);
-	_cbxGeoScale->setTooltip("STR_GEOSCAPESCALE_SCALE_DESC");
-	_cbxGeoScale->onMouseIn((ActionHandler)& OptionsVideoState::txtTooltipIn);
-	_cbxGeoScale->onMouseOut((ActionHandler)& OptionsVideoState::txtTooltipOut);
+//	_cbxGeoScale->setTooltip("STR_GEOSCAPESCALE_SCALE_DESC");
+//	_cbxGeoScale->onMouseIn((ActionHandler)& OptionsVideoState::txtTooltipIn);
+//	_cbxGeoScale->onMouseOut((ActionHandler)& OptionsVideoState::txtTooltipOut);
 
 	_txtBattleScale->setText(tr("STR_BATTLESCAPE_SCALE"));
 
 	_cbxBattleScale->setOptions(scales);
 	_cbxBattleScale->setSelected(Options::battlescapeScale);
 	_cbxBattleScale->onChange((ActionHandler)& OptionsVideoState::updateBattlescapeScale);
-	_cbxBattleScale->setTooltip("STR_BATTLESCAPE_SCALE_DESC");
-	_cbxBattleScale->onMouseIn((ActionHandler)& OptionsVideoState::txtTooltipIn);
-	_cbxBattleScale->onMouseOut((ActionHandler)& OptionsVideoState::txtTooltipOut);
+//	_cbxBattleScale->setTooltip("STR_BATTLESCAPE_SCALE_DESC");
+//	_cbxBattleScale->onMouseIn((ActionHandler)& OptionsVideoState::txtTooltipIn);
+//	_cbxBattleScale->onMouseOut((ActionHandler)& OptionsVideoState::txtTooltipOut);
 }
 
 /**

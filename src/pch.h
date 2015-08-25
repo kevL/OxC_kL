@@ -3,8 +3,9 @@
 
 // kL: heads up!
 #pragma message("kL: Compiling PCH.H")
-#pragma message("Or, how to play ping-pong.")
-#pragma message("jerking off ... please wait ...")
+#pragma message("Or ... how to play ping-pong.")
+#pragma message("...")
+#pragma message("jerking off ... please wait")
 
 
 // To check memory leaks in VS (more below):

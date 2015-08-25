@@ -93,7 +93,7 @@ private:
 		const std::vector<std::string>& getGetOneFree() const;
 
 		/// Gets what to look up in the Ufopedia.
-		const std::string getLookup() const;
+		std::string getLookup() const;
 
 		/// Gets the requirements for this ResearchProject.
 		const std::vector<std::string>& getRequirements() const;

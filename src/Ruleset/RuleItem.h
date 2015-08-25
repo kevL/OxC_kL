@@ -380,7 +380,7 @@ private:
 		/// Checks if LOS is required to use this item (only applies to psionic type items)
 		bool isLOSRequired() const;
 		/// Gets the associated special type of this item.
-		const int getSpecialType() const;
+		int getSpecialType() const;
 
 		/// Gets the item's default BattleAction.
 		BattleActionType getDefaultAction(const bool isPrimed = false) const;

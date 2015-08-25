@@ -51,7 +51,7 @@ private:
 		///
 		const std::vector<int>& getSoundList() const;
 		///
-		const std::string getCATFile() const;
+		std::string getCATFile() const;
 };
 
 }

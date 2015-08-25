@@ -191,7 +191,7 @@ protected:
 		{ return _y; }
 
 		/// Sets the surface's visibility.
-		void setVisible(bool visible = true);
+		virtual void setVisible(bool visible = true);
 		/// Gets the surface's visibility.
 		bool getVisible() const;
 
@@ -306,15 +306,15 @@ protected:
 				int colorOffset,
 				bool halfRight = false,
 				int colorGroup = 0,
-				bool halfLeft = false); // <-kL_add
+				bool halfLeft = false);
 
 		/// Invalidate the surface: force it to be redrawn
 		void invalidate(bool redraw = true);
 
 		/// Gets the tooltip of the surface.
-		std::string getTooltip() const;
+//		std::string getTooltip() const;
 		/// Sets the tooltip of the surface.
-		void setTooltip(const std::string& tooltip);
+//		void setTooltip(const std::string& tooltip);
 
 		/// Sets the color of the surface.
 		virtual void setColor(Uint8 /*color*/)
@@ -325,11 +325,6 @@ protected:
 		/// Sets the border colour of the surface.
 		virtual void setBorderColor(Uint8 /*color*/)
 		{};
-
-		/// Sets this button to use a color lookup table instead of inversion for its alternate form.
-//		virtual void setTFTDMode(bool mode);
-		/// Checks if this is a TFTD mode surface.
-//		bool isTFTDMode();
 };
 
 }

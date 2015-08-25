@@ -69,13 +69,6 @@ private:
 	OpenGL glOutput;
 	SDL_Color deferredPalette[256];
 
-	///
-	int _zoomSurfaceY(
-			SDL_Surface* src,
-			SDL_Surface* dst,
-			int flipx,
-			int flipy);
-
 	/// Sets the '_flags' and '_bpp' variables based on game options.
 	void makeVideoFlags();
 

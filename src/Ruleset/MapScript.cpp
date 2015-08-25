@@ -347,7 +347,7 @@ void MapScript::init()
  * if all the max uses are used up it will return undefined.
  * @return, group number
  */
-const int MapScript::getGroupNumber() // private.
+int MapScript::getGroupNumber() // private.
 {
 	if (_groups.size() == 0)
 		return MBT_DEFAULT;
@@ -393,7 +393,7 @@ const int MapScript::getGroupNumber() // private.
  * @note If no blocks are defined it will use a group instead.
  * @return, block number
  */
-const int MapScript::getBlockNumber() // private.
+int MapScript::getBlockNumber() // private.
 {
 	if (_cumulativeFrequency > 0)
 	{

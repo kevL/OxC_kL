@@ -3442,7 +3442,6 @@ int BattlescapeGame::takeItemFromGround(
 {
 	//Log(LOG_INFO) << "BattlescapeGame::takeItemFromGround()";
 	const int
-		TAKE_ERROR		= -1,
 		TAKE_SUCCESS	=  0,
 		TAKE_NO_TU		=  1,
 		TAKE_NO_SPACE	=  2,
@@ -3476,9 +3475,6 @@ int BattlescapeGame::takeItemFromGround(
 
 		return TAKE_NO_FIT;
 	}
-
-	// shouldn't ever end up here (yeah, right..)
-	return TAKE_ERROR;
 }
 
 /**

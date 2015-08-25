@@ -352,8 +352,8 @@ GeoscapeState::GeoscapeState()
 		_5secIterForMusic(0)
 {
 	const int
-		screenWidth		= Options::baseXGeoscape,
-		screenHeight	= Options::baseYGeoscape;
+		screenWidth = Options::baseXGeoscape,
+		screenHeight = Options::baseYGeoscape;
 
 /*	_bg		= new Surface(
 						320,

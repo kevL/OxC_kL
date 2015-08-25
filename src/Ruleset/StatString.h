@@ -132,16 +132,16 @@ private:
 		void load(const YAML::Node& node);
 
 		/// Get the conditions for this StatString.
-		const std::vector<StatStringCondition*> getConditions();
+		const std::vector<StatStringCondition*> getConditions() const;
 		/// Get the StatString string.
-		const std::string getString();
+		std::string getString() const;
 		/// Calculate a StatString.
-		static const std::wstring calcStatString(
+		static std::wstring calcStatString(
 				UnitStats& currentStats,
 				const std::vector<StatString*>& statStrings,
 				bool psiStrengthEval);
 		/// Get the CurrentStats.
-		static std::map<std::string, int> getCurrentStats(UnitStats& currentStats);
+		static std::map<std::string, int> getCurrentStats(UnitStats& currentStats) const;
 };
 
 }

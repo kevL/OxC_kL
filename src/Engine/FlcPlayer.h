@@ -140,8 +140,6 @@ private:
 	bool isEndOfFile(Uint8 *pos) const;
 
 	static void audioCallback(void* userData, Uint8* stream, int len);
-	static void wakeAudioWaiter(SDL_sem* audioWaiter);
-	static void waitForNextAudioFrame(SDL_sem* audioWaiter);
 
 
 	public:

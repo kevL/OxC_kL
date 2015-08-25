@@ -85,6 +85,7 @@ protected:
 
 		/// Presses a certain category button.
 		void setCategory(TextButton* button);
+
 		/// Handler for clicking the OK button.
 		void btnOkClick(Action* action);
 		/// Handler for clicking the Cancel button.
@@ -93,10 +94,11 @@ protected:
 		void btnDefaultClick(Action* action);
 		/// Handler for clicking one of the grouping buttons.
 		void btnGroupPress(Action* action);
+
 		/// Handler for showing tooltip.
-		void txtTooltipIn(Action* action);
+//		void txtTooltipIn(Action* action);
 		/// Handler for hiding tooltip.
-		void txtTooltipOut(Action* action);
+//		void txtTooltipOut(Action* action);
 
 		/// Update the resolution settings, we just resized the window.
 		void resize(

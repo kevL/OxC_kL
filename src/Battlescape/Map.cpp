@@ -139,10 +139,6 @@ Map::Map(
 	_spriteWidth = _res->getSurfaceSet("BLANKS.PCK")->getFrame(0)->getWidth();
 	_spriteHeight = _res->getSurfaceSet("BLANKS.PCK")->getFrame(0)->getHeight();
 
-//	const size_t depth = static_cast<size_t>(_battleSave->getDepth());
-//	if (_res->getLUTs()->size() > depth)
-//		_transparencies = &_res->getLUTs()->at(depth);
-
 	_camera = new Camera(
 					_spriteWidth,
 					_spriteHeight,
@@ -5232,7 +5228,12 @@ void Map::setHeight(int height)
 
 	_visibleMapHeight = height - _iconHeight;
 
-	_hiddenScreen->setHeight((_visibleMapHeight < 200) ? _visibleMapHeight : 200);
+	if (_visibleMapHeight < 200)
+		height = _visibleMapHeight;
+	else
+		height = 200;
+
+	_hiddenScreen->setHeight(height);
 	_hiddenScreen->setY((_visibleMapHeight - _hiddenScreen->getHeight()) / 2);
 }
 
@@ -5251,7 +5252,7 @@ void Map::setWidth(int width)
  * Gets the hidden movement screen's vertical position.
  * @return, the vertical position of the hidden movement window
  */
-const int Map::getMessageY() const
+int Map::getMessageY() const
 {
 	return _hiddenScreen->getY();
 }
@@ -5260,7 +5261,7 @@ const int Map::getMessageY() const
  * Gets the icon height.
  * @return, icon panel height
  */
-const int Map::getIconHeight() const
+int Map::getIconHeight() const
 {
 	return _iconHeight;
 }
@@ -5269,7 +5270,7 @@ const int Map::getIconHeight() const
  * Gets the icon width.
  * @return, icon panel width
  */
-const int Map::getIconWidth() const
+int Map::getIconWidth() const
 {
 	return _iconWidth;
 }
@@ -5279,7 +5280,7 @@ const int Map::getIconWidth() const
  * @param pos - reference the map position to calculate the sound angle from
  * @return, the angle of the sound (360 = 0 degrees center)
  */
-const int Map::getSoundAngle(const Position& pos) const
+int Map::getSoundAngle(const Position& pos) const
 {
 	const int midPoint = getWidth() / 2;
 
@@ -5297,7 +5298,7 @@ const int Map::getSoundAngle(const Position& pos) const
 								screenPos.x + _camera->getMapOffset().x - midPoint));
 
 	// Convert the relative distance left or right to a relative angle off-center.
-	// Since Mix_SetPosition() uses modulo 360, we can't feed it a negative number, so add 360.
+	// Since Mix_SetPosition() uses modulo 360 can't feed it a negative number so add 360.
 	// The integer-factor below is the allowable maximum deflection from center
 	return (screenPos.x * 35 / midPoint) + 360;
 }

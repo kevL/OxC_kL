@@ -139,7 +139,7 @@ private:
 
 		/// Calculates the shortest path.
 		void calculate(
-				BattleUnit* const unit,
+				const BattleUnit* const unit,
 				Position destPos,
 				const BattleUnit* const missileTarget = NULL,
 				int maxTuCost = 1000,

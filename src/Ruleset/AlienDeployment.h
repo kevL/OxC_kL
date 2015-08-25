@@ -219,9 +219,9 @@ private:
 				int& score) const;
 
 		/// Gets the score penalty xCom receives for ignoring a site.
-		const int getDespawnPenalty() const;
+		int getDespawnPenalty() const;
 		/// Gets the half-hourly score penalty xCom receives for a site existing.
-		const int getPointsPer30() const;
+		int getPointsPer30() const;
 };
 
 }

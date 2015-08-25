@@ -68,10 +68,10 @@ private:
 
 		/// Initializes the state.
 //		void init();
-		/// Handles a cancels request.
-//		void cancel();
 		/// Runs state functionality every cycle.
 		void think();
+		/// Handles a cancels request.
+//		void cancel();
 };
 
 }

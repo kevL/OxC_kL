@@ -49,7 +49,7 @@ const int
  */
 void Screen::makeVideoFlags()
 {
-	_flags = SDL_HWSURFACE|SDL_DOUBLEBUF|SDL_HWPALETTE;
+	_flags = SDL_HWSURFACE | SDL_DOUBLEBUF | SDL_HWPALETTE;
 
 	if (Options::asyncBlit == true)
 		_flags |= SDL_ASYNCBLIT;

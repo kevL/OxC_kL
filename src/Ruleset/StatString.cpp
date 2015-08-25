@@ -31,15 +31,13 @@ namespace OpenXcom
  * Creates a blank StatString.
  */
 StatString::StatString()
-{
-}
+{}
 
 /**
  * Cleans up the extra StatString.
  */
 StatString::~StatString()
-{
-}
+{}
 
 /**
  * Loads the StatString from a YAML file.
@@ -81,7 +79,7 @@ void StatString::load(const YAML::Node &node)
  */
 StatStringCondition* StatString::getCondition(
 		const std::string& conditionName,
-		const YAML::Node& node)
+		const YAML::Node& node) const
 {
 	// These are the defaults from xcomutil
 	int
@@ -106,7 +104,7 @@ StatStringCondition* StatString::getCondition(
  * Returns the conditions associated with this StatString.
  * @return List of StatStringConditions.
  */
-const std::vector< StatStringCondition*> StatString::getConditions()
+const std::vector<StatStringCondition*> StatString::getConditions() const
 {
 	return _conditions;
 }
@@ -115,7 +113,7 @@ const std::vector< StatStringCondition*> StatString::getConditions()
  * Returns the string to add to a name for this StatString.
  * @return StatString... string.
  */
-const std::string StatString::getString()
+std::string StatString::getString() const
 {
 	return _stringToBeAddedIfAllConditionsAreMet;
 }
@@ -127,7 +125,7 @@ const std::string StatString::getString()
  * @param psiStrengthEval Are psi stats available?
  * @return Resulting string of all valid StatStrings.
  */
-const std::wstring StatString::calcStatString(
+std::wstring StatString::calcStatString(
 		UnitStats& currentStats,
 		const std::vector<StatString*>& statStrings,
 		bool psiStrengthEval)
@@ -194,7 +192,7 @@ const std::wstring StatString::calcStatString(
  * @param currentStats Unit stats to use.
  * @return Map of unit stats.
  */
-std::map<std::string, int> StatString::getCurrentStats(UnitStats& currentStats)
+std::map<std::string, int> StatString::getCurrentStats(UnitStats& currentStats) const
 {
 	std::map<std::string, int> currentStatsMap;
 

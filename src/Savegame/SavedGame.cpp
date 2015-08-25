@@ -573,11 +573,11 @@ void SavedGame::load(
 	Log(LOG_INFO) << ". load discovered research";
 	// Discovered Techs should be loaded before Bases (e.g. for PSI evaluation)
 	for (YAML::const_iterator
-			it = doc["discovered"].begin();
-			it != doc["discovered"].end();
-			++it)
+			i = doc["discovered"].begin();
+			i != doc["discovered"].end();
+			++i)
 	{
-		const std::string research = it->as<std::string>();
+		const std::string research = i->as<std::string>();
 		if (rules->getResearch(research))
 			_discovered.push_back(rules->getResearch(research));
 	}
@@ -599,13 +599,13 @@ void SavedGame::load(
 	Log(LOG_INFO) << ". load popped research";
 	const YAML::Node& research = doc["poppedResearch"];
 	for (YAML::const_iterator
-			it = research.begin();
-			it != research.end();
-			++it)
+			i = research.begin();
+			i != research.end();
+			++i)
 	{
-		const std::string research = it->as<std::string>();
-		if (rules->getResearch(research))
-			_poppedResearch.push_back(rules->getResearch(research));
+		const std::string id = i->as<std::string>();
+		if (rules->getResearch(id))
+			_poppedResearch.push_back(rules->getResearch(id));
 	}
 
 	Log(LOG_INFO) << ". load alien strategy";
@@ -617,19 +617,19 @@ void SavedGame::load(
 			i != doc["deadSoldiers"].end();
 			++i)
 	{
-		SoldierDead* const deadSoldier = new SoldierDead(
-													L"",
-													0,
-													RANK_ROOKIE,
-													GENDER_MALE,
-													LOOK_BLONDE,
-													0,
-													0,
-													NULL,
-													UnitStats(),
-													UnitStats());
-		deadSoldier->load(*i);
-		_deadSoldiers.push_back(deadSoldier);
+		SoldierDead* const solDead = new SoldierDead(
+												L"",
+												0,
+												RANK_ROOKIE,
+												GENDER_MALE,
+												LOOK_BLONDE,
+												0,
+												0,
+												NULL,
+												UnitStats(),
+												UnitStats());
+		solDead->load(*i);
+		_deadSoldiers.push_back(solDead);
 	}
 
 	Log(LOG_INFO) << ". load mission statistics";

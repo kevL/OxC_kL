@@ -72,9 +72,9 @@ OptionsModsState::OptionsModsState(OptionsOrigin origin)
 	_lstMods->setSelectable();
 	_lstMods->setBackground(_window);
 	_lstMods->onMouseClick((ActionHandler)& OptionsModsState::lstModsClick);
-	_lstMods->setTooltip("STR_MODS_DESC");
-	_lstMods->onMouseIn((ActionHandler)& OptionsModsState::txtTooltipIn);
-	_lstMods->onMouseOut((ActionHandler)& OptionsModsState::txtTooltipOut);
+//	_lstMods->setTooltip("STR_MODS_DESC");
+//	_lstMods->onMouseIn((ActionHandler)& OptionsModsState::txtTooltipIn);
+//	_lstMods->onMouseOut((ActionHandler)& OptionsModsState::txtTooltipOut);
 
 	std::vector<std::string> rulesets = CrossPlatform::getDataContents("Ruleset/");
 	for (std::vector<std::string>::iterator

@@ -122,9 +122,9 @@ OptionsAudioState::OptionsAudioState(OptionsOrigin origin)
 	_slrMusicVolume->setRange(0, SDL_MIX_MAXVOLUME);
 	_slrMusicVolume->setValue(Options::musicVolume);
 	_slrMusicVolume->onChange((ActionHandler)& OptionsAudioState::slrMusicVolumeChange);
-	_slrMusicVolume->setTooltip("STR_MUSIC_VOLUME_DESC");
-	_slrMusicVolume->onMouseIn((ActionHandler)& OptionsAudioState::txtTooltipIn);
-	_slrMusicVolume->onMouseOut((ActionHandler)& OptionsAudioState::txtTooltipOut);
+//	_slrMusicVolume->setTooltip("STR_MUSIC_VOLUME_DESC");
+//	_slrMusicVolume->onMouseIn((ActionHandler)& OptionsAudioState::txtTooltipIn);
+//	_slrMusicVolume->onMouseOut((ActionHandler)& OptionsAudioState::txtTooltipOut);
 
 	_txtSoundVolume->setText(tr("STR_SFX_VOLUME"));
 
@@ -132,9 +132,9 @@ OptionsAudioState::OptionsAudioState(OptionsOrigin origin)
 	_slrSoundVolume->setValue(Options::soundVolume);
 	_slrSoundVolume->onChange((ActionHandler)& OptionsAudioState::slrSoundVolumeChange);
 	_slrSoundVolume->onMouseRelease((ActionHandler)& OptionsAudioState::slrSoundVolumeRelease);
-	_slrSoundVolume->setTooltip("STR_SFX_VOLUME_DESC");
-	_slrSoundVolume->onMouseIn((ActionHandler)& OptionsAudioState::txtTooltipIn);
-	_slrSoundVolume->onMouseOut((ActionHandler)& OptionsAudioState::txtTooltipOut);
+//	_slrSoundVolume->setTooltip("STR_SFX_VOLUME_DESC");
+//	_slrSoundVolume->onMouseIn((ActionHandler)& OptionsAudioState::txtTooltipIn);
+//	_slrSoundVolume->onMouseOut((ActionHandler)& OptionsAudioState::txtTooltipOut);
 
 	_txtUiVolume->setText(tr("STR_UI_VOLUME"));
 
@@ -142,9 +142,9 @@ OptionsAudioState::OptionsAudioState(OptionsOrigin origin)
 	_slrUiVolume->setValue(Options::uiVolume);
 	_slrUiVolume->onChange((ActionHandler)& OptionsAudioState::slrUiVolumeChange);
 	_slrUiVolume->onMouseRelease((ActionHandler)& OptionsAudioState::slrUiVolumeRelease);
-	_slrUiVolume->setTooltip("STR_UI_VOLUME_DESC");
-	_slrUiVolume->onMouseIn((ActionHandler)& OptionsAudioState::txtTooltipIn);
-	_slrUiVolume->onMouseOut((ActionHandler)& OptionsAudioState::txtTooltipOut);
+//	_slrUiVolume->setTooltip("STR_UI_VOLUME_DESC");
+//	_slrUiVolume->onMouseIn((ActionHandler)& OptionsAudioState::txtTooltipIn);
+//	_slrUiVolume->onMouseOut((ActionHandler)& OptionsAudioState::txtTooltipOut);
 
 	std::wostringstream ss;
 	std::vector<std::wstring> samplesText;
@@ -177,10 +177,10 @@ OptionsAudioState::OptionsAudioState(OptionsOrigin origin)
 	_txtSampleRate->setText(tr("STR_AUDIO_SAMPLE_RATE"));
 
 	_cbxSampleRate->setOptions(samplesText);
-	_cbxSampleRate->setTooltip("STR_AUDIO_SAMPLE_RATE_DESC");
 	_cbxSampleRate->onChange((ActionHandler)& OptionsAudioState::cbxSampleRateChange);
-	_cbxSampleRate->onMouseIn((ActionHandler)& OptionsAudioState::txtTooltipIn);
-	_cbxSampleRate->onMouseOut((ActionHandler)& OptionsAudioState::txtTooltipOut);
+//	_cbxSampleRate->setTooltip("STR_AUDIO_SAMPLE_RATE_DESC");
+//	_cbxSampleRate->onMouseIn((ActionHandler)& OptionsAudioState::txtTooltipIn);
+//	_cbxSampleRate->onMouseOut((ActionHandler)& OptionsAudioState::txtTooltipOut);
 
 	std::vector<std::wstring>
 		musicText,
@@ -204,10 +204,10 @@ OptionsAudioState::OptionsAudioState(OptionsOrigin origin)
 
 	_cbxMusicFormat->setOptions(musicText);
 	_cbxMusicFormat->setSelected(Options::preferredMusic);
-	_cbxMusicFormat->setTooltip("STR_PREFERRED_MUSIC_FORMAT_DESC");
 	_cbxMusicFormat->onChange((ActionHandler)& OptionsAudioState::cbxMusicFormatChange);
-	_cbxMusicFormat->onMouseIn((ActionHandler)& OptionsAudioState::txtTooltipIn);
-	_cbxMusicFormat->onMouseOut((ActionHandler)& OptionsAudioState::txtTooltipOut);
+//	_cbxMusicFormat->setTooltip("STR_PREFERRED_MUSIC_FORMAT_DESC");
+//	_cbxMusicFormat->onMouseIn((ActionHandler)& OptionsAudioState::txtTooltipIn);
+//	_cbxMusicFormat->onMouseOut((ActionHandler)& OptionsAudioState::txtTooltipOut);
 
 	std::wstring curMusic = musFormats[Mix_GetMusicType(0)];
 	_txtCurrentMusic->setText(tr("STR_CURRENT_FORMAT").arg(curMusic));
@@ -216,10 +216,10 @@ OptionsAudioState::OptionsAudioState(OptionsOrigin origin)
 
 	_cbxSoundFormat->setOptions(soundText);
 	_cbxSoundFormat->setSelected(Options::preferredSound);
-	_cbxSoundFormat->setTooltip("STR_PREFERRED_SFX_FORMAT_DESC");
 	_cbxSoundFormat->onChange((ActionHandler)& OptionsAudioState::cbxSoundFormatChange);
-	_cbxSoundFormat->onMouseIn((ActionHandler)& OptionsAudioState::txtTooltipIn);
-	_cbxSoundFormat->onMouseOut((ActionHandler)& OptionsAudioState::txtTooltipOut);
+//	_cbxSoundFormat->setTooltip("STR_PREFERRED_SFX_FORMAT_DESC");
+//	_cbxSoundFormat->onMouseIn((ActionHandler)& OptionsAudioState::txtTooltipIn);
+//	_cbxSoundFormat->onMouseOut((ActionHandler)& OptionsAudioState::txtTooltipOut);
 
 	std::wstring curSound = sndFormats[Options::currentSound];
 	_txtCurrentSound->setText(tr("STR_CURRENT_FORMAT").arg(curSound));

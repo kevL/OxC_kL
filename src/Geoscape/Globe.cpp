@@ -589,7 +589,6 @@ bool Globe::pointBack(
 	return (c < 0.);
 }
 
-
 /*
  * Returns latitude of last visible to player point on given longitude.
  * @param lon - longitude of the point

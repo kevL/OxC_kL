@@ -36,7 +36,6 @@ extern bool kL_reCenter;
 
 
 class Game;
-class LocalizedText;
 class Polygon;
 class RuleGlobe;
 class SurfaceSet;
@@ -57,11 +56,6 @@ class Globe
 
 private:
 	static const int NEAR_RADIUS = 25;
-//		NUM_LANDSHADES	= 48,
-//		NUM_SEASHADES	= 72,
-//		CITY_MARKER		= 8;
-//		NUM_TEXTURES	= 13;
-//		static const size_t DOGFIGHT_ZOOM = 5; // kL, was 3
 
 	static const double
 		ROTATE_LONGITUDE,
@@ -253,9 +247,6 @@ private:
 				Sint16 y,
 				double* lon,
 				double* lat) const;
-
-		/// Sets the texture set for the globe's polygons.
-		void setTexture(SurfaceSet* texture);
 
 		/// Starts rotating the globe left.
 		void rotateLeft();

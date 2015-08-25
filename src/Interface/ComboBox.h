@@ -37,7 +37,7 @@ class Window;
 
 /**
  * Text button with a list dropdown when pressed.
- * Allows selection from multiple available options.
+ * @note Allows selection from multiple available options.
  */
 class ComboBox
 	:

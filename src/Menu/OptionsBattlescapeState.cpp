@@ -108,9 +108,9 @@ OptionsBattlescapeState::OptionsBattlescapeState(OptionsOrigin origin)
 	_cbxEdgeScroll->setOptions(edgeScrolls);
 	_cbxEdgeScroll->setSelected(Options::battleEdgeScroll);
 	_cbxEdgeScroll->onChange((ActionHandler)& OptionsBattlescapeState::cbxEdgeScrollChange);
-	_cbxEdgeScroll->setTooltip("STR_EDGE_SCROLL_DESC");
-	_cbxEdgeScroll->onMouseIn((ActionHandler)& OptionsBattlescapeState::txtTooltipIn);
-	_cbxEdgeScroll->onMouseOut((ActionHandler)& OptionsBattlescapeState::txtTooltipOut);
+//	_cbxEdgeScroll->setTooltip("STR_EDGE_SCROLL_DESC");
+//	_cbxEdgeScroll->onMouseIn((ActionHandler)& OptionsBattlescapeState::txtTooltipIn);
+//	_cbxEdgeScroll->onMouseOut((ActionHandler)& OptionsBattlescapeState::txtTooltipOut);
 
 	_txtDragScroll->setText(tr("STR_DRAG_SCROLL"));
 
@@ -123,27 +123,27 @@ OptionsBattlescapeState::OptionsBattlescapeState(OptionsOrigin origin)
 	_cbxDragScroll->setOptions(dragScrolls);
 	_cbxDragScroll->setSelected(Options::battleDragScrollButton);
 	_cbxDragScroll->onChange((ActionHandler)& OptionsBattlescapeState::cbxDragScrollChange);
-	_cbxDragScroll->setTooltip("STR_DRAG_SCROLL_DESC");
-	_cbxDragScroll->onMouseIn((ActionHandler)& OptionsBattlescapeState::txtTooltipIn);
-	_cbxDragScroll->onMouseOut((ActionHandler)& OptionsBattlescapeState::txtTooltipOut);
+//	_cbxDragScroll->setTooltip("STR_DRAG_SCROLL_DESC");
+//	_cbxDragScroll->onMouseIn((ActionHandler)& OptionsBattlescapeState::txtTooltipIn);
+//	_cbxDragScroll->onMouseOut((ActionHandler)& OptionsBattlescapeState::txtTooltipOut);
 
 	_txtScrollSpeed->setText(tr("STR_SCROLL_SPEED"));
 
 	_slrScrollSpeed->setRange(2, 20);
 	_slrScrollSpeed->setValue(Options::battleScrollSpeed);
 	_slrScrollSpeed->onChange((ActionHandler)& OptionsBattlescapeState::slrScrollSpeedChange);
-	_slrScrollSpeed->setTooltip("STR_SCROLL_SPEED_BATTLE_DESC");
-	_slrScrollSpeed->onMouseIn((ActionHandler)& OptionsBattlescapeState::txtTooltipIn);
-	_slrScrollSpeed->onMouseOut((ActionHandler)& OptionsBattlescapeState::txtTooltipOut);
+//	_slrScrollSpeed->setTooltip("STR_SCROLL_SPEED_BATTLE_DESC");
+//	_slrScrollSpeed->onMouseIn((ActionHandler)& OptionsBattlescapeState::txtTooltipIn);
+//	_slrScrollSpeed->onMouseOut((ActionHandler)& OptionsBattlescapeState::txtTooltipOut);
 
 	_txtFireSpeed->setText(tr("STR_FIRE_SPEED"));
 
 	_slrFireSpeed->setRange(1, 20);
 	_slrFireSpeed->setValue(Options::battleFireSpeed);
 	_slrFireSpeed->onChange((ActionHandler)& OptionsBattlescapeState::slrFireSpeedChange);
-	_slrFireSpeed->setTooltip("STR_FIRE_SPEED_DESC");
-	_slrFireSpeed->onMouseIn((ActionHandler)& OptionsBattlescapeState::txtTooltipIn);
-	_slrFireSpeed->onMouseOut((ActionHandler)& OptionsBattlescapeState::txtTooltipOut);
+//	_slrFireSpeed->setTooltip("STR_FIRE_SPEED_DESC");
+//	_slrFireSpeed->onMouseIn((ActionHandler)& OptionsBattlescapeState::txtTooltipIn);
+//	_slrFireSpeed->onMouseOut((ActionHandler)& OptionsBattlescapeState::txtTooltipOut);
 
 	_txtXcomSpeed->setText(tr("STR_PLAYER_MOVEMENT_SPEED"));
 
@@ -151,50 +151,50 @@ OptionsBattlescapeState::OptionsBattlescapeState(OptionsOrigin origin)
 	_slrXcomSpeed->setRange(80, 1); // kL
 	_slrXcomSpeed->setValue(Options::battleXcomSpeed);
 	_slrXcomSpeed->onChange((ActionHandler)& OptionsBattlescapeState::slrXcomSpeedChange);
-	_slrXcomSpeed->setTooltip("STR_PLAYER_MOVEMENT_SPEED_DESC");
-	_slrXcomSpeed->onMouseIn((ActionHandler)& OptionsBattlescapeState::txtTooltipIn);
-	_slrXcomSpeed->onMouseOut((ActionHandler)& OptionsBattlescapeState::txtTooltipOut);
+//	_slrXcomSpeed->setTooltip("STR_PLAYER_MOVEMENT_SPEED_DESC");
+//	_slrXcomSpeed->onMouseIn((ActionHandler)& OptionsBattlescapeState::txtTooltipIn);
+//	_slrXcomSpeed->onMouseOut((ActionHandler)& OptionsBattlescapeState::txtTooltipOut);
 
 	_txtAlienSpeed->setText(tr("STR_COMPUTER_MOVEMENT_SPEED"));
 
 	_slrAlienSpeed->setRange(40, 1);
 	_slrAlienSpeed->setValue(Options::battleAlienSpeed);
 	_slrAlienSpeed->onChange((ActionHandler)& OptionsBattlescapeState::slrAlienSpeedChange);
-	_slrAlienSpeed->setTooltip("STR_COMPUTER_MOVEMENT_SPEED_DESC");
-	_slrAlienSpeed->onMouseIn((ActionHandler)& OptionsBattlescapeState::txtTooltipIn);
-	_slrAlienSpeed->onMouseOut((ActionHandler)& OptionsBattlescapeState::txtTooltipOut);
+//	_slrAlienSpeed->setTooltip("STR_COMPUTER_MOVEMENT_SPEED_DESC");
+//	_slrAlienSpeed->onMouseIn((ActionHandler)& OptionsBattlescapeState::txtTooltipIn);
+//	_slrAlienSpeed->onMouseOut((ActionHandler)& OptionsBattlescapeState::txtTooltipOut);
 
 	_txtPathPreview->setText(tr("STR_PATH_PREVIEW"));
 
 	_btnArrows->setText(tr("STR_PATH_ARROWS"));
 	_btnArrows->setPressed((Options::battleNewPreviewPath & PATH_ARROWS) != 0);
 	_btnArrows->onMouseClick((ActionHandler)& OptionsBattlescapeState::btnPathPreviewClick);
-	_btnArrows->setTooltip("STR_PATH_ARROWS_DESC");
-	_btnArrows->onMouseIn((ActionHandler)& OptionsBattlescapeState::txtTooltipIn);
-	_btnArrows->onMouseOut((ActionHandler)& OptionsBattlescapeState::txtTooltipOut);
+//	_btnArrows->setTooltip("STR_PATH_ARROWS_DESC");
+//	_btnArrows->onMouseIn((ActionHandler)& OptionsBattlescapeState::txtTooltipIn);
+//	_btnArrows->onMouseOut((ActionHandler)& OptionsBattlescapeState::txtTooltipOut);
 
 	_btnTuCost->setText(tr("STR_PATH_TIME_UNIT_COST"));
 	_btnTuCost->setPressed((Options::battleNewPreviewPath & PATH_TU_COST) != 0);
 	_btnTuCost->onMouseClick((ActionHandler)& OptionsBattlescapeState::btnPathPreviewClick);
-	_btnTuCost->setTooltip("STR_PATH_TIME_UNIT_COST_DESC");
-	_btnTuCost->onMouseIn((ActionHandler)& OptionsBattlescapeState::txtTooltipIn);
-	_btnTuCost->onMouseOut((ActionHandler)& OptionsBattlescapeState::txtTooltipOut);
+//	_btnTuCost->setTooltip("STR_PATH_TIME_UNIT_COST_DESC");
+//	_btnTuCost->onMouseIn((ActionHandler)& OptionsBattlescapeState::txtTooltipIn);
+//	_btnTuCost->onMouseOut((ActionHandler)& OptionsBattlescapeState::txtTooltipOut);
 
 	_txtOptions->setText(tr("STR_USER_INTERFACE_OPTIONS"));
 
 	_btnTooltips->setText(tr("STR_TOOLTIPS"));
 	_btnTooltips->setPressed(Options::battleTooltips);
 	_btnTooltips->onMouseClick((ActionHandler)& OptionsBattlescapeState::btnTooltipsClick);
-	_btnTooltips->setTooltip("STR_TOOLTIPS_DESC");
-	_btnTooltips->onMouseIn((ActionHandler)& OptionsBattlescapeState::txtTooltipIn);
-	_btnTooltips->onMouseOut((ActionHandler)& OptionsBattlescapeState::txtTooltipOut);
+//	_btnTooltips->setTooltip("STR_TOOLTIPS_DESC");
+//	_btnTooltips->onMouseIn((ActionHandler)& OptionsBattlescapeState::txtTooltipIn);
+//	_btnTooltips->onMouseOut((ActionHandler)& OptionsBattlescapeState::txtTooltipOut);
 
 	_btnDeaths->setText(tr("STR_DEATH_NOTIFICATIONS"));
 	_btnDeaths->setPressed(Options::battleNotifyDeath);
 	_btnDeaths->onMouseClick((ActionHandler)& OptionsBattlescapeState::btnDeathsClick);
-	_btnDeaths->setTooltip("STR_DEATH_NOTIFICATIONS_DESC");
-	_btnDeaths->onMouseIn((ActionHandler)& OptionsBattlescapeState::txtTooltipIn);
-	_btnDeaths->onMouseOut((ActionHandler)& OptionsBattlescapeState::txtTooltipOut);
+//	_btnDeaths->setTooltip("STR_DEATH_NOTIFICATIONS_DESC");
+//	_btnDeaths->onMouseIn((ActionHandler)& OptionsBattlescapeState::txtTooltipIn);
+//	_btnDeaths->onMouseOut((ActionHandler)& OptionsBattlescapeState::txtTooltipOut);
 }
 
 /**

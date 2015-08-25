@@ -1250,11 +1250,11 @@ void InventoryState::setExtraInfo( // private.
 
 }
 
-/**
+/*
 * Shows a tooltip for the appropriate button.
 * @param action - pointer to an Action
-*/
-/* void InventoryState::txtTooltipIn(Action* action)
+*
+void InventoryState::txtTooltipIn(Action* action)
 {
 	if (_inv->getSelectedItem() == 0 && Options::battleTooltips)
 	{
@@ -1263,11 +1263,11 @@ void InventoryState::setExtraInfo( // private.
 	}
 } */
 
-/**
+/*
 * Clears the tooltip text.
 * @param action - pointer to an Action
-*/
-/* void InventoryState::txtTooltipOut(Action* action)
+*
+void InventoryState::txtTooltipOut(Action* action)
 {
 	if (_inv->getSelectedItem() == 0 && Options::battleTooltips)
 	{
