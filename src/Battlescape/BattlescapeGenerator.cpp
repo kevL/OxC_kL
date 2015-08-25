@@ -1295,7 +1295,7 @@ BattleUnit* BattlescapeGenerator::addXCOMUnit(BattleUnit* const unit) // private
 			}
 		}
 	}
-	else // mission w/ transport craft that does not have ruleset Deployments. Or craft/base Equip.
+	else // mission w/ transport craft that does not have ruleset Deployments. Or it's a craft/base Equip.
 	{
 		//Log(LOG_INFO) << ". baseEquip OR Craft w/out Deployment rule";
 		int tankPos = 0;
@@ -1310,8 +1310,8 @@ BattleUnit* BattlescapeGenerator::addXCOMUnit(BattleUnit* const unit) // private
 			{
 				if (unit->getGeoscapeSoldier() == NULL)
 				{
-					if ((_battleSave->getTiles()[i]->getPosition().x == _tileEquipt->getPosition().x
-							|| unit->getArmor()->getSize() == 1)
+					if ((unit->getArmor()->getSize() == 1
+							|| _battleSave->getTiles()[i]->getPosition().x == _tileEquipt->getPosition().x)
 						&& ++tankPos == 3
 						&& _battleSave->setUnitPosition(
 													unit,

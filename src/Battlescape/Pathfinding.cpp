@@ -46,7 +46,7 @@ Uint8 // static not const.
  * Sets up a Pathfinding object.
  * @note There is only one Pathfinding object per tactical so calls to this
  * object should generally be preceded w/ setPathingUnit() in order to setup
- * '_unit' and '_moveType' etc.
+ * '_unit' and '_mType' etc.
  * @param battleSave - pointer to SavedBattleGame
  */
 Pathfinding::Pathfinding(SavedBattleGame* const battleSave)
@@ -57,9 +57,9 @@ Pathfinding::Pathfinding(SavedBattleGame* const battleSave)
 		_previewed(false),
 		_strafe(false),
 		_tuCostTotal(0),
-		_modifCTRL(false),
-		_modifALT(false),
-		_moveType(MT_WALK),
+		_Ctrl(false),
+		_Alt(false),
+		_mType(MT_WALK),
 		_openDoor(0)
 {
 	//Log(LOG_INFO) << "Create Pathfinding";
@@ -140,7 +140,7 @@ void Pathfinding::calculate(
 								// through: bresenham always uses its own default of 1000, while aStar never sets its missile=true boolean because it
 								// needs -1 passed in ...... plus it does further checks directly against maxTuCost.
 	{
-		_moveType = MT_FLY;
+		_mType = MT_FLY;
 		strafeRejected = true;
 		maxTuCost = 1000;
 	}
@@ -189,7 +189,7 @@ void Pathfinding::calculate(
 	// check if we have a floor, else lower destination.
 	// kL_note: This allows click in the air for non-flyers
 	// and they target the ground tile below the clicked tile.
-	if (_moveType != MT_FLY)
+	if (_mType != MT_FLY)
 	{
 		while (canFallDown( // for large & small units.
 						tileDest,
@@ -278,9 +278,9 @@ void Pathfinding::calculate(
 
 		_strafe = strafeRejected == false
 			   && Options::strafe == true
-			   && ((_modifCTRL == true
+			   && ((_Ctrl == true
 						&& isMech == false)
-					|| (_modifALT == true
+					|| (_Alt == true
 						&& isMech == true))
 			   && startPos.z == destPos.z
 			   && std::abs(destPos.x - startPos.x) < 2
@@ -332,7 +332,7 @@ void Pathfinding::calculate(
 						true); // <- sets '_strafe' FALSE so loop never gets back in here.
 			}
 			else if (Options::strafe == true
-				&& _modifCTRL == true
+				&& _Ctrl == true
 				&& unit->getGeoscapeSoldier() != NULL
 				&& (_strafe == false
 					|| (_path.size() == 1
@@ -734,7 +734,7 @@ int Pathfinding::getTuCostPf(
 			if (tileDest == NULL)
 				return 255;
 
-			if (_moveType != MT_FLY)
+			if (_mType != MT_FLY)
 			{
 				tileStartBelow = _battleSave->getTile(posStart + posOffset + Position(0,0,-1));
 				if (dir == DIR_DOWN)
@@ -816,7 +816,7 @@ int Pathfinding::getTuCostPf(
 				}
 			}
 			else if (fall == false // for safely walking down ramps or stairs ...
-				&& _moveType != MT_FLY
+				&& _mType != MT_FLY
 				&& canFallDown(tileDest) == true
 				&& tileDestBelow != NULL
 				&& tileDestBelow->getTerrainLevel() < -11	// higher than 1-half up.
@@ -837,7 +837,7 @@ int Pathfinding::getTuCostPf(
 //					tileDestBelow = _battleSave->getTile(*posDest + Position(x,y,-1)); // NOT USED.
 				}
 			}
-			else if (_moveType == MT_FLY
+			else if (_mType == MT_FLY
 				&& tileDestBelow != NULL
 				&& tileDestBelow->getUnit() != NULL
 				&& tileDestBelow->getUnit() != _unit)
@@ -895,7 +895,7 @@ int Pathfinding::getTuCostPf(
 			// check if there's a floor, else fall down;
 			// for walking off roofs and pathing in mid-air ...
 			if (fall == false
-				&& _moveType != MT_FLY
+				&& _mType != MT_FLY
 				&& canFallDown(tileStart) == true)
 			{
 				++partsFalling;
@@ -970,7 +970,7 @@ int Pathfinding::getTuCostPf(
 				{
 					cost += tileDest->getTuCostTile(
 												O_FLOOR,
-												_moveType);
+												_mType);
 
 					if (fall == false
 						&& stairs == false
@@ -978,7 +978,7 @@ int Pathfinding::getTuCostPf(
 					{
 						cost += tileDest->getTuCostTile(
 													O_OBJECT,
-													_moveType);
+													_mType);
 
 						if (tileDest->getMapData(O_FLOOR) == NULL)
 							cost += 4;
@@ -999,7 +999,7 @@ int Pathfinding::getTuCostPf(
 					//Log(LOG_INFO) << ". from " << tileStart->getPosition() << " to " << tileDest->getPosition() << " dir = " << dir;
 					wallTu = tileStart->getTuCostTile( // ( 'walkover' bigWalls not incl. -- none exists )
 													O_NORTHWALL,
-													_moveType);
+													_mType);
 					if (wallTu > 0)
 					{
 //						if (dir & 1) // would use this to increase diagonal wall-crossing by +50%
@@ -1031,7 +1031,7 @@ int Pathfinding::getTuCostPf(
 
 					wallTu = tileDestTest->getTuCostTile(
 													O_WESTWALL,
-													_moveType);
+													_mType);
 					if (wallTu > 0)
 					{
 						wallTotal += wallTu;
@@ -1059,7 +1059,7 @@ int Pathfinding::getTuCostPf(
 
 					wallTu = tileDestTest->getTuCostTile(
 												O_NORTHWALL,
-												_moveType);
+												_mType);
 					if (wallTu > 0)
 					{
 						wallTotal += wallTu;
@@ -1082,7 +1082,7 @@ int Pathfinding::getTuCostPf(
 					//Log(LOG_INFO) << ". from " << tileStart->getPosition() << " to " << tileDest->getPosition() << " dir = " << dir;
 					wallTu = tileStart->getTuCostTile(
 													O_WESTWALL,
-													_moveType); // ( bigWalls not incl. yet )
+													_mType); // ( bigWalls not incl. yet )
 					if (wallTu > 0)
 					{
 						wallTotal += wallTu;
@@ -1676,7 +1676,7 @@ BIGWALL_E_S		// 8
 			}
 		}
 		else if (tile->hasNoFloor(NULL) == true	// this whole section is devoted to making large units
-			&& _moveType != MT_FLY)				// not take part in any kind of falling behaviour
+			&& _mType != MT_FLY)				// not take part in any kind of falling behaviour
 		{
 			Position pos = tile->getPosition();
 			while (pos.z >= 0)
@@ -1724,13 +1724,13 @@ BIGWALL_E_S		// 8
 
 	if (tile->getTuCostTile( // blocking part
 						part,
-						_moveType) == 255)
+						_mType) == 255)
 	{
-		//Log(LOG_INFO) << "isBlocked() EXIT true, part = " << part << " MT = " << (int)_moveType;
+		//Log(LOG_INFO) << "isBlocked() EXIT true, part = " << part << " MT = " << (int)_mType;
 		return true;
 	}
 
-	//Log(LOG_INFO) << "isBlocked() EXIT false, part = " << part << " MT = " << (int)_moveType;
+	//Log(LOG_INFO) << "isBlocked() EXIT false, part = " << part << " MT = " << (int)_mType;
 	return false;
 }
 
@@ -1813,9 +1813,9 @@ int Pathfinding::validateUpDown(
 	if (gravLift == true)
 		return 1;
 
-	if (_moveType == MT_FLY //_unit->getMoveTypeUnit() == MT_FLY
+	if (_mType == MT_FLY //_unit->getMoveTypeUnit() == MT_FLY
 		|| (dir == DIR_DOWN
-			&& _modifALT == true))
+			&& _Alt == true))
 	{
 		if ((dir == DIR_UP
 				&& destTile->hasNoFloor(startTile))
@@ -1907,7 +1907,7 @@ bool Pathfinding::previewPath(bool discard)
 
 			energyLimit = unitEnergy;
 
-			falling = _moveType != MT_FLY
+			falling = _mType != MT_FLY
 				   && canFallDown(
 							_battleSave->getTile(start),
 							unitSize + 1);
@@ -1981,7 +1981,7 @@ bool Pathfinding::previewPath(bool discard)
 					if (tileAbove != NULL
 						&& tileAbove->getPreviewDir() == 0
 						&& tileTU == 0
-						&& _moveType != MT_FLY)				// unit fell down
+						&& _mType != MT_FLY)				// unit fell down
 					{
 						tileAbove->setPreviewDir(DIR_DOWN);	// retroactively set tileAbove's direction
 					}
@@ -2156,7 +2156,7 @@ void Pathfinding::setPathingUnit(BattleUnit* const unit)
 	if (unit != NULL)
 		setMoveType();
 	else
-		_moveType = MT_WALK;
+		_mType = MT_WALK;
 }
 
 /**
@@ -2164,10 +2164,10 @@ void Pathfinding::setPathingUnit(BattleUnit* const unit)
  */
 void Pathfinding::setMoveType() // private.
 {
-	_moveType = _unit->getMoveTypeUnit();
+	_mType = _unit->getMoveTypeUnit();
 
-	if (_modifALT == true // this forces soldiers in flyingsuits to walk on (or fall to) the ground.
-		&& _moveType == MT_FLY
+	if (_Alt == true // this forces soldiers in flyingsuits to walk on (or fall to) the ground.
+		&& _mType == MT_FLY
 		&& _unit->getGeoscapeSoldier() != NULL)
 //		&& (_unit->getGeoscapeSoldier() != NULL
 //			|| _unit->getUnitRules()->isMechanical() == false)	// hovertanks & cyberdiscs always hover.
@@ -2175,7 +2175,7 @@ void Pathfinding::setMoveType() // private.
 //		&& _unit->getRaceString() != "STR_CELATID"				// celatids always .. float.
 //		&& _unit->getRaceString() != "STR_ETHEREAL")			// Ethereals *can* walk, but they don't like to.
 	{															// Should turn this into Ruleset param: 'alwaysFloat'
-		_moveType = MT_WALK;									// or use floatHeight > 0 or something-like-that
+		_mType = MT_WALK;									// or use floatHeight > 0 or something-like-that
 	}
 }
 
@@ -2187,13 +2187,13 @@ void Pathfinding::setInputModifiers() // private.
 	if (_battleSave->getSide() != FACTION_PLAYER
 		|| _battleSave->getBattleGame()->getPanicHandled() == false)
 	{
-		_modifCTRL = false;
-		_modifALT = false;
+		_Ctrl = false;
+		_Alt = false;
 	}
 	else
 	{
-		_modifCTRL = (SDL_GetModState() & KMOD_CTRL) != 0;
-		_modifALT = (SDL_GetModState() & KMOD_ALT) != 0;
+		_Ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
+		_Alt = (SDL_GetModState() & KMOD_ALT) != 0;
 	}
 }
 
@@ -2201,18 +2201,18 @@ void Pathfinding::setInputModifiers() // private.
  * Checks whether a modifier key was used to enable strafing or running.
  * @return, true if modifier was used
  */
-bool Pathfinding::isModCTRL() const
+bool Pathfinding::isModCtrl() const
 {
-	return _modifCTRL;
+	return _Ctrl;
 }
 
 /**
  * Checks whether a modifier key was used to enable forced walking.
  * @return, true if modifier was used
  */
-bool Pathfinding::isModALT() const
+bool Pathfinding::isModAlt() const
 {
-	return _modifALT;
+	return _Alt;
 }
 
 /**
@@ -2221,7 +2221,7 @@ bool Pathfinding::isModALT() const
  */
 MovementType Pathfinding::getMoveTypePathing() const
 {
-	return _moveType;
+	return _mType;
 }
 
 /**
@@ -2252,15 +2252,15 @@ std::vector<int> Pathfinding::copyPath() const
 	return _path;
 }
 
-/**
+/*
  * Checks if going one step from start to destination in the given direction
  * requires going through a closed UFO door.
  * @param direction The direction of travel.
  * @param start The starting position of the travel.
  * @param destination Where the travel ends.
  * @return The TU cost of opening the door. 0 if no UFO door opened.
- */
-/* int Pathfinding::getOpeningUfoDoorCost(int direction, Position start, Position destination) // private.
+ *
+int Pathfinding::getOpeningUfoDoorCost(int direction, Position start, Position destination) // private.
 {
 	Tile* s = _battleSave->getTile(start);
 	Tile* d = _battleSave->getTile(destination);
@@ -2271,65 +2271,65 @@ std::vector<int> Pathfinding::copyPath() const
 			if (s->getMapData(O_NORTHWALL)
 				&& s->getMapData(O_NORTHWALL)->isUfoDoor()
 				&& !s->isUfoDoorOpen(O_NORTHWALL))
-			return s->getMapData(O_NORTHWALL)->getTuCost(_moveType);
+			return s->getMapData(O_NORTHWALL)->getTuCost(_mType);
 		break;
 		case 1:
 			if (s->getMapData(O_NORTHWALL)
 				&& s->getMapData(O_NORTHWALL)->isUfoDoor()
 				&& !s->isUfoDoorOpen(O_NORTHWALL))
-			return s->getMapData(O_NORTHWALL)->getTuCost(_moveType);
+			return s->getMapData(O_NORTHWALL)->getTuCost(_mType);
 			if (d->getMapData(O_WESTWALL)
 				&& d->getMapData(O_WESTWALL)->isUfoDoor()
 				&& !d->isUfoDoorOpen(O_WESTWALL))
-			return d->getMapData(O_WESTWALL)->getTuCost(_moveType);
+			return d->getMapData(O_WESTWALL)->getTuCost(_mType);
 		break;
 		case 2:
 			if (d->getMapData(O_WESTWALL)
 				&& d->getMapData(O_WESTWALL)->isUfoDoor()
 				&& !d->isUfoDoorOpen(O_WESTWALL))
-			return d->getMapData(O_WESTWALL)->getTuCost(_moveType);
+			return d->getMapData(O_WESTWALL)->getTuCost(_mType);
 		break;
 		case 3:
 			if (d->getMapData(O_NORTHWALL)
 				&& d->getMapData(O_NORTHWALL)->isUfoDoor()
 				&& !d->isUfoDoorOpen(O_NORTHWALL))
-			return d->getMapData(O_NORTHWALL)->getTuCost(_moveType);
+			return d->getMapData(O_NORTHWALL)->getTuCost(_mType);
 			if (d->getMapData(O_WESTWALL)
 				&& d->getMapData(O_WESTWALL)->isUfoDoor()
 				&& !d->isUfoDoorOpen(O_WESTWALL))
-			return d->getMapData(O_WESTWALL)->getTuCost(_moveType);
+			return d->getMapData(O_WESTWALL)->getTuCost(_mType);
 		break;
 		case 4:
 			if (d->getMapData(O_NORTHWALL)
 				&& d->getMapData(O_NORTHWALL)->isUfoDoor()
 				&& !d->isUfoDoorOpen(O_NORTHWALL))
-			return d->getMapData(O_NORTHWALL)->getTuCost(_moveType);
+			return d->getMapData(O_NORTHWALL)->getTuCost(_mType);
 		break;
 		case 5:
 			if (d->getMapData(O_NORTHWALL)
 				&& d->getMapData(O_NORTHWALL)->isUfoDoor()
 				&& !d->isUfoDoorOpen(O_NORTHWALL))
-			return d->getMapData(O_NORTHWALL)->getTuCost(_moveType);
+			return d->getMapData(O_NORTHWALL)->getTuCost(_mType);
 			if (s->getMapData(O_WESTWALL)
 				&& s->getMapData(O_WESTWALL)->isUfoDoor()
 				&& !s->isUfoDoorOpen(O_WESTWALL))
-			return s->getMapData(O_WESTWALL)->getTuCost(_moveType);
+			return s->getMapData(O_WESTWALL)->getTuCost(_mType);
 		break;
 		case 6:
 			if (s->getMapData(O_WESTWALL)
 				&& s->getMapData(O_WESTWALL)->isUfoDoor()
 				&& !s->isUfoDoorOpen(O_WESTWALL))
-			return s->getMapData(O_WESTWALL)->getTuCost(_moveType);
+			return s->getMapData(O_WESTWALL)->getTuCost(_mType);
 		break;
 		case 7:
 			if (s->getMapData(O_NORTHWALL)
 				&& s->getMapData(O_NORTHWALL)->isUfoDoor()
 				&& !s->isUfoDoorOpen(O_NORTHWALL))
-			return s->getMapData(O_NORTHWALL)->getTuCost(_moveType);
+			return s->getMapData(O_NORTHWALL)->getTuCost(_mType);
 			if (s->getMapData(O_WESTWALL)
 				&& s->getMapData(O_WESTWALL)->isUfoDoor()
 				&& !s->isUfoDoorOpen(O_WESTWALL))
-			return s->getMapData(O_WESTWALL)->getTuCost(_moveType);
+			return s->getMapData(O_WESTWALL)->getTuCost(_mType);
 		break;
 
 		default:
@@ -2339,13 +2339,13 @@ std::vector<int> Pathfinding::copyPath() const
 	return 0;
 } */
 
-/**
+/*
  * Determines whether the unit is going up a stairs.
  * @param startPosition The position to start from.
  * @param endPosition The position we wanna reach.
  * @return True if the unit is going up a stairs.
- */
-/* bool Pathfinding::isOnStairs(const Position& startPosition, const Position& endPosition)
+ *
+bool Pathfinding::isOnStairs(const Position& startPosition, const Position& endPosition)
 {
 	// condition 1 : endposition has to the south a terrainlevel -16 object (upper part of the stairs)
 	if (_battleSave->getTile(endPosition + Position(0, 1, 0))

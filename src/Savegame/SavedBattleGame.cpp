@@ -68,8 +68,8 @@ SavedBattleGame::SavedBattleGame(const std::vector<OperationPool*>* titles)
 		_mapSize(0),
 		_selectedUnit(NULL),
 		_lastSelectedUnit(NULL),
-		_pathfinding(NULL),
-		_tileEngine(NULL),
+		_pf(NULL),
+		_te(NULL),
 		_globalShade(0),
 		_side(FACTION_PLAYER),
 		_turn(1),
@@ -199,8 +199,8 @@ SavedBattleGame::~SavedBattleGame()
 		delete *i;
 	}
 
-	delete _pathfinding;
-	delete _tileEngine;
+	delete _pf;
+	delete _te;
 }
 
 /**
@@ -274,7 +274,7 @@ void SavedBattleGame::load(
 		serKey.totalBytes		= node["tileTotalBytesPer"]	.as<Uint32>(serKey.totalBytes);
 		serKey._fire			= node["tileFireSize"]		.as<Uint8>(serKey._fire);
 		serKey._smoke			= node["tileSmokeSize"]		.as<Uint8>(serKey._smoke);
-		serKey._animOffset		= node["tileOffsetSize"]	.as<Uint8>(serKey._animOffset); // kL
+		serKey._animOffset		= node["tileOffsetSize"]	.as<Uint8>(serKey._animOffset);
 		serKey._mapDataID		= node["tileIDSize"]		.as<Uint8>(serKey._mapDataID);
 		serKey._mapDataSetID	= node["tileSetIDSize"]		.as<Uint8>(serKey._mapDataSetID);
 		serKey.boolFields		= node["tileBoolFieldsSize"].as<Uint8>(1); // boolean flags used to be stored in an unmentioned byte (Uint8) :|
@@ -619,10 +619,10 @@ void SavedBattleGame::loadMapResources(const Game* const game)
 
 	initUtilities(game->getResourcePack());
 
-	_tileEngine->calculateSunShading();
-	_tileEngine->calculateTerrainLighting();
-	_tileEngine->calculateUnitLighting();
-//	_tileEngine->recalculateFOV(); // -> moved to BattlescapeGame::init()
+	_te->calculateSunShading();
+	_te->calculateTerrainLighting();
+	_te->calculateUnitLighting();
+//	_te->recalculateFOV(); // -> moved to BattlescapeGame::init()
 }
 
 /**
@@ -842,13 +842,13 @@ void SavedBattleGame::initMap(
  */
 void SavedBattleGame::initUtilities(const ResourcePack* const res)
 {
-	delete _pathfinding;
-	delete _tileEngine;
+	delete _pf;
+	delete _te;
 
-	_pathfinding = new Pathfinding(this);
-	_tileEngine = new TileEngine(
-							this,
-							res->getVoxelData());
+	_pf = new Pathfinding(this);
+	_te = new TileEngine(
+					this,
+					res->getVoxelData());
 }
 
 /**
@@ -1202,7 +1202,7 @@ std::vector<BattleItem*>* SavedBattleGame::getItems()
  */
 Pathfinding* SavedBattleGame::getPathfinding() const
 {
-	return _pathfinding;
+	return _pf;
 }
 
 /**
@@ -1211,7 +1211,7 @@ Pathfinding* SavedBattleGame::getPathfinding() const
  */
 TileEngine* SavedBattleGame::getTileEngine() const
 {
-	return _tileEngine;
+	return _te;
 }
 
 /**
@@ -1422,13 +1422,13 @@ bool SavedBattleGame::endBattlePhase()
 		}
 	}
 
-	_tileEngine->calculateSunShading();
-	_tileEngine->calculateTerrainLighting();
-	_tileEngine->calculateUnitLighting(); // turn off MCed alien lighting.
+	_te->calculateSunShading();
+	_te->calculateTerrainLighting();
+	_te->calculateUnitLighting(); // turn off MCed alien lighting.
 
 	// redo calculateFOV() *after* aliens & civies have been set
 	// notVisible -> AND *only* after a calcLighting has been done !
-	_tileEngine->recalculateFOV();
+	_te->recalculateFOV();
 
 	if (_side != FACTION_PLAYER)
 		selectNextFactionUnit();
@@ -1942,9 +1942,9 @@ Node* SavedBattleGame::getNearestNode(const BattleUnit* const unit) const
 			++i)
 	{
 		nodeTest = *i;
-		distTest = _tileEngine->distanceSq(
-										unit->getPosition(),
-										nodeTest->getPosition());
+		distTest = _te->distanceSq(
+								unit->getPosition(),
+								nodeTest->getPosition());
 
 		if (unit->getPosition().z == nodeTest->getPosition().z
 			&& distTest < dist
@@ -2047,10 +2047,10 @@ void SavedBattleGame::tileVolatiles()
 				tile = getTile((*i)->getPosition() + spreadPos);
 
 				if (tile != NULL
-					&& _tileEngine->horizontalBlockage(
-													*i,
-													tile,
-													DT_IN) == 0)
+					&& _te->horizontalBlockage(
+											*i,
+											tile,
+											DT_IN) == 0)
 				{
 					tile->ignite(var);
 				}
@@ -2092,7 +2092,7 @@ void SavedBattleGame::tileVolatiles()
 				}
 			}
 
-			_tileEngine->applyGravity(*i);
+			_te->applyGravity(*i);
 		}
 	}
 
@@ -2127,10 +2127,10 @@ void SavedBattleGame::tileVolatiles()
 												&posSpread);
 					tile = getTile((*i)->getPosition() + posSpread);
 					if (tile != NULL
-						&& _tileEngine->horizontalBlockage(
-														*i,
-														tile,
-														DT_SMOKE) == 0)
+						&& _te->horizontalBlockage(
+												*i,
+												tile,
+												DT_SMOKE) == 0)
 					{
 						tile->addSmoke(var / 2);
 					}
@@ -2224,10 +2224,10 @@ void SavedBattleGame::reviveUnit(
 			unit->setEnergy(0);
 			unit->setRevived();
 
-			_tileEngine->calculateUnitLighting();
-			_tileEngine->calculateFOV(
-									unit->getPosition(),
-									true);
+			_te->calculateUnitLighting();
+			_te->calculateFOV(
+							unit->getPosition(),
+							true);
 			removeCorpse(unit);
 		}
 	}
@@ -2239,7 +2239,7 @@ void SavedBattleGame::reviveUnit(
  */
 void SavedBattleGame::removeCorpse(const BattleUnit* const unit)
 {
-	int part = unit->getArmor()->getSize() * unit->getArmor()->getSize();
+	int quad = unit->getArmor()->getSize() * unit->getArmor()->getSize();
 
 	for (std::vector<BattleItem*>::const_iterator
 			i = _items.begin();
@@ -2251,8 +2251,7 @@ void SavedBattleGame::removeCorpse(const BattleUnit* const unit)
 			removeItem(*i);
 			--i;
 
-			--part;
-			if (part == 0)
+			if (--quad == 0)
 				return;
 		}
 	}
@@ -2260,7 +2259,7 @@ void SavedBattleGame::removeCorpse(const BattleUnit* const unit)
 
 /**
  * Places units on the map.
- * @note Handles large units that are placed on multiple tiles.
+ * @note Also handles large units that are placed on multiple tiles.
  * @param unit	- pointer to a unit to be placed
  * @param pos	- reference the position to place the unit
  * @param test	- true only checks if unit can be placed at the position (default false)
@@ -2273,16 +2272,18 @@ bool SavedBattleGame::setUnitPosition(
 {
 	if (unit != NULL)
 	{
-//		_pathfinding->setPathingUnit(unit); // <- this is not valid when doing base equip.
+//		_pf->setPathingUnit(unit); // <- this is not valid when doing base equip.
+//		int zOffset = 0;
+//		Position posTest = pos; // strip const.
 
-		const int unitSize = unit->getArmor()->getSize() - 1;
-		for (int // first check if the tiles are occupied
-				x = unitSize;
+		const int armorSize = unit->getArmor()->getSize() - 1;
+		for (int
+				x = armorSize;
 				x != -1;
 				--x)
 		{
 			for (int
-					y = unitSize;
+					y = armorSize;
 					y != -1;
 					--y)
 			{
@@ -2290,6 +2291,9 @@ bool SavedBattleGame::setUnitPosition(
 					* const tile = getTile(pos + Position(x,y,0)),
 					* const tileBelow = getTile(pos + Position(x,y,-1)),
 					* const tileAbove = getTile(pos + Position(x,y, 1));
+//					* const tile = getTile(posTest + Position(x,y, zOffset + 0)),
+//					* const tileBelow = getTile(posTest + Position(x,y, zOffset - 1)),
+//					* const tileAbove = getTile(posTest + Position(x,y, zOffset + 1));
 
 				if (tile == NULL
 					|| (tile->getUnit() != NULL
@@ -2299,7 +2303,7 @@ bool SavedBattleGame::setUnitPosition(
 										unit->getMoveTypeUnit()) == 255
 					|| (tile->hasNoFloor(tileBelow) == true
 						&& unit->getMoveTypeUnit() != MT_FLY) // <- so just use the unit's moveType.
-//						&& _pathfinding->getMoveTypePathing() != MT_FLY)
+//						&& _pf->getMoveTypePathing() != MT_FLY)
 					|| (tile->getMapData(O_OBJECT) != NULL
 						&& tile->getMapData(O_OBJECT)->getBigWall() > BIGWALL_NONE
 						&& tile->getMapData(O_OBJECT)->getBigWall() < BIGWALL_WEST)
@@ -2311,50 +2315,57 @@ bool SavedBattleGame::setUnitPosition(
 				{
 					return false;
 				}
+
+//				if (tile != NULL // I'd think this ought be totally unnecessary with well-formed MCDs and perhaps code elsewhere.
+//					&& tile->getTerrainLevel() == -24)
+//				{
+//					posTest += Position(0,0, ++zOffset);
+//					x =
+//					y = armorSize; // note the stock code sort of jerks around by additionally altering the y-offset to one tile south here. /oh well
+
+//					break; // stock code doesn't break; effectively its z-level increases for every quadrant that's on terrainLevel -24 ... or something else too weird to be constructive anymore.
+//				}
 			}
 		}
 
-		if (unitSize != 0) // -> however, large units never use base equip, so _pathfinding is valid here.
+		if (armorSize != 0) // -> however, large units never use base equip, so _pf is valid here.
 		{
-			_pathfinding->setPathingUnit(unit); // tentative.
-
+			_pf->setPathingUnit(unit); // tentative.
 			for (int
 					dir = 2;
 					dir != 5;
 					++dir)
 			{
-				if (_pathfinding->isBlockedPath(
-											getTile(pos),
-											dir) == true)
+				if (_pf->isBlockedPath(
+									getTile(pos),
+//									getTile(posTest + Position(0,0, zOffset)),
+									dir) == true)
 				{
 					return false;
 				}
 			}
 		}
 
-		if (test == true)
-			return true;
-
-
-		for (int // set the unit in position
-				x = unitSize;
-				x != -1;
-				--x)
+		if (test == false)
 		{
-			for (int
-					y = unitSize;
-					y != -1;
-					--y)
-			{
-				if (x == 0
-					&& y == 0)
-				{
-					unit->setPosition(pos);
-				}
+			unit->setPosition(pos);
+//			unit->setPosition(posTest + Position(0,0, zOffset));
 
-				getTile(pos + Position(x,y,0))->setUnit(
-													unit,
-													getTile(pos + Position(x,y,-1)));
+			for (int
+					x = armorSize;
+					x != -1;
+					--x)
+			{
+				for (int
+						y = armorSize;
+						y != -1;
+						--y)
+				{
+					getTile(pos + Position(x,y,0))->setUnit(
+														unit,
+														getTile(pos + Position(x,y,-1)));
+//					getTile(posTest + Position(x,y, zOffset))->setUnit(unit, getTile(posTest + Position(x,y, zOffset - 1)));
+				}
 			}
 		}
 
@@ -2379,12 +2390,8 @@ bool SavedBattleGame::placeUnitNearPosition(
 	if (unit == NULL)
 		return false;
 
-	if (setUnitPosition(
-					unit,
-					pos) == true)
-	{
+	if (setUnitPosition(unit, pos) == true)
 		return true;
-	}
 
 
 	int

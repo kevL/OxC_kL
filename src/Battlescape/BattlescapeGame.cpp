@@ -2846,8 +2846,8 @@ void BattlescapeGame::primaryAction(const Position& targetPos)
 			pf->setPathingUnit(_currentAction.actor);
 
 			const bool
-				modifCTRL = (SDL_GetModState() & KMOD_CTRL) != 0,
-				modifALT = (SDL_GetModState() & KMOD_ALT) != 0,
+				modCtrl = (SDL_GetModState() & KMOD_CTRL) != 0,
+				modAlt = (SDL_GetModState() & KMOD_ALT) != 0,
 				isMech = _currentAction.actor->getUnitRules() != NULL
 					  && _currentAction.actor->getUnitRules()->isMechanical();
 
@@ -2856,8 +2856,8 @@ void BattlescapeGame::primaryAction(const Position& targetPos)
 
 			if (targetUnit != NULL // spin 180 degrees
 				&& targetUnit == _currentAction.actor
-				&& modifCTRL == false
-				&& modifALT == false
+				&& modCtrl == false
+				&& modAlt == false
 				&& isMech == false
 				&& _currentAction.actor->getArmor()->getSize() == 1) // small units only
 			{
@@ -2892,8 +2892,8 @@ void BattlescapeGame::primaryAction(const Position& targetPos)
 			{
 				if (allowPreview == true
 					&& (_currentAction.target != targetPos
-						|| pf->isModCTRL() != modifCTRL
-						|| pf->isModALT() != modifALT))
+						|| pf->isModCtrl() != modCtrl
+						|| pf->isModAlt() != modAlt))
 				{
 					pf->removePreview();
 				}

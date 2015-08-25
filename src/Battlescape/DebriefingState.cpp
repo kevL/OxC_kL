@@ -851,6 +851,13 @@ void DebriefingState::prepareDebriefing() // private.
 				{
 					(*j)->returnToBase();
 				}
+
+				const MissionSite* const site = dynamic_cast<MissionSite*>((*j)->getDestination());
+				if (site != NULL
+					&& site->isInBattlescape() == true)
+				{
+					(*j)->returnToBase();
+				}
 			}
 		}
 
@@ -1071,12 +1078,12 @@ void DebriefingState::prepareDebriefing() // private.
 
 				missionAccomplished = true;
 
-				if (deployRule != NULL
+/*				if (deployRule != NULL
 					&& deployRule->getNextStage().empty() == false)
 				{
 					missionAccomplished = false;
-				}
-				else if (aborted == true
+				} else */
+				if (aborted == true
 					|| soldierLive == 0)
 				{
 					if (battleSave->allObjectivesDestroyed() == false)
@@ -1099,6 +1106,16 @@ void DebriefingState::prepareDebriefing() // private.
 							_gameSave->getAlienMissions().begin(),
 							_gameSave->getAlienMissions().end(),
 							ClearAlienBase(*i));
+
+					for (std::vector<Target*>::const_iterator
+							j = (*i)->getFollowers()->begin();
+							j != (*i)->getFollowers()->end();
+							++j)
+					{
+						Craft* const craft = dynamic_cast<Craft*>(*j);
+						if (craft != NULL) // safety.
+							craft->returnToBase();
+					}
 
 					delete *i;
 					_gameSave->getAlienBases()->erase(i);

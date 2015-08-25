@@ -65,9 +65,9 @@ private:
 		void load(const YAML::Node& node);
 
 		/// Chooses a random region for a regular mission.
-		const std::string chooseRandomRegion(const Ruleset* const rules);
+		std::string chooseRandomRegion(const Ruleset* const rules);
 		/// Chooses a random mission for a region.
-		const std::string chooseRandomMission(const std::string& region) const;
+		std::string chooseRandomMission(const std::string& region) const;
 
 		/// Removes a region and mission from the list of possibilities.
 		bool removeMission(

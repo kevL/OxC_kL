@@ -54,9 +54,9 @@ private:
 		YAML::Node save() const;
 
 		/// Selects from the items by probability.
-		const std::string choose() const;
+		std::string choose() const;
 		/// Selects the most likely item.
-		const std::string topChoice() const;
+//		std::string topChoice() const;
 
 		/// Sets an option's weight.
 		void setWeight(

@@ -256,7 +256,7 @@ SpecialAbility RuleUnit::getSpecialAbility() const
  * Gets the unit that is spawned when this one dies.
  * @return, the unit's spawn unit
  */
-std::string RuleUnit::getSpawnUnit() const
+const std::string& RuleUnit::getSpawnUnit() const
 {
 	return _spawnUnit;
 }
@@ -265,7 +265,7 @@ std::string RuleUnit::getSpawnUnit() const
  * Gets stamina recovery per turn as a percentage.
  * @return, rate of stamina recovery
  */
-const int RuleUnit::getEnergyRecovery() const
+int RuleUnit::getEnergyRecovery() const
 {
 	return _energyRecovery;
 }
@@ -278,7 +278,7 @@ const int RuleUnit::getEnergyRecovery() const
  * "_WEAPON" is added to their type to get their weapon.
  * @return, true if this unit is a living weapon
  */
-const bool RuleUnit::isLivingWeapon() const
+bool RuleUnit::isLivingWeapon() const
 {
 	return _livingWeapon;
 }
@@ -308,7 +308,7 @@ const std::vector<std::string>& RuleUnit::getBuiltInWeapons() const
  * Gets if this Unit is female.
  * @return, true if female
  */
-const bool RuleUnit::isFemale() const
+bool RuleUnit::isFemale() const
 {
 	return _female;
 }
@@ -317,7 +317,7 @@ const bool RuleUnit::isFemale() const
  * Gets if this RuleUnit is dog.
  * @return, true if dog
  */
-const bool RuleUnit::isDog() const
+bool RuleUnit::isDog() const
 {
 	return _dog;
 }
@@ -334,7 +334,7 @@ const bool RuleUnit::isDog() const
  * - canOpenDoors etc.
  * @return, true if this is a non-organic purely mechanical unit
  */
-const bool RuleUnit::isMechanical() const
+bool RuleUnit::isMechanical() const
 {
 	return _mechanical;
 }
@@ -343,7 +343,7 @@ const bool RuleUnit::isMechanical() const
  * Gets if this Unit is immune to psionic attacks.
  * @return, true if unit is immune to Psi
  */
-const bool RuleUnit::isPsiImmune() const
+bool RuleUnit::isPsiImmune() const
 {
 	return _psiImmune;
 }
@@ -355,7 +355,7 @@ const bool RuleUnit::isPsiImmune() const
  * well as prime grenades if in preBattle inventory.
  * @return, true if this unit can open doors
  */
-const bool RuleUnit::hasHands() const
+bool RuleUnit::hasHands() const
 {
 	return _hasHands;
 }

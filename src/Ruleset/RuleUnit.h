@@ -212,8 +212,8 @@ struct UnitStats
 
 
 /**
- * Represents the static data for a unit that is generated on
- * the battlescape, this includes: HWPs, aliens and civilians.
+ * Represents the static data for a unit that is generated on the battlescape.
+ * @note This includes: HWPs, aliens and civilians.
  * @sa Soldier BattleUnit
  */
 class RuleUnit
@@ -302,31 +302,31 @@ private:
 		/// Gets the alien's special ability if any.
 		SpecialAbility getSpecialAbility() const;
 		/// Gets the unit's spawn unit.
-		std::string getSpawnUnit() const;
+		const std::string& getSpawnUnit() const;
 
 		/// Gets stamina recovery per turn as a percentage.
-		const int getEnergyRecovery() const;
+		int getEnergyRecovery() const;
 
 		/// Checks if this unit has a built in weapon.
-		const bool isLivingWeapon() const;
+		bool isLivingWeapon() const;
 		/// Gets the name of any melee weapon that may be built in to this unit.
 		const std::string& getMeleeWeapon() const;
 		/// Gets a vector of integrated items this unit has available.
 		const std::vector<std::string>& getBuiltInWeapons() const;
 
 		/// Gets if this RuleUnit is female.
-		const bool isFemale() const;
+		bool isFemale() const;
 
 		/// Gets if this RuleUnit is dog.
-		const bool isDog() const;
+		bool isDog() const;
 
 		/// Gets if this RuleUnit is a mechanical apparatus.
-		const bool isMechanical() const;
+		bool isMechanical() const;
 		/// Gets if this RuleUnit is immune to psionic attacks.
-		const bool isPsiImmune() const;
+		bool isPsiImmune() const;
 
 		/// Gets if the unit can open doors and prime grenades.
-		const bool hasHands() const;
+		bool hasHands() const;
 };
 
 }

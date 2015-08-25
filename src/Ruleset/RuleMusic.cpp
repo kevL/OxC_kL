@@ -26,7 +26,7 @@ namespace OpenXcom
 /**
  * cTor
  */
-RuleMusic::RuleMusic()
+RuleMusic::RuleMusic() // TODO: put in normalization, take out MIDI stuff. See stock code.
 	:
 		_midiIndex(-1)
 {}
@@ -38,7 +38,8 @@ RuleMusic::~RuleMusic()
 {}
 
 /**
- *
+ * Loads the music rule from YAML.
+ * @param node - reference a YAML node
  */
 void RuleMusic::load(const YAML::Node& node)
 {
@@ -69,6 +70,14 @@ void RuleMusic::load(const YAML::Node& node)
 
 	while (_indexes.size() < _files.size())
 		_indexes.push_back(-1);
+}
+
+/**
+ *
+ */
+std::string RuleMusic::getType() const
+{
+	return _type;
 }
 
 /**

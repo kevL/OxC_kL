@@ -92,7 +92,7 @@ NewPossibleManufactureState::NewPossibleManufactureState(
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
 
-	_lstPossibilities->setColumns(1, 260);
+	_lstPossibilities->setColumns(1, 261);
 	_lstPossibilities->setAlign(ALIGN_CENTER);
 	_lstPossibilities->setBig();
 

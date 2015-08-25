@@ -60,8 +60,8 @@ class Pathfinding
 
 private:
 	bool
-		_modifALT,
-		_modifCTRL,
+		_Alt,
+		_Ctrl,
 		_previewed,
 		_strafe;
 	int
@@ -73,7 +73,7 @@ private:
 
 	BattleAction* _battleAction;
 
-	MovementType _moveType;
+	MovementType _mType;
 
 	std::vector<int> _path;
 
@@ -200,9 +200,9 @@ private:
 		void setPathingUnit(BattleUnit* const unit);
 
 		/// Gets the CTRL modifier setting.
-		bool isModCTRL() const;
+		bool isModCtrl() const;
 		/// Gets the ALT modifier setting.
-		bool isModALT() const;
+		bool isModAlt() const;
 
 		/// Gets the current movementType.
 		MovementType getMoveTypePathing() const;

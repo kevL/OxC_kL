@@ -46,7 +46,7 @@ private:
 		virtual ~StatStringCondition();
 
 		/// Gets condition name.
-		const std::string getConditionName();
+		std::string getConditionName();
 		/// Gets MinVal.
 		int getMinVal();
 		/// Gets MaxVal.

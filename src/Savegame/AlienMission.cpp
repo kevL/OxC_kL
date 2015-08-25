@@ -891,7 +891,7 @@ void AlienMission::ufoLifting(
 
 		case Ufo::LANDED:
 			//Log(LOG_INFO) << ". mission complete, addScore() + getTrajectory()";
-			if (   _missionRule.getPoints() > 0 // base & infiltration missions only get points when they are completed.
+			if (_missionRule.getPoints() > 0 // base & infiltration missions only get points when they are completed.
 				&& _missionRule.getObjective() != alm_BASE
 				&& _missionRule.getObjective() != alm_INFILT)
 //			if (_missionRule.getType() == "STR_ALIEN_HARVEST"

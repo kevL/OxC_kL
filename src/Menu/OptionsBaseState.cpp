@@ -315,6 +315,7 @@ void OptionsBaseState::btnDefaultClick(Action*)
 
 /**
  *
+ * @param action - pointer to an Action
  */
 void OptionsBaseState::btnGroupPress(Action* action)
 {
@@ -367,8 +368,8 @@ void OptionsBaseState::txtTooltipOut(Action* action)
 
 /**
  * Updates the scale.
- * @param dX delta of X;
- * @param dY delta of Y;
+ * @param dX - delta of X
+ * @param dY - delta of Y
  */
 void OptionsBaseState::resize(
 		int& dX,

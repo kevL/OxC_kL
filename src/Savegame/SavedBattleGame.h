@@ -98,11 +98,11 @@ private:
 	BattleUnit
 		* _selectedUnit,
 		* _lastSelectedUnit;
-	Pathfinding* _pathfinding;
+	Pathfinding* _pf;
 	Tile
 		* _invBattle,
 		** _tiles;
-	TileEngine* _tileEngine;
+	TileEngine* _te;
 
 	std::string
 		_alienRace,

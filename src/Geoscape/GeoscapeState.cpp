@@ -266,7 +266,7 @@ const int GeoscapeState::_ufoBlobs[8][13][13] =
 };
 
 
-// myk002: struct definitions used when enqueuing notification events
+// struct definitions used when enqueuing notification events
 struct ProductionCompleteInfo
 {
 	bool gotoBaseBtn;
@@ -2773,9 +2773,7 @@ void GeoscapeState::time1Hour()
 		if ((*i)->getDetected() == false)
 		{
 			(*i)->setDetected();
-			popup(new MissionDetectedState(
-										*i,
-										this));
+			popup(new MissionDetectedState(*i, this));
 			break;
 		}
 	}
@@ -2843,7 +2841,7 @@ void GenerateSupplyMission::operator() (const AlienBase* base) const
 void GeoscapeState::time1Day()
 {
 	//Log(LOG_INFO) << "GeoscapeState::time1Day()";
-	// myk002: Create a vector of pending events for this base so a slightly
+	// Create a vector of pending events for this base so a slightly
 	// different dialog layout can be shown for the last event of each type.
 	std::vector<ProductionCompleteInfo> prodEvents;
 	std::vector<State*> resEvents;
@@ -3143,9 +3141,7 @@ void GeoscapeState::time1Day()
 					if ((*j)->getRules()->getName() == (*l)->getRules()->getName()
 						&& _rules->getUnit((*l)->getRules()->getName()) == NULL)
 					{
-						(*k)->removeResearch(
-										*l,
-										false);
+						(*k)->removeResearch(*l, false);
 						break;
 					}
 				}

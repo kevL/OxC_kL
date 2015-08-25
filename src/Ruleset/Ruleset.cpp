@@ -2002,7 +2002,7 @@ const GameTime& Ruleset::getStartingTime() const
 /**
  * Gets an MCDPatch.
  * @param id - the ID of the MCDPatch
- * @return, pointer to the MCDPatch based on ID, or NULL if none defined
+ * @return, pointer to the MCDPatch based on ID or NULL if none defined
  */
 MCDPatch* Ruleset::getMCDPatch(const std::string& id) const
 {

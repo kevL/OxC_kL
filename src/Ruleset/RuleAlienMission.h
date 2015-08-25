@@ -96,7 +96,7 @@ private:
 		/// Gets a race based on the game time and the racial distribution.
 		std::string generateRace(const size_t monthsPassed) const;
 		/// Gets the most likely race based on the game time and the racial distribution.
-		std::string getTopRace(const size_t monthsPassed) const;
+//		std::string getTopRace(const size_t monthsPassed) const;
 
 		/// Gets the mission's type.
 		const std::string& getType() const

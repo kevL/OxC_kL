@@ -51,7 +51,7 @@ StatStringCondition::~StatStringCondition()
  * Gets the condition string.
  * @return, name of the associated stat
  */
-const std::string StatStringCondition::getConditionName()
+std::string StatStringCondition::getConditionName()
 {
 	return _conditionName;
 }

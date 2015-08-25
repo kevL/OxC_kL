@@ -56,9 +56,9 @@ private:
 		///
 		std::string getMode() const;
 		///
-		std::vector<std::string> getMusicalTerrains() const;
-		///
 		int getMidiIndex() const;
+		///
+		std::vector<std::string> getMusicalTerrains() const;
 		///
 		std::vector<std::string> getFiles() const;
 		///

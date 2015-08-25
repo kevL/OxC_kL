@@ -71,7 +71,7 @@ YAML::Node WeightedOptions::save() const
  * @note kL rewrite
  * @return, the key of the selected choice
  */
-const std::string WeightedOptions::choose() const
+std::string WeightedOptions::choose() const
 {
 	if (_totalWeight != 0)
 	{
@@ -94,14 +94,14 @@ const std::string WeightedOptions::choose() const
 	return "";
 }
 
-/**
+/*
  * Selects the most likely option.
  * @note This MUST be called on non-empty objects. Currently used only to
  * determine race of initial alien mission -> GeoscapeState::determineAlienMissions(atGameStart=true)
  * @note kL rewrite
  * @return, the key of the selected choice
- */
-const std::string WeightedOptions::topChoice() const
+ *
+std::string WeightedOptions::topChoice() const
 {
 	if (_totalWeight != 0)
 	{
@@ -134,7 +134,7 @@ const std::string WeightedOptions::topChoice() const
 	}
 
 	return "";
-}
+} */
 
 /**
  * Sets this WeightedOptions' weight.
