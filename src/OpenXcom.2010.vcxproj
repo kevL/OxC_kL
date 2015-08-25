@@ -482,7 +482,6 @@
     <ClCompile Include="Ruleset\RuleVideo.cpp" />
     <ClCompile Include="Ruleset\RuleCommendations.cpp" />
     <ClCompile Include="Ruleset\SoundDefinition.cpp" />
-    <ClCompile Include="Ruleset\StatStringCondition.cpp" />
     <ClCompile Include="Ruleset\RuleInterface.cpp" />
     <ClCompile Include="Ruleset\RuleBaseFacility.cpp" />
     <ClCompile Include="Ruleset\RuleCountry.cpp" />
@@ -807,7 +806,6 @@
     <ClInclude Include="Ruleset\RuleVideo.h" />
     <ClInclude Include="Ruleset\RuleCommendations.h" />
     <ClInclude Include="Ruleset\SoundDefinition.h" />
-    <ClInclude Include="Ruleset\StatStringCondition.h" />
     <ClInclude Include="Ruleset\RuleInterface.h" />
     <ClInclude Include="Ruleset\RuleAlienMission.h" />
     <ClInclude Include="Ruleset\RuleBaseFacility.h" />

@@ -151,7 +151,7 @@ void Pathfinding::calculate(
 
 	const Tile* tileDest = _battleSave->getTile(destPos);
 
-	if (isBlocked( // check if destination is blocked
+	if (isBlocked( // check if destination is blocked.
 				tileDest,
 				O_FLOOR,
 				missileTarget) == true
@@ -168,11 +168,11 @@ void Pathfinding::calculate(
 	if (strafeRejected == false)
 		destPos2 = destPos;
 
-	// The following check avoids that the unit walks behind the stairs
-	// if we click behind the stairs to make it go up the stairs.
-	// It only works if the unit is on one of the 2 tiles on the
-	// stairs, or on the tile right in front of the stairs.
-	// kL_note: I don't want this: (the function, below, can be removed too).
+	// The following check avoids causing the unit to walk behind the stairs if
+	// the player clicks behind the stairs to make it go up the stairs. It works
+	// only if the unit is on one of the 2 tiles on the stairs or on the tile
+	// right in front of the stairs.
+	// kL_note: I don't want this: (the function below can be removed too).
 /*	if (isOnStairs(startPos, destPos))
 	{
 		destPos.z++;
@@ -184,14 +184,14 @@ void Pathfinding::calculate(
 	{
 		++destPos.z;
 		tileDest = _battleSave->getTile(destPos);
+		//Log(LOG_INFO) << ". raising destTile 1 level, destPos = " << destPos;
 	}
 
-	// check if we have a floor, else lower destination.
-	// kL_note: This allows click in the air for non-flyers
-	// and they target the ground tile below the clicked tile.
+	// Check if there's a floor else lower the destination. This allows click in
+	// the air for non-flyers and they target the ground tile below that tile.
 	if (_mType != MT_FLY)
 	{
-		while (canFallDown( // for large & small units.
+		while (canFallDown(
 						tileDest,
 						armorSize))
 		{
@@ -202,7 +202,7 @@ void Pathfinding::calculate(
 	}
 
 
-	if (isBlocked(
+	if (isBlocked( // recheck if destination is blocked.
 			tileDest,
 			O_FLOOR,
 			missileTarget) == false
@@ -691,7 +691,7 @@ int Pathfinding::getTuCostPf(
 		partsGoingDown = 0,
 		partsFalling = 0,
 		partsChangingHeight = 0,
-		partsOnAir = 0,
+//		partsOnAir = 0,
 
 		cost,
 		costTotal = 0,
@@ -704,7 +704,7 @@ int Pathfinding::getTuCostPf(
 
 	Tile
 		* tileStart,
-		* tileStartBelow,
+//		* tileStartBelow,
 		* tileDest,
 		* tileDestBelow,
 		* tileDestAbove,
@@ -734,7 +734,7 @@ int Pathfinding::getTuCostPf(
 			if (tileDest == NULL)
 				return 255;
 
-			if (_mType != MT_FLY)
+/*			if (_mType != MT_FLY)
 			{
 				tileStartBelow = _battleSave->getTile(posStart + posOffset + Position(0,0,-1));
 				if (dir == DIR_DOWN)
@@ -752,7 +752,7 @@ int Pathfinding::getTuCostPf(
 					if (partsOnAir == (armorSize + 1) * (armorSize + 1))
 						return 255; // cannot walk on air
 				}
-			}
+			} */
 
 			// don't let tanks phase through doors.
 			if (x != 0 && y != 0)
@@ -879,7 +879,7 @@ int Pathfinding::getTuCostPf(
 					}
 				}
 			}
-			else if (fall == false)
+			else //if (fall == false) // <- this can probly stay <--
 			{
 				// check if path can go up or down through gravlift or fly
 				if (validateUpDown(
@@ -892,25 +892,24 @@ int Pathfinding::getTuCostPf(
 				cost = 8; // vertical movement by flying suit or grav lift
 			}
 
-			// check if there's a floor, else fall down;
-			// for walking off roofs and pathing in mid-air ...
+			// check if there's a floor, else fall down; for walking off roofs and pathing in mid-air ...
 			if (fall == false
 				&& _mType != MT_FLY
 				&& canFallDown(tileStart) == true)
 			{
 				++partsFalling;
 
-				if (dir != DIR_DOWN
-					&& partsFalling == (armorSize + 1) * (armorSize + 1))
+				if (//dir != DIR_DOWN && // <- this can probly stay <--
+					partsFalling == (armorSize + 1) * (armorSize + 1))
 				{
 //					return false; // <- fuck you.
-					return 255;
+//					return 255;
 
-//					fall = true;
-//					*posDest = posStart + Position(0,0,-1);
-//					tileDest = _battleSave->getTile(*posDest + posOffset);
+					fall = true;
+					*posDest = posStart + Position(0,0,-1);
+					tileDest = _battleSave->getTile(*posDest + posOffset);
 //					tileDestBelow = _battleSave->getTile(*posDest + Position(x,y,-1)); // NOT USED.
-//					dir = DIR_DOWN;
+					dir = DIR_DOWN;
 				}
 			}
 
@@ -1171,7 +1170,7 @@ int Pathfinding::getTuCostPf(
 		}
 	}
 
-	if (armorSize > 0) // for Large units ->
+	if (armorSize > 0) // only for Large units ->
 	{
 		//Log(LOG_INFO) << "getTuCostPf() armorSize > 0 " << (*posDest);
 		// - check the path between part 0,0 and part 1,1 at destination position

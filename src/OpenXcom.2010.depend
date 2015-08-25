@@ -5937,7 +5937,7 @@
 	<SDL.h>
 	<yaml-cpp/yaml.h>
 
-1440459915 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
+1440530382 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
 	"InventoryState.h"
 	"BattlescapeState.h"
 	"Inventory.h"
@@ -6097,7 +6097,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1440469685 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
+1440542073 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
 	"Pathfinding.h"
 	"PathfindingNode.h"
 	"PathfindingOpenSet.h"
@@ -7638,7 +7638,7 @@
 	"OptionsBaseState.h"
 	"../Engine/OptionInfo.h"
 
-1440459840 source:f:\git\openxcom\src\menu\optionsbasestate.cpp
+1440531454 source:f:\git\openxcom\src\menu\optionsbasestate.cpp
 	"OptionsBaseState.h"
 	"MainMenuState.h"
 	"OptionsAdvancedState.h"
@@ -8256,7 +8256,7 @@
 	"MCDPatch.h"
 	"MapDataSet.h"
 
-1440460564 source:f:\git\openxcom\src\ruleset\rulealienmission.cpp
+1440531520 source:f:\git\openxcom\src\ruleset\rulealienmission.cpp
 	"RuleAlienMission.h"
 	"../Savegame/WeightedOptions.h"
 
@@ -8292,7 +8292,7 @@
 1440461473 source:f:\git\openxcom\src\ruleset\ruleresearch.cpp
 	"RuleResearch.h"
 
-1440472417 source:f:\git\openxcom\src\ruleset\ruleset.cpp
+1440532085 source:f:\git\openxcom\src\ruleset\ruleset.cpp
 	"Ruleset.h"
 	"AlienRace.h"
 	"AlienDeployment.h"
@@ -8370,7 +8370,7 @@
 	"../Engine/Language.h"
 	"../Geoscape/Globe.h"
 
-1440253358 source:f:\git\openxcom\src\savegame\alienmission.cpp
+1440531253 source:f:\git\openxcom\src\savegame\alienmission.cpp
 	"AlienMission.h"
 	"AlienBase.h"
 	"Base.h"
@@ -8394,7 +8394,7 @@
 	"../Ruleset/RuleUfo.h"
 	"../Ruleset/UfoTrajectory.h"
 
-1438235035 source:f:\git\openxcom\src\savegame\alienstrategy.cpp
+1440532578 source:f:\git\openxcom\src\savegame\alienstrategy.cpp
 	"AlienStrategy.h"
 	"WeightedOptions.h"
 	"../Ruleset/RuleRegion.h"
@@ -10381,7 +10381,7 @@
 1430149550 f:\git\openxcom\src\ruleset\extramusic.h
 	<yaml-cpp/yaml.h>
 
-1430149550 source:f:\git\openxcom\src\ruleset\rulemusic.cpp
+1440532009 source:f:\git\openxcom\src\ruleset\rulemusic.cpp
 	"RuleMusic.h"
 
 1440531806 f:\git\openxcom\src\ruleset\rulemusic.h
