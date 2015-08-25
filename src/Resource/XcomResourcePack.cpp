@@ -292,7 +292,7 @@ XcomResourcePack::XcomResourcePack(const Ruleset* const rules)
 			++i)
 	{
 		const std::string id = (*i)["id"].as<std::string>();
-		Font *font = new Font();
+		Font* const font = new Font();
 		font->load(*i);
 		_fonts[id] = font;
 	}
@@ -301,18 +301,13 @@ XcomResourcePack::XcomResourcePack(const Ruleset* const rules)
 	/* GRAPHICS */
 	Log(LOG_INFO) << "Loading graphics ...";
 
-/*kL
-	{
+/*	{
 		// Load surfaces
 		std::ostringstream s;
 		s << "GEODATA/" << "INTERWIN.DAT";
 		_surfaces["INTERWIN.DAT"] = new Surface(160, 556);
 		_surfaces["INTERWIN.DAT"]->loadScr(CrossPlatform::getDataFile(s.str()));
 	} */
-
-	// kL_begin:
-//	_surfaces["INTERWIN"] = new Surface(160, 96);
-	// kL_end.
 
 	const std::string geograph = CrossPlatform::getDataFolder("GEOGRAPH/");
 	std::vector<std::string> scrs = CrossPlatform::getFolderContents(geograph, "SCR");
@@ -343,110 +338,9 @@ XcomResourcePack::XcomResourcePack(const Ruleset* const rules)
 					i->end(),
 					i->begin(),
 					std::toupper);
-//		*i = (*i).substr(0, (*i).length() - 3);
-//		*i = *i + "PCK";
 		_surfaces[*i] = new Surface(320, 200);
 		_surfaces[*i]->loadBdy(path);
 	}
-
-	// kL_begin:
-/*	Surface* kL_Geo = new Surface(
-								Screen::ORIGINAL_WIDTH - 64,	// 256
-								Screen::ORIGINAL_HEIGHT);		// 200
-	Surface* oldGeo = _surfaces["GEOBORD.SCR"];
-	for (int
-			x = 0;
-			x < Screen::ORIGINAL_WIDTH - 64;
-			++x)
-	{
-		for (int
-				y = 0;
-				y < Screen::ORIGINAL_HEIGHT;
-				++y)
-		{
-			kL_Geo->setPixelColor(x, y, oldGeo->getPixelColor(x, y));
-		}
-	}
-	_surfaces["LGEOBORD.SCR"] = kL_Geo; */ // kL_end.
-
-	// bigger Geoscape background
-/*	int
-//		newWidth	= 320 - 64,
-//		newHeight	= 200;
-		newWidth	= Screen::ORIGINAL_WIDTH - 64,
-		newHeight	= Screen::ORIGINAL_HEIGHT;
-	double
-		mult_x = static_cast<double>(Options::baseXGeoscape) / static_cast<double>(Screen::ORIGINAL_WIDTH),
-		mult_y = static_cast<double>(Options::baseYGeoscape) / static_cast<double>(Screen::ORIGINAL_HEIGHT);
-
-	int
-		width_mult = static_cast<int>(static_cast<double>(newWidth) * mult_x),
-		height_mult = static_cast<int>(static_cast<double>(newHeight) * mult_y);
-
-	Surface* newGeo = new Surface(
-//								newWidth * 3,
-//								newHeight * 3);
-								width_mult,
-								height_mult);
-	Surface* oldGeo = _surfaces["GEOBORD.SCR"];
-
-	for (int
-			x = 0;
-			x < newWidth;
-			++x)
-	{
-		for (int
-				y = 0;
-				y < newHeight;
-				++y)
-		{
-			newGeo->setPixelColor(
-							newWidth + x,
-							newHeight + y,
-							oldGeo->getPixelColor(x, y));
-			newGeo->setPixelColor(
-							newWidth - x - 1,
-							newHeight + y,
-							oldGeo->getPixelColor(x, y));
-			newGeo->setPixelColor(
-//							newWidth * 3 - x - 1,
-							width_mult - x - 1,
-							newHeight + y,
-							oldGeo->getPixelColor(x, y));
-
-			newGeo->setPixelColor(
-							newWidth + x,
-							newHeight - y - 1,
-							oldGeo->getPixelColor(x, y));
-			newGeo->setPixelColor(
-							newWidth - x - 1,
-							newHeight - y - 1,
-							oldGeo->getPixelColor(x, y));
-			newGeo->setPixelColor(
-//							newWidth * 3 - x - 1,
-							width_mult - x - 1,
-							newHeight - y - 1,
-							oldGeo->getPixelColor(x, y));
-
-			newGeo->setPixelColor(
-							newWidth + x,
-//							newHeight * 3 - y - 1,
-							height_mult - y - 1,
-							oldGeo->getPixelColor(x, y));
-			newGeo->setPixelColor(
-							newWidth - x - 1,
-//							newHeight * 3 - y - 1,
-							height_mult - y - 1,
-							oldGeo->getPixelColor(x, y));
-			newGeo->setPixelColor(
-//							newWidth * 3 - x - 1,
-//							newHeight * 3 - y - 1,
-							width_mult - x - 1,
-							height_mult - y - 1,
-							oldGeo->getPixelColor(x, y));
-		}
-	}
-	_surfaces["ALTGEOBORD.SCR"] = newGeo; */
 
 	std::vector<std::string> spks = CrossPlatform::getFolderContents(geograph, "SPK");
 	for (std::vector<std::string>::iterator
@@ -549,9 +443,7 @@ XcomResourcePack::XcomResourcePack(const Ruleset* const rules)
 						j != terrains.end();
 						++j)
 				{
-					ClearMusicAssignment(
-										type,
-										*j);
+					ClearMusicAssignment(type, *j);
 				}
 			}
 
@@ -568,86 +460,12 @@ XcomResourcePack::XcomResourcePack(const Ruleset* const rules)
 			}
 		}
 
-/*		const std::string mus[] =	// these are the filenames in /SOUND directory. THIS ARRAY IS USED ONLY FOR EXTRAMUSIC !!!!
-		{							// Loads only those files that are found in the Music Rule .RUL-file as 'files'.
-			"12GEO2",
-			"12GEO3",
-			"12MARS",
-			"12TACTIC",
-			"GMDEFEND",
-			"GMENBASE",
-			"GMGEO1",
-			"GMGEO2",
-			"GMINTER",
-			"GMINTRO1",
-			"GMINTRO2",
-			"GMINTRO3",
-			"GMLOSE",
-			"GMMARS",
-			"GMNEWMAR",
-			"GMSTORY",
-			"GMTACTIC",
-			"GMWIN",
-			"LCDEBRIEF",
-			"LCDEFEND",
-			"LCGEO1",
-			"LCGEO2",
-			"LCINTER",
-			"LCINTRO1",
-			"LCINTRO2",
-			"LCINTRO3",
-			"LCLOSE",
-			"LCMARS",
-			"LCNIGHT",
-			"LCTACTIC",
-			"LCUFOPED",
-			"LCWIN",
-			"PSDEFEND",
-			"PSENBASE",
-			"PSGEO1",
-			"PSGEO2",
-			"PSGEO3",
-			"PSGEO4",
-			"PSINTER",
-			"PSMARS",
-			"PSNEWMAR",
-			"PSSTORY",
-			"PSTACTIC",
-			"PSTACTIC2"
-		}; */
-
-/*		int tracks[] = {3, 6, 0, 18, 2, 19, 20, 21, 10, 9, 8, 12, 17, 11};
-		float tracks_normalize[] = {0.76f, 0.83f, 1.19f, 1.0f, 0.74f, 0.8f, 0.8f, 0.8f, 1.0f, 0.92f, 0.81f, 1.0f, 1.14f, 0.84f}; */
-
-		// Check which music version is available
-		// Check if GM.CAT data is available // sza_MusicRules
-//		CatFile
-//			* adlibcat = NULL,
-//			* aintrocat = NULL;
-//		GMCatFile* gmcat = NULL;
-
-//		const std::string
-//			musicAdlib = "SOUND/ADLIB.CAT",
-//			musicIntro = "SOUND/AINTRO.CAT",
-//			musicGM = "SOUND/GM.CAT";
-/*		if (CrossPlatform::fileExists(CrossPlatform::getDataFile(musicAdlib)))
-		{
-			adlibcat = new CatFile(CrossPlatform::getDataFile(musicAdlib).c_str());
-
-			if (CrossPlatform::fileExists(CrossPlatform::getDataFile(musicIntro)))
-				aintrocat = new CatFile(CrossPlatform::getDataFile(musicIntro).c_str());
-		}
-
-		if (CrossPlatform::fileExists(CrossPlatform::getDataFile(musicGM)))
-			gmcat = new GMCatFile(CrossPlatform::getDataFile(musicGM).c_str()); */
-
-		// We have the assignments, only need to load the required files now.
+		// have the assignments, load the required files.
 		for (std::map<std::string, std::map<std::string, std::vector<std::pair<std::string, int> > > >::const_iterator
 				i = _musicAssignment.begin();
 				i != _musicAssignment.end();
 				++i)
 		{
-//			std::string type = i->first;
 			const std::map<std::string, std::vector<std::pair<std::string, int> > > assignment = i->second;
 			for (std::map<std::string, std::vector<std::pair<std::string, int> > >::const_iterator
 					j = assignment.begin();
@@ -660,12 +478,8 @@ XcomResourcePack::XcomResourcePack(const Ruleset* const rules)
 						k != files.end();
 						++k)
 				{
-					const std::string file = k->first;
-
-//					const int midiIndex = k->second;
-//					LoadMusic(file, midiIndex):
-
 					bool loaded = false;
+					const std::string file = k->first;
 
 					// The file may have already been loaded because of an other assignment.
 					if (_musicFile.find(file) != _musicFile.end())
@@ -673,53 +487,9 @@ XcomResourcePack::XcomResourcePack(const Ruleset* const rules)
 
 					if (loaded == false) // Try digital tracks.
 					{
-						// sza_ExtraMusic_BEGIN:
-
-						// kL_note: This section may well be redundant w/ sza_MusicRules!!
-						// Load alternative digital track if there is an override.
-/*						for (size_t
-								l = 0;
-								l < sizeof(mus) / sizeof(mus[0]);
-								++l)
-						{
-							bool loaded = false;
-
-							const std::vector<std::pair<std::string, ExtraMusic*> > extraMusic = rules->getExtraMusic();
-							for (std::vector<std::pair<std::string, ExtraMusic*> >::const_iterator
-									m = extraMusic.begin();
-									m != extraMusic.end();
-									++m)
-							{
-								const ExtraMusic* const musicRule = m->second;
-								// check if there is an entry which overrides something but does not specify the terrain
-								if (musicRule->hasTerrainSpecification() == false)
-								{
-									const std::string overridden = musicRule->getOverridden();
-									if (overridden.empty() == false
-										&& overridden.compare(mus[l]) == 0)
-									{
-										// Found one, let's use it!
-										std::ostringstream mediaFilename;
-										mediaFilename << "SOUND/" << m->first;
-										_musics[mus[l]] = new Music();
-										_musics[mus[l]]->load(CrossPlatform::getDataFile(mediaFilename.str()));
-
-										loaded = true;
-										break;
-									}
-								}
-							}
-						} */
-
-//						if (loaded == false) // sza_End.
-//						{
 						const std::string exts[] =
 						{
-							".ogg"
-//							".flac",
-//							".mp3",
-//							".mod",
-//							".wav" // kL_add ( also added "." and removed them below )
+							".ogg" //,".flac",".mp3",".mod",".wav"
 						};
 
 						for (size_t
@@ -740,52 +510,7 @@ XcomResourcePack::XcomResourcePack(const Ruleset* const rules)
 								break;
 							}
 						}
-//						}
 					}
-
-/*kL: forget about adlib, aintro, gmcat, midi.
-					if (loaded == false)
-					{
-						if (adlibcat != NULL // Try Adlib music
-							&& Options::audioBitDepth == 16)
-						{
-							_musicFile[file] = new AdlibMusic();
-
-//							if (tracks[i] < adlibcat->getAmount()) // kL_note: tracks[i] -> file .....
-//							{
-							_musicFile[file]->load(
-													adlibcat->load(midiIndex, true),
-													adlibcat->getObjectSize(midiIndex));
-							loaded = true;
-//							}
-//							else if (aintrocat) // separate intro music
-//							{
-//								int track = tracks[i] - adlibcat->getAmount();
-//								_musics[mus[i]]->load(aintrocat->load(track, true), aintrocat->getObjectSize(track));
-
-//								loaded = true;
-//							}
-						}
-						else if (gmcat != NULL) // Try GM music
-						{
-							_musicFile[file] = gmcat->loadMIDI(midiIndex);
-
-							loaded = true;
-						}
-						else // Try MIDI music
-						{
-							std::ostringstream s;
-							s << "SOUND/" << file << ".mid";
-
-							if (CrossPlatform::fileExists(CrossPlatform::getDataFile(s.str())) == true)
-							{
-								_musicFile[file] = new Music();
-								_musicFile[file]->load(CrossPlatform::getDataFile(s.str()));
-
-								loaded = true;
-							}
-						}
-					} */
 
 					if (loaded == false)
 					{
@@ -794,162 +519,7 @@ XcomResourcePack::XcomResourcePack(const Ruleset* const rules)
 				}
 			}
 		}
-
-/*kL		for (size_t // newest: 140513, replaces all below to delete's
-				i = 0;
-				i < sizeof(mus) / sizeof(mus[0]);
-				++i)
-		{
-			Music *music = 0;
-			for (size_t j = 0; j < sizeof(priority)/sizeof(priority[0]) && music == 0; ++j)
-			{
-				music = loadMusic(priority[j], mus[i], tracks[i], tracks_normalize[i], adlibcat, aintrocat, gmcat);
-			}
-			if (!music)
-			{
-				throw Exception(mus[i] + " not found");
-			}
-			_musics[mus[i]] = music; */
-
-
-/*			bool loaded = false;
-
-			// sza_ExtraMusic_BEGIN:
-			// Load alternative digital track if there is an override
-			for (std::vector<std::pair<std::string, ExtraMusic*> >::const_iterator
-					j = extraMusic.begin();
-					j != extraMusic.end();
-					++j)
-			{
-				ExtraMusic* musicRule = j->second;
-				// check if there is an entry which overrides something but does not specify the terrain
-				if (!musicRule->hasTerrainSpecification())
-				{
-					std::string overridden = musicRule->getOverridden();
-					if (!overridden.empty()
-						&& overridden.compare(mus[i]) == 0)
-					{
-						// Found one, let's use it!
-						std::ostringstream mediaFilename;
-						mediaFilename << "SOUND/" << j->first;
-						_musics[mus[i]] = new Music();
-						_musics[mus[i]]->load(CrossPlatform::getDataFile(mediaFilename.str()));
-
-						loaded = true;
-
-						break;
-					}
-				}
-			}
-
-			if (!loaded) // sza_End.
-
-			for (size_t // Try digital tracks
-					j = 0;
-					j < sizeof(exts) / sizeof(exts[0];
-					++j)
-			{
-				std::ostringstream s;
-				s << "SOUND/" << mus[i] << "." << exts[j];
-				if (CrossPlatform::fileExists(CrossPlatform::getDataFile(s.str())))
-				{
-					_musics[mus[i]] = new Music();
-					_musics[mus[i]]->load(CrossPlatform::getDataFile(s.str()));
-					loaded = true;
-
-					break;
-				}
-			}
-
-			if (!loaded)
-			{
-				if (adlibcat // Try Adlib music
-					&& Options::audioBitDepth == 16)
-				{
-					_musics[mus[i]] = new AdlibMusic(tracks_normalize[i]);
-					if (tracks[i] < adlibcat->getAmount())
-					{
-						_musics[mus[i]]->load(
-											adlibcat->load(tracks[i], true),
-											adlibcat->getObjectSize(tracks[i]));
-						loaded = true;
-					}
-					else if (aintrocat) // separate intro music
-					{
-						int track = tracks[i] - adlibcat->getAmount();
-						_musics[mus[i]]->load(aintrocat->load(track, true), aintrocat->getObjectSize(track));
-						loaded = true;
-					}
-				}
-				else if (gmcat) // Try GM music
-				{
-					_musics[mus[i]] = gmcat->loadMIDI(tracks[i]);
-					loaded = true;
-				}
-				else // Try MIDI music
-				{
-					std::ostringstream s;
-					s << "SOUND/" << mus[i] << ".mid";
-
-					if (CrossPlatform::fileExists(CrossPlatform::getDataFile(s.str())))
-					{
-						_musics[mus[i]] = new Music();
-						_musics[mus[i]]->load(CrossPlatform::getDataFile(s.str()));
-						loaded = true;
-					}
-				}
-			}
-
-			if (!loaded)
-			{
-				throw Exception(mus[i] + " not found");
-			}
-		} */
-
-//		delete adlibcat;
-//		delete aintrocat;
-//		delete gmcat;
-
-/*		std::string musOptional[] = {"GMGEO3",
-									 "GMGEO4",
-									 "GMGEO5",
-									 "GMGEO6",
-									 "GMGEO7",
-									 "GMGEO8",
-									 "GMGEO9",
-									 "GMTACTIC1",
-									 "GMTACTIC2",
-									 "GMTACTIC3",
-									 "GMTACTIC4",
-									 "GMTACTIC5",
-									 "GMTACTIC6",
-									 "GMTACTIC7",
-									 "GMTACTIC8",
-									 "GMTACTIC9"}; */
-
-/*kL		for (size_t // Ok, now try to load the optional musics
-				i = 0;
-				i < sizeof(musOptional) / sizeof(musOptional[0]);
-				++i)
-		{
-			Music* music = 0;
-			for (size_t
-					j = 0;
-					j < sizeof(priority) / sizeof(priority[0])
-						&& music == 0;
-					++j)
-			{
-				music = loadMusic(
-								priority[j],
-								musOptional[i],
-								0,0,0,0,0);
-			}
-
-			if (music)
-				_musics[musOptional[i]] = music;
-		} */
 #endif
-
 
 		/* SOUNDS fx */
 		Log(LOG_INFO) << "Loading sound FX ...";
@@ -1079,41 +649,35 @@ XcomResourcePack::XcomResourcePack(const Ruleset* const rules)
 //	Window::soundPopup[0]		= getSound("GEO.CAT", ResourcePack::WINDOW_POPUP[0]);	// #1 wahahahah
 	Window::soundPopup[1]		= getSound("GEO.CAT", ResourcePack::WINDOW_POPUP[1]);	// #2 swish1
 	Window::soundPopup[2]		= getSound("GEO.CAT", ResourcePack::WINDOW_POPUP[2]);	// #3 swish2
-//	GeoscapeState::soundPop		= getSound("GEO.CAT", ResourcePack::WINDOW_POPUP[0]);	// wahahahah // kL, used for Geo->Base & Geo->Graphs
-//	BasescapeState::soundPop	= getSound("GEO.CAT", ResourcePack::WINDOW_POPUP[0]);	// wahahahah // kL, used for Basescape RMB.
-//	GraphsState::soundPop		= getSound("GEO.CAT", ResourcePack::WINDOW_POPUP[0]);	// wahahahah // kL, used for switching Graphs screens. Or just returning to Geoscape.
 	kL_soundPop					= getSound("GEO.CAT", ResourcePack::WINDOW_POPUP[0]);	// global.
 
 	/* BATTLESCAPE RESOURCES */
 	Log(LOG_INFO) << "Loading battlescape resources ...";
 	loadBattlescapeResources(); // TODO load this at battlescape start, unload at battlescape end
 
-	// we create extra rows on the soldier stat screens by shrinking them all down one pixel.
+	// create extra rows on the soldier stat screens by shrinking them all down one pixel.
 	// this is done after loading them, but BEFORE loading the extraSprites, in case a modder wants to replace them.
-	// kL_note: Actually, let's do it *after* loading extraSprites, in case a modder wants to alter the original
+	// Actually, do it *after* loading extraSprites, in case a modder wants to alter the original
 	// and still have this stretching happen:
 
-	// first, let's do the base info screen
+	// first, do the base info screen
 	// erase the old lines, copying from a +2 offset to account for the dithering
 /*	for (int y = 91; y < 199; y += 12)
 		for (int x = 0; x < 149; ++x)
 			_surfaces["BACK06.SCR"]->setPixelColor(
-												x,
-												y,
+												x,y,
 												_surfaces["BACK06.SCR"]->getPixelColor(x, y + 2));
 	// drawn new lines, use the bottom row of pixels as a basis
 	for (int y = 89; y < 199; y += 11)
 		for (int x = 0; x < 149; ++x)
 			_surfaces["BACK06.SCR"]->setPixelColor(
-												x,
-												y,
+												x,y,
 												_surfaces["BACK06.SCR"]->getPixelColor(x, 199));
 	// finally, move the top of the graph up by one pixel, offset for the last iteration again due to dithering.
 	for (int y = 72; y < 80; ++y)
 		for (int x = 0; x < 320; ++x)
 			_surfaces["BACK06.SCR"]->setPixelColor(
-												x,
-												y,
+												x,y,
 												_surfaces["BACK06.SCR"]->getPixelColor(x, y + (y == 79? 2: 1))); */
 
 	// Adjust the battlescape unit-info screen:
@@ -1121,23 +685,20 @@ XcomResourcePack::XcomResourcePack(const Ruleset* const rules)
 	for (int y = 39; y < 199; y += 10)
 		for (int x = 0; x < 169; ++x)
 			_surfaces["UNIBORD.PCK"]->setPixelColor(
-												x,
-												y,
+												x,y,
 												_surfaces["UNIBORD.PCK"]->getPixelColor(x, 30));
 	// drawn new lines, use the bottom row of pixels as a basis
 	for (int y = 190; y > 37; y -= 9)
 		for (int x = 0; x < 169; ++x)
 			_surfaces["UNIBORD.PCK"]->setPixelColor(
-												x,
-												y,
+												x,y,
 												_surfaces["UNIBORD.PCK"]->getPixelColor(x, 199));
-	// move the top of the graph down by eight pixels to erase the row they don't need (we actually created ~1.8 extra rows earlier)
+	// move the top of the graph down by eight pixels to erase the row not needed (actually created ~1.8 extra rows earlier)
 	for (int y = 37; y > 29; --y)
 		for (int x = 0; x < 320; ++x)
 		{
 			_surfaces["UNIBORD.PCK"]->setPixelColor(
-												x,
-												y,
+												x,y,
 												_surfaces["UNIBORD.PCK"]->getPixelColor(x, y - 8));
 			_surfaces["UNIBORD.PCK"]->setPixelColor(x, y - 8, 0);
 		}
@@ -1284,7 +845,7 @@ XcomResourcePack::XcomResourcePack(const Ruleset* const rules)
 				}
 				else
 				{
-					if (   spritePack->getSubX() == 0
+					if (spritePack->getSubX() == 0
 						&& spritePack->getSubY() == 0)
 					{
 						oststr << CrossPlatform::getDataFile(fileName);
@@ -1382,46 +943,40 @@ XcomResourcePack::XcomResourcePack(const Ruleset* const rules)
 	for (int y = 91; y < 199; y += 12)
 		for (int x = 0; x < 149; ++x)
 			_surfaces["BACK06.SCR"]->setPixelColor(
-												x,
-												y,
+												x,y,
 												_surfaces["BACK06.SCR"]->getPixelColor(x, y + 2));
 	for (int y = 89; y < 199; y += 11)
 		for (int x = 0; x < 149; ++x)
 			_surfaces["BACK06.SCR"]->setPixelColor(
-												x,
-												y,
+												x,y,
 												_surfaces["BACK06.SCR"]->getPixelColor(x, 199));
 	for (int y = 72; y < 80; ++y)
 		for (int x = 0; x < 320; ++x)
 			_surfaces["BACK06.SCR"]->setPixelColor(
-												x,
-												y,
-												_surfaces["BACK06.SCR"]->getPixelColor(x, y + (y == 79? 2: 1)));
+												x,y,
+												_surfaces["BACK06.SCR"]->getPixelColor(x, y + (y == 79 ? 2 : 1)));
 
-	Surface* const altBack07 = new Surface(320, 200);
+	Surface* const altBack07 = new Surface(320,200);
 	altBack07->copy(_surfaces["BACK07.SCR"]);
 	for (int y = 172; y >= 152; --y)
 		for (int x = 5; x <= 314; ++x)
 			altBack07->setPixelColor(
-									x,
-									y + 4,
-									altBack07->getPixelColor(x, y));
+									x,y + 4,
+									altBack07->getPixelColor(x,y));
 	for (int y = 147; y >= 134; --y)
 		for (int x = 5; x <= 314; ++x)
 			altBack07->setPixelColor(
-									x,
-									y + 9,
-									altBack07->getPixelColor(x, y));
+									x,y + 9,
+									altBack07->getPixelColor(x,y));
 	for (int y = 132; y >= 109; --y)
 		for (int x = 5; x <= 314; ++x)
 			altBack07->setPixelColor(
-									x,
-									y + 10,
-									altBack07->getPixelColor(x, y));
+									x,y + 10,
+									altBack07->getPixelColor(x,y));
 	_surfaces["ALTBACK07.SCR"] = altBack07; // kL_end.
 
 	// copy constructor doesn't like doing this directly,
-	// so let's make a second handobs file the old fashioned way.
+	// so make a second handobs file the old fashioned way.
 	// handob2 is used for all the left handed sprites.
 	_sets["HANDOB2.PCK"] = new SurfaceSet(
 									_sets["HANDOB.PCK"]->getWidth(),
@@ -1530,10 +1085,7 @@ XcomResourcePack::~XcomResourcePack()
  */
 void XcomResourcePack::loadBattlescapeResources()
 {
-	//Log(LOG_INFO) << "XcomResourcePack::loadBattlescapeResources()";
-
-	// Load Battlescape ICONS
-	std::ostringstream
+	std::ostringstream // Load Battlescape ICONS
 		oststr1,
 		oststr2;
 
@@ -1595,7 +1147,7 @@ void XcomResourcePack::loadBattlescapeResources()
 
 	for (size_t
 			i = 0;
-			i < sizeof(blanks) / sizeof(blanks[0]);
+			i != sizeof(blanks) / sizeof(blanks[0]);
 			++i)
 	{
 		std::ostringstream
@@ -1634,29 +1186,21 @@ void XcomResourcePack::loadBattlescapeResources()
 					std::toupper);
 
 		if (*i != "BIGOBS.PCK")
-			_sets[*i] = new SurfaceSet(32, 40);
+			_sets[*i] = new SurfaceSet(32,40);
 		else
-			_sets[*i] = new SurfaceSet(32, 48);
+			_sets[*i] = new SurfaceSet(32,48);
 
-		_sets[*i]->loadPck(path, tab);
+		_sets[*i]->loadPck(path,tab);
 	}
 
-	if (!_sets["CHRYS.PCK"]->getFrame(225)) // incomplete chryssalid set: 1.0 data: stop loading.
-	{
-		Log(LOG_FATAL) << "Version 1.0 data detected";
-		throw Exception("Invalid CHRYS.PCK, please patch your X-COM data to the latest version.");
-	}
-
-	// TFTD uses the loftemps dat from the terrain folder, but still has enemy unknown's version in the geodata folder, which is short by 2 entries.
-//	oststr1.str("");
-//	oststr1 << "TERRAIN/" << "LOFTEMPS.DAT";
-//	if (CrossPlatform::fileExists(CrossPlatform::getDataFile(oststr1.str())) == false)
+//	if (!_sets["CHRYS.PCK"]->getFrame(225)) // incomplete chryssalid set: 1.0 data: stop loading.
 //	{
-	oststr1.str("");
-	oststr1 << "GEODATA/LOFTEMPS.DAT";
-//	oststr1 << "GEODATA/" << "LOFTEMPS.DAT";
+//		Log(LOG_FATAL) << "Version 1.0 data detected";
+//		throw Exception("Invalid CHRYS.PCK, please patch your X-COM data to the latest version.");
 //	}
 
+	oststr1.str("");
+	oststr1 << "GEODATA/LOFTEMPS.DAT";
 	MapDataSet::loadLoft(
 					CrossPlatform::getDataFile(oststr1.str()),
 					&_voxelData);
@@ -1668,65 +1212,15 @@ void XcomResourcePack::loadBattlescapeResources()
 
 	for (size_t
 			i = 0;
-			i < sizeof(scrs) / sizeof(scrs[0]);
+			i != sizeof(scrs) / sizeof(scrs[0]);
 			++i)
 	{
 		std::ostringstream oststr;
 		oststr << "UFOGRAPH/" << scrs[i];
 
-		_surfaces[scrs[i]] = new Surface(320, 200);
+		_surfaces[scrs[i]] = new Surface(320,200);
 		_surfaces[scrs[i]]->loadScr(CrossPlatform::getDataFile(oststr.str()));
 	}
-
-/*	const std::string lbms[] =
-	{
-		"D0.LBM",
-		"D1.LBM",
-		"D2.LBM",
-		"D3.LBM"
-	};
-
-	const std::string pals[] =
-	{
-		"PAL_BATTLESCAPE",
-		"PAL_BATTLESCAPE_1",
-		"PAL_BATTLESCAPE_2",
-		"PAL_BATTLESCAPE_3"
-	};
-
-	const SDL_Color backPal[] =
-	{
-		{0,	 5,  4, 255},
-		{0, 10, 34, 255},
-		{2,  9, 24, 255},
-		{2,  0, 24, 255}
-	};
-
-	for (size_t
-			i = 0;
-			i < sizeof(lbms) / sizeof(lbms[0]);
-			++i)
-	{
-		std::ostringstream oststr;
-		oststr << "UFOGRAPH/" << lbms[i];
-		if (CrossPlatform::fileExists(CrossPlatform::getDataFile(oststr.str())) == true)
-		{
-			if (i == 0)
-				delete _palettes["PAL_BATTLESCAPE"];
-
-			Surface* srfTemp = new Surface(1, 1);
-			srfTemp->loadImage(CrossPlatform::getDataFile(oststr.str()));
-
-			_palettes[pals[i]] = new Palette();
-			SDL_Color* const colors = srfTemp->getPalette();
-			colors[255] = backPal[i];
-			_palettes[pals[i]]->setColors(colors, 256);
-
-//			createTransparencyLUT(_palettes[pals[i]]);
-
-			delete srfTemp;
-		}
-	} */
 
 	const std::string spks[] =
 	{
@@ -1741,7 +1235,7 @@ void XcomResourcePack::loadBattlescapeResources()
 
 	for (size_t
 			i = 0;
-			i < sizeof(spks) / sizeof(spks[0]);
+			i != sizeof(spks) / sizeof(spks[0]);
 			++i)
 	{
 		std::ostringstream oststr;
@@ -1776,7 +1270,7 @@ void XcomResourcePack::loadBattlescapeResources()
 		else
 			*i = *i + "PCK";
 
-		_surfaces[*i] = new Surface(320, 200);
+		_surfaces[*i] = new Surface(320,200);
 		_surfaces[*i]->loadBdy(path);
 	}
 
@@ -1794,7 +1288,7 @@ void XcomResourcePack::loadBattlescapeResources()
 					i->begin(),
 					std::toupper);
 
-		_surfaces[*i] = new Surface(320, 200);
+		_surfaces[*i] = new Surface(320,200);
 		_surfaces[*i]->loadSpk(path);
 	}
 
@@ -1847,88 +1341,6 @@ void XcomResourcePack::loadBattlescapeResources()
 				srf->unlock();
 			}
 		}
-
-/*		armorSheet = "TDXCOM_?.PCK"; // all TFTD armors
-		for (int
-				j = 0;
-				j != 3;
-				++j)
-		{
-			armorSheet[7] = '0' + static_cast<char>(j);
-			if (_sets.find(armorSheet) != _sets.end())
-			{
-				SurfaceSet* const xcom_2 = _sets[armorSheet];
-
-				for (int
-						i = 0;
-						i != 16;
-						++i)
-				{
-					Surface* const surf = xcom_2->getFrame(262 + i); // chest frame without helm
-
-					surf->lock();
-					if (i < 8)
-					{
-						ShaderMove<Uint8> head = ShaderMove<Uint8>(surf); // female chest frame
-						GraphSubset dim = head.getBaseDomain();
-						dim.beg_y = 6;
-						dim.end_y = 18;
-						head.setDomain(dim);
-						ShaderDraw<HairXCOM2>(head);
-
-						if (j == 2) // fix some pixels in ION armor that was overwrite by previous function
-						{
-							if		(i == 0) surf->setPixelColor(18, 14, 16);
-							else if (i == 3) surf->setPixelColor(19, 12, 20);
-							else if (i == 6) surf->setPixelColor(13, 14, 16);
-						}
-					}
-
-					// change face to pink to prevent mixup with ION armor backpack that have same colorgroup.
-					ShaderDraw<FaceXCOM2>(ShaderMove<Uint8>(surf));
-					surf->unlock();
-				}
-
-				for (int
-						i = 0;
-						i != 2;
-						++i)
-				{
-					Surface* const surf = xcom_2->getFrame(256 + i); // fall frame (first and second)
-
-					surf->lock();
-					ShaderMove<Uint8> head = ShaderMove<Uint8>(surf);
-					GraphSubset dim = head.getBaseDomain();
-					dim.beg_y = 0;
-
-					if (j == 3)
-						dim.end_y = 11 + 5 * i;
-					else
-						dim.end_y = 17;
-
-					head.setDomain(dim);
-					ShaderDraw<FallXCOM2>(head);
-					// change face to pink, to prevent mixup with ION armor backpack that have same colorgroup.
-					ShaderDraw<FaceXCOM2>(ShaderMove<Uint8>(surf));
-					surf->unlock();
-				}
-
-				if (j == 2) // Palette fix for ION armor
-				{
-					int frames = xcom_2->getTotalFrames();
-					for (int
-							i = 0;
-							i != frames;
-							++i)
-					{
-						Surface* const surf = xcom_2->getFrame(i);
-						surf->lock();
-						ShaderDraw<BodyXCOM2>(ShaderMove<Uint8>(surf));
-						surf->unlock();
-					}
-				}
-			}
-		} */
 	}
 }
 
@@ -1953,20 +1365,20 @@ bool XcomResourcePack::isImageFile(std::string extension)
 		|| extension == ".PNG"
 		|| extension == ".TGA"
 		|| extension == ".TIF";
-//		|| extension == "TIFF"; // kL_note: why not .TIFF (prob because only the last 4 chars are passed in)
 
-			/* // arbitrary limitation: let's not use these ones (although they're officially supported by sdl)
-			extension == ".ICO" ||
-			extension == ".CUR" ||
-			extension == ".PNM" ||
-			extension == ".PPM" ||
-			extension == ".PGM" ||
-			extension == ".PBM" ||
-			extension == ".XPM" ||
-			extension == "ILBM" ||
-			// excluding jpeg to avoid inevitable issues due to compression
-			extension == ".JPG" ||
-			extension == "JPEG" || */
+//		|| extension == "TIFF"; // why not .TIFF (because only the last 4 chars are passed in)
+	/* // arbitrary limitation: let's not use these ones (although they're officially supported by sdl)
+	extension == ".ICO"
+	extension == ".CUR"
+	extension == ".PNM"
+	extension == ".PPM"
+	extension == ".PGM"
+	extension == ".PBM"
+	extension == ".XPM"
+	extension == "ILBM"
+	// excluding jpeg to avoid inevitable issues due to compression
+	extension == ".JPG"
+	extension == "JPEG" */
 }
 
 /**
@@ -2072,86 +1484,6 @@ Music* XcomResourcePack::loadMusic(
 	}
 
 	return music;
-} */
-
-/*
- * Preamble:
- * This is the most horrible function i've ever written, and it makes me sad.
- * This is, however, a necessary evil, in order to save massive amounts of time in the draw function.
- * When used with the default TFTD ruleset, this function loops 4,194,304 times
- * (4 palettes, 4 tints, 4 levels of opacity, 256 colors, 256 comparisons per);
- * each additional tint in the rulesets will result in over a million iterations more.
- *
- * kL_note: hmm, sounds like I'm going to take this out ...
- * but, since it runs only at start ....
- *
- * @param pal - the palette to base the lookup table on
- *
-void XcomResourcePack::createTransparencyLUT(Palette* pal)
-{
-	SDL_Color target;
-	std::vector<Uint8> lookUpTable;
-
-	// start with the color sets
-	for (std::vector<SDL_Color>::const_iterator
-			tint = _ruleset->getTransparencies()->begin();
-			tint != _ruleset->getTransparencies()->end();
-			++tint)
-	{
-		// then the opacity levels, using the alpha channel as the step
-		for (int
-				opacity = 1;
-				opacity < 1 + tint->unused * 4;
-				opacity += tint->unused)
-		{
-			// then the palette itself
-			for (int
-					color = 0;
-					color < 256;
-					++color)
-			{
-				// add the RGB values from the ruleset to those of the colors contained
-				// in the palette in order to determine the desired color:
-				// all this casting and clamping is required, we're dealing with Uint8s here,
-				// and there's a lot of potential for values to wrap around.
-				target.r = static_cast<Uint8>(std::min(
-								255,
-								static_cast<int>(pal->getColors(color)->r) + (static_cast<int>(tint->r) * opacity)));
-				target.g = static_cast<Uint8>(std::min(
-								255,
-								static_cast<int>(pal->getColors(color)->g) + (static_cast<int>(tint->g) * opacity)));
-				target.b = static_cast<Uint8>(std::min(
-								255,
-								static_cast<int>(pal->getColors(color)->b) + (static_cast<int>(tint->b) * opacity)));
-
-				Uint8 closest = 0;
-				int
-					low = std::numeric_limits<int>::max(),
-					cur;
-
-				// compare each color in the palette to find the closest match to the desired one
-				for (int
-						comparoperator = 0;
-						comparoperator != 256;
-						++comparoperator)
-				{
-					cur = Sqr(target.r - pal->getColors(comparoperator)->r)
-						+ Sqr(target.g - pal->getColors(comparoperator)->g)
-						+ Sqr(target.b - pal->getColors(comparoperator)->b);
-
-					if (cur < low)
-					{
-						closest = static_cast<Uint8>(comparoperator);
-						low = cur;
-					}
-				}
-
-				lookUpTable.push_back(closest);
-			}
-		}
-	}
-
-	_transparencyLUTs.push_back(lookUpTable);
 } */
 
 }

@@ -456,9 +456,8 @@ void UnitDieBState::convertToCorpse() // private.
 }
 
 /**
- * Unit dying cannot be cancelled.
+ * Dying cannot be cancelled.
  */
-//void UnitDieBState::cancel()
-//{}
+//void UnitDieBState::cancel(){}
 
 }

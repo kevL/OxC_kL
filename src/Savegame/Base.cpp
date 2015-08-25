@@ -583,8 +583,8 @@ int Base::detect(Target* const target) const
 }
 
 /**
- * Returns if a certain target is inside this Base's radar range
- * taking in account the global positions of both.
+ * Returns if a certain target is inside this Base's radar range taking in
+ * account the global positions of both.
  * @param target - pointer to UFO
  * @return, great circle distance to UFO (negative if hyperdetected)
  */
@@ -624,7 +624,8 @@ double Base::insideRadarRange(const Target* const target) const
 }
 
 /**
- * Returns the amount of soldiers with neither a Craft assignment nor wounds at this Base.
+ * Returns the amount of soldiers with neither a Craft assignment nor wounds at
+ * this Base.
  * @param combatReady - does what it says on the tin. [ bull..] (default false)
  * @return, number of soldiers
  */

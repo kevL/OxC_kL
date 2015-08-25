@@ -2439,22 +2439,20 @@ int Ruleset::getMaxRadarRange() const
 			i != _facilitiesIndex.end();
 			++i)
 	{
-		const RuleBaseFacility* const rule = getBaseFacility(*i);
-
-		if (rule == NULL)
-			continue;
-
-		const int range = rule->getRadarRange();
-		if (range > ret)
-			ret = range;
+		const RuleBaseFacility* const facRule = getBaseFacility(*i);
+		if (facRule != NULL)
+		{
+			const int range = facRule->getRadarRange();
+			if (range > ret)
+				ret = range;
+		}
 	}
 
 	return ret;
 }
 
 /**
- * Gets the cutoff between small & large radars
- * for determining base info values.
+ * Gets the cutoff between small & large radars for determining base info values.
  */
 int Ruleset::getRadarCutoffRange() const
 {

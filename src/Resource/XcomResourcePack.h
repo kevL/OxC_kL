@@ -115,9 +115,6 @@ private:
 				CatFile* adlibcat,
 				CatFile* aintrocat,
 				GMCatFile* gmcat); */
-
-		/// Creates a transparency lookup table for a given palette.
-//		void createTransparencyLUT(Palette* pal);
 };
 
 }

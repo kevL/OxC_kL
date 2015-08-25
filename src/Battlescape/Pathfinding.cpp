@@ -172,9 +172,8 @@ void Pathfinding::calculate(
 	// if we click behind the stairs to make it go up the stairs.
 	// It only works if the unit is on one of the 2 tiles on the
 	// stairs, or on the tile right in front of the stairs.
-	// kL_note: I don't want this: ( the function, below, can be removed too ).
-/*kL
-	if (isOnStairs(startPos, destPos))
+	// kL_note: I don't want this: (the function, below, can be removed too).
+/*	if (isOnStairs(startPos, destPos))
 	{
 		destPos.z++;
 		tileDest = _battleSave->getTile(destPos);
@@ -212,9 +211,10 @@ void Pathfinding::calculate(
 				O_OBJECT,
 				missileTarget) == false)
 	{
-		--armorSize;
-		if (armorSize != 0)
+		if (armorSize != 1)
 		{
+			--armorSize;
+
 			const int dir[3] = {4,2,3};
 			size_t i = 0;
 

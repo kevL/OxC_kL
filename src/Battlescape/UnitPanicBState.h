@@ -54,7 +54,7 @@ private:
 //		void init();
 		/// Runs state functionality every cycle.
 		void think();
-		/// Handles a cancels request.
+		/// Handles a cancel request.
 //		void cancel();
 };
 

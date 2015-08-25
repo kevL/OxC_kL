@@ -405,22 +405,6 @@ Sound* ResourcePack::getSound(
 }
 
 /**
- * Returns a specific sound from either the land or underwater resource set.
- * @param depth - the depth of the battlescape
- * @param sound - ID of the sound
- * @return, pointer to the sound
- */
-/* Sound* ResourcePack::getSoundByDepth(
-		unsigned int depth,
-		unsigned int sound) const
-{
-	if (depth == 0)
-		return getSound("BATTLE.CAT", sound);
-
-	return getSound("BATTLE2.CAT", sound);
-} */
-
-/**
  * Plays a sound effect in stereo.
  * @param sound		- sound to play
  * @param randAngle	- true to randomize the sound angle (default false to center it)
@@ -504,15 +488,6 @@ const std::vector<Uint16>* const ResourcePack::getVoxelData() const
 {
 	return &_voxelData;
 }
-
-/**
- * Gets transparency lookup tables.
- * @return, pointer to a vector of vectors of colors
- */
-/* const std::vector<std::vector<Uint8> >* ResourcePack::getLUTs() const
-{
-	return &_transparencyLUTs;
-} */
 
 /**
  * Gets a random background.

@@ -155,10 +155,6 @@ private:
 			Sound* getSound(
 					const std::string& soundSet,
 					unsigned int sound) const;
-			/// Returns a specific sound from either the land or underwater resource set.
-//			Sound* getSoundByDepth(
-//					unsigned int depth,
-//					unsigned int sound) const;
 			/// Plays a sound effect in stereo.
 			void playSoundFX(
 					const int sound,
@@ -174,9 +170,6 @@ private:
 
 			/// Gets list of voxel data.
 			const std::vector<Uint16>* const getVoxelData() const;
-
-			///
-//			const std::vector<std::vector<Uint8> >* getLUTs() const;
 
 			/// Gets a random background.
 			const std::string& getRandomBackground() const;
