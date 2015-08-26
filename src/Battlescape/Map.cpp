@@ -5036,8 +5036,7 @@ void Map::cacheUnit(BattleUnit* const unit)
 												width,
 												_spriteHeight,
 												0,0);
-//												_battleSave->getDepth() != 0);
-//												pf->getMoveTypePathing());
+//												pf->getMoveTypePf());
 	unitSprite->setPalette(this->getPalette());
 
 	const int unitSize = unit->getArmor()->getSize() * unit->getArmor()->getSize();

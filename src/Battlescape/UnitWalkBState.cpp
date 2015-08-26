@@ -820,7 +820,7 @@ bool UnitWalkBState::doStatusWalk() // private.
 
 		_falling = fallCheck
 				&& _unit->getPosition().z != 0
-				&& _pf->getMoveTypePathing() != MT_FLY;
+				&& _pf->getMoveTypePf() != MT_FLY;
 
 		if (_falling == true)
 		{
@@ -1330,7 +1330,7 @@ void UnitWalkBState::playMovementSound() const // private.
 				&& groundCheck() == true
 				&& (_falling == true
 					|| (_unit->isFloating() == true
-						&& _pf->getMoveTypePathing() == MT_WALK)))
+						&& _pf->getMoveTypePf() == MT_WALK)))
 			{
 				sound = ResourcePack::ITEM_DROP; // *thunk*
 			}
@@ -1355,7 +1355,7 @@ void UnitWalkBState::playMovementSound() const // private.
  */
 void UnitWalkBState::doFallCheck() // private.
 {
-	if (_pf->getMoveTypePathing() == MT_FLY
+	if (_pf->getMoveTypePf() == MT_FLY
 		|| _unit->getPosition().z == 0
 		|| groundCheck() == true)
 	{

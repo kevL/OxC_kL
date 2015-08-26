@@ -151,8 +151,8 @@ void Pathfinding::calculate(
 
 	const Tile* tileDest = _battleSave->getTile(destPos);
 
-	if (isBlocked( // check if destination is blocked.
-				tileDest,
+	if (isBlocked(			// check if destination is blocked.
+				tileDest,	// <- note these aren't the actual destTiles yet.
 				O_FLOOR,
 				missileTarget) == true
 		|| isBlocked(
@@ -202,8 +202,8 @@ void Pathfinding::calculate(
 	}
 
 
-	if (isBlocked( // recheck if destination is blocked.
-			tileDest,
+	if (isBlocked(		// recheck if destination is blocked.
+			tileDest,	// <- these are the actual destTiles so far.
 			O_FLOOR,
 			missileTarget) == false
 		&& isBlocked(
@@ -757,7 +757,7 @@ int Pathfinding::getTuCostPf(
 				&& _mType != MT_FLY
 				&& canFallDown(
 							tileStart,
-							armorSize + 1)) // kL_note: keep at it, doughboy!
+							armorSize + 1)) // kL_note: keep at it, doughboy!! You'll get that ego you've been striving so hard for. Try Masonry.
 			{
 				if (direction != DIR_DOWN)
 					return 255; // cannot walk on air
@@ -2224,7 +2224,7 @@ bool Pathfinding::isModAlt() const
  * Gets the current movementType.
  * @return, the currently pathing unit's movementType
  */
-MovementType Pathfinding::getMoveTypePathing() const
+MovementType Pathfinding::getMoveTypePf() const
 {
 	return _mType;
 }

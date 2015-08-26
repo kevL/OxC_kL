@@ -2273,8 +2273,7 @@ bool SavedBattleGame::setUnitPosition(
 	if (unit != NULL)
 	{
 //		_pf->setPathingUnit(unit); // <- this is not valid when doing base equip.
-//		int zOffset = 0;
-//		Position posTest = pos; // strip const.
+		Position posTest = pos; // strip const.
 
 		const int armorSize = unit->getArmor()->getSize() - 1;
 		for (int
@@ -2287,58 +2286,57 @@ bool SavedBattleGame::setUnitPosition(
 					y != -1;
 					--y)
 			{
-				const Tile
-					* const tile = getTile(pos + Position(x,y,0)),
-					* const tileBelow = getTile(pos + Position(x,y,-1)),
-					* const tileAbove = getTile(pos + Position(x,y, 1));
-//					* const tile = getTile(posTest + Position(x,y, zOffset + 0)),
-//					* const tileBelow = getTile(posTest + Position(x,y, zOffset - 1)),
-//					* const tileAbove = getTile(posTest + Position(x,y, zOffset + 1));
+				const Tile* const tile = getTile(posTest + Position(x,y,0));
+				if (tile != NULL)
+				{
+					if (tile->getTerrainLevel() == -24)
+					{
+						posTest += Position(0,0,1);
+						x =
+						y = armorSize + 1; // start over.
 
-				if (tile == NULL
-					|| (tile->getUnit() != NULL
-						&& tile->getUnit() != unit)
-					|| tile->getTuCostTile(
-										O_OBJECT,
-										unit->getMoveTypeUnit()) == 255
-					|| (tile->hasNoFloor(tileBelow) == true
-						&& unit->getMoveTypeUnit() != MT_FLY) // <- so just use the unit's moveType.
-//						&& _pf->getMoveTypePathing() != MT_FLY)
-					|| (tile->getMapData(O_OBJECT) != NULL
-						&& tile->getMapData(O_OBJECT)->getBigWall() > BIGWALL_NONE
-						&& tile->getMapData(O_OBJECT)->getBigWall() < BIGWALL_WEST)
-					|| (tileAbove != NULL
+						break;
+					}
+
+					if ((tile->getUnit() != NULL
+							&& tile->getUnit() != unit)
+						|| tile->getTuCostTile(
+											O_OBJECT,
+											unit->getMoveTypeUnit()) == 255
+						|| (unit->getMoveTypeUnit() != MT_FLY
+							&& tile->hasNoFloor(getTile(posTest + Position(x,y,-1))) == true) // <- so just use the unit's moveType.
+						|| (tile->getMapData(O_OBJECT) != NULL
+							&& tile->getMapData(O_OBJECT)->getBigWall() > BIGWALL_NONE
+							&& tile->getMapData(O_OBJECT)->getBigWall() < BIGWALL_WEST))
+					{
+						return false;
+					}
+
+					// TODO: check for ceiling also.
+					const Tile* const tileAbove = getTile(posTest + Position(x,y,1));
+					if (tileAbove != NULL
 						&& tileAbove->getUnit() != NULL
 						&& tileAbove->getUnit() != unit
-						&& unit->getHeight(true) - tile->getTerrainLevel() > 26)) // don't stuck yer head up someone's flying arse.
-					// note: no check for ceilings yet ....
-				{
-					return false;
+						&& unit->getHeight(true) - tile->getTerrainLevel() > 26) // don't stuck yer head up someone's flying arse.
+					{
+						return false;
+					}
 				}
-
-//				if (tile != NULL // I'd think this ought be totally unnecessary with well-formed MCDs [Routes, spawn nodes actually] and perhaps code elsewhere.
-//					&& tile->getTerrainLevel() == -24)
-//				{
-//					posTest += Position(0,0, ++zOffset);
-//					x =
-//					y = armorSize; // note the stock code sort of jerks around by additionally altering the y-offset to one tile south here. /oh well
-
-//					break; // stock code doesn't break; effectively its z-level increases for every quadrant that's on terrainLevel -24 ... or something else too weird to be constructive anymore.
-//				}
+				else
+					return false;
 			}
 		}
 
 		if (armorSize != 0) // -> however, large units never use base equip, so _pf is valid here.
 		{
-			_pf->setPathingUnit(unit); // tentative.
+			_pf->setPathingUnit(unit);
 			for (int
 					dir = 2;
 					dir != 5;
 					++dir)
 			{
 				if (_pf->isBlockedPath(
-									getTile(pos),
-//									getTile(posTest + Position(0,0, zOffset)),
+									getTile(posTest),
 									dir) == true)
 				{
 					return false;
@@ -2348,8 +2346,7 @@ bool SavedBattleGame::setUnitPosition(
 
 		if (test == false)
 		{
-			unit->setPosition(pos);
-//			unit->setPosition(posTest + Position(0,0, zOffset));
+			unit->setPosition(posTest);
 
 			for (int
 					x = armorSize;
@@ -2361,10 +2358,9 @@ bool SavedBattleGame::setUnitPosition(
 						y != -1;
 						--y)
 				{
-					getTile(pos + Position(x,y,0))->setUnit(
-														unit,
-														getTile(pos + Position(x,y,-1)));
-//					getTile(posTest + Position(x,y, zOffset))->setUnit(unit, getTile(posTest + Position(x,y, zOffset - 1)));
+					getTile(posTest + Position(x,y,0))->setUnit(
+															unit,
+															getTile(posTest + Position(x,y,-1)));
 				}
 			}
 		}

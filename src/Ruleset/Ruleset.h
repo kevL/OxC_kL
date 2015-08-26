@@ -369,7 +369,7 @@ protected:
 		Soldier* genSoldier(SavedGame* const save) const;
 
 		/// Gets the item to be used as fuel for ships.
-		std::string getAlienFuelType() const;
+		const std::string& getAlienFuelType() const;
 		/// Gets the amount of alien fuel to recover
 		int getAlienFuelQuantity() const;
 

@@ -1272,7 +1272,7 @@ void BattlescapeState::printTileInventory() // private.
 		std::wstring
 			wst,		// for transient manipulations
 			wst1,		// first-pass
-			wst2,		// for adding ammoQty and endline
+			wst2,		// for adding ammoQty and newline
 			wst3;		// second-pass (will be compared to 1st pass to check for duplicate items)
 		int qty = 1;
 

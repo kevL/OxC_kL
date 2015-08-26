@@ -205,7 +205,7 @@ private:
 		bool isModAlt() const;
 
 		/// Gets the current movementType.
-		MovementType getMoveTypePathing() const;
+		MovementType getMoveTypePf() const;
 
 		/// Gets TU cost for opening a door.
 		int getOpenDoor() const;

@@ -2370,7 +2370,7 @@ Soldier* Ruleset::genSoldier(SavedGame* const gameSave) const
  * Gets the name of the item to be used as alien fuel (elerium or zyrbite).
  * @return, the name of the fuel
  */
-std::string Ruleset::getAlienFuelType() const
+const std::string& Ruleset::getAlienFuelType() const
 {
 	return _alienFuel.first;
 }
