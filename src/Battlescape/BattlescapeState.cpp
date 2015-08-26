@@ -1270,10 +1270,10 @@ void BattlescapeState::printTileInventory() // private.
 			woststr1,	// Console #1
 			woststr2;	// Console #2
 		std::wstring
-			wst,
-			wst1,
-			wst2,
-			wst3;
+			wst,		// for transient manipulations
+			wst1,		// first-pass
+			wst2,		// for adding ammoQty and endline
+			wst3;		// second-pass (will be compared to 1st pass to check for duplicate items)
 		int qty = 1;
 
 		for (size_t
@@ -1346,7 +1346,7 @@ void BattlescapeState::printTileInventory() // private.
 				continue;
 			}
 
-			wst3 = wst1;
+//			wst3 = wst1; // redundant, see below
 
 			if (qty > 1)
 			{
@@ -1359,38 +1359,25 @@ void BattlescapeState::printTileInventory() // private.
 			wst3 =
 			wst2 = wst1;
 
-
 			if (row < 26) // Console #1
 			{
-				if (row == 24)
+				if (row == 25)
 				{
-					woststr << L"> more >>>";
+//					woststr << L"> more >>>";
+					woststr << L"> ";
 					++row;
 				}
 
 				woststr1.str(L"");
 				woststr1 << woststr.str();
 
-				if (row == 25)
+				if (row == 26)
 				{
-					/* Log(LOG_INFO) << "row 25";
-					std::string s (wst1.begin(), wst1.end());
-					Log(LOG_INFO) << ". wst1 = " << s;
-					std::string t (wst2.begin(), wst2.end());
-					Log(LOG_INFO) << ". wst2 = " << t;
-					std::string u (wst3.begin(), wst3.end());
-					Log(LOG_INFO) << ". wst3 = " << u;
-					std::wstring wstr1 (woststr1.str());
-					std::string v (wstr1.begin(), wstr1.end());
-					Log(LOG_INFO) << ". woststr1 = " << v;
-					std::wstring wstr2 (woststr.str());
-					std::string w (wstr2.begin(), wstr2.end());
-					Log(LOG_INFO) << ". woststr = " << w; */
-
 					if (wst1 == L"> ")
 					{
 						wst = woststr1.str();
-						wst.erase(wst.length() - 8);
+//						wst.erase(wst.length() - 8);
+						wst.erase(wst.length() - 2);
 						woststr1.str(L"");
 						woststr1 << wst;
 					}
@@ -1401,11 +1388,11 @@ void BattlescapeState::printTileInventory() // private.
 					woststr.str(L"");
 				}
 			}
-
-			if (row > 25) // Console #2
+			else //if (row > 25) // Console #2
 			{
 				if (row == 50)
-					woststr << L"> more >>>";
+//					woststr << L"> more >>>";
+					woststr << L"> ";
 
 				woststr2.str(L"");
 				woststr2 << woststr.str();
@@ -1415,7 +1402,8 @@ void BattlescapeState::printTileInventory() // private.
 					if (wst1 == L"> ")
 					{
 						wst = woststr2.str();
-						wst.erase(wst.length() - 8);
+//						wst.erase(wst.length() - 8);
+						wst.erase(wst.length() - 2);
 						woststr2.str(L"");
 						woststr2 << wst;
 					}

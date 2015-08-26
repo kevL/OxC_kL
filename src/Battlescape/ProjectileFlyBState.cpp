@@ -138,34 +138,35 @@ void ProjectileFlyBState::init()
 	}
 	else
 	{
-		_ammo = _action.weapon->getAmmoItem();
-
-		if (_ammo == NULL)
+		if (_unit->getFaction() == FACTION_PLAYER
+			&& _parent->getPanicHandled() == true
+			&& _action.type != BA_HIT
+			&& _unit->getTimeUnits() < _action.TU)
+		{
+			_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
 			popThis = true;
+		}
 		else
 		{
-			if (_unit->getFaction() == FACTION_PLAYER
-				&& _parent->getPanicHandled() == true
-				&& _action.type != BA_HIT
-				&& _unit->getTimeUnits() < _action.TU)
-			{
-				_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
-				popThis = true;
-			}
-			else
+			_ammo = _action.weapon->getAmmoItem();
+			bool fireValid;
+
+			if (_unit->getFaction() != _battleSave->getSide())
 			{
 				const BattleUnit* const targetUnit = _battleSave->getTile(_action.target)->getUnit();
-				const bool rfValid = targetUnit != NULL
-								  && targetUnit->isOut_t() == false
-								  && targetUnit == _battleSave->getSelectedUnit()
-								  && _unit->getFaction() != _battleSave->getSide();
+				fireValid = targetUnit != NULL
+						 && targetUnit->isOut_t() == false
+						 && targetUnit == _battleSave->getSelectedUnit()
+						 && _ammo != NULL;
+			}
+			else
+				fireValid = true;
 
-				if (rfValid == false
-					|| _unit->getStopShot() == true)
-				{
-					_unit->setTimeUnits(_unit->getTimeUnits() + _action.TU);
-					popThis = true;
-				}
+			if (fireValid == false
+				|| _unit->getStopShot() == true)
+			{
+				_unit->setTimeUnits(_unit->getTimeUnits() + _action.TU);
+				popThis = true;
 			}
 		}
 	}
