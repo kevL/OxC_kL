@@ -410,7 +410,7 @@ protected:
 		const std::vector<MapScript*>* getMapScript(const std::string& id) const;
 
 		/// Gets the final research Id.
-		std::string getFinalResearch() const;
+		const std::string& getFinalResearch() const;
 
 		/// Gets the current Game.
 		const Game* const getGame() const;

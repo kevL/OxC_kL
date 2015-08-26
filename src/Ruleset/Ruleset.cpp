@@ -2561,7 +2561,7 @@ const std::vector<MapScript*>* Ruleset::getMapScript(const std::string& id) cons
  * Gets the final research Id.
  * @return, final research id
  */
-std::string Ruleset::getFinalResearch() const
+const std::string& Ruleset::getFinalResearch() const
 {
 	return _finalResearch;
 }

@@ -3283,23 +3283,25 @@ void BattlescapeGenerator::generateBaseMap() // private.
  */
 void BattlescapeGenerator::placeXcomProperty() // private.
 {
+	const size_t
+		xSize = static_cast<size_t>(_mapsize_x / 10),
+		ySize = static_cast<size_t>(_mapsize_y / 10);
+
 	for (size_t
 			y = 0;
-			y != static_cast<size_t>(_mapsize_y / 10);
+			y != ySize;
 			++y)
 	{
 		for (size_t
 				x = 0;
-				x != static_cast<size_t>(_mapsize_x / 10);
+				x != xSize;
 				++x)
 		{
 			if (_blocks[x][y]->isInGroup(MBT_START))
-			{
 				_battleSave->getStorageSpace().push_back(Position(
 																x * 10 + 5,
 																y * 10 + 5,
 																1));
-			}
 		}
 	}
 }
@@ -3481,15 +3483,15 @@ bool BattlescapeGenerator::selectPosition( // private.
 		int size_y)
 {
 	//Log(LOG_INFO) << "bgen::selectPosition()";
-	SDL_Rect rectMap;
-	rectMap.x =
-	rectMap.y = 0;
-	rectMap.w = static_cast<Uint16>(_mapsize_x / 10);
-	rectMap.h = static_cast<Uint16>(_mapsize_y / 10);
+	SDL_Rect rectField;
+	rectField.x =
+	rectField.y = 0;
+	rectField.w = static_cast<Uint16>(_mapsize_x / 10);
+	rectField.h = static_cast<Uint16>(_mapsize_y / 10);
 
 	std::vector<SDL_Rect*> available;
 	if (rects->empty() == true)
-		available.push_back(&rectMap);
+		available.push_back(&rectField);
 	else
 		available = *rects;
 
@@ -3506,13 +3508,13 @@ bool BattlescapeGenerator::selectPosition( // private.
 			++i)
 	{
 		//Log(LOG_INFO) << ". iter";
-		int
+		const int
 			width = static_cast<int>((*i)->w),
 			height = static_cast<int>((*i)->h),
 			xPos = static_cast<int>((*i)->x),
 			yPos = static_cast<int>((*i)->y),
-			widthAll = static_cast<int>(rectMap.w),
-			heightAll = static_cast<int>(rectMap.h);
+			widthField = static_cast<int>(rectField.w),
+			heightField = static_cast<int>(rectField.h);
 
 		if (width >= size_x && height >= size_y)
 		{
@@ -3520,14 +3522,14 @@ bool BattlescapeGenerator::selectPosition( // private.
 			for (int
 					x = xPos;
 					x + size_x <= xPos + width
-						&& x + size_x <= widthAll;
+						&& x + size_x <= widthField;
 					++x)
 			{
 				//Log(LOG_INFO) << ". . . fits X";
 				for (int
 						y = yPos;
 						y + size_y <= yPos + height
-							&& y + size_y <= heightAll;
+							&& y + size_y <= heightField;
 						++y)
 				{
 					//Log(LOG_INFO) << ". . . fits Y";
@@ -3607,6 +3609,7 @@ bool BattlescapeGenerator::addCraft( // private.
 	rectCraft.w = static_cast<Uint16>(craftBlock->getSizeX());
 	rectCraft.h = static_cast<Uint16>(craftBlock->getSizeY());
 
+	// TODO: wants casting ...
 	int
 		x,y;
 	bool placed = selectPosition(
@@ -3827,7 +3830,6 @@ bool BattlescapeGenerator::addBlock( // private.
 		_drillMap[xt + xSize]
 				 [yt + yd] = MD_HORIZONTAL;
 	}
-
 
 
 	_drillMap[xt + xSize]				// then the far corner gets marked for both
@@ -4086,22 +4088,28 @@ bool BattlescapeGenerator::removeBlocks(MapScript* const scriptCommand) // priva
 			i != scriptCommand->getRects()->end();
 			++i)
 	{
+		const int
+			xPos = static_cast<int>((*i)->x),
+			yPos = static_cast<int>((*i)->y),
+			width = static_cast<int>((*i)->w),
+			height = static_cast<int>((*i)->h);
+
 		for (int
-				x = (*i)->x;
-				x != (*i)->x + (*i)->w
+				x = xPos;
+				x != xPos + width
 					&& x != _mapsize_x / 10;
 				++x)
 		{
 			for (int
-					y = (*i)->y;
-					y != (*i)->y + (*i)->h
+					y = yPos;
+					y != yPos + height
 						&& y != _mapsize_y / 10;
 					++y)
 			{
 				if (_blocks[x][y] != NULL
 					&& _blocks[x][y] != _testBlock)
 				{
-					std::pair<int, int> pos(x,y);
+					std::pair<int, int> pos (x,y); // init.
 
 					if (scriptCommand->getGroups()->empty() == false)
 					{

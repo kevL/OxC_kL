@@ -1252,7 +1252,7 @@ void BattlescapeState::printTileInventory() // private.
 //	_txtConsole3->setText(L"");
 //	_txtConsole4->setText(L"");
 
-	bool showInfo = true;
+	bool showInfo;
 
 	Position pos;
 	_map->getSelectorPosition(&pos);
@@ -1345,8 +1345,8 @@ void BattlescapeState::printTileInventory() // private.
 				++qty;
 				continue;
 			}
-			else
-				wst3 = wst1;
+
+			wst3 = wst1;
 
 			if (qty > 1)
 			{
@@ -1402,7 +1402,7 @@ void BattlescapeState::printTileInventory() // private.
 				}
 			}
 
-			if (row > 26) // Console #2
+			if (row > 25) // Console #2
 			{
 				if (row == 50)
 					woststr << L"> more >>>";
@@ -1430,6 +1430,8 @@ void BattlescapeState::printTileInventory() // private.
 		_txtConsole1->setText(woststr1.str());
 		_txtConsole2->setText(woststr2.str());
 	}
+	else
+		showInfo = true;
 
 	updateTileInfo(tile);
 
