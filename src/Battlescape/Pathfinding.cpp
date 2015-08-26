@@ -753,8 +753,19 @@ int Pathfinding::getTuCostPf(
 						return 255; // cannot walk on air
 				}
 			} */
+/*			if (x == 0 && y == 0
+				&& _mType != MT_FLY
+				&& canFallDown(
+							tileStart,
+							armorSize + 1)) // kL_note: keep at it, doughboy!
+			{
+				if (direction != DIR_DOWN)
+					return 255; // cannot walk on air
 
-			// don't let tanks phase through doors.
+				fall = true;
+			} */ // end Take II ... i still don't trust that crap.
+
+			// don't let tanks phase through doors
 			if (x != 0 && y != 0)
 			{
 				if ((tileDest->getMapData(O_NORTHWALL) != NULL
@@ -771,7 +782,6 @@ int Pathfinding::getTuCostPf(
 			if (dir < DIR_UP
 				&& tileStart->getTerrainLevel() > -16) // lower than 2-thirds up.
 			{
-				// check if we can go this way
 				if (isBlockedPath(
 							tileStart,
 							dir,
@@ -795,7 +805,7 @@ int Pathfinding::getTuCostPf(
 			tileDestBelow = _battleSave->getTile(*posDest + posOffset + Position(0,0,-1)),
 			tileDestAbove = _battleSave->getTile(*posDest + posOffset + Position(0,0, 1));
 
-			// if we are on a stairs try to go up a level
+			// if unit is on stairs try to go up a level
 			if (dir < DIR_UP
 				&& tileStart->getTerrainLevel() < -15 // higher than 2-thirds up.
 				&& tileDestAbove->hasNoFloor(tileDest) == false
@@ -881,7 +891,6 @@ int Pathfinding::getTuCostPf(
 			}
 			else //if (fall == false) // <- this can probly stay <--
 			{
-				// check if path can go up or down through gravlift or fly
 				if (validateUpDown(
 								posStart + posOffset,
 								dir) < 1)
@@ -892,7 +901,7 @@ int Pathfinding::getTuCostPf(
 				cost = 8; // vertical movement by flying suit or grav lift
 			}
 
-			// check if there's a floor, else fall down; for walking off roofs and pathing in mid-air ...
+			// check if there's a floor else fall down; for walking off roofs and pathing in mid-air ...
 			if (fall == false
 				&& _mType != MT_FLY
 				&& canFallDown(tileStart) == true)
@@ -918,7 +927,6 @@ int Pathfinding::getTuCostPf(
 			if (dir < DIR_UP
 				&& partsGoingUp != 0)
 			{
-				// check if path can go this way
 				if (isBlockedPath(
 							tileStart,
 							dir,
@@ -935,7 +943,6 @@ int Pathfinding::getTuCostPf(
 				}
 			}
 
-			// check if the destination tile can be walked over
 			if (isBlocked(
 						tileDest,
 						O_FLOOR,
@@ -958,8 +965,7 @@ int Pathfinding::getTuCostPf(
 			// Calculate TU costage ->
 			if (dir < DIR_UP)
 			{
-				// if not fell down and there is no floor,
-				// can't know the TUs so it defaults to 4
+				// if not fell down and there is no floor can't know the TUs so it defaults to 4
 				if (fall == false
 					&& tileDest->hasNoFloor(NULL) == true)
 				{
@@ -984,7 +990,7 @@ int Pathfinding::getTuCostPf(
 					}
 				}
 
-				// climbing up a level costs one extra. Not
+				// climbing up a level costs one extra. Not.
 //				if (posOffsetVertical.z > 0) ++cost;
 
 				wallTotal =	// walking over rubble walls
@@ -1220,8 +1226,8 @@ int Pathfinding::getTuCostPf(
 			}
 		}
 
-		// if unit changed level, check that there are two parts changing level,
-		// so a big sized unit can not go up a small sized stairs
+		// If the unit changed level check that there are two parts changing
+		// level so a large unit can not go up a small sized stairs.
 		if (partsChangingHeight == 1)
 		{
 			//Log(LOG_INFO) << "blocked - not enough parts changing level";
@@ -1232,8 +1238,8 @@ int Pathfinding::getTuCostPf(
 			costTotal = static_cast<int>(Round(std::ceil( // ok, round those tanks up!
 						static_cast<double>(costTotal) / static_cast<double>((armorSize + 1) * (armorSize + 1)))));
 
-		//Log(LOG_INFO) << ". costTotal = " << costTotal;
-	}
+		//Log(LOG_INFO) << ". large unit costTotal = " << costTotal;
+	} // largeUnits_end.
 
 	//Log(LOG_INFO) << "Pathfinding::getTuCostPf() ret = " << costTotal;
 	return costTotal;

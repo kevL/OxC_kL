@@ -66,7 +66,7 @@ private:
 		_generateFuel;
 	int
 		_alienItemLevel,
-		_blocksToDo,
+		_blocksLeft,
 		_craftZ,
 		_mapsize_x,
 		_mapsize_y,
@@ -188,9 +188,9 @@ private:
 			int size_y);
 	/// Adds a craft (either a ufo or an xcom craft) somewhere on the map.
 	bool addCraft(
-			const MapBlock* const craftMap,
+			const MapBlock* const craftBlock,
 			MapScript* const scriptCommand,
-			SDL_Rect& craftPos);
+			SDL_Rect& rectCraft);
 	/// Adds a line (generally a road) to the map.
 	bool addLine(
 			MapDirection dir,

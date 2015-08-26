@@ -2509,20 +2509,6 @@ const std::map<std::string, SoundDefinition*>* Ruleset::getSoundDefinitions() co
 } */
 
 /**
- * Gets the list of MapScripts.
- * @param id - reference the script type
- * @return, pointer to a vector of pointers to MapScript
- */
-const std::vector<MapScript*>* Ruleset::getMapScript(const std::string& id) const
-{
-	std::map<std::string, std::vector<MapScript*> >::const_iterator i = _mapScripts.find(id);
-	if (i != _mapScripts.end())
-		return &i->second;
-
-	return NULL;
-}
-
-/**
  * Gets the list of videos.
  * @return, pointer to a map of strings & pointers to RuleVideos
  */
@@ -2550,6 +2536,23 @@ RuleMissionScript* Ruleset::getMissionScript(const std::string& id) const
 	std::map<std::string, RuleMissionScript*>::const_iterator i = _missionScripts.find(id);
 	if (i != _missionScripts.end())
 		return i->second;
+
+	return NULL;
+}
+
+/**
+ * Gets the list of MapScripts.
+ * @param id - reference the script type
+ * @return, pointer to a vector of pointers to MapScript
+ */
+const std::vector<MapScript*>* Ruleset::getMapScript(const std::string& id) const
+{
+	std::map<std::string, std::vector<MapScript*> >::const_iterator i = _mapScripts.find(id);
+	if (i != _mapScripts.end())
+	{
+		//Log(LOG_INFO) << "rules: i->first = " << i->first;
+		return &i->second;
+	}
 
 	return NULL;
 }

@@ -2316,7 +2316,7 @@ bool SavedBattleGame::setUnitPosition(
 					return false;
 				}
 
-//				if (tile != NULL // I'd think this ought be totally unnecessary with well-formed MCDs and perhaps code elsewhere.
+//				if (tile != NULL // I'd think this ought be totally unnecessary with well-formed MCDs [Routes, spawn nodes actually] and perhaps code elsewhere.
 //					&& tile->getTerrainLevel() == -24)
 //				{
 //					posTest += Position(0,0, ++zOffset);

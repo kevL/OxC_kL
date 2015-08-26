@@ -38,8 +38,8 @@ void WeightedOptions::load(const YAML::Node& node)
 			val != node.end();
 			++val)
 	{
-		const std::string id = val->first.as<std::string>();
-		const size_t weight = val->second.as<size_t>();
+		const std::string id	= val->first	.as<std::string>();
+		const size_t weight		= val->second	.as<size_t>();
 
 		setWeight(id, weight);
 	}

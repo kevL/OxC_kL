@@ -398,9 +398,6 @@ protected:
 		/// Gets the list of transparency colors.
 //		const std::vector<SDL_Color>* getTransparencies() const;
 
-		/// Gets the list of MapScripts.
-		const std::vector<MapScript*>* getMapScript(const std::string& id) const;
-
 		/// Gets the list of videos for intro/outro etc.
 		const std::map<std::string, RuleVideo*>* getVideos() const;
 
@@ -408,6 +405,9 @@ protected:
 		const std::vector<std::string>* getMissionScriptList() const;
 		/// Gets a mission script.
 		RuleMissionScript* getMissionScript(const std::string& id) const;
+
+		/// Gets the list of MapScripts.
+		const std::vector<MapScript*>* getMapScript(const std::string& id) const;
 
 		/// Gets the final research Id.
 		std::string getFinalResearch() const;

@@ -294,7 +294,7 @@ void MapScript::load(const YAML::Node& node)
 				_direction = MD_BOTH;
 			else
 			{
-				throw Exception("direction must be [V]ertical, [H]orizontal, or [B]oth, what does " + dir + " mean?");
+				throw Exception("direction must be [V]ertical, [H]orizontal, or [B]oth - found [" + dir + "]");
 			}
 		}
 	}

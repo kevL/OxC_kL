@@ -113,8 +113,8 @@ void AlienStrategy::load(const YAML::Node& node)
 											options.release()));
 	}
 
-	_missionLocations = node["missionLocations"].as<std::map<std::string, std::vector<std::pair<std::string, size_t> > > >(_missionLocations);
-	_missionRuns = node["missionsRun"].as<std::map<std::string, int> >(_missionRuns);
+	_missionLocations	= node["missionLocations"]	.as<std::map<std::string, std::vector<std::pair<std::string, size_t> > > >(_missionLocations);
+	_missionRuns		= node["missionsRun"]		.as<std::map<std::string, int> >(_missionRuns);
 }
 
 /**
