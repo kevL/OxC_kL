@@ -428,7 +428,7 @@ void UnitFallBState::think()
 									(*i)->getPosition(),
 									true);
 
-				_parent->checkForProximityGrenades(*i);
+				_parent->checkProxyGrenades(*i);
 				// kL_add: Put checkForSilacoid() here!
 
 				if (_parent->getTileEngine()->checkReactionFire(*i))

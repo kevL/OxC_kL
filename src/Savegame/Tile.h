@@ -89,6 +89,13 @@ protected:
 
 	public:
 		static const size_t PARTS_TILE = 4;
+		static const int
+			DR_NONE			= -1,
+			DR_OPEN_WOOD	=  0,
+			DR_OPEN_METAL	=  1,
+			DR_WAIT_METAL	=  3,
+			DR_ERR_TU		=  4,
+			DR_ERR_RESERVE	=  5;
 
 		static struct SerializationKey
 		{

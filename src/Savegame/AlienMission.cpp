@@ -445,7 +445,7 @@ Ufo* AlienMission::spawnUfo( // private.
 		const MissionWave& wave,
 		const UfoTrajectory& trajectory)
 {
-	const RuleUfo& ufoRule = *rules.getUfo(wave.ufoType);
+	const RuleUfo* ufoRule = rules.getUfo(wave.ufoType);
 	std::pair<double, double> coord;
 	Waypoint* wp;
 	Ufo* ufo;
@@ -518,11 +518,11 @@ Ufo* AlienMission::spawnUfo( // private.
 	}
 	else if (object == alm_SUPPLY)
 	{
-		if (&ufoRule != NULL
+		if (ufoRule != NULL
 			&& (_aBase != NULL // check for base to supply.
 				|| wave.objective == false))
 		{
-			ufo = new Ufo(&ufoRule);
+			ufo = new Ufo(ufoRule);
 			ufo->setUfoMissionInfo( // destination is always an alien base.
 								this,
 								&trajectory);
@@ -539,7 +539,7 @@ Ufo* AlienMission::spawnUfo( // private.
 			ufo->setAltitude(trajectory.getAltitude(0));
 			ufo->setSpeed(static_cast<int>(std::ceil(
 						  static_cast<double>(trajectory.getSpeedPct(0))
-						* static_cast<double>(ufoRule.getMaxSpeed()))));
+						* static_cast<double>(ufoRule->getMaxSpeed()))));
 			ufo->setLongitude(coord.first);
 			ufo->setLatitude(coord.second);
 
@@ -571,9 +571,9 @@ Ufo* AlienMission::spawnUfo( // private.
 		return NULL; // No base to supply!
 	}
 
-	if (&ufoRule != NULL)
+	if (ufoRule != NULL)
 	{
-		ufo = new Ufo(&ufoRule); // else Spawn according to sequence
+		ufo = new Ufo(ufoRule); // else Spawn according to sequence
 		ufo->setUfoMissionInfo(
 							this,
 							&trajectory);
@@ -591,7 +591,7 @@ Ufo* AlienMission::spawnUfo( // private.
 
 		ufo->setSpeed(static_cast<int>(std::ceil(
 					  static_cast<double>(trajectory.getSpeedPct(0))
-					* static_cast<double>(ufoRule.getMaxSpeed()))));
+					* static_cast<double>(ufoRule->getMaxSpeed()))));
 		ufo->setLongitude(coord.first);
 		ufo->setLatitude(coord.second);
 

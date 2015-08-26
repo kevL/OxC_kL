@@ -88,7 +88,7 @@ private:
 			const bool trueDir = false) const;
 	/// Opens any doors this door is connected to.
 	void openAdjacentDoors(
-			Position pos,
+			const Position& pos,
 			MapDataType part) const;
 	/// Gets a Tile within melee range.
 	Tile* getVerticalTile(

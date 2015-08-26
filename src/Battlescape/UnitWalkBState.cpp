@@ -600,7 +600,7 @@ bool UnitWalkBState::doStatusStand() // private.
 		}
 
 		// proxy blows up in face after door opens - copied doStatusStand_end()
-		if (_parent->checkForProximityGrenades(_unit) == true) // kL_add: Put checkForSilacoid() here!
+		if (_parent->checkProxyGrenades(_unit) == true) // kL_add: Put checkForSilacoid() here!
 		{
 			_parent->popState();
 //			postPathProcedures(); // .. one or the other i suppose.
@@ -921,7 +921,7 @@ bool UnitWalkBState::doStatusStand_end() // private.
 						_unit->getPosition(),
 						true);
 
-	if (_parent->checkForProximityGrenades(_unit) == true) // kL_add: Put checkForSilacoid() here!
+	if (_parent->checkProxyGrenades(_unit) == true) // kL_add: Put checkForSilacoid() here!
 	{
 		_parent->popState();
 		return false;

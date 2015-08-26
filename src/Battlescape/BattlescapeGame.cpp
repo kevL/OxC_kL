@@ -3673,7 +3673,7 @@ bool BattlescapeGame::getKneelReserved()
  * @param unit - pointer to a BattleUnit
  * @return, true if a proximity grenade is triggered
  */
-bool BattlescapeGame::checkForProximityGrenades(BattleUnit* const unit)
+bool BattlescapeGame::checkProxyGrenades(BattleUnit* const unit)
 {
 	int unitSize = unit->getArmor()->getSize() - 1;
 	for (int

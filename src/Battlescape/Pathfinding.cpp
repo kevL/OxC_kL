@@ -757,7 +757,7 @@ int Pathfinding::getTuCostPf(
 				&& _mType != MT_FLY
 				&& canFallDown(
 							tileStart,
-							armorSize + 1)) // kL_note: keep at it, doughboy!! You'll get that ego you've been striving so hard for. Try Masonry.
+							armorSize + 1)) // kL_note: keep at it!! You'll get that ego you've been striving so hard for. Try Masonry.
 			{
 				if (direction != DIR_DOWN)
 					return 255; // cannot walk on air

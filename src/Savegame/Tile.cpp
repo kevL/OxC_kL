@@ -336,6 +336,14 @@ int Tile::getTuCostTile(
 		MapDataType part,
 		MovementType moveType) const
 {
+	//if (_objects[part] != NULL)
+	//{
+	//	Log(LOG_INFO) << "part = " << (int)part;
+	//	Log(LOG_INFO) << "isUfoDoor = " << (int)_objects[part]->isUfoDoor();
+	//	Log(LOG_INFO) << "curFrame = " << (int)_curFrame[part];
+	//}
+	//else Log(LOG_INFO) << "part not valid";
+
 	if (_objects[part] != NULL
 		&& !(_objects[part]->isUfoDoor() == true
 			&& _curFrame[part] > 1)
@@ -457,8 +465,8 @@ int Tile::getFootstepSound(const Tile* const tileBelow) const
 }
 
 /**
- * Open a door on this tile.
- * @param part		- a tile part
+ * Open a door on this Tile.
+ * @param part		- a tile part type
  * @param unit		- pointer to a BattleUnit (default NULL)
  * @param reserved	- see BA_* enum for TU reserves (default BA_NONE)
  * @return, -1 no door opened
@@ -480,7 +488,7 @@ int Tile::openDoor(
 				&& _unit != unit
 				&& _unit->getPosition() != getPosition())
 			{
-				return -1;
+				return DR_NONE;
 			}
 
 			if (unit != NULL
@@ -489,7 +497,7 @@ int Tile::openDoor(
 															reserved,
 															unit->getMainHandWeapon(false)))
 			{
-				return 4;
+				return DR_ERR_TU;
 			}
 
 			setMapData(
@@ -498,14 +506,12 @@ int Tile::openDoor(
 					_mapDataSetID[part],
 					_objects[part]->getDataset()->getObjects()->at(_objects[part]->getAltMCD())->getPartType());
 
-			setMapData(
-					NULL,
-					-1,-1,
-					part);
+			setMapData(NULL,-1,-1, part);
 
-			return 0;
+			return DR_OPEN_WOOD;
 		}
-		else if (_objects[part]->isUfoDoor() == true)
+
+		if (_objects[part]->isUfoDoor() == true)
 		{
 			if (_curFrame[part] == 0) // ufo door part 0 - door is closed
 			{
@@ -515,18 +521,19 @@ int Tile::openDoor(
 																reserved,
 																unit->getMainHandWeapon(false)))
 				{
-					return 4;
+					return DR_ERR_TU;
 				}
 
 				_curFrame[part] = 1; // start opening door
-				return 1;
+				return DR_OPEN_METAL;
 			}
-			else if (_curFrame[part] != 7) // ufo door != part 7 -> door is still opening
-				return 3;
+
+			if (_curFrame[part] != 7) // ufo door != part 7 -> door is still opening
+				return DR_WAIT_METAL;
 		}
 	}
 
-	return -1;
+	return DR_NONE;
 }
 
 /**
