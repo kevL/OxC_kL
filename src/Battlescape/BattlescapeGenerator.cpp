@@ -1923,6 +1923,10 @@ BattleUnit* BattlescapeGenerator::addAlien( // private.
 										diff,
 										_gameSave->getMonthsPassed());
 
+	// safety to avoid index out of bounds errors
+	if (alienRank > 7)
+		alienRank = 7;
+
 	// following data is the order in which certain alien ranks spawn on certain node ranks;
 	// note that they all can fall back to rank 0 nodes - which is scout (outside ufo)
 	Node* node;

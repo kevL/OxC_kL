@@ -1960,11 +1960,14 @@ bool TileEngine::reactionShot(
 	if (action.targeting == true
 		&& action.actor->spendTimeUnits(action.TU) == true)
 	{
-		action.TU = 0;
-
 //		if (action.actor->getFaction() != FACTION_HOSTILE)
-		_battleSave->getBattleState()->getMap()->getCamera()->centerOnPosition(action.actor->getPosition());
-		action.cameraPosition = _battleSave->getBattleState()->getMap()->getCamera()->getMapOffset();
+//		{
+//		Camera* const rfCam = _battleSave->getBattleState()->getMap()->getCamera();	// this is getting done in Map.
+//		rfCam->centerOnPosition(action.actor->getPosition());						// The stored shot-position is more accurate from there.
+//		action.cameraPosition = rfCam->getMapOffset();
+//		}
+
+		action.TU = 0;
 
 		_battleSave->getBattleGame()->statePushBack(new UnitTurnBState( // moved to ProjectileFlyBState, post-cosmetics
 																_battleSave->getBattleGame(),

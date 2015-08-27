@@ -353,13 +353,13 @@ void Map::draw()
 											_projectile->getPosition(0).z / 24));
 			if (tile != NULL
 				&& (tile->getTileVisible() == true
-					|| _battleSave->getSide() != FACTION_PLAYER))	// shows projectile during aLien berserk
+					|| _battleSave->getSide() != FACTION_PLAYER)) // shows projectile during aLien berserk
 			{
 				_projectileInFOV = true;
 			}
 		}
 		else
-			_projectileInFOV = _battleSave->getDebugMode();
+			_projectileInFOV = _battleSave->getDebugMode(); // reveals prj in debugmode.
 
 
 		if (_explosions.empty() == false)
@@ -378,7 +378,7 @@ void Map::draw()
 						|| (tile->getUnit() != NULL
 							&& tile->getUnit()->getUnitVisible() == true)
 						|| (*i)->isBig() == true
-						|| _battleSave->getSide() != FACTION_PLAYER))	// shows hit-explosion during aLien berserk
+						|| _battleSave->getSide() != FACTION_PLAYER)) // shows hit-explosion during aLien berserk
 				{
 					_explosionInFOV = true;
 					break;
@@ -386,7 +386,7 @@ void Map::draw()
 			}
 		}
 		else
-			_explosionInFOV = _battleSave->getDebugMode(); // trick reveals Map in debugmode.
+			_explosionInFOV = _battleSave->getDebugMode(); // reveals expl in debugmode.
 
 
 		if (_battleSave->getSelectedUnit() == NULL
@@ -513,12 +513,12 @@ void Map::drawTerrain(Surface* const surface) // private.
 		bulletHighZ /= 24;
 
 		// if the projectile is outside the viewport - center back on it
-		_camera->convertVoxelToScreen(
-								_projectile->getPosition(),
-								&bullet);
-
 		if (_projectileInFOV == true)
 		{
+			_camera->convertVoxelToScreen(
+									_projectile->getPosition(),
+									&bullet);
+
 			if (Options::battleSmoothCamera == true)
 			{
 				if (_firstBulletFrame == true)
@@ -539,6 +539,10 @@ void Map::drawTerrain(Surface* const surface) // private.
 						_camera->convertVoxelToScreen(
 												_projectile->getPosition(),
 												&bullet);
+
+						BattleAction* const action = _battleSave->getBattleGame()->getCurrentAction(); // rf ->
+						if (_battleSave->getSide() != action->actor->getFaction())	// moved here from TileEngine::reactionShot()
+							action->cameraPosition = _camera->getMapOffset();		// because this is a more accurate position of the bullet-shot-actor.
 					}
 				}
 
@@ -569,7 +573,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 			else // NOT smoothCamera
 			// kL_note: Camera remains stationary when xCom actively fires at target.
 			// That is, Target is already onScreen due to targetting cursor click!
-			// ( And, player should already know what unit is shooting... )
+			// (And, player already knows what unit is shooting ...)
 //			if (_projectile->getActor()->getFaction() != FACTION_PLAYER) // kL
 			{
 				bool enough;

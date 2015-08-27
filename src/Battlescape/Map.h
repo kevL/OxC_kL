@@ -31,7 +31,7 @@
 namespace OpenXcom
 {
 
-extern bool kL_noReveal; // kL
+extern bool kL_noReveal;
 
 
 class BattlescapeMessage;
@@ -121,8 +121,6 @@ private:
 
 	std::list<Explosion*> _explosions;
 	std::vector<Position> _waypoints;
-
-//	const std::vector<Uint8>* _transparencies;
 
 	///
 	void drawTerrain(Surface* const surface);
