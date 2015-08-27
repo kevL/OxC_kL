@@ -68,7 +68,7 @@ enum BattleActionType
 };
 
 /**
- *
+ * Object that holds relevant battle action data in one container.
  */
 struct BattleAction
 {

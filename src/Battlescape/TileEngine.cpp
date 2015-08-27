@@ -85,13 +85,17 @@ TileEngine::TileEngine(
 		_spotSound(true),
 		_trueTile(NULL)
 //		_missileDirection(-1)
-{}
+{
+	_rfAction = new BattleAction();
+}
 
 /**
  * Deletes the TileEngine.
  */
 TileEngine::~TileEngine()
-{}
+{
+	delete _rfAction;
+}
 
 /**
  * Calculates sun shading for the whole terrain.
@@ -1861,48 +1865,47 @@ bool TileEngine::reactionShot(
 		const BattleUnit* const targetUnit)
 {
 	//Log(LOG_INFO) << "TileEngine::reactionShot() id-" << unit->getId();
-	BattleAction action;
-	action.actor = unit;
+	_rfAction->actor = unit;
 
 	if (unit->getFaction() == FACTION_PLAYER
 		&& unit->getOriginalFaction() == FACTION_PLAYER)
 	{
-		action.weapon = unit->getItem(unit->getActiveHand());
+		_rfAction->weapon = unit->getItem(unit->getActiveHand());
 	}
 	else
 	{
-		action.weapon = unit->getMainHandWeapon();
+		_rfAction->weapon = unit->getMainHandWeapon();
 
-		if (action.weapon == NULL
-			&& action.actor->getUnitRules() != NULL
-			&& action.actor->getUnitRules()->getMeleeWeapon() == "STR_FIST")
+		if (_rfAction->weapon == NULL
+			&& _rfAction->actor->getUnitRules() != NULL
+			&& _rfAction->actor->getUnitRules()->getMeleeWeapon() == "STR_FIST")
 		{
-			action.weapon = _battleSave->getBattleGame()->getFist();
+			_rfAction->weapon = _battleSave->getBattleGame()->getFist();
 		}
 	}
 
-	if (action.weapon == NULL
-		|| action.weapon->getRules()->canReactionFire() == false
-		|| action.weapon->getAmmoItem() == NULL						// lasers & melee are their own ammo-items
-		|| action.weapon->getAmmoItem()->getAmmoQuantity() == 0		// lasers & melee return INT_MAX
-		|| (action.actor->getFaction() != FACTION_HOSTILE			// is not an aLien and has unresearched weapon.
-			&& _battleSave->getGeoscapeSave()->isResearched(action.weapon->getRules()->getRequirements()) == false))
+	if (_rfAction->weapon == NULL
+		|| _rfAction->weapon->getRules()->canReactionFire() == false
+		|| _rfAction->weapon->getAmmoItem() == NULL						// lasers & melee are their own ammo-items
+		|| _rfAction->weapon->getAmmoItem()->getAmmoQuantity() == 0		// lasers & melee return INT_MAX
+		|| (_rfAction->actor->getFaction() != FACTION_HOSTILE			// is not an aLien and has unresearched weapon.
+			&& _battleSave->getGeoscapeSave()->isResearched(_rfAction->weapon->getRules()->getRequirements()) == false))
 	{
 		return false;
 	}
 
 
-	action.target = targetUnit->getPosition();
-	action.TU = 0;
+	_rfAction->target = targetUnit->getPosition();
+	_rfAction->TU = 0;
 
-	if (action.weapon->getRules()->getBattleType() == BT_MELEE)
+	if (_rfAction->weapon->getRules()->getBattleType() == BT_MELEE)
 	{
-		action.type = BA_HIT;
-		action.TU = action.actor->getActionTUs(
+		_rfAction->type = BA_HIT;
+		_rfAction->TU = _rfAction->actor->getActionTUs(
 											BA_HIT,
-											action.weapon);
-		if (action.TU == 0
-			|| action.TU > action.actor->getTimeUnits())
+											_rfAction->weapon);
+		if (_rfAction->TU == 0
+			|| _rfAction->TU > _rfAction->actor->getTimeUnits())
 		{
 			return false;
 		}
@@ -1925,14 +1928,14 @@ bool TileEngine::reactionShot(
 	}
 	else
 	{
-		action.type = BA_NONE;
-		selectFireMethod(action); // choose BAT & setTU req'd.
+		_rfAction->type = BA_NONE;
+		selectFireMethod(*_rfAction); // choose BAT & setTU req'd.
 
-		if (action.type == BA_NONE)
+		if (_rfAction->type == BA_NONE)
 			return false;
 	}
 
-	action.targeting = true;
+	_rfAction->targeting = true;
 
 	if (unit->getFaction() == FACTION_HOSTILE)
 	{
@@ -1946,39 +1949,39 @@ bool TileEngine::reactionShot(
 			unit->setAIState(aggro_AI);
 		}
 
-		if (action.weapon->getAmmoItem()->getRules()->getExplosionRadius() > 0
+		if (_rfAction->weapon->getAmmoItem()->getRules()->getExplosionRadius() > 0
 			&& aggro_AI->explosiveEfficacy(
-									action.target,
+									_rfAction->target,
 									unit,
-									action.weapon->getAmmoItem()->getRules()->getExplosionRadius(),
+									_rfAction->weapon->getAmmoItem()->getRules()->getExplosionRadius(),
 									_battleSave->getBattleState()->getSavedGame()->getDifficulty()) == false)
 		{
-			action.targeting = false;
+			_rfAction->targeting = false;
 		}
 	}
 
-	if (action.targeting == true
-		&& action.actor->spendTimeUnits(action.TU) == true)
+	if (_rfAction->targeting == true
+		&& _rfAction->actor->spendTimeUnits(_rfAction->TU) == true)
 	{
-//		if (action.actor->getFaction() != FACTION_HOSTILE)
+//		if (_rfAction->actor->getFaction() != FACTION_HOSTILE)
 //		{
 //		Camera* const rfCam = _battleSave->getBattleState()->getMap()->getCamera();	// this is getting done in Map.
-//		rfCam->centerOnPosition(action.actor->getPosition());						// The stored shot-position is more accurate from there.
-//		action.cameraPosition = rfCam->getMapOffset();
-//		}
+//		rfCam->centerOnPosition(_rfAction->actor->getPosition());					// The stored shot-position is more accurate from there.
+//		_rfAction->cameraPosition = rfCam->getMapOffset();							// Unfortunately I don't know how to pre-calculate the voxelPosition that the shot will be
+//		}																			// fired from (which is done in Map) and convert it to a mapOffset so I can't store it here.
 
-		action.TU = 0;
+		_rfAction->TU = 0;
 
 		_battleSave->getBattleGame()->statePushBack(new UnitTurnBState( // moved to ProjectileFlyBState, post-cosmetics
 																_battleSave->getBattleGame(),
-																action,
+																*_rfAction,
 																false));
-//		if (action.type == BA_HIT)
-//			_save->getBattleGame()->statePushBack(new MeleeAttackBState(_save->getBattleGame(), action));
+//		if (_rfAction->type == BA_HIT)
+//			_save->getBattleGame()->statePushBack(new MeleeAttackBState(_save->getBattleGame(), _rfAction));
 
 		_battleSave->getBattleGame()->statePushBack(new ProjectileFlyBState(
 																	_battleSave->getBattleGame(),
-																	action));
+																	*_rfAction));
 		return true;
 	}
 
@@ -1989,7 +1992,7 @@ bool TileEngine::reactionShot(
  * Selects a fire method based on range & time units.
  * @param action - reference a BattleAction struct
  */
-void TileEngine::selectFireMethod(BattleAction& action)
+void TileEngine::selectFireMethod(BattleAction& action) // <- TODO: this action needs to be replaced w/ _rfAction, i think.
 {
 	const RuleItem* const itRule = action.weapon->getRules();
 	const int dist = _battleSave->getTileEngine()->distance(
@@ -2068,6 +2071,24 @@ void TileEngine::selectFireMethod(BattleAction& action)
 	}
 
 	return;
+}
+
+/**
+ * Gets the unique reaction fire BattleAction struct.
+ * @return, rf action struct
+ */
+BattleAction* TileEngine::getRfAction()
+{
+	return _rfAction;
+}
+
+/**
+ * Gets the reaction fire shot list.
+ * @return, pointer to a map of unit-IDs & Positions
+ */
+std::map<int, Position>* TileEngine::getRfShotList()
+{
+	return &_rfShotList;
 }
 
 /**

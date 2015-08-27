@@ -170,6 +170,8 @@ void BattlescapeGame::think()
 	if (_states.empty() == true)
 	{
 		//Log(LOG_INFO) << "BattlescapeGame::think() - states NOT Empty.";
+		_battleSave->getTileEngine()->getRfShotList()->clear();
+
 		if (_battleSave->getSide() != FACTION_PLAYER) // it's a non player side (ALIENS or CIVILIANS)
 		{
 			if (_debugPlay == false)

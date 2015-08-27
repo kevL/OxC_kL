@@ -79,7 +79,6 @@ namespace OpenXcom
 
 bool kL_noReveal = true;
 
-
 /**
  * Sets up a map with the specified size and position.
  * @param game				- pointer to the core Game
@@ -540,9 +539,16 @@ void Map::drawTerrain(Surface* const surface) // private.
 												_projectile->getPosition(),
 												&bullet);
 
-						BattleAction* const action = _battleSave->getBattleGame()->getCurrentAction(); // rf ->
-						if (_battleSave->getSide() != action->actor->getFaction())	// moved here from TileEngine::reactionShot()
-							action->cameraPosition = _camera->getMapOffset();		// because this is a more accurate position of the bullet-shot-actor.
+						//Log(LOG_INFO) << "map:drawTerrain() set cameraPos";
+						BattleAction* const action = _battleSave->getTileEngine()->getRfAction(); // rf ->
+						if (action->actor->getFaction() != _battleSave->getSide())	// moved here from TileEngine::reactionShot()
+						{															// because this is the (accurate) position of the bullet-shot-actor's Camera mapOffset.
+							//Log(LOG_INFO) << ". " << action->actor->getId() << " to " << action->cameraPosition;
+							std::map<int, Position>* rfShotList = _battleSave->getTileEngine()->getRfShotList();
+							rfShotList->insert(std::pair<int, Position>(
+																	action->actor->getId(),
+																	_camera->getMapOffset()));
+						}
 					}
 				}
 

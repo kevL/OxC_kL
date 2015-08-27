@@ -71,6 +71,9 @@ private:
 	SavedBattleGame* _battleSave;
 	Tile* _trueTile;
 
+	BattleAction* _rfAction;
+	std::map<int, Position> _rfShotList;
+
 	const std::vector<Uint16>* _voxelData;
 
 	///
@@ -172,6 +175,10 @@ private:
 				const BattleUnit* const targetUnit);
 		/// Selects a fire method based on range & time units.
 		void selectFireMethod(BattleAction& action);
+		/// Gets the unique reaction fire BattleAction struct.
+		BattleAction* getRfAction();
+		/// Gets the reaction fire shot list.
+		std::map<int, Position>* getRfShotList();
 
 		/// Handles bullet/weapon hits.
 		BattleUnit* hit(

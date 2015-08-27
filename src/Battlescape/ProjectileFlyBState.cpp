@@ -74,7 +74,9 @@ ProjectileFlyBState::ProjectileFlyBState( // origin is unitTile
 		_initialized(false),
 		_targetFloor(false),
 		_initUnitAnim(0)
-{}
+{
+	Log(LOG_INFO) << "flyBstate:cTor " << action.actor->getId() << " cameraPos " << action.cameraPosition;
+}
 
 /**
  * Sets up a ProjectileFlyBState [1].
@@ -120,6 +122,7 @@ ProjectileFlyBState::~ProjectileFlyBState()
 void ProjectileFlyBState::init()
 {
 	//Log(LOG_INFO) << "ProjectileFlyBState::init()";
+	Log(LOG_INFO) << "flyBstate:init() " << _action.actor->getId() << " cameraPos " << _action.cameraPosition;
 	if (_initialized == true)
 		return;
 
@@ -712,7 +715,7 @@ void ProjectileFlyBState::think()
 	_battleSave->getBattleState()->clearMouseScrollingState();
 	Camera* const camera = _parent->getMap()->getCamera();
 
-	// TODO refactoring: Store the projectile in this state instead of getting it from the map each time.
+	// TODO: refactoring, Store the projectile in this state instead of getting it from the map each time.
 	if (_parent->getMap()->getProjectile() == NULL)
 	{
 		if (_action.type == BA_AUTOSHOT
@@ -727,16 +730,25 @@ void ProjectileFlyBState::think()
 		{
 			createNewProjectile();
 
-			if (_action.cameraPosition.z != -1)
+			if (_action.cameraPosition.z != -1) // this ought already be in Map draw, as camera follows projectile from barrel of weapon
 			{
 				camera->setMapOffset(_action.cameraPosition);
 
 //				_parent->getMap()->invalidate();
-				_parent->getMap()->draw(); // kL
+				_parent->getMap()->draw();
 			}
 		}
 		else // think() FINISH.
 		{
+			//Log(LOG_INFO) << "ProjectileFlyBState::think() -> finish " << _action.actor->getId();
+			//Log(LOG_INFO) << ". cameraPosition " << _action.cameraPosition;
+			if (_action.actor->getFaction() != _battleSave->getSide() // rf ->
+				&& Options::battleSmoothCamera == true)
+			{
+				std::map<int, Position>* rfShotList = _battleSave->getTileEngine()->getRfShotList();
+				_action.cameraPosition = rfShotList->at(_action.actor->getId()); // note The shotList vector will be cleared in BattlescapeGame::think() after all BattleStates have popped.
+			}
+
 			if (_action.cameraPosition.z != -1)
 //				&& _action.waypoints.size() < 2)
 			{
@@ -747,7 +759,7 @@ void ProjectileFlyBState::think()
 					|| _action.type == BA_AIMEDSHOT)
 				{
 					//Log(LOG_INFO) << "ProjectileFlyBState::think() FINISH: resetting Camera to original pos";
-					if (camera->getPauseAfterShot() == true)
+					if (camera->getPauseAfterShot() == true) // TODO: move 'pauseAfterShot' to the BattleAction struct.
 					{
 						camera->setPauseAfterShot(false);
 
@@ -759,7 +771,7 @@ void ProjectileFlyBState::think()
 					_action.cameraPosition = Position(0,0,-1); // reset.
 
 //					_parent->getMap()->invalidate();
-					_parent->getMap()->draw(); // kL
+					_parent->getMap()->draw();
 				}
 			}
 
@@ -783,7 +795,7 @@ void ProjectileFlyBState::think()
 			if (_unit->isOut_t() == false
 //				_unit->isOut() == false
 				&& _action.type != BA_HIT)	// huh? -> ie. melee & psi attacks shouldn't even get in here. But code needs cosmetic surgery .....
-			{								// actually, Melee *does* get in here; but probably not Psi.
+			{
 				_unit->setStatus(STATUS_STANDING);
 			}
 
