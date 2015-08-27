@@ -1961,7 +1961,9 @@ bool TileEngine::reactionShot(
 		&& action.actor->spendTimeUnits(action.TU) == true)
 	{
 		action.TU = 0;
+
 //		if (action.actor->getFaction() != FACTION_HOSTILE)
+		_battleSave->getBattleState()->getMap()->getCamera()->centerOnPosition(action.actor->getPosition());
 		action.cameraPosition = _battleSave->getBattleState()->getMap()->getCamera()->getMapOffset();
 
 		_battleSave->getBattleGame()->statePushBack(new UnitTurnBState( // moved to ProjectileFlyBState, post-cosmetics
