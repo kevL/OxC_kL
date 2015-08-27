@@ -972,6 +972,7 @@ void BattlescapeGame::handleAI(BattleUnit* const unit)
 /**
  * Handles the result of non target actions like priming a grenade or performing
  * a melee attack or using a medikit.
+ * @note The action is set up in ActionMenuState.
  */
 void BattlescapeGame::handleNonTargetAction()
 {
@@ -979,9 +980,7 @@ void BattlescapeGame::handleNonTargetAction()
 	{
 		_currentAction.cameraPosition = Position(0,0,-1);
 
-		bool
-			showWarning = false,
-			useArg = false;
+		int showWarning = 0;
 
 		// NOTE: These actions are done partly in ActionMenuState::btnActionMenuClick() and
 		// this subsequently handles a greater or lesser proportion of the resultant niceties.
@@ -993,7 +992,7 @@ void BattlescapeGame::handleNonTargetAction()
 				if (_currentAction.actor->spendTimeUnits(_currentAction.TU) == false)
 				{
 					_currentAction.result = "STR_NOT_ENOUGH_TIME_UNITS";
-					showWarning = true;
+					showWarning = 1;
 				}
 				else
 				{
@@ -1002,25 +1001,24 @@ void BattlescapeGame::handleNonTargetAction()
 					if (_currentAction.value == -1)
 					{
 						_currentAction.result = "STR_GRENADE_IS_DEACTIVATED";
-						showWarning = true;
+						showWarning = 1;
 					}
 					else if (_currentAction.value == 0)
 					{
 						_currentAction.result = "STR_GRENADE_IS_ACTIVATED";
-						showWarning = true;
+						showWarning = 1;
 					}
 					else
 					{
 						_currentAction.result = "STR_GRENADE_IS_ACTIVATED_";
-						showWarning = true;
-						useArg = true;
+						showWarning = 2;
 					}
 				}
 			break;
 
 			case BA_USE:
 				if (_currentAction.result.empty() == false)
-					showWarning = true;
+					showWarning = 1;
 				else if (_currentAction.targetUnit != NULL)
 				{
 					_battleSave->reviveUnit(_currentAction.targetUnit);
@@ -1030,16 +1028,16 @@ void BattlescapeGame::handleNonTargetAction()
 
 			case BA_LAUNCH:
 				if (_currentAction.result.empty() == false)
-					showWarning = true;
+					showWarning = 1;
 			break;
 
 			case BA_HIT:
 				if (_currentAction.result.empty() == false)
-					showWarning = true;
+					showWarning = 1;
 				else if (_currentAction.actor->spendTimeUnits(_currentAction.TU) == false)
 				{
 					_currentAction.result = "STR_NOT_ENOUGH_TIME_UNITS";
-					showWarning = true;
+					showWarning = 1;
 				}
 				else
 				{
@@ -1053,7 +1051,7 @@ void BattlescapeGame::handleNonTargetAction()
 
 			case BA_DROP:
 				if (_currentAction.result.empty() == false)
-					showWarning = true;
+					showWarning = 1;
 				else
 				{
 //					if (_currentAction.actor->getPosition().z > 0) // effectively done in applyGravity()
@@ -1069,7 +1067,7 @@ void BattlescapeGame::handleNonTargetAction()
 
 			case BA_EXECUTE:
 				if (_currentAction.result.empty() == false)
-					showWarning = true;
+					showWarning = 1;
 				else if (_currentAction.targetUnit != NULL)
 				{
 					executeUnit();
@@ -1080,18 +1078,15 @@ void BattlescapeGame::handleNonTargetAction()
 		}
 
 
-		if (showWarning == true)
-		{
-			if (useArg == true)
-				_parentState->warning(
-									_currentAction.result,
-									_currentAction.value);
-			else
-				_parentState->warning(_currentAction.result);
+		if (showWarning == 1)
+			_parentState->warning(_currentAction.result);
+		else if (showWarning == 2)
+			_parentState->warning(
+								_currentAction.result,
+								true,
+								_currentAction.value);
 
-			_currentAction.result.clear();
-		}
-
+		_currentAction.result.clear();
 		_currentAction.type = BA_NONE;
 		_parentState->updateSoldierInfo();
 	}

@@ -4554,7 +4554,8 @@ int TileEngine::unitOpensDoor(
 	Position
 		pos,
 		posDoor;
-	MapDataType part;
+	MapDataType part = O_FLOOR; // avoid vc++ linker warning.
+	bool calcTu = false;
 	int
 		ret = Tile::DR_NONE,
 		tuCost = 0,
@@ -4661,9 +4662,7 @@ int TileEngine::unitOpensDoor(
 								else
 									part = O_WESTWALL;
 
-								tuCost = tileDoor->getTuCostTile(
-																part,
-																unit->getMoveTypeUnit());
+								calcTu = true;
 							}
 							else if (ret == Tile::DR_OPEN_METAL)
 							{
@@ -4671,15 +4670,10 @@ int TileEngine::unitOpensDoor(
 												posDoor,
 												part);
 
-								tuCost = tileDoor->getTuCostTile(
-																part,
-																unit->getMoveTypeUnit());
+								calcTu = true;
 							}
 							else if (ret == Tile::DR_ERR_TU)
-								tuCost = tileDoor->getTuCostTile(
-																part,
-																unit->getMoveTypeUnit());
-							//Log(LOG_INFO) << ". . ret = " << ret << ", part = " << part << ", tuCost = " << tuCost;
+								calcTu = true;
 
 							break;
 						}
@@ -4690,8 +4684,13 @@ int TileEngine::unitOpensDoor(
 	}
 
 	//Log(LOG_INFO) << "tuCost = " << tuCost;
-	if (tuCost != 0) // TODO: This should really check the return from openDoor() - 'cause some doors may be 0tu to open.
+	if (calcTu == true)
 	{
+		tuCost = tileDoor->getTuCostTile(
+										part,
+										unit->getMoveTypeUnit());
+		//Log(LOG_INFO) << ". . ret = " << ret << ", part = " << part << ", tuCost = " << tuCost;
+
 		if (_battleSave->getBattleGame()->checkReservedTu(
 														unit,
 														tuCost) == true)
@@ -4709,7 +4708,7 @@ int TileEngine::unitOpensDoor(
 							unit->getPosition(),
 							true);
 
-					// look from the other side, may need check reaction fire
+					// look from the other side, may need to check reaction fire
 					// This seems redundant but hey maybe it removes now-unseen units from a unit's visible-units vector ....
 					const std::vector<BattleUnit*>* const hostileUnits = unit->getHostileUnits();
 					for (size_t
@@ -5973,14 +5972,16 @@ bool TileEngine::psiAttack(BattleAction* const action)
 		{
 			std::string info;
 			if (action->type == BA_PSIPANIC)
-				info = "STR_PANIC";
+				info = "STR_PANIC_";
 			else if (action->type == BA_PSICONFUSE)
-				info = "STR_CONFUSE";
+				info = "STR_CONFUSE_";
 			else
-				info = "STR_CONTROL";
+				info = "STR_CONTROL_";
 
+			//Log(LOG_INFO) << "te:psiAttack() success = " << success;
 			_battleSave->getBattleState()->warning(
 												info,
+												true,
 												success);
 
 			if (victim->getOriginalFaction() == FACTION_PLAYER

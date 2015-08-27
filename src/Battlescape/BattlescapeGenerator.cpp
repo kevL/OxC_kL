@@ -3594,7 +3594,7 @@ bool BattlescapeGenerator::selectPosition( // private.
 }
 
 /**
- * Adds a craft (or UFO) to the map, and tries to add a landing zone type block
+ * Adds a craft or UFO to the map and tries to add a landing zone type block
  * underneath it.
  * @param craftBlock	- pointer to the MapBlock for the craft in question
  * @param scriptCommand	- pointer to the script command to pull info from
@@ -3609,50 +3609,60 @@ bool BattlescapeGenerator::addCraft( // private.
 	rectCraft.w = static_cast<Uint16>(craftBlock->getSizeX());
 	rectCraft.h = static_cast<Uint16>(craftBlock->getSizeY());
 
-	// TODO: wants casting ...
 	int
-		x,y;
-	bool placed = selectPosition(
-							scriptCommand->getRects(),
-							x,y,
-							rectCraft.w,
-							rectCraft.h);
+		get_x,
+		get_y;
 
-	if (placed == true)
+	if (selectPosition(
+					scriptCommand->getRects(),
+					get_x,
+					get_y,
+					static_cast<int>(rectCraft.w),
+					static_cast<int>(rectCraft.h)) == true)
 	{
-		rectCraft.x = static_cast<Sint16>(x);
-		rectCraft.y = static_cast<Sint16>(y);
+		rectCraft.x = static_cast<Sint16>(get_x);
+		rectCraft.y = static_cast<Sint16>(get_y);
 		rectCraft.w /= 10;
 		rectCraft.h /= 10;
 
-		for (
+		const size_t
+			rC_x = static_cast<size_t>(get_x),
+			rC_y = static_cast<size_t>(get_y),
+			rC_w = static_cast<size_t>(rectCraft.w),
+			rC_h = static_cast<size_t>(rectCraft.h);
+
+		MapBlock* block;
+
+		for (size_t
 				x = 0;
-				x != rectCraft.w;
+				x != rC_w;
 				++x)
 		{
-			for (
+			for (size_t
 					y = 0;
-					y != rectCraft.h;
+					y != rC_h;
 					++y)
 			{
-				_landingzone[rectCraft.x + x]
-							[rectCraft.y + y] = true;
+				_landingzone[rC_x + x]
+							[rC_y + y] = true;
 
-				MapBlock* const block = scriptCommand->getNextBlock(_terraRule);
+				block = scriptCommand->getNextBlock(_terraRule);
 				if (block != NULL
-					&& _blocks[rectCraft.x + x]
-							  [rectCraft.y + y] == NULL)
+					&& _blocks[rC_x + x]
+							  [rC_y + y] == NULL)
 				{
-					_blocks[rectCraft.x + x]
-						   [rectCraft.y + y] = block;
+					_blocks[rC_x + x]
+						   [rC_y + y] = block;
 
 					--_blocksLeft;
 				}
 			}
 		}
+
+		return true;
 	}
 
-	return placed;
+	return false;
 }
 
 /**

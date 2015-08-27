@@ -139,7 +139,7 @@ int MapBlock::getSizeZ() const
 /**
  * Gets whether this MapBlock is from a particular group.
  * @param group - the group to check for
- * @return, true if block is defined in the specified group
+ * @return, true if block is defined in @a group
  */
 bool MapBlock::isInGroup(int group) const
 {

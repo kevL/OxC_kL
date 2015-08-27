@@ -367,7 +367,8 @@ private:
 		/// Show warning message.
 		void warning(
 				const std::string& message,
-				const int arg = 0);
+				bool useArg = false,
+				int arg = 0);
 
 		/// Displays a popup window.
 		void popup(State* state);
