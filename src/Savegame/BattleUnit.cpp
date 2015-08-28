@@ -2495,16 +2495,17 @@ void BattleUnit::initTu(
 	}
 	else
 	{
-		int tu = std::min(
-					_stats.tu,
-					static_cast<int>(Round(static_cast<double>(_stats.tu * getStrength())
-										 / static_cast<double>(getCarriedWeight()))));
+		int tu = _stats.tu;
+
+		const int overBurden = getCarriedWeight() - getStrength();
+		if (overBurden > 0)
+			tu -= overBurden;
 
 		if (_geoscapeSoldier != NULL) // Each fatal wound to the left or right leg reduces a Soldier's TUs by 10%.
 			tu -= (tu * (getFatalWound(BODYPART_LEFTLEG) + getFatalWound(BODYPART_RIGHTLEG) * 10)) / 100;
 
 		if (hasPanicked == true) // this is how many TU the unit gets to run around/shoot with.
-			tu = _stats.tu * RNG::generate(0,100) / 100;
+			tu = tu * RNG::generate(0,100) / 100;
 
 		_tu = std::max(12, tu);
 
