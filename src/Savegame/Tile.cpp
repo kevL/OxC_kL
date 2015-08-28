@@ -1322,79 +1322,140 @@ void Tile::removeItem(BattleItem* const item)
 }
 
 /**
- * Get the topmost item sprite to draw on the battlescape.
- * @param primed - pointer to primed bool (default NULL)
+ * Gets a corpse-sprite to draw on the battlefield.
+ * @param fired - pointer to set fire true
  * @return, sprite ID in floorobs (-1 none)
  */
-int Tile::getTopItemSprite(bool* ptrPrimed) const
+int Tile::getCorpseSprite(bool* fired) const
 {
-	if (_inventory.empty() == true)
-		return -1;
+	int sprite = -1;
 
-	BattleItem
-		* proxGrenade = NULL,
-		* fuseGrenade = NULL,
-		* solCorpse = NULL;
-
-	if (ptrPrimed != NULL)
-		*ptrPrimed = false;
-
-	for (std::vector<BattleItem*>::const_iterator
-			i = _inventory.begin();
-			i != _inventory.end();
-			++i)
+	if (_inventory.empty() == false)
 	{
-		if ((*i)->getRules()->getBattleType() == BT_PROXYGRENADE
-			&& (*i)->getFuse() > -1)
-		{
-			proxGrenade = *i;
+		*fired = false;
+		int
+			weight = -1,
+			weightTest;
 
-			if (ptrPrimed != NULL)
-				*ptrPrimed = true;
+		for (std::vector<BattleItem*>::const_iterator
+				i = _inventory.begin();
+				i != _inventory.end();
+				++i)
+		{
+			if ((*i)->getUnit() != NULL
+				&& (*i)->getUnit()->getGeoscapeSoldier() != NULL)
+			{
+				weightTest = (*i)->getRules()->getWeight();
+				if (weightTest > weight)
+				{
+					weight = weightTest;
+					sprite = (*i)->getRules()->getFloorSprite();
+
+					if ((*i)->getUnit()->getFireOnUnit() != 0)
+						*fired = true;
+				}
+			}
 		}
 
-		if ((*i)->getRules()->getBattleType() == BT_GRENADE
-			&& (*i)->getFuse() > -1)
+		if (sprite == -1)
 		{
-			fuseGrenade = *i;
+			for (std::vector<BattleItem*>::const_iterator
+					i = _inventory.begin();
+					i != _inventory.end();
+					++i)
+			{
+				if ((*i)->getUnit() != NULL)
+				{
+					weightTest = (*i)->getRules()->getWeight();
+					if (weightTest > weight)
+					{
+						weight = weightTest;
+						sprite = (*i)->getRules()->getFloorSprite();
 
-			if (ptrPrimed != NULL) // try this although it was setup for proxies ... looks good for alien grenades ...
-				*ptrPrimed = true;
-		}
+						if ((*i)->getUnit()->getFireOnUnit() != 0)
+							*fired = true;
+					}
+				}
+			}
 
-		if ((*i)->getUnit() != NULL
-			&& (*i)->getUnit()->getGeoscapeSoldier() != NULL)
-		{
-			solCorpse = *i;
+			if (sprite == -1)
+			{
+				for (std::vector<BattleItem*>::const_iterator
+						i = _inventory.begin();
+						i != _inventory.end();
+						++i)
+				{
+					if ((*i)->getRules()->getBattleType() == BT_CORPSE)
+					{
+						weightTest = (*i)->getRules()->getWeight();
+						if (weightTest > weight)
+						{
+							weight = weightTest;
+							sprite = (*i)->getRules()->getFloorSprite();
+						}
+					}
+				}
+			}
 		}
 	}
 
-	if (proxGrenade != NULL)
-		return proxGrenade->getRules()->getFloorSprite();
+	return sprite;
+}
 
-	if (fuseGrenade != NULL)
-		return fuseGrenade->getRules()->getFloorSprite();
+/**
+ * Get the topmost item sprite to draw on the battlefield.
+ * @param primed - pointer to set primed true
+ * @return, sprite ID in floorobs (-1 none)
+ */
+int Tile::getTopSprite(bool* primed) const
+{
+	int sprite = -1;
 
-	if (solCorpse != NULL)
-		return solCorpse->getRules()->getFloorSprite();
-
-
-	int
-		weight = -1,
-		sprite = -1;
-
-	for (std::vector<BattleItem*>::const_iterator
-			i = _inventory.begin();
-			i != _inventory.end();
-			++i)
+	if (_inventory.empty() == false)
 	{
-		if ((*i)->getRules()->getBattleType() == BT_CORPSE)
-			return (*i)->getRules()->getFloorSprite();
+		BattleItem* grenade = NULL;
+		*primed = false;
+		BattleType bType;
 
-		if ((*i)->getRules()->getWeight() > weight)
+		for (std::vector<BattleItem*>::const_iterator
+				i = _inventory.begin();
+				i != _inventory.end();
+				++i)
 		{
-			weight = (*i)->getRules()->getWeight();
-			sprite = (*i)->getRules()->getFloorSprite();
+			if ((*i)->getFuse() > -1)
+			{
+				bType = (*i)->getRules()->getBattleType();
+				if (bType == BT_PROXYGRENADE)
+				{
+					*primed = true;
+					return (*i)->getRules()->getFloorSprite();
+				}
+				else if (bType == BT_GRENADE)
+				{
+					*primed = true;
+					grenade = *i;
+				}
+			}
+		}
+
+		if (grenade != NULL)
+			return grenade->getRules()->getFloorSprite();
+
+		int
+			weight = -1,
+			weightTest;
+
+		for (std::vector<BattleItem*>::const_iterator
+				i = _inventory.begin();
+				i != _inventory.end();
+				++i)
+		{
+			weightTest = (*i)->getRules()->getWeight();
+			if (weightTest > weight)
+			{
+				weight = weightTest;
+				sprite = (*i)->getRules()->getFloorSprite();
+			}
 		}
 	}
 

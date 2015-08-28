@@ -74,9 +74,7 @@ ProjectileFlyBState::ProjectileFlyBState( // origin is unitTile
 		_initialized(false),
 		_targetFloor(false),
 		_initUnitAnim(0)
-{
-	Log(LOG_INFO) << "flyBstate:cTor " << action.actor->getId() << " cameraPos " << action.cameraPosition;
-}
+{}
 
 /**
  * Sets up a ProjectileFlyBState [1].
@@ -122,7 +120,6 @@ ProjectileFlyBState::~ProjectileFlyBState()
 void ProjectileFlyBState::init()
 {
 	//Log(LOG_INFO) << "ProjectileFlyBState::init()";
-	Log(LOG_INFO) << "flyBstate:init() " << _action.actor->getId() << " cameraPos " << _action.cameraPosition;
 	if (_initialized == true)
 		return;
 
@@ -741,14 +738,14 @@ void ProjectileFlyBState::think()
 		else // think() FINISH.
 		{
 			//Log(LOG_INFO) << "ProjectileFlyBState::think() -> finish " << _action.actor->getId();
-			//Log(LOG_INFO) << ". cameraPosition " << _action.cameraPosition;
-			if (_action.actor->getFaction() != _battleSave->getSide() // rf ->
-				&& Options::battleSmoothCamera == true)
+			if (_action.actor->getFaction() != _battleSave->getSide()	// rf -> note that actionActor there may not be the actual shooter
+				&& Options::battleSmoothCamera == true)					// but he/she will be on the same Side taking a reaction shot.
 			{
 				std::map<int, Position>* rfShotList = _battleSave->getTileEngine()->getRfShotList();
 				_action.cameraPosition = rfShotList->at(_action.actor->getId()); // note The shotList vector will be cleared in BattlescapeGame::think() after all BattleStates have popped.
 			}
 
+			//Log(LOG_INFO) << ". cameraPosition " << _action.cameraPosition;
 			if (_action.cameraPosition.z != -1)
 //				&& _action.waypoints.size() < 2)
 			{

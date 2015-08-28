@@ -287,8 +287,10 @@ protected:
 		/// Removes item
 		void removeItem(BattleItem* const item);
 
-		/// Gets top-most item-sprite
-		int getTopItemSprite(bool* ptrPrimed = NULL) const;
+		/// Gets corpse-sprite.
+		int getCorpseSprite(bool* fired) const;
+		/// Gets top-most item-sprite.
+		int getTopSprite(bool* primed) const;
 		/// Gets if the tile has an unconscious unit in its inventory.
 		int hasUnconsciousUnit(bool playerOnly = true) const;
 

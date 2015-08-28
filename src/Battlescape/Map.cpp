@@ -79,6 +79,7 @@ namespace OpenXcom
 
 bool kL_noReveal = true;
 
+
 /**
  * Sets up a map with the specified size and position.
  * @param game				- pointer to the core Game
@@ -1192,48 +1193,57 @@ void Map::drawTerrain(Surface* const surface) // private.
 											}
 										}
 
-										// draw an item on top of the floor (if any)
-										bool primed;
-										const int sprite = tileWest->getTopItemSprite(&primed);
+										// Draw corpse + item if any on top of the floor
+										bool val;
+										int sprite = tileWest->getCorpseSprite(&val);
 										if (sprite != -1)
 										{
 											srfSprite = _res->getSurfaceSet("FLOOROB.PCK")->getFrame(sprite);
-											srfSprite->blitNShade(
-													surface,
-													posScreen.x - 16,
-													posScreen.y - 8 + tileWest->getTerrainLevel(),
-													shade,
-													true); // halfRight
-
-											if (primed == true)
-//												&& sprite == 21)					// standard proxy grenade
+											if (srfSprite)
 											{
-												srfSprite->setPixelColor(			// cycles from 31 down to 16 and jumps to 31 again
-																	16,28,			// <- the pixel coords
-																	_fuseColor);	// 17 is the pixel's spritesheet color
+												srfSprite->blitNShade(
+														surface,
+														posScreen.x - 16,
+														posScreen.y - 8 + tileWest->getTerrainLevel(),
+														shade,
+														true); // halfRight
 											}
 
-											if (tileWest->isDiscovered(2) == true) // -> maybe, maybe not.
+											if (val == true
+												&& tileWest->isDiscovered(2) == true)
 											{
-												for (std::vector<BattleItem*>::const_iterator
-														i = tileWest->getInventory()->begin();
-														i != tileWest->getInventory()->end();
-														++i)
+												// Draw SMOKE & FIRE if itemUnit is on Fire
+												frame = 4 + (_animFrame / 2);
+												srfSprite = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
+												if (srfSprite)
+													srfSprite->blitNShade(
+															surface,
+															posScreen.x - 16,
+															posScreen.y - 8 + tileWest->getTerrainLevel(),
+															0);
+												break;
+											}
+										}
+
+										sprite = tileWest->getTopSprite(&val);
+										if (sprite != -1)
+										{
+											srfSprite = _res->getSurfaceSet("FLOOROB.PCK")->getFrame(sprite);
+											if (srfSprite)
+											{
+												srfSprite->blitNShade(
+														surface,
+														posScreen.x - 16,
+														posScreen.y - 8 + tileWest->getTerrainLevel(),
+														shade,
+														true); // halfRight
+
+												if (val == true
+													&& tileWest->isDiscovered(2) == true)	// sprite== 21, standard proxy grenade
 												{
-													if ((*i)->getUnit() != NULL
-														&& (*i)->getUnit()->getFireOnUnit() != 0)
-													{
-														// Draw SMOKE & FIRE if itemUnit is on Fire
-														frame = 4 + (_animFrame / 2);
-														srfSprite = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
-														if (srfSprite)
-															srfSprite->blitNShade(
-																	surface,
-																	posScreen.x,
-																	posScreen.y + tile->getTerrainLevel(),
-																	0);
-														break;
-													}
+													srfSprite->setPixelColor(				// cycles from 31 down to 16 and jumps to 31 again
+																		16,28,				// <- the pixel coords
+																		_fuseColor);		// 17 is the proxy-pixel's spritesheet color
 												}
 											}
 										}
@@ -1527,9 +1537,38 @@ void Map::drawTerrain(Surface* const surface) // private.
 									tileShade);
 						}
 
-// Draw Item on Floor if any
-						bool primed;
-						const int sprite = tile->getTopItemSprite(&primed);
+// Draw Corpse + Item on Floor if any
+						bool val;
+						int sprite = tile->getCorpseSprite(&val);
+						if (sprite != -1)
+						{
+							srfSprite = _res->getSurfaceSet("FLOOROB.PCK")->getFrame(sprite);
+							if (srfSprite)
+							{
+								srfSprite->blitNShade(
+										surface,
+										posScreen.x,
+										posScreen.y + tile->getTerrainLevel(),
+										tileShade);
+							}
+
+							if (val == true
+								&& tile->isDiscovered(2) == true)
+							{
+								// Draw SMOKE & FIRE if itemUnit is on Fire
+								frame = 4 + (_animFrame / 2);
+								srfSprite = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
+								if (srfSprite)
+									srfSprite->blitNShade(
+											surface,
+											posScreen.x,
+											posScreen.y + tile->getTerrainLevel(),
+											0);
+								break;
+							}
+						}
+
+						sprite = tile->getTopSprite(&val);
 						if (sprite != -1)
 						{
 							srfSprite = _res->getSurfaceSet("FLOOROB.PCK")->getFrame(sprite);
@@ -1541,36 +1580,12 @@ void Map::drawTerrain(Surface* const surface) // private.
 										posScreen.y + tile->getTerrainLevel(),
 										tileShade);
 
-								if (primed == true)
-//									&& sprite == 21)					// standard proxy grenade
+								if (val == true
+									&& tile->isDiscovered(2) == true)	// sprite== 21, standard proxy grenade
 								{
 									srfSprite->setPixelColor(			// cycles from 31 down to 16 and jumps to 31 again
 														16,28,			// <- the pixel coords
-														_fuseColor);	// 17 is the pixel's spritesheet color
-								}
-							}
-
-							if (tile->isDiscovered(2) == true)
-							{
-								for (std::vector<BattleItem*>::const_iterator
-										i = tile->getInventory()->begin();
-										i != tile->getInventory()->end();
-										++i)
-								{
-									if ((*i)->getUnit() != NULL
-										&& (*i)->getUnit()->getFireOnUnit() != 0)
-									{
-										// Draw SMOKE & FIRE if itemUnit is on Fire
-										frame = 4 + (_animFrame / 2);
-										srfSprite = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
-										if (srfSprite)
-											srfSprite->blitNShade(
-													surface,
-													posScreen.x,
-													posScreen.y + tile->getTerrainLevel(),
-													0);
-										break;
-									}
+														_fuseColor);	// 17 is the proxy-pixel's spritesheet color
 								}
 							}
 						}
