@@ -273,6 +273,8 @@ protected:
 		void setUnit(
 				BattleUnit* const unit,
 				const Tile* const tileBelow = NULL);
+		/// Sets a unit transitorily on this Tile.
+		void setUnitOnly(BattleUnit* const unit);
 		/**
 		 * Gets the (alive) unit on this tile.
 		 * @return, pointer to a BattleUnit

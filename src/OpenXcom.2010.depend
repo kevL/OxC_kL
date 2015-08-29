@@ -4641,7 +4641,7 @@
 1440518251 f:\git\openxcom\src\savegame\savedbattlegame.h
 	"BattleUnit.h"
 
-1440163202 f:\git\openxcom\src\savegame\battleunit.h
+1440798426 f:\git\openxcom\src\savegame\battleunit.h
 	"SavedGame.h"
 	"Soldier.h"
 	"../Battlescape/BattlescapeGame.h"
@@ -5406,7 +5406,7 @@
 
 1440359613 f:\git\openxcom\src\savegame\battleitem.h
 
-1440720833 f:\git\openxcom\src\savegame\tile.h
+1440739483 f:\git\openxcom\src\savegame\tile.h
 	"BattleUnit.h"
 	"../Battlescape/Position.h"
 	"../Ruleset/MapData.h"
@@ -5442,7 +5442,7 @@
 1440092817 f:\git\openxcom\src\battlescape\battlestate.h
 	"BattlescapeGame.h"
 
-1440700972 f:\git\openxcom\src\battlescape\map.h
+1440816280 f:\git\openxcom\src\battlescape\map.h
 	"Position.h"
 	"../Engine/InteractiveSurface.h"
 
@@ -5542,7 +5542,7 @@
 1440469594 f:\git\openxcom\src\battlescape\unitturnbstate.h
 	"BattleState.h"
 
-1440459095 f:\git\openxcom\src\battlescape\unitwalkbstate.h
+1440742597 f:\git\openxcom\src\battlescape\unitwalkbstate.h
 	"BattlescapeGame.h"
 	"BattleState.h"
 
@@ -5963,7 +5963,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1440722101 source:f:\git\openxcom\src\battlescape\map.cpp
+1440816413 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	"BattlescapeMessage.h"
 	"BattlescapeState.h"
@@ -6324,7 +6324,7 @@
 	"../Savegame/BattleUnit.h"
 	"../Savegame/SavedBattleGame.h"
 
-1440614327 source:f:\git\openxcom\src\battlescape\unitwalkbstate.cpp
+1440805595 source:f:\git\openxcom\src\battlescape\unitwalkbstate.cpp
 	"UnitWalkBState.h"
 	"BattlescapeState.h"
 	"Camera.h"
@@ -8440,7 +8440,7 @@
 	"../Ruleset/RuleItem.h"
 	"../Savegame/SavedBattleGame.h"
 
-1440724349 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1440805139 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	"BattleItem.h"
 	"SavedGame.h"
@@ -8628,7 +8628,7 @@
 	"TerrorSite.h"
 	"../Engine/Language.h"
 
-1440720855 source:f:\git\openxcom\src\savegame\tile.cpp
+1440739440 source:f:\git\openxcom\src\savegame\tile.cpp
 	"Tile.h"
 	"BattleItem.h"
 	"SerializationHelper.h"

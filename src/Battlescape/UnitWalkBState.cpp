@@ -152,7 +152,8 @@ void UnitWalkBState::think()
 	//Log(LOG_INFO) << ". _onScreen = " << _onScreen;
 
 
-// _oO **** STATUS WALKING **** Oo_ // #2
+/* _oO **** STATUS WALKING **** Oo_ */// #2
+
 	if (_unit->getStatus() == STATUS_WALKING
 		|| _unit->getStatus() == STATUS_FLYING)
 	{
@@ -177,11 +178,14 @@ void UnitWalkBState::think()
 		}
 
 
-	// _oO **** STATUS STANDING end **** Oo_ // #3
+/* _oO **** STATUS STANDING end **** Oo_ */// #3
+
 		// kL_note: walkPhase reset as the unit completes its transition to the next tile
 		if (_unit->getStatus() == STATUS_STANDING)
 		{
 			//Log(LOG_INFO) << "STATUS_STANDING_end in UnitWalkBState _WALKING or _FLYING !!!" ;
+			clearTilesLink(true);
+
 //			if (_unit->getVisible())
 			if (_onScreen == true)
 			{
@@ -209,13 +213,14 @@ void UnitWalkBState::think()
 				//Log(LOG_INFO) << ". . doStatusStand_end() FALSE return";
 				return;
 			}
-			else if (_unit->getFaction() == FACTION_PLAYER
+
+			if (_unit->getFaction() == FACTION_PLAYER
 				&& _parent->getPanicHandled() == true)
 			{
 				_parent->getBattlescapeState()->updateHostileHotcons();
 			}
 		}
-		else if (_onScreen == true) // still walking ... make sure the unit sprites are up to date
+		else if (_onScreen == true) // keep walking ... make sure the unit sprites are up to date
 		{
 			//Log(LOG_INFO) << ". _onScreen : still walking ...";
 //			if (_pf->getStrafeMove() == true) // NOTE: This could be trimmed, because I had to make tanks use getFaceDirection() in UnitSprite::drawRoutine2() anyway ...
@@ -244,7 +249,8 @@ void UnitWalkBState::think()
 	}
 
 
-// _oO **** STATUS STANDING **** Oo_ // #1 & #4
+/* _oO **** STATUS STANDING **** Oo_ */// #1 & #4
+
 	if (_unit->getStatus() == STATUS_STANDING
 		|| _unit->getStatus() == STATUS_PANICKING)
 	{
@@ -254,40 +260,40 @@ void UnitWalkBState::think()
 			//Log(LOG_INFO) << ". . doStatusStand() FALSE return";
 			return;
 		}
-		else // Destination is not valid until *after* doStatusStand() runs.
-		{
-//			if (_unit->getVisible())
-			if (_onScreen == true)
-			{
-				//Log(LOG_INFO) << ". onScreen";
-				const int pos_z = _unit->getPosition().z;
 
-				if (_unit->getFaction() != FACTION_PLAYER
-					&& _walkCam->isOnScreen(_unit->getPosition()) == false)
+		// Destination is not valid until *after* doStatusStand() runs.
+//		if (_unit->getVisible())
+		if (_onScreen == true)
+		{
+			//Log(LOG_INFO) << ". onScreen";
+			const int pos_z = _unit->getPosition().z;
+
+			if (_unit->getFaction() != FACTION_PLAYER
+				&& _walkCam->isOnScreen(_unit->getPosition()) == false)
+			{
+				_walkCam->centerOnPosition(_unit->getPosition());
+			}
+			else if (_walkCam->isOnScreen(_unit->getPosition()) == true)
+			{
+				//Log(LOG_INFO) << ". cam->onScreen";
+				int dest_z = _unit->getDestination().z;
+				//Log(LOG_INFO) << ". dest_z == pos_z : " << (dest_z == pos_z);
+				//Log(LOG_INFO) << ". dest_z > pos_z : " << (dest_z > pos_z);
+				//Log(LOG_INFO) << ". _walkCam->getViewLevel() < pos_z : " << (_walkCam->getViewLevel() < pos_z);
+				if (dest_z == pos_z
+					|| (dest_z > pos_z
+						&& _walkCam->getViewLevel() < dest_z))
 				{
-					_walkCam->centerOnPosition(_unit->getPosition());
-				}
-				else if (_walkCam->isOnScreen(_unit->getPosition()) == true)
-				{
-					//Log(LOG_INFO) << ". cam->onScreen";
-					int dest_z = _unit->getDestination().z;
-					//Log(LOG_INFO) << ". dest_z == pos_z : " << (dest_z == pos_z);
-					//Log(LOG_INFO) << ". dest_z > pos_z : " << (dest_z > pos_z);
-					//Log(LOG_INFO) << ". _walkCam->getViewLevel() < pos_z : " << (_walkCam->getViewLevel() < pos_z);
-					if (dest_z == pos_z
-						|| (dest_z > pos_z
-							&& _walkCam->getViewLevel() < dest_z))
-					{
-						//Log(LOG_INFO) << ". . setViewLevel(pos_z)";
-						_walkCam->setViewLevel(pos_z);
-					}
+					//Log(LOG_INFO) << ". . setViewLevel(pos_z)";
+					_walkCam->setViewLevel(pos_z);
 				}
 			}
 		}
 	}
 
 
-// _oO **** STATUS TURNING **** Oo_
+/* _oO **** STATUS TURNING **** Oo_ */
+
 	if (_unit->getStatus() == STATUS_TURNING) // turning during walking costs no tu
 	{
 		//Log(LOG_INFO) << "STATUS_TURNING : " << _unit->getId();
@@ -434,9 +440,10 @@ bool UnitWalkBState::doStatusStand() // private.
 			staCost;
 		//Log(LOG_INFO) << ". tuCost = " << tuCost;
 
-		const Tile* const destTile = _battleSave->getTile(dest);
+		Tile* const destTile = _battleSave->getTile(dest);
+
 		// kL_note: should this include neutrals? (ie != FACTION_PLAYER; see also 32tu inflation...)
-		if (   destTile != NULL
+		if (destTile != NULL // would hate to see what happens if destTile=NULL, nuclear war no doubt.
 			&& destTile->getFire() > 0
 			&& _unit->getFaction() != FACTION_PLAYER
 			&& _unit->getArmor()->getDamageModifier(DT_IN) > 0.f)
@@ -609,14 +616,14 @@ bool UnitWalkBState::doStatusStand() // private.
 		}
 
 		//Log(LOG_INFO) << ". check size for obstacles";
-		const int unitSize = _unit->getArmor()->getSize() - 1;
+		const int armorSize = _unit->getArmor()->getSize() - 1;
 		for (int
-				x = unitSize;
+				x = armorSize;
 				x != -1;
 				--x)
 		{
 			for (int
-					y = unitSize;
+					y = armorSize;
 					y != -1;
 					--y)
 			{
@@ -636,9 +643,7 @@ bool UnitWalkBState::doStatusStand() // private.
 						|| (belowDest != NULL
 							&& unitBelowMyWay != NULL
 							&& unitBelowMyWay != _unit
-							&& unitBelowMyWay->getFloatHeight()
-										+ unitBelowMyWay->getHeight()
-										- belowDest->getTerrainLevel() >= 24 + 4)))
+							&& unitBelowMyWay->getHeight(true) - belowDest->getTerrainLevel() > 27)))
 							// 4+ voxels poking into the tile above, we don't kick people in the head here at XCom.
 							// kL_note: this appears to be only +2 in Pathfinding....
 				{
@@ -677,6 +682,9 @@ bool UnitWalkBState::doStatusStand() // private.
 							tileBelow);
 //							_onScreen);
 
+			establishTilesLink();
+
+
 //			if (_unit->getMoveSound() != -1)
 //			{
 				//Log(LOG_INFO) << "doStatusStand() playSound";
@@ -712,29 +720,24 @@ bool UnitWalkBState::doStatusStand() // private.
 bool UnitWalkBState::doStatusWalk() // private.
 {
 	//Log(LOG_INFO) << "***** UnitWalkBState::doStatusWalk() : " << _unit->getId();
-	const Tile* tileBelow;
-//	Position pos = _unit->getPosition();
-
-	if (_battleSave->getTile(_unit->getDestination())->getUnit() == NULL  // next tile must be not occupied
+	if (_battleSave->getTile(_unit->getDestination())->getUnit() == NULL // next tile must be not occupied
 		// kL_note: and, if not flying, the position directly below the tile must not be occupied...
 		// Had that happen with a sectoid left standing in the air because a cyberdisc was 2 levels below it.
 		// btw, these have probably been already checked...
 		|| _battleSave->getTile(_unit->getDestination())->getUnit() == _unit)
 	{
 		//Log(LOG_INFO) << ". WalkBState, keepWalking()";
-//		if (_unit->getMoveSound() == -1)
 		playMovementSound();
 
-//		bool onScreenBoundary = (_unit->getVisible() && _parent->getMap()->getCamera()->isOnScreen(_unit->getPosition(), true, size, true));
-//		_unit->keepWalking(tileBelow, onScreenBoundary); // advances the phase
-		tileBelow = _battleSave->getTile(_unit->getPosition() + Position(0,0,-1));
 		_unit->keepWalking( // advances _walkPhase
-						tileBelow,
+						_battleSave->getTile(_unit->getPosition() + Position(0,0,-1)),
 						_onScreen);
 	}
 	else if (_falling == false)
 	{
 		//Log(LOG_INFO) << ". WalkBState, !falling Abort path";
+		clearTilesLink(false);
+
 		_unit->lookAt( // turn to blocking unit
 				_unit->getDestination(),
 				_unit->getTurretType() != -1);
@@ -747,36 +750,26 @@ bool UnitWalkBState::doStatusWalk() // private.
 	// unit moved from one tile to the other, update the tiles & investigate new flooring
 	if (_tileSwitchDone == false
 		&& _unit->getPosition() != _unit->getLastPosition())
-		// ( _pos != _lastpos ) <- set equal at Start, _walkPhase == 0.
-		// this clicks over in keepWalking(_walkPhase == middle)
-		// rougly _walkPhase == 4
-		// when _pos sets equal to _destination.
-		// So. How does _falling ever equate TRUE, if it has to be flagged on _walkPhase == 0 only?
 	{
-//		if (!_parent->getMap()->getCamera()->isOnScreen(_unit->getPosition(), true, size, false) && _unit->getFaction() != FACTION_PLAYER && _unit->getVisible())
-
 		//Log(LOG_INFO) << ". tile switch from _lastpos to _destination";
-		// BattleUnit::startWalking() sets _lastpos = _pos, then
-		// BattleUnit::keepWalking (_walkPhase == middle) sets _pos = _destination
 		_tileSwitchDone = true;
 
 		bool fallCheck = true;
-//		Position posSized;
+		const Tile* tileBelow;
 
-		const int unitSize = _unit->getArmor()->getSize() - 1;
+		const int armorSize = _unit->getArmor()->getSize() - 1;
 		for (int
-				x = unitSize;
+				x = armorSize;
 				x != -1;
 				--x)
 		{
 			for (int
-					y = unitSize;
+					y = armorSize;
 					y != -1;
 					--y)
 			{
-//				posSized = pos + Position(x,y,0);
 				tileBelow = _battleSave->getTile(_unit->getPosition() + Position(x,y,-1));
-				if (_battleSave->getTile(_unit->getPosition() + Position(x,y,0))->hasNoFloor(tileBelow) == false) // _unit->getMovementType() == MT_FLY ||
+				if (_battleSave->getTile(_unit->getPosition() + Position(x,y,0))->hasNoFloor(tileBelow) == false)
 				{
 					//Log(LOG_INFO) << ". . . hasFloor ( fallCheck set FALSE )";
 					fallCheck = false;
@@ -784,39 +777,31 @@ bool UnitWalkBState::doStatusWalk() // private.
 
 				//Log(LOG_INFO) << ". . remove unit from previous tile";
 				_battleSave->getTile(_unit->getLastPosition() + Position(x,y,0))->setUnit(NULL);
-			}
-		} // -> might move to doStatusStand_end()
+				//Log(LOG_INFO) << ". . set unit on new tile";
+				_battleSave->getTile(_unit->getPosition() + Position(x,y,0))->setUnit(		// note: Tile will take each of unit's quadrants, but the Unit will associate only the last tile, at quad 0,0;
+																					_unit,	// the previous quadrant-associations are overwritten by the last iteration here.
+																					tileBelow);
+				//Log(LOG_INFO) << ". . . NEW unitPos " << _unit->getPosition();
 
-		for (int
-				x = unitSize;
+				_battleSave->getTile(_unit->getLastPosition() + Position(x,y,0))->setUnitOnly(_unit); // IMPORTANT: lastTile transiently holds onto this unit (all quads) for Map drawing.
+			}
+		}
+/*		for (int // moved up^
+				x = armorSize;
 				x != -1;
 				--x)
 		{
 			for (int
-					y = unitSize;
+					y = armorSize;
 					y != -1;
 					--y)
 			{
 				//Log(LOG_INFO) << ". . set unit on new tile";
-//				posSized = pos + Position(x,y,0);
 				_battleSave->getTile(_unit->getPosition() + Position(x,y,0))
-										->setUnit(
-												_unit,
-												_battleSave->getTile(_unit->getPosition() + Position(x,y,-1)));
+										->setUnit(_unit, _battleSave->getTile(_unit->getPosition() + Position(x,y,-1)));
 				//Log(LOG_INFO) << ". . . NEW unitPos " << _unit->getPosition();
-
-//				Tile* const nextTile = _battleSave->getTile(_unit->getPosition() + Position(x,y,0));
-//				nextTile->setUnit(
-//								_unit,
-//								_battleSave->getTile(_unit->getPosition() + Position(x,y,-1)));
-
-//				if (_unit->getFaction() == FACTION_PLAYER)	// This ensures that a unit getting hit by RF will be in a discovered/visible Tile.
-//				{											// ... although CalcFOV should handle it, the latter has problems especially on top-level tiling.
-//					nextTile->setTileVisible();				// ->fixed. 'void' tiles were not being saved to file as 'discovered'
-//					nextTile->setDiscovered(true, 2);
-//				}
 			}
-		}
+		} */
 
 		_falling = fallCheck
 				&& _unit->getPosition().z != 0
@@ -825,15 +810,13 @@ bool UnitWalkBState::doStatusWalk() // private.
 		if (_falling == true)
 		{
 			//Log(LOG_INFO) << ". falling";
-//			pos = _unit->getPosition();
-
 			for (int
-					x = unitSize;
+					x = armorSize;
 					x != -1;
 					--x)
 			{
 				for (int
-						y = unitSize;
+						y = armorSize;
 						y != -1;
 						--y)
 				{
@@ -843,6 +826,8 @@ bool UnitWalkBState::doStatusWalk() // private.
 						&& tileBelow->getUnit() != NULL)
 					{
 						//Log(LOG_INFO) << ". . . another unit already occupies lower tile";
+						clearTilesLink(true);
+
 						_falling = false;
 
 						_pf->dequeuePath();
@@ -870,7 +855,6 @@ bool UnitWalkBState::doStatusStand_end() // private.
 {
 	//Log(LOG_INFO) << "***** UnitWalkBState::doStatusStand_end() : " << _unit->getId();
 //	_tileSwitchDone = false;
-
 	if (_unit->getFaction() != FACTION_PLAYER)
 		_unit->setUnitVisible(false);
 	else
@@ -1397,6 +1381,55 @@ bool UnitWalkBState::groundCheck() const // private.
 	}
 
 	return false;
+}
+
+/**
+ * Establishes unit's transient link(s) to its destination Tile(s).
+ */
+void UnitWalkBState::establishTilesLink() const // private.
+{
+	const int armorSize = _unit->getArmor()->getSize() - 1;
+	for (int
+			x = armorSize;
+			x != -1;
+			--x)
+	{
+		for (int
+				y = armorSize;
+				y != -1;
+				--y)
+		{
+			_battleSave->getTile(_unit->getDestination() + Position(x,y,0))->setUnitOnly(_unit);
+		}
+	}
+}
+
+/**
+ * Clears unit's transient link(s) to other Tile(s).
+ * @param origin - true if previous tile is cleared; false for destination tile
+ */
+void UnitWalkBState::clearTilesLink(bool origin) const // private.
+{
+	Position pos;
+	if (origin == true)
+		pos = _unit->getLastPosition();
+	else
+		pos = _unit->getDestination();
+
+	const int armorSize = _unit->getArmor()->getSize() - 1;
+	for (int
+			x = armorSize;
+			x != -1;
+			--x)
+	{
+		for (int
+				y = armorSize;
+				y != -1;
+				--y)
+		{
+			_battleSave->getTile(pos + Position(x,y,0))->setUnitOnly(NULL);
+		}
+	}
 }
 
 }

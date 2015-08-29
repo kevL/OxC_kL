@@ -1243,7 +1243,7 @@ void Tile::animateTile()
 /**
  * Get the number of frames the fire or smoke animation is off-sync.
  * @note To void fire and smoke animations of different tiles moving nice in
- * sync - it looks fake.
+ * sync - that'd look fake.
  * @return, offset
  */
 int Tile::getAnimationOffset() const
@@ -1252,8 +1252,8 @@ int Tile::getAnimationOffset() const
 }
 
 /**
- * Get the sprite of a certain part of the tile.
- * @param part - this Tile's part to get a sprite for
+ * Get the sprite of a certain part of this Tile.
+ * @param part - tile part to get a sprite for
  * @return, pointer to the sprite
  */
 Surface* Tile::getSprite(int part) const
@@ -1268,7 +1268,7 @@ Surface* Tile::getSprite(int part) const
 }
 
 /**
- * Sets a unit on this tile.
+ * Sets a unit on this Tile.
  * @param unit		- pointer to a BattleUnit
  * @param tileBelow	- pointer to the Tile below this Tile (default NULL)
  */
@@ -1285,7 +1285,17 @@ void Tile::setUnit(
 }
 
 /**
- * Add an item on the tile.
+ * Sets a unit transitorily on this Tile.
+ * @param unit		- pointer to a BattleUnit
+ * @param tileBelow	- pointer to the Tile below this Tile (default NULL)
+ */
+void Tile::setUnitOnly(BattleUnit* const unit)
+{
+	_unit = unit;
+}
+
+/**
+ * Add an item on this Tile.
  * @param item		- pointer to a BattleItem
  * @param ground	- pointer to RuleInventory ground-slot
  */
@@ -1300,7 +1310,7 @@ void Tile::addItem(
 }
 
 /**
- * Remove an item from the tile.
+ * Remove an item from this Tile.
  * @param item - pointer to a BattleItem
  */
 void Tile::removeItem(BattleItem* const item)

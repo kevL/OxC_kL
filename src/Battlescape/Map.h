@@ -44,6 +44,7 @@ class ResourcePack;
 class SavedBattleGame;
 class Surface;
 class SurfaceSet;
+class Tile;
 class Timer;
 
 
@@ -115,6 +116,7 @@ private:
 		* _arrow,
 		* _arrow_kneel;
 	SurfaceSet* _projectileSet;
+	Tile* _tile;
 	Timer
 		* _scrollMouseTimer,
 		* _scrollKeyTimer;
@@ -125,15 +127,15 @@ private:
 	///
 	void drawTerrain(Surface* const surface);
 	///
-	bool hilltopRedraw(
-			const BattleUnit& unit,
-			const Position& posMap,
-			int& pixelOffset_x,
-			int& pixelOffset_y) const;
+//	bool hilltopRedraw(
+//			const BattleUnit& unit,
+//			const Position& posMap,
+//			int& pixelOffset_x,
+//			int& pixelOffset_y) const;
 	///
 	int getTerrainLevel(
 			const Position& pos,
-			int unitSize);
+			int unitSize) const;
 
 
 	public:
@@ -190,8 +192,8 @@ private:
 
 		/// Calculates the offset of a soldier, when it is walking in the middle of 2 tiles.
 		void calculateWalkingOffset(
-				BattleUnit* const unit,
-				Position* offset);
+				const BattleUnit* const unit,
+				Position* const offset) const;
 
 		/// Sets the 3D cursor type.
 		void setCursorType(

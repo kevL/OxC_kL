@@ -443,16 +443,21 @@ private:
 		_hidingForTurn,
 		_kneeled,
 		_revived,
-		_stopShot,	// to stop a unit from firing/throwing if it spots a new opponent during turning
-		_takenExpl,	// used to stop large units from taking damage for each part.
+		_stopShot, // to stop a unit from firing/throwing if it spots a new opponent during turning
+		_takenExpl, // used to stop large units from taking damage for each part.
 		_takenFire,
 		_visible;
 	int
 		_aimPhase,
 		_coverReserve,
 		_armorHp[PARTS_ARMOR],
-		_direction,
-		_directionTurret,
+		_dir,
+		_dirTurret,
+		_dirTo,
+		_dirToTurret,
+		_dirFace, // used only during strafing moves
+		_dirTurn, // used for determining 180 degree turn direction
+		_dirVertical,
 		_energy,
 		_expBravery,
 		_expFiring,
@@ -461,7 +466,6 @@ private:
 		_expPsiStrength,
 		_expReactions,
 		_expThrowing,
-		_faceDirection, // used only during strafing moves
 		_fallPhase,
 		_fatalWounds[PARTS_BODY],
 		_fire,
@@ -474,12 +478,8 @@ private:
 		_drugDose,
 		_spinPhase,
 		_stunLevel,
-		_toDirection,
-		_toDirectionTurret,
 		_tu,
-		_turnDir,	// used for determining 180 degree turn direction
 		_turnsExposed,
-		_verticalDirection,
 		_walkPhase,
 		_mcStrength,
 		_mcSkill;
@@ -493,9 +493,9 @@ private:
 	Tile* _tile;
 
 	Position
-		_lastPos,
 		_pos,
-		_destination;
+		_posLast,
+		_posDest;
 	UnitFaction
 		_faction,
 		_originalFaction,
@@ -643,6 +643,10 @@ private:
 		void keepWalking(
 				const Tile* const tileBelow,
 				bool cache);
+		/// Calculates the mid- and end-phases of walking.
+		void walkPhaseCutoffs(
+				int& midPhase,
+				int& endPhase) const;
 		/// Gets the walking phase for animation and sound.
 		int getWalkPhase() const;
 		/// Gets the walking phase for diagonal walking.
@@ -1145,7 +1149,7 @@ private:
 		void putDown();
 
 		/// Sets this BattleUnit's turn direction when spinning 180 degrees.
-		void setTurnDirection(const int turnDir);
+		void setTurnDirection(int dir);
 
 		/// Sets this BattleUnit as having just revived during a Turnover.
 		void setRevived(bool revived = true);

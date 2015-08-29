@@ -90,6 +90,11 @@ private:
 	/// Checks if there is ground below when unit is falling.
 	bool groundCheck() const;
 
+	/// Establishes unit's transient link(s) to its destination Tile(s).
+	void establishTilesLink() const;
+	/// Clears unit's transient link(s) to other Tile(s).
+	void clearTilesLink(bool origin) const;
+
 
 	public:
 		/// Creates a new UnitWalkBState class.

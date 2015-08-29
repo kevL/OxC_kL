@@ -74,13 +74,13 @@ BattleUnit::BattleUnit(
 		_turretType(-1),
 		_tile(NULL),
 		_pos(Position()),
-		_lastPos(Position()),
-		_direction(0),
-		_toDirection(0),
-		_directionTurret(0),
-		_toDirectionTurret(0),
-		_verticalDirection(0),
-		_faceDirection(-1),
+		_posLast(Position()),
+		_dir(0),
+		_dirTo(0),
+		_dirTurret(0),
+		_dirToTurret(0),
+		_dirVertical(0),
+		_dirFace(-1),
 		_status(STATUS_STANDING),
 		_walkPhase(0),
 		_fallPhase(0),
@@ -115,7 +115,7 @@ BattleUnit::BattleUnit(
 		_takenExpl(false),
 		_takenFire(false),
 		_diedByFire(false),
-		_turnDir(0),
+		_dirTurn(0),
 		_mcStrength(0),
 		_mcSkill(0),
 		_drugDose(0),
@@ -240,14 +240,14 @@ BattleUnit::BattleUnit(
 		_rankInt(-1),
 		_turretType(-1),
 		_pos(Position()),
-		_lastPos(Position()),
+		_posLast(Position()),
 		_tile(NULL),
-		_direction(0),
-		_toDirection(0),
-		_directionTurret(0),
-		_toDirectionTurret(0),
-		_verticalDirection(0),
-		_faceDirection(-1),
+		_dir(0),
+		_dirTo(0),
+		_dirTurret(0),
+		_dirToTurret(0),
+		_dirVertical(0),
+		_dirFace(-1),
 		_status(STATUS_STANDING),
 		_walkPhase(0),
 		_fallPhase(0),
@@ -287,7 +287,7 @@ BattleUnit::BattleUnit(
 		_aboutToDie(false),
 		_activeHand("STR_RIGHT_HAND"),
 		_diedByFire(false),
-		_turnDir(0),
+		_dirTurn(0),
 		_mcStrength(0),
 		_mcSkill(0),
 		_drugDose(0),
@@ -441,10 +441,10 @@ void BattleUnit::load(const YAML::Node& node)
 
 	_id					= node["id"]					.as<int>(_id);
 	_pos				= node["position"]				.as<Position>(_pos);
-	_direction			=
-	_toDirection		= node["direction"]				.as<int>(_direction);
-	_directionTurret	=
-	_toDirectionTurret	= node["directionTurret"]		.as<int>(_directionTurret);
+	_dir				=
+	_dirTo				= node["direction"]				.as<int>(_dir);
+	_dirTurret			=
+	_dirToTurret		= node["directionTurret"]		.as<int>(_dirTurret);
 	_tu					= node["tu"]					.as<int>(_tu);
 	_health				= node["health"]				.as<int>(_health);
 	_stunLevel			= node["stunLevel"]				.as<int>(_stunLevel);
@@ -580,8 +580,8 @@ YAML::Node BattleUnit::save() const
 
 	node["status"]			= static_cast<int>(_status);
 	node["position"]		= _pos;
-	node["direction"]		= _direction;
-	node["directionTurret"]	= _directionTurret;
+	node["direction"]		= _dir;
+	node["directionTurret"]	= _dirTurret;
 	node["tu"]				= _tu;
 	node["health"]			= _health;
 	node["stunLevel"]		= _stunLevel;
@@ -752,7 +752,7 @@ void BattleUnit::setPosition(
 		bool updateLast)
 {
 	if (updateLast == true)
-		_lastPos = _pos;
+		_posLast = _pos;
 
 	_pos = pos;
 }
@@ -772,7 +772,7 @@ const Position& BattleUnit::getPosition() const
  */
 const Position& BattleUnit::getLastPosition() const
 {
-	return _lastPos;
+	return _posLast;
 }
 
 /**
@@ -781,7 +781,7 @@ const Position& BattleUnit::getLastPosition() const
  */
 const Position& BattleUnit::getDestination() const
 {
-	return _destination;
+	return _posDest;
 }
 
 /**
@@ -794,13 +794,13 @@ void BattleUnit::setDirection(
 		int dir,
 		bool turret)
 {
-	_direction =
-	_toDirection = dir;
+	_dir =
+	_dirTo = dir;
 
 	if (turret == true
 		|| _turretType == -1)
 	{
-		_directionTurret = dir;
+		_dirTurret = dir;
 	}
 }
 
@@ -810,7 +810,7 @@ void BattleUnit::setDirection(
  */
 int BattleUnit::getDirection() const
 {
-	return _direction;
+	return _dir;
 }
 
 /**
@@ -820,7 +820,7 @@ int BattleUnit::getDirection() const
  */
 void BattleUnit::setFaceDirection(int dir)
 {
-	_faceDirection = dir;
+	_dirFace = dir;
 }
 
 /**
@@ -830,7 +830,7 @@ void BattleUnit::setFaceDirection(int dir)
  */
 int BattleUnit::getFaceDirection() const
 {
-	return _faceDirection;
+	return _dirFace;
 }
 
 /**
@@ -839,7 +839,7 @@ int BattleUnit::getFaceDirection() const
  */
 int BattleUnit::getTurretDirection() const
 {
-	return _directionTurret;
+	return _dirTurret;
 }
 
 /**
@@ -848,7 +848,7 @@ int BattleUnit::getTurretDirection() const
  */
 void BattleUnit::setTurretDirection(int dir)
 {
-	_directionTurret = dir;
+	_dirTurret = dir;
 }
 
 /**
@@ -857,7 +857,7 @@ void BattleUnit::setTurretDirection(int dir)
  */
 int BattleUnit::getTurretToDirection() const
 {
-	return _toDirectionTurret;
+	return _dirToTurret;
 }
 
 /**
@@ -867,7 +867,7 @@ int BattleUnit::getTurretToDirection() const
  */
 int BattleUnit::getVerticalDirection() const
 {
-	return _verticalDirection;
+	return _dirVertical;
 }
 
 /**
@@ -900,13 +900,13 @@ void BattleUnit::startWalking(
 		const Tile* const tileBelow)
 {
 	_walkPhase = 0;
-	_destination = dest;
-	_lastPos = _pos;
+	_posLast = _pos;
+	_posDest = dest;
 
 	if (dir >= Pathfinding::DIR_UP)
 	{
 		_status = STATUS_FLYING; // controls walking sound in UnitWalkBState, what else
-		_verticalDirection = dir;
+		_dirVertical = dir;
 
 		if (_tile->getMapData(O_FLOOR) != NULL
 			&& _tile->getMapData(O_FLOOR)->isGravLift() == true)
@@ -921,14 +921,14 @@ void BattleUnit::startWalking(
 		_status = STATUS_FLYING;
 		_floating = true;
 		_kneeled = false;
-		_direction = dir;
+		_dir = dir;
 	}
 	else
 	{
 		_status = STATUS_WALKING;
 		_floating =
 		_kneeled = false;
-		_direction = dir;
+		_dir = dir;
 	}
 }
 
@@ -947,46 +947,26 @@ void BattleUnit::keepWalking(
 		midPhase,
 		endPhase;
 
-	if (_verticalDirection != 0)
-	{
-		midPhase = 4;
-		endPhase = 8;
-	}
-	else // diagonal walking takes double the steps
-	{
-		endPhase = 8 + 8 * (_direction % 2);
-
-		if (_armor->getSize() > 1)
-		{
-			if (_direction < 1 || _direction > 5) // dir = 0,7,6,5 (up x3 or left)
-				midPhase = endPhase;
-			else if (_direction == 5)
-				midPhase = 12;
-			else if (_direction == 1)
-				midPhase = 5;
-			else
-				midPhase = 1;
-		}
-		else
-			midPhase = endPhase / 2;
-	}
-
 	if (cache == false) // ie. not onScreen
 	{
-		midPhase = 1; // kL: Mc'd units offscreen won't move without this (tho they turn, as if to start walking)
+		midPhase = 1;
 		endPhase = 2;
 	}
+	else
+		walkPhaseCutoffs(
+					midPhase,
+					endPhase);
 
-	if (_walkPhase == midPhase) // we assume we reached our destination tile
-		// This is actually a drawing hack, so soldiers are not overlapped by floortiles
-		// kL_note: which they (large units) are half the time anyway... fixed.
-		_pos = _destination;
+	if (_walkPhase == midPhase) // assume unit reached the destination tile
+		// This is actually a drawing hack so soldiers are not overlapped by floortiles
+		// kL_note: which they (large units) are half the time anyway ... fixed. uh yeah, no.
+		_pos = _posDest;
 
 	if (_walkPhase >= endPhase) // officially reached the destination tile
 	{
 		_status = STATUS_STANDING;
 		_walkPhase =
-		_verticalDirection = 0;
+		_dirVertical = 0;
 
 		if (_floating == true
 			&& _tile->hasNoFloor(tileBelow) == false)
@@ -994,10 +974,10 @@ void BattleUnit::keepWalking(
 			_floating = false;
 		}
 
-		if (_faceDirection > -1) // finish strafing move facing the correct way.
+		if (_dirFace > -1) // finish strafing move facing the correct way.
 		{
-			_direction = _faceDirection;
-			_faceDirection = -1;
+			_dir = _dirFace;
+			_dirFace = -1;
 		}
 
 		// motion points calculation for the motion scanner blips
@@ -1015,6 +995,40 @@ void BattleUnit::keepWalking(
 	}
 
 	_cacheInvalid = cache;
+}
+
+/**
+ * Calculates the mid- and end-phases of walking.
+ * @param midPhase - reference to the midPhase var
+ * @param endPhase - reference to the endPhase var
+ */
+void BattleUnit::walkPhaseCutoffs(
+		int& midPhase,
+		int& endPhase) const
+{
+	if (_dirVertical != 0)
+	{
+		midPhase = 4;
+		endPhase = 8;
+	}
+	else // diagonal walking takes double the steps
+	{
+		endPhase = 8 + 8 * (_dir % 2);
+
+		if (_armor->getSize() > 1)
+		{
+			if (_dir < 1 || _dir > 5) // dir = 0,7,6 (upward)
+				midPhase = endPhase;
+			else if (_dir == 5)
+				midPhase = 12;
+			else if (_dir == 1)
+				midPhase = 5;
+			else
+				midPhase = 1;
+		}
+		else
+			midPhase = endPhase / 2;
+	}
 }
 
 /**
@@ -1048,14 +1062,14 @@ void BattleUnit::lookAt(
 
 	if (turret == true)
 	{
-		_toDirectionTurret = dir;
-		if (_toDirectionTurret != _directionTurret)
+		_dirToTurret = dir;
+		if (_dirToTurret != _dirTurret)
 			_status = STATUS_TURNING;
 	}
 	else
 	{
-		_toDirection = dir;
-		if (_toDirection != _direction)
+		_dirTo = dir;
+		if (_dirTo != _dir)
 			_status = STATUS_TURNING;
 	}
 }
@@ -1071,16 +1085,16 @@ void BattleUnit::lookAt(
 {
 	if (force == true)
 	{
-		_toDirection = direction;
-		_direction = direction;
+		_dirTo = direction;
+		_dir = direction;
 	}
 	else
 	{
 		if (direction < 0 || direction > 7)
 			return;
 
-		_toDirection = direction;
-		if (_toDirection != _direction)
+		_dirTo = direction;
+		if (_dirTo != _dir)
 			_status = STATUS_TURNING;
 	}
 }
@@ -1095,23 +1109,23 @@ void BattleUnit::turn(bool turret)
 
 	if (turret == true)
 	{
-		if (_directionTurret == _toDirectionTurret)
+		if (_dirTurret == _dirToTurret)
 		{
 			_status = STATUS_STANDING;
 			return;
 		}
 
-		delta = _toDirectionTurret - _directionTurret;
+		delta = _dirToTurret - _dirTurret;
 	}
 	else
 	{
-		if (_direction == _toDirection)
+		if (_dir == _dirTo)
 		{
 			_status = STATUS_STANDING;
 			return;
 		}
 
-		delta = _toDirection - _direction;
+		delta = _dirTo - _dir;
 	}
 
 	if (delta != 0) // duh
@@ -1119,65 +1133,65 @@ void BattleUnit::turn(bool turret)
 		if (delta > 0)
 		{
 			if (delta < 5
-				&& _turnDir != -1)
+				&& _dirTurn != -1)
 			{
 				if (turret == false)
 				{
-					++_direction;
+					++_dir;
 					if (_turretType > -1)
-						++_directionTurret;
+						++_dirTurret;
 				}
 				else
-					++_directionTurret;
+					++_dirTurret;
 			}
 			else // > 4
 			{
 				if (turret == false)
 				{
-					--_direction;
+					--_dir;
 					if (_turretType > -1)
-						--_directionTurret;
+						--_dirTurret;
 				}
 				else
-					--_directionTurret;
+					--_dirTurret;
 			}
 		}
 		else
 		{
 			if (delta > -5
-				&& _turnDir != 1)
+				&& _dirTurn != 1)
 			{
 				if (turret == false)
 				{
-					--_direction;
+					--_dir;
 					if (_turretType > -1)
-						--_directionTurret;
+						--_dirTurret;
 				}
 				else
-					--_directionTurret;
+					--_dirTurret;
 			}
 			else // < -4
 			{
 				if (turret == false)
 				{
-					++_direction;
+					++_dir;
 					if (_turretType > -1)
-						++_directionTurret;
+						++_dirTurret;
 				}
 				else
-					++_directionTurret;
+					++_dirTurret;
 			}
 		}
 
-		if (_direction < 0)
-			_direction = 7;
-		else if (_direction > 7)
-			_direction = 0;
+		if (_dir < 0)
+			_dir = 7;
+		else if (_dir > 7)
+			_dir = 0;
 
-		if (_directionTurret < 0)
-			_directionTurret = 7;
-		else if (_directionTurret > 7)
-			_directionTurret = 0;
+		if (_dirTurret < 0)
+			_dirTurret = 7;
+		else if (_dirTurret > 7)
+			_dirTurret = 0;
 
 		if (_visible == true
 			|| _faction == FACTION_PLAYER) // kL_note: Faction_player should *always* be _visible...
@@ -1188,10 +1202,10 @@ void BattleUnit::turn(bool turret)
 
 	if (turret == true)
 	{
-		 if (_toDirectionTurret == _directionTurret)
+		 if (_dirToTurret == _dirTurret)
 			_status = STATUS_STANDING;
 	}
-	else if (_toDirection == _direction
+	else if (_dirTo == _dir
 		|| _status == STATUS_UNCONSCIOUS)	// kL_note: I didn't know Unconscious could turn...
 											// learn something new every day.
 											// It's used when reviving unconscious soldiers;
@@ -1477,8 +1491,8 @@ int BattleUnit::damage(
 				}
 			}
 
-			//Log(LOG_INFO) << "BattleUnit::damage() Target was hit from DIR = " << ((relDir - _direction) %8);
-			switch ((relDir - _direction) % 8)
+			//Log(LOG_INFO) << "BattleUnit::damage() Target was hit from DIR = " << ((relDir - _dir) %8);
+			switch ((relDir - _dir) % 8)
 			{
 				case 0:	side = SIDE_FRONT;									break;
 				case 1:	side = RNG::percent(50) ? SIDE_FRONT : SIDE_RIGHT;	break;
@@ -2685,32 +2699,28 @@ void BattleUnit::setTile(
 {
 	_tile = tile;
 
-	if (_tile == NULL)
+	if (_tile != NULL)
 	{
+		if (_status == STATUS_WALKING
+			&& _tile->hasNoFloor(tileBelow) == true
+			&& _moveType == MT_FLY)
+		{
+			_status = STATUS_FLYING;
+			_floating = true;
+		}
+		else if (_status == STATUS_FLYING
+			&& _tile->hasNoFloor(tileBelow) == false
+			&& _dirVertical == 0)
+		{
+			_status = STATUS_WALKING;
+			_floating = false;
+		}
+		else if (_status == STATUS_UNCONSCIOUS)
+			_floating = _moveType == MT_FLY
+					 && _tile->hasNoFloor(tileBelow);
+	}
+	else
 		_floating = false;
-		return;
-	}
-
-
-	if (_status == STATUS_WALKING
-		&& _tile->hasNoFloor(tileBelow)
-		&& _moveType == MT_FLY)
-	{
-		_status = STATUS_FLYING;
-		_floating = true;
-	}
-	else if (_status == STATUS_FLYING
-		&& _tile->hasNoFloor(tileBelow) == false
-		&& _verticalDirection == 0)
-	{
-		_status = STATUS_WALKING;
-		_floating = false;
-	}
-	else if (_status == STATUS_UNCONSCIOUS)
-	{
-		_floating = _moveType == MT_FLY
-				 && _tile->hasNoFloor(tileBelow);
-	}
 }
 
 /**
@@ -4090,7 +4100,7 @@ bool BattleUnit::checkViewSector(const Position& pos) const
 		dx = pos.x - _pos.x,
 		dy = _pos.y - pos.y;
 
-	switch (_direction)
+	switch (_dir)
 	{
 		case 0:
 			if (dx + dy > -1 && dy - dx > -1)
@@ -4229,7 +4239,7 @@ void BattleUnit::initDeathSpin()
  */
 void BattleUnit::contDeathSpin()
 {
-	int dir = _direction;
+	int dir = _dir;
 	if (dir == 3)	// when facing player, 1 rotation left;
 					// unless started facing player, in which case 2 rotations left
 	{
@@ -4667,11 +4677,11 @@ void BattleUnit::putDown()
 
 /**
  * Sets this BattleUnit's turn direction when spinning 180 degrees.
- * @param turnDir - 1 counterclockwise; -1 clockwise
+ * @param dir - 1 counterclockwise; -1 clockwise
  */
-void BattleUnit::setTurnDirection(const int turnDir)
+void BattleUnit::setTurnDirection(int dir)
 {
-	_turnDir = turnDir;
+	_dirTurn = dir;
 }
 
 /**
