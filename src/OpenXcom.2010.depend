@@ -5634,7 +5634,7 @@
 1430149550 f:\git\openxcom\src\battlescape\battlescapemessage.h
 	"../Engine/Surface.h"
 
-1440827215 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1440858996 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	"AbortMissionState.h"
 	"ActionMenuState.h"
@@ -6324,7 +6324,7 @@
 	"../Savegame/BattleUnit.h"
 	"../Savegame/SavedBattleGame.h"
 
-1440805595 source:f:\git\openxcom\src\battlescape\unitwalkbstate.cpp
+1440863134 source:f:\git\openxcom\src\battlescape\unitwalkbstate.cpp
 	"UnitWalkBState.h"
 	"BattlescapeState.h"
 	"Camera.h"

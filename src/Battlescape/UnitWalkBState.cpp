@@ -754,10 +754,10 @@ bool UnitWalkBState::doStatusWalk() // private.
 		//Log(LOG_INFO) << ". tile switch from _lastpos to _destination";
 		_tileSwitchDone = true;
 
-		bool fallCheck = true;
+		Tile* tile;
 		const Tile* tileBelow;
-
 		const int armorSize = _unit->getArmor()->getSize() - 1;
+
 		for (int
 				x = armorSize;
 				x != -1;
@@ -768,25 +768,15 @@ bool UnitWalkBState::doStatusWalk() // private.
 					y != -1;
 					--y)
 			{
-				tileBelow = _battleSave->getTile(_unit->getPosition() + Position(x,y,-1));
-				if (_battleSave->getTile(_unit->getPosition() + Position(x,y,0))->hasNoFloor(tileBelow) == false)
-				{
-					//Log(LOG_INFO) << ". . . hasFloor ( fallCheck set FALSE )";
-					fallCheck = false;
-				}
-
 				//Log(LOG_INFO) << ". . remove unit from previous tile";
-				_battleSave->getTile(_unit->getLastPosition() + Position(x,y,0))->setUnit(NULL);
-				//Log(LOG_INFO) << ". . set unit on new tile";
-				_battleSave->getTile(_unit->getPosition() + Position(x,y,0))->setUnit(		// note: Tile will take each of unit's quadrants, but the Unit will associate only the last tile, at quad 0,0;
-																					_unit,	// the previous quadrant-associations are overwritten by the last iteration here.
-																					tileBelow);
-				//Log(LOG_INFO) << ". . . NEW unitPos " << _unit->getPosition();
-
-				_battleSave->getTile(_unit->getLastPosition() + Position(x,y,0))->setUnitOnly(_unit); // IMPORTANT: lastTile transiently holds onto this unit (all quads) for Map drawing.
+				tile = _battleSave->getTile(_unit->getLastPosition() + Position(x,y,0));
+				tile->setUnit(NULL);
+				tile->setUnitOnly(_unit); // IMPORTANT: lastTile transiently holds onto this unit (all quads) for Map drawing.
 			}
 		}
-/*		for (int // moved up^
+
+		bool fallCheck = true;
+		for (int
 				x = armorSize;
 				x != -1;
 				--x)
@@ -796,16 +786,25 @@ bool UnitWalkBState::doStatusWalk() // private.
 					y != -1;
 					--y)
 			{
+				tile = _battleSave->getTile(_unit->getPosition() + Position(x,y,0));
+				tileBelow = _battleSave->getTile(_unit->getPosition() + Position(x,y,-1));
+				if (tile->hasNoFloor(tileBelow) == false)
+				{
+					//Log(LOG_INFO) << ". . . hasFloor ( fallCheck set FALSE )";
+					fallCheck = false;
+				}
+
 				//Log(LOG_INFO) << ". . set unit on new tile";
-				_battleSave->getTile(_unit->getPosition() + Position(x,y,0))
-										->setUnit(_unit, _battleSave->getTile(_unit->getPosition() + Position(x,y,-1)));
+				tile->setUnit(		// note: Tile will take each of unit's quadrants, but the Unit will associate only the last tile, at quad 0,0;
+							_unit,	// the previous quadrant-associations are overwritten by the last iteration here.
+							tileBelow);
 				//Log(LOG_INFO) << ". . . NEW unitPos " << _unit->getPosition();
 			}
-		} */
+		}
 
-		_falling = fallCheck
-				&& _unit->getPosition().z != 0
-				&& _pf->getMoveTypePf() != MT_FLY;
+		_falling = fallCheck == true
+				&& _pf->getMoveTypePf() != MT_FLY
+				&& _unit->getPosition().z != 0;
 
 		if (_falling == true)
 		{
@@ -1410,11 +1409,10 @@ void UnitWalkBState::establishTilesLink() const // private.
  */
 void UnitWalkBState::clearTilesLink(bool origin) const // private.
 {
-	Position pos;
-	if (origin == true)
-		pos = _unit->getLastPosition();
-	else
-		pos = _unit->getDestination();
+	std::vector<Position> posCurrent;
+	Position
+		pos = _unit->getPosition(),
+		posTest;
 
 	const int armorSize = _unit->getArmor()->getSize() - 1;
 	for (int
@@ -1427,7 +1425,33 @@ void UnitWalkBState::clearTilesLink(bool origin) const // private.
 				y != -1;
 				--y)
 		{
-			_battleSave->getTile(pos + Position(x,y,0))->setUnitOnly(NULL);
+			posCurrent.push_back(pos + Position(x,y,0));
+		}
+	}
+
+	if (origin == true)
+		pos = _unit->getLastPosition();
+	else
+		pos = _unit->getDestination();
+
+	for (int
+			x = armorSize;
+			x != -1;
+			--x)
+	{
+		for (int
+				y = armorSize;
+				y != -1;
+				--y)
+		{
+			posTest = pos + Position(x,y,0);
+			if (std::find(
+						posCurrent.begin(),
+						posCurrent.end(),
+						posTest) == posCurrent.end())
+			{
+				_battleSave->getTile(posTest)->setUnitOnly(NULL);
+			}
 		}
 	}
 }
