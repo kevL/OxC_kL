@@ -1238,18 +1238,18 @@ UnitFaction BattleUnit::getFaction() const
 /**
  * Sets the unit's cache flag.
  * @note Set to true when the unit has to be redrawn from scratch.
- * @param cache	- pointer to cache surface to use, NULL to redraw from scratch
- * @param part	- unit part to cache (default 0)
+ * @param cache		- pointer to cache surface to use, NULL to redraw from scratch
+ * @param quadrant	- unit quadrant to cache (default 0)
  */
 void BattleUnit::setCache(
 		Surface* cache,
-		int part)
+		int quadrant)
 {
 	if (cache == NULL)
 		_cacheInvalid = true;
 	else
 	{
-		_cache[static_cast<size_t>(part)] = cache;
+		_cache[static_cast<size_t>(quadrant)] = cache;
 		_cacheInvalid = false;
 	}
 }
@@ -1258,18 +1258,18 @@ void BattleUnit::setCache(
  * Check if the unit is still cached in the Map cache.
  * @note When the unit needs to animate it needs to be re-cached.
  * @param invalid	- pointer to true if the cache is invalid
- * @param part		- unit part to check (default 0)
+ * @param quadrant	- unit quadrant to check (default 0)
  * @return, pointer to the cache Surface used
  */
 Surface* BattleUnit::getCache(
 		bool* invalid,
-		int part) const
+		int quadrant) const
 {
-	if (part < 0) part = 0;
+	if (quadrant < 0) quadrant = 0;
 
 	*invalid = _cacheInvalid;
 
-	return _cache[static_cast<size_t>(part)];
+	return _cache[static_cast<size_t>(quadrant)];
 }
 
 /**

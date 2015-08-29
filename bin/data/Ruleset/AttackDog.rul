@@ -39,7 +39,7 @@ units:
       reactions: 66
       firing: 0
       throwing: 0
-      strength: 6
+      strength: 9
       psiStrength: 40
       psiSkill: 0
       melee: 99

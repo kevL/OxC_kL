@@ -674,11 +674,11 @@ private:
 		/// Sets this unit's cache and the cached flag.
 		void setCache(
 				Surface* cache,
-				int part = 0);
+				int quadrant = 0);
 		/// Gets this unit's cache for the battlescape.
 		Surface* getCache(
 				bool* invalid,
-				int part = 0) const;
+				int quadrant = 0) const;
 		/// Gets unit sprite recolors values.
 		const std::vector<std::pair<Uint8, Uint8> >& getRecolor() const;
 

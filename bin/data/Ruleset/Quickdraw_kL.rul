@@ -150,7 +150,7 @@ invs:
       STR_QD: 11
   - id: STR_QD
 #    x: 192
-    x: 176
+    x: 172
     y: 104
     slots:
       - [0, 0]

@@ -4,7 +4,7 @@
 items:
   - type: STR_COMBAT_KNIFE
     size: 0.1
-    costBuy: 125
+    costBuy: 325
     costSell: 45
     weight: 2
     bigSprite: 61
@@ -12,6 +12,7 @@ items:
     handSprite: 144
     meleeSound: 39
     meleeHitSound: 67
+    meleeAnimation: 4
     power: 30
     strengthApplied: true
     damageType: 7
@@ -33,7 +34,7 @@ ufopaedia:
 extraSprites:
   - type: BIGOBS.PCK
     files:
-      61: Resources/CombatKnife/BigCombatKnife.png
+      61: Resources/CombatKnife/CombatKnife_alt.png # BigCombatKnife.png
   - type: FLOOROB.PCK
     files:
       76: Resources/CombatKnife/FloorCombatKnife.png
@@ -43,7 +44,14 @@ extraSprites:
     subX: 32
     subY: 40
     files:
-      144: Resources/CombatKnife/HANDOB/HandCombatKnife.png
+      144: Resources/CombatKnife/HandCombatKnife.png
+  - type: HIT.PCK
+    width: 128
+    height: 40
+    subX: 32
+    subY: 40
+    files:
+      4: Resources/CombatKnife/AttackMelee_luna.png
 extraSounds:
   - type: BATTLE.CAT
     files:

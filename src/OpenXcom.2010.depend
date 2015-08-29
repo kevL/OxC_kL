@@ -4641,7 +4641,7 @@
 1440518251 f:\git\openxcom\src\savegame\savedbattlegame.h
 	"BattleUnit.h"
 
-1440798426 f:\git\openxcom\src\savegame\battleunit.h
+1440857613 f:\git\openxcom\src\savegame\battleunit.h
 	"SavedGame.h"
 	"Soldier.h"
 	"../Battlescape/BattlescapeGame.h"
@@ -4650,7 +4650,7 @@
 	"../Ruleset/RuleItem.h"
 	"../Ruleset/RuleUnit.h"
 
-1440700295 f:\git\openxcom\src\battlescape\battlescapegame.h
+1440859482 f:\git\openxcom\src\battlescape\battlescapegame.h
 	"Position.h"
 
 1432586518 f:\git\openxcom\src\battlescape\position.h
@@ -5468,7 +5468,7 @@
 1432984133 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1440713680 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1440859555 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	"AlienBAIState.h"
 	"BattlescapeState.h"
@@ -6097,7 +6097,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1440825641 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
+1440827905 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
 	"Pathfinding.h"
 	"PathfindingNode.h"
 	"PathfindingOpenSet.h"
@@ -8190,7 +8190,7 @@
 	"../Engine/SurfaceSet.h"
 	"../Resource/XcomResourcePack.h"
 
-1440475201 source:f:\git\openxcom\src\resource\xcomresourcepack.cpp
+1440829010 source:f:\git\openxcom\src\resource\xcomresourcepack.cpp
 	"XcomResourcePack.h"
 	"../Engine/Language.h"
 	"../Engine/Sound.h"
@@ -8440,7 +8440,7 @@
 	"../Ruleset/RuleItem.h"
 	"../Savegame/SavedBattleGame.h"
 
-1440817270 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1440857667 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	"BattleItem.h"
 	"SavedGame.h"

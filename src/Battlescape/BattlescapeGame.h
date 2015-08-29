@@ -237,7 +237,7 @@ private:
 		bool playableUnitSelected();
 
 		/// Handles kneeling action.
-		bool kneel(BattleUnit* const bu);
+		bool kneel(BattleUnit* const unit);
 
 		/// Checks for casualties in battle.
 		void checkForCasualties(
@@ -261,9 +261,9 @@ private:
 		bool isBusy() const;
 
 		/// Activates primary action (left click).
-		void primaryAction(const Position& posTarget);
+		void primaryAction(const Position& pos);
 		/// Activates secondary action (right click).
-		void secondaryAction(const Position& posTarget);
+		void secondaryAction(const Position& pos);
 		/// Handler for the blaster launcher button.
 		void launchAction();
 		/// Handler for the psi button.

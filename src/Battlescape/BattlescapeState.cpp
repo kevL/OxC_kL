@@ -1906,19 +1906,19 @@ void BattlescapeState::btnKneelClick(Action*)
 			//Log(LOG_INFO) << "BattlescapeState::btnKneelClick()";
 			if (_battleGame->kneel(unit) == true)
 			{
-				updateSoldierInfo(false);
-
 				_battleGame->getTileEngine()->calculateFOV(
 														unit->getPosition(),
 														true);
-				// need this here, so that my newVis algorithm works without
+				// need that here, so that my newVis algorithm works without
 				// false positives, or true negatives as it were, when a soldier
 				// stands up and walks in one go via UnitWalkBState. Because if
 				// I calculate newVis in kneel() it says 'yeh you see something'
 				// but the soldier wouldn't stop - so newVis has to be calculated
 				// directly in UnitWalkBState.... yet by doing it here on the
 				// btn-press, the enemy visibility indicator should light up.
-				//
+
+				updateSoldierInfo(false);
+
 				// Will check reactionFire in BattlescapeGame::kneel()
 				// no, no it won't.
 				_battleGame->getTileEngine()->checkReactionFire(unit);

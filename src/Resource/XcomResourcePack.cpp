@@ -1003,10 +1003,10 @@ XcomResourcePack::XcomResourcePack(const Ruleset* const rules)
 			++i)
 	{
 		Surface
-			* const surface1 = _sets["HANDOB2.PCK"]->addFrame(i->first),
-			* const surface2 = i->second;
-		surface1->setPalette(surface2->getPalette());
-		surface2->blit(surface1);
+			* const srf1 = _sets["HANDOB2.PCK"]->addFrame(i->first),
+			* const srf2 = i->second;
+		srf1->setPalette(srf2->getPalette());
+		srf2->blit(srf1);
 	}
 
 

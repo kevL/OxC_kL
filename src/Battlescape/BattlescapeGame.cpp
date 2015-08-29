@@ -1244,51 +1244,52 @@ bool BattlescapeGame::playableUnitSelected()
 /**
  * Toggles the kneel/stand status of a unit.
  * TODO: allow Civilian units to kneel when controlled by medikit or by AI.
- * @param bu - pointer to a BattleUnit
+ * @param unit - pointer to a BattleUnit
  * @return, true if the action succeeded
  */
-bool BattlescapeGame::kneel(BattleUnit* const bu)
+bool BattlescapeGame::kneel(BattleUnit* const unit)
 {
 	//Log(LOG_INFO) << "BattlescapeGame::kneel()";
-	if (bu->getGeoscapeSoldier() != NULL
-		&& bu->getFaction() == bu->getOriginalFaction())
+	if (unit->getGeoscapeSoldier() != NULL
+		&& unit->getFaction() == unit->getOriginalFaction())
 	{
-		if (bu->isFloating() == false) // kL_note: This prevents flying soldiers from 'kneeling' .....
+		if (unit->isFloating() == false) // kL_note: This prevents flying soldiers from 'kneeling' .....
 		{
 			int tu;
-			if (bu->isKneeled() == true)
+			if (unit->isKneeled() == true)
 				tu = 10;
 			else
 				tu = 3;
 
-			if (checkReservedTu(bu, tu) == true
+			if (checkReservedTu(unit, tu) == true
 				|| (tu == 3
 					&& _battleSave->getKneelReserved() == true))
 			{
-				if (bu->getTimeUnits() >= tu)
+				if (unit->getTimeUnits() >= tu)
 				{
 					if (tu == 3
 						|| (tu == 10
-							&& bu->spendEnergy(std::max(
+							&& unit->spendEnergy(std::max(
 													0,
-													5 - bu->getArmor()->getAgility())) == true))
+													5 - unit->getArmor()->getAgility())) == true))
 					{
-						bu->spendTimeUnits(tu);
-						bu->kneel(bu->isKneeled() == false);
+						unit->spendTimeUnits(tu);
+						unit->kneel(!unit->isKneeled());
 						// kneeling or standing up can reveal new terrain or units. I guess. -> sure can!
-						// but updateSoldierInfo() also does does calculateFOV(), so ...
-//						getTileEngine()->calculateFOV(bu);
+						// But updateSoldierInfo() also does does calculateFOV(), so ...
+//						getTileEngine()->calculateFOV(unit);
 
 						getMap()->cacheUnits();
-//kL						_parentState->updateSoldierInfo(false); // <- also does calculateFOV() !
-							// wait... shouldn't one of those calcFoV's actually trigger!! ? !
-							// Hopefully it's done after returning, in another updateSoldierInfo... or newVis check.
-							// So.. I put this in BattlescapeState::btnKneelClick() instead; updates will
-							// otherwise be handled by walking or what have you. Doing it this way conforms
-							// updates/FoV checks with my newVis routines.
 
-//kL						getTileEngine()->checkReactionFire(bu);
-							// ditto..
+//						_parentState->updateSoldierInfo(false); // <- also does calculateFOV() !
+						// wait... shouldn't one of those calcFoV's actually trigger!! ? !
+						// Hopefully it's done after returning, in another updateSoldierInfo... or newVis check.
+						// So.. I put this in BattlescapeState::btnKneelClick() instead; updates will
+						// otherwise be handled by walking or what have you. Doing it this way conforms
+						// updates/FoV checks with my newVis routines.
+
+//						getTileEngine()->checkReactionFire(unit);
+						// ditto..
 
 						return true;
 					}
@@ -1304,27 +1305,27 @@ bool BattlescapeGame::kneel(BattleUnit* const bu)
 		else
 			_parentState->warning("STR_ACTION_NOT_ALLOWED_FLOAT");
 	}
-	else if (bu->getGeoscapeSoldier() != NULL) // MC'd xCom agent, trying to stand & walk by AI.
+	else if (unit->getGeoscapeSoldier() != NULL) // MC'd xCom agent, trying to stand & walk by AI.
 	{
 		const int energyCost = std::max(
 									0,
-									5 - bu->getArmor()->getAgility());
+									5 - unit->getArmor()->getAgility());
 
-		if (bu->getTimeUnits() > 9
-			&& bu->getEnergy() >= energyCost)
+		if (unit->getTimeUnits() > 9
+			&& unit->getEnergy() >= energyCost)
 		{
-			bu->spendTimeUnits(10);
-			bu->spendEnergy(energyCost);
+			unit->spendTimeUnits(10);
+			unit->spendEnergy(energyCost);
 
-			bu->kneel(false);
+			unit->kneel(false);
 			getMap()->cacheUnits();
 
 			return true;
 		}
 	}
-	else if (bu->getFaction() == FACTION_PLAYER
-		&& bu->getOriginalFaction() == FACTION_HOSTILE)
-//		&& bu->getUnitRules()->isMechanical() == false) // MOB has Unit-rules
+	else if (unit->getFaction() == FACTION_PLAYER
+		&& unit->getOriginalFaction() == FACTION_HOSTILE)
+//		&& unit->getUnitRules()->isMechanical() == false) // MOB has Unit-rules
 	{
 		_parentState->warning("STR_ACTION_NOT_ALLOWED_ALIEN");
 	}
@@ -2584,14 +2585,14 @@ bool BattlescapeGame::isBusy() const
 
 /**
  * Activates primary action (left click).
- * @param targetPos - reference a Position on the map
+ * @param pos - reference a Position on the map
  */
-void BattlescapeGame::primaryAction(const Position& targetPos)
+void BattlescapeGame::primaryAction(const Position& pos)
 {
 	//Log(LOG_INFO) << "BattlescapeGame::primaryAction()";
 	//if (_battleSave->getSelectedUnit()) Log(LOG_INFO) << ". ID " << _battleSave->getSelectedUnit()->getId();
 	_currentAction.actor = _battleSave->getSelectedUnit();
-	BattleUnit* const targetUnit = _battleSave->selectUnit(targetPos);
+	BattleUnit* const targetUnit = _battleSave->selectUnit(pos);
 
 	if (_currentAction.actor != NULL
 		&& _currentAction.targeting == true)
@@ -2605,8 +2606,8 @@ void BattlescapeGame::primaryAction(const Position& targetPos)
 			{
 				//Log(LOG_INFO) << ". . . . BA_LAUNCH";
 				_parentState->showLaunchButton();
-				_currentAction.waypoints.push_back(targetPos);
-				getMap()->getWaypoints()->push_back(targetPos);
+				_currentAction.waypoints.push_back(pos);
+				getMap()->getWaypoints()->push_back(pos);
 			}
 		}
 		else if (_currentAction.type == BA_USE
@@ -2634,7 +2635,7 @@ void BattlescapeGame::primaryAction(const Position& targetPos)
 													_currentAction.weapon->getRules()->getHitSound())
 												->play(
 													-1,
-													getMap()->getSoundAngle(targetPos));
+													getMap()->getSoundAngle(pos));
 
 							_parentState->getGame()->pushState(new UnitInfoState(
 																			targetUnit,
@@ -2674,7 +2675,7 @@ void BattlescapeGame::primaryAction(const Position& targetPos)
 				if (aLienPsi == true)
 					_currentAction.weapon = _alienPsi;
 
-				_currentAction.target = targetPos;
+				_currentAction.target = pos;
 				_currentAction.TU = _currentAction.actor->getActionTUs(
 																	_currentAction.type,
 																	_currentAction.weapon);
@@ -2777,13 +2778,13 @@ void BattlescapeGame::primaryAction(const Position& targetPos)
 		}
 		else if (Options::battleConfirmFireMode == true
 			&& (_currentAction.waypoints.empty() == true
-				|| targetPos != _currentAction.waypoints.front()))
+				|| pos != _currentAction.waypoints.front()))
 		{
 			_currentAction.waypoints.clear();
-			_currentAction.waypoints.push_back(targetPos);
+			_currentAction.waypoints.push_back(pos);
 
 			getMap()->getWaypoints()->clear();
-			getMap()->getWaypoints()->push_back(targetPos);
+			getMap()->getWaypoints()->push_back(pos);
 		}
 		else
 		{
@@ -2797,7 +2798,7 @@ void BattlescapeGame::primaryAction(const Position& targetPos)
 			getMap()->setCursorType(CT_NONE);
 			_parentState->getGame()->getCursor()->setHidden();
 
-			_currentAction.target = targetPos;
+			_currentAction.target = pos;
 			_currentAction.cameraPosition = getMap()->getCamera()->getMapOffset();
 
 			_states.push_back(new ProjectileFlyBState(
@@ -2856,7 +2857,7 @@ void BattlescapeGame::primaryAction(const Position& targetPos)
 
 				Position screenPixel;
 				getMap()->getCamera()->convertMapToScreen(
-														targetPos,
+														pos,
 														&screenPixel);
 				screenPixel += getMap()->getCamera()->getMapOffset();
 
@@ -2871,7 +2872,7 @@ void BattlescapeGame::primaryAction(const Position& targetPos)
 				Pathfinding::directionToVector(
 											(_currentAction.actor->getDirection() + 4) % 8,
 											&_currentAction.target);
-				_currentAction.target += targetPos;
+				_currentAction.target += pos;
 
 				statePushBack(new UnitTurnBState(
 											this,
@@ -2880,14 +2881,14 @@ void BattlescapeGame::primaryAction(const Position& targetPos)
 			else // handle pathPreview and MOVE
 			{
 				if (allowPreview == true
-					&& (_currentAction.target != targetPos
+					&& (_currentAction.target != pos
 						|| pf->isModCtrl() != modCtrl
 						|| pf->isModAlt() != modAlt))
 				{
 					pf->removePreview();
 				}
 
-				_currentAction.target = targetPos;
+				_currentAction.target = pos;
 				pf->calculate(
 							_currentAction.actor,
 							_currentAction.target);
@@ -2919,23 +2920,23 @@ void BattlescapeGame::primaryAction(const Position& targetPos)
 
 /**
  * Activates secondary action (right click).
- * @param posTarget - reference a Position on the map
+ * @param pos - reference a Position on the map
  */
-void BattlescapeGame::secondaryAction(const Position& posTarget)
+void BattlescapeGame::secondaryAction(const Position& pos)
 {
 	_currentAction.actor = _battleSave->getSelectedUnit();
 
-	if (_currentAction.actor->getPosition() == posTarget)
+	if (_currentAction.actor->getPosition() == pos)
 	{
 		_parentState->btnKneelClick(NULL); // could put just about anything in here Orelly.
 		return;
 	}
 
 	// -= turn to or open door =-
-	_currentAction.target = posTarget;
-	_currentAction.strafe = Options::strafe
+	_currentAction.target = pos;
+	_currentAction.strafe = _currentAction.actor->getTurretType() > -1
 						 && (SDL_GetModState() & KMOD_CTRL) != 0
-						 && _currentAction.actor->getTurretType() > -1;
+						 && Options::strafe == true;
 
 	statePushBack(new UnitTurnBState(
 									this,
@@ -2991,7 +2992,6 @@ void BattlescapeGame::moveUpDown(
 {
 	_currentAction.target = unit->getPosition();
 
-	Pathfinding* const pf = _battleSave->getPathfinding();
 	if (dir == Pathfinding::DIR_UP)
 		++_currentAction.target.z;
 	else
@@ -3000,6 +3000,7 @@ void BattlescapeGame::moveUpDown(
 	getMap()->setCursorType(CT_NONE);
 	_parentState->getGame()->getCursor()->setHidden();
 
+	Pathfinding* const pf = _battleSave->getPathfinding();
 	pf->calculate(
 				_currentAction.actor,
 				_currentAction.target);
