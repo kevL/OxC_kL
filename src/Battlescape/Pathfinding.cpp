@@ -1757,21 +1757,21 @@ bool Pathfinding::canFallDown(const Tile* const tile) const // private
 /**
  * Wrapper for canFallDown() above.
  * @param tile		- pointer to the current Tile
- * @param unitSize	- the size of the unit
+ * @param armorSize	- the size of the unit
  * @return, true if a unit on @a tile can fall to a lower level
  */
 bool Pathfinding::canFallDown( // private
 		const Tile* const tile,
-		int unitSize) const
+		int armorSize) const
 {
 	for (int
 			x = 0;
-			x != unitSize;
+			x != armorSize;
 			++x)
 	{
 		for (int
 				y = 0;
-				y != unitSize;
+				y != armorSize;
 				++y)
 		{
 			if (canFallDown(_battleSave->getTile(tile->getPosition() + Position(x,y,0))) == false)
@@ -1784,8 +1784,8 @@ bool Pathfinding::canFallDown( // private
 
 /**
  * Checks if vertical movement is valid.
- * Either there is a grav lift or the unit can fly and there are no obstructions.
- * @param startPos	- start Position
+ * @note There is a grav lift or the unit can fly and there are no obstructions.
+ * @param posStart	- start position
  * @param dir		- up or down
  * @return,	-1 can't fly
 //			-1 kneeling (stop unless on gravLift)
@@ -1794,18 +1794,18 @@ bool Pathfinding::canFallDown( // private
 			 2 flying (go unless blocked)
  */
 int Pathfinding::validateUpDown(
-		const Position& startPos,
+		const Position& posStart,
 		const int dir)
 {
-	Position destPos;
+	Position posDest;
 	directionToVector(
 					dir,
-					&destPos);
-	destPos += startPos;
+					&posDest);
+	posDest += posStart;
 
 	const Tile
-		* const startTile = _battleSave->getTile(startPos),
-		* const destTile = _battleSave->getTile(destPos);
+		* const startTile = _battleSave->getTile(posStart),
+		* const destTile = _battleSave->getTile(posDest);
 
 	if (destTile == NULL)
 		return 0;
@@ -1825,7 +1825,7 @@ int Pathfinding::validateUpDown(
 		if ((dir == DIR_UP
 				&& destTile->hasNoFloor(startTile))
 			|| (dir == DIR_DOWN
-				&& startTile->hasNoFloor(_battleSave->getTile(startPos + Position(0,0,-1)))))
+				&& startTile->hasNoFloor(_battleSave->getTile(posStart + Position(0,0,-1)))))
 		{
 			return 2; // flying.
 		}
@@ -2148,15 +2148,10 @@ void Pathfinding::setPathingUnit(BattleUnit* const unit)
 {
 	_unit = unit;
 
-	// '_battleAction' is used only to set .strafe and .dash (along w/ Dashing
-	// flag) for Player-controlled units; but also should safely ensure that
-	// nonPlayer-controlled units are flagged false.
 	if (_battleSave->getBattleState() == NULL) // safety for battlescape generation.
 		_battleAction = NULL;
 	else
 		_battleAction = _battleSave->getBattleGame()->getCurrentAction();
-
-//	setInputModifiers(); // -> do that in calculate() so that modifiers remain current.
 
 	if (unit != NULL)
 		setMoveType();
@@ -2174,20 +2169,19 @@ void Pathfinding::setMoveType() // private.
 	if (_Alt == true // this forces soldiers in flyingsuits to walk on (or fall to) the ground.
 		&& _mType == MT_FLY
 		&& _unit->getGeoscapeSoldier() != NULL)
-//		&& (_unit->getGeoscapeSoldier() != NULL
 //			|| _unit->getUnitRules()->isMechanical() == false)	// hovertanks & cyberdiscs always hover.
 //		&& _unit->getRaceString() != "STR_FLOATER"				// floaters always float
 //		&& _unit->getRaceString() != "STR_CELATID"				// celatids always .. float.
 //		&& _unit->getRaceString() != "STR_ETHEREAL")			// Ethereals *can* walk, but they don't like to.
 	{															// Should turn this into Ruleset param: 'alwaysFloat'
-		_mType = MT_WALK;									// or use floatHeight > 0 or something-like-that
+		_mType = MT_WALK;										// or use floatHeight > 0 or something-like-that
 	}
 }
 
 /**
  * Sets keyboard input modifiers.
  */
-void Pathfinding::setInputModifiers() // private.
+void Pathfinding::setInputModifiers()
 {
 	if (_battleSave->getSide() != FACTION_PLAYER
 		|| _battleSave->getBattleGame()->getPanicHandled() == false)

@@ -4889,7 +4889,7 @@ extraStrings:
       STR_ACTION_NOT_ALLOWED_KNEEL: "> kneel <"
       STR_ACTION_NOT_ALLOWED_FLOOR: "> floor <"
       STR_ACTION_NOT_ALLOWED_ROOF: "> roof <"
-      STR_ACTION_NOT_ALLOWED_FLIGHT: "> flight <"
+      STR_ACTION_NOT_ALLOWED_NOFLY: "> nofly <"
       STR_ACTION_NOT_ALLOWED_ALIEN: "> aLien <"
       STR_ACTION_NOT_ALLOWED_PSIONIC: "> psionic <"
       STR_TIME_UNITS_RESERVED: "tu Reserved"

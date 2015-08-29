@@ -1785,22 +1785,29 @@ void BattlescapeState::btnUnitUpClick(Action*)
 	if (playableUnitSelected() == true)
 	{
 		Pathfinding* const pf = _battleSave->getPathfinding();
-		pf->setPathingUnit(_battleSave->getSelectedUnit());
-		const int valid = pf->validateUpDown(
-										_battleSave->getSelectedUnit()->getPosition(),
-										Pathfinding::DIR_UP);
+		pf->setInputModifiers();
 
-		if (valid > 0) // gravLift or flying
+		if (pf->isModAlt() == false)
 		{
-			_battleGame->cancelCurrentAction();
-			_battleGame->moveUpDown(
-								_battleSave->getSelectedUnit(),
-								Pathfinding::DIR_UP);
+			pf->setPathingUnit(_battleSave->getSelectedUnit());
+			const int valid = pf->validateUpDown(
+											_battleSave->getSelectedUnit()->getPosition(),
+											Pathfinding::DIR_UP);
+
+			if (valid > 0) // gravLift or flying
+			{
+				_battleGame->cancelCurrentAction();
+				_battleGame->moveUpDown(
+									_battleSave->getSelectedUnit(),
+									Pathfinding::DIR_UP);
+			}
+			else if (valid == -1)
+				warning("STR_ACTION_NOT_ALLOWED_NOFLY");
+			else
+				warning("STR_ACTION_NOT_ALLOWED_ROOF");
 		}
-		else if (valid == -1) // no flight suit
-			warning("STR_ACTION_NOT_ALLOWED_FLIGHT");
-		else // valid==0 -> blocked by roof
-			warning("STR_ACTION_NOT_ALLOWED_ROOF");
+		else
+			warning("STR_ACTION_NOT_ALLOWED_NOFLY");
 	}
 }
 
@@ -1813,6 +1820,8 @@ void BattlescapeState::btnUnitDownClick(Action*)
 	if (playableUnitSelected() == true)
 	{
 		Pathfinding* const pf = _battleSave->getPathfinding();
+		pf->setInputModifiers();
+
 		pf->setPathingUnit(_battleSave->getSelectedUnit());
 		const int valid = pf->validateUpDown(
 										_battleSave->getSelectedUnit()->getPosition(),
@@ -1825,7 +1834,7 @@ void BattlescapeState::btnUnitDownClick(Action*)
 								_battleSave->getSelectedUnit(),
 								Pathfinding::DIR_DOWN);
 		}
-		else // blocked, floor
+		else
 			warning("STR_ACTION_NOT_ALLOWED_FLOOR");
 	}
 }

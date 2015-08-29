@@ -2540,7 +2540,6 @@ bool BattlescapeGame::cancelCurrentAction(bool force)
 					return true;
 				}
 
-//				_currentAction.clearAction();
 				_currentAction.targeting = false;
 				_currentAction.type = BA_NONE;
 
@@ -2796,12 +2795,10 @@ void BattlescapeGame::primaryAction(const Position& targetPos)
 			}
 
 			getMap()->setCursorType(CT_NONE);
-//			_parentState->getGame()->getCursor()->setVisible(false);	// leave vis 'cause box-cursor won't refresh if mouse is moved while invis.
-			_parentState->getGame()->getCursor()->setHidden();			// yes.
+			_parentState->getGame()->getCursor()->setHidden();
 
 			_currentAction.target = targetPos;
 			_currentAction.cameraPosition = getMap()->getCamera()->getMapOffset();
-			//Log(LOG_INFO) << "BattlescapeGame::primaryAction() setting cameraPosition to mapOffset";
 
 			_states.push_back(new ProjectileFlyBState(
 													this,
@@ -2810,10 +2807,6 @@ void BattlescapeGame::primaryAction(const Position& targetPos)
 			statePushFront(new UnitTurnBState( // first of all turn towards the target
 											this,
 											_currentAction));
-//			}
-			// kL_note: else give message Out-of-TUs, or this must be done elsewhere already...
-			// probably in ProjectileFlyBState... great. not.
-			// I imagine updateSoldierInfo() is done somewhere down the line....... It's done at the end of popState()
 		}
 	}
 	else // select unit, or spin/ MOVE .......
@@ -2879,7 +2872,6 @@ void BattlescapeGame::primaryAction(const Position& targetPos)
 											(_currentAction.actor->getDirection() + 4) % 8,
 											&_currentAction.target);
 				_currentAction.target += targetPos;
-//				_currentAction.strafe = false;
 
 				statePushBack(new UnitTurnBState(
 											this,
@@ -2896,7 +2888,7 @@ void BattlescapeGame::primaryAction(const Position& targetPos)
 				}
 
 				_currentAction.target = targetPos;
-				pf->calculate( // CREATE the Path.
+				pf->calculate(
 							_currentAction.actor,
 							_currentAction.target);
 
@@ -2909,11 +2901,10 @@ void BattlescapeGame::primaryAction(const Position& targetPos)
 						allowPreview = false;
 					}
 
-					if (allowPreview == false) // -= start walking =- //
+					if (allowPreview == false)
 					{
 						getMap()->setCursorType(CT_NONE);
-//						_parentState->getGame()->getCursor()->setVisible(false);	// leave vis 'cause box-cursor won't refresh if mouse is moved while invis.
-						_parentState->getGame()->getCursor()->setHidden();			// yes.
+						_parentState->getGame()->getCursor()->setHidden();
 
 						statePushBack(new UnitWalkBState(
 														this,
@@ -2923,7 +2914,6 @@ void BattlescapeGame::primaryAction(const Position& targetPos)
 			}
 		}
 	}
-	//Log(LOG_INFO) << "bsg:primaryAction() EXIT w/ strafe = " << (int)_currentAction.strafe << " / dash = " << (int)_currentAction.dash;
 	//Log(LOG_INFO) << "BattlescapeGame::primaryAction() EXIT";
 }
 
@@ -2933,13 +2923,11 @@ void BattlescapeGame::primaryAction(const Position& targetPos)
  */
 void BattlescapeGame::secondaryAction(const Position& posTarget)
 {
-	//Log(LOG_INFO) << "BattlescapeGame::secondaryAction()";
 	_currentAction.actor = _battleSave->getSelectedUnit();
 
 	if (_currentAction.actor->getPosition() == posTarget)
 	{
-		// could put just about anything in here Orelly.
-		_parentState->btnKneelClick(NULL);
+		_parentState->btnKneelClick(NULL); // could put just about anything in here Orelly.
 		return;
 	}
 
@@ -2965,15 +2953,14 @@ void BattlescapeGame::launchAction()
 	_currentAction.target = _currentAction.waypoints.front();
 
 	getMap()->setCursorType(CT_NONE);
-//	_parentState->getGame()->getCursor()->setVisible(false);	// leave vis 'cause box-cursor won't refresh if mouse is moved while invis.
-	_parentState->getGame()->getCursor()->setHidden();			// yes.
+	_parentState->getGame()->getCursor()->setHidden();
 
 //	_currentAction.cameraPosition = getMap()->getCamera()->getMapOffset();
 
 	_states.push_back(new ProjectileFlyBState(
 											this,
 											_currentAction));
-	statePushFront(new UnitTurnBState( // first of all turn towards the target
+	statePushFront(new UnitTurnBState(
 									this,
 									_currentAction));
 }
@@ -3004,22 +2991,15 @@ void BattlescapeGame::moveUpDown(
 {
 	_currentAction.target = unit->getPosition();
 
+	Pathfinding* const pf = _battleSave->getPathfinding();
 	if (dir == Pathfinding::DIR_UP)
-	{
-		if ((SDL_GetModState() & KMOD_ALT) != 0)
-			return;
-
 		++_currentAction.target.z;
-	}
 	else
 		--_currentAction.target.z;
 
 	getMap()->setCursorType(CT_NONE);
-//	_parentState->getGame()->getCursor()->setVisible(false);	// leave vis 'cause box-cursor won't refresh if mouse is moved while invis.
-	_parentState->getGame()->getCursor()->setHidden();			// yes.
+	_parentState->getGame()->getCursor()->setHidden();
 
-	Pathfinding* const pf = _battleSave->getPathfinding();
-//	pf->setPathingUnit(_currentAction.actor); // set in BattlescapeState::btnUnitUp/DownClick()
 	pf->calculate(
 				_currentAction.actor,
 				_currentAction.target);

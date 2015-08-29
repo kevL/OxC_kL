@@ -109,12 +109,10 @@ private:
 	/// Determines whether a unit can fall down from this tile.
 	bool canFallDown(
 			const Tile* const tile,
-			int unitSize) const;
+			int armorSize) const;
 
 	/// Sets the movement type for the path.
 	void setMoveType();
-	/// Sets keyboard input modifiers.
-	void setInputModifiers();
 
 	/// Determines the additional TU cost of going one step from
 	/// start to destination if going through a closed UFO door.
@@ -181,7 +179,7 @@ private:
 
 		/// Checks if the movement is valid, for the up/down button.
 		int validateUpDown(
-				const Position& startPos,
+				const Position& posStart,
 				const int dir);
 
 		/// Gets all reachable tiles, based on cost.
@@ -198,6 +196,8 @@ private:
 
 		/// Sets unit in order to exploit low-level pathing functions.
 		void setPathingUnit(BattleUnit* const unit);
+		/// Sets keyboard input modifiers.
+		void setInputModifiers();
 
 		/// Gets the CTRL modifier setting.
 		bool isModCtrl() const;
