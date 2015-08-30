@@ -621,7 +621,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 
 
 	const bool pathPreview = _battleSave->getPathfinding()->isPathPreviewed();
-	NumberText* wpID = NULL;
+	NumberText* wpId = NULL;
 
 	if (_waypoints.empty() == false
 		|| (pathPreview == true
@@ -629,9 +629,9 @@ void Map::drawTerrain(Surface* const surface) // private.
 	{
 		// note: WpID is used for both pathPreview and BL waypoints.
 		// kL_note: Leave them the same color.
-		wpID = new NumberText(15, 15, 20, 30);
-		wpID->setPalette(getPalette());
-		wpID->setColor(1); // white
+		wpId = new NumberText(15, 15, 20, 30);
+		wpId->setPalette(getPalette());
+		wpId->setColor(1); // white
 
 /*		Uint8 wpColor;
 		if (_battleSave->getBattleTerrain() == "DESERT")
@@ -648,7 +648,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 		else
 			wpColor = Palette::blockOffset(0)+1; // white
 
-		wpID->setColor(wpColor); */
+		wpId->setColor(wpColor); */
 	}
 
 
@@ -4086,9 +4086,9 @@ void Map::drawTerrain(Surface* const surface) // private.
 
 							if (_battleSave->getBattleGame()->getCurrentAction()->type == BA_LAUNCH)
 							{
-								wpID->setValue(waypid);
-								wpID->draw();
-								wpID->blitNShade(
+								wpId->setValue(static_cast<unsigned>(waypid));
+								wpId->draw();
+								wpId->blitNShade(
 										surface,
 										posScreen.x + waypXOff,
 										posScreen.y + waypYOff,
@@ -4144,7 +4144,8 @@ void Map::drawTerrain(Surface* const surface) // private.
 	{
 		unit = _battleSave->getSelectedUnit();
 		if (unit != NULL
-			&& unit->getStatus() != STATUS_WALKING
+			&& (unit->getStatus() == STATUS_STANDING
+				|| unit->getStatus() == STATUS_TURNING)
 			&& unit->getPosition().z <= _camera->getViewLevel())
 		{
 			_camera->convertMapToScreen(
@@ -4152,9 +4153,9 @@ void Map::drawTerrain(Surface* const surface) // private.
 									&posScreen);
 			posScreen += _camera->getMapOffset();
 
-			calculateWalkingOffset( // this calculates terrainLevel, but is otherwise bloat here.
-								unit,
-								&walkOffset);
+			walkOffset.y += getTerrainLevel(
+										unit->getPosition(),
+										unit->getArmor()->getSize());
 			walkOffset.y += 21 - unit->getHeight();
 
 			if (unit->getArmor()->getSize() > 1)
@@ -4199,8 +4200,8 @@ void Map::drawTerrain(Surface* const surface) // private.
 
 	if (pathPreview == true)
 	{
-		if (wpID != NULL)
-			wpID->setBordered(); // make a border for the pathfinding display
+		if (wpId != NULL)
+			wpId->setBordered(); // make a border for the pathfinding display
 
 		for (int
 				itZ = beginZ;
@@ -4290,11 +4291,11 @@ void Map::drawTerrain(Surface* const surface) // private.
 									offset_y += 7;
 							}
 
-							wpID->setValue(_tile->getPreviewTU());
-							wpID->draw();
+							wpId->setValue(static_cast<unsigned>(_tile->getPreviewTU()));
+							wpId->draw();
 
 							if (!(_previewSetting & PATH_ARROWS))
-								wpID->blitNShade(
+								wpId->blitNShade(
 											surface,
 											posScreen.x + 16 - offset_x,
 //											posScreen.y + 29 - offset_y,
@@ -4303,7 +4304,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 											false,
 											_tile->getPreviewColor());
 							else
-								wpID->blitNShade(
+								wpId->blitNShade(
 											surface,
 											posScreen.x + 16 - offset_x,
 //											posScreen.y + 22 - offset_y,
@@ -4315,11 +4316,11 @@ void Map::drawTerrain(Surface* const surface) // private.
 			}
 		}
 
-		if (wpID != NULL)
-			wpID->setBordered(false); // remove the border in case it's used for missile waypoints.
+		if (wpId != NULL)
+			wpId->setBordered(false); // remove the border in case it's used for missile waypoints.
 	}
 
-	delete wpID;
+	delete wpId;
 	// end Path Preview.
 
 
@@ -4367,23 +4368,22 @@ void Map::drawTerrain(Surface* const surface) // private.
 							bullet.y - 64,
 							0);
 				}
-				else if ((*i)->isHit() == 1) // melee or psiamp, http://ufopaedia.org/index.php?title=HIT.PCK
-				{
-					srfSprite = _res->getSurfaceSet("HIT.PCK")->getFrame((*i)->getCurrentFrame());
-					srfSprite->blitNShade(
-							surface,
-							bullet.x - 15,
-							bullet.y - 25,
-							0);
-				}
 				else if ((*i)->isHit() == 0) // bullet, http://ufopaedia.org/index.php?title=SMOKE.PCK
 				{
-					//Log(LOG_INFO) << "Map:hitFrame = " << (*i)->getCurrentFrame();
 					srfSprite = _res->getSurfaceSet("SMOKE.PCK")->getFrame((*i)->getCurrentFrame());
 					srfSprite->blitNShade(
 							surface,
 							bullet.x - 15,
 							bullet.y - 15,
+							0);
+				}
+				else //if ((*i)->isHit() == 1) // melee or psiamp, http://ufopaedia.org/index.php?title=HIT.PCK
+				{	 // note, put that back in to acknowledge -1 as a no-animation melee miss.
+					srfSprite = _res->getSurfaceSet("HIT.PCK")->getFrame((*i)->getCurrentFrame());
+					srfSprite->blitNShade(
+							surface,
+							bullet.x - 15,
+							bullet.y - 25,
 							0);
 				}
 			}

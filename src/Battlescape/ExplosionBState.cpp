@@ -53,7 +53,6 @@ namespace OpenXcom
  * @param lowerWeapon	- true to tell the unit causing this explosion to lower their weapon (default false)
  * @param meleeSuccess	- true if the (melee) attack was succesful (default false)
  * @param forceCamera	- forces Camera to center on the explosion (default false)
-// * @param cosmetic		- new undocumented parameter
  */
 ExplosionBState::ExplosionBState(
 		BattlescapeGame* const parent,
@@ -64,7 +63,6 @@ ExplosionBState::ExplosionBState(
 		bool lowerWeapon,
 		bool meleeSuccess,
 		bool forceCamera)
-//		bool cosmetic)
 	:
 		BattleState(parent),
 		_center(center),
@@ -74,7 +72,6 @@ ExplosionBState::ExplosionBState(
 		_lowerWeapon(lowerWeapon),
 		_hitSuccess(meleeSuccess),
 		_forceCamera(forceCamera),
-//		_cosmetic(cosmetic),
 		_battleSave(parent->getBattleSave()),
 		_power(0),
 		_areaOfEffect(true),
@@ -288,7 +285,6 @@ void ExplosionBState::init()
 			start,
 			sound = _item->getRules()->getHitSound();
 
-//		if (_cosmetic == true)
 		if (_hit == true)
 		{
 			if (_hitSuccess == true
@@ -325,7 +321,7 @@ void ExplosionBState::init()
 													start,
 													0,
 													false,
-													result); // --> _cosmetic effect bleh.
+													result);
 			_parent->getMap()->getExplosions()->push_back(explosion);
 
 			Uint32 interval = BattlescapeState::STATE_INTERVAL_STANDARD * 5 / 7;
@@ -334,7 +330,7 @@ void ExplosionBState::init()
 			_parent->setStateInterval(interval);
 		}
 
-		Camera* const exploCam = _parent->getMap()->getCamera(); // -> apply more cosmetics
+		Camera* const exploCam = _parent->getMap()->getCamera();
 		if (_forceCamera == true
 			|| (exploCam->isOnScreen(targetPos) == false
 				&& (_battleSave->getSide() != FACTION_PLAYER
@@ -560,7 +556,6 @@ void ExplosionBState::explode() // private.
 		int radius;
 		if (_unit != NULL
 			&& _unit->getSpecialAbility() == SPECAB_EXPLODE)
-//				|| _unit->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE))
 		{
 			radius = _parent->getRuleset()->getItem(_unit->getArmor()->getCorpseGeoscape())->getExplosionRadius();
 		}
@@ -577,7 +572,6 @@ void ExplosionBState::explode() // private.
 
 
 	//Log(LOG_INFO) << "ExplosionBState::explode() CALL bg::checkForCasualties()";
-//	if (!_cosmetic)
 	_parent->checkForCasualties(
 							_item,
 							_unit,

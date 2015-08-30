@@ -147,8 +147,6 @@ void RuleArmor::load(const YAML::Node& node)
 	{
 		_canHoldWeapon = true;
 	}
-	else
-		_canHoldWeapon = false;
 
 	_faceColorGroup		= node["spriteFaceGroup"]	.as<int>(_faceColorGroup);
 	_hairColorGroup		= node["spriteHairGroup"]	.as<int>(_hairColorGroup);

@@ -29,9 +29,9 @@
 namespace OpenXcom
 {
 
+class BattleItem;
 class BattlescapeGame;
 class BattleUnit;
-class BattleItem;
 class SavedBattleGame;
 class Tile;
 
@@ -48,15 +48,13 @@ class ExplosionBState
 private:
 	bool
 		_areaOfEffect,
-//		_cosmetic,
 		_forceCamera,
 		_hit,
+		_hitSuccess,
 		_lowerWeapon,
-		_pistolWhip,
-		_hitSuccess;
-	int
+		_pistolWhip;
+	int _power;
 //		_extend,
-		_power;
 
 	BattleItem* _item;
 	BattleUnit* _unit;
@@ -81,7 +79,6 @@ private:
 				bool lowerWeapon = false,
 				bool meleeSuccess = false,
 				bool forceCamera = false);
-//				bool cosmetic = false);
 		/// Cleans up the ExplosionBState.
 		~ExplosionBState();
 

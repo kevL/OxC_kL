@@ -267,7 +267,7 @@ void UnitSprite::drawRoutine0()
 			* itemB		= NULL;
 
 	// magic numbers
-	int torsoHandsWeaponY = 0; // kL
+	int torsoHandsWeaponY = 0;
 	const int
 		maleTorso	=  32,
 		femaleTorso	= 267,
@@ -294,7 +294,6 @@ void UnitSprite::drawRoutine0()
 	const int
 		yoffWalk[8]		= { 1,  0, -1,  0,  1,  0, -1,  0}, // bobbing up and down
 		yoffWalk_mut[8]	= { 1,  1,  0,  0,  1,  1,  0,  0}, // bobbing up and down (muton)
-//		yoffWalk_mut[8]	= { 0,  0,  0,  0,  0,  0,  0,  0}, // kL_TEST.
 		offX[8]			= { 8, 10,  7,  4, -9,-11, -7, -3}, // for the weapons
 		offY[8]			= {-6, -3,  0,  2,  0, -4, -7, -9}, // for the weapons
 		offX2[8]		= {-8,  3,  5, 12,  6, -1, -5,-13}, // for the left handed weapons
@@ -304,7 +303,6 @@ void UnitSprite::drawRoutine0()
 		offX4[8]		= {-8,  2,  7, 14,  7, -2, -4, -8}, // for the left handed weapons
 		offY4[8]		= {-3, -3, -1,  0,  3,  3,  0,  1}, // for the left handed weapons
 		offX5[8]		= {-1,  1,  1,  2,  0, -1,  0,  0}, // for the weapons (muton)
-//		offY5[8]		= { 1, -1, -1, -1, -1, -2, -3,  0}, // for the weapons (muton) // kL
 		offY5[8]		= { 1, -1, -1, -1, -1, -1, -3,  0}, // for the weapons (muton)
 		offX6[8]		= { 0,  6,  6,  12,-4, -5, -5,-13}, // for the left handed rifles
 		offY6[8]		= {-4, -4, -1,  0,  5,  0,  1,  0}, // for the left handed rifles
@@ -348,9 +346,8 @@ void UnitSprite::drawRoutine0()
 		isWalking = _unit->getStatus() == STATUS_WALKING,
 		isKneeled = _unit->isKneeled();
 
-	if (isWalking == true) // when walking, torso(fixed sprite) has to be animated up/down
+	if (isWalking == true) // when walking torso (fixed sprite) has to be animated up/down
 	{
-//		//Log(LOG_INFO) << "UnitSprite::drawRoutine0() : " << _unit->getId() << " STATUS_WALKING";
 		if (_drawingRoutine == 10)							// muton
 			torsoHandsWeaponY = yoffWalk_mut[walkPhase];
 		else												// xCom agents etc
@@ -361,33 +358,18 @@ void UnitSprite::drawRoutine0()
 		legs = _unitSurface->getFrame(legsWalk[unitDir] + walkPhase);
 		leftArm = _unitSurface->getFrame(larmWalk[unitDir] + walkPhase);
 		rightArm = _unitSurface->getFrame(rarmWalk[unitDir] + walkPhase);
-
-		// kL_note: This needs to be removed because I already changed/ fixed the sprites:
-/*		if (_drawingRoutine == 10
-			&& unitDir == 3)
-		{
-			leftArm->setY(-1);
-		} */ // kL_note_end.
 	}
 	else
 	{
 		if (isKneeled == true)
-		{
-//			//Log(LOG_INFO) << "UnitSprite::drawRoutine0() : " << _unit->getId() << " isKneeled";
 			legs = _unitSurface->getFrame(legsKneel + unitDir);
-		}
 		else if (_unit->isFloating() == true
 			&& _unit->getMoveTypeUnit() == MT_FLY)
-//			&& _moveType == MT_FLY) // kL, try it. Nope, try floating next time .......
 		{
-//			//Log(LOG_INFO) << "UnitSprite::drawRoutine0() : " << _unit->getId() << " isFloating in FlyingSuit";
 			legs = _unitSurface->getFrame(legsFloat + unitDir);
 		}
 		else
-		{
-//			//Log(LOG_INFO) << "UnitSprite::drawRoutine0() : " << _unit->getId() << " etc.";
 			legs = _unitSurface->getFrame(legsStand + unitDir);
-		}
 
 		leftArm = _unitSurface->getFrame(larmStand + unitDir);
 		rightArm = _unitSurface->getFrame(rarmStand + unitDir);
@@ -398,7 +380,8 @@ void UnitSprite::drawRoutine0()
 	if (_itemA) // holding an item
 	{
 		if (_unit->getStatus() == STATUS_AIMING // draw handob item
-			&& _itemA->getRules()->isTwoHanded())
+			&& (_itemA->getRules()->isTwoHanded()
+				|| _itemA->getRules()->getBattleType() == BT_MELEE)) // could look weird.
 		{
 			int dir = (unitDir + 2) % 8;
 			itemA = _itemSurfaceA->getFrame(_itemA->getRules()->getHandSprite() + dir);
@@ -428,7 +411,8 @@ void UnitSprite::drawRoutine0()
 			}
 		}
 
-		if (_itemA->getRules()->isTwoHanded()) // draw arms holding the item
+		if (_itemA->getRules()->isTwoHanded() // draw arms holding the item
+			|| _itemA->getRules()->getBattleType() == BT_MELEE) // could look weird.
 		{
 			leftArm = _unitSurface->getFrame(larm2H + unitDir);
 
@@ -458,7 +442,8 @@ void UnitSprite::drawRoutine0()
 			rightArm->setY(torsoHandsWeaponY);
 
 			itemA->setY(itemA->getY() + torsoHandsWeaponY);
-			if (_itemA->getRules()->isTwoHanded())
+			if (_itemA->getRules()->isTwoHanded()
+				|| _itemA->getRules()->getBattleType() == BT_MELEE) // could look weird.
 			{
 				leftArm->setY(torsoHandsWeaponY);
 			}
@@ -470,7 +455,7 @@ void UnitSprite::drawRoutine0()
 		leftArm = _unitSurface->getFrame(larm2H + unitDir);
 
 		itemB = _itemSurfaceB->getFrame(_itemB->getRules()->getHandSprite() + unitDir);
-		if (!_itemB->getRules()->isTwoHanded())
+		if (_itemB->getRules()->isTwoHanded() == false)
 		{
 			if (_drawingRoutine == 10)
 			{
@@ -492,7 +477,8 @@ void UnitSprite::drawRoutine0()
 		}
 
 		if (_unit->getStatus() == STATUS_AIMING
-			&& _itemB->getRules()->isTwoHanded())
+			&& (_itemB->getRules()->isTwoHanded()
+				|| _itemB->getRules()->getBattleType() == BT_MELEE)) // could look weird.
 		{
 			int dir = (unitDir + 2) % 8;
 			itemB = _itemSurfaceB->getFrame(_itemB->getRules()->getHandSprite() + dir);
@@ -516,8 +502,11 @@ void UnitSprite::drawRoutine0()
 			leftArm->setY(torsoHandsWeaponY);
 
 			itemB->setY(itemB->getY() + torsoHandsWeaponY);
-			if (_itemB->getRules()->isTwoHanded())
+			if (_itemB->getRules()->isTwoHanded()
+				|| _itemB->getRules()->getBattleType() == BT_MELEE) // could look weird.
+			{
 				rightArm->setY(torsoHandsWeaponY);
+			}
 		}
 	}
 
@@ -563,14 +552,6 @@ void UnitSprite::drawRoutine0()
 		if (itemB)
 			itemB->setX(itemB->getX() + offXAiming);
 	}
-	// kL_note: This needs to be removed because I already changed the sprites:
-/*	else if (!itemA
-		&& _drawingRoutine == 10
-		&& _unit->getStatus() == STATUS_WALKING
-		&& unitDir == 2)
-	{
-		rightArm->setX(-6);
-	} */ // kL_note_end.
 
 
 	// blit order depends on unit direction
@@ -603,10 +584,8 @@ void UnitSprite::drawRoutine0()
 		break;
 		case 3:
 			if (_unit->getStatus() != STATUS_AIMING
-				&& ((_itemA
-						&& _itemA->getRules()->isTwoHanded())
-					|| (_itemB
-						&& _itemB->getRules()->isTwoHanded())))
+				&& ((_itemA && _itemA->getRules()->isTwoHanded())
+					|| (_itemB && _itemB->getRules()->isTwoHanded())))
 			{
 				drawRecolored(legs);
 				drawRecolored(torso);
@@ -635,10 +614,8 @@ void UnitSprite::drawRoutine0()
 		break;
 		case 5:
 			if (_unit->getStatus() != STATUS_AIMING
-				&& ((_itemA
-						&& _itemA->getRules()->isTwoHanded())
-					|| (_itemB
-						&& _itemB->getRules()->isTwoHanded())))
+				&& ((_itemA && _itemA->getRules()->isTwoHanded())
+					|| (_itemB && _itemB->getRules()->isTwoHanded())))
 			{
 				drawRecolored(rightArm);
 				drawRecolored(legs);
@@ -667,10 +644,8 @@ void UnitSprite::drawRoutine0()
 		break;
 		case 7:
 			if (_unit->getStatus() != STATUS_AIMING
-				&& ((_itemA
-						&& _itemA->getRules()->isTwoHanded())
-					|| (_itemB
-						&& _itemB->getRules()->isTwoHanded())))
+				&& ((_itemA && _itemA->getRules()->isTwoHanded())
+					|| (_itemB && _itemB->getRules()->isTwoHanded())))
 			{
 				drawRecolored(rightArm);
 				itemA ? itemA->blit(this) : void();
@@ -756,7 +731,7 @@ void UnitSprite::drawRoutine1()
 	leftArm = _unitSurface->getFrame(larm + unitDir);
 	rightArm = _unitSurface->getFrame(rarm + unitDir);
 
-	// when walking torso(fixed sprite) has to be animated up/down
+	// when walking torso (fixed sprite) has to be animated up/down
 	if (_unit->getStatus() == STATUS_WALKING)
 	{
 		// floater only has 5 walk animations instead of 8
@@ -1028,9 +1003,7 @@ void UnitSprite::drawRoutine3()
 }
 
 /**
- * Drawing routine for civilians, ethereals, zombies (routine 4),
- * tftd civilians, tftd zombies (routine 17), more tftd civilians (routine 18). // <- wtf. says routines 16 & 17 below.
- * Very easy: first 8 is standing positions, then 8 walking sequences of 8, finally death sequence of 3
+ * Drawing routine for civilians, ethereals, zombies (routine 4).
  */
 void UnitSprite::drawRoutine4()
 {
@@ -1508,7 +1481,7 @@ void UnitSprite::drawRoutine7()
 
 	torso = _unitSurface->getFrame(Torso + unitDir);
 
-	// when walking, torso(fixed sprite) has to be animated up/down
+	// when walking torso (fixed sprite) has to be animated up/down
 	if (_unit->getStatus() == STATUS_WALKING)
 	{
 		torso->setY(yoffWalk[walkPhase]);
@@ -1617,19 +1590,12 @@ void UnitSprite::drawRoutine9()
 		int
 			phase = _unit->getAimingPhase(),
 			extra;
-		//if (_unit->getId() == 1000007) Log(LOG_INFO) << "DRAW phase = " << phase;
 
 		if (phase == framesTotal)
-		{
-			//if (_unit->getId() == 1000007) Log(LOG_INFO) << ". add Extra";
 			extra = 2; // bounce back one frame at the end.
-		}
 		else
 			extra = 0;
 
-		//if (_unit->getId() == 1000007) Log(LOG_INFO) << ". draw Frame " << (std::min(
-		//									shoot + phase - extra,
-		//									shoot + framesTotal - 1));
 		torso = _unitSurface->getFrame(std::min(
 											shoot + phase - extra,
 											shoot + framesTotal - 1));
