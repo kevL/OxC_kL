@@ -23,6 +23,8 @@
 #include "BattleState.h"
 //#include "Position.h"
 
+#include "../Ruleset/MapData.h"
+
 
 namespace OpenXcom
 {
@@ -46,9 +48,7 @@ private:
 	bool
 		_initialized,
 		_targetFloor;
-	int
-		_initUnitAnim,
-		_prjImpact;
+	int _initUnitAnim;
 
 	BattleItem
 		* _ammo,
@@ -61,6 +61,7 @@ private:
 		_originVoxel,
 		_targetVoxel,
 		_prjVector;
+	VoxelType _prjImpact;
 
 	/// Tries to create a projectile sprite.
 	bool createNewProjectile();

@@ -2695,7 +2695,7 @@ void BattlescapeGame::primaryAction(const Position& pos)
 //						getMap()->setCursorType(CT_NONE);
 //						_parentState->getGame()->getCursor()->setVisible(false);
 //						_currentAction.cameraPosition = getMap()->getCamera()->getMapOffset();
-						_currentAction.cameraPosition = Position(0,0,-1); // kL, don't adjust the camera when coming out of ProjectileFlyB/ExplosionB states
+						_currentAction.cameraPosition = Position(0,0,-1); // don't adjust the camera when coming out of ProjectileFlyB/ExplosionB states
 
 
 //						statePushBack(new PsiAttackBState(this, _currentAction));
@@ -2704,7 +2704,7 @@ void BattlescapeGame::primaryAction(const Position& pos)
 															this,
 															_currentAction));
 
-						if (_currentAction.actor->getTimeUnits() >= _currentAction.TU) // kL_note: WAIT, check this *before* all the stuff above!!!
+						if (_currentAction.actor->getTimeUnits() >= _currentAction.TU) // WAIT, check this *before* all the stuff above!!!
 						{
 							if (getTileEngine()->psiAttack(&_currentAction) == true)
 							{
@@ -2802,11 +2802,11 @@ void BattlescapeGame::primaryAction(const Position& pos)
 			_currentAction.target = pos;
 			_currentAction.cameraPosition = getMap()->getCamera()->getMapOffset();
 
-			_states.push_back(new ProjectileFlyBState(
-													this,
+			_states.push_back(new ProjectileFlyBState(		// TODO: should check for valid LoF/LoT *before* invoking this
+													this,	// instead of the (flakey) checks in that state. Then conform w/ AI ...
 													_currentAction));
 
-			statePushFront(new UnitTurnBState( // first of all turn towards the target
+			statePushFront(new UnitTurnBState(
 											this,
 											_currentAction));
 		}
@@ -2841,7 +2841,7 @@ void BattlescapeGame::primaryAction(const Position& pos)
 				modCtrl = (SDL_GetModState() & KMOD_CTRL) != 0,
 				modAlt = (SDL_GetModState() & KMOD_ALT) != 0,
 				isMech = _currentAction.actor->getUnitRules() != NULL
-					  && _currentAction.actor->getUnitRules()->isMechanical();
+					  && _currentAction.actor->getUnitRules()->isMechanical() == true;
 
 //			_currentAction.dash = false;
 //			_currentAction.actor->setDashing(false);

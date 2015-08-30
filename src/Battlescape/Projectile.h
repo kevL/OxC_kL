@@ -25,6 +25,8 @@
 #include "BattlescapeGame.h"
 #include "Position.h"
 
+#include "../Ruleset/MapData.h"
+
 
 namespace OpenXcom
 {
@@ -86,12 +88,12 @@ private:
 		~Projectile();
 
 		/// Calculates the trajectory for a straight path.
-		int calculateTrajectory(double accuracy);
-		int calculateTrajectory(
+		VoxelType calculateShot(double accuracy);
+		VoxelType calculateShot(
 				double accuracy,
 				const Position& originVoxel);
 		/// Calculates the trajectory for a curved path.
-		int calculateThrow(double accuracy);
+		VoxelType calculateThrow(double accuracy);
 
 		/// Moves the projectile one step in its trajectory.
 		bool traceProjectile();

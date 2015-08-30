@@ -4350,14 +4350,14 @@ void BattlescapeState::saveVoxelView()
 
 			black = true;
 
-			test = _battleSave->getTileEngine()->calculateLine(
-															originVoxel,
-															targetVoxel,
-															false,
-															&_trajectory,
-															bu,
-															true,
-															debug == false) + 1;
+			test = static_cast<int>(_battleSave->getTileEngine()->plotLine(
+																		originVoxel,
+																		targetVoxel,
+																		false,
+																		&_trajectory,
+																		bu,
+																		true,
+																		debug == false)) + 1;
 			if (test != 0 && test != 6)
 			{
 				tile = _battleSave->getTile(Position(
@@ -4506,7 +4506,7 @@ void BattlescapeState::saveVoxelView()
  */
 void BattlescapeState::saveVoxelMap()
 {
-	std::ostringstream ss;
+	std::ostringstream oststr;
 	std::vector<unsigned char> image;
 	static const unsigned char pal[30] =
 	{
@@ -4541,15 +4541,15 @@ void BattlescapeState::saveVoxelMap()
 					x < _battleSave->getMapSizeX() * 16;
 					++x)
 			{
-				int test = _battleSave->getTileEngine()->voxelCheck(
-																Position(x,y,z * 2),
-																0,0) + 1;
+				int test = static_cast<int>(_battleSave->getTileEngine()->voxelCheck(
+																				Position(x,y,z * 2),
+																				0,0)) + 1;
 				float dist = 1.f;
 
-				if (x %16 == 15)
+				if (x % 16 == 15)
 					dist *= 0.9f;
 
-				if (y %16 == 15)
+				if (y % 16 == 15)
 					dist *= 0.9f;
 
 				if (test == VOXEL_OUTOFBOUNDS)
@@ -4591,11 +4591,11 @@ void BattlescapeState::saveVoxelMap()
 			}
 		}
 
-		ss.str("");
-		ss << Options::getUserFolder() << "voxel" << std::setfill('0') << std::setw(2) << z << ".png";
+		oststr.str("");
+		oststr << Options::getUserFolder() << "voxel" << std::setfill('0') << std::setw(2) << z << ".png";
 
 		unsigned error = lodepng::encode(
-									ss.str(),
+									oststr.str(),
 									image,
 									_battleSave->getMapSizeX() * 16,
 									_battleSave->getMapSizeY() * 16,

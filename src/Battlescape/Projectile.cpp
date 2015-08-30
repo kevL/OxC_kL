@@ -34,7 +34,6 @@
 
 #include "../Resource/ResourcePack.h"
 
-//#include "../Ruleset/MapData.h"
 //#include "../Ruleset/RuleItem.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleSoldier.h"
@@ -162,9 +161,10 @@ Projectile::~Projectile()
 {}
 
 /**
- * Calculates the trajectory for a straight path.
- * @note This is a wrapper for calculateTrajectory() below - it calculates and
- * passes on an originVoxel.
+ * Calculates the trajectory for a straight/line path.
+ * @note Accuracy affects the VoxelType result.
+ * @note This is a wrapper for calculateShot() below - it calculates and
+ * passes on the acting unit's originVoxel.
  * @param accuracy - accuracy of the projectile's trajectory (a battleunit's accuracy)
  * @return,  -1 nothing to hit / no line of fire
  *			0-3 tile-part (floor / westwall / northwall / content)
@@ -178,17 +178,18 @@ Projectile::~Projectile()
  * VOXEL_UNIT			//  4
  * VOXEL_OUTOFBOUNDS	//  5
  */
-int Projectile::calculateTrajectory(double accuracy)
+VoxelType Projectile::calculateShot(double accuracy)
 {
-	return calculateTrajectory(
-							accuracy,
-							_battleSave->getTileEngine()->getOriginVoxel(
-																	_action,
-																	_battleSave->getTile(_origin)));
+	return calculateShot(
+					accuracy,
+					_battleSave->getTileEngine()->getOriginVoxel(
+															_action,
+															_battleSave->getTile(_origin)));
 }
 
 /**
- * Calculates the trajectory for a straight path.
+ * Calculates the trajectory for a straight/line path.
+ * @note Accuracy affects the VoxelType result.
  * @note First determines if there is LoF then calculates and stores a modified
  * trajectory that is actually pathed.
  * @param accuracy		- accuracy of the projectile's trajectory (a BattleUnit's accuracy)
@@ -205,16 +206,16 @@ int Projectile::calculateTrajectory(double accuracy)
  * VOXEL_UNIT			//  4
  * VOXEL_OUTOFBOUNDS	//  5
  */
-int Projectile::calculateTrajectory(
+VoxelType Projectile::calculateShot(
 		double accuracy,
 		const Position& originVoxel)
 {
-	//Log(LOG_INFO) << "Projectile::calculateTrajectory()";
-	const Tile* const targetTile = _battleSave->getTile(_action.target);
-	const BattleUnit* const targetUnit = targetTile->getUnit();
+	//Log(LOG_INFO) << "Projectile::calculateShot()";
+	const Tile* const tileTarget = _battleSave->getTile(_action.target);
+	const BattleUnit* const targetUnit = tileTarget->getUnit();
 
 	// test for LoF
-	if (_action.actor->getFaction() == FACTION_PLAYER // kL_note: aLiens don't even get in here!
+	if (_action.actor->getFaction() == FACTION_PLAYER // aLiens don't even get in here!
 		&& _action.autoShotCount == 1
 		&& _action.type != BA_LAUNCH
 		&& _battleSave->getBattleGame()->getPanicHandled() == true
@@ -222,13 +223,12 @@ int Projectile::calculateTrajectory(
 			|| Options::forceFire == false))
 	{
 		//Log(LOG_INFO) << ". autoshotCount[0] = " << _action.autoShotCount;
-		const VoxelType voxelType = static_cast<VoxelType>(
-								  _battleSave->getTileEngine()->calculateLine(
+		const VoxelType voxelType = _battleSave->getTileEngine()->plotLine(
 																		originVoxel,
 																		_targetVoxel,
 																		false,
 																		&_trajectory,
-																		_action.actor));
+																		_action.actor);
 		//Log(LOG_INFO) << ". voxelType = " << (int)voxelType;
 
 		if (voxelType != VOXEL_EMPTY
@@ -323,11 +323,11 @@ int Projectile::calculateTrajectory(
 					&_targetVoxel,
 					accuracy,
 					false,
-					targetTile);
+					tileTarget);
 		//Log(LOG_INFO) << ". postAcu target = " << _targetVoxel << " tSpace " << (_targetVoxel / Position(16,16,24));
 	}
 
-	const int ret = _battleSave->getTileEngine()->calculateLine( // finally do a line calculation and store the trajectory.
+	const VoxelType ret = _battleSave->getTileEngine()->plotLine( // finally do a line calculation and store the trajectory.
 															originVoxel,
 															_targetVoxel,
 															true,
@@ -348,6 +348,7 @@ int Projectile::calculateTrajectory(
 
 /**
  * Calculates the trajectory for a parabolic path.
+ * @note Accuracy affects the VoxelType result.
  * @param accuracy - accuracy of the projectile's trajectory (a battleunit's accuracy)
  * @return,  -1 nothing to hit / no line of fire
  *			0-3 tile-part (floor / westwall / northwall / content)
@@ -361,7 +362,7 @@ int Projectile::calculateTrajectory(
  * VOXEL_UNIT			//  4
  * VOXEL_OUTOFBOUNDS	//  5
  */
-int Projectile::calculateThrow(double accuracy)
+VoxelType Projectile::calculateThrow(double accuracy)
 {
 /*	BattleUnit* bu = _battleSave->getTile(_origin)->getUnit();
 	if (bu == NULL)
@@ -400,7 +401,7 @@ int Projectile::calculateThrow(double accuracy)
 
 
 	const Position originVoxel = _battleSave->getTileEngine()->getOriginVoxel(_action);
-	int ret = static_cast<int>(VOXEL_OUTOFBOUNDS);
+	VoxelType ret = VOXEL_OUTOFBOUNDS;
 	double arc;
 	if (_battleSave->getTileEngine()->validateThrow(
 												_action,
@@ -409,7 +410,7 @@ int Projectile::calculateThrow(double accuracy)
 												&arc,
 												&ret) == true)
 	{
-		// Do a parabola calculation and store that trajectory - make sure it's valid.
+		// Do a parabola calculation and store that trajectory.
 		VoxelType test = VOXEL_OUTOFBOUNDS;
 		while (test == VOXEL_OUTOFBOUNDS)
 		{
@@ -425,14 +426,14 @@ int Projectile::calculateThrow(double accuracy)
 //						false);
 
 			delta -= targetVoxel;
-			test = static_cast<VoxelType>(_battleSave->getTileEngine()->calculateParabola(
-																					originVoxel,
-																					targetVoxel,
-																					true,
-																					&_trajectory,
-																					_action.actor,
-																					arc,
-																					delta));
+			test = _battleSave->getTileEngine()->plotParabola(
+															originVoxel,
+															targetVoxel,
+															true,
+															&_trajectory,
+															_action.actor,
+															arc,
+															delta);
 
 			// Don't let thrown items land on diagonal bigwalls.
 			// this prevents exploiting blast-propagation routine to both sides of a bigWall.diag
@@ -456,7 +457,7 @@ int Projectile::calculateThrow(double accuracy)
 		return ret;
 	}
 
-	return static_cast<int>(VOXEL_OUTOFBOUNDS);
+	return VOXEL_OUTOFBOUNDS;
 }
 
 /**
@@ -477,7 +478,7 @@ void Projectile::applyAccuracy( // private.
 //		const bool extendLine)
 {
 	//Log(LOG_INFO) << "Projectile::applyAccuracy(), accuracy = " << accuracy;
-	if (_action.type == BA_HIT)
+	if (_action.type == BA_HIT) // probly not needed.
 		return;
 
 	//Log(LOG_INFO) << "input Target = " << (*target);

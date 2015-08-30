@@ -2035,7 +2035,7 @@ bool AlienBAIState::explosiveEfficacy(
 			{
 				//Log(LOG_INFO) << ". . dangerousFALSE = " << ((*i)->getTile() != NULL && (*i)->getTile()->getDangerous() == false);
 				//Log(LOG_INFO) << ". . exposed = " << ((*i)->getFaction() == FACTION_HOSTILE || (*i)->getExposed() < _intelligence + 1);
-				if (   (*i)->getTile() != NULL
+				if ((*i)->getTile() != NULL
 					&& (*i)->getTile()->getDangerous() == false
 					&& ((*i)->getFaction() == FACTION_HOSTILE
 						|| ((*i)->getExposed() != -1
@@ -2052,7 +2052,7 @@ bool AlienBAIState::explosiveEfficacy(
 										((*i)->getPosition().z * 24) + 12);
 
 					std::vector<Position> trajectory;
-					const int impact = _battleSave->getTileEngine()->calculateLine(
+					const VoxelType impact = _battleSave->getTileEngine()->plotLine(
 																				voxelPosA,
 																				voxelPosB,
 																				false,
@@ -2365,12 +2365,12 @@ bool AlienBAIState::pathWaypoints() // private.
 						(posEnd.y * 16) + 8,
 						(posEnd.z * 24) + 16);
 
-			collision = _battleSave->getTileEngine()->calculateLine(
-																voxelPosA,
-																voxelPosB,
-																false,
-																NULL,
-																_unit);
+			collision = _battleSave->getTileEngine()->plotLine(
+															voxelPosA,
+															voxelPosB,
+															false,
+															NULL,
+															_unit);
 
 			if (VOXEL_EMPTY < collision && collision < VOXEL_UNIT)
 			{

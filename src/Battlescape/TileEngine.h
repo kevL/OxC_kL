@@ -150,7 +150,7 @@ private:
 		bool canTargetTile(
 				const Position* const originVoxel,
 				const Tile* const targetTile,
-				const int tilePart,
+				const MapDataType tilePart,
 				Position* const scanVoxel,
 				const BattleUnit* const excludeUnit) const;
 		/// Checks a unit's % exposure on a tile.
@@ -227,21 +227,21 @@ private:
 		int closeUfoDoors() const;
 
 		/// Calculates a line trajectory.
-		int calculateLine(
+		VoxelType plotLine(
 				const Position& origin,
 				const Position& target,
-				const bool storeTrajectory,
-				std::vector<Position>* const trajectory,
+				const bool storeTrj,
+				std::vector<Position>* const trj,
 				const BattleUnit* const excludeUnit,
 				const bool doVoxelCheck = true,
 				const bool onlyVisible = false,
 				const BattleUnit* const excludeAllBut = NULL) const;
 		/// Calculates a parabola trajectory.
-		int calculateParabola(
+		VoxelType plotParabola(
 				const Position& origin,
 				const Position& target,
-				bool storeTrajectory,
-				std::vector<Position>* const trajectory,
+				bool storeTrj,
+				std::vector<Position>* const trj,
 				const BattleUnit* const excludeUnit,
 				const double arc,
 				const Position& delta = Position(0,0,0)) const;
@@ -251,7 +251,7 @@ private:
 				const Position& originVoxel,
 				const Position& targetVoxel,
 				double* const arc = NULL,
-				int* const voxelType = NULL) const;
+				VoxelType* const voxelType = NULL) const;
 
 		/// Checks the distance between two positions.
 		int distance(
@@ -300,7 +300,7 @@ private:
 		/// Checks the visibility of a given voxel.
 //		bool isVoxelVisible(const Position& voxel) const;
 		/// Checks what type of voxel occupies posTarget in voxel space.
-		int voxelCheck(
+		VoxelType voxelCheck(
 				const Position& posTarget,
 				const BattleUnit* const excludeUnit = NULL,
 				const bool excludeAllUnits = false,
