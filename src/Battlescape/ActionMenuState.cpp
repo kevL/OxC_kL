@@ -433,10 +433,7 @@ void ActionMenuState::btnActionMenuClick(Action* action)
 				if (_action->TU > _action->actor->getTimeUnits())
 					_action->result = "STR_NOT_ENOUGH_TIME_UNITS";
 				else if (_action->weapon->getAmmoItem() == NULL)
-//					|| _action->weapon->getAmmoItem()->getAmmoQuantity() == 0)
-				{
 					_action->result = "STR_NO_AMMUNITION_LOADED";
-				}
 				else
 					_action->targeting = true;
 
@@ -447,7 +444,7 @@ void ActionMenuState::btnActionMenuClick(Action* action)
 				if (_action->TU > _action->actor->getTimeUnits())
 					_action->result = "STR_NOT_ENOUGH_TIME_UNITS";
 				else if (_game->getSavedGame()->getBattleSave()->getTileEngine()
-										->validMeleeRange(_action->actor) == false)
+									->validMeleeRange(_action->actor) == false)
 				{
 					_action->result = "STR_THERE_IS_NO_ONE_THERE";
 				}

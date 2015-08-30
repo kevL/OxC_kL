@@ -1043,7 +1043,6 @@ void BattlescapeGame::handleNonTargetAction()
 				}
 				else
 				{
-//					statePushBack(new MeleeAttackBState(this, _currentAction)); // And remove 'return;' below_
 					statePushBack(new ProjectileFlyBState(
 														this,
 														_currentAction));
@@ -1056,7 +1055,6 @@ void BattlescapeGame::handleNonTargetAction()
 					showWarning = 1;
 				else
 				{
-//					if (_currentAction.actor->getPosition().z > 0) // effectively done in applyGravity()
 					_battleSave->getTileEngine()->applyGravity(_currentAction.actor->getTile());
 					getResourcePack()->getSound(
 											"BATTLE.CAT",
@@ -1079,16 +1077,19 @@ void BattlescapeGame::handleNonTargetAction()
 			// switch_end.
 		}
 
+		if (showWarning != 0)
+		{
+			if (showWarning == 1)
+				_parentState->warning(_currentAction.result);
+			else if (showWarning == 2)
+				_parentState->warning(
+									_currentAction.result,
+									true,
+									_currentAction.value);
 
-		if (showWarning == 1)
-			_parentState->warning(_currentAction.result);
-		else if (showWarning == 2)
-			_parentState->warning(
-								_currentAction.result,
-								true,
-								_currentAction.value);
+			_currentAction.result.clear();
+		}
 
-		_currentAction.result.clear();
 		_currentAction.type = BA_NONE;
 		_parentState->updateSoldierInfo();
 	}

@@ -6299,7 +6299,86 @@ bool TileEngine::validMeleeRange(
 }
 
 /**
+ * Gets an adjacent Position that can be attacked with melee.
+ * @param actor - pointer to a BattleUnit
+ * @return, position in direction that unit faces
+ */
+Position TileEngine::getMeleePosition(const BattleUnit* const actor) const
+{
+	const Tile* tileOrigin;
+	Tile* tileTarget;
+	const Position pos = actor->getPosition();
+	Position
+		posOrigin,
+		posTarget,
+		posVector,
+		posOrigin_vox,
+		posTarget_vox; // not used.
+
+	const int
+		armorSize = actor->getArmor()->getSize(),
+		dir = actor->getDirection();
+
+	Pathfinding::directionToVector(
+								dir,
+								&posVector);
+
+	for (int
+			x = 0;
+			x != armorSize;
+			++x)
+	{
+		for (int
+				y = 0;
+				y != armorSize;
+				++y)
+		{
+			posOrigin = pos + Position(x,y,0);
+			posTarget = posOrigin + posVector;
+
+			tileOrigin = _battleSave->getTile(posOrigin);
+			tileTarget = _battleSave->getTile(posTarget);
+
+			if (tileOrigin != NULL && tileTarget != NULL)
+			{
+				if (tileTarget->getUnit() == NULL
+					|| tileTarget->getUnit() == actor)
+				{
+					tileTarget = getVerticalTile(
+											posOrigin,
+											posTarget);
+				}
+
+				if (tileTarget != NULL
+					&& tileTarget->getUnit() != NULL
+					&& tileTarget->getUnit() != actor)
+				{
+					posOrigin_vox = Position(posOrigin * Position(16,16,24))
+								  + Position(
+											8,8,
+											actor->getHeight(true)
+												- tileOrigin->getTerrainLevel()
+												- 4);
+					if (canTargetTile(
+									&posOrigin_vox,
+									tileOrigin,
+									O_FLOOR,
+									&posTarget_vox,
+									actor) == true)
+					{
+						return posTarget;	// TODO: conform this to the fact Reapers can melee vs. 2 tiles
+					}						// or three tiles if their direction is diagonal.
+				}
+			}
+		}
+	}
+
+	return Position(-1,-1,-1); // this should simply never happen because the call is made after validMeleeRange()
+}
+
+/**
  * Gets an adjacent tile with an unconscious unit if any.
+ * @param actor - pointer to a BattleUnit
  * @return, pointer to a Tile
  */
 Tile* TileEngine::getExecutionTile(const BattleUnit* const actor) const
@@ -6315,7 +6394,7 @@ Tile* TileEngine::getExecutionTile(const BattleUnit* const actor) const
 		posTarget_vox; // not used.
 
 	const int
-		actorSize = actor->getArmor()->getSize(),
+		armorSize = actor->getArmor()->getSize(),
 		dir = actor->getDirection();
 
 	Pathfinding::directionToVector(
@@ -6324,12 +6403,12 @@ Tile* TileEngine::getExecutionTile(const BattleUnit* const actor) const
 
 	for (int
 			x = 0;
-			x != actorSize;
+			x != armorSize;
 			++x)
 	{
 		for (int
 				y = 0;
-				y != actorSize;
+				y != armorSize;
 				++y)
 		{
 			posOrigin = pos + Position(x,y,0);

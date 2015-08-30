@@ -387,7 +387,7 @@ Ruleset::~Ruleset()
 		delete i->second;
 	}
 
-	for (std::map<std::string, std::vector<MapScript*> >::iterator
+	for (std::map<std::string, std::vector<MapScript*> >::const_iterator
 			i = _mapScripts.begin();
 			i != _mapScripts.end();
 			++i)
@@ -398,7 +398,6 @@ Ruleset::~Ruleset()
 				++j)
 		{
 			delete *j;
-			j = (*i).second.erase(j);
 		}
 	}
 

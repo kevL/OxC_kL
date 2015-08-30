@@ -275,19 +275,21 @@ private:
 		Tile* applyGravity(Tile* const tile) const;
 
 		/// Validates the melee range between two BattleUnits.
-		bool TileEngine::validMeleeRange(
+		bool validMeleeRange(
 				const BattleUnit* const actor,
 				const int dir = -1,
 				const BattleUnit* const targetUnit = NULL) const;
 		/// Validates the melee range between a Position and a BattleUnit.
-		bool TileEngine::validMeleeRange(
+		bool validMeleeRange(
 				const Position& pos,
 				const int dir,
 				const BattleUnit* const actor,
 				const BattleUnit* const targetUnit = NULL) const;
 
+		/// Gets an adjacent Position that can be attacked with melee.
+		Position getMeleePosition(const BattleUnit* const actor) const;
 		/// Gets an adjacent tile with an unconscious unit if any.
-		Tile* TileEngine::getExecutionTile(const BattleUnit* const actor) const;
+		Tile* getExecutionTile(const BattleUnit* const actor) const;
 
 		/// Gets the AI to look through a window.
 		int faceWindow(const Position& pos) const;

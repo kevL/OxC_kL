@@ -59,7 +59,6 @@ RuleMissionScript::~RuleMissionScript()
 			++i)
 	{
 		delete i->second;
-		i = _missionWeights.erase(i);
 	}
 
 	for (std::vector<std::pair<size_t, WeightedOptions*> >::const_iterator
@@ -68,7 +67,6 @@ RuleMissionScript::~RuleMissionScript()
 			++i)
 	{
 		delete i->second;
-		i = _raceWeights.erase(i);
 	}
 
 	for (std::vector<std::pair<size_t, WeightedOptions*> >::const_iterator
@@ -77,7 +75,6 @@ RuleMissionScript::~RuleMissionScript()
 			++i)
 	{
 		delete i->second;
-		i = _regionWeights.erase(i);
 	}
 }
 
@@ -99,6 +96,8 @@ void RuleMissionScript::load(const YAML::Node& node)
 	_delay			= node["startDelay"]	.as<int>(_delay);
 	_conditionals	= node["conditionals"]	.as<std::vector<int> >(_conditionals);
 
+	WeightedOptions* weightOpt;
+
 	if (const YAML::Node& weights = node["missionWeights"])
 	{
 		for (YAML::const_iterator
@@ -106,11 +105,11 @@ void RuleMissionScript::load(const YAML::Node& node)
 				i != weights.end();
 				++i)
 		{
-			WeightedOptions* j = new WeightedOptions();
-			j->load(i->second);
+			weightOpt = new WeightedOptions();
+			weightOpt->load(i->second);
 			_missionWeights.push_back(std::make_pair(
 												i->first.as<size_t>(0),
-												j));
+												weightOpt));
 		}
 	}
 
@@ -121,11 +120,11 @@ void RuleMissionScript::load(const YAML::Node& node)
 				i != weights.end();
 				++i)
 		{
-			WeightedOptions* j = new WeightedOptions();
-			j->load(i->second);
+			weightOpt = new WeightedOptions();
+			weightOpt->load(i->second);
 			_raceWeights.push_back(std::make_pair(
 											i->first.as<size_t>(0),
-											j));
+											weightOpt));
 		}
 	}
 
@@ -136,11 +135,11 @@ void RuleMissionScript::load(const YAML::Node& node)
 				i != weights.end();
 				++i)
 		{
-			WeightedOptions* j = new WeightedOptions();
-			j->load(i->second);
+			weightOpt = new WeightedOptions();
+			weightOpt->load(i->second);
 			_regionWeights.push_back(std::make_pair(
 												i->first.as<size_t>(0),
-												j));
+												weightOpt));
 		}
 	}
 

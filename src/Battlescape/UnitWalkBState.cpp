@@ -1172,8 +1172,8 @@ int UnitWalkBState::getFinalDirection() const // private.
 			&& (*i)->getExposed() <= _unit->getIntelligence())
 		{
 			const int dist = _battleSave->getTileEngine()->distance(
-																	(*i)->getPosition(),
-																	_unit->getPosition());
+																(*i)->getPosition(),
+																_unit->getPosition());
 			if (dist < testDist)
 			{
 				testDist = dist;

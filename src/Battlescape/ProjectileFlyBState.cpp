@@ -265,13 +265,11 @@ void ProjectileFlyBState::init()
 		}
 		break;
 
-		// removed post-cosmetics
 		case BA_HIT:
 			performMeleeAttack();
 			//Log(LOG_INFO) << ". . BA_HIT performMeleeAttack() DONE";
 		return;
 
-		// removed post-cosmetics
 		case BA_PSIPANIC:
 		case BA_PSICONTROL:
 		case BA_PSICONFUSE:
@@ -690,7 +688,7 @@ bool ProjectileFlyBState::createNewProjectile() // private.
  */
 void ProjectileFlyBState::think()
 {
-	//Log(LOG_INFO) << "ProjectileFlyBState::think()";
+	//Log(LOG_INFO) << "ProjectileFlyBState::think() " << _unit->getId();
 	if (_unit->getStatus() == STATUS_AIMING
 		&& _unit->getArmor()->getShootFrames() != 0)
 	{
@@ -779,7 +777,7 @@ void ProjectileFlyBState::think()
 				&& _action.type != BA_PSICONTROL
 				&& _battleSave->getUnitsFalling() == false)
 			{
-				//Log(LOG_INFO) << "ProjectileFlyBState::think() CALL te::checkReactionFire()"
+				//Log(LOG_INFO) << "ProjectileFlyBState::think() CALL te::checkReactionFire()";
 				//	<< " id-" << _unit->getId()
 				//	<< " action.type = " << _action.type
 				//	<< " action.TU = " << _action.TU;
@@ -789,12 +787,14 @@ void ProjectileFlyBState::think()
 														_action.type != BA_HIT);
 			}
 
+			//Log(LOG_INFO) << "ProjectileFlyBState::think() current Status = " << (int)_unit->getStatus();
 			if (_unit->isOut_t() == false
 //				_unit->isOut() == false
 				&& _action.type != BA_HIT)	// huh? -> ie. melee & psi attacks shouldn't even get in here. But code needs cosmetic surgery .....
 			{
 				_unit->setStatus(STATUS_STANDING);
 			}
+			//Log(LOG_INFO) << "ProjectileFlyBState::think() current Status = " << (int)_unit->getStatus();
 
 			if (_battleSave->getSide() == FACTION_PLAYER
 				|| _battleSave->getDebugMode() == true)
@@ -807,6 +807,7 @@ void ProjectileFlyBState::think()
 	}
 	else // projectile VALID in motion -> ! impact !
 	{
+		//Log(LOG_INFO) << "ProjectileFlyBState::think() -> move Projectile";
 		if (_action.type != BA_THROW
 			&& _ammo != NULL
 			&& _ammo->getRules()->getShotgunPellets() != 0)
@@ -874,20 +875,20 @@ void ProjectileFlyBState::think()
 				_action.target = _action.waypoints.front();
 
 				// launch the next projectile in the waypoint cascade
-				ProjectileFlyBState* const nextWp = new ProjectileFlyBState(
+				ProjectileFlyBState* const wpNext = new ProjectileFlyBState(
 																		_parent,
 																		_action,
 																		_origin); // -> tilePos for BL.
-				nextWp->_originVoxel = _parent->getMap()->getProjectile()->getPosition();
-//				nextWp->setOriginVoxel(_parent->getMap()->getProjectile()->getPosition()); // !getPosition(-1) -> tada, fixed. // -> voxlPos
+				wpNext->_originVoxel = _parent->getMap()->getProjectile()->getPosition();
+//				wpNext->setOriginVoxel(_parent->getMap()->getProjectile()->getPosition()); // !getPosition(-1) -> tada, fixed. // -> voxlPos
 
 				// this follows BL as it hits through waypoints
 				camera->centerOnPosition(_origin);
 
 				if (_origin == _action.target)
-					nextWp->targetFloor();
+					wpNext->targetFloor();
 
-				_parent->statePushNext(nextWp);
+				_parent->statePushNext(wpNext);
 			}
 			else // shoot -> impact.
 			{
@@ -1269,11 +1270,15 @@ void ProjectileFlyBState::targetFloor() // private.
  * Peforms a melee attack.
  * @note Removed after cosmetic surgery.
  */
-void ProjectileFlyBState::performMeleeAttack()
+void ProjectileFlyBState::performMeleeAttack() // private.
 {
+	//Log(LOG_INFO) << "flyB:performMeleeAttack() " << _unit->getId();
 	_unit->aim();
 	_unit->setCache(NULL);
 	_parent->getMap()->cacheUnit(_unit);
+
+	_action.target = _battleSave->getTileEngine()->getMeleePosition(_unit);
+	//Log(LOG_INFO) << ". target " << _action.target;
 
 	// moved here from ExplosionBState to play a proper hit/miss sFx
 	bool success;
@@ -1330,8 +1335,8 @@ void ProjectileFlyBState::performMeleeAttack()
 
 
 	const BattleUnit* const targetUnit = _battleSave->getTile(_action.target)->getUnit();
-	const int height = targetUnit->getFloatHeight()
-					 + (targetUnit->getHeight() / 2)
+	const int height = (targetUnit->getHeight() / 2)
+					 + targetUnit->getFloatHeight()
 					 - _battleSave->getTile(_action.target)->getTerrainLevel();
 
 	Position posVoxel;

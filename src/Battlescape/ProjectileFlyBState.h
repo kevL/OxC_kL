@@ -69,6 +69,9 @@ private:
 	/// Set the boolean flag to angle a blaster bomb towards the floor.
 	void targetFloor();
 
+	/// Peforms a melee attack.
+	void performMeleeAttack();
+
 
 	public:
 		/// Creates a new ProjectileFlyB class
@@ -100,9 +103,6 @@ private:
 				int weight,
 				int strength,
 				int level);
-
-		/// Peforms a melee attack.
-		void performMeleeAttack(); // removed post-cosmetic surgery.
 };
 
 }
