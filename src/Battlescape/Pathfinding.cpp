@@ -807,9 +807,9 @@ int Pathfinding::getTuCostPf(
 
 			// if unit is on stairs try to go up a level
 			if (dir < DIR_UP
+				&& stairs == false
 				&& tileStart->getTerrainLevel() < -15 // higher than 2-thirds up.
-				&& tileDestAbove->hasNoFloor(tileDest) == false
-				&& stairs == false)
+				&& tileDestAbove->hasNoFloor(tileDest) == false)
 			{
 				++partsGoingUp;
 				//Log(LOG_INFO) << "partsUp = " << partsGoingUp;
@@ -825,14 +825,12 @@ int Pathfinding::getTuCostPf(
 //					tileDestBelow = _battleSave->getTile(*posDest + Position(x,y,-1)); // NOT USED.
 				}
 			}
-			else if (fall == false // for safely walking down ramps or stairs ...
+			else if (dir < DIR_UP
+				&& fall == false // for safely walking down ramps or stairs ...
 				&& _mType != MT_FLY
 				&& canFallDown(tileDest) == true
 				&& tileDestBelow != NULL
-				&& tileDestBelow->getTerrainLevel() < -11	// higher than 1-half up.
-				&& dir != DIR_DOWN)							// kL
-//				&& posStart.x != posDest->x					// Don't consider this section if
-//				&& posStart.y != posDest->y)				// falling via Alt+FlightSuit.
+				&& tileDestBelow->getTerrainLevel() < -11)	// higher than 1-half up.
 			{
 				++partsGoingDown;
 				//Log(LOG_INFO) << "partsDown = " << partsGoingDown;

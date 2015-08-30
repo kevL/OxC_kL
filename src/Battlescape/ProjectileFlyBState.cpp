@@ -180,7 +180,6 @@ void ProjectileFlyBState::init()
 	}
 
 
-	// removed post-cosmetics
 	// autoshot will default back to snapshot if it's not possible
 	// kL_note: This shouldn't happen w/ selectFireMethod() properly in place.
 	if (_action.type == BA_AUTOSHOT
@@ -191,7 +190,6 @@ void ProjectileFlyBState::init()
 	// Except that Berserk tries to use SnapShot .... needs looking at.
 
 
-	// removed post-cosmetics
 	// snapshot defaults to "hit" if it's a melee weapon (in case of reaction
 	// "shots" with a melee weapon) for Silacoid attack etc.
 	if (_action.weapon->getRules()->getBattleType() == BT_MELEE
@@ -202,11 +200,6 @@ void ProjectileFlyBState::init()
 		//Log(LOG_INFO) << ". convert shotType to BA_HIT";
 		_action.type = BA_HIT;
 	}
-
-	// reaction fire, added post-cosmetics
-//	_unit->lookAt(_action.target, _unit->getTurretType() != -1);
-//	while (_unit->getStatus() == STATUS_TURNING)
-//		_unit->turn();
 
 	const Tile* const destTile = _battleSave->getTile(_action.target);
 
@@ -739,28 +732,13 @@ void ProjectileFlyBState::think()
 			if (_action.actor->getFaction() != _battleSave->getSide()	// rf -> note that actionActor there may not be the actual shooter
 				&& Options::battleSmoothCamera == true)					// but he/she will be on the same Side taking a reaction shot.
 			{
-				//Log(LOG_INFO) << ". get stored Camera pos";
 				const std::map<int, Position>* const rfShotList (_battleSave->getTileEngine()->getRfShotList()); // init.
-				//Log(LOG_INFO) << ". rfShotList OKAY";
 
 				std::map<int, Position>::const_iterator i = rfShotList->find(_action.actor->getId());
 				if (i != rfShotList->end()) // note The shotList vector will be cleared in BattlescapeGame::think() after all BattleStates have popped.
-				{
 					_action.cameraPosition = i->second;
-					//Log(LOG_INFO) << ". found Camera pos " << _action.cameraPosition << " for " << _action.actor->getId();
-				}
 				else
 					_action.cameraPosition.z = -1;
-
-/*				for (std::map<int, Position>::const_iterator
-						i = rfShotList->begin();
-						i != rfShotList->end();
-						++i)
-				{
-					Log(LOG_INFO) << ". on Shotlist " << i->first;
-					_action.cameraPosition = rfShotList->at(_action.actor->getId());
-					Log(LOG_INFO) << ". found Camera pos " << _action.cameraPosition << " for " << _action.actor->getId();
-				} */
 			}
 
 			//Log(LOG_INFO) << ". cameraPosition " << _action.cameraPosition;

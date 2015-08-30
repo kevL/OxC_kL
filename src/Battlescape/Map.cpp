@@ -525,7 +525,6 @@ void Map::drawTerrain(Surface* const surface) // private.
 				if (_firstBulletFrame == true)
 				{
 					_firstBulletFrame = false;
-					//Log(LOG_INFO) << "map:drawTerrain() first bullet Frame";
 
 					if (   bullet.x < 0
 						|| bullet.x > surface->getWidth() - 1
@@ -534,19 +533,17 @@ void Map::drawTerrain(Surface* const surface) // private.
 					{
 						_camera->centerOnPosition(
 												Position(
-													bulletLowX,
-													bulletLowY,
-													bulletHighZ),
+														bulletLowX,
+														bulletLowY,
+														bulletHighZ),
 												false);
 						_camera->convertVoxelToScreen(
 												_projectile->getPosition(),
 												&bullet);
 
 						BattleAction* const action = _battleSave->getTileEngine()->getRfAction(); // rf ->
-						//Log(LOG_INFO) << ". camera center On Position, rfActor = " << action->actor->getId();
 						if (action->actor->getFaction() != _battleSave->getSide())	// moved here from TileEngine::reactionShot()
 						{															// because this is the (accurate) position of the bullet-shot-actor's Camera mapOffset.
-							//Log(LOG_INFO) << ". STORE " << action->actor->getId() << " to " << action->cameraPosition;
 							std::map<int, Position>* const rfShotList (_battleSave->getTileEngine()->getRfShotList()); // init.
 							rfShotList->insert(std::pair<int, Position>(
 																	action->actor->getId(),
@@ -4386,6 +4383,17 @@ void Map::drawTerrain(Surface* const surface) // private.
 							bullet.x - 15,
 							bullet.y - 25,
 							0);
+
+					if ((*i)->isHit() == 1) // temp kludge to show batman-type hit if melee is successful
+					{
+						srfSprite = _res->getSurfaceSet("HIT.PCK")->getFrame((*i)->getCurrentFrame() - 4);
+						if (srfSprite)
+							srfSprite->blitNShade(
+									surface,
+									bullet.x - 15,
+									bullet.y - 25,
+									0);
+					}
 				}
 			}
 		}

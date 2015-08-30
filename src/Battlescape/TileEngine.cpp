@@ -1963,7 +1963,6 @@ bool TileEngine::reactionShot(
 	if (_rfAction->targeting == true
 		&& _rfAction->actor->spendTimeUnits(_rfAction->TU) == true)
 	{
-		//Log(LOG_INFO) << ". add Actor";
 //		if (_rfAction->actor->getFaction() != FACTION_HOSTILE)
 //		{
 //		Camera* const rfCam = _battleSave->getBattleState()->getMap()->getCamera();	// this is getting done in Map.
@@ -1973,13 +1972,10 @@ bool TileEngine::reactionShot(
 
 		_rfAction->TU = 0;
 
-		_battleSave->getBattleGame()->statePushBack(new UnitTurnBState( // moved to ProjectileFlyBState, post-cosmetics
+		_battleSave->getBattleGame()->statePushBack(new UnitTurnBState(
 																_battleSave->getBattleGame(),
 																*_rfAction,
 																false));
-//		if (_rfAction->type == BA_HIT)
-//			_save->getBattleGame()->statePushBack(new MeleeAttackBState(_save->getBattleGame(), _rfAction));
-
 		_battleSave->getBattleGame()->statePushBack(new ProjectileFlyBState(
 																	_battleSave->getBattleGame(),
 																	*_rfAction));
@@ -5230,7 +5226,7 @@ int TileEngine::calculateLine(
 }
 
 /**
- * Calculates a parabola trajectory, used for throwing items.
+ * Calculates a parabola trajectory for thrown items.
  * @param origin			- reference the origin in voxelspace
  * @param target			- reference the target in voxelspace
  * @param storeTrajectory	- true will store the whole trajectory - otherwise it stores the last position only
