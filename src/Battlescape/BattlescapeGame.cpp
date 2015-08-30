@@ -169,7 +169,7 @@ void BattlescapeGame::think()
 	// nothing is happening - see if they need some alien AI or units panicking or what have you
 	if (_states.empty() == true)
 	{
-		//Log(LOG_INFO) << "BattlescapeGame::think() - states NOT Empty.";
+		//Log(LOG_INFO) << "BattlescapeGame::think() - _states is Empty. Clear rfShotList";
 		_battleSave->getTileEngine()->getRfShotList()->clear();
 
 		if (_battleSave->getSide() != FACTION_PLAYER) // it's a non player side (ALIENS or CIVILIANS)

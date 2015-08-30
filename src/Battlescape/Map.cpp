@@ -525,6 +525,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 				if (_firstBulletFrame == true)
 				{
 					_firstBulletFrame = false;
+					//Log(LOG_INFO) << "map:drawTerrain() first bullet Frame";
 
 					if (   bullet.x < 0
 						|| bullet.x > surface->getWidth() - 1
@@ -541,12 +542,12 @@ void Map::drawTerrain(Surface* const surface) // private.
 												_projectile->getPosition(),
 												&bullet);
 
-						//Log(LOG_INFO) << "map:drawTerrain() set cameraPos";
 						BattleAction* const action = _battleSave->getTileEngine()->getRfAction(); // rf ->
+						//Log(LOG_INFO) << ". camera center On Position, rfActor = " << action->actor->getId();
 						if (action->actor->getFaction() != _battleSave->getSide())	// moved here from TileEngine::reactionShot()
 						{															// because this is the (accurate) position of the bullet-shot-actor's Camera mapOffset.
-							//Log(LOG_INFO) << ". " << action->actor->getId() << " to " << action->cameraPosition;
-							std::map<int, Position>* rfShotList = _battleSave->getTileEngine()->getRfShotList();
+							//Log(LOG_INFO) << ". STORE " << action->actor->getId() << " to " << action->cameraPosition;
+							std::map<int, Position>* const rfShotList (_battleSave->getTileEngine()->getRfShotList()); // init.
 							rfShotList->insert(std::pair<int, Position>(
 																	action->actor->getId(),
 																	_camera->getMapOffset()));

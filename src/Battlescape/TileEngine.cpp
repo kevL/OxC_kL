@@ -1864,7 +1864,7 @@ bool TileEngine::reactionShot(
 		BattleUnit* const unit,
 		const BattleUnit* const targetUnit)
 {
-	//Log(LOG_INFO) << "TileEngine::reactionShot() id-" << unit->getId();
+	//Log(LOG_INFO) << "TileEngine::reactionShot() " << unit->getId();
 	_rfAction->actor = unit;
 
 	if (unit->getFaction() == FACTION_PLAYER
@@ -1963,6 +1963,7 @@ bool TileEngine::reactionShot(
 	if (_rfAction->targeting == true
 		&& _rfAction->actor->spendTimeUnits(_rfAction->TU) == true)
 	{
+		//Log(LOG_INFO) << ". add Actor";
 //		if (_rfAction->actor->getFaction() != FACTION_HOSTILE)
 //		{
 //		Camera* const rfCam = _battleSave->getBattleState()->getMap()->getCamera();	// this is getting done in Map.
