@@ -6359,10 +6359,9 @@ Position TileEngine::getMeleePosition(const BattleUnit* const actor) const
 											actor->getHeight(true)
 												- tileOrigin->getTerrainLevel()
 												- 4);
-					if (canTargetTile(
+					if (canTargetUnit(
 									&posOrigin_vox,
-									tileOrigin,
-									O_FLOOR,
+									tileTarget,
 									&posTarget_vox,
 									actor) == true)
 					{
