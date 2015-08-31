@@ -74,7 +74,9 @@ ProjectileFlyBState::ProjectileFlyBState( // origin is unitTile
 		_initialized(false),
 		_targetFloor(false),
 		_initUnitAnim(0)
-{}
+{
+	//Log(LOG_INFO) << "ProjectileFlyBState cTor.";
+}
 
 /**
  * Sets up a ProjectileFlyBState [1].
@@ -464,7 +466,7 @@ void ProjectileFlyBState::init()
  */
 bool ProjectileFlyBState::createNewProjectile() // private.
 {
-	//Log(LOG_INFO) << "ProjectileFlyBState::createNewProjectile() -> create Projectile";
+	//Log(LOG_INFO) << "ProjectileFlyBState::createNewProjectile()";
 	//Log(LOG_INFO) << ". _action_type = " << _action.type;
 	++_action.autoShotCount;
 
@@ -1054,35 +1056,33 @@ void ProjectileFlyBState::think()
 							}
 						}
 					}
-					// kL_note: Could take this section out (i had removed it for a while ..)
+
 					// ... Let's try something
-/*kL
-					if (_prjImpact == VOXEL_UNIT)
+/*					if (_prjImpact == VOXEL_UNIT)
 					{
 						BattleUnit* victim = _battleSave->getTile(
 																_parent->getMap()->getProjectile()->getPosition(offset) / Position(16, 16, 24))
 															->getUnit();
-						// kL_begin:
 						if (victim
 							&& !victim->isOut(true, true)
 							&& victim->getOriginalFaction() == FACTION_PLAYER
 							&& _unit->getFaction() == FACTION_HOSTILE)
 						{
 							_unit->setExposed();
-						} */ // kL_end. But this is entirely unnecessary, since aLien has already seen and logged the soldier.
-/*kL
-						if (victim
+						} */ // But this is entirely unnecessary since aLien has already seen and logged the soldier.
+/*						if (victim
 							&& !victim->isOut(true, true)
 							&& victim->getFaction() == FACTION_HOSTILE)
 						{
 							AlienBAIState* aggro = dynamic_cast<AlienBAIState*>(victim->getCurrentAIState());
 							if (aggro != 0)
 							{
-								aggro->setWasHitBy(_unit);	// kL_note: is used only for spotting on RA.
-								_unit->setExposed();		// kL_note: might want to remark this! Ok.
+								aggro->setWasHitBy(_unit);	// is used only for spotting on RA.
+								_unit->setExposed();		// might want to remark this! Ok.
 								// technically, in the original as I remember it, only
 								// a BlasterLaunch (by xCom) would set an xCom soldier Exposed here!
-								// ( Those aLiens had a way of tracing a BL back to its origin ....)
+								// Those aLiens had a way of tracing a BL back to its origin ....
+								// ... but that's madness.
 							}
 						}
 					} */
@@ -1116,7 +1116,6 @@ void ProjectileFlyBState::cancel()
 
 		Camera* const camera = _parent->getMap()->getCamera();
 		const Position pos = projectile->getPosition() / Position(16,16,24);
-//		if (!_parent->getMap()->getCamera()->isOnScreen(Position(p.x/16, p.y/16, p.z/24), false, 0, false))
 		if (camera->isOnScreen(pos) == false)
 			camera->centerOnPosition(pos);
 	}

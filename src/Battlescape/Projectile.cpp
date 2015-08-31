@@ -78,7 +78,7 @@ Projectile::Projectile(
 	//Log(LOG_INFO) << "cTor origin = " << origin;
 	//Log(LOG_INFO) << "cTor target = " << targetVoxel << " tSpace " << (targetVoxel / Position(16,16,24));
 
-	//Log(LOG_INFO) << "Projectile";
+	//Log(LOG_INFO) << "Projectile cTor";
 	//Log(LOG_INFO) << ". action.weapon = " << _action.weapon->getRules()->getType();
 	//Log(LOG_INFO) << ". bullet = " << _action.weapon->getAmmoItem()->getRules()->getType();
 
@@ -132,6 +132,8 @@ Projectile::Projectile(
 	if (_speed < 1)
 		_speed = 1;
 
+	//Log(LOG_INFO) << "Projectile cTor EXIT";
+}
 //	if ((targetVoxel.x - origin.x) + (targetVoxel.y - origin.y) > -1)
 //		_reversed = true;
 //	else
@@ -152,7 +154,6 @@ Projectile::Projectile(
 	NNW		not reversed
 	N	-1	not reversed
 	NNE		not reversed */
-}
 
 /**
  * Deletes the Projectile.
@@ -364,6 +365,7 @@ VoxelType Projectile::calculateShot(
  */
 VoxelType Projectile::calculateThrow(double accuracy)
 {
+	//Log(LOG_INFO) << "Projectile calculateThrow()";
 /*	BattleUnit* bu = _battleSave->getTile(_origin)->getUnit();
 	if (bu == NULL)
 		bu = _battleSave->getTile(Position(
@@ -454,9 +456,11 @@ VoxelType Projectile::calculateThrow(double accuracy)
 			}
 		}
 
+		//Log(LOG_INFO) << "Projectile calculateThrow() EXIT w ret = " << ret;
 		return ret;
 	}
 
+	//Log(LOG_INFO) << "Projectile calculateThrow() EXIT out of bounds";
 	return VOXEL_OUTOFBOUNDS;
 }
 
@@ -477,7 +481,7 @@ void Projectile::applyAccuracy( // private.
 		const Tile* const targetTile)
 //		const bool extendLine)
 {
-	//Log(LOG_INFO) << "Projectile::applyAccuracy(), accuracy = " << accuracy;
+	//Log(LOG_INFO) << "Projectile::applyAccuracy() accuracy = " << accuracy;
 	if (_action.type == BA_HIT) // probly not needed.
 		return;
 

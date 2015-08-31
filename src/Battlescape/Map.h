@@ -127,12 +127,6 @@ private:
 	///
 	void drawTerrain(Surface* const surface);
 	///
-//	bool hilltopRedraw(
-//			const BattleUnit& unit,
-//			const Position& posMap,
-//			int& pixelOffset_x,
-//			int& pixelOffset_y) const;
-	///
 	int getTerrainLevel(
 			const Position& pos,
 			int unitSize) const;

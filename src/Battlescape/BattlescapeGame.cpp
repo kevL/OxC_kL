@@ -2809,6 +2809,7 @@ void BattlescapeGame::primaryAction(const Position& pos)
 			statePushFront(new UnitTurnBState(
 											this,
 											_currentAction));
+			//Log(LOG_INFO) << ". . . . FIRING or THROWING done";
 		}
 	}
 	else // select unit, or spin/ MOVE .......

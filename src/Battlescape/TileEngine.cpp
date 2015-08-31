@@ -5266,6 +5266,7 @@ VoxelType TileEngine::plotParabola(
 		const double arc,
 		const Position& delta) const
 {
+	//Log(LOG_INFO) << "TileEngine::plotParabola()";
 	const double ro = std::sqrt(static_cast<double>(
 					 (target.x - origin.x) * (target.x - origin.x)
 				   + (target.y - origin.y) * (target.y - origin.y)
@@ -5329,6 +5330,7 @@ VoxelType TileEngine::plotParabola(
 				trj->push_back(pos2);
 			}
 
+			//Log(LOG_INFO) << "TileEngine::plotParabola() EXIT w/ ret = " << ret;
 			return ret;
 		}
 
@@ -5342,6 +5344,7 @@ VoxelType TileEngine::plotParabola(
 		trj->push_back(Position(x,y,z));
 	}
 
+	//Log(LOG_INFO) << "TileEngine::plotParabola() EXIT w/ Empty";
 	return VOXEL_EMPTY;
 }
 
@@ -5383,6 +5386,7 @@ bool TileEngine::validateThrow(
 //			|| action.weapon->getRules()->getBattleType() == BT_PROXYGRENADE)
 //		&& tile->getMapData(O_OBJECT)->getTuCostPart(MT_WALK) == 255)
 	{
+		//Log(LOG_INFO) << ". vT() ret FALSE, no diag BigWalls";
 		return false; // prevent Grenades from landing on diagonal BigWalls.
 	}
 
