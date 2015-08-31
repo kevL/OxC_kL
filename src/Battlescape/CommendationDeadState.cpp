@@ -69,13 +69,16 @@ CommendationDeadState::CommendationDeadState(std::vector<SoldierDead*> soldiersL
 	_window->setColor(Palette::blockOffset(15)-1); // green
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
+	if (soldiersLost.size() == 1)
+		_txtTitle->setText(tr("STR_LOST"));
+	else
+		_txtTitle->setText(tr("STR_LOST_PL"));
 	_txtTitle->setColor(Palette::blockOffset(8)+5); // cyan
-	_txtTitle->setText(tr("STR_LOST"));
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
 
 	_lstLost->setColor(Palette::blockOffset(8)+5);
-	_lstLost->setColumns(2, 150, 135);
+	_lstLost->setColumns(2, 200, 77);
 	_lstLost->setBackground(_window);
 	_lstLost->setSelectable();
 	_lstLost->setMargin();
@@ -92,8 +95,8 @@ CommendationDeadState::CommendationDeadState(std::vector<SoldierDead*> soldiersL
 	_txtMedalInfo->setHighContrast();
 	_txtMedalInfo->setWordWrap();
 
-	_btnOk->setColor(Palette::blockOffset(15)-1);
 	_btnOk->setText(tr("STR_OK"));
+	_btnOk->setColor(Palette::blockOffset(15)-1);
 	_btnOk->onMouseClick((ActionHandler)& CommendationDeadState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& CommendationDeadState::btnOkClick,
@@ -175,9 +178,9 @@ CommendationDeadState::CommendationDeadState(std::vector<SoldierDead*> soldiersL
 						modularAward = true;
 					}
 
-					std::wstringstream wss;
-					wss << L"  ";
-					wss << (*soldier)->getName().c_str();
+					std::wstringstream wststr;
+					wststr << L"  ";
+					wststr << (*soldier)->getName().c_str();
 
 					int
 						skip = 0,
@@ -209,7 +212,7 @@ CommendationDeadState::CommendationDeadState(std::vector<SoldierDead*> soldiersL
 
 					_lstSoldiers->addRow(
 									2,
-									wss.str().c_str(),
+									wststr.str().c_str(),
 									tr((*soldierAward)->getDecorLevelType(skip)).c_str());
 					break;
 				}

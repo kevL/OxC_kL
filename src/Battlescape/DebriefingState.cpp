@@ -508,7 +508,6 @@ DebriefingState::~DebriefingState()
 void DebriefingState::init()
 {
 	State::init();
-
 	_game->getResourcePack()->playMusic(
 									_music,
 									"",1);

@@ -1722,7 +1722,7 @@ void Globe::drawRadars()
 										(*j)->getLatitude(),
 										(*j)->getLongitude(),
 										range,
-										24,
+										48,
 										CLO_RADAR2);
 						}
 					}

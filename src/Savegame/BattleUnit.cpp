@@ -3537,7 +3537,7 @@ void BattleUnit::morphine()
 }
 
 /**
- * Restores soldier energy and reduce stun level.
+ * Restores soldier energy and reduces stun level.
  * @param energy	- the amount of energy to add
  * @param stun		- the amount of stun level to reduce
  * @return, true if unit regains consciousness
