@@ -5347,7 +5347,7 @@ VoxelType TileEngine::plotParabola(
 
 /**
  * Checks if a throw action is permissible.
- * @note Accuracy is NOT considered; this checks a true path/trajectory.
+ * @note Accuracy is NOT considered; this checks for a true path/trajectory.
  * @sa Projectile::calculateThrow()
  * @param action		- reference the action to validate
  * @param originVoxel	- reference the origin point of the action
@@ -5364,10 +5364,33 @@ bool TileEngine::validateThrow(
 		VoxelType* const voxelType) const
 {
 	//Log(LOG_INFO) << "\nTileEngine::validateThrow()";
-	const Position targetPos = targetVoxel / Position(16,16,24);
+	const Tile* const tile = _battleSave->getTile(action.target);
+	if (ProjectileFlyBState::validThrowRange(
+										&action,
+										originVoxel,
+										tile) == false)
+	{
+		//Log(LOG_INFO) << ". vT() ret FALSE, ThrowRange not valid";
+		return false;
+	}
+
+	if (action.type == BA_THROW
+		&& tile != NULL
+		&& tile->getMapData(O_OBJECT) != NULL
+		&& (tile->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NESW
+			|| tile->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NWSE))
+//		&& (action.weapon->getRules()->getBattleType() == BT_GRENADE
+//			|| action.weapon->getRules()->getBattleType() == BT_PROXYGRENADE)
+//		&& tile->getMapData(O_OBJECT)->getTuCostPart(MT_WALK) == 255)
+	{
+		return false; // prevent Grenades from landing on diagonal BigWalls.
+	}
+
+
+	const Position posTarget = targetVoxel / Position(16,16,24);
 	double parabolicCoefficient; // higher parabolicCoefficient means higher arc IG. eh ......
 
-	if (targetPos != originVoxel / Position(16,16,24))
+	if (posTarget != originVoxel / Position(16,16,24))
 	{
 		parabolicCoefficient = 0.81;
 
@@ -5378,34 +5401,10 @@ bool TileEngine::validateThrow(
 		parabolicCoefficient = 0.;
 	//Log(LOG_INFO) << ". starting arc = " << parabolicCoefficient;
 
-	const Tile* const targetTile = _battleSave->getTile(action.target);
-
-	if (ProjectileFlyBState::validThrowRange(
-										&action,
-										originVoxel,
-										targetTile) == false)
-	{
-		//Log(LOG_INFO) << ". vT() ret FALSE, ThrowRange not valid";
-		return false;
-	}
-
-	if (action.type == BA_THROW
-		&& targetTile != NULL
-		&& targetTile->getMapData(O_OBJECT) != NULL
-		&& (targetTile->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NESW
-			|| targetTile->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NWSE))
-//		&& (action.weapon->getRules()->getBattleType() == BT_GRENADE
-//			|| action.weapon->getRules()->getBattleType() == BT_PROXYGRENADE)
-//		&& targetTile->getMapData(O_OBJECT)->getTuCostPart(MT_WALK) == 255)
-	{
-		return false; // prevent Grenades from landing on diagonal BigWalls.
-	}
-
-
 	// check for test up from the lowest trajectory
 	bool found = false;
 	while (found == false // try several different curvatures
-		&& parabolicCoefficient < 8.3)
+		&& parabolicCoefficient < 6.1)
 	{
 		//Log(LOG_INFO) << ". . arc = " << parabolicCoefficient;
 		std::vector<Position> trj;
@@ -5421,7 +5420,7 @@ bool TileEngine::validateThrow(
 		if (test != VOXEL_OUTOFBOUNDS
 			&& test != VOXEL_WESTWALL
 			&& test != VOXEL_NORTHWALL
-			&& (trj.at(0) / Position(16,16,24)) == targetPos)
+			&& (trj.at(0) / Position(16,16,24)) == posTarget)
 		{
 			//Log(LOG_INFO) << ". . . found TRUE";
 			found = true;
@@ -5433,9 +5432,9 @@ bool TileEngine::validateThrow(
 			parabolicCoefficient += 0.3;
 	}
 
-	if (parabolicCoefficient >= 8.3)
+	if (parabolicCoefficient >= 6.1)
 	{
-		//Log(LOG_INFO) << ". vT() ret FALSE, arc > 8.3";
+		//Log(LOG_INFO) << ". vT() ret FALSE, arc > 6.1";
 		return false;
 	}
 
@@ -5445,7 +5444,7 @@ bool TileEngine::validateThrow(
 
 	found = false;
 	while (found == false // try several different curvatures
-		&& parabolicCoefficient2 < 8.3)
+		&& parabolicCoefficient2 < 6.1)
 	{
 		//Log(LOG_INFO) << ". . arc = " << parabolicCoefficient2;
 		std::vector<Position> trj;
@@ -5461,7 +5460,7 @@ bool TileEngine::validateThrow(
 		if (test == VOXEL_OUTOFBOUNDS
 			|| test == VOXEL_WESTWALL
 			|| test == VOXEL_NORTHWALL
-			|| (trj.at(0) / Position(16,16,24)) != targetPos)
+			|| (trj.at(0) / Position(16,16,24)) != posTarget)
 		{
 			//Log(LOG_INFO) << ". . . found TRUE";
 			found = true;
@@ -5655,7 +5654,7 @@ VoxelType TileEngine::voxelCheck(
 					&& _voxelData->at(loftId) & (1 << x)) // if the voxelData at loftId is "1" solid:
 				{
 					//Log(LOG_INFO) << ". vC() ret = " << part;
-					return static_cast<VoxelType>(part);
+					return static_cast<VoxelType>(partType); // Note MapDataType & VoxelType correspond.
 				}
 			}
 		}
