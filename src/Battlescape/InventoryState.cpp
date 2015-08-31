@@ -104,7 +104,7 @@ InventoryState::InventoryState(
 	_txtName	= new Text(200, 17, 36, 6);
 	_gender		= new Surface(7, 7, 28, 1);
 
-	_txtWeight	= new Text(70, 9, 237, 24); // 237 -> was, 245
+	_txtWeight	= new Text(70, 9, 237, 24);
 	_txtTUs		= new Text(40, 9, 237, 24);
 	_txtFAcc	= new Text(40, 9, 237, 32);
 	_txtReact	= new Text(40, 9, 237, 40);
@@ -119,6 +119,13 @@ InventoryState::InventoryState(
 
 	_numOrder	= new NumberText(7, 5, 228,  4);
 	_tuCost		= new NumberText(7, 5, 310, 60);
+
+	_wndHead		= new NumberText(7, 5,  79,  31);
+	_wndTorso		= new NumberText(7, 5,  79, 144);
+	_wndRightArm	= new NumberText(7, 5,  40,  80);
+	_wndLeftArm		= new NumberText(7, 5, 117,  80);
+	_wndRightLeg	= new NumberText(7, 5,  40, 120);
+	_wndLeftLeg		= new NumberText(7, 5, 117, 120);
 
 	_txtItem	= new Text(160, 9, 128, 140);
 
@@ -180,6 +187,7 @@ InventoryState::InventoryState(
 
 	add(_numOrder);
 	add(_tuCost);
+
 	add(_txtItem,		"textItem",			"inventory", _bg);
 	add(_txtAmmo,		"textAmmo",			"inventory", _bg);
 	add(_btnOk,			"buttonOK",			"inventory", _bg);
@@ -188,14 +196,24 @@ InventoryState::InventoryState(
 	add(_btnUnload,		"buttonUnload",		"inventory", _bg);
 	add(_btnGround,		"buttonGround",		"inventory", _bg);
 	add(_btnRank,		"rank",				"inventory", _bg);
+
 //	add(_btnCreateTemplate,	"buttonCreate",	"inventory", _bg);
 //	add(_btnApplyTemplate,	"buttonApply",	"inventory", _bg);
 //	add(_btnClearInventory);
+
 	add(_selAmmo);
 	add(_inv);
+
 	add(_txtUseTU,		"textTUs",			"inventory", _bg);
 	add(_txtThrowTU,	"textTUs",			"inventory", _bg);
 	add(_txtPsiTU,		"textTUs",			"inventory", _bg);
+
+	add(_wndHead);
+	add(_wndTorso);
+	add(_wndRightArm);
+	add(_wndLeftArm);
+	add(_wndRightLeg);
+	add(_wndLeftLeg);
 
 	// move the TU display down to make room for the weight display
 	if (Options::showMoreStatsInInventoryView == true)
@@ -224,6 +242,19 @@ InventoryState::InventoryState(
 
 	_tuCost->setColor(1);
 	_tuCost->setVisible(false);
+
+	_wndHead->setColor(Palette::blockOffset(2)+6); // red
+	_wndHead->setVisible(false);
+	_wndTorso->setColor(Palette::blockOffset(2)+6);
+	_wndTorso->setVisible(false);
+	_wndRightArm->setColor(Palette::blockOffset(2)+6);
+	_wndRightArm->setVisible(false);
+	_wndLeftArm->setColor(Palette::blockOffset(2)+6);
+	_wndLeftArm->setVisible(false);
+	_wndRightLeg->setColor(Palette::blockOffset(2)+6);
+	_wndRightLeg->setVisible(false);
+	_wndLeftLeg->setColor(Palette::blockOffset(2)+6);
+	_wndLeftLeg->setVisible(false);
 
 	_txtItem->setHighContrast();
 
@@ -533,6 +564,7 @@ void InventoryState::init()
 	}
 
 	updateStats();
+	updateWounds();
 	refreshMouse();
 }
 
@@ -625,6 +657,87 @@ void InventoryState::updateStats() // private.
 			}
 			else
 				_txtPStr->setText(L""); */
+		}
+	}
+}
+
+/**
+ * Shows woundage values.
+ */
+void InventoryState::updateWounds() // private.
+{
+	const BattleUnit* const unit = _battleSave->getSelectedUnit();
+	UnitBodyPart bodyPart;
+	unsigned wound;
+
+	for (size_t
+			i = 0;
+			i != BattleUnit::PARTS_BODY;
+			++i)
+	{
+		bodyPart = static_cast<UnitBodyPart>(i);
+		wound = static_cast<unsigned>(unit->getFatalWound(bodyPart));
+
+		switch (bodyPart)
+		{
+			case BODYPART_HEAD:
+				if (wound != 0)
+				{
+					_wndHead->setValue(wound);
+					_wndHead->setVisible();
+				}
+				else
+					_wndHead->setVisible(false);
+			break;
+
+			case BODYPART_TORSO:
+				if (wound != 0)
+				{
+					_wndTorso->setValue(wound);
+					_wndTorso->setVisible();
+				}
+				else
+					_wndTorso->setVisible(false);
+			break;
+
+			case BODYPART_RIGHTARM:
+				if (wound != 0)
+				{
+					_wndRightArm->setValue(wound);
+					_wndRightArm->setVisible();
+				}
+				else
+					_wndRightArm->setVisible(false);
+			break;
+
+			case BODYPART_LEFTARM:
+				if (wound != 0)
+				{
+					_wndLeftArm->setValue(wound);
+					_wndLeftArm->setVisible();
+				}
+				else
+					_wndLeftArm->setVisible(false);
+			break;
+
+			case BODYPART_RIGHTLEG:
+				if (wound != 0)
+				{
+					_wndRightLeg->setValue(wound);
+					_wndRightLeg->setVisible();
+				}
+				else
+					_wndRightLeg->setVisible(false);
+			break;
+
+			case BODYPART_LEFTLEG:
+				if (wound != 0)
+				{
+					_wndLeftLeg->setValue(wound);
+					_wndLeftLeg->setVisible();
+				}
+				else
+					_wndLeftLeg->setVisible(false);
 		}
 	}
 }

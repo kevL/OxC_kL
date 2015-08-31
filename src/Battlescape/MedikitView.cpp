@@ -142,7 +142,7 @@ void MedikitView::mouseClick(Action* action, State*)
 
 	for (size_t
 			i = 0;
-			i != BattleUnit::PARTS_BODY; //static_cast<int>(srt->getTotalFrames());
+			i != BattleUnit::PARTS_BODY;
 			++i)
 	{
 		srf = srt->getFrame(static_cast<int>(i));

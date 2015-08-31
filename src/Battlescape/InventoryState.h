@@ -66,7 +66,13 @@ private:
 	Inventory* _inv;
 	NumberText
 		* _numOrder,
-		* _tuCost;
+		* _tuCost,
+		* _wndHead,
+		* _wndTorso,
+		* _wndRightArm,
+		* _wndLeftArm,
+		* _wndRightLeg,
+		* _wndLeftLeg;
 	SavedBattleGame* _battleSave;
 	Surface
 		* _bg,
@@ -92,6 +98,9 @@ private:
 
 	/// Updates the selected unit's info - weight, TU, etc.
 	void updateStats();
+	/// Shows woundage values.
+	void updateWounds();
+
 	/// Refresh the hover status of the mouse.
 	void refreshMouse();
 
