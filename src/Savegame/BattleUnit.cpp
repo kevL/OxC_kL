@@ -347,7 +347,7 @@ BattleUnit::BattleUnit(
 			i != PARTS_ARMOR;
 			++i)
 	{
-		_cache[i] = 0;
+		_cache[i] = NULL;
 	}
 
 	for (size_t
@@ -406,11 +406,11 @@ BattleUnit::~BattleUnit()
 			i != PARTS_ARMOR;
 			++i)
 	{
-		if (_cache[i] != NULL)
-			delete _cache[i];
+//		if (_cache[i] != NULL)
+		delete _cache[i];
 	}
 
-/*kL: Soldier Diary, not needed for nonSoldiers. Or soldiers for that matter ....
+/* Soldier Diary, not needed for nonSoldiers. Or soldiers for that matter ....
 	if (getGeoscapeSoldier() == NULL)
 	{
 		for (std::vector<BattleUnitKills*>::const_iterator
@@ -421,7 +421,7 @@ BattleUnit::~BattleUnit()
 			delete *i;
 		}
 	} */
-//	if (_geoscapeSoldier != NULL) // kL ... delete it anyway:
+//	if (_geoscapeSoldier != NULL) // ... delete it anyway:
 	delete _statistics;
 
 	delete _currentAIState;
@@ -1623,7 +1623,7 @@ int BattleUnit::damage(
 			if (moraleLoss > 0)
 			{
 				int leadership = 100; // <- for civilians & pre-battle PS explosion.
-				if (_battleGame != NULL)
+				if (_battleGame != NULL) // ie. don't crash on power-source explosion.
 				{
 					if (_originalFaction == FACTION_PLAYER)
 						leadership = _battleGame->getBattlescapeState()->getSavedBattleGame()->getMoraleModifier();
@@ -1699,6 +1699,15 @@ void BattleUnit::playHitSound()
 }
 
 /**
+ * Sets this unit's health level.
+ * @param health - the health to set
+ */
+void BattleUnit::setHealth(int health)
+{
+	_health = health;
+}
+
+/**
  * Does an amount of stun recovery.
  * @param power - stun to recover
  * @return, true if unit revives
@@ -1741,22 +1750,18 @@ void BattleUnit::setStun(int stun)
  * unconscious.
  * @note Used when another unit falls on top of this unit. Zombified units first
  * convert to their spawn unit.
- * @param battleGame - pointer to BattlescapeGame
  */
-void BattleUnit::knockOut(BattlescapeGame* battleGame)
+void BattleUnit::knockOut()
 {
-	if (_armor->getSize() > 1	// large units die
-		|| (_unitRule != NULL	// so do scout drones
-			&& _unitRule->isMechanical() == true))
+	if (_unitRule != NULL
+		&& _unitRule->isMechanical() == true)
 	{
 		_health = 0;
 	}
 	else if (_spawnUnit.empty() == false)
 	{
-		BattleUnit* const conUnit = battleGame->convertUnit(
-														this,
-														_spawnUnit);
-		conUnit->knockOut(battleGame); // -> STATUS_UNCONSCIOUS
+		BattleUnit* const conUnit = _battleGame->convertUnit(this);
+		conUnit->knockOut();
 	}
 	else
 		_stunLevel = _health;
@@ -4313,23 +4318,6 @@ int BattleUnit::getSpinPhase() const
 void BattleUnit::setSpinPhase(int spinphase)
 {
 	_spinPhase = spinphase;
-}
-
-/**
- * Sets this unit to STATUS_UNCONSCIOUS.
- */
-void BattleUnit::knockOut()
-{
-	_status = STATUS_UNCONSCIOUS;
-}
-
-/**
- * Sets this unit's health level.
- * @param health - the health to set
- */
-void BattleUnit::setHealth(int health)
-{
-	_health = health;
 }
 
 /**

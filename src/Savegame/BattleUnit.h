@@ -717,6 +717,9 @@ private:
 		/// Plays a grunt sFx when hit/damaged.
 		void playHitSound();
 
+		/// Sets this unit's health level.
+		void setHealth(int health);
+
 		/// Heals stun level of this unit.
 		bool healStun(int power);
 		/// Gets this unit's stun level.
@@ -725,7 +728,7 @@ private:
 		void setStun(int stun);
 
 		/// Knocks this unit out instantly.
-		void knockOut(BattlescapeGame* battleGame);
+		void knockOut();
 
 		/// Starts the falling sequence. This is only for collapsing dead or unconscious units.
 		void startFalling();
@@ -1074,12 +1077,6 @@ private:
 		int getSpinPhase() const;
 		/// Sets the spinPhase of this unit.
 		void setSpinPhase(int spinphase);
-
-		/// Sets this unit to STATUS_UNCONSCIOUS.
-		void knockOut();
-
-		/// Sets this unit's health level.
-		void setHealth(int health);
 
 		/// To stop a unit from firing/throwing if it spots a new opponent during turning.
 		void setStopShot(const bool stop = true);

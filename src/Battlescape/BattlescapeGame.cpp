@@ -1735,9 +1735,7 @@ void BattlescapeGame::checkForCasualties(
 				if ((*i)->getSpawnUnit() == "STR_ZOMBIE") // human->zombie (nobody cares about zombie->chryssalid)
 				{
 					converted = true;
-					convertUnit(
-							*i,
-							(*i)->getSpawnUnit());
+					convertUnit(*i);
 				}
 				else if (stunned == false)
 					bypass = true;
@@ -3071,15 +3069,12 @@ void BattlescapeGame::dropItem(
 /**
  * Converts a unit into a unit of another type.
  * @param unit		- pointer to a unit to convert
- * @param conType	- reference the type of unit to convert to
  * @return, pointer to the new unit
  */
-BattleUnit* BattlescapeGame::convertUnit(
-		BattleUnit* const unit,
-		const std::string& conType)
+BattleUnit* BattlescapeGame::convertUnit(BattleUnit* const unit)
 {
 	//Log(LOG_INFO) << "BattlescapeGame::convertUnit() " << conType;
-	const bool visible = unit->getUnitVisible();
+	const bool wasVisible = unit->getUnitVisible();
 
 	_battleSave->getBattleState()->showPsiButton(false);
 	_battleSave->removeCorpse(unit); // in case the unit was unconscious
@@ -3104,14 +3099,15 @@ BattleUnit* BattlescapeGame::convertUnit(
 	_battleSave->getTile(unit->getPosition())->setUnit(NULL);
 
 
-	std::ostringstream armorType;
-	armorType << getRuleset()->getUnit(conType)->getArmor();
+	std::string conType = unit->getSpawnUnit();
+	RuleUnit* const unitRule = getRuleset()->getUnit(conType);
+	std::string armorType = unitRule->getArmor();
 
 	BattleUnit* const conUnit = new BattleUnit(
-											getRuleset()->getUnit(conType),
+											unitRule,
 											FACTION_HOSTILE,
 											_battleSave->getUnits()->back()->getId() + 1,
-											getRuleset()->getArmor(armorType.str()),
+											getRuleset()->getArmor(armorType),
 											_parentState->getGame()->getSavedGame()->getDifficulty(),
 											_parentState->getGame()->getSavedGame()->getMonthsPassed(),
 											this);
@@ -3137,7 +3133,7 @@ BattleUnit* BattlescapeGame::convertUnit(
 										conUnit,
 										NULL));
 
-	std::string terrorWeapon = getRuleset()->getUnit(conType)->getRace().substr(4);
+	std::string terrorWeapon = unitRule->getRace().substr(4);
 	terrorWeapon += "_WEAPON";
 	BattleItem* const item = new BattleItem(
 										getRuleset()->getItem(terrorWeapon),
@@ -3146,18 +3142,15 @@ BattleUnit* BattlescapeGame::convertUnit(
 	item->setSlot(getRuleset()->getInventory("STR_RIGHT_HAND"));
 	_battleSave->getItems()->push_back(item);
 
-//	conUnit->setCache(NULL);
 	getMap()->cacheUnit(conUnit);
 
-	conUnit->setUnitVisible(visible);
+	conUnit->setUnitVisible(wasVisible);
 
 	getTileEngine()->applyGravity(conUnit->getTile());
-//	getTileEngine()->calculateUnitLighting(); // <- done in UnitDieBState
+//	getTileEngine()->calculateUnitLighting(); // <- done in UnitDieBState. But does pre-Spawned unit always go through UnitDieBState, and if not does it matter ...
 	getTileEngine()->calculateFOV(
 							conUnit->getPosition(),
 							true);
-
-//	conUnit->getCurrentAIState()->think();
 
 	return conUnit;
 }

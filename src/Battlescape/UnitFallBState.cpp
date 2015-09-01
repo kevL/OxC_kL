@@ -369,7 +369,7 @@ void UnitFallBState::think()
 					if (escape == false)
 					{
 						//Log(LOG_INFO) << ". . . NOT escape";
-						unitBelow->knockOut(_parent);
+						unitBelow->knockOut();
 						j = _unitsToMove.erase(j);
 					}
 				}

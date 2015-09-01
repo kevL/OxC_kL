@@ -571,9 +571,9 @@ void DebriefingState::btnOkClick(Action*)
 				_game->pushState(new ErrorMessageState(
 												tr("STR_CONTAINMENT_EXCEEDED").arg(_base->getName()).c_str(),
 												_palette,
-												_game->getRuleset()->getInterface("debriefing")->getElement("errorMessage")->color,
+												_rules->getInterface("debriefing")->getElement("errorMessage")->color,
 												"BACK04.SCR",
-												_game->getRuleset()->getInterface("debriefing")->getElement("errorPalette")->color));
+												_rules->getInterface("debriefing")->getElement("errorPalette")->color));
 			}
 
 			if (_base->storesOverfull() == true //_manageContainment == false &&
@@ -583,9 +583,9 @@ void DebriefingState::btnOkClick(Action*)
 				_game->pushState(new ErrorMessageState(
 												tr("STR_STORAGE_EXCEEDED").arg(_base->getName()).c_str(),
 												_palette,
-												_game->getRuleset()->getInterface("debriefing")->getElement("errorMessage")->color,
+												_rules->getInterface("debriefing")->getElement("errorMessage")->color,
 												_game->getResourcePack()->getRandomBackground(),
-												_game->getRuleset()->getInterface("debriefing")->getElement("errorPalette")->color));
+												_rules->getInterface("debriefing")->getElement("errorPalette")->color));
 			}
 
 			if (playAwardMusic == true)
@@ -1136,12 +1136,12 @@ void DebriefingState::prepareDebriefing() // private.
 			i != battleSave->getUnits()->end();
 			++i)
 	{
-		if ((*i)->getTile() == NULL)								// This unit is not on a tile... give it one.
+		if ((*i)->getTile() == NULL)								// This unit is not on a tile ... give it one.
 		{
 			Position pos = (*i)->getPosition();
-			if (pos == Position(-1,-1,-1))							// in fact, this Unit is in limbo... ie, is carried.
+			if (pos == Position(-1,-1,-1))							// in fact, this Unit is in limbo ... ie, is carried.
 			{
-				for (std::vector<BattleItem*>::const_iterator		// so look for its body or corpse...
+				for (std::vector<BattleItem*>::const_iterator		// so look for its body or corpse ...
 						j = battleSave->getItems()->begin();
 						j != battleSave->getItems()->end();
 						++j)
@@ -1150,7 +1150,7 @@ void DebriefingState::prepareDebriefing() // private.
 						&& (*j)->getUnit() == *i)					// found it: corpse is a dead or unconscious BattleUnit!!
 					{
 						if ((*j)->getOwner() != NULL)				// corpse of BattleUnit has an Owner (ie. is being carried by another BattleUnit)
-							pos = (*j)->getOwner()->getPosition();	// Put the corpse down.. slowly.
+							pos = (*j)->getOwner()->getPosition();	// Put the corpse down .. slowly.
 						else if ((*j)->getTile() != NULL)			// corpse of BattleUnit is laying around somewhere
 							pos = (*j)->getTile()->getPosition();	// you're not vaporized yet, Get up.
 					}
@@ -1167,13 +1167,11 @@ void DebriefingState::prepareDebriefing() // private.
 
 		if (status == STATUS_DEAD) // so this is a dead unit
 		{
-			Log(LOG_INFO) << ". unitDead " << (*i)->getId() << " type = " << (*i)->getType();
-
+			//Log(LOG_INFO) << ". unitDead " << (*i)->getId() << " type = " << (*i)->getType();
 			if (orgFaction == FACTION_HOSTILE
 				&& (*i)->killedBy() == FACTION_PLAYER)
 			{
-				Log(LOG_INFO) << ". . killed by xCom";
-
+				//Log(LOG_INFO) << ". . killed by xCom";
 				addStat(
 					"STR_ALIENS_KILLED",
 					value);
@@ -1236,13 +1234,12 @@ void DebriefingState::prepareDebriefing() // private.
 		}
 		else // so this unit is NOT dead...
 		{
-			Log(LOG_INFO) << ". unitLive " << (*i)->getId() << " type = " << (*i)->getType();
-
-			std::string type;
-			if ((*i)->getSpawnUnit().empty() == false)
-				type = (*i)->getSpawnUnit();
-			else
-				type = (*i)->getType();
+			//Log(LOG_INFO) << ". unitLive " << (*i)->getId() << " type = " << (*i)->getType();
+//			std::string type;
+//			if ((*i)->getSpawnUnit().empty() == false)
+//				type = (*i)->getSpawnUnit();
+//			else
+//				type = (*i)->getType(); // <- all moved to recoverLiveAlien() way below_
 
 			const UnitFaction faction = (*i)->getFaction();
 
@@ -1273,7 +1270,7 @@ void DebriefingState::prepareDebriefing() // private.
 					}
 					else // not soldier -> tank
 					{
-						_base->getItems()->addItem(type);
+						_base->getItems()->addItem((*i)->getType());
 
 						if (_skirmish == false)
 							_missionCost += _base->hwpExpense((*i)->getArmor()->getSize() * (*i)->getArmor()->getSize());
@@ -1283,7 +1280,7 @@ void DebriefingState::prepareDebriefing() // private.
 
 						if ((*i)->getItem("STR_RIGHT_HAND") != NULL)
 						{
-							itRule = _rules->getItem(type); // (*i)->getItem("STR_RIGHT_HAND")->getRules(), as below_
+							itRule = _rules->getItem((*i)->getType()); // note this is generally the tank/item itself. -> (*i)->getItem("STR_RIGHT_HAND")->getRules()
 							if (itRule->getCompatibleAmmo()->empty() == false)
 							{
 								ammoItem = (*i)->getItem("STR_RIGHT_HAND")->getAmmoItem();
@@ -1357,7 +1354,8 @@ void DebriefingState::prepareDebriefing() // private.
 			}
 			else if (faction == FACTION_PLAYER		// This section is for units still standing.
 				&& orgFaction == FACTION_HOSTILE	// ie, MC'd aLiens
-				&& (*i)->isOut() == false
+				&& (*i)->isOut_t(OUT_STAT) == false
+//				&& (*i)->isOut() == false
 				&& (aborted == false
 					|| (*i)->isInExitArea() == true))
 				// kL_note: so, this never actually runs unless early psi-exit
@@ -1805,10 +1803,10 @@ void DebriefingState::reequipCraft(Craft* craft) // private.
 		craftVehicles.addItem((*i)->getRules()->getType());
 	}
 
-	// Now we know how many vehicles (separated by types) we have to read.
-	// Erase the current vehicles, because we have to
-	// reAdd them ('cause we want to redistribute their ammo)
-	// kL_note: and generally weave our way through this spaghetti ....
+	// now you know how many vehicles (separated by types) have to be read.
+	// Erase the current vehicles because you have to reAdd them (to
+	// redistribute their ammo) and generally weave our way through this
+	// spaghetti .......
 	if (vehicleDestruction == true)
 	{
 		for (std::vector<Vehicle*>::const_iterator
@@ -1937,7 +1935,6 @@ void DebriefingState::reequipCraft(Craft* craft) // private.
 			addTanks,
 			craft->getName(_game->getLanguage())
 		};
-
 		_missingItems.push_back(stat); */
 		// kL_end.
 	}
@@ -1948,7 +1945,7 @@ void DebriefingState::reequipCraft(Craft* craft) // private.
  * Converts the battlescape inventory into a geoscape itemcontainer.
  * @param battleItems - pointer to a vector of pointers to BattleItems on the battlescape
  */
-void DebriefingState::recoverItems(std::vector<BattleItem*>* battleItems) // private.
+void DebriefingState::recoverItems(std::vector<BattleItem*>* const battleItems) // private.
 {
 	RuleItem* itRule;
 
@@ -1967,7 +1964,7 @@ void DebriefingState::recoverItems(std::vector<BattleItem*>* battleItems) // pri
 					addStat( // special case of an item counted as a stat
 						_rules->getAlienFuelType(),
 						100,
-						_game->getRuleset()->getAlienFuelQuantity());
+						_rules->getAlienFuelQuantity());
 			}
 			else //if (*i)->getXCOMProperty() == false
 			{
@@ -1976,8 +1973,7 @@ void DebriefingState::recoverItems(std::vector<BattleItem*>* battleItems) // pri
 					&& itRule->getBattleType() != BT_CORPSE
 					&& _gameSave->isResearched(itRule->getType()) == false)
 				{
-					Log(LOG_INFO) << ". . artefact = " << itRule->getType();
-
+					//Log(LOG_INFO) << ". . artefact = " << itRule->getType();
 					addStat( // add pts. for unresearched items only
 						"STR_ALIEN_ARTIFACTS_RECOVERED",
 						itRule->getRecoveryPoints());
@@ -1987,7 +1983,7 @@ void DebriefingState::recoverItems(std::vector<BattleItem*>* battleItems) // pri
 				{
 					case BT_CORPSE:
 					{
-						const BattleUnit* const unit = (*i)->getUnit();
+						BattleUnit* const unit = (*i)->getUnit();
 						if (unit != NULL)
 						{
 							if (itRule->isRecoverable() == true
@@ -1995,8 +1991,7 @@ void DebriefingState::recoverItems(std::vector<BattleItem*>* battleItems) // pri
 									|| (unit->getStatus() == STATUS_LIMBO // kL_tentative.
 										&& unit->isOut_t(OUT_DEAD) == true)))
 							{
-								Log(LOG_INFO) << ". . corpse = " << itRule->getType();
-
+								//Log(LOG_INFO) << ". . corpse = " << itRule->getType();
 								addStat(
 									"STR_ALIEN_CORPSES_RECOVERED",
 									unit->getValue() / 3); // This should rather be the 'recoveryPoints' of the corpse item!
@@ -2018,8 +2013,7 @@ void DebriefingState::recoverItems(std::vector<BattleItem*>* battleItems) // pri
 								}
 								else if (unit->getOriginalFaction() == FACTION_NEUTRAL)
 								{
-									Log(LOG_INFO) << ". . unconsciousCivie = " << itRule->getType();
-
+									//Log(LOG_INFO) << ". . unconsciousCivie = " << itRule->getType();
 									addStat(
 										"STR_CIVILIANS_SAVED",
 										unit->getValue()); // duplicated above.
@@ -2060,12 +2054,16 @@ void DebriefingState::recoverItems(std::vector<BattleItem*>* battleItems) // pri
  * Recovers a live alien from the battlescape.
  * @param unit - pointer to a BattleUnit to recover
  */
-void DebriefingState::recoverLiveAlien(const BattleUnit* const unit) // private.
+void DebriefingState::recoverLiveAlien(BattleUnit* const unit) // private.
 {
-	if (_base->getAvailableContainment() != 0)
+	if (unit->getSpawnUnit().empty() == false)
 	{
-		Log(LOG_INFO) << ". . . alienLive = " << unit->getType();
-
+		BattleUnit* const conUnit = _gameSave->getBattleSave()->getBattleGame()->convertUnit(unit);
+		conUnit->setFaction(FACTION_PLAYER);
+	}
+	else if (_base->getAvailableContainment() != 0)
+	{
+		//Log(LOG_INFO) << ". . . alienLive = " << unit->getType();
 		const std::string type = unit->getType();
 
 		int value;
@@ -2085,8 +2083,7 @@ void DebriefingState::recoverLiveAlien(const BattleUnit* const unit) // private.
 	}
 	else
 	{
-		Log(LOG_INFO) << ". . . alienDead = " << unit->getType();
-
+		//Log(LOG_INFO) << ". . . alienDead = " << unit->getType();
 		_noContainment = true;
 		addStat(
 			"STR_ALIEN_CORPSES_RECOVERED",
@@ -2094,10 +2091,7 @@ void DebriefingState::recoverLiveAlien(const BattleUnit* const unit) // private.
 
 		std::string corpseItem;
 		if (unit->getSpawnUnit().empty() == false)
-			corpseItem = _game->getRuleset()->getArmor(
-												_game->getRuleset()->getUnit(
-																		unit->getSpawnUnit())
-												->getArmor())->getCorpseGeoscape();
+			corpseItem = _rules->getArmor(_rules->getUnit(unit->getSpawnUnit())->getArmor())->getCorpseGeoscape();
 		else
 			corpseItem = unit->getArmor()->getCorpseGeoscape();
 

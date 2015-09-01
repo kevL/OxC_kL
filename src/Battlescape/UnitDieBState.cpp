@@ -92,9 +92,9 @@ UnitDieBState::UnitDieBState(
 	else
 	{
 		if (_unit->getHealth() == 0)
-			_unit->instaKill(); // STATUS_DEAD
+			_unit->instaKill();
 		else
-			_unit->knockOut(); // STATUS_UNCONSCIOUS if has SPECAB::spawnUnit. Else sets health0 / stun=health
+			_unit->knockOut(); // convert if has SPECAB::spawnUnit. Else sets health0 / stun=health
 	}
 
 	if (_unit->getFaction() == FACTION_HOSTILE)
@@ -281,9 +281,7 @@ void UnitDieBState::think()
 		if (_unit->getSpawnUnit().empty() == true)
 			convertToCorpse();
 		else
-			_parent->convertUnit(
-							_unit,
-							_unit->getSpawnUnit());
+			_parent->convertUnit(_unit);
 	}
 
 	_unit->setCache(NULL);

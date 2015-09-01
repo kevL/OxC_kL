@@ -285,9 +285,7 @@ private:
 				bool disown = false);
 
 		/// Converts a unit into a unit of another type.
-		BattleUnit* convertUnit(
-				BattleUnit* const unit,
-				const std::string& conType);
+		BattleUnit* convertUnit(BattleUnit* const unit);
 
 		/// Gets the map.
 		Map* getMap() const;

@@ -90,6 +90,7 @@ class TextButton;
 class TextList;
 class Window;
 
+
 /**
  * Debriefing screen shown after a Battlescape mission that displays the results.
  */
@@ -154,9 +155,9 @@ private:
 	/// Prepares debriefing.
 	void prepareDebriefing();
 	/// Recovers items from the battlescape.
-	void recoverItems(std::vector<BattleItem*>* from);
+	void recoverItems(std::vector<BattleItem*>* const battleItems);
 	/// Recovers an alien from the battlescape.
-	void recoverLiveAlien(const BattleUnit* const unit);
+	void recoverLiveAlien(BattleUnit* const unit);
 	/// Reequips a craft after a mission.
 	void reequipCraft(Craft* craft = NULL);
 
