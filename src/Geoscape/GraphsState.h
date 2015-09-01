@@ -124,10 +124,10 @@ private:
 	void scrollButtons(
 			std::vector<GraphBtnInfo*>& toggles,
 			std::vector<ToggleTextButton*>& buttons,
-			std::vector<Text*>& actAlien,
-			std::vector<Text*>& actXCom,
-			std::vector<bool>& blink,
-			std::vector<bool>& blinkXCom,
+			std::vector<Text*>& actA_vect,
+			std::vector<Text*>& actX_vect,
+			std::vector<bool>& blinkA,
+			std::vector<bool>& blinkX,
 			size_t& btnOffset,
 			int dir);
 	///

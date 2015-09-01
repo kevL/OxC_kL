@@ -67,30 +67,30 @@ struct GraphBtnInfo
 		_color,
 		_colorTxt;
 	int
-		_alienAct,
-		_xcomAct;
+		_actA,
+		_actX;
 	bool
-		_blink,
-		_blinkXCom,
+		_blinkA,
+		_blinkX,
 		_pushed;
 
 	/// Builds this struct.
 	GraphBtnInfo(
 			const LocalizedText& name,
 			Uint8 color,
-			int alienAct,
-			int xcomAct,
+			int actA,
+			int actX,
 			Uint8 colorTxt,
-			bool blink,
-			bool blinkXCom)
+			bool blinkA,
+			bool blinkX)
 		:
 			_name(name),
 			_color(color),
-			_alienAct(alienAct),
-			_xcomAct(xcomAct),
+			_actA(actA),
+			_actX(actX),
 			_colorTxt(colorTxt),
-			_blink(blink),
-			_blinkXCom(blinkXCom),
+			_blinkA(blinkA),
+			_blinkX(blinkX),
 			_pushed(false)
 	{}
 };
@@ -2042,8 +2042,8 @@ void GraphsState::initButtons() // private.
 			i != _regionToggles.end();
 			++i)
 	{
-		if ((*i)->_blink == true
-			|| (*i)->_blinkXCom == true)
+		if ((*i)->_blinkA == true
+			|| (*i)->_blinkX == true)
 		{
 			_blinkTimer->start();
 			return;
@@ -2055,8 +2055,8 @@ void GraphsState::initButtons() // private.
 			i != _countryToggles.end();
 			++i)
 	{
-		if ((*i)->_blink == true
-			|| (*i)->_blinkXCom == true)
+		if ((*i)->_blinkA == true
+			|| (*i)->_blinkX == true)
 		{
 			_blinkTimer->start();
 			return;
@@ -2133,10 +2133,10 @@ void GraphsState::shiftButtons(Action* action)
 void GraphsState::scrollButtons( // private.
 		std::vector<GraphBtnInfo*>& toggles,
 		std::vector<ToggleTextButton*>& buttons,
-		std::vector<Text*>& actAlien,
-		std::vector<Text*>& actXCom,
-		std::vector<bool>& blink,
-		std::vector<bool>& blinkXCom,
+		std::vector<Text*>& actA_vect,
+		std::vector<Text*>& actX_vect,
+		std::vector<bool>& blinkA,
+		std::vector<bool>& blinkX,
 		size_t& btnOffset,
 		int dir)
 {
@@ -2158,10 +2158,10 @@ void GraphsState::scrollButtons( // private.
 		rowCurrent = btnOffset; // aka _btnCountriesOffset (note: would conflict w/ _btnRegionsOffset if/when regions are scrollable.)
 
 		std::vector<ToggleTextButton*>::const_iterator btn = buttons.begin();
-		std::vector<Text*>::const_iterator aliens = actAlien.begin();
-		std::vector<Text*>::const_iterator xcom = actXCom.begin();
-		std::vector<bool>::iterator bling = blink.begin();
-		std::vector<bool>::iterator blingXCom = blinkXCom.begin();
+		std::vector<Text*>::const_iterator actA_iter = actA_vect.begin();
+		std::vector<Text*>::const_iterator actX_iter = actX_vect.begin();
+		std::vector<bool>::iterator blingA = blinkA.begin();
+		std::vector<bool>::iterator blingX = blinkX.begin();
 		size_t row = 0;
 
 		for (std::vector<GraphBtnInfo*>::const_iterator
@@ -2174,17 +2174,17 @@ void GraphsState::scrollButtons( // private.
 				continue;
 			else if (row < btnOffset + GRAPH_BUTTONS)
 			{
-				*bling = (*i)->_blink;
-				*blingXCom = (*i)->_blinkXCom;
+				*blingA = (*i)->_blinkA;
+				*blingX = (*i)->_blinkX;
 
-				++bling;
-				++blingXCom;
+				++blingA;
+				++blingX;
 
 				updateButton(
 							*i,
 							*btn++,
-							*aliens++,
-							*xcom++);
+							*actA_iter++,
+							*actX_iter++);
 			}
 			else
 				return;
@@ -2205,10 +2205,10 @@ void GraphsState::updateButton( // private.
 	btn->setInvertColor(info->_color);
 	btn->setPressed(info->_pushed);
 
-	aliens->setText(Text::formatNumber(info->_alienAct));
+	aliens->setText(Text::formatNumber(info->_actA));
 	aliens->setColor(info->_colorTxt);
 
-	xcom->setText(Text::formatNumber(info->_xcomAct));
+	xcom->setText(Text::formatNumber(info->_actX));
 	xcom->setColor(info->_colorTxt);
 }
 
