@@ -619,20 +619,6 @@ GraphsState::GraphsState(int curGraph)
 	}
 
 
-	switch (curGraph)
-	{
-		case 0: btnUfoRegionClick(NULL);	break;
-		case 1: btnXcomRegionClick(NULL);	break;
-		case 2: btnUfoCountryClick(NULL);	break;
-		case 3: btnXcomCountryClick(NULL);	break;
-		case 4: btnIncomeClick(NULL);		break;
-		case 5: btnFinanceClick(NULL);		break;
-
-		default:
-			btnUfoRegionClick(NULL);
-	}
-
-
 	Surface* srf = _game->getResourcePack()->getSurface("GRAPH.BDY");
 	if (srf == NULL)
 		srf = _game->getResourcePack()->getSurface("GRAPHS.SPK");
@@ -681,6 +667,19 @@ GraphsState::GraphsState(int curGraph)
 	_blinkTimer->onTimer((StateHandler)& GraphsState::blinkButtons);
 
 	initButtons();
+
+	switch (curGraph)
+	{
+		case 0: btnUfoRegionClick(NULL);	break;
+		case 1: btnXcomRegionClick(NULL);	break;
+		case 2: btnUfoCountryClick(NULL);	break;
+		case 3: btnXcomCountryClick(NULL);	break;
+		case 4: btnIncomeClick(NULL);		break;
+		case 5: btnFinanceClick(NULL);		break;
+
+		default:
+			btnUfoRegionClick(NULL);
+	}
 }
 
 /**
@@ -848,12 +847,14 @@ void GraphsState::btnUfoRegionClick(Action*)
 		_current = 0;
 		_game->getSavedGame()->setCurrentGraph(0);
 
+		_forceVis =
+
 		_alien = true;
 		_income =
 		_country =
 		_finance = false;
 
-		_btnReset->setVisible();
+		_btnReset->setVisible(_blinkTimer->isRunning() == true);
 		resetScreen();
 		drawLines();
 
@@ -889,12 +890,14 @@ void GraphsState::btnXcomRegionClick(Action*)
 		_current = 1;
 		_game->getSavedGame()->setCurrentGraph(1);
 
+		_forceVis = true;
+
 		_alien =
 		_income =
 		_country =
 		_finance = false;
 
-		_btnReset->setVisible();
+		_btnReset->setVisible(_blinkTimer->isRunning() == true);
 		resetScreen();
 		drawLines();
 
@@ -930,12 +933,14 @@ void GraphsState::btnUfoCountryClick(Action*)
 		_current = 2;
 		_game->getSavedGame()->setCurrentGraph(2);
 
+		_forceVis =
+
 		_alien =
 		_country = true;
 		_income =
 		_finance = false;
 
-		_btnReset->setVisible();
+		_btnReset->setVisible(_blinkTimer->isRunning() == true);
 		resetScreen();
 		drawLines();
 
@@ -971,12 +976,14 @@ void GraphsState::btnXcomCountryClick(Action*)
 		_current = 3;
 		_game->getSavedGame()->setCurrentGraph(3);
 
+		_forceVis =
+
 		_country = true;
 		_alien =
 		_income =
 		_finance = false;
 
-		_btnReset->setVisible();
+		_btnReset->setVisible(_blinkTimer->isRunning() == true);
 		resetScreen();
 		drawLines();
 
@@ -1152,6 +1159,7 @@ void GraphsState::btnFinanceListClick(Action* action)
 void GraphsState::btnResetPress(Action*)
 {
 	_reset = true;
+	_btnReset->setVisible(false);
 
 	for (std::vector<Region*>::iterator
 			i = _game->getSavedGame()->getRegions()->begin();
