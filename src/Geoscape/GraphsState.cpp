@@ -226,7 +226,7 @@ GraphsState::GraphsState(int curGraph)
 
 			add(_txtRegionActivityAlien.at(btnOffset));
 
-			_blinkRegion.push_back(blinkA);
+			_blinkRegionAlien.push_back(blinkA);
 			_blinkRegionXCom.push_back(blinkX);
 
 
@@ -343,7 +343,7 @@ GraphsState::GraphsState(int curGraph)
 
 			add(_txtCountryActivityAlien.at(btnOffset));
 
-			_blinkCountry.push_back(blinkA);
+			_blinkCountryAlien.push_back(blinkA);
 			_blinkCountryXCom.push_back(blinkX);
 
 
@@ -734,7 +734,7 @@ void GraphsState::initButtons() // private.
 				_btnCountries,
 				_txtCountryActivityAlien,
 				_txtCountryActivityXCom,
-				_blinkCountry,
+				_blinkCountryAlien,
 				_blinkCountryXCom,
 				_btnCountriesOffset,
 				static_cast<int>(rowCurrent),
@@ -753,7 +753,7 @@ void GraphsState::initButtons() // private.
 		}
 	}
 /*	for (std::vector<GraphBtnInfo*>::const_iterator	// not needed because Country-areas are all subsumed within Regions;
-			i = _countryToggles.begin();			// that is, if a country is blinking its region will also be blinking.
+			i = _countryToggles.begin();			// that is, if a country is blinking its region will already be blinking.
 			i != _countryToggles.end();
 			++i)
 	{
@@ -799,8 +799,8 @@ void GraphsState::blinkButtons() // private.
 		&& _finance == false)
 	{
 		for (std::vector<bool>::const_iterator
-				i = _blinkRegion.begin();
-				i != _blinkRegion.end();
+				i = _blinkRegionAlien.begin();
+				i != _blinkRegionAlien.end();
 				++i)
 		{
 			if (*i == true)
@@ -817,8 +817,8 @@ void GraphsState::blinkButtons() // private.
 		&& _finance == false)
 	{
 		for (std::vector<bool>::const_iterator
-				i = _blinkCountry.begin();
-				i != _blinkCountry.end();
+				i = _blinkCountryAlien.begin();
+				i != _blinkCountryAlien.end();
 				++i)
 		{
 			if (*i == true)
@@ -2087,13 +2087,13 @@ void GraphsState::shiftButtons(Action* action)
 							_btnCountries,
 							_txtCountryActivityAlien,
 							_txtCountryActivityXCom,
-							_blinkCountry,
+							_blinkCountryAlien,
 							_blinkCountryXCom,
 							_btnCountriesOffset,
 							dir);
 			}
 		}
-		else // _region
+/*		else // _region -> not needed unless quantity of Regions increases over GRAPH_BUTTONS. Ain't likely to happen.
 		{
 			if (_regionToggles.size() > GRAPH_BUTTONS)
 			{
@@ -2109,12 +2109,12 @@ void GraphsState::shiftButtons(Action* action)
 							_btnRegions,
 							_txtRegionActivityAlien,
 							_txtRegionActivityXCom,
-							_blinkRegion,
+							_blinkRegionAlien,
 							_blinkRegionXCom,
 							_btnRegionsOffset,
 							dir);
 			}
-		}
+		} */
 	}
 }
 

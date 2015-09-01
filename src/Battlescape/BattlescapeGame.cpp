@@ -3099,15 +3099,15 @@ BattleUnit* BattlescapeGame::convertUnit(BattleUnit* const unit)
 	_battleSave->getTile(unit->getPosition())->setUnit(NULL);
 
 
-	const std::string conType = unit->getSpawnUnit();
-	RuleUnit* const unitRule = getRuleset()->getUnit(conType);
-	const std::string armorType = unitRule->getArmor();
+	std::string st = unit->getSpawnUnit();
+	RuleUnit* const unitRule = getRuleset()->getUnit(st);
+	st = unitRule->getArmor();
 
 	BattleUnit* const conUnit = new BattleUnit(
 											unitRule,
 											FACTION_HOSTILE,
 											_battleSave->getUnits()->back()->getId() + 1,
-											getRuleset()->getArmor(armorType),
+											getRuleset()->getArmor(st),
 											_parentState->getGame()->getSavedGame()->getDifficulty(),
 											_parentState->getGame()->getSavedGame()->getMonthsPassed(),
 											this);
@@ -3120,7 +3120,7 @@ BattleUnit* BattlescapeGame::convertUnit(BattleUnit* const unit)
 	conUnit->setTimeUnits(0);
 
 	int dir;
-	if (conType == "STR_ZOMBIE") // TODO: RuleUnit var '_isZombie' -- narrow FoV etc.
+	if (conUnit->isZombie() == true)
 		dir = RNG::generate(0,7); // or, (unit->getDirection())
 	else
 		dir = 3;
@@ -3133,9 +3133,9 @@ BattleUnit* BattlescapeGame::convertUnit(BattleUnit* const unit)
 										conUnit,
 										NULL));
 
-	const std::string terrorWeapon = unitRule->getRace().substr(4) + "_WEAPON";
+	st = unitRule->getRace().substr(4) + "_WEAPON";
 	BattleItem* const item = new BattleItem(
-										getRuleset()->getItem(terrorWeapon),
+										getRuleset()->getItem(st),
 										_battleSave->getNextItemId());
 	item->moveToOwner(conUnit);
 	item->setSlot(getRuleset()->getInventory("STR_RIGHT_HAND"));

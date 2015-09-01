@@ -89,9 +89,9 @@ private:
 	Timer* _blinkTimer;
 
 	std::vector<bool>
-		_blinkCountry,
+		_blinkCountryAlien,
 		_blinkCountryXCom,
-		_blinkRegion,
+		_blinkRegionAlien,
 		_blinkRegionXCom,
 		_financeToggles;
 
