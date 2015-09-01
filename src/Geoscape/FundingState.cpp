@@ -120,7 +120,7 @@ FundingState::FundingState()
 
 		const std::vector<int>
 			funds = (*i)->getFunding(),
-			actX = (*i)->getActivityXcom(),
+			actX = (*i)->getActivityXCom(),
 			actA = (*i)->getActivityAlien();
 
 		woststr1 << L'\x01' << Text::formatFunding(funds.at(funds.size() - 1)) << L'\x01';

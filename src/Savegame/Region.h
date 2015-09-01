@@ -39,7 +39,7 @@ class Region
 private:
 	int
 		_activityRecent,
-		_activityRecentXCOM;
+		_activityRecentXCom;
 
 	RuleRegion* _rules;
 
@@ -65,11 +65,11 @@ private:
 		std::string getType() const;
 
 		/// Adds xcom activity in this region.
-		void addActivityXcom(int activity);
+		void addActivityXCom(int activity);
 		/// Adds alien activity in this region.
 		void addActivityAlien(int activity);
 		/// Gets xcom activity for this region.
-		std::vector<int>& getActivityXcom();
+		std::vector<int>& getActivityXCom();
 		/// Gets xcom activity for this region.
 		std::vector<int>& getActivityAlien();
 
@@ -81,7 +81,7 @@ private:
 				bool activity = true,
 				bool graphs = false);
 		/// Handles recent XCOM activity in this region for GraphsState blink.
-		bool recentActivityXCOM(
+		bool recentActivityXCom(
 				bool activity = true,
 				bool graphs = false);
 		/// Resets activity.

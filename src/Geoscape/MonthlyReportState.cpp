@@ -343,10 +343,10 @@ void MonthlyReportState::calculateChanges() // private.
 		(*i)->newMonth();
 
 		if (lastMonth > 0)
-			_ratingLast += (*i)->getActivityXcom().at(lastMonth - 1)
+			_ratingLast += (*i)->getActivityXCom().at(lastMonth - 1)
 						 - (*i)->getActivityAlien().at(lastMonth - 1);
 
-		total += (*i)->getActivityXcom().at(lastMonth);
+		total += (*i)->getActivityXCom().at(lastMonth);
 		aLienTotal += (*i)->getActivityAlien().at(lastMonth);
 	}
 
@@ -409,11 +409,11 @@ void MonthlyReportState::calculateChanges() // private.
 	{
 		(*i)->newMonth();
 
-		if ((*i)->getActivityXcom().size() > 2)
-			_ratingLast += (*i)->getActivityXcom().at(offset_pre)
+		if ((*i)->getActivityXCom().size() > 2)
+			_ratingLast += (*i)->getActivityXCom().at(offset_pre)
 						 - (*i)->getActivityAlien().at(offset_pre);
 
-		subTotal += (*i)->getActivityXcom().at(offset);
+		subTotal += (*i)->getActivityXCom().at(offset);
 		aLienTotal += (*i)->getActivityAlien().at(offset);
 	}
 

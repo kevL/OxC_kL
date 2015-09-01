@@ -43,7 +43,7 @@ private:
 		_pact;
 	int
 		_activityRecent,
-		_activityRecentXCOM,
+		_activityRecentXCom,
 		_satisfaction;
 
 	RuleCountry* _rules;
@@ -81,11 +81,11 @@ private:
 		int getSatisfaction() const;
 
 		/// Adds xcom activity in this country.
-		void addActivityXcom(int activity);
+		void addActivityXCom(int activity);
 		/// Adds alien activity in this country.
 		void addActivityAlien(int activity);
 		/// Gets xcom activity for this country.
-		std::vector<int>& getActivityXcom();
+		std::vector<int>& getActivityXCom();
 		/// Gets alien activity for this country.
 		std::vector<int>& getActivityAlien();
 
@@ -109,7 +109,7 @@ private:
 				bool activity = true,
 				bool graphs = false);
 		/// Handles recent XCOM activity in this country for GraphsState blink.
-		bool recentActivityXCOM(
+		bool recentActivityXCom(
 				bool activity = true,
 				bool graphs = false);
 		/// Resets activity.

@@ -296,8 +296,8 @@ DebriefingState::DebriefingState()
 		}
 		else
 		{
-			_region->addActivityXcom(total);
-			_region->recentActivityXCOM();
+			_region->addActivityXCom(total);
+			_region->recentActivityXCom();
 		}
 	}
 
@@ -310,8 +310,8 @@ DebriefingState::DebriefingState()
 		}
 		else
 		{
-			_country->addActivityXcom(total);
-			_country->recentActivityXCOM();
+			_country->addActivityXCom(total);
+			_country->recentActivityXCom();
 		}
 	}
 

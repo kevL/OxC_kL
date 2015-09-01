@@ -738,7 +738,7 @@ XcomResourcePack::XcomResourcePack(const Ruleset* const rules)
 		{
 			if (_surfaces.find(st) == _surfaces.end())
 			{
-				Log(LOG_DEBUG) << "Creating new single image: " << st;
+				//Log(LOG_DEBUG) << "Creating new single image: " << st;
 				//Log(LOG_INFO) << "Creating new single image: " << st;
 				_surfaces[st] = new Surface(
 										spritePack->getWidth(),
@@ -746,7 +746,7 @@ XcomResourcePack::XcomResourcePack(const Ruleset* const rules)
 			}
 			else
 			{
-				Log(LOG_DEBUG) << "Adding/Replacing single image: " << st;
+				//Log(LOG_DEBUG) << "Adding/Replacing single image: " << st;
 				//Log(LOG_INFO) << "Adding/Replacing single image: " << st;
 				delete _surfaces[st];
 				_surfaces[st] = new Surface(
@@ -764,7 +764,7 @@ XcomResourcePack::XcomResourcePack(const Ruleset* const rules)
 
 			if (_sets.find(st) == _sets.end())
 			{
-				Log(LOG_DEBUG) << "Creating new surface set: " << st;
+				//Log(LOG_DEBUG) << "Creating new surface set: " << st;
 				//Log(LOG_INFO) << "Creating new surface set: " << st;
 				adding = true;
 				if (subdivision == true)
@@ -776,18 +776,18 @@ XcomResourcePack::XcomResourcePack(const Ruleset* const rules)
 											spritePack->getWidth(),
 											spritePack->getHeight());
 			}
-			else
-			{
-				Log(LOG_DEBUG) << "Adding/Replacing items in surface set: " << st;
+			//else
+			//{
+				//Log(LOG_DEBUG) << "Adding/Replacing items in surface set: " << st;
 				//Log(LOG_INFO) << "Adding/Replacing items in surface set: " << st;
-			}
+			//}
 
-			if (subdivision == true)
-			{
-				const int frames = (spritePack->getWidth() / spritePack->getSubX()) * (spritePack->getHeight() / spritePack->getSubY());
-				Log(LOG_DEBUG) << "Subdividing into " << frames << " frames.";
+			//if (subdivision == true)
+			//{
+				//const int frames = (spritePack->getWidth() / spritePack->getSubX()) * (spritePack->getHeight() / spritePack->getSubY());
+				//Log(LOG_DEBUG) << "Subdividing into " << frames << " frames.";
 				//Log(LOG_INFO) << "Subdividing into " << frames << " frames.";
-			}
+			//}
 
 			for (std::map<int, std::string>::const_iterator
 					j = spritePack->getSprites()->begin();
@@ -799,7 +799,7 @@ XcomResourcePack::XcomResourcePack(const Ruleset* const rules)
 				st2 = j->second;
 				if (st2.substr(st2.length() - 1, 1) == "/")
 				{
-					Log(LOG_DEBUG) << "Loading surface set from folder: " << st2 << " starting at frame: " << start;
+					//Log(LOG_DEBUG) << "Loading surface set from folder: " << st2 << " starting at frame: " << start;
 					//Log(LOG_INFO) << "Loading surface set from folder: " << st2 << " starting at frame: " << start;
 					offset = start;
 
@@ -822,7 +822,7 @@ XcomResourcePack::XcomResourcePack(const Ruleset* const rules)
 
 								if (_sets[st]->getFrame(offset))
 								{
-									Log(LOG_DEBUG) << "Replacing frame: " << offset;
+									//Log(LOG_DEBUG) << "Replacing frame: " << offset;
 									//Log(LOG_INFO) << "Replacing frame: " << offset;
 									_sets[st]->getFrame(offset)->loadImage(oststr.str());
 								}
@@ -832,7 +832,7 @@ XcomResourcePack::XcomResourcePack(const Ruleset* const rules)
 										_sets[st]->addFrame(offset)->loadImage(oststr.str());
 									else
 									{
-										Log(LOG_DEBUG) << "Adding frame: " << offset + spritePack->getModIndex();
+										//Log(LOG_DEBUG) << "Adding frame: " << offset + spritePack->getModIndex();
 										//Log(LOG_INFO) << "Adding frame: " << offset + spritePack->getModIndex();
 										_sets[st]->addFrame(offset + spritePack->getModIndex())->loadImage(oststr.str());
 									}
@@ -858,13 +858,13 @@ XcomResourcePack::XcomResourcePack(const Ruleset* const rules)
 
 						if (_sets[st]->getFrame(start))
 						{
-							Log(LOG_DEBUG) << "Replacing frame: " << start;
+							//Log(LOG_DEBUG) << "Replacing frame: " << start;
 							//Log(LOG_INFO) << "Replacing frame: " << start;
 							_sets[st]->getFrame(start)->loadImage(oststr.str());
 						}
 						else
 						{
-							Log(LOG_DEBUG) << "Adding frame: " << start << ", using index: " << start + spritePack->getModIndex();
+							//Log(LOG_DEBUG) << "Adding frame: " << start << ", using index: " << start + spritePack->getModIndex();
 							//Log(LOG_INFO) << "Adding frame: " << start << ", using index: " << start + spritePack->getModIndex();
 							_sets[st]->addFrame(start + spritePack->getModIndex())->loadImage(oststr.str());
 						}
@@ -895,7 +895,7 @@ XcomResourcePack::XcomResourcePack(const Ruleset* const rules)
 								// joyDivision
 								if (_sets[st]->getFrame(offset))
 								{
-									Log(LOG_DEBUG) << "Replacing frame: " << offset;
+									//Log(LOG_DEBUG) << "Replacing frame: " << offset;
 									//Log(LOG_INFO) << "Replacing frame: " << offset;
 									_sets[st]->getFrame(offset)->clear();
 									// for some reason regular blit() doesn't work here how i want it, so use this function instead.
@@ -909,7 +909,7 @@ XcomResourcePack::XcomResourcePack(const Ruleset* const rules)
 								{
 									if (adding == true)
 									{
-										Log(LOG_DEBUG) << "Adding frame: " << offset;
+										//Log(LOG_DEBUG) << "Adding frame: " << offset;
 										//Log(LOG_INFO) << "Adding frame: " << offset;
 										// for some reason regular blit() doesn't work here how i want it, so use this function instead.
 										blank->blitNShade(
@@ -920,7 +920,7 @@ XcomResourcePack::XcomResourcePack(const Ruleset* const rules)
 									}
 									else
 									{
-										Log(LOG_DEBUG) << "Adding custom frame: " << offset + spritePack->getModIndex();
+										//Log(LOG_DEBUG) << "Adding custom frame: " << offset + spritePack->getModIndex();
 										//Log(LOG_INFO) << "Adding custom frame: " << offset + spritePack->getModIndex();
 										// for some reason regular blit() doesn't work here how i want it, so use this function instead.
 										blank->blitNShade(

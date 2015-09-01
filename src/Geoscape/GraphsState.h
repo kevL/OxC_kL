@@ -49,15 +49,15 @@ class GraphsState
 {
 
 private:
-	static const size_t GRAPH_MAX_BUTTONS = 19; // # visible btns. Does not include TOTAL btn.
+	static const size_t GRAPH_BUTTONS = 19; // # visible btns. Does not include TOTAL btn.
 
 	bool
 		_alien,
 		_country,
 		_finance,
 		_income,
-		_reset,
-		_vis;
+		_forceVis,	// true to ensure values are displayed when scrolling buttons
+		_reset;		// true to stop buttons blinking & reset activity
 
 	int _current;
 
@@ -89,15 +89,15 @@ private:
 	Timer* _blinkTimer;
 
 	std::vector<bool>
-		_financeToggles,
 		_blinkCountry,
-		_blinkCountryXCOM,
+		_blinkCountryXCom,
 		_blinkRegion,
-		_blinkRegionXCOM;
+		_blinkRegionXCom,
+		_financeToggles;
 
 	std::vector<GraphBtnInfo*>
-		_regionToggles,
-		_countryToggles;
+		_countryToggles,
+		_regionToggles;
 	std::vector<Surface*>
 		_alienCountryLines,
 		_alienRegionLines,
@@ -116,24 +116,26 @@ private:
 		_btnFinances,
 		_btnRegions;
 
-	/// Scroll button lists: scroll and repaint buttons functions
+	/// Blinks recent activity.
+	void blinkButtons();
+	/// Shifts buttons to their pre-Graph cTor row.
+	void initButtons();
+	/// Scroll button lists: scroll and repaint buttons' functions.
 	void scrollButtons(
 			std::vector<GraphBtnInfo*>& toggles,
 			std::vector<ToggleTextButton*>& buttons,
 			std::vector<Text*>& actAlien,
 			std::vector<Text*>& actXCom,
 			std::vector<bool>& blink,
-			std::vector<bool>& blinkXCOM,
-			size_t& offset,
-			int step);
+			std::vector<bool>& blinkXCom,
+			size_t& btnOffset,
+			int dir);
 	///
 	void updateButton(
 			GraphBtnInfo* info,
 			ToggleTextButton* btn,
 			Text* aliens,
 			Text* xcom);
-	/// Shifts buttons to their pre-Graph cTor row.
-	void initButtons();
 
 
 	public:
@@ -144,8 +146,6 @@ private:
 
 		/// Handles the blink timer.
 		void think();
-		/// Blinks recent activity.
-		void blink();
 
 		/// Handler for clicking the Geoscape icon.
 		void btnGeoscapeClick(Action* action);

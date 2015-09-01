@@ -1344,7 +1344,7 @@ void GeoscapeState::updateTimeDisplay()
 				i != _gameSave->getRegions()->end();
 				++i)
 		{
-			score += (*i)->getActivityXcom().at(ent) - (*i)->getActivityAlien().at(ent);
+			score += (*i)->getActivityXCom().at(ent) - (*i)->getActivityAlien().at(ent);
 		}
 		_txtScore->setText(Text::formatNumber(score));
 	}
@@ -2652,7 +2652,7 @@ void GeoscapeState::time1Hour()
 			++i)
 	{
 		(*i)->recentActivity(false);
-		(*i)->recentActivityXCOM(false);
+		(*i)->recentActivityXCom(false);
 	}
 
 	for (std::vector<Country*>::const_iterator
@@ -2661,7 +2661,7 @@ void GeoscapeState::time1Hour()
 			++i)
 	{
 		(*i)->recentActivity(false);
-		(*i)->recentActivityXCOM(false);
+		(*i)->recentActivityXCom(false);
 	}
 
 

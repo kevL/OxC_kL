@@ -43,7 +43,7 @@ Country::Country(
 		_funding(0),
 		_satisfaction(2),
 		_activityRecent(-1),
-		_activityRecentXCOM(-1)
+		_activityRecentXCom(-1)
 {
 	if (genFunds == true)
 		_funding.push_back(_rules->generateFunding());
@@ -65,10 +65,10 @@ Country::~Country()
 void Country::load(const YAML::Node& node)
 {
 	_funding			= node["funding"]			.as<std::vector<int> >(_funding);
-	_activityXcom		= node["activityXcom"]		.as<std::vector<int> >(_activityXcom);
+	_activityXcom		= node["activityXCom"]		.as<std::vector<int> >(_activityXcom);
 	_activityAlien		= node["activityAlien"]		.as<std::vector<int> >(_activityAlien);
 	_activityRecent		= node["activityRecent"]	.as<int>(_activityRecent);
-	_activityRecentXCOM	= node["activityRecentXCOM"].as<int>(_activityRecentXCOM);
+	_activityRecentXCom	= node["activityRecentXCom"].as<int>(_activityRecentXCom);
 	_pact				= node["pact"]				.as<bool>(_pact);
 	_newPact			= node["newPact"]			.as<bool>(_newPact);
 }
@@ -83,10 +83,10 @@ YAML::Node Country::save() const
 
 	node["type"]				= _rules->getType();
 	node["funding"]				= _funding;
-	node["activityXcom"]		= _activityXcom;
+	node["activityXCom"]		= _activityXcom;
 	node["activityAlien"]		= _activityAlien;
 	node["activityRecent"]		= _activityRecent;
-	node["activityRecentXCOM"]	= _activityRecentXCOM;
+	node["activityRecentXCom"]	= _activityRecentXCom;
 
 	if (_pact == true)
 		node["pact"]	= _pact;
@@ -152,7 +152,7 @@ int Country::getSatisfaction() const
  * Adds to the country's xcom activity level.
  * @param activity - how many points to add
  */
-void Country::addActivityXcom(int activity)
+void Country::addActivityXCom(int activity)
 {
 	_activityXcom.back() += activity;
 }
@@ -170,7 +170,7 @@ void Country::addActivityAlien(int activity)
  * Gets the country's xcom activity level.
  * @return, reference to a vector of activity levels
  */
-std::vector<int>& Country::getActivityXcom()
+std::vector<int>& Country::getActivityXCom()
 {
 	return _activityXcom;
 }
@@ -348,25 +348,25 @@ bool Country::recentActivity(
  * @param graphs	- not sure lol (default false)
  * @return, true if there is activity
  */
-bool Country::recentActivityXCOM(
+bool Country::recentActivityXCom(
 		bool activity,
 		bool graphs)
 {
 	if (activity == true)
-		_activityRecentXCOM = 0;
-	else if (_activityRecentXCOM != -1)
+		_activityRecentXCom = 0;
+	else if (_activityRecentXCom != -1)
 	{
 		if (graphs == true)
 			return true;
 
 
-		++_activityRecentXCOM;
+		++_activityRecentXCom;
 
-		if (_activityRecentXCOM == 24) // aLien bases show activity every 24 hrs.
-			_activityRecentXCOM = -1;
+		if (_activityRecentXCom == 24) // aLien bases show activity every 24 hrs.
+			_activityRecentXCom = -1;
 	}
 
-	if (_activityRecentXCOM == -1)
+	if (_activityRecentXCom == -1)
 		return false;
 
 	return true;
@@ -378,7 +378,7 @@ bool Country::recentActivityXCOM(
 void Country::resetActivity()
 {
 	_activityRecent =
-	_activityRecentXCOM = -1;
+	_activityRecentXCom = -1;
 }
 
 }
