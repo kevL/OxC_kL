@@ -351,10 +351,10 @@ void MiniBaseView::blink()
 
 		x = i * (MINI_SIZE + 2);
 
-		if (   base->getScientists() > 0 // unused Scientists &/or Engineers &/or PsiLab space
+		if (base->getScientists() > 0 // unused Scientists &/or Engineers &/or PsiLab space
 			|| base->getEngineers() > 0
-			|| (   static_cast<int>(base->getSoldiers()->size()) < base->getAvailablePsiLabs()
-				&& static_cast<int>(base->getSoldiers()->size()) > base->getUsedPsiLabs()))
+			|| (base->getUsedPsiLabs() != base->getAvailablePsiLabs()
+				&& base->getUsedPsiLabs() < static_cast<int>(base->getSoldiers()->size())))
 		{
 			if (_blink == true)
 				color = RED_L;

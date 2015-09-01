@@ -90,10 +90,6 @@ class XcomResourcePack
 		public ResourcePack
 {
 
-private:
-	const Ruleset* _ruleset;
-
-
 	public:
 		/// Creates the X-Com Resource Pack.
 		explicit XcomResourcePack(const Ruleset* const rules);

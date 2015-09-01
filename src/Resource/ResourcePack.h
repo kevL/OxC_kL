@@ -41,10 +41,10 @@ class SurfaceSet;
 
 /**
  * Packs of external game media.
- * @note Resource packs contain all the game media that's loaded externally,
- * like graphics, fonts, languages, audio and world map.
- * @note The game is still hardcoded to X-Com resources,
- * so for now this just serves to keep all the file loading in one place.
+ * @note Resource packs contain all the game media that's loaded externally like
+ * graphics, fonts, languages, audio and globe data.
+ * @note The game is still hardcoded to X-Com resources so for now this just
+ * serves to load all the files in one place.
  */
 class ResourcePack // no copy cTor.
 {
@@ -56,7 +56,7 @@ private:
 	Sound* _muteSound;
 
 	/// Gets a random music. This is private to prevent access. Use playMusic() instead.
-	Music* getRandomMusic( // sza_MusicRules
+	Music* getRandomMusic(
 			const std::string& trackType,
 			const std::string& terrainType) const;
 
@@ -69,12 +69,10 @@ private:
 		std::map<std::string, SurfaceSet*> _sets;
 		std::map<std::string, SoundSet*> _sounds;
 
-		std::map<std::string, Music*> _musicFile; // sza_MusicRules
-		std::map<std::string, std::map<std::string, std::vector<std::pair<std::string, int> > > > _musicAssignment; // sza_MusicRules
+		std::map<std::string, Music*> _musicFile;
+		std::map<std::string, std::map<std::string, std::vector<std::pair<std::string, int> > > > _musicAssignment;
 
 		std::vector<Uint16> _voxelData;
-
-		std::vector<std::vector<Uint8> > _transparencyLUTs;
 
 
 		public:
@@ -134,18 +132,18 @@ private:
 			/// Plays a particular music.
 			void playMusic(
 					const std::string& trackType,
-					const std::string& terrainType = "", // kL, sza_MusicRules
+					const std::string& terrainType = "",
 					int loops = -1);
 			/// Fades the currently playing music.
 			void fadeMusic(
 					Game* const game,
 					const int fadeDur);
 			/// Clear a music assignment
-			void ClearMusicAssignment( // sza_MusicRules
+			void ClearMusicAssignment(
 					const std::string& trackType,
 					const std::string& terrainType);
 			/// Make a music assignment
-			void MakeMusicAssignment( // sza_MusicRules
+			void MakeMusicAssignment(
 					const std::string& trackType,
 					const std::string& terrainType,
 					const std::vector<std::string>& files,

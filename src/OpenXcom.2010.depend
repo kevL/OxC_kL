@@ -4383,7 +4383,7 @@
 	"Text.h"
 	"../Engine/InteractiveSurface.h"
 
-1440466874 f:\git\openxcom\src\resource\resourcepack.h
+1441081042 f:\git\openxcom\src\resource\resourcepack.h
 
 1440212531 f:\git\openxcom\src\savegame\base.h
 	"Target.h"
@@ -4897,7 +4897,7 @@
 	<windows.h>
 	<stddef.h>
 
-1438163743 source:f:\git\openxcom\src\basescape\minibaseview.cpp
+1441079842 source:f:\git\openxcom\src\basescape\minibaseview.cpp
 	"MiniBaseView.h"
 	"../Engine/Action.h"
 	"../Engine/SurfaceSet.h"
@@ -5603,7 +5603,7 @@
 	<exception>
 	<string>
 
-1440467821 f:\git\openxcom\src\resource\xcomresourcepack.h
+1441081065 f:\git\openxcom\src\resource\xcomresourcepack.h
 	"ResourcePack.h"
 
 1437431771 f:\git\openxcom\src\ruleset\alienrace.h
@@ -7094,7 +7094,7 @@
 
 1440173244 f:\git\openxcom\src\ufopaedia\ufopaedia.h
 
-1441043823 source:f:\git\openxcom\src\geoscape\globe.cpp
+1441045440 source:f:\git\openxcom\src\geoscape\globe.cpp
 	"Globe.h"
 	"GeoscapeState.h"
 	"../Engine/Action.h"
@@ -8192,7 +8192,7 @@
 	"../Engine/SurfaceSet.h"
 	"../Resource/XcomResourcePack.h"
 
-1440829010 source:f:\git\openxcom\src\resource\xcomresourcepack.cpp
+1441085665 source:f:\git\openxcom\src\resource\xcomresourcepack.cpp
 	"XcomResourcePack.h"
 	"../Engine/Language.h"
 	"../Engine/Sound.h"
