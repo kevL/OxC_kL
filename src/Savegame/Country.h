@@ -42,23 +42,23 @@ private:
 		_newPact,
 		_pact;
 	int
-		_activityRecent,
-		_activityRecentXCom,
+		_recentActA,
+		_recentActX,
 		_satisfaction;
 
-	RuleCountry* _rules;
+	RuleCountry* _countryRule;
 
 	std::vector<int>
-		_activityAlien,
-		_activityXcom,
+		_actA,
+		_actX,
 		_funding;
 
 
 	public:
 		/// Creates a new country of the specified type.
 		Country(
-				RuleCountry* rules,
-				bool genFunds = true);
+				RuleCountry* const countryRule,
+				bool genFunds = false);
 		/// Cleans up the country.
 		~Country();
 
@@ -80,14 +80,14 @@ private:
 		/// Gets the country's satisfaction level.
 		int getSatisfaction() const;
 
-		/// Adds xcom activity in this country.
-		void addActivityXCom(int activity);
 		/// Adds alien activity in this country.
 		void addActivityAlien(int activity);
-		/// Gets xcom activity for this country.
-		std::vector<int>& getActivityXCom();
+		/// Adds xcom activity in this country.
+		void addActivityXCom(int activity);
 		/// Gets alien activity for this country.
 		std::vector<int>& getActivityAlien();
+		/// Gets xcom activity for this country.
+		std::vector<int>& getActivityXCom();
 
 		/// Stores last month's counters, starts new counters, sets this month's change.
 		void newMonth(
@@ -105,7 +105,7 @@ private:
 		void setPact();
 
 		/// Handles recent alien activity in this country for GraphsState blink.
-		bool recentActivity(
+		bool recentActivityAlien(
 				bool activity = true,
 				bool graphs = false);
 		/// Handles recent XCOM activity in this country for GraphsState blink.

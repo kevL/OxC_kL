@@ -27,16 +27,16 @@ namespace OpenXcom
 
 /**
  * Initializes a region of the specified type.
- * @param rules - pointer to RuleRegion
+ * @param regionRule - pointer to RuleRegion
  */
-Region::Region(RuleRegion* rules)
+Region::Region(RuleRegion* const regionRule)
 	:
-		_rules(rules),
-		_activityRecent(-1),
-		_activityRecentXCom(-1)
+		_regionRule(regionRule),
+		_recentActA(-1),
+		_recentActX(-1)
 {
-	_activityAlien.push_back(0);
-	_activityXcom.push_back(0);
+	_actA.push_back(0);
+	_actX.push_back(0);
 }
 
 /**
@@ -51,10 +51,10 @@ Region::~Region()
  */
 void Region::load(const YAML::Node& node)
 {
-	_activityXcom		= node["activityXCom"].as< std::vector<int> >(_activityXcom);
-	_activityAlien		= node["activityAlien"].as< std::vector<int> >(_activityAlien);
-	_activityRecent		= node["activityRecent"].as<int>(_activityRecent);
-	_activityRecentXCom	= node["activityRecentXCom"].as<int>(_activityRecentXCom);
+	_actA		= node["actA"]		.as<std::vector<int> >(_actA);
+	_actX		= node["actX"]		.as<std::vector<int> >(_actX);
+	_recentActA	= node["recentActA"].as<int>(_recentActA);
+	_recentActX	= node["recentActX"].as<int>(_recentActX);
 }
 
 /**
@@ -65,11 +65,11 @@ YAML::Node Region::save() const
 {
 	YAML::Node node;
 
-	node["type"]				= _rules->getType();
-	node["activityXCom"]		= _activityXcom;
-	node["activityAlien"]		= _activityAlien;
-	node["activityRecent"]		= _activityRecent;
-	node["activityRecentXCom"]	= _activityRecentXCom;
+	node["type"]		= _regionRule->getType();
+	node["actA"]		= _actA;
+	node["actX"]		= _actX;
+	node["recentActA"]	= _recentActA;
+	node["recentActX"]	= _recentActX;
 
 	return node;
 }
@@ -80,7 +80,7 @@ YAML::Node Region::save() const
  */
 RuleRegion* Region::getRules() const
 {
-	return _rules;
+	return _regionRule;
 }
 
 /**
@@ -89,16 +89,7 @@ RuleRegion* Region::getRules() const
  */
 std::string Region::getType() const
 {
-	return _rules->getType();
-}
-
-/**
- * Adds to the region's xcom activity level.
- * @param activity - amount to add
- */
-void Region::addActivityXCom(int activity)
-{
-	_activityXcom.back() += activity;
+	return _regionRule->getType();
 }
 
 /**
@@ -107,16 +98,16 @@ void Region::addActivityXCom(int activity)
  */
 void Region::addActivityAlien(int activity)
 {
-	_activityAlien.back() += activity;
+	_actA.back() += activity;
 }
 
 /**
- * Gets the region's xcom activity level.
- * @return, activity level
+ * Adds to the region's xcom activity level.
+ * @param activity - amount to add
  */
-std::vector<int>& Region::getActivityXCom()
+void Region::addActivityXCom(int activity)
 {
-	return _activityXcom;
+	_actX.back() += activity;
 }
 
 /**
@@ -125,7 +116,16 @@ std::vector<int>& Region::getActivityXCom()
  */
 std::vector<int>& Region::getActivityAlien()
 {
-	return _activityAlien;
+	return _actA;
+}
+
+/**
+ * Gets the region's xcom activity level.
+ * @return, activity level
+ */
+std::vector<int>& Region::getActivityXCom()
+{
+	return _actX;
 }
 
 /**
@@ -133,14 +133,14 @@ std::vector<int>& Region::getActivityAlien()
  */
 void Region::newMonth()
 {
-	_activityAlien.push_back(0);
-	_activityXcom.push_back(0);
+	_actA.push_back(0);
+	_actX.push_back(0);
 
-	if (_activityAlien.size() > 12)
-		_activityAlien.erase(_activityAlien.begin());
+	if (_actA.size() > 12)
+		_actA.erase(_actA.begin());
 
-	if (_activityXcom.size() > 12)
-		_activityXcom.erase(_activityXcom.begin());
+	if (_actX.size() > 12)
+		_actX.erase(_actX.begin());
 }
 
 /**
@@ -149,26 +149,26 @@ void Region::newMonth()
  * @param graphs	- not sure lol (default false)
  * @return, true if there is activity
  */
-bool Region::recentActivity(
+bool Region::recentActivityAlien(
 		bool activity,
 		bool graphs)
 {
 	if (activity == true)
-		_activityRecent = 0;
-	else if (_activityRecent != -1)
+		_recentActA = 0;
+	else if (_recentActA != -1)
 	{
 		if (graphs == true)
 			return true;
 		else
 		{
-			++_activityRecent;
+			++_recentActA;
 
-			if (_activityRecent == 24) // min: aLien bases show activity every 24 hrs.
-				_activityRecent = -1;
+			if (_recentActA == 24) // min: aLien bases show activity every 24 hrs.
+				_recentActA = -1;
 		}
 	}
 
-	if (_activityRecent == -1)
+	if (_recentActA == -1)
 		return false;
 
 	return true;
@@ -185,21 +185,21 @@ bool Region::recentActivityXCom(
 		bool graphs)
 {
 	if (activity == true)
-		_activityRecentXCom = 0;
-	else if (_activityRecentXCom != -1)
+		_recentActX = 0;
+	else if (_recentActX != -1)
 	{
 		if (graphs == true)
 			return true;
 		else
 		{
-			++_activityRecentXCom;
+			++_recentActX;
 
-			if (_activityRecentXCom == 24) // min: aLien bases show activity every 24 hrs. /shrug
-				_activityRecentXCom = -1;
+			if (_recentActX == 24) // min: aLien bases show activity every 24 hrs. /shrug
+				_recentActX = -1;
 		}
 	}
 
-	if (_activityRecentXCom == -1)
+	if (_recentActX == -1)
 		return false;
 
 	return true;
@@ -210,8 +210,8 @@ bool Region::recentActivityXCom(
  */
 void Region::resetActivity()
 {
-	_activityRecent =
-	_activityRecentXCom = -1;
+	_recentActA =
+	_recentActX = -1;
 }
 
 }

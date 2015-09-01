@@ -118,7 +118,8 @@ void RuleUnit::load(
 }
 
 /**
- * Returns the language string that names this unit. Each unit type has a unique name.
+ * Returns the string-ID that identifies this type of unit.
+ * @note Each unit is identified by race and if alien rank.
  * @return, the unit's name
  */
 std::string RuleUnit::getType() const

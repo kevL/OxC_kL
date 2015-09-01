@@ -1684,7 +1684,7 @@ void GeoscapeState::time5Seconds()
 					if ((*k)->getRules()->insideCountry(lon,lat) == true)
 					{
 						(*k)->addActivityAlien((*j)->getRules()->getScore());
-						(*k)->recentActivity();
+						(*k)->recentActivityAlien();
 						break;
 					}
 				}
@@ -1697,7 +1697,7 @@ void GeoscapeState::time5Seconds()
 					if ((*k)->getRules()->insideRegion(lon,lat) == true)
 					{
 						(*k)->addActivityAlien((*j)->getRules()->getScore());
-						(*k)->recentActivity();
+						(*k)->recentActivityAlien();
 						break;
 					}
 				}
@@ -2427,7 +2427,7 @@ bool GeoscapeState::processMissionSite(MissionSite* const site) const
 		if (region != NULL)
 		{
 			region->addActivityAlien(aLienPts);
-			region->recentActivity();
+			region->recentActivityAlien();
 		}
 
 		for (std::vector<Country*>::const_iterator
@@ -2440,7 +2440,7 @@ bool GeoscapeState::processMissionSite(MissionSite* const site) const
 											site->getLatitude()) == true)
 			{
 				(*i)->addActivityAlien(aLienPts);
-				(*i)->recentActivity();
+				(*i)->recentActivityAlien();
 
 				break;
 			}
@@ -2575,19 +2575,19 @@ void GeoscapeState::time30Minutes()
 	}
 
 
-	const int vp = ((_gameSave->getMonthsPassed() + 2) / 4)
+	const int pt = ((_gameSave->getMonthsPassed() + 2) / 4)
 				 + static_cast<int>(_gameSave->getDifficulty());	// basic Victory Points
-	int ufoVP;														// Beginner @ 1st/2nd month ought add 0pts. here
+	int aLienPts;													// Beginner @ 1st/2nd month ought add 0pts. here
 
-	// TODO: vp = vp * _rules->getAlienMission("STR_ALIEN_*")->getPoints() / 100;
+	// TODO: pt = pt * _rules->getAlienMission("STR_ALIEN_*")->getPoints() / 100;
 
 	for (std::vector<Ufo*>::const_iterator // handle UFO detection and give aLiens points
 			i = _gameSave->getUfos()->begin();
 			i != _gameSave->getUfos()->end();
 			++i)
 	{
-		ufoVP = (*i)->getVictoryPoints() + vp; // reset for each UFO
-		if (ufoVP > 0)
+		aLienPts = (*i)->getVictoryPoints() + pt; // reset for each UFO
+		if (aLienPts > 0)
 		{
 			const double
 				lon = (*i)->getLongitude(),
@@ -2602,8 +2602,8 @@ void GeoscapeState::time30Minutes()
 												lon,
 												lat) == true)
 				{
-					(*j)->addActivityAlien(ufoVP); // points per UFO in-Region per half hour
-					(*j)->recentActivity();
+					(*j)->addActivityAlien(aLienPts); // points per UFO in-Region per half hour
+					(*j)->recentActivityAlien();
 
 					break;
 				}
@@ -2618,8 +2618,8 @@ void GeoscapeState::time30Minutes()
 												lon,
 												lat) == true)
 				{
-					(*j)->addActivityAlien(ufoVP); // points per UFO in-Country per half hour
-					(*j)->recentActivity();
+					(*j)->addActivityAlien(aLienPts); // points per UFO in-Country per half hour
+					(*j)->recentActivityAlien();
 
 					break;
 				}
@@ -2651,7 +2651,7 @@ void GeoscapeState::time1Hour()
 			i != _gameSave->getRegions()->end();
 			++i)
 	{
-		(*i)->recentActivity(false);
+		(*i)->recentActivityAlien(false);
 		(*i)->recentActivityXCom(false);
 	}
 
@@ -2660,7 +2660,7 @@ void GeoscapeState::time1Hour()
 			i != _gameSave->getCountries()->end();
 			++i)
 	{
-		(*i)->recentActivity(false);
+		(*i)->recentActivityAlien(false);
 		(*i)->recentActivityXCom(false);
 	}
 
@@ -3237,7 +3237,7 @@ void GeoscapeState::time1Day()
 												lat) == true)
 				{
 					(*j)->addActivityAlien(aLienPts);
-					(*j)->recentActivity();
+					(*j)->recentActivityAlien();
 
 					break;
 				}
@@ -3253,7 +3253,7 @@ void GeoscapeState::time1Day()
 												lat) == true)
 				{
 					(*j)->addActivityAlien(aLienPts);
-					(*j)->recentActivity();
+					(*j)->recentActivityAlien();
 
 					break;
 				}

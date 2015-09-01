@@ -129,7 +129,8 @@ private:
 			std::vector<bool>& blinkA,
 			std::vector<bool>& blinkX,
 			size_t& btnOffset,
-			int dir);
+			int dir,
+			bool init = false);
 	///
 	void updateButton(
 			GraphBtnInfo* info,

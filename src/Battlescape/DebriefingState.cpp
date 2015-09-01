@@ -292,7 +292,7 @@ DebriefingState::DebriefingState()
 		if (_destroyXCOMBase == true)
 		{
 			_region->addActivityAlien((_diff + 1) * 235);
-			_region->recentActivity();
+			_region->recentActivityAlien();
 		}
 		else
 		{
@@ -306,7 +306,7 @@ DebriefingState::DebriefingState()
 		if (_destroyXCOMBase == true)
 		{
 			_country->addActivityAlien((_diff + 1) * 235);
-			_country->recentActivity();
+			_country->recentActivityAlien();
 		}
 		else
 		{
@@ -780,8 +780,8 @@ void DebriefingState::prepareDebriefing() // private.
 
 
 	int
-		soldierExit = 0, // if this stays 0 the craft is lost...
-		soldierLive = 0, // if this stays 0 the craft is lost...
+		soldierExit = 0, // if this stays 0 the craft is lost ...
+		soldierLive = 0, // if this stays 0 the craft is lost ...
 		soldierDead = 0, // Soldier Diary.
 		soldierOut = 0;
 
@@ -2058,7 +2058,7 @@ void DebriefingState::recoverLiveAlien(BattleUnit* const unit) // private.
 {
 	if (unit->getSpawnUnit().empty() == false)
 	{
-		BattleUnit* const conUnit = _gameSave->getBattleSave()->getBattleGame()->convertUnit(unit);
+		BattleUnit* const conUnit = _gameSave->getBattleSave()->getBattleGame()->convertUnit(unit); // TODO: use a sparsed down version of convertUnit() here.
 		conUnit->setFaction(FACTION_PLAYER);
 	}
 	else if (_base->getAvailableContainment() != 0)
@@ -2089,11 +2089,12 @@ void DebriefingState::recoverLiveAlien(BattleUnit* const unit) // private.
 			"STR_ALIEN_CORPSES_RECOVERED",
 			unit->getValue() / 3);
 
-		std::string corpseItem;
-		if (unit->getSpawnUnit().empty() == false)
-			corpseItem = _rules->getArmor(_rules->getUnit(unit->getSpawnUnit())->getArmor())->getCorpseGeoscape();
-		else
-			corpseItem = unit->getArmor()->getCorpseGeoscape();
+//		std::string corpseItem;
+//		if (unit->getSpawnUnit().empty() == false)
+//			corpseItem = _rules->getArmor(_rules->getUnit(unit->getSpawnUnit())->getArmor())->getCorpseGeoscape();
+//		else
+//			corpseItem = unit->getArmor()->getCorpseGeoscape();
+		const std::string corpseItem = unit->getArmor()->getCorpseGeoscape();
 
 		if (corpseItem.empty() == false) // safety.
 			_base->getItems()->addItem(corpseItem);

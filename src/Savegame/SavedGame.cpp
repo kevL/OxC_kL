@@ -473,9 +473,7 @@ void SavedGame::load(
 		const std::string type = (*i)["type"].as<std::string>();
 		if (rules->getCountry(type))
 		{
-			Country* const c = new Country(
-										rules->getCountry(type),
-										false);
+			Country* const c = new Country(rules->getCountry(type));
 			c->load(*i);
 			_countries.push_back(c);
 		}

@@ -120,6 +120,7 @@ BattleUnit::BattleUnit(
 		_mcStrength(0),
 		_mcSkill(0),
 		_drugDose(0),
+		_isZombie(false),
 
 		_deathSound(-1),
 		_aggroSound(-1),
@@ -293,6 +294,7 @@ BattleUnit::BattleUnit(
 		_mcStrength(0),
 		_mcSkill(0),
 		_drugDose(0),
+		_isZombie(unitRule->getRace() == "STR_ZOMBIE"),
 
 		_statistics(NULL), // Soldier Diary
 
@@ -1553,7 +1555,7 @@ int BattleUnit::damage(
 	{
 		const bool selfAware = _geoscapeSoldier != NULL
 							|| (_unitRule->isMechanical() == false
-								&& _race != "STR_ZOMBIE");
+								&& _isZombie == false);
 		int wounds = 0;
 
 		if (dType == DT_STUN)
@@ -1576,7 +1578,7 @@ int BattleUnit::damage(
 					_diedByFire = true;
 					_spawnUnit.clear();
 
-					if (_type == "STR_ZOMBIE")
+					if (_isZombie == true)
 						_specab = SPECAB_EXPLODE;
 					else
 						_specab = SPECAB_NONE;
@@ -1623,7 +1625,7 @@ int BattleUnit::damage(
 			if (moraleLoss > 0)
 			{
 				int leadership = 100; // <- for civilians & pre-battle PS explosion.
-				if (_battleGame != NULL) // ie. don't crash on power-source explosion.
+				if (_battleGame != NULL) // ie. don't CTD on preBattle power-source explosion.
 				{
 					if (_originalFaction == FACTION_PLAYER)
 						leadership = _battleGame->getBattlescapeState()->getSavedBattleGame()->getMoraleModifier();
@@ -1754,7 +1756,8 @@ void BattleUnit::setStun(int stun)
 void BattleUnit::knockOut()
 {
 	if (_unitRule != NULL
-		&& _unitRule->isMechanical() == true)
+		&& (_unitRule->isMechanical() == true
+			|| _isZombie == true))
 	{
 		_health = 0;
 	}
@@ -3756,7 +3759,7 @@ bool BattleUnit::isWoundable() const
 		&& (_geoscapeSoldier != NULL
 			|| (Options::alienBleeding == true
 				&& _unitRule->isMechanical() == false
-				&& _race != "STR_ZOMBIE"));
+				&& _isZombie == false));
 }
 
 /**
@@ -3769,7 +3772,7 @@ bool BattleUnit::isFearable() const
 		&& _status != STATUS_UNCONSCIOUS
 		&& (_geoscapeSoldier != NULL
 			|| (_unitRule->isMechanical() == false
-				&& _race != "STR_ZOMBIE"));
+				&& _isZombie == false));
 }
 
 /**
@@ -3781,7 +3784,7 @@ bool BattleUnit::isHealable() const
 	return _status != STATUS_DEAD
 		&& (_geoscapeSoldier != NULL
 			|| (_unitRule->isMechanical() == false
-				&& _race != "STR_ZOMBIE"));
+				&& _isZombie == false));
 }
 
 /**
@@ -4721,7 +4724,7 @@ void BattleUnit::hostileMcParameters(
 /**
  * Plays this BattleUnit's death scream.
  */
-void BattleUnit::playDeathSound()
+void BattleUnit::playDeathSound() const
 {
 	int sound = -1;
 
@@ -4750,6 +4753,15 @@ void BattleUnit::playDeathSound()
 									->play(
 										-1,
 										_battleGame->getMap()->getSoundAngle(_pos));
+}
+
+/**
+ * Gets if this unit is a Zombie.
+ * @return, true if zombie
+ */
+bool BattleUnit::isZombie() const
+{
+	return _isZombie;
 }
 
 }

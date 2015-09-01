@@ -3099,9 +3099,9 @@ BattleUnit* BattlescapeGame::convertUnit(BattleUnit* const unit)
 	_battleSave->getTile(unit->getPosition())->setUnit(NULL);
 
 
-	std::string conType = unit->getSpawnUnit();
+	const std::string conType = unit->getSpawnUnit();
 	RuleUnit* const unitRule = getRuleset()->getUnit(conType);
-	std::string armorType = unitRule->getArmor();
+	const std::string armorType = unitRule->getArmor();
 
 	BattleUnit* const conUnit = new BattleUnit(
 											unitRule,
@@ -3120,7 +3120,7 @@ BattleUnit* BattlescapeGame::convertUnit(BattleUnit* const unit)
 	conUnit->setTimeUnits(0);
 
 	int dir;
-	if (conType == "STR_ZOMBIE")
+	if (conType == "STR_ZOMBIE") // TODO: RuleUnit var '_isZombie' -- narrow FoV etc.
 		dir = RNG::generate(0,7); // or, (unit->getDirection())
 	else
 		dir = 3;
@@ -3133,8 +3133,7 @@ BattleUnit* BattlescapeGame::convertUnit(BattleUnit* const unit)
 										conUnit,
 										NULL));
 
-	std::string terrorWeapon = unitRule->getRace().substr(4);
-	terrorWeapon += "_WEAPON";
+	const std::string terrorWeapon = unitRule->getRace().substr(4) + "_WEAPON";
 	BattleItem* const item = new BattleItem(
 										getRuleset()->getItem(terrorWeapon),
 										_battleSave->getNextItemId());

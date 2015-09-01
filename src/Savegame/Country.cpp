@@ -30,26 +30,26 @@ namespace OpenXcom
 
 /**
  * Initializes a country of the specified type.
- * @param rules		- pointer to RuleCountry
- * @param genFunds	- true to generate new funding (default true)
+ * @param countryRule	- pointer to RuleCountry
+ * @param genFunds		- true to generate new funding (default false)
  */
 Country::Country(
-		RuleCountry* rules,
+		RuleCountry* const countryRule,
 		bool genFunds)
 	:
-		_rules(rules),
+		_countryRule(countryRule),
 		_pact(false),
 		_newPact(false),
 		_funding(0),
 		_satisfaction(2),
-		_activityRecent(-1),
-		_activityRecentXCom(-1)
+		_recentActA(-1),
+		_recentActX(-1)
 {
 	if (genFunds == true)
-		_funding.push_back(_rules->generateFunding());
+		_funding.push_back(_countryRule->generateFunding());
 
-	_activityXcom.push_back(0);
-	_activityAlien.push_back(0);
+	_actA.push_back(0);
+	_actX.push_back(0);
 }
 
 /**
@@ -64,13 +64,13 @@ Country::~Country()
  */
 void Country::load(const YAML::Node& node)
 {
-	_funding			= node["funding"]			.as<std::vector<int> >(_funding);
-	_activityXcom		= node["activityXCom"]		.as<std::vector<int> >(_activityXcom);
-	_activityAlien		= node["activityAlien"]		.as<std::vector<int> >(_activityAlien);
-	_activityRecent		= node["activityRecent"]	.as<int>(_activityRecent);
-	_activityRecentXCom	= node["activityRecentXCom"].as<int>(_activityRecentXCom);
-	_pact				= node["pact"]				.as<bool>(_pact);
-	_newPact			= node["newPact"]			.as<bool>(_newPact);
+	_funding	= node["funding"]	.as<std::vector<int> >(_funding);
+	_actA		= node["actA"]		.as<std::vector<int> >(_actA);
+	_actX		= node["actX"]		.as<std::vector<int> >(_actX);
+	_recentActA	= node["recentActA"].as<int>(_recentActA);
+	_recentActX	= node["recentActX"].as<int>(_recentActX);
+	_pact		= node["pact"]		.as<bool>(_pact);
+	_newPact	= node["newPact"]	.as<bool>(_newPact);
 }
 
 /**
@@ -81,12 +81,12 @@ YAML::Node Country::save() const
 {
 	YAML::Node node;
 
-	node["type"]				= _rules->getType();
-	node["funding"]				= _funding;
-	node["activityXCom"]		= _activityXcom;
-	node["activityAlien"]		= _activityAlien;
-	node["activityRecent"]		= _activityRecent;
-	node["activityRecentXCom"]	= _activityRecentXCom;
+	node["type"]		= _countryRule->getType();
+	node["funding"]		= _funding;
+	node["actA"]		= _actA;
+	node["actX"]		= _actX;
+	node["recentActA"]	= _recentActA;
+	node["recentActX"]	= _recentActX;
 
 	if (_pact == true)
 		node["pact"]	= _pact;
@@ -102,7 +102,7 @@ YAML::Node Country::save() const
  */
 RuleCountry* Country::getRules() const
 {
-	return _rules;
+	return _countryRule;
 }
 
 /**
@@ -111,7 +111,7 @@ RuleCountry* Country::getRules() const
  */
 std::string Country::getType() const
 {
-	return _rules->getType();
+	return _countryRule->getType();
 }
 
 /**
@@ -149,30 +149,21 @@ int Country::getSatisfaction() const
 }
 
 /**
- * Adds to the country's xcom activity level.
- * @param activity - how many points to add
- */
-void Country::addActivityXCom(int activity)
-{
-	_activityXcom.back() += activity;
-}
-
-/**
  * Adds to the country's alien activity level.
  * @param activity - how many points to add
  */
 void Country::addActivityAlien(int activity)
 {
-	_activityAlien.back() += activity;
+	_actA.back() += activity;
 }
 
 /**
- * Gets the country's xcom activity level.
- * @return, reference to a vector of activity levels
+ * Adds to the country's xcom activity level.
+ * @param activity - how many points to add
  */
-std::vector<int>& Country::getActivityXCom()
+void Country::addActivityXCom(int activity)
 {
-	return _activityXcom;
+	_actX.back() += activity;
 }
 
 /**
@@ -181,7 +172,16 @@ std::vector<int>& Country::getActivityXCom()
  */
 std::vector<int>& Country::getActivityAlien()
 {
-	return _activityAlien;
+	return _actA;
+}
+
+/**
+ * Gets the country's xcom activity level.
+ * @return, reference to a vector of activity levels
+ */
+std::vector<int>& Country::getActivityXCom()
+{
+	return _actX;
 }
 
 /**
@@ -200,8 +200,8 @@ void Country::newMonth(
 	_satisfaction = 2;
 
 	const int
-		xcomPts = (xcomTotal / 10) + _activityXcom.back(),
-		alienPts = (alienTotal / 20) + _activityAlien.back(),
+		xcomPts = (xcomTotal / 10) + _actX.back(),
+		alienPts = (alienTotal / 20) + _actA.back(),
 		funding = getFunding().back(),
 		oldFunding = _funding.back() / 1000;
 	int newFunding = (oldFunding * RNG::generate(5,20) / 100) * 1000;
@@ -263,14 +263,14 @@ void Country::newMonth(
 	else
 		_funding.push_back(funding);
 
-	_activityAlien.push_back(0);
-	_activityXcom.push_back(0);
+	_actA.push_back(0);
+	_actX.push_back(0);
 
-	if (_activityAlien.size() > 12)
-		_activityAlien.erase(_activityAlien.begin());
+	if (_actA.size() > 12)
+		_actA.erase(_actA.begin());
 
-	if (_activityXcom.size() > 12)
-		_activityXcom.erase(_activityXcom.begin());
+	if (_actX.size() > 12)
+		_actX.erase(_actX.begin());
 
 	if (_funding.size() > 12)
 		_funding.erase(_funding.begin());
@@ -318,25 +318,25 @@ void Country::setPact()
  * @param graphs	- not sure lol (default false)
  * @return, true if there is activity
  */
-bool Country::recentActivity(
+bool Country::recentActivityAlien(
 		bool activity,
 		bool graphs)
 {
 	if (activity == true)
-		_activityRecent = 0;
-	else if (_activityRecent != -1)
+		_recentActA = 0;
+	else if (_recentActA != -1)
 	{
 		if (graphs == true)
 			return true;
 
 
-		++_activityRecent;
+		++_recentActA;
 
-		if (_activityRecent == 24) // aLien bases show activity every 24 hrs.
-			_activityRecent = -1;
+		if (_recentActA == 24) // aLien bases show activity every 24 hrs.
+			_recentActA = -1;
 	}
 
-	if (_activityRecent == -1)
+	if (_recentActA == -1)
 		return false;
 
 	return true;
@@ -353,20 +353,20 @@ bool Country::recentActivityXCom(
 		bool graphs)
 {
 	if (activity == true)
-		_activityRecentXCom = 0;
-	else if (_activityRecentXCom != -1)
+		_recentActX = 0;
+	else if (_recentActX != -1)
 	{
 		if (graphs == true)
 			return true;
 
 
-		++_activityRecentXCom;
+		++_recentActX;
 
-		if (_activityRecentXCom == 24) // aLien bases show activity every 24 hrs.
-			_activityRecentXCom = -1;
+		if (_recentActX == 24) // aLien bases show activity every 24 hrs.
+			_recentActX = -1;
 	}
 
-	if (_activityRecentXCom == -1)
+	if (_recentActX == -1)
 		return false;
 
 	return true;
@@ -377,8 +377,8 @@ bool Country::recentActivityXCom(
  */
 void Country::resetActivity()
 {
-	_activityRecent =
-	_activityRecentXCom = -1;
+	_recentActA =
+	_recentActX = -1;
 }
 
 }

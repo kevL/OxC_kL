@@ -1092,22 +1092,22 @@ void AlienMission::addScore( // private.
 //	alm_RETAL,	// 4 -> Retaliation has 0 pts.
 //	alm_SUPPLY	// 5
 
-	int alienPts = _missionRule.getPoints();
+	int aLienPts = _missionRule.getPoints();
 	switch (_missionRule.getObjective())
 	{
 		case alm_INFILT:
 		case alm_BASE:
-			alienPts += static_cast<int>(_gameSave.getDifficulty()) * 20
+			aLienPts += static_cast<int>(_gameSave.getDifficulty()) * 20
 					 + _gameSave.getMonthsPassed() * 2;
 		break;
 
 		case alm_SUPPLY:
-			alienPts += static_cast<int>(_gameSave.getDifficulty()) * 10
+			aLienPts += static_cast<int>(_gameSave.getDifficulty()) * 10
 					 + _gameSave.getMonthsPassed() / 2;
 		break;
 
 		case alm_SCORE:
-			alienPts += static_cast<int>(_gameSave.getDifficulty()) * 2
+			aLienPts += static_cast<int>(_gameSave.getDifficulty()) * 2
 					 + _gameSave.getMonthsPassed();
 	}
 
@@ -1120,8 +1120,8 @@ void AlienMission::addScore( // private.
 										lon,
 										lat) == true)
 		{
-			(*i)->addActivityAlien(alienPts);
-			(*i)->recentActivity();
+			(*i)->addActivityAlien(aLienPts);
+			(*i)->recentActivityAlien();
 
 			break;
 		}
@@ -1136,8 +1136,8 @@ void AlienMission::addScore( // private.
 										lon,
 										lat) == true)
 		{
-			(*i)->addActivityAlien(alienPts);
-			(*i)->recentActivity();
+			(*i)->addActivityAlien(aLienPts);
+			(*i)->recentActivityAlien();
 
 			break;
 		}

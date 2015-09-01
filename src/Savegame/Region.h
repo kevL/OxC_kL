@@ -38,19 +38,19 @@ class Region
 
 private:
 	int
-		_activityRecent,
-		_activityRecentXCom;
+		_recentActA,
+		_recentActX;
 
-	RuleRegion* _rules;
+	RuleRegion* _regionRule;
 
 	std::vector<int>
-		_activityAlien,
-		_activityXcom;
+		_actA,
+		_actX;
 
 
 	public:
 		/// Creates a new region of the specified type.
-		explicit Region(RuleRegion* rules);
+		explicit Region(RuleRegion* const regionRule);
 		/// Cleans up the region.
 		~Region();
 
@@ -64,20 +64,20 @@ private:
 		/// Get the region's name.
 		std::string getType() const;
 
-		/// Adds xcom activity in this region.
-		void addActivityXCom(int activity);
 		/// Adds alien activity in this region.
 		void addActivityAlien(int activity);
-		/// Gets xcom activity for this region.
-		std::vector<int>& getActivityXCom();
+		/// Adds xcom activity in this region.
+		void addActivityXCom(int activity);
 		/// Gets xcom activity for this region.
 		std::vector<int>& getActivityAlien();
+		/// Gets xcom activity for this region.
+		std::vector<int>& getActivityXCom();
 
 		/// Stores last month's counters, starts new counters.
 		void newMonth();
 
 		/// Handles recent alien activity in this region for GraphsState blink.
-		bool recentActivity(
+		bool recentActivityAlien(
 				bool activity = true,
 				bool graphs = false);
 		/// Handles recent XCOM activity in this region for GraphsState blink.

@@ -519,6 +519,8 @@ private:
 	// static data
 	UnitStats _stats;
 
+	bool _isZombie;
+
 	int
 		_aggression,
 		_aggroSound,
@@ -1160,7 +1162,10 @@ private:
 				int& skill);
 
 		/// Plays the death sound.
-		void playDeathSound();
+		void playDeathSound() const;
+
+		/// Gets if this unit is a Zombie.
+		bool isZombie() const;
 };
 
 }

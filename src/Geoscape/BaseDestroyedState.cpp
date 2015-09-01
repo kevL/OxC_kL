@@ -188,7 +188,7 @@ void BaseDestroyedState::finish()
 										lat))
 		{
 			(*i)->addActivityAlien(aLienPts);
-			(*i)->recentActivity();
+			(*i)->recentActivityAlien();
 
 			break;
 		}
@@ -204,7 +204,7 @@ void BaseDestroyedState::finish()
 										lat))
 		{
 			(*i)->addActivityAlien(aLienPts);
-			(*i)->recentActivity();
+			(*i)->recentActivityAlien();
 
 			break;
 		}
