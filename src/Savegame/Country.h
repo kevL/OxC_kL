@@ -91,8 +91,8 @@ private:
 
 		/// Stores last month's counters, starts new counters, sets this month's change.
 		void newMonth(
-				const int xcomTotal,
-				const int alienTotal,
+				const int totalX,
+				const int totalA,
 				const int diff);
 
 		/// Gets if they're signing a new pact w/ aLiens.

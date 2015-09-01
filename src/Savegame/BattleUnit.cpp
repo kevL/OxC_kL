@@ -1755,16 +1755,16 @@ void BattleUnit::setStun(int stun)
  */
 void BattleUnit::knockOut()
 {
-	if (_unitRule != NULL
+	if (_spawnUnit.empty() == false)
+	{
+		BattleUnit* const conUnit = _battleGame->convertUnit(this);
+		conUnit->knockOut();
+	}
+	else if (_unitRule != NULL
 		&& (_unitRule->isMechanical() == true
 			|| _isZombie == true))
 	{
 		_health = 0;
-	}
-	else if (_spawnUnit.empty() == false)
-	{
-		BattleUnit* const conUnit = _battleGame->convertUnit(this);
-		conUnit->knockOut();
 	}
 	else
 		_stunLevel = _health;

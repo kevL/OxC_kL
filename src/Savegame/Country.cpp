@@ -192,21 +192,21 @@ std::vector<int>& Country::getActivityXCom()
  * @param diff			- game difficulty
  */
 void Country::newMonth(
-		const int xcomTotal,
-		const int alienTotal,
+		const int totalX,
+		const int totalA,
 		const int diff)
 {
 	//Log(LOG_INFO) << "Country::newMonth()";
 	_satisfaction = 2;
 
 	const int
-		xcomPts = (xcomTotal / 10) + _actX.back(),
-		alienPts = (alienTotal / 20) + _actA.back(),
+		xComPts = (totalX / 10) + _actX.back(),
+		aLienPts = (totalA / 20) + _actA.back(),
 		funding = getFunding().back(),
 		oldFunding = _funding.back() / 1000;
 	int newFunding = (oldFunding * RNG::generate(5,20) / 100) * 1000;
 
-	if (xcomPts > alienPts + ((diff + 1) * 20)) // country auto. increases funding
+	if (xComPts > aLienPts + ((diff + 1) * 20)) // country auto. increases funding
 	{
 		//Log(LOG_INFO) << ". auto funding increase";
 		const int cap = getRules()->getFundingCap() * 1000;
@@ -217,10 +217,10 @@ void Country::newMonth(
 		if (newFunding != 0)
 			_satisfaction = 3;
 	}
-	else if (xcomPts - (diff * 20) > alienPts) // 50-50 increase/decrease funding
+	else if (xComPts - (diff * 20) > aLienPts) // 50-50 increase/decrease funding
 	{
 		//Log(LOG_INFO) << ". possible funding increase/decrease";
-		if (RNG::generate(0, xcomPts) > alienPts)
+		if (RNG::generate(0, xComPts) > aLienPts)
 		{
 			//Log(LOG_INFO) << ". . funding increase";
 			const int cap = getRules()->getFundingCap() * 1000;
@@ -231,7 +231,7 @@ void Country::newMonth(
 			if (newFunding != 0)
 				_satisfaction = 3;
 		}
-		else if (RNG::generate(0, alienPts) > xcomPts
+		else if (RNG::generate(0, aLienPts) > xComPts
 			&& newFunding != 0)
 		{
 			//Log(LOG_INFO) << ". . funding decrease";
@@ -267,13 +267,11 @@ void Country::newMonth(
 	_actX.push_back(0);
 
 	if (_actA.size() > 12)
+	{
 		_actA.erase(_actA.begin());
-
-	if (_actX.size() > 12)
 		_actX.erase(_actX.begin());
-
-	if (_funding.size() > 12)
 		_funding.erase(_funding.begin());
+	}
 }
 
 /**

@@ -1773,8 +1773,10 @@ std::vector<BattleUnit*> TileEngine::getSpottingUnits(const BattleUnit* const un
 //			&& (*i)->getSpawnUnit().empty() == true)
 		{
 			if ((((*i)->getFaction() == FACTION_HOSTILE							// Mc'd xCom units will RF on loyal xCom units
-						&& (*i)->getOriginalFaction() != FACTION_PLAYER)		// but Mc'd aLiens won't RF on other aLiens ...
-					|| ((*i)->getOriginalFaction() == FACTION_PLAYER			// Also - aLiens get to see in all directions
+						&& (*i)->getOriginalFaction() != FACTION_PLAYER			// but Mc'd aLiens won't RF on other aLiens ...
+						&& (*i)->isZombie() == false)
+					|| (((*i)->getOriginalFaction() == FACTION_PLAYER			// Also - aLiens get to see in all directions
+							|| (*i)->isZombie() == true)
 						&& (*i)->checkViewSector(unit->getPosition()) == true))	// but xCom must checkViewSector() even when MC'd
 				&& visible(
 						*i,
