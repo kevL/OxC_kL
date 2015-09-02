@@ -1178,9 +1178,7 @@ int Pathfinding::getTuCostPf(
 	{
 		//Log(LOG_INFO) << "getTuCostPf() armorSize > 0 " << (*posDest);
 		// - check the path between part 0,0 and part 1,1 at destination position
-		const Tile
-			* const ulTile = _battleSave->getTile(*posDest),
-			* const lrTile = _battleSave->getTile(*posDest + Position(1,1,0));
+		const Tile* const ulTile = _battleSave->getTile(*posDest);
 		if (isBlockedPath(
 					ulTile,
 					3,
@@ -1191,9 +1189,7 @@ int Pathfinding::getTuCostPf(
 		}
 
 		// - then check the path between part 1,0 and part 0,1 at destination position
-		const Tile
-			* const urTile = _battleSave->getTile(*posDest + Position(1,0,0)),
-			* const llTile = _battleSave->getTile(*posDest + Position(0,1,0));
+		const Tile* const urTile = _battleSave->getTile(*posDest + Position(1,0,0));
 		if (isBlockedPath(
 					urTile,
 					5,
@@ -1205,6 +1201,9 @@ int Pathfinding::getTuCostPf(
 
 		if (fall == false)
 		{
+			const Tile
+				* const lrTile = _battleSave->getTile(*posDest + Position(1,1,0)),
+				* const llTile = _battleSave->getTile(*posDest + Position(0,1,0));
 			const int
 				levels[4] =
 				{
@@ -1232,9 +1231,8 @@ int Pathfinding::getTuCostPf(
 			return 255;
 		}
 
-		if (armorSize != 0)
-			costTotal = static_cast<int>(Round(std::ceil( // ok, round those tanks up!
-						static_cast<double>(costTotal) / static_cast<double>((armorSize + 1) * (armorSize + 1)))));
+		costTotal = static_cast<int>(Round(std::ceil( // ok, round those tanks up!
+					static_cast<double>(costTotal) / static_cast<double>((armorSize + 1) * (armorSize + 1)))));
 
 		//Log(LOG_INFO) << ". large unit costTotal = " << costTotal;
 	} // largeUnits_end.
