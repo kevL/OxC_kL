@@ -136,14 +136,12 @@ void ExplosionBState::init()
 			_areaOfEffect = _pistolWhip == false
 						 && _item->getRules()->getBattleType() != BT_MELEE
 						 && _item->getRules()->getExplosionRadius() > -1;
-//						 && _cosmetic == false // kL_note: foregoes _pistolwhip
 		}
 	}
 	else if (_tile != NULL)
 		_power = _tile->getExplosive();
 	else if (_unit != NULL // cyberdiscs!!! And ... ZOMBIES.
 		&& _unit->getSpecialAbility() == SPECAB_EXPLODE)
-//			|| _unit->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE))
 	{
 		_power = _parent->getRuleset()->getItem(_unit->getArmor()->getCorpseGeoscape())->getPower();
 		const int
@@ -498,7 +496,7 @@ void ExplosionBState::explode() // private.
 							itRule->defusePulse() == true);
 //			tileEngine->setProjectileDirection(-1);
 		}
-		else // -> if !_cosmetics
+		else
 		{
 			//Log(LOG_INFO) << "ExplosionBState::explode() point te::hit";
 			ItemDamageType dType = itRule->getDamageType();

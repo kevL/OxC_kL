@@ -695,13 +695,13 @@ void BattlescapeGame::handleAI(BattleUnit* const unit)
 	// might need this: populate _hostileUnit for a newly-created alien
 	//Log(LOG_INFO) << "BattlescapeGame::handleAI(), calculateFOV() call";
 	_battleSave->getTileEngine()->calculateFOV(unit->getPosition());
-		// it might also help chryssalids realize they've zombified someone and need to move on;
-		// it should also hide units when they've killed the guy spotting them;
-		// it's also for good luck and prosperity.
+	// it might also help chryssalids realize they've zombified someone and need to move on;
+	// it should also hide units when they've killed the guy spotting them;
+	// it's also for good luck and prosperity.
 
-	BattleAIState* ai = unit->getCurrentAIState();
+//	BattleAIState* ai = unit->getCurrentAIState();
 //	const BattleAIState* const ai = unit->getCurrentAIState();
-	if (ai == NULL)
+	if (unit->getCurrentAIState() == NULL)
 	{
 		// for some reason the unit had no AI routine assigned..
 		//Log(LOG_INFO) << "BattlescapeGame::handleAI() !ai, assign AI";

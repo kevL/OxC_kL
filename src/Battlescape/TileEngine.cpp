@@ -1777,7 +1777,7 @@ std::vector<BattleUnit*> TileEngine::getSpottingUnits(const BattleUnit* const un
 						&& (*i)->isZombie() == false)
 					|| (((*i)->getOriginalFaction() == FACTION_PLAYER			// Also - aLiens get to see in all directions
 							|| (*i)->isZombie() == true)
-						&& (*i)->checkViewSector(unit->getPosition()) == true))	// but xCom must checkViewSector() even when MC'd
+						&& (*i)->checkViewSector(unit->getPosition()) == true))	// but xCom & zombies must checkViewSector() even when MC'd
 				&& visible(
 						*i,
 						tile) == true)

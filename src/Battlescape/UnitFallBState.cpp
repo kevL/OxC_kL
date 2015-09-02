@@ -403,7 +403,6 @@ void UnitFallBState::think()
 			{
 				//Log(LOG_INFO) << ". . burnFloors, checkProxies, Erase.i";
 				if ((*i)->getSpecialAbility() == SPECAB_BURN) // if the unit burns floortiles, burn floortiles
-//					|| (*i)->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE)
 				{
 					// kL_add: Put burnedBySilacoid() here! etc
 					(*i)->getTile()->ignite(1);
