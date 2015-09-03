@@ -33,7 +33,7 @@ CraftWeaponProjectile::CraftWeaponProjectile()
 		_speed(0),
 		_dir(PD_NONE),
 		_pos(0),
-		_posHori(0),
+		_posHori(PH_CENTER),
 		_beamPhase(0),
 		_accuracy(0),
 		_damage(0),
@@ -87,7 +87,7 @@ CwpGlobal CraftWeaponProjectile::getGlobalType() const
  * Sets the direction of the projectile.
  * @param direction - direction
  */
-void CraftWeaponProjectile::setDirection(int dir)
+void CraftWeaponProjectile::setDirection(CwpDirection dir)
 {
 	_dir = dir;
 
@@ -99,7 +99,7 @@ void CraftWeaponProjectile::setDirection(int dir)
  * Gets the direction of the projectile.
  * @return, the direction
  */
-int CraftWeaponProjectile::getDirection() const
+CwpDirection CraftWeaponProjectile::getDirection() const
 {
 	return _dir;
 }
@@ -161,7 +161,7 @@ int CraftWeaponProjectile::getPosition() const
 
 /**
  * Sets the x position of the projectile on the radar.
- * It's used only once for each projectile during firing.
+ * @note This is used only once for each projectile during firing.
  * @param pos - the x position
  */
 void CraftWeaponProjectile::setHorizontalPosition(int pos)

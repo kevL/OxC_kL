@@ -359,6 +359,7 @@ DogfightState::DogfightState(
 
 	// Define the colors to be used. Note these have been further tweaked in Interfaces.rul
 	const RuleInterface* const dfInterface = _game->getRuleset()->getInterface("dogfight");
+
 	_colors[CRAFT_MIN]			= static_cast<Uint8>(dfInterface->getElement("craftRange")->color);			// 160 (10)slate gray
 	_colors[CRAFT_MAX]			= static_cast<Uint8>(dfInterface->getElement("craftRange")->color2);		// 176 (11)purple
 	_colors[RADAR_MIN]			= static_cast<Uint8>(dfInterface->getElement("radarRange")->color);			// 112 (7)green
@@ -1358,8 +1359,6 @@ void DogfightState::updateDogfight()
  */
 void DogfightState::fireWeapon1()
 {
-//	if (_w1Enabled == true)
-//	{
 	CraftWeapon* const cw = _craft->getWeapons()->at(0);
 	if (cw->setAmmo(cw->getAmmo() - 1))
 	{
@@ -1379,7 +1378,6 @@ void DogfightState::fireWeapon1()
 										cw->getRules()->getSound(),
 										true);
 	}
-//	}
 }
 
 /**
@@ -1387,8 +1385,6 @@ void DogfightState::fireWeapon1()
  */
 void DogfightState::fireWeapon2()
 {
-//	if (_w2Enabled == true)
-//	{
 	CraftWeapon* const cw = _craft->getWeapons()->at(1);
 	if (cw->setAmmo(cw->getAmmo() - 1))
 	{
@@ -1408,11 +1404,10 @@ void DogfightState::fireWeapon2()
 										cw->getRules()->getSound(),
 										true);
 	}
-//	}
 }
 
 /**
- * Each time a UFO fires its cannons a new reload interval is calculated.
+ * Each time a UFO fires its weapon a new reload interval is calculated.
  */
 void DogfightState::ufoFireWeapon()
 {
@@ -1456,7 +1451,7 @@ void DogfightState::maximumDistance()
 			++i)
 	{
 		if (*i != NULL
-			&& (*i)->getAmmo() > 0
+			&& (*i)->getAmmo() != 0
 			&& (*i)->getRules()->getRange() > dist)
 		{
 			dist = (*i)->getRules()->getRange();
@@ -1482,7 +1477,7 @@ void DogfightState::minimumDistance()
 			++i)
 	{
 		if (*i != NULL
-			&& (*i)->getAmmo() > 0
+			&& (*i)->getAmmo() != 0
 			&& (*i)->getRules()->getRange() < dist)
 		{
 			dist = (*i)->getRules()->getRange();
@@ -1864,10 +1859,10 @@ void DogfightState::drawUfo()
  */
 void DogfightState::drawProjectile(const CraftWeaponProjectile* const prj)
 {
-	int posX = _battle->getWidth() / 2 + prj->getHorizontalPosition();
+	int posX = (_battle->getWidth() / 2) + (prj->getHorizontalPosition() * 2);
 	Uint8
 		color,
-		offset;
+		colorOffset;
 
 	if (prj->getGlobalType() == PGT_MISSILE) // Draw missiles.
 	{
@@ -1883,15 +1878,15 @@ void DogfightState::drawProjectile(const CraftWeaponProjectile* const prj)
 					y != 6;
 					++y)
 			{
-				offset = static_cast<Uint8>(_projectileBlobs[prj->getType()]
-															[static_cast<size_t>(y)]
-															[static_cast<size_t>(x)]);
-				if (offset != 0)
+				colorOffset = static_cast<Uint8>(_projectileBlobs[prj->getType()]
+																 [static_cast<size_t>(y)]
+																 [static_cast<size_t>(x)]);
+				if (colorOffset != 0)
 				{
 					color = _window->getPixelColor(
 												posX + x + 3,
 												posY + y + 3); // +3 cause of the window frame
-					color -= offset;
+					color -= colorOffset;
 					if (color < _colors[BLOB_MIN])
 						color = _colors[BLOB_MIN];
 
@@ -1905,22 +1900,27 @@ void DogfightState::drawProjectile(const CraftWeaponProjectile* const prj)
 	}
 	else if (prj->getGlobalType() == PGT_BEAM) // Draw beams.
 	{
+		colorOffset = static_cast<Uint8>(prj->getBeamPhase());
 		const int
 			stop = _battle->getHeight() - 2,
 			start = _battle->getHeight() - (_dist / 8);
-		offset = static_cast<Uint8>(prj->getBeamPhase());
 
 		for (int
 				y = stop;
 				y != start;
 				--y)
 		{
-			color = _window->getPixelColor(
-										posX + 3,
-										y + 3);
-			color -= offset;
-			if (color < _colors[BLOB_MIN])
-				color = _colors[BLOB_MIN];
+			if (prj->getDirection() == PD_UP)
+			{
+				color = _window->getPixelColor(
+											posX + 3,
+											y + 3);
+				color -= colorOffset;
+				if (color < _colors[BLOB_MIN])
+					color = _colors[BLOB_MIN];
+			}
+			else
+				color = 128; // red
 
 			_battle->setPixelColor(
 								posX,

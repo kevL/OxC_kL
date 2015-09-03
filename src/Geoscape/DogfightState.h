@@ -29,7 +29,7 @@
 namespace OpenXcom
 {
 
-enum ColorNames
+enum ColorDf
 {
 	CRAFT_MIN,			//  0
 	CRAFT_MAX,			//  1
@@ -59,7 +59,7 @@ class Ufo;
 
 
 /**
- * Shows a dogfight (interception) between a player craft and a UFO.
+ * Shows a dogfight (interception) between a player's Craft and a UFO.
  */
 class DogfightState
 	:
@@ -70,7 +70,7 @@ private:
 	static const int
 		_projectileBlobs[4][6][3],
 
-		DST_ENGAGE	= 635,
+		DST_ENGAGE		= 635,
 		DST_STANDOFF	= 595,
 		DST_CLOSE		= 64,
 		MSG_TIMEOUT		= 45;
@@ -109,7 +109,7 @@ private:
 	size_t
 		_slot,
 		_totalIntercepts;
-	Uint8 _colors[11]; // see ColorNames enum above^
+	Uint8 _colors[11]; // see ColorDf enum above^
 //		_currentCraftDamageColor;
 
 	std::vector<CraftWeaponProjectile*> _projectiles;

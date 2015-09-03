@@ -40,8 +40,8 @@ RuleCraftWeapon::RuleCraftWeapon(const std::string& type)
 		_reloadAggressive(0),
 		_ammoMax(0),
 		_rearmRate(1),
-		_projectileSpeed(0),
-		_projectileType(PT_CANNON_ROUND)
+		_prjSpeed(0),
+		_prjType(PT_CANNON_ROUND)
 {}
 
 /**
@@ -83,11 +83,11 @@ void RuleCraftWeapon::load(
 	_reloadAggressive	= node["reloadAggressive"]	.as<int>(_reloadAggressive);
 	_ammoMax			= node["ammoMax"]			.as<int>(_ammoMax);
 	_rearmRate			= node["rearmRate"]			.as<int>(_rearmRate);
-	_projectileSpeed	= node["projectileSpeed"]	.as<int>(_projectileSpeed);
+	_prjSpeed			= node["prjSpeed"]			.as<int>(_prjSpeed);
 	_launcher			= node["launcher"]			.as<std::string>(_launcher);
 	_clip				= node["clip"]				.as<std::string>(_clip);
 
-	_projectileType		= static_cast<CwpType>(node["projectileType"].as<int>(_projectileType));
+	_prjType = static_cast<CwpType>(node["prjType"].as<int>(_prjType));
 }
 
 /**
@@ -215,7 +215,7 @@ std::string RuleCraftWeapon::getClipItem() const
  */
 CwpType RuleCraftWeapon::getProjectileType() const
 {
-	return _projectileType;
+	return _prjType;
 }
 
 /**
@@ -224,7 +224,7 @@ CwpType RuleCraftWeapon::getProjectileType() const
  */
 int RuleCraftWeapon::getProjectileSpeed() const
 {
-	return _projectileSpeed;
+	return _prjSpeed;
 }
 
 }

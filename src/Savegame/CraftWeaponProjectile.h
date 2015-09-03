@@ -70,13 +70,13 @@ private:
 				// but UFO is downed, by other weapon, before it hits; the missile
 				// is then not removed from the craft's ordnance.
 		_damage,
-		_dir,
 		_dist,
 		_posHori,
 		_range,
 		_speed,
 		_beamPhase;
 
+	CwpDirection _dir;
 	CwpGlobal _globalType;
 	CwpType _type;
 
@@ -95,9 +95,9 @@ private:
 		CwpGlobal getGlobalType() const;
 
 		/// Sets projectile direction. This determines its initial position.
-		void setDirection(int dir);
+		void setDirection(CwpDirection dir);
 		/// Gets projectile direction.
-		int getDirection() const;
+		CwpDirection getDirection() const;
 
 		/// Moves projectile in '_dir' with '_speed'.
 		void moveProjectile();

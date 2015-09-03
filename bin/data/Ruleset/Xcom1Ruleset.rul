@@ -315,8 +315,8 @@ craftWeapons: #new order: stingray,avalanche,cannon,fusionball,lasercannon,plasm
     rearmRate: 25
     launcher: STR_CANNON
     clip: STR_CANNON_ROUNDS_X50
-    projectileType: 2
-    projectileSpeed: 8
+    prjType: 2
+    prjSpeed: 8
   - type: STR_STINGRAY
     sprite: 0
     sound: 5
@@ -330,8 +330,8 @@ craftWeapons: #new order: stingray,avalanche,cannon,fusionball,lasercannon,plasm
     rearmRate: 2
     launcher: STR_STINGRAY_LAUNCHER
     clip: STR_STINGRAY_MISSILES
-    projectileType: 0
-    projectileSpeed: 9
+    prjType: 0
+    prjSpeed: 9
   - type: STR_AVALANCHE
     sprite: 1
     sound: 5
@@ -345,8 +345,8 @@ craftWeapons: #new order: stingray,avalanche,cannon,fusionball,lasercannon,plasm
     rearmRate: 1
     launcher: STR_AVALANCHE_LAUNCHER
     clip: STR_AVALANCHE_MISSILES
-    projectileType: 1
-    projectileSpeed: 10
+    prjType: 1
+    prjSpeed: 10
   - type: STR_LASER_CANNON_UC
     sprite: 4
     sound: 8
@@ -360,7 +360,7 @@ craftWeapons: #new order: stingray,avalanche,cannon,fusionball,lasercannon,plasm
     rearmRate: 11
     launcher: STR_LASER_CANNON
     clip: STR_ELERIUM_115
-    projectileType: 4
+    prjType: 4
   - type: STR_PLASMA_BEAM_UC
     sprite: 5
     sound: 9
@@ -374,7 +374,7 @@ craftWeapons: #new order: stingray,avalanche,cannon,fusionball,lasercannon,plasm
     rearmRate: 11
     launcher: STR_PLASMA_BEAM
     clip: STR_ELERIUM_115
-    projectileType: 5
+    prjType: 5
   - type: STR_FUSION_BALL_UC
     sprite: 3
     sound: 7
@@ -388,8 +388,8 @@ craftWeapons: #new order: stingray,avalanche,cannon,fusionball,lasercannon,plasm
     rearmRate: 1
     launcher: STR_FUSION_BALL_LAUNCHER
     clip: STR_FUSION_BALL
-    projectileType: 3
-    projectileSpeed: 7
+    prjType: 3
+    prjSpeed: 7
 items:
   - type: STR_CANNON
     size: 1.5

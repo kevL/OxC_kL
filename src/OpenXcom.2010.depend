@@ -4688,10 +4688,10 @@
 	<vector>
 	"../Engine/State.h"
 
-1437993330 f:\git\openxcom\src\ruleset\rulecraftweapon.h
+1441277723 f:\git\openxcom\src\ruleset\rulecraftweapon.h
 	"../Savegame/CraftWeaponProjectile.h"
 
-1441273165 f:\git\openxcom\src\savegame\craftweaponprojectile.h
+1441308741 f:\git\openxcom\src\savegame\craftweaponprojectile.h
 
 1441270477 f:\git\openxcom\src\savegame\craftweapon.h
 
@@ -6884,7 +6884,7 @@
 	"../Resource/XcomResourcePack.h"
 	"../Savegame/SavedGame.h"
 
-1441091285 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
+1441308894 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
 	"DogfightState.h"
 	"GeoscapeCraftState.h"
 	"GeoscapeState.h"
@@ -6915,7 +6915,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Ufo.h"
 
-1441272243 f:\git\openxcom\src\geoscape\dogfightstate.h
+1441308362 f:\git\openxcom\src\geoscape\dogfightstate.h
 	"../Engine/State.h"
 
 1440532567 f:\git\openxcom\src\savegame\alienstrategy.h
@@ -8272,7 +8272,7 @@
 	"RuleCraft.h"
 	"RuleTerrain.h"
 
-1441269050 source:f:\git\openxcom\src\ruleset\rulecraftweapon.cpp
+1441278142 source:f:\git\openxcom\src\ruleset\rulecraftweapon.cpp
 	"RuleCraftWeapon.h"
 
 1440164247 source:f:\git\openxcom\src\ruleset\ruleinventory.cpp

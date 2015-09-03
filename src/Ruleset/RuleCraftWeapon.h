@@ -47,7 +47,7 @@ private:
 		_accuracy,
 		_ammoMax,
 		_damage,
-		_projectileSpeed,
+		_prjSpeed,
 		_range,
 		_rearmRate,
 		_reloadAggressive,
@@ -56,7 +56,7 @@ private:
 		_sound,
 		_sprite;
 
-	CwpType _projectileType;
+	CwpType _prjType;
 
 
 	public:
