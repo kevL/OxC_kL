@@ -72,7 +72,7 @@
 #include "../Engine/Timer.h"
 
 #include "../Interface/ImageButton.h"
-//#include "../Interface/NumberText.h"
+#include "../Interface/NumberText.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 
@@ -131,8 +131,8 @@ namespace OpenXcom
 
 size_t kL_curBase = 0;
 bool
-	kL_geoMusicPlaying = false,
-	kL_geoMusicReturnState = false;
+	kL_geoMusicPlaying		= false,
+	kL_geoMusicReturnState	= false;
 
 const double
 	earthRadius					= 3440., //.0647948164,			// nautical miles.
@@ -249,7 +249,7 @@ const int GeoscapeState::_ufoBlobs[8][13][13] =
 		{0, 0, 0, 2, 2, 3, 3, 3, 2, 2, 0, 0, 0}
 	},
 	{
-		{0, 0, 0, 3, 3, 4, 4, 4, 3, 3, 0, 0, 0}, // 7 - STR_ENOURMOUS
+		{0, 0, 0, 3, 3, 4, 4, 4, 3, 3, 0, 0, 0}, // 7 - STR_ENORMOUS
 		{0, 0, 3, 4, 4, 5, 5, 5, 4, 4, 3, 0, 0},
 		{0, 3, 4, 5, 5, 5, 5, 5, 5, 5, 4, 3, 0},
 		{3, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 4, 3},
@@ -352,80 +352,37 @@ GeoscapeState::GeoscapeState()
 		_5secIterForMusic(0)
 {
 	const int
-		screenWidth = Options::baseXGeoscape,
-		screenHeight = Options::baseYGeoscape;
+		screenWidth		= Options::baseXGeoscape,
+		screenHeight	= Options::baseYGeoscape;
 
-/*	_bg		= new Surface(
-						320,
-						200,
-						screenWidth - 320,
-						screenHeight / 2 - 100); */
-/*	Surface* hd	= _game->getResourcePack()->getSurface("ALTGEOBORD.SCR");
-	_bg			= new Surface(
-						hd->getWidth(),
-						hd->getHeight(),
-						0,
-						0); */
-/*	_sidebar	= new Surface(
-						64,
-						200,
+	_srfSpace	= new Surface(
+						screenWidth,
+						screenHeight);
+	_globe		= new Globe(
+						_game,
+						(screenWidth - 64) / 2,
+						screenHeight / 2,
 						screenWidth - 64,
-						screenHeight / 2 - 100); */
-/*	_srfSpace	= new Surface(
-//							screenWidth - 64,
-//							screenHeight,
-							256,
-							200,
-							32,
-							12); */
-//	_srfSpace	= new Surface(480, 270, 0, 0);
-	_srfSpace		= new Surface(
-							screenWidth,
-							screenHeight);
-	_globe			= new Globe(
-							_game,					// GLOBE:
-							(screenWidth - 64) / 2,	// center_x	= 160 pixels
-							screenHeight / 2,		// center_y	= 120
-							screenWidth - 64,		// x_width	= 320
-							screenHeight,			// y_height	= 120
-							0,0);					// start_x, start_y
-	_sideBarBlack	= new Surface(
-							64,
-							screenHeight,
-							screenWidth - 64,
-							0);
+						screenHeight);
+	_sideBlack	= new Surface(
+						64,
+						screenHeight,
+						screenWidth - 64,
+						0);
 
-																// BACKGROUND:
-//	_bg->setX((_globe->getWidth() - _bg->getWidth()) / 2);		// (160 - 768) / 2	= -304	= x
-//	_bg->setY((_globe->getHeight() - _bg->getHeight()) / 2);	// (120 - 600) / 2	= -240	= y
-
-/*	_btnIntercept	= new TextButton(63, 11, screenWidth-63, screenHeight/2-100);
-	_btnBases		= new TextButton(63, 11, screenWidth-63, screenHeight/2-88);
-	_btnGraphs		= new TextButton(63, 11, screenWidth-63, screenHeight/2-76);
-	_btnUfopaedia	= new TextButton(63, 11, screenWidth-63, screenHeight/2-64);
-	_btnOptions		= new TextButton(63, 11, screenWidth-63, screenHeight/2-52);
-	_btnFunding		= new TextButton(63, 11, screenWidth-63, screenHeight/2-40);
-
-	_btn5Secs		= new TextButton(31, 13, screenWidth-63, screenHeight/2+12);
-	_btn1Min		= new TextButton(31, 13, screenWidth-31, screenHeight/2+12);
-	_btn5Mins		= new TextButton(31, 13, screenWidth-63, screenHeight/2+26);
-	_btn30Mins		= new TextButton(31, 13, screenWidth-31, screenHeight/2+26);
-	_btn1Hour		= new TextButton(31, 13, screenWidth-63, screenHeight/2+40);
-	_btn1Day		= new TextButton(31, 13, screenWidth-31, screenHeight/2+40); */
-
-	// revert to ImageButtons.
+	// revert to ImageButtons. Stock build uses TextButton's
 	_btnIntercept	= new ImageButton(63, 11, screenWidth - 63, screenHeight / 2 - 100);
 	_btnBases		= new ImageButton(63, 11, screenWidth - 63, screenHeight / 2 - 88);
 	_btnGraphs		= new ImageButton(63, 11, screenWidth - 63, screenHeight / 2 - 76);
 	_btnUfopaedia	= new ImageButton(63, 11, screenWidth - 63, screenHeight / 2 - 64);
 	_btnOptions		= new ImageButton(63, 11, screenWidth - 63, screenHeight / 2 - 52);
 	_btnFunding		= new ImageButton(63, 11, screenWidth - 63, screenHeight / 2 - 40);
-//	_btnOptions		= new ImageButton(63, 11, screenWidth - 63, screenHeight / 2 - 100);
+//	_btnOptions		= new ImageButton(63, 11, screenWidth - 63, screenHeight / 2 - 100); // change the GeoGraphic first .... ->
 //	_btnUfopaedia	= new ImageButton(63, 11, screenWidth - 63, screenHeight / 2 - 88);
 //	_btnFunding		= new ImageButton(63, 11, screenWidth - 63, screenHeight / 2 - 76);
 //	_btnGraphs		= new ImageButton(63, 11, screenWidth - 63, screenHeight / 2 - 64);
 //	_btnIntercept	= new ImageButton(63, 11, screenWidth - 63, screenHeight / 2 - 52);
-//	_btnBases		= new ImageButton(63, 11, screenWidth - 63, screenHeight / 2 - 40); // change the GeoGraphic first ....
+//	_btnBases		= new ImageButton(63, 11, screenWidth - 63, screenHeight / 2 - 40);
 
 	_btn5Secs		= new ImageButton(31, 13, screenWidth - 63, screenHeight / 2 + 12);
 	_btn1Min		= new ImageButton(31, 13, screenWidth - 31, screenHeight / 2 + 12);
@@ -433,16 +390,15 @@ GeoscapeState::GeoscapeState()
 	_btn30Mins		= new ImageButton(31, 13, screenWidth - 31, screenHeight / 2 + 26);
 	_btn1Hour		= new ImageButton(31, 13, screenWidth - 63, screenHeight / 2 + 40);
 	_btn1Day		= new ImageButton(31, 13, screenWidth - 31, screenHeight / 2 + 40);
-//	_btn5Secs		= new ImageButton(31, 13, screenWidth - 63, screenHeight / 2 + 12);
+//	_btn5Secs		= new ImageButton(31, 13, screenWidth - 63, screenHeight / 2 + 12); // change the GeoGraphic first .... ->
 //	_btn1Min		= new ImageButton(31, 13, screenWidth - 63, screenHeight / 2 + 26);
 //	_btn5Mins		= new ImageButton(31, 13, screenWidth - 63, screenHeight / 2 + 40);
 //	_btn30Mins		= new ImageButton(31, 13, screenWidth - 31, screenHeight / 2 + 12);
 //	_btn1Hour		= new ImageButton(31, 13, screenWidth - 31, screenHeight / 2 + 26);
 //	_btn1Day		= new ImageButton(31, 13, screenWidth - 31, screenHeight / 2 + 40);
 
-	// The old rotate buttons have now become the Detail & Radar toggles.
+	// The old Globe rotate buttons have become the Detail & Radar toggles.
 	_btnDetail		= new ImageButton(63, 46, screenWidth - 63, screenHeight / 2 + 54);
-
 /*	_btnRotateLeft	= new InteractiveSurface(12, 10, screenWidth-61, screenHeight/2+76);
 	_btnRotateRight	= new InteractiveSurface(12, 10, screenWidth-37, screenHeight/2+76);
 	_btnRotateUp	= new InteractiveSurface(13, 12, screenWidth-49, screenHeight/2+62);
@@ -466,97 +422,66 @@ GeoscapeState::GeoscapeState()
 
 	std::fill_n(
 			_visibleUfo,
-			UFO_HOTCONS,
+			UFO_HOTICONS,
 			static_cast<Ufo*>(NULL));
 
 	int
+		x,y,
 		offset_x,
 		offset_y;
 	for (size_t
 			i = 0;
-			i != UFO_HOTCONS;
+			i != UFO_HOTICONS;
 			++i)
 	{
-		offset_x = ((i % 4) * 13); // 4 UFOs per row only
+		offset_x = ((i % 4) * 13); // 4 UFOs per row on top sidebar
 		offset_y = ((i / 4) * 13); // 4 rows going up
+		x = _sideTop->getX() + offset_x + 3;
+		y = _sideTop->getY() + height - offset_y - 16;
 
 		_isfVisibleUfo[i] = new InteractiveSurface(
 												13,13,
-												_sideTop->getX() + offset_x + 3,
-												_sideTop->getY() + height - offset_y - 16);
-
-//		_numVisibleUfo[i] = new NumberText(
-//										9,
-//										9,
-//										x + iconsWidth - 15 - offset_x,
-//										y - 12 - (static_cast<int>(i) * 13));
+												x,y);
+		_numVisibleUfo[i] = new NumberText(
+										11,5,
+										x + 2, y + 8);
 	}
 
 	_isfTime	= new InteractiveSurface(63, 39, screenWidth - 63, screenHeight / 2 - 28);
 
-//	_txtHour	= new Text(19, 17, screenWidth - 61, screenHeight / 2 - 26);
-//	_txtHourSep	= new Text(5,  17, screenWidth - 42, screenHeight / 2 - 26);
-//	_txtMin		= new Text(19, 17, screenWidth - 37, screenHeight / 2 - 26);
-//	_txtMinSep	= new Text(5,  17, screenWidth - 18, screenHeight / 2 - 26);
-//	_txtSec		= new Text(10, 17, screenWidth - 13, screenHeight / 2 - 26);
 	_txtHour	= new Text(19, 17, screenWidth - 54, screenHeight / 2 - 22);
-	_txtHourSep	= new Text( 5, 17, screenWidth - 35, screenHeight / 2 - 22);
+	_txtColon	= new Text( 5, 17, screenWidth - 35, screenHeight / 2 - 22);
 	_txtMin		= new Text(19, 17, screenWidth - 30, screenHeight / 2 - 22);
 	_txtSec		= new Text( 6,  9, screenWidth -  8, screenHeight / 2 - 26);
-
-//	_txtWeekday	= new Text(59,  8, screenWidth - 61, screenHeight / 2 - 13);
-//	_txtDay		= new Text(12, 16, screenWidth - 61, screenHeight / 2 - 5);
-//	_txtMonth	= new Text(21, 16, screenWidth - 49, screenHeight / 2 - 5);
-//	_txtYear	= new Text(27, 16, screenWidth - 28, screenHeight / 2 - 5);
-//	_txtDate	= new Text(60,  8, screenWidth - 62, screenHeight / 2 - 5);
 
 	_txtDay		= new Text(11, 9, screenWidth - 57, screenHeight / 2 - 5);
 	_txtMonth	= new Text(17, 9, screenWidth - 45, screenHeight / 2 - 5);
 	_txtYear	= new Text(21, 9, screenWidth - 27, screenHeight / 2 - 5);
 
-//	_srfDay1		= new Surface(3, 8, screenWidth - 45, screenHeight / 2 - 3);
-//	_srfDay2		= new Surface(3, 8, screenWidth - 41, screenHeight / 2 - 3);
-//	_srfMonth1		= new Surface(3, 8, screenWidth - 34, screenHeight / 2 - 3);
-//	_srfMonth2		= new Surface(3, 8, screenWidth - 30, screenHeight / 2 - 3);
-//	_srfYear1		= new Surface(3, 8, screenWidth - 23, screenHeight / 2 - 3);
-//	_srfYear2		= new Surface(3, 8, screenWidth - 19, screenHeight / 2 - 3);
+	_txtFunds	= new Text(63, 8, screenWidth - 64, screenHeight / 2 - 110);
+	_txtScore	= new Text(63, 8, screenWidth - 64, screenHeight / 2 + 102);
 
-	_txtFunds = new Text(63, 8, screenWidth - 64, screenHeight / 2 - 110);
-	if (Options::showFundsOnGeoscape == true)
-	{
-		_txtFunds = new Text(59, 8, screenWidth - 61, screenHeight / 2 - 27);
-		_txtHour->		setY(_txtHour->		getY() + 6);
-		_txtHourSep->	setY(_txtHourSep->	getY() + 6);
-		_txtMin->		setY(_txtMin->		getY() + 6);
-//		_txtMinSep->	setX(_txtMinSep->	getX() - 10);
-//		_txtSec->		setX(_txtSec->		getX() - 10);
-	}
-
-	_txtScore = new Text(63, 8, screenWidth - 64, screenHeight / 2 + 102);
-
-	_timeSpeed = _btn5Secs;
+	_timeComp = _btn5Secs;
 	_geoTimer = new Timer(static_cast<Uint32>(Options::geoClockSpeed));
 
-	const Uint32 optionSpeed = static_cast<Uint32>(Options::dogfightSpeed);
-	_dfZoomInTimer	= new Timer(optionSpeed);
-	_dfZoomOutTimer	= new Timer(optionSpeed);
-	_dfStartTimer	= new Timer(optionSpeed);
-	_dfTimer		= new Timer(optionSpeed);
+	const Uint32 dfSpeed = static_cast<Uint32>(Options::dogfightSpeed);
+	_dfZoomInTimer	= new Timer(dfSpeed);
+	_dfZoomOutTimer	= new Timer(dfSpeed);
+	_dfStartTimer	= new Timer(dfSpeed);
+	_dfTimer		= new Timer(dfSpeed);
 
-	_txtDebug = new Text(320, 18, 0, 0);
+	_txtDebug = new Text(320, 18);
+
 
 	setInterface("geoscape");
 
-//	add(_bg);
-//	add(_sidebar);
-
 	add(_srfSpace);
-	add(_sideBarBlack);
+	add(_sideBlack);
 	add(_globe);
 
 	add(_btnDetail);
 
-	add(_btnIntercept,	"button", "geoscape"); // 246, mine: (15)+5= 245; change in Interfaces.rul to match, was getting yellow on topleft corner of btn, w/ 246.
+	add(_btnIntercept,	"button", "geoscape");
 	add(_btnBases,		"button", "geoscape");
 	add(_btnGraphs,		"button", "geoscape");
 	add(_btnUfopaedia,	"button", "geoscape");
@@ -583,70 +508,45 @@ GeoscapeState::GeoscapeState()
 
 	for (size_t
 			i = 0;
-			i != UFO_HOTCONS;
+			i != UFO_HOTICONS;
 			++i)
 	{
 		add(_isfVisibleUfo[i]);
-
 		_isfVisibleUfo[i]->setVisible(false);
 		_isfVisibleUfo[i]->onMousePress(
 						(ActionHandler)& GeoscapeState::btnVisibleUfoPress,
 						SDL_BUTTON_LEFT);
 
+		add(_numVisibleUfo[i]);
+		_numVisibleUfo[i]->setVisible(false);
+		_numVisibleUfo[i]->setColor(11); // dk.yellow
+
 //		_isfVisibleUfo[i]->onKeyboardPress(
 //						(ActionHandler)& GeoscapeState::btnVisibleUfoPress,
 //						buttons[i]);
-//		_numVisibleUfo[i]->setColor(color);
 //		_numVisibleUfo[i]->setValue(static_cast<unsigned>(i) + 1);
 	}
 
 	add(_isfTime);
-
-//	if (Options::showFundsOnGeoscape)
-	add(_txtFunds,		"text",		"geoscape");
-	add(_txtScore,		"text",		"geoscape");
-
-	add(_txtHour);		//, "text", "geoscape");
-	add(_txtHourSep);	//, "text", "geoscape");
-	add(_txtMin);		//, "text", "geoscape");
-//	add(_txtMinSep,		"text",		"geoscape");
-	add(_txtSec);		//, "text", "geoscape");
-//	add(_txtDate,		"text",		"geoscape");
-
-//	add(_srfDay1);
-//	add(_srfDay2);
-//	add(_srfMonth1);
-//	add(_srfMonth2);
-//	add(_srfYear1);
-//	add(_srfYear2);
-//	add(_txtWeekday,	"text",		"geoscape");
-
-//	add(_txtDay,		"text",		"geoscape");
-//	add(_txtMonth,		"text",		"geoscape");
-//	add(_txtYear,		"text",		"geoscape");
+	add(_txtDebug,	"text", "geoscape");
+	add(_txtFunds,	"text", "geoscape");
+	add(_txtScore,	"text", "geoscape");
+	add(_txtHour);
+	add(_txtColon);
+	add(_txtMin);
+	add(_txtSec);
 	add(_txtDay);
 	add(_txtMonth);
 	add(_txtYear);
 
-	add(_txtDebug,		"text",		"geoscape");
-
-//	_game->getResourcePack()->getSurface("GEOBORD.SCR")->blit(_bg);
-//	_game->getResourcePack()->getSurface("LGEOBORD.SCR")->blit(_srfSpace);
-//	_game->getResourcePack()->getSurface("ALTGEOBORD.SCR")->blit(_srfSpace);
 	_game->getResourcePack()->getSurface("Cygnus_BG")->blit(_srfSpace);
 
+	_sideBlack->drawRect(
+					0,0,
+					static_cast<Sint16>(_sideBlack->getWidth()),
+					static_cast<Sint16>(_sideBlack->getHeight()),
+					15); // black
 
-/*	Surface* geobord = _game->getResourcePack()->getSurface("GEOBORD.SCR");
-	geobord->setX(_sidebar->getX() - geobord->getWidth() + _sidebar->getWidth());
-	geobord->setY(_sidebar->getY());
-	_sidebar->copy(geobord);
-	_game->getResourcePack()->getSurface("ALTGEOBORD.SCR")->blit(_bg); */
-
-	_sideBarBlack->drawRect(
-						0,0,
-						static_cast<Sint16>(_sideBarBlack->getWidth()),
-						static_cast<Sint16>(_sideBarBlack->getHeight()),
-						15); // black
 /*	_btnIntercept->initText(_game->getResourcePack()->getFont("FONT_GEO_BIG"), _game->getResourcePack()->getFont("FONT_GEO_SMALL"), _game->getLanguage());
 //	_btnIntercept->setColor(Palette::blockOffset(15)+6);
 //	_btnIntercept->setTextColor(Palette::blockOffset(15)+5);
@@ -700,7 +600,7 @@ GeoscapeState::GeoscapeState()
 //	_btn5Secs->setColor(Palette::blockOffset(15)+6);
 //	_btn5Secs->setTextColor(Palette::blockOffset(15)+5);
 	_btn5Secs->setText(tr("STR_5_SECONDS"));
-	_btn5Secs->setGroup(&_timeSpeed);
+	_btn5Secs->setGroup(&_timeComp);
 	_btn5Secs->onKeyboardPress((ActionHandler)& GeoscapeState::btnTimerPress, Options::keyGeoSpeed1);
 	_btn5Secs->setGeoscapeButton(true);
 
@@ -709,7 +609,7 @@ GeoscapeState::GeoscapeState()
 //	_btn1Min->setColor(Palette::blockOffset(15)+6);
 //	_btn1Min->setTextColor(Palette::blockOffset(15)+5);
 	_btn1Min->setText(tr("STR_1_MINUTE"));
-	_btn1Min->setGroup(&_timeSpeed);
+	_btn1Min->setGroup(&_timeComp);
 	_btn1Min->onKeyboardPress((ActionHandler)& GeoscapeState::btnTimerPress, Options::keyGeoSpeed2);
 	_btn1Min->setGeoscapeButton(true);
 
@@ -718,7 +618,7 @@ GeoscapeState::GeoscapeState()
 //	_btn5Mins->setColor(Palette::blockOffset(15)+6);
 //	_btn5Mins->setTextColor(Palette::blockOffset(15)+5);
 	_btn5Mins->setText(tr("STR_5_MINUTES"));
-	_btn5Mins->setGroup(&_timeSpeed);
+	_btn5Mins->setGroup(&_timeComp);
 	_btn5Mins->onKeyboardPress((ActionHandler)& GeoscapeState::btnTimerPress, Options::keyGeoSpeed3);
 	_btn5Mins->setGeoscapeButton(true);
 
@@ -727,7 +627,7 @@ GeoscapeState::GeoscapeState()
 //	_btn30Mins->setColor(Palette::blockOffset(15)+6);
 //	_btn30Mins->setTextColor(Palette::blockOffset(15)+5);
 	_btn30Mins->setText(tr("STR_30_MINUTES"));
-	_btn30Mins->setGroup(&_timeSpeed);
+	_btn30Mins->setGroup(&_timeComp);
 	_btn30Mins->onKeyboardPress((ActionHandler)& GeoscapeState::btnTimerPress, Options::keyGeoSpeed4);
 	_btn30Mins->setGeoscapeButton(true);
 
@@ -736,7 +636,7 @@ GeoscapeState::GeoscapeState()
 //	_btn1Hour->setColor(Palette::blockOffset(15)+6);
 //	_btn1Hour->setTextColor(Palette::blockOffset(15)+5);
 	_btn1Hour->setText(tr("STR_1_HOUR"));
-	_btn1Hour->setGroup(&_timeSpeed);
+	_btn1Hour->setGroup(&_timeComp);
 	_btn1Hour->onKeyboardPress((ActionHandler)& GeoscapeState::btnTimerPress, Options::keyGeoSpeed5);
 	_btn1Hour->setGeoscapeButton(true);
 
@@ -745,12 +645,9 @@ GeoscapeState::GeoscapeState()
 //	_btn1Day->setColor(Palette::blockOffset(15)+6);
 //	_btn1Day->setTextColor(Palette::blockOffset(15)+5);
 	_btn1Day->setText(tr("STR_1_DAY"));
-	_btn1Day->setGroup(&_timeSpeed);
+	_btn1Day->setGroup(&_timeComp);
 	_btn1Day->onKeyboardPress((ActionHandler)& GeoscapeState::btnTimerPress, Options::keyGeoSpeed6);
 	_btn1Day->setGeoscapeButton(true); */
-
-//	_sideBottom->setGeoscapeButton(true);
-//	_sideTop->setGeoscapeButton(true);
 
 	// revert to ImageButtons.
 	Surface* const geobord = _game->getResourcePack()->getSurface("GEOBORD.SCR");
@@ -796,43 +693,42 @@ GeoscapeState::GeoscapeState()
 
 	_isfTime->copy(geobord);
 	_isfTime->onMousePress((ActionHandler)& GeoscapeState::btnPausePress);
-//	_isfTime->onMouseClick((ActionHandler)& GeoscapeState::btnPausePress);
 //	_isfTime->onKeyboardPress(
 //					(ActionHandler)& GeoscapeState::btnPausePress,
 //					Options::key___); // <- check if spacebar is ok
 
 	_btn5Secs->copy(geobord);
-	_btn5Secs->setGroup(&_timeSpeed);
+	_btn5Secs->setGroup(&_timeComp);
 	_btn5Secs->onKeyboardPress(
 					(ActionHandler)& GeoscapeState::btnTimerPress,
 					Options::keyGeoSpeed1);
 
 	_btn1Min->copy(geobord);
-	_btn1Min->setGroup(&_timeSpeed);
+	_btn1Min->setGroup(&_timeComp);
 	_btn1Min->onKeyboardPress(
 					(ActionHandler)& GeoscapeState::btnTimerPress,
 					Options::keyGeoSpeed2);
 
 	_btn5Mins->copy(geobord);
-	_btn5Mins->setGroup(&_timeSpeed);
+	_btn5Mins->setGroup(&_timeComp);
 	_btn5Mins->onKeyboardPress(
 					(ActionHandler)& GeoscapeState::btnTimerPress,
 					Options::keyGeoSpeed3);
 
 	_btn30Mins->copy(geobord);
-	_btn30Mins->setGroup(&_timeSpeed);
+	_btn30Mins->setGroup(&_timeComp);
 	_btn30Mins->onKeyboardPress(
 					(ActionHandler)& GeoscapeState::btnTimerPress,
 					Options::keyGeoSpeed4);
 
 	_btn1Hour->copy(geobord);
-	_btn1Hour->setGroup(&_timeSpeed);
+	_btn1Hour->setGroup(&_timeComp);
 	_btn1Hour->onKeyboardPress(
 					(ActionHandler)& GeoscapeState::btnTimerPress,
 					Options::keyGeoSpeed5);
 
 	_btn1Day->copy(geobord);
-	_btn1Day->setGroup(&_timeSpeed);
+	_btn1Day->setGroup(&_timeComp);
 	_btn1Day->onKeyboardPress(
 					(ActionHandler)& GeoscapeState::btnTimerPress,
 					Options::keyGeoSpeed6);
@@ -877,7 +773,7 @@ GeoscapeState::GeoscapeState()
 					(ActionHandler)& GeoscapeState::btnZoomOutLeftClick,
 					Options::keyGeoZoomOut);
 
-	_ufoDetected->setColor(164); // slate+, white=5.
+	_ufoDetected->setColor(164); // slate gray
 	_ufoDetected->setBig();
 	_ufoDetected->setVisible(false);
 
@@ -909,63 +805,38 @@ GeoscapeState::GeoscapeState()
 	_btnZoomOut->onMouseClick((ActionHandler)& GeoscapeState::btnZoomOutRightClick, SDL_BUTTON_RIGHT);
 	_btnZoomOut->onKeyboardPress((ActionHandler)&GeoscapeState::btnZoomOutLeftClick, Options::keyGeoZoomOut); */
 
-	_txtFunds->setAlign(ALIGN_CENTER);
 	if (Options::showFundsOnGeoscape == true)
 	{
-		_txtFunds->setSmall();
 		_txtFunds->setAlign(ALIGN_CENTER);
-
-		_txtHour->setSmall();
-		_txtHourSep->setSmall();
-		_txtMin->setSmall();
-//		_txtMinSep->setSmall();
+		_txtScore->setAlign(ALIGN_CENTER);
 	}
 	else
 	{
-		_txtHour->setBig();
-		_txtHourSep->setBig();
-		_txtMin->setBig();
-//		_txtMinSep->setBig();
+		_txtFunds->setVisible(false);
+		_txtScore->setVisible(false);
 	}
 
-	_txtScore->setAlign(ALIGN_CENTER);
-
-//	if (Options::showFundsOnGeoscape == false) else _txtHour->setBig();
-	_txtHour->setColor(Palette::blockOffset(15)+2);
+	_txtHour->setColor(242); // sea green
 	_txtHour->setAlign(ALIGN_RIGHT);
+	_txtHour->setBig();
 
-//	if (Options::showFundsOnGeoscape == false) _txtHourSep->setBig();
-	_txtHourSep->setColor(Palette::blockOffset(15)+2);
-	_txtHourSep->setText(L":");
+	_txtColon->setColor(242);
+	_txtColon->setText(L":");
+	_txtColon->setBig();
 
-//	if (Options::showFundsOnGeoscape == false) else _txtMin->setBig();
-	_txtMin->setColor(Palette::blockOffset(15)+2);
+	_txtMin->setColor(242);
+	_txtMin->setBig();
 
-//	if (Options::showFundsOnGeoscape == false) _txtMinSep->setBig();
-//	_txtMinSep->setColor(Palette::blockOffset(15)+2);
-//	_txtMinSep->setText(L".");
-
-	_txtSec->setColor(Palette::blockOffset(15)+2);
+	_txtSec->setColor(242);
 	_txtSec->setText(L".");
 
-//	_txtDate->setColor(Palette::blockOffset(15)+2);
-//	_txtDate->setAlign(ALIGN_CENTER);
-
-//	_txtWeekday->setSmall();
-//	_txtWeekday->setColor(Palette::blockOffset(15)+2);
-//	_txtWeekday->setAlign(ALIGN_CENTER);
-
-//	_txtDay->setBig();
-	_txtDay->setColor(Palette::blockOffset(15)+2);
+	_txtDay->setColor(242);
 	_txtDay->setAlign(ALIGN_RIGHT);
 
-//	_txtMonth->setBig();
-	_txtMonth->setColor(Palette::blockOffset(15)+2);
+	_txtMonth->setColor(242);
 	_txtMonth->setAlign(ALIGN_CENTER);
 
-//	_txtYear->setBig();
-	_txtYear->setColor(Palette::blockOffset(15)+2);
-//	_txtYear->setAlign(ALIGN_LEFT);
+	_txtYear->setColor(242);
 
 	_geoTimer->onTimer((StateHandler)& GeoscapeState::timeAdvance);
 	_geoTimer->start();
@@ -1019,25 +890,6 @@ void GeoscapeState::blit()
 {
 	State::blit();
 
-/*	_game->getScreen()->getSurface()->drawLine(
-											Options::baseXGeoscape - 64, // kL
-											0,
-											Options::baseXGeoscape - 64, // kL
-											_game->getScreen()->getSurface()->getHeight(),
-											15);
-	_game->getScreen()->getSurface()->drawLine(
-											Options::baseXGeoscape - 63, // kL
-											Options::baseYGeoscape / 2 - 101, // kL
-											_game->getScreen()->getSurface()->getWidth(),
-											Options::baseYGeoscape / 2 - 101, // kL
-											15);
-	_game->getScreen()->getSurface()->drawLine(
-											Options::baseXGeoscape - 63, // kL
-											Options::baseYGeoscape / 2 + 100, // kL
-											_game->getScreen()->getSurface()->getWidth(),
-											Options::baseYGeoscape / 2 + 100, // kL
-											15); */
-
 	for (std::list<DogfightState*>::const_iterator
 			i = _dogfights.begin();
 			i != _dogfights.end();
@@ -1076,12 +928,6 @@ void GeoscapeState::handle(Action* action)
 							_debug += "region : ";
 						else if (_globe->getDebugType() == 2)
 							_debug += "missionZones : ";
-/*						if (_globe->getDebugType() == 0)
-							_txtDebug->setText(L"DEBUG MODE : countries");
-						else if (_globe->getDebugType() == 1)
-							_txtDebug->setText(L"DEBUG MODE : regions");
-						else if (_globe->getDebugType() == 2)
-							_txtDebug->setText(L"DEBUG MODE : missionZones"); */
 					}
 					else
 					{
@@ -1093,7 +939,7 @@ void GeoscapeState::handle(Action* action)
 					&& _gameSave->getDebugMode() == true)				// ctrl+c is also handled in Game::run() where the 'cycle' is determined.
 				{
 					_txtDebug->setText(L"");
-					_debug = "DEBUG MODE : "; // _gameSave->setDebugArgDone("");
+					_debug = "DEBUG MODE : ";
 
 					if (_globe->getDebugType() == 0)
 						_debug += "country : ";
@@ -1175,15 +1021,12 @@ void GeoscapeState::init()
 
 	_globe->unsetNewBaseHover();
 
-	if (_gameSave->getMonthsPassed() == -1								// run once
-		&& _gameSave->getBases()->empty() == false						// as long as there's a base
-		&& _gameSave->getBases()->front()->getName().empty() == false)	// and it has a name (THIS prevents it from running prior to the base being placed.)
+	if (_gameSave->getMonthsPassed() == -1							// run once
+		&& _gameSave->getBases()->empty() == false					// as long as there's a base
+		&& _gameSave->getBases()->front()->getBasePlaced() == true)	// THIS prevents missions running prior to the first base being placed.
 	{
 		_gameSave->addMonth();
-
 		determineAlienMissions();
-//		setupLandMission();
-
 		_gameSave->setFunds(_gameSave->getFunds() - static_cast<int64_t>(_gameSave->getBases()->front()->getMonthlyMaintenace()));
 	}
 }
@@ -1247,12 +1090,11 @@ void GeoscapeState::drawUfoIndicators()
 {
 	for (size_t
 			i = 0;
-			i != UFO_HOTCONS;
+			i != UFO_HOTICONS;
 			++i)
 	{
 		_isfVisibleUfo[i]->setVisible(false);
-//		_numVisibleUfo[i]->setVisible(false);
-
+		_numVisibleUfo[i]->setVisible(false);
 		_visibleUfo[i] = NULL;
 	}
 
@@ -1261,37 +1103,38 @@ void GeoscapeState::drawUfoIndicators()
 		ufoSize;
 	Uint8
 		color,
-		baseColor;
+		colorBasic;
 
 	for (std::vector<Ufo*>::const_iterator
 			i = _gameSave->getUfos()->begin();
-			i != _gameSave->getUfos()->end();
+			i != _gameSave->getUfos()->end()
+				&& j != UFO_HOTICONS;
 			++i)
 	{
 		if ((*i)->getDetected() == true)
 		{
 			_isfVisibleUfo[j]->setVisible();
-//			_numVisibleUfo[j]->setVisible();
-//getId()
+			_numVisibleUfo[j]->setVisible();
+			_numVisibleUfo[j]->setValue(static_cast<unsigned>((*i)->getId()) % 1000); // truncate to 3 least significant digits
 
 			_visibleUfo[j] = *i;
 
 			ufoSize = (*i)->getRadius();
 
 			if ((*i)->getTimerTicked() == true)
-				baseColor = 133;			// red (8), all red. TODO: blink
+				colorBasic = 133; // red (8), all red. TODO: blink
 			else
 			{
 				switch ((*i)->getStatus())
 				{
 					case Ufo::CRASHED:
-						baseColor = 53;		// brownish (3)
+						colorBasic = 53; // brownish (3)
 					break;
 					case Ufo::LANDED:
-						baseColor = 112;	// green (7) goes down into (6) still green.
+						colorBasic = 112; // green (7) goes down into (6) still green.
 					break;
-					default: //case Ufo::FLYING:
-						baseColor = 170;	// dark slate (10)+10
+					default: // Ufo::FLYING
+						colorBasic = 170; // dark slate (10)+10
 				}
 			}
 
@@ -1309,20 +1152,14 @@ void GeoscapeState::drawUfoIndicators()
 														[static_cast<size_t>(y)]
 														[static_cast<size_t>(x)]);
 					if (color != 0)
-					{
-						color = baseColor - color;
 						_isfVisibleUfo[j]->setPixelColor(
 														x,y,
-														color);
-					}
+														colorBasic - color);
 				}
 			}
 
 			++j;
 		}
-
-		if (j == UFO_HOTCONS - 1)
-			break;
 	}
 }
 
@@ -1356,7 +1193,7 @@ void GeoscapeState::updateTimeDisplay()
 		woststr1,
 		woststr2;
 
-	if (_timeSpeed != _btn5Secs)
+	if (_timeComp != _btn5Secs)
 		_txtSec->setVisible();
 	else
 		_txtSec->setVisible(_gameSave->getTime()->getSecond() % 15 == 0);
@@ -1387,63 +1224,6 @@ void GeoscapeState::updateTimeDisplay()
 			}
 		}
 	}
-/*	int date = _gameSave->getTime()->getDay();
-	if (_day != date)
-	{
-		_srfDay1->clear();
-		_srfDay2->clear();
-
-		_day = date;
-
-		SurfaceSet* const digitSet = _game->getResourcePack()->getSurfaceSet("DIGITS");
-
-		Surface* srfDate = digitSet->getFrame(date / 10);
-		srfDate->blit(_srfDay1);
-
-		srfDate = digitSet->getFrame(date % 10);
-		srfDate->blit(_srfDay2);
-
-		_srfDay1->offset(Palette::blockOffset(15)+3);
-		_srfDay2->offset(Palette::blockOffset(15)+3);
-
-
-		date = _gameSave->getTime()->getMonth();
-		if (_month != date)
-		{
-			_srfMonth1->clear();
-			_srfMonth2->clear();
-
-			_month = date;
-
-			srfDate = digitSet->getFrame(date / 10);
-			srfDate->blit(_srfMonth1);
-
-			srfDate = digitSet->getFrame(date % 10);
-			srfDate->blit(_srfMonth2);
-
-			_srfMonth1->offset(Palette::blockOffset(15)+3);
-			_srfMonth2->offset(Palette::blockOffset(15)+3);
-
-
-			date = _gameSave->getTime()->getYear() % 100;
-			if (_year != date)
-			{
-				_srfYear1->clear();
-				_srfYear2->clear();
-
-				_year = date;
-
-				srfDate = digitSet->getFrame(date / 10);
-				srfDate->blit(_srfYear1);
-
-				srfDate = digitSet->getFrame(date % 10);
-				srfDate->blit(_srfYear2);
-
-				_srfYear1->offset(Palette::blockOffset(15)+3);
-				_srfYear2->offset(Palette::blockOffset(15)+3);
-			}
-		}
-	} */
 }
 
 /**
@@ -1485,12 +1265,12 @@ void GeoscapeState::timeAdvance()
 	if (_pauseHard == false)
 	{
 		int timeSpan;
-		if		(_timeSpeed == _btn5Secs)	timeSpan = 1;
-		else if (_timeSpeed == _btn1Min)	timeSpan = 12;
-		else if (_timeSpeed == _btn5Mins)	timeSpan = 12 * 5;
-		else if (_timeSpeed == _btn30Mins)	timeSpan = 12 * 5 * 6;
-		else if (_timeSpeed == _btn1Hour)	timeSpan = 12 * 5 * 6 * 2;
-		else if (_timeSpeed == _btn1Day)	timeSpan = 12 * 5 * 6 * 2 * 24;
+		if		(_timeComp == _btn5Secs)	timeSpan = 1;
+		else if (_timeComp == _btn1Min)		timeSpan = 12;
+		else if (_timeComp == _btn5Mins)	timeSpan = 12 * 5;
+		else if (_timeComp == _btn30Mins)	timeSpan = 12 * 5 * 6;
+		else if (_timeComp == _btn1Hour)	timeSpan = 12 * 5 * 6 * 2;
+		else if (_timeComp == _btn1Day)		timeSpan = 12 * 5 * 6 * 2 * 24;
 		else
 			timeSpan = 0;
 
@@ -3412,24 +3192,24 @@ void GeoscapeState::time1Month()
 
 	// handle Xcom Operatives discovering bases
 	// NOTE: might want to change this to time1day() ...
-	const int diff = static_cast<int>(_gameSave->getDifficulty());
-	const int rdiff = 20 - (diff * 5);
-
-	if (RNG::percent(rdiff + 50) == true
-		&& _gameSave->getAlienBases()->empty() == false)
+	if (_gameSave->getAlienBases()->empty() == false)
 	{
-		for (std::vector<AlienBase*>::const_iterator
-				i = _gameSave->getAlienBases()->begin();
-				i != _gameSave->getAlienBases()->end();
-				++i)
+		const int pct = 20 - (static_cast<int>(_gameSave->getDifficulty()) * 5);
+		if (RNG::percent(pct + 50) == true)
 		{
-			if ((*i)->isDiscovered() == false
-				&& RNG::percent(rdiff + 5) == true)
+			for (std::vector<AlienBase*>::const_iterator
+					i = _gameSave->getAlienBases()->begin();
+					i != _gameSave->getAlienBases()->end();
+					++i)
 			{
-				(*i)->setDiscovered(true);
-				popup(new AlienBaseState( // NOTE: multiple popups are going to glitch
-									*i,
-									this));
+				if ((*i)->isDiscovered() == false
+					&& RNG::percent(pct + 5) == true)
+				{
+					(*i)->setDiscovered(true);
+					popup(new AlienBaseState( // NOTE: multiple popups may glitch.
+										*i,
+										this));
+				}
 			}
 		}
 	}
@@ -3458,7 +3238,7 @@ void GeoscapeState::resetTimer()
  */
 bool GeoscapeState::is5Sec() const
 {
-	return (_timeSpeed == _btn5Secs);
+	return (_timeComp == _btn5Secs);
 }
 
 /**
@@ -4165,7 +3945,7 @@ bool GeoscapeState::processCommand(RuleMissionScript* const missionCommand)
 	{
 		missionType = missionCommand->genMissionDatum(		// for a fact this command has mission weights defined
 													month,	// otherwise this flag would not be set.
-													GEN_MISSION);
+													GT_MISSION);
 		const std::vector<std::string> missions = missionCommand->getMissionTypes(month);
 		size_t
 			missionsTotal = missions.size(),
@@ -4278,11 +4058,14 @@ bool GeoscapeState::processCommand(RuleMissionScript* const missionCommand)
 			if (missionCommand->hasRegionWeights() == true) // if it has a weighted region list it has at least one valid choice for this mission
 				targetRegion = missionCommand->genMissionDatum(
 															month,
-															GEN_REGION);
-			else															// if it don't have a weighted list select a region at random from the ruleset,
-				targetRegion = _rules->getRegionsList().at(RNG::generate(	// validate that it's in the list and pick one of its cities at random;
-																	0,		// this gives an even distribution between regions regardless of the number of cities.
-																	_rules->getRegionsList().size() - 1));
+															GT_REGION);
+			else
+			{															// if it don't have a weighted list select a region at random from the ruleset,
+				const size_t pick = static_cast<size_t>(RNG::generate(	// validate that it's in the list and pick one of its cities at random;
+																	0,	// this gives an even distribution between regions regardless of the number of cities.
+																	static_cast<int>(_rules->getRegionsList().size()) - 1));
+				targetRegion = _rules->getRegionsList().at(pick);
+			}
 
 
 			int // need to know the range of the region within the vector in order to randomly select a city in it
@@ -4416,7 +4199,7 @@ bool GeoscapeState::processCommand(RuleMissionScript* const missionCommand)
 	else
 		targetRegion = missionCommand->genMissionDatum(
 													month,
-													GEN_REGION);
+													GT_REGION);
 
 
 	if (targetRegion.empty() == true)
@@ -4435,7 +4218,7 @@ bool GeoscapeState::processCommand(RuleMissionScript* const missionCommand)
 		else
 			missionType = missionCommand->genMissionDatum(
 														month,
-														GEN_MISSION);
+														GT_MISSION);
 	}
 
 
@@ -4455,7 +4238,7 @@ bool GeoscapeState::processCommand(RuleMissionScript* const missionCommand)
 	else
 		missionRace = missionCommand->genMissionDatum(
 													month,
-													GEN_RACE);
+													GT_RACE);
 
 	if (_rules->getAlienRace(missionRace) == 0)
 	{
@@ -4649,7 +4432,7 @@ void GeoscapeState::btnVisibleUfoPress(Action* action) // private.
 {
 	for (size_t // find out which button was pressed
 			i = 0;
-			i != UFO_HOTCONS;
+			i != UFO_HOTICONS;
 			++i)
 	{
 		if (_isfVisibleUfo[i] == action->getSender())
@@ -4729,28 +4512,6 @@ void GeoscapeState::resize(
 		}
 	}
 }
-//kL	_bg->setX((_globe->getWidth() - _bg->getWidth()) / 2);
-//kL	_bg->setY((_globe->getHeight() - _bg->getHeight()) / 2);
-
-/*
-// kL_begin:
-	int height = ((Options::baseYResolution - Screen::ORIGINAL_HEIGHT) / 2) - 1;
-	_sideTop->setHeight(height);
-	_sideTop->setY(0);
-	_sideBottom->setHeight(height);
-	_sideBottom->setY(Options::baseYResolution - height + 1);
-// kL_end.
-*/
-/*kL
-	int height = (Options::baseYResolution - Screen::ORIGINAL_HEIGHT) / 2 + 10;
-	_sideTop->setHeight(height);
-	_sideTop->setY(_sidebar->getY() - height - 1);
-	_sideBottom->setHeight(height);
-	_sideBottom->setY(_sidebar->getY() + _sidebar->getHeight() + 1);
-
-	_sideBarBlack->setHeight(Options::baseYResolution);
-	_sideBarBlack->setY(0);
-	_sideBarBlack->drawRect(0,0, _sideBarBlack->getWidth(), _sideBarBlack->getHeight(), 15); */
 
 /**
  * Examines the quantity of remaining UFO-detected popups.

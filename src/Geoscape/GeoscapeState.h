@@ -46,6 +46,7 @@ class Globe;
 class ImageButton;
 class InteractiveSurface;
 class MissionSite;
+class NumberText;
 class RuleMissionScript;
 class Ruleset;
 class SavedGame;
@@ -66,7 +67,7 @@ class GeoscapeState
 {
 
 private:
-	static const size_t UFO_HOTCONS = 16;
+	static const size_t UFO_HOTICONS = 16;
 
 	bool
 		_dfCenterCurrentCoords,
@@ -105,40 +106,30 @@ private:
 		* _btn1Day,
 
 		* _btnDetail,
-		* _timeSpeed;
+		* _timeComp;
 //	InteractiveSurface* _btnRotateLeft, * _btnRotateRight, * _btnRotateUp, * _btnRotateDown, * _btnZoomIn, * _btnZoomOut;
 	InteractiveSurface
-		* _isfVisibleUfo[UFO_HOTCONS],
+		* _isfVisibleUfo[UFO_HOTICONS],
 		* _isfTime;
-//	NumberText* _numVisibleUfo[UFO_HOTCONS];
+	NumberText* _numVisibleUfo[UFO_HOTICONS];
 	Ruleset* _rules;
 	SavedGame* _gameSave;
 	Surface
-//		* _bg,
-//		* _sidebar,
-		* _sideBarBlack,
+		* _sideBlack,
 		* _srfSpace;
-//		* _srfDay1,
-//		* _srfDay2,
-//		* _srfMonth1,
-//		* _srfMonth2,
-//		* _srfYear1,
-//		* _srfYear2;
 	Text
 		* _txtDebug,
 		* _txtFunds,
 		* _txtScore,
 
 		* _txtHour,
-		* _txtHourSep,
+		* _txtColon,
 		* _txtMin,
 		* _txtSec,
 		* _txtDay,
 		* _txtMonth,
 		* _txtYear,
-//		* _txtMinSep,
-//		* _txtDate;
-//		* _txtWeekday,
+
 		* _ufoDetected;
 	TextButton
 		* _sideTop,
@@ -149,7 +140,7 @@ private:
 		* _dfZoomOutTimer,
 		* _dfStartTimer,
 		* _dfTimer;
-	Ufo* _visibleUfo[UFO_HOTCONS];
+	Ufo* _visibleUfo[UFO_HOTICONS];
 
 	std::list<State*> _popups;
 	std::list<DogfightState*>
@@ -303,10 +294,10 @@ private:
 				Base* base,
 				Ufo* ufo);
 
-		/// Process a mission site
+		/// Processes a mission site.
 		bool processMissionSite(MissionSite* const site) const; // OoO
 
-		/// Update the resolution settings, the window was resized.
+		/// Update the resolution settings - the window was resized.
 		void resize(
 				int& dX,
 				int& dY);

@@ -305,7 +305,7 @@ void Ufo::setId(int id)
 
 /**
  * Returns the UFO's unique ID.
- * If it's 0 this UFO has never been detected.
+ * @note If it's 0 this UFO has never been detected.
  * @return, unique ID
  */
 int Ufo::getId() const

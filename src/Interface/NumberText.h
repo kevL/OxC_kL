@@ -60,6 +60,9 @@ private:
 		/// Gets the number text's value.
 		unsigned getValue() const;
 
+		/// Sets the number to have a border or not.
+		void setBordered(bool bordered = true);
+
 		/// Sets the number text's color.
 		void setColor(Uint8 color);
 		/// Gets the number text's color.
@@ -73,9 +76,6 @@ private:
 
 		/// Draws the number text.
 		void draw();
-
-		/// Sets the number to have a border or not.
-		void setBordered(bool bordered = true);
 };
 
 }

@@ -218,26 +218,6 @@ NumberText::NumberText(
 						_borderedChars[i],
 						0,0,0);
 	}
-/*	for (int i = 0; i < 10; ++i)
-	{
-		// give it a border
-		_borderedChars[i] = new Surface(5, 7);
-
-		// this is the "darker" shade that goes in the corners
-		for (int x = 0; x <= 2; x += 2)
-			for (int y = 0; y <= 2; y += 2)
-				_chars[i]->blitNShade(_borderedChars[i], x, y, 11);
-
-		// this is the "slightly darker" version that goes in four cardinals
-		for (int z = 0; z <= 2; z += 2)
-		{
-			_chars[i]->blitNShade(_borderedChars[i], z, 1, 8);
-			_chars[i]->blitNShade(_borderedChars[i], 1, z, 8);
-		}
-
-		// and finally the number itself
-		_chars[i]->blitNShade(_borderedChars[i], 1, 1, 0);
-	} */
 }
 
 /**
@@ -272,6 +252,15 @@ void NumberText::setValue(unsigned value)
 unsigned NumberText::getValue() const
 {
 	return _value;
+}
+
+/**
+ * Sets whether or not to draw a border around the number.
+ * @param bordered - true to border (default true)
+ */
+void NumberText::setBordered(bool bordered)
+{
+	_bordered = bordered;
 }
 
 /**
@@ -368,15 +357,6 @@ void NumberText::draw()
 	}
 
 	this->offset(_color);
-}
-
-/**
- * Sets whether or not to draw a border around the number.
- * @param bordered - true to border (default true)
- */
-void NumberText::setBordered(bool bordered)
-{
-	_bordered = bordered;
 }
 
 }

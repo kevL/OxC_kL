@@ -417,15 +417,15 @@ std::string RuleMissionScript::genMissionDatum(
 
 	switch (type)
 	{
-		case GEN_RACE:
+		case GT_RACE:
 			rweight = _raceWeights.rbegin();
 		break;
 
-		case GEN_REGION:
+		case GT_REGION:
 			rweight = _regionWeights.rbegin();
 		break;
 
-		default:
+		default: // GT_MISSION
 			rweight = _missionWeights.rbegin();
 	}
 

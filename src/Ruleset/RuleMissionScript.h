@@ -33,9 +33,9 @@ namespace OpenXcom
 
 enum GenerationType
 {
-	GEN_REGION,		// 0
-	GEN_MISSION,	// 1
-	GEN_RACE		// 2
+	GT_REGION,	// 0
+	GT_MISSION,	// 1
+	GT_RACE		// 2
 };
 
 class WeightedOptions;
