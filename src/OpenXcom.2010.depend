@@ -4691,10 +4691,9 @@
 1437993330 f:\git\openxcom\src\ruleset\rulecraftweapon.h
 	"../Savegame/CraftWeaponProjectile.h"
 
-1437508927 f:\git\openxcom\src\savegame\craftweaponprojectile.h
+1441273165 f:\git\openxcom\src\savegame\craftweaponprojectile.h
 
-1440095872 f:\git\openxcom\src\savegame\craftweapon.h
-	<yaml-cpp/yaml.h>
+1441270477 f:\git\openxcom\src\savegame\craftweapon.h
 
 1440380315 source:f:\git\openxcom\src\basescape\craftsoldiersstate.cpp
 	"CraftSoldiersState.h"
@@ -5803,7 +5802,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1441257811 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
+1441260469 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
 	"DebriefingState.h"
 	"CannotReequipState.h"
 	"CommendationDeadState.h"
@@ -6916,7 +6915,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Ufo.h"
 
-1439361595 f:\git\openxcom\src\geoscape\dogfightstate.h
+1441272243 f:\git\openxcom\src\geoscape\dogfightstate.h
 	"../Engine/State.h"
 
 1440532567 f:\git\openxcom\src\savegame\alienstrategy.h
@@ -8273,7 +8272,7 @@
 	"RuleCraft.h"
 	"RuleTerrain.h"
 
-1433858629 source:f:\git\openxcom\src\ruleset\rulecraftweapon.cpp
+1441269050 source:f:\git\openxcom\src\ruleset\rulecraftweapon.cpp
 	"RuleCraftWeapon.h"
 
 1440164247 source:f:\git\openxcom\src\ruleset\ruleinventory.cpp
@@ -8469,7 +8468,7 @@
 	"Country.h"
 	"../Ruleset/RuleCountry.h"
 
-1441256451 source:f:\git\openxcom\src\savegame\craft.cpp
+1441261496 source:f:\git\openxcom\src\savegame\craft.cpp
 	"Craft.h"
 	"AlienBase.h"
 	"Base.h"
@@ -8493,14 +8492,14 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Transfer.h"
 
-1437510922 source:f:\git\openxcom\src\savegame\craftweapon.cpp
+1441270467 source:f:\git\openxcom\src\savegame\craftweapon.cpp
 	"CraftWeapon.h"
 	"CraftWeaponProjectile.h"
 	"../Ruleset/RuleCraftWeapon.h"
 	"../Ruleset/RuleItem.h"
 	"../Ruleset/Ruleset.h"
 
-1437508941 source:f:\git\openxcom\src\savegame\craftweaponprojectile.cpp
+1441271354 source:f:\git\openxcom\src\savegame\craftweaponprojectile.cpp
 	"CraftWeaponProjectile.h"
 
 1440359453 source:f:\git\openxcom\src\savegame\equipmentlayoutitem.cpp

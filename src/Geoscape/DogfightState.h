@@ -70,7 +70,7 @@ private:
 	static const int
 		_projectileBlobs[4][6][3],
 
-		DST_ENGAGE		= 635,
+		DST_ENGAGE	= 635,
 		DST_STANDOFF	= 595,
 		DST_CLOSE		= 64,
 		MSG_TIMEOUT		= 45;
@@ -91,7 +91,7 @@ private:
 		_diff,
 		_timeout,
 		_dist,
-		_targetDist,
+		_desired,
 
 		_ufoSize,
 		_craftHeight,

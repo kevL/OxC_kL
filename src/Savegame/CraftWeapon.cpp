@@ -31,14 +31,14 @@ namespace OpenXcom
 
 /**
  * Initializes a craft weapon of the specified type.
- * @param rules	- pointer to RuleCraftWeapon
- * @param ammo	- initial ammo quantity
+ * @param cwRule	- pointer to RuleCraftWeapon
+ * @param ammo		- initial ammo quantity
  */
 CraftWeapon::CraftWeapon(
-		RuleCraftWeapon* rules,
+		RuleCraftWeapon* const cwRule,
 		int ammo)
 	:
-		_cwRule(rules),
+		_cwRule(cwRule),
 		_ammo(ammo),
 		_rearming(false),
 		_cantLoad(false)
@@ -132,7 +132,7 @@ bool CraftWeapon::getRearming() const
  * Sets whether this craft weapon needs rearming - in case there's no more ammo.
  * @param rearming - rearming status (default true)
  */
-void CraftWeapon::setRearming(const bool rearming)
+void CraftWeapon::setRearming(bool rearming)
 {
 	_rearming = rearming;
 }
@@ -144,8 +144,8 @@ void CraftWeapon::setRearming(const bool rearming)
  * @return, the amount of clips used (negative if not enough clips at Base)
  */
 int CraftWeapon::rearm(
-		const int baseClips,
-		const int clipSize)
+		int baseClips,
+		int clipSize)
 {
 	const int
 		fullQty = _cwRule->getAmmoMax(),
@@ -205,7 +205,7 @@ bool CraftWeapon::getCantLoad() const
  * Sets this CraftWeapon's cantLoad status - no stock in Base Stores.
  * @param cantLoad - true if weapon ammo is low in stock (default true)
  */
-void CraftWeapon::setCantLoad(const bool cantLoad)
+void CraftWeapon::setCantLoad(bool cantLoad)
 {
 	_cantLoad = cantLoad;
 }
@@ -218,11 +218,11 @@ CraftWeaponProjectile* CraftWeapon::fire() const
 {
 	CraftWeaponProjectile* const prj = new CraftWeaponProjectile();
 
-	prj->setType(this->getRules()->getProjectileType());
-	prj->setSpeed(this->getRules()->getProjectileSpeed());
-	prj->setAccuracy(this->getRules()->getAccuracy());
-	prj->setDamage(this->getRules()->getDamage());
-	prj->setRange(this->getRules()->getRange());
+	prj->setType(_cwRule->getProjectileType());
+	prj->setSpeed(_cwRule->getProjectileSpeed());
+	prj->setAccuracy(_cwRule->getAccuracy());
+	prj->setDamage(_cwRule->getDamage());
+	prj->setRange(_cwRule->getRange());
 
 	return prj;
 }

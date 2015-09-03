@@ -186,11 +186,11 @@ void Craft::load(
 		const std::string type = (*i)["type"].as<std::string>();
 		if (rules->getItem(type) != NULL)
 		{
-			const int unitSize = rules->getArmor(rules->getUnit(type)->getArmor())->getSize();
+			const int armorSize = rules->getArmor(rules->getUnit(type)->getArmor())->getSize();
 			Vehicle* const vhcl = new Vehicle(
 											rules->getItem(type),
 											0,
-											unitSize * unitSize);
+											armorSize * armorSize);
 			vhcl->load(*i);
 			_vehicles.push_back(vhcl);
 		}
@@ -787,6 +787,7 @@ int Craft::getFuelLimit(const Base* const base) const
 		distRads = getDistance(_dest) + _base->getDistance(_dest);
 	else if (_crRule->getRefuelItem().empty() == true)
 		patrol_factor = 2.;	// Elerium-powered Craft do not suffer this; they use 1 fuel per 10-min regardless of patrol speed.
+
 	const double speedRads = static_cast<double>(_crRule->getMaxSpeed()) * unitToRads / 6.;
 
 	return static_cast<int>(std::ceil(

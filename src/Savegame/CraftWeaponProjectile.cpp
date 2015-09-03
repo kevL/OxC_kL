@@ -28,19 +28,19 @@ namespace OpenXcom
  */
 CraftWeaponProjectile::CraftWeaponProjectile()
 	:
-		_type(CWPT_CANNON_ROUND),
-		_globalType(CWPGT_MISSILE),
+		_type(PT_CANNON_ROUND),
+		_globalType(PGT_MISSILE),
 		_speed(0),
-		_direction(D_NONE),
-		_currentPosition(0),
-		_horizontalPosition(0),
-		_beamState(0),
+		_dir(PD_NONE),
+		_pos(0),
+		_posHori(0),
+		_beamPhase(0),
 		_accuracy(0),
 		_damage(0),
 		_range(0),
-		_toBeRemoved(false),
+		_done(false),
 		_missed(false),
-		_distanceCovered(0)
+		_dist(0)
 {}
 
 /**
@@ -58,10 +58,10 @@ void CraftWeaponProjectile::setType(CwpType type)
 {
 	_type = type;
 
-	if (type >= CWPT_LASER_BEAM)
+	if (type >= PT_LASER_BEAM)
 	{
-		_globalType = CWPGT_BEAM;
-		_beamState = 8;
+		_globalType = PGT_BEAM;
+		_beamPhase = 8;
 	}
 }
 
@@ -85,14 +85,14 @@ CwpGlobal CraftWeaponProjectile::getGlobalType() const
 
 /**
  * Sets the direction of the projectile.
- * @param direction - reference the direction
+ * @param direction - direction
  */
-void CraftWeaponProjectile::setDirection(const int& directon)
+void CraftWeaponProjectile::setDirection(int dir)
 {
-	_direction = directon;
+	_dir = dir;
 
-	if (_direction == D_UP)
-		_currentPosition = 0;
+	if (_dir == PD_UP)
+		_pos = 0;
 }
 
 /**
@@ -101,7 +101,7 @@ void CraftWeaponProjectile::setDirection(const int& directon)
  */
 int CraftWeaponProjectile::getDirection() const
 {
-	return _direction;
+	return _dir;
 }
 
 /**
@@ -109,45 +109,45 @@ int CraftWeaponProjectile::getDirection() const
  */
 void CraftWeaponProjectile::moveProjectile()
 {
-	if (_globalType == CWPGT_MISSILE)
+	if (_globalType == PGT_MISSILE)
 	{
 		// Check if projectile would reach its maximum range this tick.
-		int positionChange;
-		if (_range > (_distanceCovered / 8)
-			&& _range <= ((_distanceCovered + _speed) / 8))
+		int delta;
+		if (_range > (_dist / 8)
+			&& _range <= ((_dist + _speed) / 8))
 		{
-			positionChange = _range * 8 - _distanceCovered;
+			delta = (_range * 8) - _dist;
 		}
 		else
-			positionChange = _speed;
+			delta = _speed;
 
 		// Check if projectile passed its maximum range on previous tick.
-		if (_range <= (_distanceCovered / 8))
-			setMissed(true);
+		if (_range <= (_dist / 8))
+			_missed = true;
 
-		if (_direction == D_UP)
-			_currentPosition += positionChange;
-		else if (_direction == D_DOWN)
-			_currentPosition -= positionChange;
+		if (_dir == PD_UP)
+			_pos += delta;
+		else if (_dir == PD_DOWN)
+			_pos -= delta;
 
-		_distanceCovered += positionChange;
+		_dist += delta;
 	}
-	else if (_globalType == CWPGT_BEAM)
+	else if (_globalType == PGT_BEAM)
 	{
-		_beamState /= 2;
+		_beamPhase /= 2;
 
-		if (_beamState == 1)
-			_toBeRemoved = true;
+		if (_beamPhase == 1)
+			_done = true;
 	}
 }
 
 /**
  * Sets the y position of the projectile on the radar.
- * @param position - reference the position
+ * @param pos - position
  */
-void CraftWeaponProjectile::setPosition(const int& position)
+void CraftWeaponProjectile::setPosition(int pos)
 {
-	_currentPosition = position;
+	_pos = pos;
 }
 
 /**
@@ -156,17 +156,17 @@ void CraftWeaponProjectile::setPosition(const int& position)
  */
 int CraftWeaponProjectile::getPosition() const
 {
-	return _currentPosition;
+	return _pos;
 }
 
 /**
  * Sets the x position of the projectile on the radar.
  * It's used only once for each projectile during firing.
- * @param position - the x position
+ * @param pos - the x position
  */
-void CraftWeaponProjectile::setHorizontalPosition(int position)
+void CraftWeaponProjectile::setHorizontalPosition(int pos)
 {
-	_horizontalPosition = position;
+	_posHori = pos;
 }
 
 /**
@@ -175,7 +175,7 @@ void CraftWeaponProjectile::setHorizontalPosition(int position)
  */
 int CraftWeaponProjectile::getHorizontalPosition() const
 {
-	return _horizontalPosition;
+	return _posHori;
 }
 
 /**
@@ -183,7 +183,7 @@ int CraftWeaponProjectile::getHorizontalPosition() const
  */
 void CraftWeaponProjectile::removeProjectile()
 {
-	_toBeRemoved = true;
+	_done = true;
 }
 
 /**
@@ -192,23 +192,23 @@ void CraftWeaponProjectile::removeProjectile()
  */
 bool CraftWeaponProjectile::toBeRemoved() const
 {
-	return _toBeRemoved;
+	return _done;
 }
 
 /**
  * Returns animation state of a beam.
  * @return, the state of the beam
  */
-int CraftWeaponProjectile::getBeamState() const
+int CraftWeaponProjectile::getBeamPhase() const
 {
-	return _beamState;
+	return _beamPhase;
 }
 
 /**
  * Sets the amount of damage the projectile can do when hitting its target.
- * @param damage - reference the damage value
+ * @param damage - damage value
  */
-void CraftWeaponProjectile::setDamage(const int& damage)
+void CraftWeaponProjectile::setDamage(int damage)
 {
 	_damage = damage;
 }
@@ -224,9 +224,9 @@ int CraftWeaponProjectile::getDamage() const
 
 /**
  * Sets the accuracy of the projectile.
- * @param accuracy - reference the accuracy
+ * @param accuracy - accuracy
  */
-void CraftWeaponProjectile::setAccuracy(const int& accuracy)
+void CraftWeaponProjectile::setAccuracy(int accuracy)
 {
 	_accuracy = accuracy;
 }
@@ -242,9 +242,9 @@ int CraftWeaponProjectile::getAccuracy() const
 
 /**
  * Marks the projectile as a one which missed its target.
- * @param missed - reference true for missed
+ * @param missed - true for missed (default true)
  */
-void CraftWeaponProjectile::setMissed(const bool& missed)
+void CraftWeaponProjectile::setMissed(bool missed)
 {
 	_missed = missed;
 }
@@ -260,9 +260,9 @@ bool CraftWeaponProjectile::getMissed() const
 
 /**
  * Sets maximum range of projectile.
- * @param range - reference the range
+ * @param range - range
  */
-void CraftWeaponProjectile::setRange(const int& range)
+void CraftWeaponProjectile::setRange(int range)
 {
 	_range = range;
 }

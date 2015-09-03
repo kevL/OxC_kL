@@ -20,7 +20,7 @@
 #ifndef OPENXCOM_CRAFTWEAPON_H
 #define OPENXCOM_CRAFTWEAPON_H
 
-#include <yaml-cpp/yaml.h>
+//#include <yaml-cpp/yaml.h>
 
 
 namespace OpenXcom
@@ -51,7 +51,7 @@ private:
 	public:
 		/// Creates a craft weapon of the specified type.
 		CraftWeapon(
-				RuleCraftWeapon* rules,
+				RuleCraftWeapon* const cwRule,
 				int ammo);
 		/// Cleans up the craft weapon.
 		~CraftWeapon();
@@ -71,15 +71,15 @@ private:
 		/// Gets the craft weapon's rearming status.
 		bool getRearming() const;
 		/// Sets the craft weapon's rearming status
-		void setRearming(const bool rearming = true);
+		void setRearming(bool rearming = true);
 		/// Rearms the craft weapon.
 		int rearm(
-				const int baseClips = 0,
-				const int clipSize = 0);
+				int baseClips = 0,
+				int clipSize = 0);
 		/// Gets this CraftWeapon's cantLoad status - no stock in Base Stores.
 		bool getCantLoad() const;
 		/// Sets this CraftWeapon's cantLoad status - no stock in Base Stores.
-		void setCantLoad(const bool cantLoad = true);
+		void setCantLoad(bool cantLoad = true);
 
 		/// Fires the craft weapon - used during dogfights.
 		CraftWeaponProjectile* fire() const;

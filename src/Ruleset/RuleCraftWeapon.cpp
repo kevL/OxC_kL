@@ -41,7 +41,7 @@ RuleCraftWeapon::RuleCraftWeapon(const std::string& type)
 		_ammoMax(0),
 		_rearmRate(1),
 		_projectileSpeed(0),
-		_projectileType(CWPT_CANNON_ROUND)
+		_projectileType(PT_CANNON_ROUND)
 {}
 
 /**

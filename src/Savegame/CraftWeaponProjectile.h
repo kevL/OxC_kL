@@ -27,31 +27,31 @@ namespace OpenXcom
 // Do not change the order of these enums because they are related to blob order.
 enum CwpGlobal
 {
-	CWPGT_MISSILE,	// 0
-	CWPGT_BEAM		// 1
+	PGT_MISSILE,	// 0
+	PGT_BEAM		// 1
 };
 
 enum CwpType
 {
-	CWPT_STINGRAY_MISSILE,	// 0
-	CWPT_AVALANCHE_MISSILE,	// 1
-	CWPT_CANNON_ROUND,		// 2
-	CWPT_FUSION_BALL,		// 3
-	CWPT_LASER_BEAM,		// 4
-	CWPT_PLASMA_BEAM		// 5
+	PT_STINGRAY_MISSILE,	// 0
+	PT_AVALANCHE_MISSILE,	// 1
+	PT_CANNON_ROUND,		// 2
+	PT_FUSION_BALL,			// 3
+	PT_LASER_BEAM,			// 4
+	PT_PLASMA_BEAM			// 5
 };
 
-enum Directions
+enum CwpDirection
 {
-	D_NONE,	// 0
-	D_UP,	// 1
-	D_DOWN	// 2
+	PD_NONE,	// 0
+	PD_UP,		// 1
+	PD_DOWN		// 2
 };
 
 const int
-	HP_LEFT		= -1,
-	HP_CENTER	=  0,
-	HP_RIGHT	=  1;
+	PH_LEFT		= -1,
+	PH_CENTER	=  0,
+	PH_RIGHT	=  1;
 
 
 class CraftWeaponProjectile
@@ -60,22 +60,22 @@ class CraftWeaponProjectile
 private:
 	bool
 		_missed,
-		_toBeRemoved;
+		_done;
 	int
 		_accuracy,
-		_currentPosition,	// relative to interceptor, apparently, which is a problem
-							// when the interceptor disengages while projectile is in flight.
+		_pos,	// relative to interceptor, apparently, which is a problem
+				// when the interceptor disengages while projectile is in flight.
 
-							// kL_note: also, something screws with when a missile is launched
-							// but UFO is downed, by other weapon, before it hits; the missile
-							// is then not removed from the craft's ordnance.
+				// kL_note: also, something screws with when a missile is launched
+				// but UFO is downed, by other weapon, before it hits; the missile
+				// is then not removed from the craft's ordnance.
 		_damage,
-		_direction,
-		_distanceCovered,
-		_horizontalPosition,
+		_dir,
+		_dist,
+		_posHori,
 		_range,
 		_speed,
-		_beamState;
+		_beamPhase;
 
 	CwpGlobal _globalType;
 	CwpType _type;
@@ -95,19 +95,19 @@ private:
 		CwpGlobal getGlobalType() const;
 
 		/// Sets projectile direction. This determines its initial position.
-		void setDirection(const int& directon);
+		void setDirection(int dir);
 		/// Gets projectile direction.
 		int getDirection() const;
 
-		/// Moves projectile in '_direction' with '_speed'.
+		/// Moves projectile in '_dir' with '_speed'.
 		void moveProjectile();
 
+		/// Sets projectile position.
+		void setPosition(int pos);
 		/// Gets projectile position.
 		int getPosition() const;
-		/// Sets projectile position.
-		void setPosition(const int& position);
 		/// Sets horizontal position. This determines from which weapon projectile has been fired.
-		void setHorizontalPosition(int position);
+		void setHorizontalPosition(int pos);
 		/// Gets horizontal position.
 		int getHorizontalPosition() const;
 
@@ -117,25 +117,25 @@ private:
 		bool toBeRemoved() const;
 
 		/// Returns state of the beam.
-		int getBeamState() const;
+		int getBeamPhase() const;
 
 		/// Sets power of the projectile.
-		void setDamage(const int& damage);
+		void setDamage(int damage);
 		/// Gets power of the projectile.
 		int getDamage() const;
 
 		/// Sets accuracy of the projectile.
-		void setAccuracy(const int& accuracy);
+		void setAccuracy(int accuracy);
 		/// Gets accuracy of the projectile.
 		int getAccuracy() const;
 
 		/// Sets the projectile to missed status.
-		void setMissed(const bool& missed);
+		void setMissed(bool missed = true);
 		/// Gets the projectile missed status.
 		bool getMissed() const;
 
 		/// Sets maximum range of projectile.
-		void setRange(const int& range);
+		void setRange(int range);
 		/// Gets maximum range of projectile.
 		int getRange() const;
 

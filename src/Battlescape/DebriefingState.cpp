@@ -961,9 +961,7 @@ void DebriefingState::prepareDebriefing() // private.
 			i != _gameSave->getRegions()->end();
 			++i)
 	{
-		if ((*i)->getRules()->insideRegion(
-										lon,
-										lat) == true)
+		if ((*i)->getRules()->insideRegion(lon, lat) == true)
 		{
 			_region = *i;
 			_missionStatistics->region = _region->getRules()->getType();
@@ -976,9 +974,7 @@ void DebriefingState::prepareDebriefing() // private.
 			i != _gameSave->getCountries()->end();
 			++i)
 	{
-		if ((*i)->getRules()->insideCountry(
-										lon,
-										lat) == true)
+		if ((*i)->getRules()->insideCountry(lon, lat) == true)
 		{
 			_country = *i;
 			_missionStatistics->country = _country->getRules()->getType();
