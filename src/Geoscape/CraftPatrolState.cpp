@@ -242,6 +242,14 @@ void CraftPatrolState::transposeWindow() // private.
 //	_window->setBackground(NULL);
 	_window->setVisible(false);
 
+	const int dy = 9;
+	_btnOk->setY(_btnOk->getY() + dy);
+	_btn5s->setY(_btn5s->getY() + dy);
+	_btnInfo->setY(_btnInfo->getY() + dy);
+	_btnBase->setY(_btnBase->getY() + dy);
+	_btnCenter->setY(_btnCenter->getY() + dy);
+	_btnRedirect->setY(_btnRedirect->getY() + dy);
+
 	_txtDestination->setVisible(false);
 	_btnCenter->setText(tr("STR_PAUSE"));
 

@@ -1616,30 +1616,31 @@ void GeoscapeState::time5Seconds()
 								{
 									resetTimer();
 
-									int // look up polygon's textureId + shade
-										textureId,
+									int // look up polygon's texId + shade
+										texId,
 										shade;
 									_globe->getPolygonTextureAndShade(
 																	ufo->getLongitude(),
 																	ufo->getLatitude(),
-																	&textureId,
+																	&texId,
 																	&shade);
 									popup(new ConfirmLandingState(
 															*j,
 															// countryside Texture; choice of Terrain made in ConfirmLandingState
-															_rules->getGlobe()->getTextureRule(textureId),
+															_rules->getGlobe()->getTextureRule(texId),
 															shade));
 								}
 							}
 							else if (ufo->getStatus() != Ufo::LANDED)
-								(*j)->returnToBase();
+							{
+								popup(new CraftPatrolState(*j, this));
+								(*j)->setDestination(NULL);
+							}
 					}
 				}
 				else if (wayPoint != NULL)
 				{
-					popup(new CraftPatrolState(
-											*j,
-											this));
+					popup(new CraftPatrolState(*j, this));
 					(*j)->setDestination(NULL);
 				}
 				else if (missionSite != NULL)
@@ -1648,7 +1649,7 @@ void GeoscapeState::time5Seconds()
 					{
 						resetTimer();
 
-						const int textureId = missionSite->getSiteTextureId();
+						const int texId = missionSite->getSiteTextureId();
 						int shade;
 						_globe->getPolygonShade(
 											missionSite->getLongitude(),
@@ -1657,24 +1658,28 @@ void GeoscapeState::time5Seconds()
 						popup(new ConfirmLandingState(
 												*j,
 												// preset missionSite Texture; choice of Terrain made via texture-deployment, in ConfirmLandingState
-												_rules->getGlobe()->getTextureRule(textureId),
+												_rules->getGlobe()->getTextureRule(texId),
 												shade));
 					}
 					else
-						(*j)->setDestination(NULL);
-				}
-				else if (alienBase != NULL)
-				{
-					if (alienBase->isDiscovered() == true)
 					{
-						if ((*j)->getNumSoldiers() > 0)
-						{
-							resetTimer();
-							popup(new ConfirmLandingState(*j));
-							// was countryside Texture & shade; utterly worthless & unused. Choice of Terrain made in BattlescapeGenerator.
-						}
-						else
-							(*j)->setDestination(NULL);
+						popup(new CraftPatrolState(*j, this));
+						(*j)->setDestination(NULL);
+					}
+				}
+				else if (alienBase != NULL
+					&& alienBase->isDiscovered() == true)
+				{
+					if ((*j)->getNumSoldiers() > 0)
+					{
+						resetTimer();
+						popup(new ConfirmLandingState(*j));
+						// was countryside Texture & shade; utterly worthless & unused. Choice of Terrain made in BattlescapeGenerator.
+					}
+					else
+					{
+						popup(new CraftPatrolState(*j, this));
+						(*j)->setDestination(NULL);
 					}
 				}
 			}
