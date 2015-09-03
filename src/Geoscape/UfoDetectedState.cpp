@@ -526,12 +526,10 @@ void UfoDetectedState::btnCancelClick(Action*)
  */
 void UfoDetectedState::transposeWindow() // private.
 {
-//	_window->setBackground(NULL);
 	_window->setVisible(false);
 
 	_txtDetected->setVisible(false);
 	_lstInfo->setVisible(false);
-//	_btnCancel->setText(tr("STR_TERROR_CONTINUES").c_str());
 
 	if (_geo->getPause() == false)
 		_btnCenter->setText(tr("STR_PAUSE").c_str());
@@ -544,6 +542,17 @@ void UfoDetectedState::transposeWindow() // private.
 		_lstInfo2->setVisible(false);
 		_txtBases->setVisible(false);
 	}
+
+	int dy;
+	if (_hyper == true)
+		dy = 9;
+	else
+		dy = 20;
+
+	_btnCenter->setY(_btnCenter->getY() + dy);
+	_btnIntercept->setY(_btnIntercept->getY() + dy);
+	_btn5Sec->setY(_btn5Sec->getY() + dy);
+	_btnCancel->setY(_btnCancel->getY() + dy);
 
 	_game->getResourcePack()->getSurface("TARGET_UFO")->blit(_srfTarget);
 }

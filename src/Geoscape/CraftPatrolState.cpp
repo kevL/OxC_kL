@@ -239,10 +239,9 @@ void CraftPatrolState::btnRedirectClick(Action*)
  */
 void CraftPatrolState::transposeWindow() // private.
 {
-//	_window->setBackground(NULL);
 	_window->setVisible(false);
 
-	const int dy = 9;
+	const int dy = 25;
 	_btnOk->setY(_btnOk->getY() + dy);
 	_btn5s->setY(_btn5s->getY() + dy);
 	_btnInfo->setY(_btnInfo->getY() + dy);

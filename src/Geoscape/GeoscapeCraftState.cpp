@@ -468,7 +468,6 @@ void GeoscapeCraftState::btnCancelClick(Action*)
  */
 void GeoscapeCraftState::transposeWindow() // private.
 {
-//	_window->setBackground(NULL);
 	_window->setVisible(false);
 
 	_txtRedirect->setVisible(false);
@@ -484,15 +483,22 @@ void GeoscapeCraftState::transposeWindow() // private.
 	_txtW2Name->setVisible(false);
 	_txtW2Ammo->setVisible(false);
 
+	int dy = 26;
+	_btnTarget->setY(_btnTarget->getY() + dy);
+	_btnPatrol->setY(_btnPatrol->getY() + dy);
+	_btnCenter->setY(_btnCenter->getY() + dy);
+	_btnBase->setY(_btnBase->getY() + dy);
+	_btnCancel->setY(_btnCancel->getY() + dy);
+
 	if (_geo->getPause() == false)
 		_btnCenter->setText(tr("STR_PAUSE"));
 	else
 	{
 		_btnCenter->setVisible(false);
 
-		const int y = _btnCenter->getY();
-		_btnTarget->setY(y);
-		_btnPatrol->setY(y);
+		dy = _btnCenter->getY();
+		_btnTarget->setY(dy);
+		_btnPatrol->setY(dy);
 	}
 
 	_game->getResourcePack()->getSurface("TARGET_UFO")->blit(_srfTarget);

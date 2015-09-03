@@ -1610,7 +1610,6 @@ void GeoscapeState::time5Seconds()
 						case Ufo::CRASHED:		// setSpeed 1/2 (need to speed back up when setting a new destination)
 						case Ufo::DESTROYED:	// just before expiration
 							if ((*j)->getNumSoldiers() > 0)
-//								|| (*j)->getNumVehicles() > 0)
 							{
 								if ((*j)->isInDogfight() == false)
 								{
@@ -1625,8 +1624,7 @@ void GeoscapeState::time5Seconds()
 																	&texId,
 																	&shade);
 									popup(new ConfirmLandingState(
-															*j,
-															// countryside Texture; choice of Terrain made in ConfirmLandingState
+															*j, // countryside Texture; choice of Terrain made in ConfirmLandingState
 															_rules->getGlobe()->getTextureRule(texId),
 															shade));
 								}
@@ -1656,8 +1654,7 @@ void GeoscapeState::time5Seconds()
 											missionSite->getLatitude(),
 											&shade);
 						popup(new ConfirmLandingState(
-												*j,
-												// preset missionSite Texture; choice of Terrain made via texture-deployment, in ConfirmLandingState
+												*j, // preset missionSite Texture; choice of Terrain made via texture-deployment, in ConfirmLandingState
 												_rules->getGlobe()->getTextureRule(texId),
 												shade));
 					}
@@ -1667,14 +1664,12 @@ void GeoscapeState::time5Seconds()
 						(*j)->setDestination(NULL);
 					}
 				}
-				else if (alienBase != NULL
-					&& alienBase->isDiscovered() == true)
+				else if (alienBase != NULL) //&& alienBase->isDiscovered() == true)
 				{
 					if ((*j)->getNumSoldiers() > 0)
 					{
-						resetTimer();
+						resetTimer(); // was countryside Texture & shade; utterly worthless & unused. Choice of Terrain made in BattlescapeGenerator.
 						popup(new ConfirmLandingState(*j));
-						// was countryside Texture & shade; utterly worthless & unused. Choice of Terrain made in BattlescapeGenerator.
 					}
 					else
 					{
