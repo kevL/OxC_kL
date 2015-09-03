@@ -49,8 +49,7 @@ MovingTarget::MovingTarget()
  */
 MovingTarget::~MovingTarget() // virtual.
 {
-	if (_dest != NULL
-		&& _dest->getFollowers()->empty() == false)
+	if (_dest != NULL)
 	{
 		for (std::vector<Target*>::const_iterator
 				i = _dest->getFollowers()->begin();
@@ -94,7 +93,6 @@ YAML::Node MovingTarget::save() const // virtual.
 	node["speedLon"]	= serializeDouble(_speedLon);
 	node["speedLat"]	= serializeDouble(_speedLat);
 	node["speedRadian"]	= serializeDouble(_speedRadian);
-
 	node["speed"]		= _speed;
 
 	return node;
@@ -115,7 +113,7 @@ Target* MovingTarget::getDestination() const
  */
 void MovingTarget::setDestination(Target* const dest) // virtual.
 {
-	if (_dest != NULL) // remove moving target from old destination's followers
+	if (_dest != NULL)
 	{
 		for (std::vector<Target*>::const_iterator
 				i = _dest->getFollowers()->begin();
@@ -132,7 +130,7 @@ void MovingTarget::setDestination(Target* const dest) // virtual.
 
 	_dest = dest;
 
-	if (_dest != NULL) // add moving target to new destination's followers
+	if (_dest != NULL)
 		_dest->getFollowers()->push_back(this);
 
 	calculateSpeed();
@@ -157,7 +155,6 @@ void MovingTarget::setSpeed(const int speed)
 	_speed = speed;
 
 	// each nautical mile is 1/60th of a degree; each hour contains 720 5-seconds
-//	_speedRadian = ceil(static_cast<double>(_speed) * (1.0 / 60.0) * (M_PI / 180.0) / 720.0);
 	_speedRadian = static_cast<double>(_speed) * unitToRads / 720.;
 
 	calculateSpeed();

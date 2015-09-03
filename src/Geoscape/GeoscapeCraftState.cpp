@@ -78,7 +78,6 @@ GeoscapeCraftState::GeoscapeCraftState(
 
 	_txtTitle		= new Text(192, 17, 32, 15);
 
-//	_sprite			= new Surface(32, 38, 224, -3);
 	_sprite			= new Surface(
 								32,38,
 								_window->getX() + _window->getWidth() - 16,
@@ -200,7 +199,7 @@ GeoscapeCraftState::GeoscapeCraftState(
 			if (_craft->isInDogfight() == true)
 			{
 				speed = ufo->getSpeed();	// THIS DOES NOT CHANGE THE SPEED of the xCom CRAFT
-											// for Fuel usage. ( ie. it should )
+											// for Fuel usage. (ie. it should)
 				status = tr("STR_TAILING_UFO").arg(ufo->getId());
 			}
 			else if (ufo->getStatus() == Ufo::FLYING)
@@ -232,7 +231,7 @@ GeoscapeCraftState::GeoscapeCraftState(
 							.arg(Text::formatNumber(_craft->getRules()->getMaxSpeed())));
 
 	std::string alt;
-	if (   stat == "STR_READY"
+	if (stat == "STR_READY"
 		|| stat == "STR_REPAIRS"
 		|| stat == "STR_REFUELLING"
 		|| stat == "STR_REARMING")
@@ -317,7 +316,8 @@ GeoscapeCraftState::GeoscapeCraftState(
 	// note these could be set up there where status was set.....
 	if (stat != "STR_OUT"
 		|| lowFuel == true
-		|| missionComplete == true)
+		|| missionComplete == true
+		|| _craft->getTakeoff() == false)
 	{
 		_btnBase->setVisible(false);
 		_btnPatrol->setVisible(false);
@@ -326,7 +326,8 @@ GeoscapeCraftState::GeoscapeCraftState(
 			|| stat == "STR_REFUELLING"
 			|| stat == "STR_REARMING"
 			|| lowFuel == true
-			|| missionComplete == true)
+			|| missionComplete == true
+			|| _craft->getTakeoff() == false)
 		{
 			_btnTarget->setVisible(false);
 		}
@@ -382,7 +383,6 @@ void GeoscapeCraftState::btnCenterClick(Action*)
 											false,
 											true));
 		delete _waypoint;
-
 		return;
 	}
 
@@ -390,7 +390,6 @@ void GeoscapeCraftState::btnCenterClick(Action*)
 	{
 		_delayPop = false;
 		transposeWindow();
-
 		return;
 	}
 

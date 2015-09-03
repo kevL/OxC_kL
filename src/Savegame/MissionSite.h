@@ -44,7 +44,7 @@ class MissionSite
 private:
 	bool
 		_detected,
-		_inTactical;
+		_tactical;
 	int
 		_id,
 		_secondsLeft,
@@ -95,7 +95,7 @@ private:
 		void setSecondsLeft(int sec);
 
 		/// Sets this MissionSite's battlescape status.
-		void setInBattlescape(bool inTactical);
+		void setInBattlescape(bool tactical = true);
 		/// Gets if this MissionSite is in battlescape.
 		bool isInBattlescape() const;
 

@@ -2341,7 +2341,7 @@ void Globe::drawPath(
 					p2.lat,
 					&x2,&y2);
 
-		if (   pointBack(p1.lon, p1.lat) == false
+		if (pointBack(p1.lon, p1.lat) == false
 			&& pointBack(p2.lon, p2.lat) == false)
 		{
 			XuLine(

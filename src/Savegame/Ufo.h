@@ -61,7 +61,7 @@ private:
 	bool
 		_detected,
 		_hyperDetected,
-		_inTactical,
+		_tactical,
 		_processedIntercept;
 	int
 		_damage,
@@ -169,7 +169,7 @@ private:
 		bool isDestroyed() const;
 
 		/// Sets the UFO's battlescape status.
-		void setInBattlescape(const bool inTactical);
+		void setInBattlescape(bool tactical = true);
 		/// Gets if the UFO is in battlescape.
 		bool isInBattlescape() const;
 

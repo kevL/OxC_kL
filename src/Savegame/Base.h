@@ -56,7 +56,7 @@ class Base
 private:
 	bool
 		_exposed,
-		_inTactical,
+		_tactical,
 		_placed;
 	int
 		_cashSpent,
@@ -257,9 +257,9 @@ private:
 		/// Gets the quantity of aLiens currently under interrogation.
 		int getInterrogatedAliens() const;
 
-		/// Sets a craft's battlescape status.
-		void setInBattlescape(bool inTactical);
-		/// Gets if a craft is in the battlescape.
+		/// Sets the Base's battlescape status.
+		void setInBattlescape(bool tactical = true);
+		/// Gets if the Base is in the battlescape.
 		bool isInBattlescape() const;
 
 		/// Sets this base as eligible for alien retaliation.

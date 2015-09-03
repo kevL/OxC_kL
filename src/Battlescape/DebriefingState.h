@@ -101,7 +101,7 @@ class DebriefingState
 
 private:
 	bool
-		_destroyXCOMBase,
+		_destroyXComBase,
 		_manageContainment,
 		_noContainment,
 		_skirmish;

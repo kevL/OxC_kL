@@ -62,7 +62,7 @@ class Craft
 
 private:
 	bool
-		_inTactical,
+		_tactical,
 		_inDogfight,
 		_lowFuel,
 		_mission,
@@ -164,7 +164,7 @@ private:
 		/// Gets the craft's amount of fuel.
 		int getFuel() const;
 		/// Sets the craft's amount of fuel.
-		void setFuel(const int fuel);
+		void setFuel(int fuel);
 		/// Gets the craft's percentage of fuel.
 		int getFuelPercentage() const;
 
@@ -178,12 +178,12 @@ private:
 		/// Gets whether the craft is running out of fuel.
 		bool getLowFuel() const;
 		/// Sets whether the craft is running out of fuel.
-		void setLowFuel(const bool low);
+		void setLowFuel(bool low);
 
 		/// Gets whether the craft has just finished a mission.
 		bool getMissionReturn() const;
 		/// Sets whether the craft has just finished a mission.
-		void setMissionReturn(const bool mission);
+		void setMissionReturn(bool mission = true);
 
 		/// Gets the craft's distance from its base.
 		double getDistanceFromBase() const;
@@ -193,7 +193,7 @@ private:
 		/// Gets the craft's minimum fuel limit.
 		int getFuelLimit() const;
 		/// Gets the craft's minimum fuel limit to go to a base.
-		int getFuelLimit(Base* base) const;
+		int getFuelLimit(const Base* const base) const;
 
 		/// Returns the craft to its base.
 		void returnToBase();
@@ -213,12 +213,12 @@ private:
 		/// Repairs the Craft.
 		void repair();
 		/// Rearms the Craft.
-		std::string rearm(const Ruleset* rules);
+		std::string rearm(const Ruleset* const rules);
 		/// Refuels the Craft.
 		void refuel();
 
 		/// Sets the Craft's battlescape status.
-		void setInBattlescape(const bool battle);
+		void setInBattlescape(bool tactical = true);
 		/// Gets if the Craft is in battlescape.
 		bool isInBattlescape() const;
 
@@ -236,11 +236,6 @@ private:
 		void setInDogfight(const bool inDogfight);
 		/// Gets if the Craft is in dogfight.
 		bool isInDogfight() const;
-
-		/// Sets the Craft's flight order.
-//		void setFlightOrder(const int order);
-		/// Gets the Craft's flight order.
-//		int getFlightOrder() const;
 
 		/// Gets the Craft's unique id.
 		CraftId getUniqueId() const;

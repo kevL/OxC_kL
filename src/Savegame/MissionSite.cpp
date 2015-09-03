@@ -43,7 +43,7 @@ MissionSite::MissionSite(
 		_id(0),
 		_texture(-1),
 		_secondsLeft(0),
-		_inTactical(false),
+		_tactical(false),
 		_detected(false)
 {}
 
@@ -65,7 +65,7 @@ void MissionSite::load(const YAML::Node& node)
 	_texture		= node["texture"]		.as<int>(_texture);
 	_secondsLeft	= node["secondsLeft"]	.as<int>(_secondsLeft);
 	_race			= node["race"]			.as<std::string>(_race);
-	_inTactical		= node["inTactical"]	.as<bool>(_inTactical);
+	_tactical		= node["tactical"]		.as<bool>(_tactical);
 	_detected		= node["detected"]		.as<bool>(_detected);
 
 	// NOTE: "type" & "deployment" loaded by SavedGame and passed into cTor.
@@ -85,14 +85,9 @@ YAML::Node MissionSite::save() const
 	node["type"]		= _missionRule->getType();
 	node["deployment"]	= _deployRule->getType();
 
-	if (_detected == true)
-		node["detected"] = _detected;
-
-	if (_secondsLeft != 0)
-		node["secondsLeft"] = _secondsLeft;
-
-	if (_inTactical == true)
-		node["inTactical"] = _inTactical;
+	if (_detected == true)	node["detected"]	= _detected;
+	if (_secondsLeft != 0)	node["secondsLeft"]	= _secondsLeft;
+	if (_tactical == true)	node["tactical"]	= _tactical;
 
 	return node;
 }
@@ -196,16 +191,16 @@ void MissionSite::setSecondsLeft(int sec)
  */
 bool MissionSite::isInBattlescape() const
 {
-	return _inTactical;
+	return _tactical;
 }
 
 /**
  * Sets this MissionSite's battlescape status.
- * @param inTactical - true if in the battlescape
+ * @param tactical - true if in the battlescape (default true)
  */
-void MissionSite::setInBattlescape(bool inTactical)
+void MissionSite::setInBattlescape(bool tactical)
 {
-	_inTactical = inTactical;
+	_tactical = tactical;
 }
 
 /**

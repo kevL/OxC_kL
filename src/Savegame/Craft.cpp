@@ -73,7 +73,7 @@ Craft::Craft(
 		_status("STR_READY"),
 		_lowFuel(false),
 		_mission(false),
-		_inTactical(false),
+		_tactical(false),
 		_inDogfight(false),
 		_loadCur(0),
 		_warning(CW_NONE),
@@ -196,10 +196,10 @@ void Craft::load(
 		}
 	}
 
-	_status			= node["status"]	.as<std::string>(_status);
-	_lowFuel		= node["lowFuel"]	.as<bool>(_lowFuel);
-	_mission		= node["mission"]	.as<bool>(_mission);
-	_kills			= node["kills"]		.as<int>(_kills);
+	_status		= node["status"]	.as<std::string>(_status);
+	_lowFuel	= node["lowFuel"]	.as<bool>(_lowFuel);
+	_mission	= node["mission"]	.as<bool>(_mission);
+	_kills		= node["kills"]		.as<int>(_kills);
 
 	if (const YAML::Node name = node["name"])
 		_name = Language::utf8ToWstr(name.as<std::string>());
@@ -272,8 +272,8 @@ void Craft::load(
 	}
 
 	_takeOff	= node["takeOff"]	.as<int>(_takeOff);
-	_inTactical	= node["inTactical"].as<bool>(_inTactical);
-	if (_inTactical == true)
+	_tactical	= node["tactical"]	.as<bool>(_tactical);
+	if (_tactical == true)
 		setSpeed(0);
 
 	_loadCur = getNumEquipment() + (getNumSoldiers() + getNumVehicles(true) * 10); // note: 10 is the 'load' that a single 'space' uses.
@@ -289,9 +289,6 @@ YAML::Node Craft::save() const
 
 	node["type"]	= _crRule->getType();
 	node["id"]		= _id;
-	node["fuel"]	= _fuel;
-	node["damage"]	= _damage;
-	node["warning"]	= static_cast<int>(_warning);
 
 	for (std::vector<CraftWeapon*>::const_iterator
 			i = _weapons.begin();
@@ -299,12 +296,10 @@ YAML::Node Craft::save() const
 			++i)
 	{
 		YAML::Node subnode;
-
 		if (*i != 0)
 			subnode = (*i)->save();
 		else
 			subnode["type"] = "0";
-
 		node["weapons"].push_back(subnode);
 	}
 
@@ -320,12 +315,15 @@ YAML::Node Craft::save() const
 
 	node["status"] = _status;
 
+	if (_fuel != 0)				node["fuel"]		= _fuel;
+	if (_damage != 0)			node["damage"]		= _damage;
 	if (_lowFuel == true)		node["lowFuel"]		= _lowFuel;
 	if (_mission == true)		node["mission"]		= _mission;
-	if (_inTactical == true)	node["inTactical"]	= _inTactical;
+	if (_tactical == true)		node["tactical"]	= _tactical;
 	if (_kills != 0)			node["kills"]		= _kills;
 	if (_takeOff != 0)			node["takeOff"]		= _takeOff;
 	if (_name.empty() == false)	node["name"]		= Language::wstrToUtf8(_name);
+	if (_warning != CW_NONE)	node["warning"]		= static_cast<int>(_warning);
 
 	return node;
 }
@@ -397,7 +395,7 @@ int Craft::getId() const
 
 /**
  * Gets this Craft's unique identifying name.
- * If there's no custom name, the language default is used.
+ * @note If there's no custom name the language default is used.
  * @param lang - pointer to a Language to get strings from
  * @return, full name of craft
  */
@@ -462,6 +460,11 @@ void Craft::setBase(
 
 /**
  * Gets the current status of this Craft.
+ *		STR_READY
+ *		STR_REPAIRS
+ *		STR_REFUELLING
+ *		STR_REARMING
+ *		STR_OUT
  * @return, status string
  */
 std::string Craft::getStatus() const
@@ -506,27 +509,6 @@ std::string Craft::getAltitude() const
 
 	return "STR_VERY_LOW";
 }
-// Craft::getAltitude(), add strings for based xCom craft.
-/*	if (u)
-	{
-		if (u->getAltitude() != "STR_GROUND")
-		{
-			return u->getAltitude();
-		}
-		else return "STR_VERY_LOW";
-	}
-	else if (getStatus() == "STR_READY"
-		|| getStatus() == "STR_REPAIRS"
-		|| getStatus() == "STR_REFUELLING"
-		|| getStatus() == "STR_REARMING")
-	{
-		return "STR_GROUND";
-	}
-	// need to add: if xCom craft && inDogFight, return UFO altitude.
-	else
-	{
-		return "STR_VERY_LOW";
-	} */
 
 /**
  * Sets the destination this Craft is heading to.
@@ -535,9 +517,11 @@ std::string Craft::getAltitude() const
 void Craft::setDestination(Target* const dest)
 {
 	if (_status != "STR_OUT")
+	{
 		_takeOff = 75;
-
-	if (dest == NULL)
+		setSpeed(_crRule->getMaxSpeed() / 10);
+	}
+	else if (dest == NULL)
 		setSpeed(_crRule->getMaxSpeed() / 2);
 	else
 		setSpeed(_crRule->getMaxSpeed());
@@ -665,7 +649,7 @@ int Craft::getFuel() const
  * Sets the amount of fuel currently contained in this craft.
  * @param fuel - amount of fuel
  */
-void Craft::setFuel(const int fuel)
+void Craft::setFuel(int fuel)
 {
 	_fuel = fuel;
 
@@ -682,9 +666,8 @@ void Craft::setFuel(const int fuel)
  */
 int Craft::getFuelPercentage() const
 {
-	return static_cast<int>(
-			std::floor((static_cast<double>(_fuel) / static_cast<double>(_crRule->getMaxFuel()))
-			* 100.));
+	return static_cast<int>(std::floor(
+		   static_cast<double>(_fuel) / static_cast<double>(_crRule->getMaxFuel()) * 100.));
 }
 
 /**
@@ -734,7 +717,7 @@ bool Craft::getLowFuel() const
  * back to its Base.
  * @param low - true if fuel is low
  */
-void Craft::setLowFuel(const bool low)
+void Craft::setLowFuel(bool low)
 {
 	_lowFuel = low;
 }
@@ -752,9 +735,9 @@ bool Craft::getMissionReturn() const
 /**
  * Sets whether this craft has just done a ground mission and is forced to
  * return to its Base.
- * @param mission - true if this craft needs to return to base
+ * @param mission - true if this craft needs to return to base (default true)
  */
-void Craft::setMissionReturn(const bool mission)
+void Craft::setMissionReturn(bool mission)
 {
 	_mission = mission;
 }
@@ -769,7 +752,7 @@ double Craft::getDistanceFromBase() const
 }
 
 /**
- * Gets the amount of fuel this craft uses while it's in the air.
+ * Gets the amount of fuel this craft uses while it's airborne.
  * @return, fuel amount
  */
 int Craft::getFuelConsumption() const
@@ -777,9 +760,7 @@ int Craft::getFuelConsumption() const
 	if (_crRule->getRefuelItem().empty() == false) // Firestorm, Lightning, Avenger, etc.
 		return 1;
 
-//	return static_cast<int>(floor(
-//			static_cast<double>(_speed) / 100.)); // Skyranger, Interceptor.
-	return _speed; // Skyranger, Interceptor.
+	return _speed; // Skyranger, Interceptor, etc.
 }
 
 /**
@@ -796,7 +777,7 @@ int Craft::getFuelLimit() const
  * @param base - pointer to a target Base
  * @return, fuel amount
  */
-int Craft::getFuelLimit(Base* base) const
+int Craft::getFuelLimit(const Base* const base) const
 {
 	double
 		distRads = getDistance(base),
@@ -805,11 +786,8 @@ int Craft::getFuelLimit(Base* base) const
 	if (_dest != NULL)
 		distRads = getDistance(_dest) + _base->getDistance(_dest);
 	else if (_crRule->getRefuelItem().empty() == true)
-		patrol_factor = 2.;	// Elerium-powered Craft do not suffer this;
-							// they use 1 fuel per 10-min regardless of patrol speed:
-							// see getFuelConsumption() above^
-
-	const double speedRads = static_cast<double>(_crRule->getMaxSpeed()) * unitToRads / 6.; // per 10-min.
+		patrol_factor = 2.;	// Elerium-powered Craft do not suffer this; they use 1 fuel per 10-min regardless of patrol speed.
+	const double speedRads = static_cast<double>(_crRule->getMaxSpeed()) * unitToRads / 6.;
 
 	return static_cast<int>(std::ceil(
 		   static_cast<double>(getFuelConsumption()) * distRads * patrol_factor / speedRads));
@@ -828,24 +806,30 @@ void Craft::returnToBase()
  */
 void Craft::think()
 {
-	if (_takeOff == 0)
-		moveTarget();
-	else
+	if (_takeOff != 0)
+	{
 		--_takeOff;
 
-	if (reachedDestination() == true
-		&& _dest == dynamic_cast<Target*>(_base))
+		if (_takeOff == 0)
+			setSpeed(_crRule->getMaxSpeed());
+	}
+	else
 	{
-//		setFlightOrder(0);
-		setDestination(NULL);
-		setSpeed(0);
+		moveTarget();
 
-		_lowFuel = false;
-		_mission = false;
-		_warning = CW_NONE;
-		_takeOff = 0;
+		if (reachedDestination() == true
+			&& _dest == dynamic_cast<Target*>(_base))
+		{
+			setDestination(NULL);
+			setSpeed(0);
 
-		checkup();
+			_lowFuel =
+			_mission = false;
+			_warning = CW_NONE;
+			_takeOff = 0;
+
+			checkup();
+		}
 	}
 }
 
@@ -857,9 +841,6 @@ void Craft::think()
  */
 void Craft::checkup()
 {
-//	_warning = CW_NONE;
-//	_warned = false;
-
 	int
 		cw = 0,
 		loaded = 0;
@@ -881,11 +862,11 @@ void Craft::checkup()
 	}
 
 	if (_damage > 0)
-		_status = "STR_REPAIRS";	// 1st
+		_status = "STR_REPAIRS";	// 1st stage
 	else if (cw > loaded)
-		_status = "STR_REARMING";	// 2nd
+		_status = "STR_REARMING";	// 2nd stage
 	else if (_fuel < _crRule->getMaxFuel())
-		_status = "STR_REFUELLING";	// 3rd
+		_status = "STR_REFUELLING";	// 3rd stage
 	else
 		_status = "STR_READY";		// 4th Ready.
 }
@@ -921,8 +902,7 @@ void Craft::consumeFuel()
 }
 
 /**
- * Repairs the craft's damage every hour while it's docked at the base.
- * kL_note: now every half-hour.
+ * Repairs the craft's damage every half-hour while it's docked at the base.
  */
 void Craft::repair()
 {
@@ -936,12 +916,12 @@ void Craft::repair()
 }
 
 /**
- * Rearms the craft's weapons by adding ammo every hour
- * while it's docked at the base. kL_note: now every half-hour!
+ * Rearms the craft's weapons by adding ammo every half-hour while it's docked
+ * at the base.
  * @param rules - pointer to Ruleset
  * @return, blank string if ArmOk else a string for cantLoad
  */
-std::string Craft::rearm(const Ruleset* rules)
+std::string Craft::rearm(const Ruleset* const rules)
 {
 	std::string
 		ret,
@@ -1011,7 +991,7 @@ std::string Craft::rearm(const Ruleset* rules)
 }
 
 /**
- * Refuels the craft every 30 minutes while docked at its Base.
+ * Refuels the craft every half-hour while docked at its Base.
  */
 void Craft::refuel()
 {
@@ -1030,24 +1010,25 @@ void Craft::refuel()
  */
 bool Craft::isInBattlescape() const
 {
-	return _inTactical;
+	return _tactical;
 }
 
 /**
  * Sets this Craft's battlescape status.
- * @param inbattle - true if Craft is on the battlescape
+ * @param tactical - true if Craft is on the battlescape (default true)
  */
-void Craft::setInBattlescape(const bool battle)
+void Craft::setInBattlescape(bool tactical)
 {
-	if (battle == true)
+	if (tactical == true)
 		setSpeed(0);
 
-	_inTactical = battle;
+	_tactical = tactical;
 }
 
 /**
  * Gets the craft destroyed status.
- * If the amount of damage the craft take is more than its health it will be destroyed.
+ * @note If the amount of damage the craft takes is more than its health it will
+ * be destroyed.
  * @return, true if the craft is destroyed
  */
 bool Craft::isDestroyed() const

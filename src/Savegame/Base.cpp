@@ -73,7 +73,7 @@ Base::Base(const Ruleset* const rules)
 		_rules(rules),
 		_scientists(0),
 		_engineers(0),
-		_inTactical(false),
+		_tactical(false),
 		_exposed(false),
 		_cashIncome(0),
 		_cashSpent(0),
@@ -258,7 +258,7 @@ void Base::load(
 	}
 
 	_items->load(node["items"]);
-	// Some old saves have bad items, better get rid of them to avoid further bugs
+	// old saves might have bad items, better get rid of them to avoid bugs
 	for (std::map<std::string, int>::const_iterator
 			i = _items->getContents()->begin();
 			i != _items->getContents()->end();
@@ -275,9 +275,6 @@ void Base::load(
 			++i;
 	}
 
-	_scientists	= node["scientists"].as<int>(_scientists);
-	_engineers	= node["engineers"]	.as<int>(_engineers);
-	_inTactical	= node["inTactical"].as<bool>(_inTactical);
 	_cashIncome	= node["cashIncome"].as<int>(_cashIncome);
 	_cashSpent	= node["cashSpent"]	.as<int>(_cashSpent);
 
@@ -331,7 +328,10 @@ void Base::load(
 			_engineers += (*i)["assigned"].as<int>(0);
 	}
 
-	_exposed = node["exposed"].as<bool>(_exposed);
+	_tactical	= node["tactical"]	.as<bool>(_tactical);
+	_exposed	= node["exposed"]	.as<bool>(_exposed);
+	_scientists	= node["scientists"].as<int>(_scientists);
+	_engineers	= node["engineers"]	.as<int>(_engineers);
 }
 
 /**
@@ -369,9 +369,6 @@ YAML::Node Base::save() const
 	}
 
 	node["items"]		= _items->save();
-	node["scientists"]	= _scientists;
-	node["engineers"]	= _engineers;
-	node["inTactical"]	= _inTactical;
 	node["cashIncome"]	= _cashIncome;
 	node["cashSpent"]	= _cashSpent;
 
@@ -399,7 +396,10 @@ YAML::Node Base::save() const
 		node["productions"].push_back((*i)->save());
 	}
 
-	node["exposed"] = _exposed;
+	if (_tactical == true)	node["tactical"]	= _tactical;
+	if (_exposed == true)	node["exposed"]		= _exposed;
+	if (_scientists != 0)	node["scientists"]	= _scientists;
+	if (_engineers != 0)	node["engineers"]	= _engineers;
 
 	return node;
 }
@@ -1987,16 +1987,16 @@ int Base::getInterrogatedAliens() const
  */
 bool Base::isInBattlescape() const
 {
-	return _inTactical;
+	return _tactical;
 }
 
 /**
  * Changes this Base's battlescape status.
- * @param inbattle - true if in the battlescape
+ * @param tactical - true if in the battlescape (default true)
  */
-void Base::setInBattlescape(bool inTactical)
+void Base::setInBattlescape(bool tactical)
 {
-	_inTactical = inTactical;
+	_tactical = tactical;
 }
 
 /**

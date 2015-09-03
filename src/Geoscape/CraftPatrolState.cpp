@@ -239,7 +239,9 @@ void CraftPatrolState::btnRedirectClick(Action*)
  */
 void CraftPatrolState::transposeWindow() // private.
 {
-	_window->setBackground(NULL);
+//	_window->setBackground(NULL);
+	_window->setVisible(false);
+
 	_txtDestination->setVisible(false);
 	_btnCenter->setText(tr("STR_PAUSE"));
 

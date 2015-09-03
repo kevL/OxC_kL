@@ -160,7 +160,7 @@ void BattlescapeGenerator::init() // private.
 void BattlescapeGenerator::setCraft(Craft* craft)
 {
 	_craft = craft;
-	_craft->setInBattlescape(true);
+	_craft->setInBattlescape();
 }
 
 /**
@@ -170,7 +170,7 @@ void BattlescapeGenerator::setCraft(Craft* craft)
 void BattlescapeGenerator::setUfo(Ufo* ufo)
 {
 	_ufo = ufo;
-	_ufo->setInBattlescape(true);
+	_ufo->setInBattlescape();
 }
 
 /**
@@ -180,7 +180,7 @@ void BattlescapeGenerator::setUfo(Ufo* ufo)
 void BattlescapeGenerator::setBase(Base* base)
 {
 	_base = base;
-	_base->setInBattlescape(true);
+	_base->setInBattlescape();
 }
 
 /**
@@ -190,7 +190,7 @@ void BattlescapeGenerator::setBase(Base* base)
 void BattlescapeGenerator::setMissionSite(MissionSite* mission)
 {
 	_mission = mission;
-	_mission->setInBattlescape(true);
+	_mission->setInBattlescape();
 }
 
 /**
@@ -200,7 +200,7 @@ void BattlescapeGenerator::setMissionSite(MissionSite* mission)
 void BattlescapeGenerator::setAlienBase(AlienBase* base)
 {
 	_alienBase = base;
-	_alienBase->setInBattlescape(true);
+	_alienBase->setInBattlescape();
 }
 
 /**
@@ -220,8 +220,10 @@ void BattlescapeGenerator::setTacTerrain(RuleTerrain* terrain)
  */
 void BattlescapeGenerator::setTacShade(int shade)
 {
-	if (shade > 15) shade = 15;
-	if (shade < 0) shade = 0;
+	if (shade > 15)
+		shade = 15;
+	else if (shade < 0)
+		shade = 0;
 
 	_shade = shade;
 }

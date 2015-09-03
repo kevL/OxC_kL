@@ -38,7 +38,6 @@ class Target
 {
 
 protected:
-//	int _depth;
 	double
 		_lat,
 		_lon;

@@ -61,7 +61,7 @@ Ufo::Ufo(const RuleUfo* const rules)
 		_altitude("STR_HIGH_UC"),
 		_status(FLYING),
 		_secondsLeft(0),
-		_inTactical(false),
+		_tactical(false),
 		_mission(NULL),
 		_trajectory(NULL),
 		_trajectoryPoint(0),
@@ -159,7 +159,7 @@ void Ufo::load(
 	_detected		= node["detected"]		.as<bool>(_detected);
 	_hyperDetected	= node["hyperDetected"]	.as<bool>(_hyperDetected);
 	_secondsLeft	= node["secondsLeft"]	.as<int>(_secondsLeft);
-	_inTactical		= node["inTactical"]	.as<bool>(_inTactical);
+	_tactical		= node["tactical"]		.as<bool>(_tactical);
 	_terrain		= node["terrain"]		.as<std::string>(_terrain);
 
 	double
@@ -211,7 +211,7 @@ void Ufo::load(
 	_fireCountdown		= node["fireCountdown"]		.as<int>(_fireCountdown);
 	_escapeCountdown	= node["escapeCountdown"]	.as<int>(_escapeCountdown);
 
-	if (_inTactical == true)
+	if (_tactical == true)
 		setSpeed(0);
 }
 
@@ -226,27 +226,20 @@ YAML::Node Ufo::save(bool skirmish) const
 	node["type"]		= _rules->getType();
 	node["id"]			= _id;
 
-	if (_terrain.empty() == false)
-		node["terrain"]	= _terrain;
+	if (_terrain.empty() == false) node["terrain"] = _terrain;
 
-	if (_crashId != 0)
-		node["crashId"]		= _crashId;
-	else if (_landId != 0)
-		node["landId"]	= _landId;
+	if (_crashId != 0)		node["crashId"]	= _crashId;
+	else if (_landId != 0)	node["landId"]	= _landId;
 
-	node["damage"]		= _damage;
 	node["altitude"]	= _altitude;
 	node["direction"]	= _direction;
-	node["status"]		= (int)_status;
+	node["status"]		= static_cast<int>(_status);
 
-	if (_detected == true)
-		node["detected"]		= _detected;
-	if (_hyperDetected == true)
-		node["hyperDetected"]	= _hyperDetected;
-	if (_secondsLeft != 0)
-		node["secondsLeft"]		= _secondsLeft;
-	if (_inTactical == true)
-		node["inTactical"]		= _inTactical;
+	if (_damage != 0)			node["damage"]			= _damage;
+	if (_detected == true)		node["detected"]		= _detected;
+	if (_hyperDetected == true)	node["hyperDetected"]	= _hyperDetected;
+	if (_secondsLeft != 0)		node["secondsLeft"]		= _secondsLeft;
+	if (_tactical == true)		node["tactical"]		= _tactical;
 
 	if (skirmish == false)
 	{
@@ -255,8 +248,8 @@ YAML::Node Ufo::save(bool skirmish) const
 		node["trajectoryPoint"]	= _trajectoryPoint;
 	}
 
-	node["fireCountdown"]	= _fireCountdown;
-	node["escapeCountdown"]	= _escapeCountdown;
+	if (_fireCountdown != 0)	node["fireCountdown"]	= _fireCountdown;
+	if (_escapeCountdown != 0)	node["escapeCountdown"]	= _escapeCountdown;
 
 	return node;
 }
@@ -509,8 +502,6 @@ bool Ufo::isDestroyed() const
 void Ufo::calculateSpeed()
 {
 	MovingTarget::calculateSpeed();
-	//Log(LOG_INFO) << "Ufo::calculateSpeed(), _speedLon = " << _speedLon;
-	//Log(LOG_INFO) << "Ufo::calculateSpeed(), _speedLat = " << _speedLat;
 
 	const double
 		x = _speedLon,
@@ -536,18 +527,15 @@ void Ufo::calculateSpeed()
 				_direction = "STR_WEST";
 		}
 
-		//Log(LOG_INFO) << ". . _dir = " << _direction;
 		return;
 	}
 
 	double theta = std::atan2(y, x); // theta is radians.
-	//Log(LOG_INFO) << ". . theta(rad) = " << theta;
 
 	// Convert radians to degrees so i don't go bonkers;
 	// ie. KILL IT WITH FIRE!!1@!
 	// note that this is between +/- 180 deg.
 	theta = theta * 180. / M_PI;
-	//Log(LOG_INFO) << ". . theta(deg) = " << theta;
 
 	if (theta > 157.5 || theta < -157.5)
 		_direction = "STR_WEST";
@@ -565,8 +553,6 @@ void Ufo::calculateSpeed()
 		_direction = "STR_SOUTH_EAST";
 	else
 		_direction = "STR_EAST";
-
-	//Log(LOG_INFO) << ". . _dir = " << _direction;
 }
 
 /**
@@ -579,7 +565,7 @@ void Ufo::think()
 		case FLYING:
 			moveTarget();
 
-			if (reachedDestination() == true) // Prevent further movement.
+			if (reachedDestination() == true)
 				setSpeed(0);
 		break;
 
@@ -591,22 +577,19 @@ void Ufo::think()
 		case CRASHED:
 			if (_detected == false)
 				_detected = true;
-
-//		case DESTROYED: // Do nothing
-//		break;
 	}
 }
 
 /**
  * Sets this Ufo's battlescape status.
- * @param inTactical - true if in battlescape
+ * @param tactical - true if in battlescape (default true)
  */
-void Ufo::setInBattlescape(const bool inTactical)
+void Ufo::setInBattlescape(bool tactical)
 {
-	if (inTactical == true)
+	if (tactical == true)
 		setSpeed(0);
 
-	_inTactical = inTactical;
+	_tactical = tactical;
 }
 
 /**
@@ -615,7 +598,7 @@ void Ufo::setInBattlescape(const bool inTactical)
  */
 bool Ufo::isInBattlescape() const
 {
-	return _inTactical;
+	return _tactical;
 }
 
 /**

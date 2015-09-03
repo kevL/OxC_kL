@@ -37,7 +37,6 @@ Target::Target()
 	:
 		_lon(0.),
 		_lat(0.)
-//		_depth(0)
 {}
 
 /**
@@ -64,7 +63,6 @@ void Target::load(const YAML::Node& node) // virtual.
 {
 	_lon	= node["lon"]	.as<double>(_lon);
 	_lat	= node["lat"]	.as<double>(_lat);
-//	_depth	= node["depth"]	.as<int>(_depth);
 }
 
 /**
@@ -77,8 +75,6 @@ YAML::Node Target::save() const // virtual.
 
 	node["lon"] = serializeDouble(_lon);
 	node["lat"] = serializeDouble(_lat);
-//	if (_depth != 0)
-//		node["depth"] = _depth;
 
 	return node;
 }

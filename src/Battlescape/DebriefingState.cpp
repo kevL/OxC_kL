@@ -96,7 +96,7 @@ DebriefingState::DebriefingState()
 		_craft(NULL),
 		_noContainment(false),
 		_manageContainment(false),
-		_destroyXCOMBase(false),
+		_destroyXComBase(false),
 		_aliensControlled(0),
 		_aliensKilled(0),
 		_aliensStunned(0),
@@ -289,7 +289,7 @@ DebriefingState::DebriefingState()
 
 	if (_region != NULL)
 	{
-		if (_destroyXCOMBase == true)
+		if (_destroyXComBase == true)
 		{
 			_region->addActivityAlien((_diff + 1) * 235);
 			_region->recentActivityAlien();
@@ -303,7 +303,7 @@ DebriefingState::DebriefingState()
 
 	if (_country != NULL)
 	{
-		if (_destroyXCOMBase == true)
+		if (_destroyXComBase == true)
 		{
 			_country->addActivityAlien((_diff + 1) * 235);
 			_country->recentActivityAlien();
@@ -538,7 +538,7 @@ void DebriefingState::btnOkClick(Action*)
 		_game->setState(new MainMenuState());
 	else
 	{
-		if (_destroyXCOMBase == false)
+		if (_destroyXComBase == false)
 		{
 			bool playAwardMusic = false;
 
@@ -779,209 +779,14 @@ void DebriefingState::prepareDebriefing() // private.
 	}
 
 
+	// let's see what happened with units
 	int
 		soldierExit = 0, // if this stays 0 the craft is lost ...
 		soldierLive = 0, // if this stays 0 the craft is lost ...
 		soldierDead = 0, // Soldier Diary.
 		soldierOut = 0;
 
-	for (std::vector<Base*>::const_iterator
-			i = _gameSave->getBases()->begin();
-			i != _gameSave->getBases()->end();
-			++i)
-	{
-		for (std::vector<Craft*>::const_iterator // in case there is a craft - check which craft it is about
-				j = (*i)->getCrafts()->begin();
-				j != (*i)->getCrafts()->end();
-				++j)
-		{
-			if ((*j)->isInBattlescape() == true)
-			{
-				if (_skirmish == false)
-					_missionCost = (*i)->craftExpense(*j);
-
-				const double
-					craftLon = (*j)->getLongitude(),
-					craftLat = (*j)->getLatitude();
-
-				for (std::vector<Region*>::const_iterator
-						k = _gameSave->getRegions()->begin();
-						k != _gameSave->getRegions()->end();
-						++k)
-				{
-					if ((*k)->getRules()->insideRegion(
-													craftLon,
-													craftLat) == true)
-					{
-						_region = *k;
-						_missionStatistics->region = _region->getRules()->getType();
-						break;
-					}
-				}
-
-				for (std::vector<Country*>::const_iterator
-						k = _gameSave->getCountries()->begin();
-						k != _gameSave->getCountries()->end();
-						++k)
-				{
-					if ((*k)->getRules()->insideCountry(
-													craftLon,
-													craftLat) == true)
-					{
-						_country = *k;
-						_missionStatistics->country = _country->getRules()->getType();
-						break;
-					}
-				}
-
-				_base = *i;
-				_craft = *j;
-				ptrCraft = j;
-
-				_craft->returnToBase();
-				_craft->setMissionReturn(true);
-				_craft->setInBattlescape(false);
-			}
-			else if ((*j)->getDestination() != NULL)
-			{
-				const Ufo* const ufo = dynamic_cast<Ufo*>((*j)->getDestination());
-				if (ufo != NULL
-					&& ufo->isInBattlescape() == true)
-				{
-					(*j)->returnToBase();
-				}
-
-				const MissionSite* const site = dynamic_cast<MissionSite*>((*j)->getDestination());
-				if (site != NULL
-					&& site->isInBattlescape() == true)
-				{
-					(*j)->returnToBase();
-				}
-			}
-		}
-
-		if ((*i)->isInBattlescape() == true) // in case this DON'T have a craft (ie. baseDefense)
-		{
-			_base = *i;
-
-			const double
-				baseLon = _base->getLongitude(),
-				baseLat = _base->getLatitude();
-
-			for (std::vector<Region*>::const_iterator
-					k = _gameSave->getRegions()->begin();
-					k != _gameSave->getRegions()->end();
-					++k)
-			{
-				if ((*k)->getRules()->insideRegion(
-												baseLon,
-												baseLat) == true)
-				{
-					_region = *k;
-					_missionStatistics->region = _region->getRules()->getType();
-					break;
-				}
-			}
-
-			for (std::vector<Country*>::const_iterator
-					k = _gameSave->getCountries()->begin();
-					k != _gameSave->getCountries()->end();
-					++k)
-			{
-				if ((*k)->getRules()->insideCountry(
-												baseLon,
-												baseLat) == true)
-				{
-					_country = *k;
-					_missionStatistics->country = _country->getRules()->getType();
-					break;
-				}
-			}
-
-			if (aborted == true)
-				_destroyXCOMBase = true;
-			else
-			{
-				_base->setInBattlescape(false);
-				_base->cleanupDefenses(false);
-
-				bool facDestroyed = false; // not in stockcode
-				for (std::vector<BaseFacility*>::const_iterator
-						k = _base->getFacilities()->begin();
-						k != _base->getFacilities()->end();
-						)
-				{
-					if (battleSave->getModuleMap()[(*k)->getX()]
-												  [(*k)->getY()].second == 0) // this facility was demolished
-					{
-						facDestroyed = true; // not in stockcode
-						_base->destroyFacility(k);
-					}
-					else
-						++k;
-				}
-
-				if (facDestroyed == true) // kL_add <-
-					_base->destroyDisconnectedFacilities(); // this may cause the base to become disjointed; destroy the disconnected parts.
-			}
-		}
-	}
-
-
-	bool found = false;
-	for (std::vector<Ufo*>::const_iterator // First - search for UFO.
-			i = _gameSave->getUfos()->begin();
-			i != _gameSave->getUfos()->end();
-			++i)
-	{
-		if ((*i)->isInBattlescape() == true)
-		{
-			found = true;
-			(*i)->setInBattlescape(false);
-
-			_txtRecovery->setText(tr("STR_UFO_RECOVERY"));
-			_missionStatistics->ufo = (*i)->getRules()->getType();
-
-			if (aborted == true
-				&& (*i)->getStatus() == Ufo::LANDED)
-			{
-				(*i)->setSecondsLeft(15); // UFO lifts off ...
-			}
-			else if (aborted == false) // successful mission ( kL: failed mission leaves UFO still crashed! )
-//				|| (*i)->getStatus() == Ufo::CRASHED) // UFO can't fly
-			{
-				delete *i;
-				_gameSave->getUfos()->erase(i); // UFO crash/landing site disappears
-			}
-
-			break;
-		}
-	}
-
-	if (found == false)
-//		&& (deployRule == NULL
-//			|| deployRule->getNextStage().empty() == true))
-	{
-		for (std::vector<MissionSite*>::const_iterator // Second - search for MissionSite.
-				i = _gameSave->getMissionSites()->begin();
-				i != _gameSave->getMissionSites()->end();
-				++i)
-		{
-			if ((*i)->isInBattlescape() == true)
-			{
-				found = true;
-
-				delete *i;
-				_gameSave->getMissionSites()->erase(i); // Mission Site disappears even if aborted
-
-				break;
-			}
-		}
-	}
-
-
-	// lets see what happens with units;
-	// evaluate how many surviving xCom units there are and if they are
+	// Evaluate how many surviving xCom units there are and if they are
 	// unconscious and how many have died - for the Awards Ceremony.
 	for (std::vector<BattleUnit*>::const_iterator
 			i = battleSave->getUnits()->begin();
@@ -1000,7 +805,7 @@ void DebriefingState::prepareDebriefing() // private.
 
 				++soldierLive;
 			}
-			else // -> STATUS_DEAD
+			else // STATUS_DEAD
 			{
 				++soldierDead;
 
@@ -1041,7 +846,7 @@ void DebriefingState::prepareDebriefing() // private.
 			if ((*i)->getGeoscapeSoldier() != NULL
 				&& (*i)->getStatus() != STATUS_DEAD)
 			{
-				// if only one soldier survived AND none have died, means only one soldier went on the mission...
+				// if only one soldier survived AND none have died, only one soldier went on the mission
 				if (soldierDead == 0
 					&& _aliensControlled == 0
 					&& _aliensKilled + _aliensStunned > 1 + _diff
@@ -1050,7 +855,7 @@ void DebriefingState::prepareDebriefing() // private.
 					(*i)->getStatistics()->ironMan = true;
 					break;
 				}
-				// if only one soldier survived, give him a medal! (unless he killed all the others...)
+				// if only one soldier survived give him a medal! (unless he killed all the others ...)
 				else if ((*i)->getStatistics()->hasFriendlyFired() == false
 					&& soldierDead > 0)
 				{
@@ -1062,9 +867,178 @@ void DebriefingState::prepareDebriefing() // private.
 	}
 
 
-	if (found == false) // alien base disappears if not aborted
-//		&& (deployRule == NULL
-//			|| deployRule->getNextStage().empty() == true))
+	// Determine xCom craft or base, and get its coordinates.
+	double
+		lon = 0., // avoid vc++ linker warnings.
+		lat = 0.; // avoid vc++ linker warnings.
+
+	for (std::vector<Base*>::const_iterator
+			i = _gameSave->getBases()->begin();
+			i != _gameSave->getBases()->end();
+			++i)
+	{
+		for (std::vector<Craft*>::const_iterator // in case there is a craft - check which craft it is about
+				j = (*i)->getCrafts()->begin();
+				j != (*i)->getCrafts()->end();
+				++j)
+		{
+			if ((*j)->isInBattlescape() == true)
+			{
+				if (_skirmish == false)
+					_missionCost = (*i)->craftExpense(*j);
+
+				lon = (*j)->getLongitude();
+				lat = (*j)->getLatitude();
+
+				_base = *i;
+				_craft = *j;
+				ptrCraft = j;
+
+				_craft->returnToBase();
+				_craft->setMissionReturn();
+				_craft->setInBattlescape(false);
+			}
+			else if ((*j)->getDestination() != NULL)
+			{
+				if (soldierLive != 0
+					&& aborted == false)
+				{
+					const Ufo* const ufo = dynamic_cast<Ufo*>((*j)->getDestination());
+					if (ufo != NULL
+						&& ufo->isInBattlescape() == true)
+					{
+						(*j)->returnToBase();
+					}
+				}
+
+				const MissionSite* const site = dynamic_cast<MissionSite*>((*j)->getDestination());
+				if (site != NULL
+					&& site->isInBattlescape() == true)
+				{
+					(*j)->returnToBase();
+				}
+			}
+		}
+
+		if ((*i)->isInBattlescape() == true) // in case this DON'T have a craft (ie. baseDefense)
+		{
+			_base = *i;
+
+			lon = _base->getLongitude();
+			lat = _base->getLatitude();
+
+			if (aborted == true)
+				_destroyXComBase = true;
+			else
+			{
+				_base->setInBattlescape(false);
+				_base->cleanupDefenses(false);
+
+				bool facDestroyed = false; // not in stockcode
+				for (std::vector<BaseFacility*>::const_iterator
+						j = _base->getFacilities()->begin();
+						j != _base->getFacilities()->end();
+						)
+				{
+					if (battleSave->getModuleMap()[(*j)->getX()]
+												  [(*j)->getY()].second == 0) // this facility was demolished
+					{
+						facDestroyed = true; // not in stockcode
+						_base->destroyFacility(j);
+					}
+					else
+						++j;
+				}
+
+				if (facDestroyed == true) // kL_add <-
+					_base->destroyDisconnectedFacilities(); // this may cause the base to become disjointed; destroy the disconnected parts.
+			}
+		}
+	}
+
+	for (std::vector<Region*>::const_iterator
+			i = _gameSave->getRegions()->begin();
+			i != _gameSave->getRegions()->end();
+			++i)
+	{
+		if ((*i)->getRules()->insideRegion(
+										lon,
+										lat) == true)
+		{
+			_region = *i;
+			_missionStatistics->region = _region->getRules()->getType();
+			break;
+		}
+	}
+
+	for (std::vector<Country*>::const_iterator
+			i = _gameSave->getCountries()->begin();
+			i != _gameSave->getCountries()->end();
+			++i)
+	{
+		if ((*i)->getRules()->insideCountry(
+										lon,
+										lat) == true)
+		{
+			_country = *i;
+			_missionStatistics->country = _country->getRules()->getType();
+			break;
+		}
+	}
+
+
+	// Determine aLien tactical mission.
+	bool found = false;
+	for (std::vector<Ufo*>::const_iterator // First - search for UFO.
+			i = _gameSave->getUfos()->begin();
+			i != _gameSave->getUfos()->end();
+			++i)
+	{
+		if ((*i)->isInBattlescape() == true)
+		{
+			found = true;
+
+			_txtRecovery->setText(tr("STR_UFO_RECOVERY"));
+			_missionStatistics->ufo = (*i)->getRules()->getType();
+
+			if (soldierLive != 0
+				&& aborted == false)
+			{
+				delete *i;
+				_gameSave->getUfos()->erase(i);
+			}
+			else
+			{
+				(*i)->setInBattlescape(false);
+
+				if ((*i)->getStatus() == Ufo::LANDED)
+					(*i)->setSecondsLeft(15);
+			}
+
+			break;
+		}
+	}
+
+	if (found == false)
+	{
+		for (std::vector<MissionSite*>::const_iterator // Second - search for MissionSite.
+				i = _gameSave->getMissionSites()->begin();
+				i != _gameSave->getMissionSites()->end();
+				++i)
+		{
+			if ((*i)->isInBattlescape() == true)
+			{
+				found = true;
+
+				delete *i;
+				_gameSave->getMissionSites()->erase(i);
+
+				break;
+			}
+		}
+	}
+
+	if (found == false)
 	{
 		for (std::vector<AlienBase*>::const_iterator // Third - search for AlienBase.
 				i = _gameSave->getAlienBases()->begin();
@@ -1077,16 +1051,10 @@ void DebriefingState::prepareDebriefing() // private.
 
 				missionAccomplished = true;
 
-/*				if (deployRule != NULL
-					&& deployRule->getNextStage().empty() == false)
-				{
-					missionAccomplished = false;
-				} else */
 				if (aborted == true
 					|| soldierLive == 0)
 				{
-					if (battleSave->allObjectivesDestroyed() == false)
-						missionAccomplished = false;
+					missionAccomplished = battleSave->allObjectivesDestroyed();
 				}
 
 				if (missionAccomplished == true)
@@ -1100,8 +1068,7 @@ void DebriefingState::prepareDebriefing() // private.
 							objectiveCompleteText,
 							objectiveCompleteScore);
 
-					// Take care to remove supply missions for the aLien base.
-					std::for_each(
+					std::for_each( // Take care to remove supply missions for the aLien base.
 							_gameSave->getAlienMissions().begin(),
 							_gameSave->getAlienMissions().end(),
 							ClearAlienBase(*i));
@@ -1112,7 +1079,7 @@ void DebriefingState::prepareDebriefing() // private.
 							++j)
 					{
 						Craft* const craft = dynamic_cast<Craft*>(*j);
-						if (craft != NULL) // safety.
+						if (craft != NULL)
 							craft->returnToBase();
 					}
 
@@ -1535,7 +1502,7 @@ void DebriefingState::prepareDebriefing() // private.
 		{
 			case TCT_BASEDEFENSE:
 				tacResult = "STR_BASE_IS_LOST";
-				_destroyXCOMBase = true;
+				_destroyXComBase = true;
 			break;
 
 			case TCT_MISSIONSITE:
@@ -1559,7 +1526,7 @@ void DebriefingState::prepareDebriefing() // private.
 				objectiveFailedScore);
 
 		if (soldierLive > 0
-			&& _destroyXCOMBase == false)
+			&& _destroyXComBase == false)
 		{
 			for (size_t // recover items from the ground
 					i = 0;
@@ -1633,7 +1600,7 @@ void DebriefingState::prepareDebriefing() // private.
 
 	if (tacType == TCT_BASEDEFENSE)
 	{
-		if (_destroyXCOMBase == false)
+		if (_destroyXComBase == false)
 		{
 			// reequip the Base's crafts after a base defense mission
 			for (std::vector<Craft*>::const_iterator
