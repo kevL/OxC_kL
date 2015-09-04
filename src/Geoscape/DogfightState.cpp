@@ -779,7 +779,7 @@ void DogfightState::updateDogfight()
 			int escapeTicks = _ufo->getEscapeCountdown();
 			if (escapeTicks > 0)
 			{
-				_geo->drawUfoIndicators();
+				_geo->drawUfoBlobs();
 
 				if (_dist < DST_STANDOFF)
 					_ufo->setEscapeCountdown(--escapeTicks);

@@ -195,7 +195,7 @@ BattlescapeState::BattlescapeState()
 	_btnReserveKneel	= new BattlescapeButton(10, 23, x + 96, y + 33);
 	_btnZeroTUs			= new BattlescapeButton(10, 23, x + 49, y + 33); */
 	_btnStats			= new InteractiveSurface(164, 23, x + 107, y + 33);
-	_btnZeroTUs			= new InteractiveSurface( 57, 23, x +  49, y + 33);
+	_btnLogo			= new InteractiveSurface( 57, 23, x +  49, y + 33);
 
 	_btnLeftHandItem	= new InteractiveSurface(32, 48, x +   8, y + 5);
 	_btnRightHandItem	= new InteractiveSurface(32, 48, x + 280, y + 5);
@@ -383,7 +383,7 @@ BattlescapeState::BattlescapeState()
 	add(_btnReserveAimed,	"buttonReserveAimed",	"battlescape", _icons);
 	add(_btnReserveAuto,	"buttonReserveAuto",	"battlescape", _icons);
 	add(_btnReserveKneel,	"buttonReserveKneel",	"battlescape", _icons); */
-	add(_btnZeroTUs,		"buttonZeroTUs",		"battlescape", _icons);
+	add(_btnLogo,		"buttonZeroTUs",		"battlescape", _icons);
 	add(_btnLeftHandItem,	"buttonLeftHand",		"battlescape", _icons);
 	add(_btnRightHandItem,	"buttonRightHand",		"battlescape", _icons);
 	add(_numAmmoLeft,		"numAmmoLeft",			"battlescape", _icons);
@@ -877,15 +877,15 @@ BattlescapeState::BattlescapeState()
 	_btnReserveKneel->onMouseOut((ActionHandler)& BattlescapeState::txtTooltipOut);
 	_btnReserveKneel->allowToggleInversion(); */
 
-	_btnZeroTUs->onMouseClick(
-					(ActionHandler)& BattlescapeState::btnUfoPaediaClick,
+	_btnLogo->onMouseClick(
+					(ActionHandler)& BattlescapeState::btnZeroTuClick,
 					SDL_BUTTON_LEFT);
-	_btnZeroTUs->onMouseClick(
-					(ActionHandler)& BattlescapeState::btnZeroTUsClick,
-					SDL_BUTTON_RIGHT);
-	_btnZeroTUs->onKeyboardPress(
-					(ActionHandler)& BattlescapeState::btnZeroTUsClick,
+	_btnLogo->onKeyboardPress(
+					(ActionHandler)& BattlescapeState::btnZeroTuClick,
 					Options::keyBattleZeroTUs);
+	_btnLogo->onMouseClick(
+					(ActionHandler)& BattlescapeState::btnUfoPaediaClick,
+					SDL_BUTTON_RIGHT);
 //	_btnZeroTUs->setTooltip("STR_EXPEND_ALL_TIME_UNITS");
 //	_btnZeroTUs->onMouseIn((ActionHandler)& BattlescapeState::txtTooltipIn);
 //	_btnZeroTUs->onMouseOut((ActionHandler)& BattlescapeState::txtTooltipOut);
@@ -2512,7 +2512,7 @@ void BattlescapeState::btnReloadClick(Action*)
  * Removes all time units.
  * @param action - pointer to an Action
  */
-void BattlescapeState::btnZeroTUsClick(Action* action)
+void BattlescapeState::btnZeroTuClick(Action* action)
 {
 	if (allowButtons() == true)
 	{

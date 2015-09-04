@@ -421,8 +421,8 @@ GeoscapeState::GeoscapeState()
 	_ufoDetected = new Text(17, 17, _sideBottom->getX() + 6, _sideBottom->getY() + 4);
 
 	std::fill_n(
-			_visibleUfo,
-			UFO_HOTICONS,
+			_hostileUfos,
+			UFO_HOTBLOBS,
 			static_cast<Ufo*>(NULL));
 
 	int
@@ -431,7 +431,7 @@ GeoscapeState::GeoscapeState()
 		offset_y;
 	for (size_t
 			i = 0;
-			i != UFO_HOTICONS;
+			i != UFO_HOTBLOBS;
 			++i)
 	{
 		offset_x = ((i % 4) * 13); // 4 UFOs per row on top sidebar
@@ -439,10 +439,10 @@ GeoscapeState::GeoscapeState()
 		x = _sideTop->getX() + offset_x + 3;
 		y = _sideTop->getY() + height - offset_y - 16;
 
-		_isfVisibleUfo[i] = new InteractiveSurface(
+		_isfUfoBlobs[i] = new InteractiveSurface(
 												13,13,
 												x,y);
-		_numVisibleUfo[i] = new NumberText(
+		_numUfoBlobs[i] = new NumberText(
 										11,5,
 										x + 2, y + 8);
 	}
@@ -508,23 +508,23 @@ GeoscapeState::GeoscapeState()
 
 	for (size_t
 			i = 0;
-			i != UFO_HOTICONS;
+			i != UFO_HOTBLOBS;
 			++i)
 	{
-		add(_isfVisibleUfo[i]);
-		_isfVisibleUfo[i]->setVisible(false);
-		_isfVisibleUfo[i]->onMousePress(
-						(ActionHandler)& GeoscapeState::btnVisibleUfoPress,
+		add(_isfUfoBlobs[i]);
+		_isfUfoBlobs[i]->setVisible(false);
+		_isfUfoBlobs[i]->onMousePress(
+						(ActionHandler)& GeoscapeState::btnUfoBlobPress,
 						SDL_BUTTON_LEFT);
 
-		add(_numVisibleUfo[i]);
-		_numVisibleUfo[i]->setVisible(false);
-		_numVisibleUfo[i]->setColor(11); // dk.yellow
+		add(_numUfoBlobs[i]);
+		_numUfoBlobs[i]->setVisible(false);
+		_numUfoBlobs[i]->setColor(11); // dk.yellow
 
-//		_isfVisibleUfo[i]->onKeyboardPress(
-//						(ActionHandler)& GeoscapeState::btnVisibleUfoPress,
+//		_isfUfoBlobs[i]->onKeyboardPress(
+//						(ActionHandler)& GeoscapeState::btnUfoBlobPress,
 //						buttons[i]);
-//		_numVisibleUfo[i]->setValue(static_cast<unsigned>(i) + 1);
+//		_numUfoBlobs[i]->setValue(static_cast<unsigned>(i) + 1);
 	}
 
 	add(_isfTime);
@@ -692,10 +692,15 @@ GeoscapeState::GeoscapeState()
 
 
 	_isfTime->copy(geobord);
-	_isfTime->onMousePress((ActionHandler)& GeoscapeState::btnPausePress);
-//	_isfTime->onKeyboardPress(
-//					(ActionHandler)& GeoscapeState::btnPausePress,
-//					Options::key___); // <- check if spacebar is ok
+	_isfTime->onMouseClick(
+					(ActionHandler)& GeoscapeState::btnPauseClick,
+					SDL_BUTTON_LEFT);
+	_isfTime->onMouseClick(
+					(ActionHandler)& GeoscapeState::btnPauseClick,
+					SDL_BUTTON_RIGHT);
+	_isfTime->onKeyboardPress(
+					(ActionHandler)& GeoscapeState::btnPauseClick,
+					SDLK_SPACE);
 
 	_btn5Secs->copy(geobord);
 	_btn5Secs->setGroup(&_timeComp);
@@ -1105,8 +1110,8 @@ void GeoscapeState::think()
 		&& _game->getSavedGame()->getDebugArgDone() == true // ie. do not write info until Globe actually sets it.
 		&& _debug.compare(0,5, "DEBUG") == 0)
 	{
-		const std::string debugStr = _debug + _game->getSavedGame()->getDebugArg();
-		_txtDebug->setText(Language::cpToWstr(debugStr));
+		const std::string stDebug = _debug + _game->getSavedGame()->getDebugArg();
+		_txtDebug->setText(Language::cpToWstr(stDebug));
 	}
 
 	if (_popups.empty() == true
@@ -1144,16 +1149,16 @@ void GeoscapeState::think()
 /**
  * Draws the UFO indicators for known UFOs.
  */
-void GeoscapeState::drawUfoIndicators()
+void GeoscapeState::drawUfoBlobs()
 {
 	for (size_t
 			i = 0;
-			i != UFO_HOTICONS;
+			i != UFO_HOTBLOBS;
 			++i)
 	{
-		_isfVisibleUfo[i]->setVisible(false);
-		_numVisibleUfo[i]->setVisible(false);
-		_visibleUfo[i] = NULL;
+		_isfUfoBlobs[i]->setVisible(false);
+		_numUfoBlobs[i]->setVisible(false);
+		_hostileUfos[i] = NULL;
 	}
 
 	size_t
@@ -1166,16 +1171,16 @@ void GeoscapeState::drawUfoIndicators()
 	for (std::vector<Ufo*>::const_iterator
 			i = _gameSave->getUfos()->begin();
 			i != _gameSave->getUfos()->end()
-				&& j != UFO_HOTICONS;
+				&& j != UFO_HOTBLOBS;
 			++i)
 	{
 		if ((*i)->getDetected() == true)
 		{
-			_isfVisibleUfo[j]->setVisible();
-			_numVisibleUfo[j]->setVisible();
-			_numVisibleUfo[j]->setValue(static_cast<unsigned>((*i)->getId()) % 1000); // truncate to 3 least significant digits
+			_isfUfoBlobs[j]->setVisible();
+			_numUfoBlobs[j]->setVisible();
+			_numUfoBlobs[j]->setValue(static_cast<unsigned>((*i)->getId()) % 1000); // truncate to 3 least significant digits
 
-			_visibleUfo[j] = *i;
+			_hostileUfos[j] = *i;
 
 			ufoSize = (*i)->getRadius();
 
@@ -1210,7 +1215,7 @@ void GeoscapeState::drawUfoIndicators()
 														[static_cast<size_t>(y)]
 														[static_cast<size_t>(x)]);
 					if (color != 0)
-						_isfVisibleUfo[j]->setPixelColor(
+						_isfUfoBlobs[j]->setPixelColor(
 														x,y,
 														colorBasic - color);
 				}
@@ -1788,7 +1793,7 @@ void GeoscapeState::time5Seconds()
 			++i;
 	}
 
-	drawUfoIndicators();
+	drawUfoBlobs();
 
 
 	// This is ONLY for allowing _dogfights to fill (or not) before deciding whether
@@ -3878,8 +3883,8 @@ std::list<DogfightState*>& GeoscapeState::getDogfights()
  * @param ufo	- pointer to Ufo attacking base
  */
 void GeoscapeState::handleBaseDefense(
-		Base* base,
-		Ufo* ufo)
+		Base* const base,
+		Ufo* const ufo)
 {
 	ufo->setStatus(Ufo::DESTROYED);
 
@@ -4505,30 +4510,30 @@ void GeoscapeState::btnTimerPress(Action* action) // private.
 
 /**
  * Pauses and unpauses the Geoscape.
- * @param action - pointer to the mouse Action
+ * @param action - pointer to an Action
  */
-void GeoscapeState::btnPausePress(Action* action) // private.
+void GeoscapeState::btnPauseClick(Action*) // private.
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
-		_pauseHard = !_pauseHard;
+	_pauseHard = !_pauseHard;
+	_globe->toggleBlink();
 }
 
 /**
  * Centers on the UFO corresponding to this button.
  * @param action - pointer to an Action
  */
-void GeoscapeState::btnVisibleUfoPress(Action* action) // private.
+void GeoscapeState::btnUfoBlobPress(Action* action) // private.
 {
 	for (size_t // find out which button was pressed
 			i = 0;
-			i != UFO_HOTICONS;
+			i != UFO_HOTBLOBS;
 			++i)
 	{
-		if (_isfVisibleUfo[i] == action->getSender())
+		if (_isfUfoBlobs[i] == action->getSender())
 		{
 			_globe->center(
-						_visibleUfo[i]->getLongitude(),
-						_visibleUfo[i]->getLatitude());
+						_hostileUfos[i]->getLongitude(),
+						_hostileUfos[i]->getLatitude());
 			break;
 		}
 	}
@@ -4620,6 +4625,7 @@ void GeoscapeState::assessUfoPopups()
 void GeoscapeState::setPaused()
 {
 	_pauseHard = true;
+	_globe->toggleBlink();
 }
 
 /**

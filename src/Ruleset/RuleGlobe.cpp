@@ -170,7 +170,6 @@ void RuleGlobe::load(const YAML::Node& node)
 	Globe::CLO_RADAR2		= static_cast<Uint8>(node["radar2Color"]	.as<int>(Globe::CLO_RADAR2));		// craft radars
 	Globe::CLO_FLIGHT		= static_cast<Uint8>(node["flightColor"]	.as<int>(Globe::CLO_FLIGHT));		// flight paths
 	Globe::CLO_OCEAN		= static_cast<Uint8>(node["oceanPalette"]	.as<int>(Globe::CLO_OCEAN));
-//	if (node["oceanPalette"]) Globe::CLO_OCEAN = Palette::blockOffset(static_cast<Uint8>(node["oceanPalette"].as<int>(12)));
 }
 
 /**

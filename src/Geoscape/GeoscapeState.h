@@ -67,7 +67,7 @@ class GeoscapeState
 {
 
 private:
-	static const size_t UFO_HOTICONS = 16;
+	static const size_t UFO_HOTBLOBS = 16;
 
 	bool
 		_dfCenterCurrentCoords,
@@ -109,9 +109,9 @@ private:
 		* _timeComp;
 //	InteractiveSurface* _btnRotateLeft, * _btnRotateRight, * _btnRotateUp, * _btnRotateDown, * _btnZoomIn, * _btnZoomOut;
 	InteractiveSurface
-		* _isfVisibleUfo[UFO_HOTICONS],
+		* _isfUfoBlobs[UFO_HOTBLOBS],
 		* _isfTime;
-	NumberText* _numVisibleUfo[UFO_HOTICONS];
+	NumberText* _numUfoBlobs[UFO_HOTBLOBS];
 	Ruleset* _rules;
 	SavedGame* _gameSave;
 	Surface
@@ -140,7 +140,7 @@ private:
 		* _dfZoomOutTimer,
 		* _dfStartTimer,
 		* _dfTimer;
-	Ufo* _visibleUfo[UFO_HOTICONS];
+	Ufo* _hostileUfos[UFO_HOTBLOBS];
 
 	std::list<State*> _popups;
 	std::list<DogfightState*>
@@ -161,9 +161,9 @@ private:
 	/// Handler for clicking the timer button.
 	void btnTimerPress(Action* action);
 	/// Handler for clicking pause.
-	void btnPausePress(Action* action);
+	void btnPauseClick(Action* action);
 	/// Handler for clicking a visible UFO button.
-	void btnVisibleUfoPress(Action* action);
+	void btnUfoBlobPress(Action* action);
 
 
 	public:
@@ -183,7 +183,7 @@ private:
 		void think();
 
 		/// Draws the UFO indicators for known UFOs.
-		void drawUfoIndicators();
+		void drawUfoBlobs();
 
 		/// Displays the game time/date. (+Funds)
 		void updateTimeDisplay();
@@ -300,8 +300,8 @@ private:
 
 		/// Handles base defense
 		void handleBaseDefense(
-				Base* base,
-				Ufo* ufo);
+				Base* const base,
+				Ufo* const ufo);
 
 		/// Processes a mission site.
 		bool processMissionSite(MissionSite* const site) const; // OoO

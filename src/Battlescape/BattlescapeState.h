@@ -125,7 +125,7 @@ private:
 		* _btnStats,
 		* _btnHostileUnit[UNIT_HOTCONS],
 		* _btnWounds,
-		* _btnZeroTUs;
+		* _btnLogo;
 //	ImageButton* _reserve;
 //	ImageButton* _btnReserveNone, * _btnReserveSnap, * _btnReserveAimed, * _btnReserveAuto, * _btnReserveKneel, * _btnZeroTUs;
 	Map* _map;
@@ -325,7 +325,7 @@ private:
 		/// Handler for clicking the reload button.
 		void btnReloadClick(Action* action);
 		/// Handler for clicking the expend all TUs button.
-		void btnZeroTUsClick(Action* action);
+		void btnZeroTuClick(Action* action);
 		/// Handler for clicking the UfoPaedia button.
 		void btnUfoPaediaClick(Action* action);
 		/// Handler for clicking the lighting button.

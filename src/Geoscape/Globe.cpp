@@ -24,7 +24,7 @@
 //#include <cmath>
 //#include "../fmath.h"
 
-#include "GeoscapeState.h"
+#include "GeoscapeState.h" //unitToRads
 
 #include "../Engine/Action.h"
 //#include "../Engine/FastLineClip.h"
@@ -305,7 +305,7 @@ struct CreateShadow
  * @param y			- Y position in pixels (default 0)
  */
 Globe::Globe(
-		Game* game,
+		Game* const game,
 		int cenX,
 		int cenY,
 		int width,
@@ -326,8 +326,6 @@ Globe::Globe(
 		_game(game),
 		_rules(game->getRuleset()->getGlobe()),
 		_hover(false),
-		_blink(-1),
-//		_blinkVal(0),
 		_isMouseScrolled(false),
 		_isMouseScrolling(false),
 		_mouseOverThreshold(false),
@@ -341,7 +339,8 @@ Globe::Globe(
 		_radius(0.),
 		_radiusStep(0.),
 		_debugType(0),
-		_radarDetail(2)
+		_radarDetail(2),
+		_blink(true)
 {
 	_texture	= new SurfaceSet(*_game->getResourcePack()->getSurfaceSet("TEXTURE.DAT"));
 	_markerSet	= new SurfaceSet(*_game->getResourcePack()->getSurfaceSet("GlobeMarkers"));
@@ -351,107 +350,12 @@ Globe::Globe(
 	_radars		= new Surface(width, height, x, y);
 	_clipper	= new FastLineClip(x, x + width, y, y + height);
 
-	// Animation timers
 	_blinkTimer = new Timer(200);
 	_blinkTimer->onTimer((SurfaceHandler)& Globe::blink);
 	_blinkTimer->start();
 
-//	_rotTimer = new Timer(10);
-	_rotTimer = new Timer(Options::geoScrollSpeed); // old.
+	_rotTimer = new Timer(Options::geoScrollSpeed);
 	_rotTimer->onTimer((SurfaceHandler)& Globe::rotate);
-
-// kL_begin:
-	// Globe markers
-/*	_mkXcomBase = new Surface(3, 3);
-	_mkXcomBase->lock();
-	_mkXcomBase->setPixelColor(0, 0, 9); // cyan border
-	_mkXcomBase->setPixelColor(1, 0, 9);
-	_mkXcomBase->setPixelColor(2, 0, 9);
-	_mkXcomBase->setPixelColor(0, 1, 9);
-	_mkXcomBase->setPixelColor(2, 1, 9);
-	_mkXcomBase->setPixelColor(0, 2, 9);
-	_mkXcomBase->setPixelColor(1, 2, 9);
-	_mkXcomBase->setPixelColor(2, 2, 9);
-	_mkXcomBase->unlock();
-
-	_mkAlienBase = new Surface(3, 3);
-	_mkAlienBase->lock();
-	_mkAlienBase->setPixelColor(0, 0, 1); // pink border
-	_mkAlienBase->setPixelColor(1, 0, 1);
-	_mkAlienBase->setPixelColor(2, 0, 1);
-	_mkAlienBase->setPixelColor(0, 1, 1);
-	_mkAlienBase->setPixelColor(2, 1, 1);
-	_mkAlienBase->setPixelColor(0, 2, 1);
-	_mkAlienBase->setPixelColor(1, 2, 1);
-	_mkAlienBase->setPixelColor(2, 2, 1);
-	_mkAlienBase->unlock();
-
-	_mkCraft = new Surface(3, 3);
-	_mkCraft->lock();
-	_mkCraft->setPixelColor(1, 0, 11); // yellow +
-	_mkCraft->setPixelColor(0, 1, 11);
-	_mkCraft->setPixelColor(2, 1, 11);
-	_mkCraft->setPixelColor(1, 2, 11);
-	_mkCraft->unlock();
-
-	_mkWaypoint = new Surface(3, 3);
-	_mkWaypoint->lock();
-	_mkWaypoint->setPixelColor(0, 0, 3); // orange x
-	_mkWaypoint->setPixelColor(0, 2, 3);
-	_mkWaypoint->setPixelColor(1, 1, 3);
-	_mkWaypoint->setPixelColor(2, 0, 3);
-	_mkWaypoint->setPixelColor(2, 2, 3);
-	_mkWaypoint->unlock();
-
-	_mkCity = new Surface(3, 3);
-	_mkCity->lock();
-	_mkCity->setPixelColor(0, 0, 172); // (10)+12 dark slate gray (as per city labels)
-	_mkCity->setPixelColor(1, 0, 172);
-	_mkCity->setPixelColor(2, 0, 172);
-	_mkCity->setPixelColor(0, 1, 172);
-	_mkCity->setPixelColor(1, 1, 14); // red center
-	_mkCity->setPixelColor(2, 1, 172);
-	_mkCity->setPixelColor(0, 2, 172);
-	_mkCity->setPixelColor(1, 2, 172);
-	_mkCity->setPixelColor(2, 2, 172);
-	_mkCity->unlock();
-
-	_mkFlyingUfo = new Surface(3, 3);
-	_mkFlyingUfo->lock();
-	_mkFlyingUfo->setPixelColor(1, 0, 13); // red +
-	_mkFlyingUfo->setPixelColor(0, 1, 13);
-	_mkFlyingUfo->setPixelColor(1, 1, 13);
-	_mkFlyingUfo->setPixelColor(2, 1, 13);
-	_mkFlyingUfo->setPixelColor(1, 2, 13);
-	_mkFlyingUfo->unlock();
-
-	_mkLandedUfo = new Surface(3, 3);
-	_mkLandedUfo->lock();
-	_mkLandedUfo->setPixelColor(0, 0, 7); // green x
-	_mkLandedUfo->setPixelColor(0, 2, 7);
-	_mkLandedUfo->setPixelColor(1, 1, 7);
-	_mkLandedUfo->setPixelColor(2, 0, 7);
-	_mkLandedUfo->setPixelColor(2, 2, 7);
-	_mkLandedUfo->unlock();
-
-	_mkCrashedUfo = new Surface(3, 3);
-	_mkCrashedUfo->lock();
-	_mkCrashedUfo->setPixelColor(0, 0, 5); // white x
-	_mkCrashedUfo->setPixelColor(0, 2, 5);
-	_mkCrashedUfo->setPixelColor(1, 1, 5);
-	_mkCrashedUfo->setPixelColor(2, 0, 5);
-	_mkCrashedUfo->setPixelColor(2, 2, 5);
-	_mkCrashedUfo->unlock();
-
-	_mkAlienSite = new Surface(3, 3);
-	_mkAlienSite->lock();
-	_mkAlienSite->setPixelColor(1, 0, 1); // pink +
-	_mkAlienSite->setPixelColor(0, 1, 1);
-	_mkAlienSite->setPixelColor(1, 1, 1);
-	_mkAlienSite->setPixelColor(2, 1, 1);
-	_mkAlienSite->setPixelColor(1, 2, 1);
-	_mkAlienSite->unlock(); */
-//kL_end.
 
 	_cenLon = _game->getSavedGame()->getGlobeLongitude();
 	_cenLat = _game->getSavedGame()->getGlobeLatitude();
@@ -462,7 +366,6 @@ Globe::Globe(
 			height);
 	setZoom(_zoom);
 
-	// fill random noise "texture"
 	_randomNoiseData.resize(static_data.random_surf_size * static_data.random_surf_size);
 	for (size_t
 			i = 0;
@@ -481,8 +384,7 @@ Globe::Globe(
 Globe::~Globe()
 {
 	delete _texture;
-//	delete _markerSet; // (they don't actually delete this.. it's been commented in stock code too.)
-
+	delete _markerSet;
 	delete _blinkTimer;
 	delete _rotTimer;
 	delete _countries;
@@ -1277,24 +1179,37 @@ void Globe::think()
  */
 void Globe::blink()
 {
-	_blink = -_blink;
+	static int blink (-1);
 
-	const int j = static_cast<int>(_markerSet->getTotalFrames());
-	for (int
-			i = 0;
-			i != j;
-			++i)
+	if (_blink == true)
 	{
-		if (i != GLM_CITY)
-			_markerSet->getFrame(i)->offset(_blink);
-	}
+		blink = -blink;
 
-	drawMarkers();
+		const int j = static_cast<int>(_markerSet->getTotalFrames());
+		for (int
+				i = 0;
+				i != j;
+				++i)
+		{
+			if (i != GLM_CITY)
+				_markerSet->getFrame(i)->offset(blink);
+		}
+
+		drawMarkers();
+	}
 }
 
 /**
- * Rotates the globe by a set amount. Necessary since the
- * globe keeps rotating while a button is pressed down.
+ * Toggles the blinking.
+ */
+void Globe::toggleBlink()
+{
+	_blink = !_blink;
+}
+
+/**
+ * Rotates the globe by a set amount.
+ * @note Necessary since the globe keeps rotating while a button is pressed down.
  */
 void Globe::rotate()
 {

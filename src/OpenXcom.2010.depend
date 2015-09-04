@@ -4488,7 +4488,7 @@
 1440212072 f:\git\openxcom\src\geoscape\buildnewbasestate.h
 	"../Engine/State.h"
 
-1441342507 f:\git\openxcom\src\geoscape\geoscapestate.h
+1441397874 f:\git\openxcom\src\geoscape\geoscapestate.h
 	"../Engine/State.h"
 
 1430149550 f:\git\openxcom\src\menu\errormessagestate.h
@@ -4736,7 +4736,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Ufo.h"
 
-1440460082 f:\git\openxcom\src\geoscape\globe.h
+1441400286 f:\git\openxcom\src\geoscape\globe.h
 	"Cord.h"
 	"../Engine/FastLineClip.h"
 	"../Engine/InteractiveSurface.h"
@@ -5335,7 +5335,7 @@
 1431047771 f:\git\openxcom\src\battlescape\abortmissionstate.h
 	"../Engine/State.h"
 
-1440639942 f:\git\openxcom\src\battlescape\battlescapestate.h
+1441402272 f:\git\openxcom\src\battlescape\battlescapestate.h
 	"Position.h"
 	"../Engine/State.h"
 
@@ -6488,7 +6488,7 @@
 	"OpenGL.h"
 	"Surface.h"
 
-1440038233 source:f:\git\openxcom\src\engine\options.cpp
+1441391241 source:f:\git\openxcom\src\engine\options.cpp
 	"Options.h"
 	"Options.inc.h"
 	"TargetConditionals.h"
@@ -6884,7 +6884,7 @@
 	"../Resource/XcomResourcePack.h"
 	"../Savegame/SavedGame.h"
 
-1441332062 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
+1441394958 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
 	"DogfightState.h"
 	"GeoscapeCraftState.h"
 	"GeoscapeState.h"
@@ -6961,7 +6961,7 @@
 1432346700 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1441342383 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1441400378 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	"AlienBaseState.h"
 	"BaseDefenseState.h"
@@ -7094,7 +7094,7 @@
 
 1440173244 f:\git\openxcom\src\ufopaedia\ufopaedia.h
 
-1441340241 source:f:\git\openxcom\src\geoscape\globe.cpp
+1441400328 source:f:\git\openxcom\src\geoscape\globe.cpp
 	"Globe.h"
 	"GeoscapeState.h"
 	"../Engine/Action.h"
@@ -10809,7 +10809,7 @@
 1439224668 source:f:\git\openxcom\src\ruleset\polyline.cpp
 	"Polyline.h"
 
-1430174618 source:f:\git\openxcom\src\ruleset\ruleglobe.cpp
+1441399002 source:f:\git\openxcom\src\ruleset\ruleglobe.cpp
 	"RuleGlobe.h"
 	"Polygon.h"
 	"Polyline.h"

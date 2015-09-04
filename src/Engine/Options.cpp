@@ -295,6 +295,8 @@ void create()
 //	- SDLK_k, kill all aliens [doubles w/ kneel, above]
 // Screen::handle()
 //	- SDLK_F8, game speed switch (3 position flag)
+// GeoscapeState::GeoscapeState()
+//	- SDLK_SPACE, geoscape hard-pause
 
 #ifdef __MORPHOS__
 	_info.push_back(OptionInfo("FPS", &FPS, 15));
@@ -595,8 +597,8 @@ void load(const std::string& file)
 	{
 		const YAML::Node doc = YAML::LoadFile(st);
 
-		if (doc["options"]["NewBattleMission"]) // Ignore old options files
-			return;
+//		if (doc["options"]["NewBattleMission"]) // Ignore old options files
+//			return;
 
 		for (std::vector<OptionInfo>::const_iterator
 				i = _info.begin();

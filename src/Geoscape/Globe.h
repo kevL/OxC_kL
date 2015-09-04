@@ -65,10 +65,9 @@ private:
 		_hover,
 		_isMouseScrolled,
 		_isMouseScrolling,
-		_mouseOverThreshold;
+		_mouseOverThreshold,
+		_blink;
 	int
-		_blink,
-//		_blinkVal,
 		_debugType,
 		_radarDetail,
 		_totalMouseMoveX,
@@ -219,7 +218,7 @@ private:
 
 		/// Creates a new globe at the specified position and size.
 		Globe(
-				Game* game,
+				Game* const game,
 				int cenX,
 				int cenY,
 				int width,
@@ -315,6 +314,8 @@ private:
 		void think();
 		/// Blinks the markers.
 		void blink();
+		/// Toggles the blinking.
+		void toggleBlink();
 		/// Rotates the globe.
 		void rotate();
 
