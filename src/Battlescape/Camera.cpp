@@ -275,34 +275,74 @@ void Camera::mouseOver(Action* action, State*)
  */
 void Camera::keyboardPress(Action* action, State*)
 {
-	if (_map->getCursorType() == CT_NONE)
-		return;
-
-	int scrollSpeed = Options::battleScrollSpeed;
-
-	int key = action->getDetails()->key.keysym.sym;
-	if (key == Options::keyBattleLeft)
-		_scrollKeyX = scrollSpeed;
-	else if (key == Options::keyBattleRight)
-		_scrollKeyX = -scrollSpeed;
-	else if (key == Options::keyBattleUp)
-		_scrollKeyY = scrollSpeed;
-	else if (key == Options::keyBattleDown)
-		_scrollKeyY = -scrollSpeed;
-
-	if ((_scrollKeyX != 0
-			|| _scrollKeyY != 0)
-		&& _scrollKeyTimer->isRunning() == false
-		&& _scrollMouseTimer->isRunning() == false
-		&& (SDL_GetMouseState(0,0) & SDL_BUTTON(Options::battleDragScrollButton)) == 0)
+	if (_map->getCursorType() != CT_NONE)
 	{
-		_scrollKeyTimer->start();
-	}
-	else if (_scrollKeyTimer->isRunning() == true
-		&& _scrollKeyX == 0
-		&& _scrollKeyY == 0)
-	{
-		_scrollKeyTimer->stop();
+/*		const int keyB = action->getDetails()->key.keysym.sym;
+		if (keyB == Options::keyBattleLeft || keyB == SDLK_KP4)
+			_scrollKeyX = scrollSpeed;
+		else if (keyB == Options::keyBattleRight || keyB == SDLK_KP6)
+			_scrollKeyX = -scrollSpeed;
+		else if (keyB == Options::keyBattleUp || keyB == SDLK_KP8)
+			_scrollKeyY = scrollSpeed;
+		else if (keyB == Options::keyBattleDown || keyB == SDLK_KP2)
+			_scrollKeyY = -scrollSpeed; */
+
+		const int scrollSpeed = Options::battleScrollSpeed;
+		switch (action->getDetails()->key.keysym.sym)
+		{
+			case SDLK_LEFT: // hardcoding these ... ->
+			case SDLK_KP4:
+				_scrollKeyX = scrollSpeed;
+			break;
+
+			case SDLK_RIGHT:
+			case SDLK_KP6:
+				_scrollKeyX = -scrollSpeed;
+			break;
+
+			case SDLK_UP:
+			case SDLK_KP8:
+				_scrollKeyY = scrollSpeed;
+			break;
+
+			case SDLK_DOWN:
+			case SDLK_KP2:
+				_scrollKeyY = -scrollSpeed;
+			break;
+
+			case SDLK_KP7:
+				_scrollKeyX =
+				_scrollKeyY = scrollSpeed;
+			break;
+
+			case SDLK_KP9:
+				_scrollKeyX = -scrollSpeed;
+				_scrollKeyY =  scrollSpeed;
+			break;
+
+			case SDLK_KP1:
+				_scrollKeyX =  scrollSpeed;
+				_scrollKeyY = -scrollSpeed;
+			break;
+
+			case SDLK_KP3:
+				_scrollKeyX =
+				_scrollKeyY = -scrollSpeed;
+		}
+
+		if ((_scrollKeyX != 0 || _scrollKeyY != 0)
+			&& _scrollKeyTimer->isRunning() == false
+			&& _scrollMouseTimer->isRunning() == false
+			&& (SDL_GetMouseState(0,0) & SDL_BUTTON(Options::battleDragScrollButton)) == 0)
+		{
+			_scrollKeyTimer->start();
+		}
+		else if (_scrollKeyTimer->isRunning() == true
+			&& _scrollKeyX == 0
+			&& _scrollKeyY == 0)
+		{
+			_scrollKeyTimer->stop();
+		}
 	}
 }
 
@@ -313,32 +353,52 @@ void Camera::keyboardPress(Action* action, State*)
  */
 void Camera::keyboardRelease(Action* action, State*)
 {
-	if (_map->getCursorType() == CT_NONE)
-		return;
-
-	int key = action->getDetails()->key.keysym.sym;
-	if (key == Options::keyBattleLeft)
-		_scrollKeyX = 0;
-	else if (key == Options::keyBattleRight)
-		_scrollKeyX = 0;
-	else if (key == Options::keyBattleUp)
-		_scrollKeyY = 0;
-	else if (key == Options::keyBattleDown)
-		_scrollKeyY = 0;
-
-	if ((_scrollKeyX != 0
-			|| _scrollKeyY != 0)
-		&& _scrollKeyTimer->isRunning() == false
-		&& _scrollMouseTimer->isRunning() == false
-		&& (SDL_GetMouseState(0,0) & SDL_BUTTON(Options::battleDragScrollButton)) == 0)
+	if (_map->getCursorType() != CT_NONE)
 	{
-		_scrollKeyTimer->start();
-	}
-	else if (_scrollKeyTimer->isRunning() == true
-		&& _scrollKeyX == 0
-		&& _scrollKeyY == 0)
-	{
-		_scrollKeyTimer->stop();
+/*		const int keyB = action->getDetails()->key.keysym.sym;
+		if (keyB == Options::keyBattleLeft || keyB == SDLK_KP4)
+			_scrollKeyX = 0;
+		else if (keyB == Options::keyBattleRight || keyB == SDLK_KP6)
+			_scrollKeyX = 0;
+		else if (keyB == Options::keyBattleUp || keyB == SDLK_KP8)
+			_scrollKeyY = 0;
+		else if (keyB == Options::keyBattleDown || keyB == SDLK_KP2)
+			_scrollKeyY = 0; */
+
+		switch (action->getDetails()->key.keysym.sym)
+		{
+			case SDLK_LEFT: // hardcoding these ... ->
+			case SDLK_KP4:
+			case SDLK_RIGHT:
+			case SDLK_KP6:
+				_scrollKeyX = 0;
+			break;
+
+			case SDLK_UP:
+			case SDLK_KP8:
+			case SDLK_DOWN:
+			case SDLK_KP2:
+				_scrollKeyY = 0;
+			break;
+
+			default:
+				_scrollKeyX =
+				_scrollKeyY = 0;
+		}
+
+		if ((_scrollKeyX != 0 || _scrollKeyY != 0)
+			&& _scrollKeyTimer->isRunning() == false
+			&& _scrollMouseTimer->isRunning() == false
+			&& (SDL_GetMouseState(0,0) & SDL_BUTTON(Options::battleDragScrollButton)) == 0)
+		{
+			_scrollKeyTimer->start();
+		}
+		else if (_scrollKeyTimer->isRunning() == true
+			&& _scrollKeyX == 0
+			&& _scrollKeyY == 0)
+		{
+			_scrollKeyTimer->stop();
+		}
 	}
 }
 

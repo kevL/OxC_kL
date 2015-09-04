@@ -5506,7 +5506,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1439751371 f:\git\openxcom\src\battlescape\camera.h
+1441404891 f:\git\openxcom\src\battlescape\camera.h
 	"Position.h"
 
 1433862595 f:\git\openxcom\src\battlescape\civilianbaistate.h
@@ -5634,7 +5634,7 @@
 1430149550 f:\git\openxcom\src\battlescape\battlescapemessage.h
 	"../Engine/Surface.h"
 
-1440973520 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1441402657 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	"AbortMissionState.h"
 	"ActionMenuState.h"
@@ -5771,7 +5771,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Ufo.h"
 
-1440705203 source:f:\git\openxcom\src\battlescape\camera.cpp
+1441405470 source:f:\git\openxcom\src\battlescape\camera.cpp
 	"Camera.h"
 	"BattlescapeState.h"
 	"Map.h"
@@ -5963,7 +5963,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1440996330 source:f:\git\openxcom\src\battlescape\map.cpp
+1441403115 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	"BattlescapeMessage.h"
 	"BattlescapeState.h"

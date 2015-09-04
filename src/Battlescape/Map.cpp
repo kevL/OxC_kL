@@ -134,7 +134,7 @@ Map::Map(
 	_iconHeight = _game->getRuleset()->getInterface("battlescape")->getElement("icons")->h;
 
 	_previewSetting	= Options::battleNewPreviewPath;
-//	if (Options::traceAI == true) // turn everything on because we want to see the markers.
+//	if (Options::traceAI == true) // turn everything to see the markers.
 //		_previewSetting = PATH_FULL;
 
 	_spriteWidth = _res->getSurfaceSet("BLANKS.PCK")->getFrame(0)->getWidth();

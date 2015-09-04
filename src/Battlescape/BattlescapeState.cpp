@@ -383,7 +383,7 @@ BattlescapeState::BattlescapeState()
 	add(_btnReserveAimed,	"buttonReserveAimed",	"battlescape", _icons);
 	add(_btnReserveAuto,	"buttonReserveAuto",	"battlescape", _icons);
 	add(_btnReserveKneel,	"buttonReserveKneel",	"battlescape", _icons); */
-	add(_btnLogo,		"buttonZeroTUs",		"battlescape", _icons);
+	add(_btnLogo,			"buttonZeroTUs",		"battlescape", _icons);
 	add(_btnLeftHandItem,	"buttonLeftHand",		"battlescape", _icons);
 	add(_btnRightHandItem,	"buttonRightHand",		"battlescape", _icons);
 	add(_numAmmoLeft,		"numAmmoLeft",			"battlescape", _icons);
