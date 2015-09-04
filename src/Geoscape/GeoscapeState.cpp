@@ -4531,7 +4531,7 @@ void GeoscapeState::assessUfoPopups()
 /**
  * Sets pause.
  */
-void GeoscapeState::setPause()
+void GeoscapeState::setPaused()
 {
 	_pauseHard = true;
 }
@@ -4540,7 +4540,7 @@ void GeoscapeState::setPause()
  * Gets pause.
  * @return, true if state is paused
  */
-bool GeoscapeState::getPause() const
+bool GeoscapeState::getPaused() const
 {
 	return _pauseHard;
 }

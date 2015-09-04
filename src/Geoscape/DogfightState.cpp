@@ -223,12 +223,6 @@ DogfightState::DogfightState(
 	_btnDisengage->invalidate(false);
 	_btnUfo->invalidate(false);
 
-//	if (_txtDistance->isTFTDMode() == true)
-//	{
-//		_txtDistance->setY(_txtDistance->getY() + 1);
-//		_txtDistance->setX(_txtDistance->getX() + 7);
-//	}
-
 /*	Surface* graphic;
 	graphic = _game->getResourcePack()->getSurface("INTERWIN.DAT");
 	graphic->setX(0);
@@ -283,7 +277,10 @@ DogfightState::DogfightState(
 	} // kL_end.
 	_preview->setVisible(false);
 	_preview->onMouseClick(
-					(ActionHandler)& DogfightState::previewPress,
+					(ActionHandler)& DogfightState::previewClick,
+					SDL_BUTTON_LEFT);
+	_preview->onMouseClick(
+					(ActionHandler)& DogfightState::previewClick,
 					SDL_BUTTON_RIGHT);
 
 	_btnMinimize->onMouseClick((ActionHandler)& DogfightState::btnMinimizeDfClick);
@@ -293,26 +290,26 @@ DogfightState::DogfightState(
 
 	_btnDisengage->copy(_window);
 	_btnDisengage->setGroup(&_craftStance);
-	_btnDisengage->onMouseClick((ActionHandler)& DogfightState::btnDisengagePress);
+	_btnDisengage->onMouseClick((ActionHandler)& DogfightState::btnDisengageClick);
 
 	_btnCautious->copy(_window);
 	_btnCautious->setGroup(&_craftStance);
-	_btnCautious->onMouseClick((ActionHandler)& DogfightState::btnCautiousPress);
+	_btnCautious->onMouseClick((ActionHandler)& DogfightState::btnCautiousClick);
 
 	_btnStandard->copy(_window);
 	_btnStandard->setGroup(&_craftStance);
-	_btnStandard->onMouseClick((ActionHandler)& DogfightState::btnStandardPress);
+	_btnStandard->onMouseClick((ActionHandler)& DogfightState::btnStandardClick);
 
 	_btnAggressive->copy(_window);
 	_btnAggressive->setGroup(&_craftStance);
-	_btnAggressive->onMouseClick((ActionHandler)& DogfightState::btnAggressivePress);
+	_btnAggressive->onMouseClick((ActionHandler)& DogfightState::btnAggressiveClick);
 
 	_btnStandoff->copy(_window);
 	_btnStandoff->setGroup(&_craftStance);
-	_btnStandoff->onMouseClick((ActionHandler)& DogfightState::btnStandoffPress);
-//	_btnStandoff->onKeyboardPress(
-//					(ActionHandler)& DogfightState::btnStandoffPress,
-//					Options::keyOk); // used for Maximize all minimized interceptor icons.
+	_btnStandoff->onMouseClick((ActionHandler)& DogfightState::btnStandoffClick);
+	_btnStandoff->onKeyboardPress(
+					(ActionHandler)& DogfightState::keyEscape,
+					Options::keyCancel);
 
 	srf = _game->getResourcePack()->getSurface(getTextureIcon());
 	if (srf != NULL)
@@ -334,7 +331,10 @@ DogfightState::DogfightState(
 	_btnMinimizedIcon->onMousePress((ActionHandler)& DogfightState::btnMaximizeDfPress);
 	_btnMinimizedIcon->onKeyboardPress(
 					(ActionHandler)& DogfightState::btnMaximizeDfPress,
-					Options::keyOk); // was keyCancel
+					Options::keyOk); // used to Maximize all minimized interceptor icons.
+	_btnMinimizedIcon->onKeyboardPress(
+					(ActionHandler)& DogfightState::btnMaximizeDfPress,
+					SDLK_KP_ENTER); // used to Maximize all minimized interceptor icons.
 	_btnMinimizedIcon->setVisible(false);
 
 	std::wostringstream woststr;
@@ -1501,10 +1501,42 @@ void DogfightState::setStatus(const std::string& status)
 }
 
 /**
+ * Puts craft in standoff if engaged, if in standoff minimizes dogfight.
+ * @note If all dogfights are minimized sends all Craft back to their bases.
+ * @note This ought affect all dogfights at once.
+ */
+void DogfightState::keyEscape(Action*)
+{
+	if (_craftStance != _btnStandoff)
+	{
+		_btnStandoff->releaseButtonGroup();
+		btnStandoffClick(NULL);
+	}
+	else if (_minimized == false)
+	{
+		bool mini = true;
+		for (std::list<DogfightState*>::const_iterator
+				i = _geo->getDogfights().begin();
+				i != _geo->getDogfights().end();
+				++i)
+		{
+			if ((*i)->isStandingOff() == false) //_dist >= DST_STANDOFF
+			{
+				mini = false;
+				break;
+			}
+		}
+
+		if (mini == true)
+			btnMinimizeDfClick(NULL);
+	}
+}
+
+/**
  * Switches to Standoff mode - maximum range.
  * @param action - pointer to an Action
  */
-void DogfightState::btnStandoffPress(Action*)
+void DogfightState::btnStandoffClick(Action*)
 {
 	if (_ufo->isCrashed() == false
 		&& _craft->isDestroyed() == false
@@ -1520,7 +1552,7 @@ void DogfightState::btnStandoffPress(Action*)
  * Switches to Cautious mode - maximum weapon range.
  * @param action - pointer to an Action
  */
-void DogfightState::btnCautiousPress(Action*)
+void DogfightState::btnCautiousClick(Action*)
 {
 	if (_ufo->isCrashed() == false
 		&& _craft->isDestroyed() == false
@@ -1549,7 +1581,7 @@ void DogfightState::btnCautiousPress(Action*)
  * Switches to Standard mode - minimum weapon range.
  * @param action - pointer to an Action
  */
-void DogfightState::btnStandardPress(Action*)
+void DogfightState::btnStandardClick(Action*)
 {
 	if (_ufo->isCrashed() == false
 		&& _craft->isDestroyed() == false
@@ -1578,7 +1610,7 @@ void DogfightState::btnStandardPress(Action*)
  * Switches to Aggressive mode - minimum range.
  * @param action - pointer to an Action
  */
-void DogfightState::btnAggressivePress(Action*)
+void DogfightState::btnAggressiveClick(Action*)
 {
 	if (_ufo->isCrashed() == false
 		&& _craft->isDestroyed() == false
@@ -1607,7 +1639,7 @@ void DogfightState::btnAggressivePress(Action*)
  * Disengages from the UFO.
  * @param action - pointer to an Action
  */
-void DogfightState::btnDisengagePress(Action*)
+void DogfightState::btnDisengageClick(Action*)
 {
 	if (_ufo->isCrashed() == false
 		&& _craft->isDestroyed() == false
@@ -1653,7 +1685,7 @@ void DogfightState::btnUfoClick(Action*)
  * Hides the front view of the UFO.
  * @param action - pointer to an Action
  */
-void DogfightState::previewPress(Action*)
+void DogfightState::previewClick(Action*)
 {
 	_preview->setVisible(false);
 
@@ -1682,7 +1714,8 @@ void DogfightState::btnMinimizeDfClick(Action*)
 		&& _craft->isDestroyed() == false
 		&& _ufoBreakingOff == false)
 	{
-		if (_dist >= DST_STANDOFF)
+		if (_dist >= DST_STANDOFF
+			&& _projectiles.empty() == true) // TODO: prj-in-flight should have its own warning below_
 		{
 			_minimized = true;
 
@@ -1734,14 +1767,14 @@ void DogfightState::btnMinimizeDfClick(Action*)
  */
 void DogfightState::btnMaximizeDfPress(Action* action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) // note that this includes keyboard press for whatever reason.
 	{
 		_texture->clear();
 
 		Surface* const srfTexture = _game->getResourcePack()->getSurface(getTextureIcon());
 		if (srfTexture != NULL)
 			srfTexture->blit(_texture);
-		else Log(LOG_INFO) << "ERROR: no texture icon for dogfight";
+		else Log(LOG_WARNING) << "Texture icon for dogfight not available.";
 
 		_minimized = false;
 
@@ -1798,6 +1831,15 @@ void DogfightState::btnMaximizeDfPress(Action* action)
 bool DogfightState::isMinimized() const
 {
 	return _minimized;
+}
+
+/**
+ * Returns true if Craft stance is in stand-off.
+ * @return, true if standing off
+ */
+bool DogfightState::isStandingOff() const
+{
+	return (_craftStance == _btnStandoff);
 }
 
 /**

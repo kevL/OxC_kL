@@ -4488,7 +4488,7 @@
 1440212072 f:\git\openxcom\src\geoscape\buildnewbasestate.h
 	"../Engine/State.h"
 
-1441224831 f:\git\openxcom\src\geoscape\geoscapestate.h
+1441316511 f:\git\openxcom\src\geoscape\geoscapestate.h
 	"../Engine/State.h"
 
 1430149550 f:\git\openxcom\src\menu\errormessagestate.h
@@ -6852,7 +6852,7 @@
 1430149550 f:\git\openxcom\src\geoscape\crafterrorstate.h
 	"../Engine/State.h"
 
-1441310846 source:f:\git\openxcom\src\geoscape\craftpatrolstate.cpp
+1441316488 source:f:\git\openxcom\src\geoscape\craftpatrolstate.cpp
 	"CraftPatrolState.h"
 	"GeoscapeCraftState.h"
 	"GeoscapeState.h"
@@ -6915,7 +6915,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Ufo.h"
 
-1441308362 f:\git\openxcom\src\geoscape\dogfightstate.h
+1441323314 f:\git\openxcom\src\geoscape\dogfightstate.h
 	"../Engine/State.h"
 
 1440532567 f:\git\openxcom\src\savegame\alienstrategy.h
@@ -6937,7 +6937,7 @@
 1430149550 f:\git\openxcom\src\geoscape\fundingstate.h
 	"../Engine/State.h"
 
-1441258821 source:f:\git\openxcom\src\geoscape\geoscapecraftstate.cpp
+1441316511 source:f:\git\openxcom\src\geoscape\geoscapecraftstate.cpp
 	"GeoscapeCraftState.h"
 	"GeoscapeState.h"
 	"Globe.h"
@@ -6961,7 +6961,7 @@
 1432346700 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1441311298 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1441316511 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	"AlienBaseState.h"
 	"BaseDefenseState.h"
@@ -7160,10 +7160,8 @@
 	"../Savegame/Region.h"
 	"../Savegame/SavedGame.h"
 
-1430149550 f:\git\openxcom\src\interface\toggletextbutton.h
+1441327705 f:\git\openxcom\src\interface\toggletextbutton.h
 	"TextButton.h"
-	"../Engine/Action.h"
-	"../Engine/State.h"
 
 1438532124 source:f:\git\openxcom\src\geoscape\interceptstate.cpp
 	"InterceptState.h"
@@ -7374,7 +7372,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Target.h"
 
-1441314495 source:f:\git\openxcom\src\geoscape\ufodetectedstate.cpp
+1441316511 source:f:\git\openxcom\src\geoscape\ufodetectedstate.cpp
 	"UfoDetectedState.h"
 	"GeoscapeState.h"
 	"Globe.h"
@@ -7456,7 +7454,7 @@
 	"Text.h"
 	"../Engine/Language.h"
 
-1430149550 source:f:\git\openxcom\src\interface\textbutton.cpp
+1441327803 source:f:\git\openxcom\src\interface\textbutton.cpp
 	"TextButton.h"
 	"ComboBox.h"
 	"Text.h"
@@ -7475,8 +7473,9 @@
 	"ScrollBar.h"
 	"../Engine/Action.h"
 
-1430149550 source:f:\git\openxcom\src\interface\toggletextbutton.cpp
+1441327713 source:f:\git\openxcom\src\interface\toggletextbutton.cpp
 	"ToggleTextButton.h"
+	"../Engine/Action.h"
 
 1420134053 source:f:\git\openxcom\src\interface\turncounter.cpp
 	"TurnCounter.h"

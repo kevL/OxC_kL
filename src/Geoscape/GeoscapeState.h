@@ -304,10 +304,11 @@ private:
 
 		/// Examines the quantity of remaining UFO-detected popups.
 		void assessUfoPopups();
+
 		/// Sets pause.
-		void setPause();
+		void setPaused();
 		/// Gets pause.
-		bool getPause() const;
+		bool getPaused() const;
 };
 
 }

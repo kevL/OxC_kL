@@ -19,6 +19,8 @@
 
 #include "ToggleTextButton.h"
 
+#include "../Engine/Action.h"
+
 
 namespace OpenXcom
 {
@@ -87,21 +89,21 @@ void ToggleTextButton::mousePress(Action* action, State* state)
  */
 void ToggleTextButton::setPressed(bool pressed)
 {
-	if (_isPressed == pressed)
-		return;
-
-	_isPressed = pressed;
-	_fakeGroup = _isPressed ? this : NULL;
-
-	if (_isPressed == true
-		&& _invertedColor != std::numeric_limits<uint8_t>::max())
+	if (_isPressed != pressed)
 	{
-		TextButton::setColor(_invertedColor);
-	}
-	else
-		TextButton::setColor(_originalColor);
+		_isPressed = pressed;
+		_fakeGroup = _isPressed ? this : NULL;
 
-	_redraw = true;
+		if (_isPressed == true
+			&& _invertedColor != std::numeric_limits<uint8_t>::max())
+		{
+			TextButton::setColor(_invertedColor);
+		}
+		else
+			TextButton::setColor(_originalColor);
+
+		_redraw = true;
+	}
 }
 
 /**

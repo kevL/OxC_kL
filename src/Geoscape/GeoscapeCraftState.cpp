@@ -393,7 +393,7 @@ void GeoscapeCraftState::btnCenterClick(Action*)
 		return;
 	}
 
-	_geo->setPause();
+	_geo->setPaused();
 	_geo->resetTimer();
 	_game->popState();
 
@@ -490,7 +490,7 @@ void GeoscapeCraftState::transposeWindow() // private.
 	_btnBase->setY(_btnBase->getY() + dy);
 	_btnCancel->setY(_btnCancel->getY() + dy);
 
-	if (_geo->getPause() == false)
+	if (_geo->getPaused() == false)
 		_btnCenter->setText(tr("STR_PAUSE"));
 	else
 	{

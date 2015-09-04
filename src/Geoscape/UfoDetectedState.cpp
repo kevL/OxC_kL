@@ -495,7 +495,7 @@ void UfoDetectedState::btnCentreClick(Action*)
 	}
 
 	_geo->assessUfoPopups();
-	_geo->setPause();
+	_geo->setPaused();
 	_geo->resetTimer();
 	_game->popState();
 }
@@ -531,7 +531,7 @@ void UfoDetectedState::transposeWindow() // private.
 	_txtDetected->setVisible(false);
 	_lstInfo->setVisible(false);
 
-	if (_geo->getPause() == false)
+	if (_geo->getPaused() == false)
 		_btnCenter->setText(tr("STR_PAUSE").c_str());
 	else
 		_btnCenter->setVisible(false);

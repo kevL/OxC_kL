@@ -189,20 +189,22 @@ private:
 		/// Changes the status text.
 		void setStatus(const std::string& status);
 
+		/// Handler for the escape/cancel keyboard button.
+		void keyEscape(Action* action);
 		/// Handler for pressing the Standoff button.
-		void btnStandoffPress(Action* action);
+		void btnStandoffClick(Action* action);
 		/// Handler for pressing the Cautious Attack button.
-		void btnCautiousPress(Action* action);
+		void btnCautiousClick(Action* action);
 		/// Handler for pressing the Standard Attack button.
-		void btnStandardPress(Action* action);
+		void btnStandardClick(Action* action);
 		/// Handler for pressing the Aggressive Attack button.
-		void btnAggressivePress(Action* action);
+		void btnAggressiveClick(Action* action);
 		/// Handler for pressing the Disengage button.
-		void btnDisengagePress(Action* action);
+		void btnDisengageClick(Action* action);
 		/// Handler for clicking the Ufo button.
 		void btnUfoClick(Action* action);
 		/// Handler for clicking the Preview graphic.
-		void previewPress(Action* action);
+		void previewClick(Action* action);
 		/// Handler for clicking the Minimize dogfight button.
 		void btnMinimizeDfClick(Action* action);
 		/// Handler for clicking the Maximize dogfight icon.
@@ -210,6 +212,8 @@ private:
 
 		/// Returns true if state is minimized.
 		bool isMinimized() const;
+		/// Returns true if Craft stance is in stand-off.
+		bool isStandingOff() const;
 
 		/// Draws UFO.
 		void drawUfo();
