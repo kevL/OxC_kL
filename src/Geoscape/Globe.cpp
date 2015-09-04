@@ -623,8 +623,8 @@ bool Globe::insidePolygon(
 	{
 		backFace = backFace == true
 				&& pointBack(
-							poly->getLongitude(i),
-							poly->getLatitude(i)) == true;
+						poly->getLongitude(i),
+						poly->getLatitude(i)) == true;
 	}
 
 	if (backFace != pointBack(lon, lat))
@@ -662,14 +662,14 @@ bool Globe::insidePolygon(
 				&x,
 				&y);
 
-		if (((y_i < y
+		if (((		   y_i <  y
 					&& y_j >= y)
-				|| (y_j < y
+				|| (   y_j <  y
 					&& y_i >= y))
-			&& (x_i <= x
-				|| x_j <= x))
+			&& (	   x_i <= x
+				||	   x_j <= x))
 		{
-			odd ^= (x_i + (y - y_i) / (y_j - y_i) * (x_j - x_i) < x);
+			odd ^= (x_i + (y - y_i) / (y_j - y_i) * (x_j - x_i) < x); // holy space-time continuum batman.
 		}
 	}
 

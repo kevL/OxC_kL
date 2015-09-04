@@ -253,9 +253,9 @@ UfoDetectedState::UfoDetectedState(
 	_btnIntercept->setVisible(contact);
 
 	_btnCenter->setText(tr("STR_CENTER_ON_UFO_TIME_5_SECONDS"));
-	_btnCenter->onMouseClick((ActionHandler)& UfoDetectedState::btnCentreClick);
+	_btnCenter->onMouseClick((ActionHandler)& UfoDetectedState::btnCenterClick);
 	_btnCenter->onKeyboardPress(
-					(ActionHandler)& UfoDetectedState::btnCentreClick,
+					(ActionHandler)& UfoDetectedState::btnCenterClick,
 					Options::keyOk);
 
 	_btn5Sec->setText(tr("STR_OK_5_SECONDS"));
@@ -471,26 +471,23 @@ void UfoDetectedState::btnInterceptClick(Action*)
 	_geo->resetTimer();
 	_game->popState();
 
-	_game->pushState(new InterceptState(
-									NULL,
-									_geo));
+	_game->pushState(new InterceptState(NULL, _geo));
 }
 
 /**
  * Centers the globe on the UFO and returns to the previous screen.
  * @param action - pointer to an Action
  */
-void UfoDetectedState::btnCentreClick(Action*)
+void UfoDetectedState::btnCenterClick(Action*)
 {
 	_geo->getGlobe()->center(
-							_ufo->getLongitude(),
-							_ufo->getLatitude());
+						_ufo->getLongitude(),
+						_ufo->getLatitude());
 
 	if (_delayPop == true)
 	{
 		_delayPop = false;
 		transposeWindow();
-
 		return;
 	}
 

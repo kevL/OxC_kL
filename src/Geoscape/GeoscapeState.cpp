@@ -741,37 +741,95 @@ GeoscapeState::GeoscapeState()
 	_btnDetail->onKeyboardPress(
 					(ActionHandler)& GeoscapeState::btnRotateLeftPress,
 					Options::keyGeoLeft);
+	_btnDetail->onKeyboardPress(
+					(ActionHandler)& GeoscapeState::btnRotateLeftPress,
+					SDLK_KP4);
 	_btnDetail->onKeyboardRelease(
-					(ActionHandler)& GeoscapeState::btnRotateLeftRelease,
+					(ActionHandler)& GeoscapeState::btnRotateLonStop,
 					Options::keyGeoLeft);
+	_btnDetail->onKeyboardRelease(
+					(ActionHandler)& GeoscapeState::btnRotateLonStop,
+					SDLK_KP4);
 
 	_btnDetail->onKeyboardPress(
 					(ActionHandler)& GeoscapeState::btnRotateRightPress,
 					Options::keyGeoRight);
+	_btnDetail->onKeyboardPress(
+					(ActionHandler)& GeoscapeState::btnRotateRightPress,
+					SDLK_KP6);
 	_btnDetail->onKeyboardRelease(
-					(ActionHandler)& GeoscapeState::btnRotateRightRelease,
+					(ActionHandler)& GeoscapeState::btnRotateLonStop,
 					Options::keyGeoRight);
+	_btnDetail->onKeyboardRelease(
+					(ActionHandler)& GeoscapeState::btnRotateLonStop,
+					SDLK_KP6);
 
 	_btnDetail->onKeyboardPress(
 					(ActionHandler)& GeoscapeState::btnRotateUpPress,
 					Options::keyGeoUp);
+	_btnDetail->onKeyboardPress(
+					(ActionHandler)& GeoscapeState::btnRotateUpPress,
+					SDLK_KP8);
 	_btnDetail->onKeyboardRelease(
-					(ActionHandler)& GeoscapeState::btnRotateUpRelease,
+					(ActionHandler)& GeoscapeState::btnRotateLatStop,
 					Options::keyGeoUp);
+	_btnDetail->onKeyboardRelease(
+					(ActionHandler)& GeoscapeState::btnRotateLatStop,
+					SDLK_KP8);
 
 	_btnDetail->onKeyboardPress(
 					(ActionHandler)& GeoscapeState::btnRotateDownPress,
 					Options::keyGeoDown);
+	_btnDetail->onKeyboardPress(
+					(ActionHandler)& GeoscapeState::btnRotateDownPress,
+					SDLK_KP2);
 	_btnDetail->onKeyboardRelease(
-					(ActionHandler)& GeoscapeState::btnRotateDownRelease,
+					(ActionHandler)& GeoscapeState::btnRotateLatStop,
 					Options::keyGeoDown);
+	_btnDetail->onKeyboardRelease(
+					(ActionHandler)& GeoscapeState::btnRotateLatStop,
+					SDLK_KP2);
+
+	_btnDetail->onKeyboardPress(
+					(ActionHandler)& GeoscapeState::btnRotateLeftUpPress,
+					SDLK_KP7);
+	_btnDetail->onKeyboardRelease(
+					(ActionHandler)& GeoscapeState::btnRotateStop,
+					SDLK_KP7);
+
+	_btnDetail->onKeyboardPress(
+					(ActionHandler)& GeoscapeState::btnRotateLeftDownPress,
+					SDLK_KP1);
+	_btnDetail->onKeyboardRelease(
+					(ActionHandler)& GeoscapeState::btnRotateStop,
+					SDLK_KP1);
+
+	_btnDetail->onKeyboardPress(
+					(ActionHandler)& GeoscapeState::btnRotateRightUpPress,
+					SDLK_KP9);
+	_btnDetail->onKeyboardRelease(
+					(ActionHandler)& GeoscapeState::btnRotateStop,
+					SDLK_KP9);
+
+	_btnDetail->onKeyboardPress(
+					(ActionHandler)& GeoscapeState::btnRotateRightDownPress,
+					SDLK_KP3);
+	_btnDetail->onKeyboardRelease(
+					(ActionHandler)& GeoscapeState::btnRotateStop,
+					SDLK_KP3);
 
 	_btnDetail->onKeyboardPress(
 					(ActionHandler)& GeoscapeState::btnZoomInLeftClick,
 					Options::keyGeoZoomIn);
 	_btnDetail->onKeyboardPress(
+					(ActionHandler)& GeoscapeState::btnZoomInLeftClick,
+					SDLK_KP_PLUS);
+	_btnDetail->onKeyboardPress(
 					(ActionHandler)& GeoscapeState::btnZoomOutLeftClick,
 					Options::keyGeoZoomOut);
+	_btnDetail->onKeyboardPress(
+					(ActionHandler)& GeoscapeState::btnZoomOutLeftClick,
+					SDLK_KP_MINUS);
 
 	_ufoDetected->setColor(164); // slate gray
 	_ufoDetected->setBig();
@@ -3423,15 +3481,6 @@ void GeoscapeState::btnRotateLeftPress(Action*)
 }
 
 /**
- * Stops rotating the globe to the left.
- * @param action - pointer to an Action
- */
-void GeoscapeState::btnRotateLeftRelease(Action*)
-{
-	_globe->rotateStopLon();
-}
-
-/**
  * Starts rotating the globe to the right.
  * @param action - pointer to an Action
  */
@@ -3441,10 +3490,10 @@ void GeoscapeState::btnRotateRightPress(Action*)
 }
 
 /**
- * Stops rotating the globe to the right.
+ * Stops rotating the globe horizontally.
  * @param action - pointer to an Action
  */
-void GeoscapeState::btnRotateRightRelease(Action*)
+void GeoscapeState::btnRotateLonStop(Action*)
 {
 	_globe->rotateStopLon();
 }
@@ -3459,15 +3508,6 @@ void GeoscapeState::btnRotateUpPress(Action*)
 }
 
 /**
- * Stops rotating the globe upwards.
- * @param action - pointer to an Action
- */
-void GeoscapeState::btnRotateUpRelease(Action*)
-{
-	_globe->rotateStopLat();
-}
-
-/**
  * Starts rotating the globe downwards.
  * @param action - pointer to an Action
  */
@@ -3477,12 +3517,61 @@ void GeoscapeState::btnRotateDownPress(Action*)
 }
 
 /**
- * Stops rotating the globe downwards.
+ * Stops rotating the globe vertically.
  * @param action - pointer to an Action
  */
-void GeoscapeState::btnRotateDownRelease(Action*)
+void GeoscapeState::btnRotateLatStop(Action*)
 {
 	_globe->rotateStopLat();
+}
+
+/**
+ * Starts rotating the globe to the left up.
+ * @param action - pointer to an Action
+ */
+void GeoscapeState::btnRotateLeftUpPress(Action*)
+{
+	_globe->rotateLeft();
+	_globe->rotateUp();
+}
+
+/**
+ * Starts rotating the globe to the left down.
+ * @param action - pointer to an Action
+ */
+void GeoscapeState::btnRotateLeftDownPress(Action*)
+{
+	_globe->rotateLeft();
+	_globe->rotateDown();
+}
+
+/**
+ * Starts rotating the globe to the right up.
+ * @param action - pointer to an Action
+ */
+void GeoscapeState::btnRotateRightUpPress(Action*)
+{
+	_globe->rotateRight();
+	_globe->rotateUp();
+}
+
+/**
+ * Starts rotating the globe to the right down.
+ * @param action - pointer to an Action
+ */
+void GeoscapeState::btnRotateRightDownPress(Action*)
+{
+	_globe->rotateRight();
+	_globe->rotateDown();
+}
+
+/**
+ * Stops rotating the globe.
+ * @param action - pointer to an Action
+ */
+void GeoscapeState::btnRotateStop(Action*)
+{
+	_globe->rotateStop();
 }
 
 /**
@@ -3495,15 +3584,6 @@ void GeoscapeState::btnZoomInLeftClick(Action*)
 }
 
 /**
- * Zooms the globe maximum.
- * @param action - pointer to an Action
- */
-/* void GeoscapeState::btnZoomInRightClick(Action*)
-{
-	_globe->zoomMax();
-} */
-
-/**
  * Zooms out of the globe.
  * @param action - pointer to an Action
  */
@@ -3512,11 +3592,20 @@ void GeoscapeState::btnZoomOutLeftClick(Action*)
 	_globe->zoomOut();
 }
 
-/**
+/*
+ * Zooms the globe maximum.
+ * @param action - pointer to an Action
+ *
+void GeoscapeState::btnZoomInRightClick(Action*)
+{
+	_globe->zoomMax();
+} */
+
+/*
  * Zooms the globe minimum.
  * @param action - pointer to an Action
- */
-/* void GeoscapeState::btnZoomOutRightClick(Action*)
+ *
+void GeoscapeState::btnZoomOutRightClick(Action*)
 {
 	_globe->zoomMin();
 } */
@@ -4519,13 +4608,10 @@ void GeoscapeState::resize(
  */
 void GeoscapeState::assessUfoPopups()
 {
-	if (_windowPops > 0)
-	{
-		_ufoDetected->setText(Text::formatNumber(--_windowPops));
-
-		if (_windowPops == 0)
-			_ufoDetected->setVisible(false);
-	}
+	if (--_windowPops == 0)
+		_ufoDetected->setVisible(false);
+	else
+		_ufoDetected->setText(Text::formatNumber(_windowPops));
 }
 
 /**

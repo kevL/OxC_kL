@@ -235,26 +235,35 @@ private:
 
 		/// Handler for pressing the Rotate Left arrow.
 		void btnRotateLeftPress(Action* action);
-		/// Handler for releasing the Rotate Left arrow.
-		void btnRotateLeftRelease(Action* action);
 		/// Handler for pressing the Rotate Right arrow.
 		void btnRotateRightPress(Action* action);
-		/// Handler for releasing the Rotate Right arrow.
-		void btnRotateRightRelease(Action* action);
+		/// Handler for releasing the Rotate Left/Right arrows.
+		void btnRotateLonStop(Action* action);
+
 		/// Handler for pressing the Rotate Up arrow.
 		void btnRotateUpPress(Action* action);
-		/// Handler for releasing the Rotate Up arrow.
-		void btnRotateUpRelease(Action* action);
 		/// Handler for pressing the Rotate Down arrow.
 		void btnRotateDownPress(Action* action);
-		/// Handler for releasing the Rotate Down arrow.
-		void btnRotateDownRelease(Action* action);
+		/// Handler for releasing the Rotate Up/Down arrows.
+		void btnRotateLatStop(Action* action);
+
+		/// Handler for pressing the Rotate Left Up arrow.
+		void btnRotateLeftUpPress(Action* action);
+		/// Handler for pressing the Rotate Left Down arrow.
+		void btnRotateLeftDownPress(Action* action);
+		/// Handler for pressing the Rotate Right Up arrow.
+		void btnRotateRightUpPress(Action* action);
+		/// Handler for pressing the Rotate Right Down arrow.
+		void btnRotateRightDownPress(Action* action);
+		/// Handler for releasing the Rotate Diagonally arrows.
+		void btnRotateStop(Action* action);
+
 		/// Handler for left-clicking the Zoom In icon.
 		void btnZoomInLeftClick(Action* action);
-		/// Handler for right-clicking the Zoom In icon.
-//		void btnZoomInRightClick(Action* action);
 		/// Handler for left-clicking the Zoom Out icon.
 		void btnZoomOutLeftClick(Action* action);
+		/// Handler for right-clicking the Zoom In icon.
+//		void btnZoomInRightClick(Action* action);
 		/// Handler for right-clicking the Zoom Out icon.
 //		void btnZoomOutRightClick(Action* action);
 

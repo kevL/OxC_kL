@@ -93,7 +93,7 @@ private:
 		/// Handler for clicking the Intercept button.
 		void btnInterceptClick(Action* action);
 		/// Handler for clicking the Centre on UFO button.
-		void btnCentreClick(Action* action);
+		void btnCenterClick(Action* action);
 		/// Handler for clicking the Cancel button and sets Geoscape timer to 5 seconds.
 		void btn5SecClick(Action* action);
 		/// Handler for clicking the Cancel button.

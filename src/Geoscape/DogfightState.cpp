@@ -1502,7 +1502,6 @@ void DogfightState::setStatus(const std::string& status)
 
 /**
  * Puts craft in standoff if engaged, if in standoff minimizes dogfight.
- * @note If all dogfights are minimized sends all Craft back to their bases.
  * @note This ought affect all dogfights at once.
  */
 void DogfightState::keyEscape(Action*)
