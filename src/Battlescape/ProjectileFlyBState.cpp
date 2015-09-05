@@ -782,11 +782,8 @@ void ProjectileFlyBState::think()
 			}
 			//Log(LOG_INFO) << "ProjectileFlyBState::think() current Status = " << (int)_unit->getStatus();
 
-			if (_battleSave->getSide() == FACTION_PLAYER
-				|| _battleSave->getDebugMode() == true)
-			{
-				_parent->setupCursor();
-			}
+//			if (_battleSave->getSide() == FACTION_PLAYER || _battleSave->getDebugMode() == true)
+//				_parent->setupCursor(); // <- not yet! Do it in popState() when everything is finished.
 
 			_parent->popState();
 		}

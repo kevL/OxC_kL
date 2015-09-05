@@ -1032,7 +1032,7 @@ int RuleItem::getMeleeAnimation() const
  * Checks if line of sight is required for this psionic weapon to function.
  * @return, true if line of sight is required
  */
-bool RuleItem::isLOSRequired() const
+bool RuleItem::isLosRequired() const
 {
 	return _LOSRequired;
 }
@@ -1054,7 +1054,7 @@ int RuleItem::getSpecialType() const
  * @param isPrimed - true if checking a grenade and it's primed (default false)
  * @return, BattleActionType (BattlescapeGame.h)
  */
-BattleActionType RuleItem::getDefaultAction(const bool isPrimed) const
+BattleActionType RuleItem::getDefaultAction(bool isPrimed) const
 {
 	if (_fixedWeapon == true)
 		return BA_NONE;

@@ -345,7 +345,7 @@ void BattlescapeGame::popState()
 			{
 				switch (action.type)
 				{
-					case BA_LAUNCH: // see also, cancelCurrentAction()
+					case BA_LAUNCH:
 						_currentAction.waypoints.clear();
 					case BA_THROW:
 					case BA_SNAPSHOT:
@@ -368,7 +368,6 @@ void BattlescapeGame::popState()
 
 		//Log(LOG_INFO) << ". move Front-state to _deleted.";
 		_deleted.push_back(_states.front());
-
 		//Log(LOG_INFO) << ". states.Popfront";
 		_states.pop_front();
 
@@ -484,9 +483,10 @@ void BattlescapeGame::popState()
 						}
 					}
 
-					setupCursor();
-					_parentState->getGame()->getCursor()->setVisible(); // might not be needed here anymore. But safety.
-					_parentState->getGame()->getCursor()->setHidden(false);
+					// -> I moved this to the end of the function to prevent cursor showing during RF.
+//					setupCursor();
+//					_parentState->getGame()->getCursor()->setVisible(); // might not be needed here anymore. But safety.
+//					_parentState->getGame()->getCursor()->setHidden(false);
 					//Log(LOG_INFO) << ". end NOT actionFailed";
 				}
 			}
@@ -536,7 +536,8 @@ void BattlescapeGame::popState()
 				else if (_debugPlay == true)
 				{
 					setupCursor();
-					_parentState->getGame()->getCursor()->setVisible();
+					_parentState->getGame()->getCursor()->setHidden(false);	// don't know if this be needed here.
+//					_parentState->getGame()->getCursor()->setVisible();		// I seldom use debugPlay
 				}
 			}
 		}
@@ -579,32 +580,42 @@ void BattlescapeGame::popState()
 			_states.front()->init(); // init the next state in queue
 		}
 
-		// the currently selected unit died or became unconscious or disappeared inexplicably
+		// The selected unit died or became unconscious or disappeared inexplicably.
 		if (_battleSave->getSelectedUnit() == NULL
 			|| _battleSave->getSelectedUnit()->isOut_t() == true)
 //			|| _battleSave->getSelectedUnit()->isOut(true, true) == true)
 		{
 			//Log(LOG_INFO) << ". unit incapacitated: cancelAction & deSelect)";
-			cancelCurrentAction();
+			cancelCurrentAction(); // note that this *will* setupCursor() under certain circumstances - ie, if current action was targetting.
 
 			_battleSave->setSelectedUnit(NULL);
 			//if (_battleSave->getSelectedUnit() != NULL) Log(LOG_INFO) << "selectUnit " << _battleSave->getSelectedUnit()->getId();
 			//else Log(LOG_INFO) << "NO UNIT SELECTED";
 
-			if (_battleSave->getSide() == FACTION_PLAYER) // kL
+/*			if (_battleSave->getSide() == FACTION_PLAYER) //|| _debugPlay == true) // kL <- let end of function set cursor.
 			{
-				//Log(LOG_INFO) << ". enable cursor";
-				getMap()->setCursorType(CT_NORMAL);
-				_parentState->getGame()->getCursor()->setVisible();
+				//Log(LOG_INFO) << ". No selUnit, enable cursor";
+//				getMap()->setCursorType(CT_NORMAL);
+				setupCursor();
 				_parentState->getGame()->getCursor()->setHidden(false);
-			}
+//				_parentState->getGame()->getCursor()->setVisible();
+			} */
 		}
 
-		if (_battleSave->getSide() == FACTION_PLAYER) // kL
+		if (_battleSave->getSide() == FACTION_PLAYER) //|| _debugPlay == true) // kL
 		{
 			//Log(LOG_INFO) << ". updateSoldierInfo()";
 			_parentState->updateSoldierInfo(); // calcFoV ought have been done by now ...
 		}
+	}
+
+	if (_states.empty() == true // note: endTurnPhase() above^ might develop problems w/ cursor visibility ...
+		&& _battleSave->getSide() == FACTION_PLAYER) //|| _debugPlay == true))
+	{
+		//Log(LOG_INFO) << ". states Empty, reable cursor";
+		setupCursor();
+		_parentState->getGame()->getCursor()->setHidden(false);
+//		_parentState->getGame()->getCursor()->setVisible(); // might not be needed here anymore. But safety.
 	}
 	//Log(LOG_INFO) << "BattlescapeGame::popState() EXIT";
 }
@@ -1188,7 +1199,7 @@ void BattlescapeGame::setupCursor()
 	getMap()->refreshSelectorPosition();
 
 	CursorType cType;
-	int quads = 1;
+	int quadrants = 1;
 
 	if (_currentAction.targeting == true)
 	{
@@ -1220,12 +1231,12 @@ void BattlescapeGame::setupCursor()
 
 		_currentAction.actor = _battleSave->getSelectedUnit();
 		if (_currentAction.actor != NULL)
-			quads = _currentAction.actor->getArmor()->getSize();
+			quadrants = _currentAction.actor->getArmor()->getSize();
 	}
 
 	getMap()->setCursorType(
 						cType,
-						quads);
+						quadrants);
 }
 
 /**
@@ -2499,68 +2510,66 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* const unit) // private.
 }
 
 /**
-  * Cancels the current action the user had selected (firing, throwing, etc).
+  * Cancels the current action the Player has selected (firing, throwing, etc).
+  * @note The return is used only by BattlescapeState::mapClick() to check if
+  * pathPreview was cancelled.
   * @param force - force the action to be cancelled (default false)
-  * @return, true if action was cancelled
+  * @return, true if pathPreview is cancelled
   */
 bool BattlescapeGame::cancelCurrentAction(bool force)
 {
-	if (Options::battleNewPreviewPath != PATH_NONE
-		&& _battleSave->getPathfinding()->removePreview() == true)
+	if (_battleSave->getPathfinding()->removePreview() == false
+		|| Options::battlePreviewPath == PATH_NONE)
 	{
-		return true;
-	}
-
-	if (_states.empty() == true
-		|| force == true)
-	{
-		if (_currentAction.targeting == true)
+		if (_states.empty() == true
+			|| force == true)
 		{
-			if (_currentAction.type == BA_LAUNCH
-				&& _currentAction.waypoints.empty() == false)
+			if (_currentAction.targeting == true)
 			{
-				_currentAction.waypoints.pop_back();
-
-				if (getMap()->getWaypoints()->empty() == false)
-					getMap()->getWaypoints()->pop_back();
-
-				if (_currentAction.waypoints.empty() == true)
-					_parentState->showLaunchButton(false);
-
-				return true;
-			}
-			else
-			{
-				if (Options::battleConfirmFireMode == true
+				if (_currentAction.type == BA_LAUNCH
 					&& _currentAction.waypoints.empty() == false)
 				{
 					_currentAction.waypoints.pop_back();
-					getMap()->getWaypoints()->pop_back();
 
-					return true;
+					if (getMap()->getWaypoints()->empty() == false)
+						getMap()->getWaypoints()->pop_back();
+
+					if (_currentAction.waypoints.empty() == true)
+						_parentState->showLaunchButton(false);
 				}
-
-				_currentAction.targeting = false;
-				_currentAction.type = BA_NONE;
-
-				if (_battleSave->getSide() == FACTION_PLAYER)
+				else
 				{
-					setupCursor();
-					_parentState->getGame()->getCursor()->setVisible();
+/*					if (Options::battleConfirmFireMode == true && _currentAction.waypoints.empty() == false)
+					{
+						_currentAction.waypoints.pop_back();
+						getMap()->getWaypoints()->pop_back();
+						return true;
+					} */
+					_currentAction.targeting = false;
+					_currentAction.type = BA_NONE;
+
+					if (force == false
+						&& _battleSave->getSide() == FACTION_PLAYER) //|| _debugPlay == true
+					{
+						setupCursor();
+						_parentState->getGame()->getCursor()->setHidden(false);
+//						_parentState->getGame()->getCursor()->setVisible();
+					}
 				}
-
-				return true;
 			}
+			else
+				return false;
 		}
-	}
-	else if (_states.empty() == false
-		&& _states.front() != NULL)
-	{
-		_states.front()->cancel();
-		return true;
+		else if (_states.empty() == false
+			&& _states.front() != NULL)
+		{
+			_states.front()->cancel();
+		}
+		else
+			return false;
 	}
 
-	return false;
+	return true;
 }
 
 /**
@@ -2583,7 +2592,7 @@ bool BattlescapeGame::isBusy() const
 }
 
 /**
- * Activates primary action (left click).
+ * Left click activates a primary action.
  * @param pos - reference a Position on the map
  */
 void BattlescapeGame::primaryAction(const Position& pos)
@@ -2617,7 +2626,7 @@ void BattlescapeGame::primaryAction(const Position& pos)
 				&& targetUnit->getFaction() != _currentAction.actor->getFaction()
 				&& targetUnit->getUnitVisible() == true)
 			{
-				if (_currentAction.weapon->getRules()->isLOSRequired() == false
+				if (_currentAction.weapon->getRules()->isLosRequired() == false
 					|| std::find(
 							_currentAction.actor->getHostileUnits()->begin(),
 							_currentAction.actor->getHostileUnits()->end(),
@@ -2653,8 +2662,6 @@ void BattlescapeGame::primaryAction(const Position& pos)
 				}
 				else
 					_parentState->warning("STR_NO_LINE_OF_FIRE");
-
-				cancelCurrentAction();
 			}
 		}
 		else if (_currentAction.type == BA_PSIPANIC
@@ -2679,7 +2686,7 @@ void BattlescapeGame::primaryAction(const Position& pos)
 																	_currentAction.type,
 																	_currentAction.weapon);
 
-				if (_currentAction.weapon->getRules()->isLOSRequired() == false
+				if (_currentAction.weapon->getRules()->isLosRequired() == false
 					|| std::find(
 							_currentAction.actor->getHostileUnits()->begin(),
 							_currentAction.actor->getHostileUnits()->end(),
@@ -2813,7 +2820,7 @@ void BattlescapeGame::primaryAction(const Position& pos)
 	else // select unit, or spin/ MOVE .......
 	{
 		//Log(LOG_INFO) << ". . NOT _currentAction.targeting";
-		bool allowPreview = (Options::battleNewPreviewPath != PATH_NONE);
+		bool allowPreview = (Options::battlePreviewPath != PATH_NONE);
 
 		if (targetUnit != NULL // select unit
 			&& targetUnit != _currentAction.actor
@@ -2831,26 +2838,22 @@ void BattlescapeGame::primaryAction(const Position& pos)
 				_currentAction.actor = targetUnit;
 			}
 		}
-		else if (playableUnitSelected() == true)
+		else if (playableUnitSelected() == true) // spin 180 degrees
 		{
 			Pathfinding* const pf = _battleSave->getPathfinding();
 			pf->setPathingUnit(_currentAction.actor);
 
 			const bool
-				modCtrl = (SDL_GetModState() & KMOD_CTRL) != 0,
-				modAlt = (SDL_GetModState() & KMOD_ALT) != 0,
-				isMech = _currentAction.actor->getUnitRules() != NULL
-					  && _currentAction.actor->getUnitRules()->isMechanical() == true;
+				ctrl = (SDL_GetModState() & KMOD_CTRL) != 0,
+				alt = (SDL_GetModState() & KMOD_ALT) != 0;
 
-//			_currentAction.dash = false;
-//			_currentAction.actor->setDashing(false);
-
-			if (targetUnit != NULL // spin 180 degrees
+			if (targetUnit != NULL
 				&& targetUnit == _currentAction.actor
-				&& modCtrl == false
-				&& modAlt == false
-				&& isMech == false
-				&& _currentAction.actor->getArmor()->getSize() == 1) // small units only
+				&& ctrl == false
+				&& alt == false
+				&& (_currentAction.actor->getGeoscapeSoldier() != NULL
+					|| _currentAction.actor->getUnitRules()->isMechanical() == false)
+				&& _currentAction.actor->getArmor()->getSize() == 1)
 			{
 				if (allowPreview == true)
 					pf->removePreview();
@@ -2882,8 +2885,8 @@ void BattlescapeGame::primaryAction(const Position& pos)
 			{
 				if (allowPreview == true
 					&& (_currentAction.target != pos
-						|| pf->isModCtrl() != modCtrl
-						|| pf->isModAlt() != modAlt))
+						|| pf->isModCtrl() != ctrl
+						|| pf->isModAlt() != alt))
 				{
 					pf->removePreview();
 				}
@@ -2919,28 +2922,25 @@ void BattlescapeGame::primaryAction(const Position& pos)
 }
 
 /**
- * Activates secondary action (right click).
+ * Right click activates a secondary action.
  * @param pos - reference a Position on the map
  */
 void BattlescapeGame::secondaryAction(const Position& pos)
 {
 	_currentAction.actor = _battleSave->getSelectedUnit();
-
-	if (_currentAction.actor->getPosition() == pos)
+	if (_currentAction.actor->getPosition() != pos)
 	{
-		_parentState->btnKneelClick(NULL); // could put just about anything in here Orelly.
-		return;
+		_currentAction.target = pos;
+		_currentAction.strafe = _currentAction.actor->getTurretType() != -1
+							 && (SDL_GetModState() & KMOD_CTRL) != 0
+							 && Options::strafe == true;
+
+		statePushBack(new UnitTurnBState( // open door or rotate turret.
+										this,
+										_currentAction));
 	}
-
-	// -= turn to or open door =-
-	_currentAction.target = pos;
-	_currentAction.strafe = _currentAction.actor->getTurretType() > -1
-						 && (SDL_GetModState() & KMOD_CTRL) != 0
-						 && Options::strafe == true;
-
-	statePushBack(new UnitTurnBState(
-									this,
-									_currentAction));
+	else
+		_parentState->btnKneelClick(NULL); // could put just about anything here Orelly.
 }
 
 /**
@@ -2978,7 +2978,6 @@ void BattlescapeGame::psiButtonAction()
 
 	setupCursor();
 }
-
 
 /**
  * Moves a unit up or down.

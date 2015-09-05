@@ -244,8 +244,7 @@ void NextTurnState::nextTurn()
 			_game->getCursor()->setVisible();
 
 			const int turn = _battleSave->getTurn();
-/*			if (turn == 1
-				|| (turn % Options::autosaveFrequency) == 0)
+/*			if (turn == 1 || (turn % Options::autosaveFrequency) == 0)
 			{
 				if (_game->getSavedGame()->isIronman() == true)
 					_game->pushState(new SaveGameState(
@@ -314,15 +313,12 @@ void NextTurnState::nextTurn()
 	}
 }
 
-/**
+/*
  *
- */
-/*void NextTurnState::resize(
-		int& dX,
-		int& dY)
+ *
+void NextTurnState::resize(int& dX, int& dY)
 {
 	State::resize(dX, dY);
-
 //	_bg->setX(0);
 //	_bg->setY(0);
 } */

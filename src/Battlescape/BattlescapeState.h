@@ -143,8 +143,6 @@ private:
 		* _numMorale,
 		* _numAmmoLeft,
 		* _numAmmoRight,
-//		* _numFuseLeft,
-//		* _numFuseRight,
 
 		* _numDir,
 		* _numDirTur,
@@ -161,16 +159,12 @@ private:
 		* _rank,
 		* _overWeight,
 		* _hostileTargeter;
-//		* _srfWounds;
 	Text
 		* _txtBaseLabel,
 		* _txtConsole1,
 		* _txtConsole2,
-//		* _txtConsole3,
-//		* _txtConsole4,
 		* _txtControlDestroyed,
 		* _txtDebug,
-//		* _txtHasKill,
 		* _txtMissionLabel,
 		* _txtName,
 		* _txtOperationTitle,
@@ -180,7 +174,6 @@ private:
 		* _txtTerrain,
 //		* _txtTooltip;
 		* _txtTurn;
-//	TextList* _lstConsole;
 	TextList
 		* _lstSoldierInfo,
 		* _lstTileInfo;
@@ -209,10 +202,6 @@ private:
 	void drawHostileTargeter();
 	/// Draws an execution explosion on the Map.
 	void doExecutionExpl();
-	/// Draws the kneel indicator.
-//	void drawKneelIndicator();
-	/// Draws the fatal wounds indicator.
-//	void drawWoundIndicator();
 
 	/// Popups a context sensitive list of actions the player can choose from.
 	void handAction(
@@ -232,12 +221,12 @@ private:
 		/// Selects the next soldier.
 		void selectNextFactionUnit(
 				bool checkReselect = false,
-				bool setDontReselect = false,
+				bool dontReselect = false,
 				bool checkInventory = false);
 		/// Selects the previous soldier.
 		void selectPreviousFactionUnit(
 				bool checkReselect = false,
-				bool setDontReselect = false,
+				bool dontReselect = false,
 				bool checkInventory = false);
 
 		/// Initializes this BattlescapeState.

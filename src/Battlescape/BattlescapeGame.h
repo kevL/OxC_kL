@@ -260,9 +260,9 @@ private:
 		/// Determines whether there is an action currently going on.
 		bool isBusy() const;
 
-		/// Activates primary action (left click).
+		/// Left click activates a primary action.
 		void primaryAction(const Position& pos);
-		/// Activates secondary action (right click).
+		/// Right click activates a secondary action.
 		void secondaryAction(const Position& pos);
 		/// Handler for the blaster launcher button.
 		void launchAction();

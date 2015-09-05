@@ -162,7 +162,6 @@ BattlescapeState::BattlescapeState()
 				visibleMapHeight);
 
 	_numLayers	= new NumberText(3, 5, x + 232, y + 6);
-//	_numLayers	= new NumberText(3, 5, x + 223, y + 6);
 	_numDir		= new NumberText(3, 5, x + 150, y + 6);
 	_numDirTur	= new NumberText(3, 5, x + 167, y + 6);
 
@@ -201,8 +200,6 @@ BattlescapeState::BattlescapeState()
 	_btnRightHandItem	= new InteractiveSurface(32, 48, x + 280, y + 5);
 	_numAmmoLeft		= new NumberText(30, 5, x +   8, y + 4);
 	_numAmmoRight		= new NumberText(30, 5, x + 280, y + 4);
-//	_numFuseLeft		= new NumberText(15, 5, x +  16, y + 4);
-//	_numFuseRight		= new NumberText(15, 5, x + 288, y + 4);
 
 //	const int
 //		visibleUnitX = _rules->getInterface("battlescape")->getElement("visibleUnits")->x,
@@ -242,19 +239,19 @@ BattlescapeState::BattlescapeState()
 		_numHostileUnit[i]->setX(_numHostileUnit[i]->getX() - 2);
 	}
 
-	_warning	= new WarningMessage(
-					224,24,
-					x + 48,
-					y + 32);
+	_warning		= new WarningMessage(
+						224,24,
+						x + 48,
+						y + 32);
 
-	_btnLaunch	= new BattlescapeButton(
-					32,24,
-					screenWidth - 32,
-					20);
-	_btnPsi		= new BattlescapeButton(
-					32,24,
-					screenWidth - 32,
-					45);
+	_btnLaunch		= new BattlescapeButton(
+						32,24,
+						screenWidth - 32,
+						20);
+	_btnPsi			= new BattlescapeButton(
+						32,24,
+						screenWidth - 32,
+						45);
 	_bigBtnBorder	= new Surface(
 						32,24,
 						screenWidth - 32,
@@ -279,7 +276,6 @@ BattlescapeState::BattlescapeState()
 	_numMorale		= new NumberText(15, 5, x + 154, y + 50);
 	_barMorale		= new Bar(102, 3, x + 170, y + 53);
 
-//	_txtDebug		= new Text(300, 10, 150, 0);
 	_txtDebug		= new Text(145, 9, screenWidth - 145, screenHeight - 9);
 //	_txtTooltip		= new Text(300, 10, x + 2, y - 10);
 
@@ -290,15 +286,11 @@ BattlescapeState::BattlescapeState()
 
 	_txtOrder		= new Text(55, 9, 1, 37);
 	_lstSoldierInfo	= new TextList(25, 57, 1, 47);
-//	_txtHasKill		= new Text(10, 9, 1, 105);
 	_alienMark		= new Surface(9, 11, 1, 105);
 
 	_txtConsole1	= new Text(screenWidth / 2, y, 0, 0);
 	_txtConsole2	= new Text(screenWidth / 2, y, screenWidth / 2, 0);
-//	_txtConsole3	= new Text(screenWidth / 2, y, 0, 0);
-//	_txtConsole4	= new Text(screenWidth / 2, y, screenWidth / 2, 0);
 
-//	_battleSave->setPaletteByDepth(this);
 	setPalette("PAL_BATTLESCAPE");
 
 	if (_rules->getInterface("battlescape")->getElement("pathfinding"))
@@ -336,10 +328,6 @@ BattlescapeState::BattlescapeState()
 	rect->w = static_cast<Uint16>(iconsWidth);
 	rect->h = static_cast<Uint16>(iconsHeight);
 	icons->blit(_icons);
-
-	// this is a hack to fix the single transparent pixel on TFTD's icon panel.
-//	if (_rules->getInterface("battlescape")->getElement("icons")->TFTDMode)
-//		_icons->setPixelColor(46, 44, 8);
 
 	add(_rank,				"rank",					"battlescape", _icons);
 	add(_btnWounds);
@@ -388,12 +376,9 @@ BattlescapeState::BattlescapeState()
 	add(_btnRightHandItem,	"buttonRightHand",		"battlescape", _icons);
 	add(_numAmmoLeft,		"numAmmoLeft",			"battlescape", _icons);
 	add(_numAmmoRight,		"numAmmoRight",			"battlescape", _icons);
-//	add(_numFuseLeft,		"numAmmoLeft",			"battlescape", _icons);
-//	add(_numFuseRight,		"numAmmoRight",			"battlescape", _icons);
 	add(_hostileTargeter);
 
 	_hostileTargeter->setVisible(false);
-//	_iconsLayer->setVisible(false);
 
 	for (size_t
 			i = 0;
@@ -604,8 +589,6 @@ BattlescapeState::BattlescapeState()
 	add(_lstTileInfo,	"textName",	"battlescape"); // blue
 	add(_txtConsole1,	"textName",	"battlescape");
 	add(_txtConsole2,	"textName",	"battlescape");
-//	add(_txtConsole3,	"textName",	"battlescape");
-//	add(_txtConsole4,	"textName",	"battlescape");
 
 	_lstTileInfo->setColumns(2, 11, 7);
 	_lstTileInfo->setHighContrast();
@@ -614,17 +597,12 @@ BattlescapeState::BattlescapeState()
 	_txtConsole1->setVisible(_showConsole > 0);
 	_txtConsole2->setHighContrast();
 	_txtConsole2->setVisible(_showConsole > 1);
-//	_txtConsole3->setHighContrast();
-//	_txtConsole3->setVisible(_showConsole > 2);
-//	_txtConsole4->setHighContrast();
-//	_txtConsole4->setVisible(_showConsole > 3);
 
 	add(_txtTerrain,		"infoText",			"battlescape"); // yellow
 	add(_txtShade,			"infoText",			"battlescape");
 	add(_txtTurn,			"infoText",			"battlescape");
 	add(_txtOrder,			"operationTitle",	"battlescape"); // white
 	add(_lstSoldierInfo,	"textName",			"battlescape"); // blue
-//	add(_txtHasKill,		"infoText",			"battlescape");
 	add(_alienMark);
 
 	_txtTerrain->setHighContrast();
@@ -641,14 +619,10 @@ BattlescapeState::BattlescapeState()
 	_lstSoldierInfo->setHighContrast();
 	_lstSoldierInfo->setColumns(2, 10, 15);
 
-//	_txtHasKill->setHighContrast();
 	Surface* const srfMark = _game->getResourcePack()->getSurface("ALIENINSIGNIA");
 	srfMark->blit(_alienMark);
 	_alienMark->setVisible(false);
 
-
-//	_numLayers->setColor(Palette::blockOffset(5)+12);
-//	_numLayers->setValue(1);
 
 	_numDir->setColor(Palette::blockOffset(5)+12);
 	_numDir->setValue(0);
@@ -661,10 +635,6 @@ BattlescapeState::BattlescapeState()
 	_kneel->drawRect(0,0,2,2, Palette::blockOffset(5)+12);
 	_kneel->setVisible(false);
 
-/*	Surface* srfOverload = _game->getResourcePack()->getSurfaceSet("SCANG.DAT")->getFrame(97); // 274, brown dot 2px; 97, red sq 3px
-	srfOverload->setX(-1);
-	srfOverload->setY(-1);
-	srfOverload->blit(_overWeight); */
 	_overWeight->drawRect(0,0,2,2, Palette::blockOffset(2)+13); // dark.red
 	_overWeight->setVisible(false);
 
@@ -677,9 +647,6 @@ BattlescapeState::BattlescapeState()
 
 	_numAmmoLeft->setValue(0);
 	_numAmmoRight->setValue(0);
-
-//	_numFuseLeft->setValue(0);
-//	_numFuseRight->setValue(0);
 
 	_icons->onMouseIn((ActionHandler)& BattlescapeState::mouseInIcons);
 	_icons->onMouseOut((ActionHandler)& BattlescapeState::mouseOutIcons);
@@ -953,7 +920,6 @@ BattlescapeState::BattlescapeState()
 
 	_barHealth->setScale();
 	_barHealth->setMax(100.);
-//	_barHealth->setBorderColor(Palette::blockOffset(2)+7);
 
 	_barMorale->setScale();
 	_barMorale->setMax(100.);
@@ -966,7 +932,7 @@ BattlescapeState::BattlescapeState()
 	_animTimer = new Timer(STATE_INTERVAL_STANDARD); // setStateInterval() does NOT set this <-
 	_animTimer->onTimer((StateHandler)& BattlescapeState::animate);
 
-	_battleTimer = new Timer(STATE_INTERVAL_STANDARD); //+ 32); // setStateInterval() sets this <-
+	_battleTimer = new Timer(STATE_INTERVAL_STANDARD); // setStateInterval() does set this <-
 	_battleTimer->onTimer((StateHandler)& BattlescapeState::handleState);
 
 	_battleGame = new BattlescapeGame(
@@ -1051,7 +1017,6 @@ void BattlescapeState::init()
 //	_txtTooltip->setText(L"");
 /*	if (_battleSave->getKneelReserved())
 		_btnReserveKneel->invert(_btnReserveKneel->getColor()+3);
-
 	_btnReserveKneel->toggle(_battleSave->getKneelReserved());
 	_battleGame->setKneelReserved(_battleSave->getKneelReserved()); */
 	//Log(LOG_INFO) << "BattlescapeState::init() EXIT";
@@ -1127,21 +1092,11 @@ void BattlescapeState::mapOver(Action* action)
 
 		_isMouseScrolled = true;
 
-/*kL
-		// Set the mouse cursor back ( or not )
-		SDL_EventState(
-					SDL_MOUSEMOTION,
-					SDL_IGNORE);
-		SDL_WarpMouse(
-					static_cast<Uint16>(_xBeforeMouseScrolling),
-					static_cast<Uint16>(_yBeforeMouseScrolling));
-//		SDL_WarpMouse( // newScroll
-//					_game->getScreen()->getWidth() / 2,
-//					_game->getScreen()->getHeight() / 2 - _map->getIconHeight() / 2);
-		SDL_EventState(
-					SDL_MOUSEMOTION,
-					SDL_ENABLE); */
-
+/*		// Set the mouse cursor back ( or not )
+		SDL_EventState(SDL_MOUSEMOTION, SDL_IGNORE);
+		SDL_WarpMouse(static_cast<Uint16>(_xBeforeMouseScrolling), static_cast<Uint16>(_yBeforeMouseScrolling));
+//		SDL_WarpMouse(_game->getScreen()->getWidth() / 2, _game->getScreen()->getHeight() / 2 - _map->getIconHeight() / 2); // newScroll
+		SDL_EventState(SDL_MOUSEMOTION, SDL_ENABLE); */
 
 		_totalMouseMoveX += static_cast<int>(action->getDetails()->motion.xrel);
 		_totalMouseMoveY += static_cast<int>(action->getDetails()->motion.yrel);
@@ -1153,16 +1108,13 @@ void BattlescapeState::mapOver(Action* action)
 
 		if (Options::battleDragScrollInvert == true) // scroll. I don't use this
 		{
-/*fenyo1
-			_map->getCamera()->setMapOffset(_mapOffsetBeforeMouseScrolling);
+/*			_map->getCamera()->setMapOffset(_mapOffsetBeforeMouseScrolling);
 			int scrollX = -(int)((double)_totalMouseMoveX / action->getXScale());
 			int scrollY = -(int)((double)_totalMouseMoveY / action->getYScale());
 			Position delta2 = _map->getCamera()->getMapOffset();
 			_map->getCamera()->scrollXY(scrollX, scrollY, true);
 			delta2 = _map->getCamera()->getMapOffset() - delta2;
-
-			// Keep the limits...
-			if (scrollX != delta2.x || scrollY != delta2.y)
+			if (scrollX != delta2.x || scrollY != delta2.y) // Keep the limits...
 			{
 				_totalMouseMoveX = -(int) (delta2.x * action->getXScale());
 				_totalMouseMoveY = -(int) (delta2.y * action->getYScale());
@@ -1181,22 +1133,15 @@ void BattlescapeState::mapOver(Action* action)
 		}
 		else
 		{
-/*fenyo1
-			Position delta = _map->getCamera()->getMapOffset();
+/*			Position delta = _map->getCamera()->getMapOffset();
 			_map->getCamera()->setMapOffset(_mapOffsetBeforeMouseScrolling);
-
 			int scrollX = (int)((double)_totalMouseMoveX / action->getXScale());
 			int scrollY = (int)((double)_totalMouseMoveY / action->getYScale());
-
 			Position delta2 = _map->getCamera()->getMapOffset();
-
 			_map->getCamera()->scrollXY(scrollX, scrollY, true);
-
 			delta2 = _map->getCamera()->getMapOffset() - delta2;
 			delta = _map->getCamera()->getMapOffset() - delta;
-
-			// Keep the limits...
-			if (scrollX != delta2.x || scrollY != delta2.y)
+			if (scrollX != delta2.x || scrollY != delta2.y) // Keep the limits...
 			{
 				_totalMouseMoveX = (int)(delta2.x * action->getXScale());
 				_totalMouseMoveY = (int)(delta2.y * action->getYScale());
@@ -1211,16 +1156,11 @@ void BattlescapeState::mapOver(Action* action)
 			delta = _map->getCamera()->getMapOffset() - delta;
 			_cursorPosition.x = std::min(
 									_game->getScreen()->getWidth() - static_cast<int>(Round(action->getXScale())),
-									std::max(
-											0,
-											_cursorPosition.x + static_cast<int>(Round(static_cast<double>(delta.x) * action->getXScale()))));
+									std::max(0, _cursorPosition.x + static_cast<int>(Round(static_cast<double>(delta.x) * action->getXScale()))));
 			_cursorPosition.y = std::min(
 									_game->getScreen()->getHeight() - static_cast<int>(Round(action->getYScale())),
-									std::max(
-											0,
-											_cursorPosition.y + static_cast<int>(Round(static_cast<double>(delta.y) * action->getYScale())))); */
-/*kL
-			int barWidth = _game->getScreen()->getCursorLeftBlackBand();
+									std::max(0, _cursorPosition.y + static_cast<int>(Round(static_cast<double>(delta.y) * action->getYScale())))); */
+/*			int barWidth = _game->getScreen()->getCursorLeftBlackBand();
 			int barHeight = _game->getScreen()->getCursorTopBlackBand();
 			int cursorX = _cursorPosition.x + Round(delta.x * action->getXScale());
 			int cursorY = _cursorPosition.y + Round(delta.y * action->getYScale());
@@ -1249,8 +1189,6 @@ void BattlescapeState::printTileInventory() // private.
 {
 	_txtConsole1->setText(L"");
 	_txtConsole2->setText(L"");
-//	_txtConsole3->setText(L"");
-//	_txtConsole4->setText(L"");
 
 	bool showInfo;
 
@@ -1346,8 +1284,6 @@ void BattlescapeState::printTileInventory() // private.
 				continue;
 			}
 
-//			wst3 = wst1; // redundant, see below
-
 			if (qty > 1)
 			{
 				wst2 += L" * " + Text::formatNumber(qty);
@@ -1363,7 +1299,6 @@ void BattlescapeState::printTileInventory() // private.
 			{
 				if (row == 25)
 				{
-//					woststr << L"> more >>>";
 					woststr << L"> ";
 					++row;
 				}
@@ -1376,7 +1311,6 @@ void BattlescapeState::printTileInventory() // private.
 					if (wst1 == L"> ")
 					{
 						wst = woststr1.str();
-//						wst.erase(wst.length() - 8);
 						wst.erase(wst.length() - 2);
 						woststr1.str(L"");
 						woststr1 << wst;
@@ -1388,10 +1322,9 @@ void BattlescapeState::printTileInventory() // private.
 					woststr.str(L"");
 				}
 			}
-			else //if (row > 25) // Console #2
+			else // row > 25 // Console #2
 			{
 				if (row == 50)
-//					woststr << L"> more >>>";
 					woststr << L"> ";
 
 				woststr2.str(L"");
@@ -1402,7 +1335,6 @@ void BattlescapeState::printTileInventory() // private.
 					if (wst1 == L"> ")
 					{
 						wst = woststr2.str();
-//						wst.erase(wst.length() - 8);
 						wst.erase(wst.length() - 2);
 						woststr2.str(L"");
 						woststr2 << wst;
@@ -1430,7 +1362,6 @@ void BattlescapeState::printTileInventory() // private.
 	_txtOrder->setVisible(showInfo);
 	_lstSoldierInfo->setVisible(showInfo);
 	_alienMark->setVisible(showInfo && allowAlienMark());
-//	_txtHasKill->setVisible(showInfo);
 	_showSoldierData = showInfo;
 }
 
@@ -1447,20 +1378,14 @@ void BattlescapeState::mapPress(Action* action)
 		_isMouseScrolling = true;
 		_isMouseScrolled = false;
 
-//		SDL_GetMouseState(
-//					&_xBeforeMouseScrolling,
-//					&_yBeforeMouseScrolling);
-
+//		SDL_GetMouseState(&_xBeforeMouseScrolling, &_yBeforeMouseScrolling);
 		_offsetPreDragScroll = _map->getCamera()->getMapOffset();
 
-/*kL
-		if (!Options::battleDragScrollInvert
-			&& _cursorPosition.z == 0)
+/*		if (!Options::battleDragScrollInvert && _cursorPosition.z == 0)
 		{
 			_cursorPosition.x = static_cast<int>(action->getDetails()->motion.x);
 			_cursorPosition.y = static_cast<int>(action->getDetails()->motion.y);
-			// the Z is irrelevant to our mouse position, but we can use it as a boolean to check if the position is set or not
-			_cursorPosition.z = 1;
+			_cursorPosition.z = 1; // the Z is irrelevant to our mouse position, but we can use it as a boolean to check if the position is set or not
 		} */
 
 		_totalMouseMoveX =
@@ -1523,23 +1448,16 @@ void BattlescapeState::mapClick(Action* action)
 			return;
 	}
 
-	// right-click aborts walking state
-	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT
-		&& _battleGame->cancelCurrentAction() == true)
+
+	if ((action->getDetails()->button.button == SDL_BUTTON_RIGHT	// right-click removes pathPreview or aborts walking state
+			&& _battleGame->cancelCurrentAction() == true)
+		|| _mouseOverIcons == true									// don't handle mouseclicks over the buttons
+		|| _map->getCursorType() == CT_NONE							// don't accept clicks if there is no cursor
+		|| _battleGame->isBusy() == true)							// or there is an action busy
 	{
 		return;
 	}
 
-	// don't handle mouseclicks over the buttons (it overlaps with map surface)
-	if (_mouseOverIcons == true)
-		return;
-
-	// don't accept leftclicks if there is no cursor or there is an action busy
-	if (_map->getCursorType() == CT_NONE
-		|| _battleGame->isBusy() == true)
-	{
-		return;
-	}
 
 	Position pos;
 	_map->getSelectorPosition(&pos);
@@ -1579,49 +1497,33 @@ void BattlescapeState::mapIn(Action*)
 	_map->setButtonsPressed(static_cast<Uint8>(Options::battleDragScrollButton), false);
 }
 
-/**
+/*
  * Move the mouse back to where it started after we finish drag scrolling.
  * @param action - pointer to an Action
- */
-/*void BattlescapeState::stopScrolling(Action* action)
+ *
+void BattlescapeState::stopScrolling(Action* action)
 {
 	if (Options::battleDragScrollInvert)
 	{
-		SDL_WarpMouse(
-				static_cast<Uint16>(_xBeforeMouseScrolling),
-				static_cast<Uint16>(_yBeforeMouseScrolling));
-		action->setMouseAction(
-				_xBeforeMouseScrolling,
-				_yBeforeMouseScrolling,
-				_map->getX(),
-				_map->getY());
-
+		SDL_WarpMouse(static_cast<Uint16>(_xBeforeMouseScrolling), static_cast<Uint16>(_yBeforeMouseScrolling));
+		action->setMouseAction(_xBeforeMouseScrolling, _yBeforeMouseScrolling, _map->getX(), _map->getY());
 		_battleGame->setupCursor();
-		if (_battleGame->getCurrentAction()->actor == NULL
-			&& (_save->getSide() == FACTION_PLAYER
-				|| _save->getDebugMode() == true))
-		{
+		if (_battleGame->getCurrentAction()->actor == NULL && (_save->getSide() == FACTION_PLAYER || _save->getDebugMode() == true))
 			_map->setCursorType(CT_NORMAL);
-		}
 	}
 	else
 	{
-		SDL_WarpMouse(
-				static_cast<Uint16>(_cursorPosition.x),
-				static_cast<Uint16>(_cursorPosition.y));
+		SDL_WarpMouse(static_cast<Uint16>(_cursorPosition.x), static_cast<Uint16>(_cursorPosition.y));
 		action->setMouseAction(
 				static_cast<int>(static_cast<double>(_cursorPosition.x) / action->getXScale()),
 				static_cast<int>(static_cast<double>(_cursorPosition.y) / action->getYScale()),
-				_game->getScreen()->getSurface()->getX(),
-				_game->getScreen()->getSurface()->getY());
+				_game->getScreen()->getSurface()->getX(), _game->getScreen()->getSurface()->getY());
 
 		_map->setSelectorPosition(
 							static_cast<int>(static_cast<double>(_cursorPosition.x) / action->getXScale()),
 							static_cast<int>(static_cast<double>(_cursorPosition.y) / action->getYScale()));
 	}
-
-	// reset our "mouse position stored" flag
-	_cursorPosition.z = 0;
+	_cursorPosition.z = 0; // reset our "mouse position stored" flag
 } */
 
 /**
@@ -1639,9 +1541,7 @@ inline void BattlescapeState::handle(Action* action)
 				|| action->getDetails()->type == SDL_MOUSEBUTTONUP)))
 	{
 		State::handle(action);
-/*kL
-		if (_isMouseScrolling
-			&& !Options::battleDragScrollInvert) // newScroll
+/*		if (_isMouseScrolling && !Options::battleDragScrollInvert) // newScroll
 		{
 			_map->setSelectorPosition(
 								(_cursorPosition.x - _game->getScreen()->getCursorLeftBlackBand()) / action->getXScale(),
@@ -1674,7 +1574,6 @@ inline void BattlescapeState::handle(Action* action)
 					{
 						beep = true;
 						_battleSave->setDebugMode();
-//						_txtOperationTitle->setVisible(false);
 						debug(L"Debug Mode");
 					}
 					else if (_battleSave->getDebugMode() == true)
@@ -1786,7 +1685,6 @@ void BattlescapeState::btnUnitUpClick(Action*)
 	{
 		Pathfinding* const pf = _battleSave->getPathfinding();
 		pf->setInputModifiers();
-
 		if (pf->isModAlt() == false)
 		{
 			pf->setPathingUnit(_battleSave->getSelectedUnit());
@@ -1821,13 +1719,11 @@ void BattlescapeState::btnUnitDownClick(Action*)
 	{
 		Pathfinding* const pf = _battleSave->getPathfinding();
 		pf->setInputModifiers();
-
 		pf->setPathingUnit(_battleSave->getSelectedUnit());
-		const int valid = pf->validateUpDown(
-										_battleSave->getSelectedUnit()->getPosition(),
-										Pathfinding::DIR_DOWN);
 
-		if (valid > 0) // gravLift or flying
+		if (pf->validateUpDown(
+							_battleSave->getSelectedUnit()->getPosition(),
+							Pathfinding::DIR_DOWN) > 0)
 		{
 			_battleGame->cancelCurrentAction();
 			_battleGame->moveUpDown(
@@ -1975,9 +1871,7 @@ void BattlescapeState::btnInventoryClick(Action*)
 				_btnLaunch->setVisible(false);
 			}
 
-			_battleGame->getPathfinding()->removePreview();
 			_battleGame->cancelCurrentAction(true);
-
 			_game->pushState(new InventoryState(
 											_battleSave->getDebugMode() == false,
 											this));
@@ -2041,12 +1935,12 @@ void BattlescapeState::btnPrevStopClick(Action*)
 /**
  * Selects the next soldier.
  * @param checkReselect		- don't select a unit that has been previously flagged
- * @param setDontReselect	- flag the current unit first
+ * @param dontReselect		- flag the current unit first
  * @param checkInventory	- don't select a unit that has no inventory
  */
 void BattlescapeState::selectNextFactionUnit(
 		bool checkReselect,
-		bool setDontReselect,
+		bool dontReselect,
 		bool checkInventory)
 {
 	if (allowButtons() == true
@@ -2054,7 +1948,7 @@ void BattlescapeState::selectNextFactionUnit(
 	{
 		BattleUnit* const unit = _battleSave->selectNextFactionUnit(
 																checkReselect,
-																setDontReselect,
+																dontReselect,
 																checkInventory);
 		updateSoldierInfo();
 
@@ -2062,20 +1956,19 @@ void BattlescapeState::selectNextFactionUnit(
 			_map->getCamera()->centerOnPosition(unit->getPosition());
 
 		_battleGame->cancelCurrentAction();
-//		_battleGame->getCurrentAction()->actor = unit; // -> done in setupCursor()
-		_battleGame->setupCursor();
+//		_battleGame->setupCursor(); // not sure why this not needed.
 	}
 }
 
 /**
  * Selects the previous soldier.
  * @param checkReselect		- don't select a unit that has been previously flagged
- * @param setDontReselect	- flag the current unit first
+ * @param dontReselect		- flag the current unit first
  * @param checkInventory	- don't select a unit that has no inventory
  */
 void BattlescapeState::selectPreviousFactionUnit(
 		bool checkReselect,
-		bool setDontReselect,
+		bool dontReselect,
 		bool checkInventory)
 {
 	if (allowButtons() == true
@@ -2083,7 +1976,7 @@ void BattlescapeState::selectPreviousFactionUnit(
 	{
 		BattleUnit* const unit = _battleSave->selectPreviousFactionUnit(
 																	checkReselect,
-																	setDontReselect,
+																	dontReselect,
 																	checkInventory);
 		updateSoldierInfo();
 
@@ -2091,8 +1984,7 @@ void BattlescapeState::selectPreviousFactionUnit(
 			_map->getCamera()->centerOnPosition(unit->getPosition());
 
 		_battleGame->cancelCurrentAction();
-//		_battleGame->getCurrentAction()->actor = unit; // -> done in setupCursor()
-		_battleGame->setupCursor();
+//		_battleGame->setupCursor(); // not sure why this not needed.
 	}
 }
 /**
@@ -2101,8 +1993,6 @@ void BattlescapeState::selectPreviousFactionUnit(
  */
 void BattlescapeState::btnShowLayersClick(Action*)
 {
-//	_numLayers->setValue(_map->getCamera()->toggleShowAllLayers());
-
 	if (allowButtons() == true)
 	{
 		const bool showLayers = (_map->getCamera()->toggleShowAllLayers() == 2) ? true : false;
@@ -2190,7 +2080,6 @@ void BattlescapeState::btnStatsClick(Action* action)
 		}
 
 		_battleGame->cancelCurrentAction(true);
-
 		if (edge == false)
 			popup(new UnitInfoState(
 								_battleSave->getSelectedUnit(),
@@ -2366,7 +2255,6 @@ void BattlescapeState::btnHostileUnitPress(Action* action)
 					updateSoldierInfo();
 
 					_battleGame->cancelCurrentAction();
-//					_battleGame->getCurrentAction()->actor = nextSpotter; // -> done in setupCursor()
 					_battleGame->setupCursor();
 				}
 
@@ -2566,24 +2454,15 @@ void BattlescapeState::btnConsoleToggle(Action*)
 			_showConsole = 1;
 
 			_txtConsole2->setText(L"");
-//			_txtConsole3->setText(L"");
-//			_txtConsole4->setText(L"");
 		}
 		else if (_showConsole == 1)
-		{
 			_showConsole = 2;
-
-//			_txtConsole3->setText(L"");
-//			_txtConsole4->setText(L"");
-		}
 		else if (_showConsole == 2)
 		{
-//			_showConsole = 3;
 			_showConsole = 0;
 
 			_txtConsole1->setText(L"");
 			_txtConsole2->setText(L"");
-//			_txtConsole4->setText(L"");
 
 			_txtTerrain->setVisible();
 			_txtShade->setVisible();
@@ -2592,40 +2471,11 @@ void BattlescapeState::btnConsoleToggle(Action*)
 			_txtOrder->setVisible();
 			_lstSoldierInfo->setVisible();
 			_alienMark->setVisible(allowAlienMark());
-//			_txtHasKill->setVisible();
 			_showSoldierData = true;
 		}
-/*		else if (_showConsole == 3)
-		{
-			_showConsole = 4;
-
-			_txtConsole1->setText(L"");
-			_txtConsole2->setText(L"");
-		}
-		else if (_showConsole == 4)
-		{
-			_showConsole = 0;
-
-			_txtConsole1->setText(L"");
-			_txtConsole2->setText(L"");
-			_txtConsole3->setText(L"");
-			_txtConsole4->setText(L"");
-
-			_txtTerrain->setVisible();
-			_txtShade->setVisible();
-			_txtTurn->setVisible();
-			_txtOrder->setVisible();
-			_lstSoldierInfo->setVisible();
-			_alienMark->setVisible(allowAlienMark());
-//			_txtHasKill->setVisible();
-		} */
 
 		_txtConsole1->setVisible(_showConsole > 0);
 		_txtConsole2->setVisible(_showConsole > 1);
-/*		_txtConsole1->setVisible(0 < _showConsole && _showConsole < 3);
-		_txtConsole2->setVisible(1 < _showConsole && _showConsole < 3);
-		_txtConsole3->setVisible(2 < _showConsole);
-		_txtConsole4->setVisible(3 < _showConsole); */
 	}
 }
 
@@ -2696,8 +2546,6 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 	_btnLeftHandItem	->setVisible(false);
 	_numAmmoRight		->setVisible(false);
 	_numAmmoLeft		->setVisible(false);
-//	_numFuseRight		->setVisible(false);
-//	_numFuseLeft		->setVisible(false);
 
 	_isKneeled =
 	_isOverweight = false;
@@ -3010,30 +2858,6 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 					&& selUnit->getBaseStats()->psiSkill > 0);
 	}
 }
-
-/**
- * kL. Draws the kneel indicator.
- */
-/* void BattlescapeState::drawKneelIndicator() // kL
-{
-//	SDL_Rect square;
-//	square.x = 0;
-//	square.y = 0;
-//	square.w = 2;
-//	square.h = 2;
-
-//	_kneel->drawRect(&square, Palette::blockOffset(5)+12);
-	_kneel->drawRect(0,0, 2,2, Palette::blockOffset(5)+12);
-} */
-
-/**
- * kL. Draws the fatal wounds indicator.
- */
-/* void BattlescapeState::drawWoundIndicator() // kL
-{
-	_btnWounds->drawRect(0,0, 15,12, 15);		// black border
-	_btnWounds->drawRect(1,1, 13,10, color);	// inner red square
-} */
 
 /**
  * Refreshes the visUnits indicators for UnitWalk/TurnBStates.
@@ -3591,8 +3415,6 @@ void BattlescapeState::mouseInIcons(Action*)
 
 	_txtConsole1->setText(L"");
 	_txtConsole2->setText(L"");
-//	_txtConsole3->setText(L"");
-//	_txtConsole4->setText(L"");
 
 	_txtTerrain->setVisible();
 	_txtShade->setVisible();
@@ -3601,7 +3423,6 @@ void BattlescapeState::mouseInIcons(Action*)
 	_txtOrder->setVisible();
 	_lstSoldierInfo->setVisible();
 	_alienMark->setVisible(allowAlienMark());
-//	_txtHasKill->setVisible();
 	_showSoldierData = true;
 
 	_lstTileInfo->setVisible(false);
@@ -3735,11 +3556,6 @@ void BattlescapeState::resize(
 void BattlescapeState::updateTurn()
 {
 	_txtTurn->setText(tr("STR_TURN").arg(_battleSave->getTurn()));
-
-/*	std::wostringstream woStr;
-	woStr << L"turn ";
-	woStr << _battleSave->getTurn();
-	_txtTurn->setText(woStr.str()); */
 }
 
 /**
@@ -3772,7 +3588,6 @@ void BattlescapeState::toggleIcons(bool vis)
 	_txtOrder->setVisible(vis);
 	_lstSoldierInfo->setVisible(vis);
 	_alienMark->setVisible(vis && allowAlienMark());
-//	_txtHasKill->setVisible(vis);
 	_showSoldierData = vis;
 
 //	_txtControlDestroyed->setVisible(vis);
@@ -3787,7 +3602,7 @@ void BattlescapeState::toggleIcons(bool vis)
 
 /**
  * Gets the TimeUnits field from icons.
- * Note: these are for use in UnitWalkBState to update info when soldier walks.
+ * @note These are for use in UnitWalkBState to update info when soldier walks.
  * @return, pointer to time units NumberText
  */
 NumberText* BattlescapeState::getTimeUnitsField() const
@@ -3841,61 +3656,57 @@ void BattlescapeState::updateExperienceInfo()
 	_lstSoldierInfo->clearList();
 	_alienMark->setVisible(false);
 
-	if (_showSoldierData == false)
-		return;
-
-
-	const BattleUnit* const unit = _battleSave->getSelectedUnit();
-	if (unit == NULL
-		|| unit->getGeoscapeSoldier() == NULL)
+	if (_showSoldierData == true)
 	{
-		return;
-	}
+		const BattleUnit* const unit = _battleSave->getSelectedUnit();
+		if (unit != NULL
+			&& unit->getGeoscapeSoldier() != NULL)
+		{
+			if (unit->hasFirstKill() == true)
+				_alienMark->setVisible();
 
-	if (unit->hasFirstKill() == true)
-		_alienMark->setVisible();
+			// keep this consistent ...
+			std::vector<std::wstring> xpType;
+			xpType.push_back(L"f "); // firing
+			xpType.push_back(L"t "); // throwing
+			xpType.push_back(L"m "); // melee
+			xpType.push_back(L"r "); // reactions
+			xpType.push_back(L"b "); // bravery
+			xpType.push_back(L"a "); // psiSkill attack
+			xpType.push_back(L"d "); // psiStrength defense
 
+			// ... consistent with this
+			const int xp[] =
+			{
+				unit->getExpFiring(),
+				unit->getExpThrowing(),
+				unit->getExpMelee(),
+				unit->getExpReactions(),
+				unit->getExpBravery(),
+				unit->getExpPsiSkill(),
+				unit->getExpPsiStrength()
+			};
 
-	// keep this consistent ...
-	std::vector<std::wstring> xpType;
-	xpType.push_back(L"f "); // firing
-	xpType.push_back(L"t "); // throwing
-	xpType.push_back(L"m "); // melee
-	xpType.push_back(L"r "); // reactions
-	xpType.push_back(L"b "); // bravery
-	xpType.push_back(L"a "); // psiSkill attack
-	xpType.push_back(L"d "); // psiStrength defense
+			for (size_t
+					i = 0;
+					i != sizeof(xp) / sizeof(xp[0]);
+					++i)
+			{
+				_lstSoldierInfo->addRow(
+									2,
+									xpType.at(i).c_str(),
+									Text::formatNumber(xp[i]).c_str());
 
-	// ... consistent with this
-	const int xp[] =
-	{
-		unit->getExpFiring(),
-		unit->getExpThrowing(),
-		unit->getExpMelee(),
-		unit->getExpReactions(),
-		unit->getExpBravery(),
-		unit->getExpPsiSkill(),
-		unit->getExpPsiStrength()
-	};
-
-	for (size_t
-			i = 0;
-			i != sizeof(xp) / sizeof(xp[0]);
-			++i)
-	{
-		_lstSoldierInfo->addRow(
-							2,
-							xpType.at(i).c_str(),
-							Text::formatNumber(xp[i]).c_str());
-
-		if (xp[i] > 10)
-			_lstSoldierInfo->setCellColor(i, 1, Palette::blockOffset(5), true);		// lt.brown
-		else if (xp[i] > 5)
-			_lstSoldierInfo->setCellColor(i, 1, Palette::blockOffset(10), true);	// brown
-		else if (xp[i] > 2)
-			_lstSoldierInfo->setCellColor(i, 1, Palette::blockOffset(1), true);		// orange
-		else if (xp[i] > 0)
-			_lstSoldierInfo->setCellColor(i, 1, Palette::blockOffset(3), true);		// green
+				if (xp[i] > 10)
+					_lstSoldierInfo->setCellColor(i, 1, Palette::blockOffset(5), true); // lt.brown
+				else if (xp[i] > 5)
+					_lstSoldierInfo->setCellColor(i, 1, Palette::blockOffset(10), true); // brown
+				else if (xp[i] > 2)
+					_lstSoldierInfo->setCellColor(i, 1, Palette::blockOffset(1), true); // orange
+				else if (xp[i] > 0)
+					_lstSoldierInfo->setCellColor(i, 1, Palette::blockOffset(3), true); // green
+			}
+		}
 	}
 }
 
@@ -3907,128 +3718,125 @@ void BattlescapeState::updateTileInfo(const Tile* const tile)
 {
 	_lstTileInfo->clearList();
 
-	if (tile == NULL
-		|| tile->isDiscovered(2) == false)
+	if (tile != NULL
+		&& tile->isDiscovered(2) == true)
 	{
-		return;
-	}
+		size_t rows = 3;
+		int tuCost = 0;
 
-	size_t rows = 3;
-	int tuCost = 0;
-
-	const BattleUnit* const unit = _battleSave->getSelectedUnit();
-	if (unit != NULL
-		&& unit->getFaction() == FACTION_PLAYER)
-	{
-		++rows;
-
-		MovementType moveType = unit->getMoveTypeUnit();
-
-		tuCost = tile->getTuCostTile(
-								O_FLOOR,
-								moveType)
-			   + tile->getTuCostTile(
-								O_OBJECT,
-								moveType);
-
-		if (tile->getMapData(O_FLOOR) == NULL
-			&& tile->getMapData(O_OBJECT) != NULL)
+		const BattleUnit* const unit = _battleSave->getSelectedUnit();
+		if (unit != NULL
+			&& unit->getFaction() == FACTION_PLAYER)
 		{
-			tuCost += 4;
-		}
-		else if (tuCost == 0)
-		{
-			if (moveType == MT_FLY
-				|| moveType == MT_FLOAT)
+			++rows;
+
+			MovementType moveType = unit->getMoveTypeUnit();
+
+			tuCost = tile->getTuCostTile(
+									O_FLOOR,
+									moveType)
+				   + tile->getTuCostTile(
+									O_OBJECT,
+									moveType);
+
+			if (tile->getMapData(O_FLOOR) == NULL
+				&& tile->getMapData(O_OBJECT) != NULL)
 			{
-				tuCost = 4;
+				tuCost += 4;
 			}
-			else
-				tuCost = 255;
-		}
-	}
-
-
-	const int info[] =
-	{
-		static_cast<int>(tile->hasNoFloor(_battleSave->getTile(tile->getPosition() + Position(0,0,-1)))),
-		tile->getSmoke(),
-		tile->getFire(),
-		tuCost
-	};
-
-	std::vector<std::wstring> infoType;
-	infoType.push_back(L"F"); // Floor
-	infoType.push_back(L"S"); // smoke
-	infoType.push_back(L"I"); // fire
-	infoType.push_back(L"M"); // tuCost
-
-
-	Uint8 color = Palette::blockOffset(8); // blue, avoid VC++ linker warning.
-
-	for (size_t
-			i = 0;
-			i != rows;
-			++i)
-	{
-		if (i == 0) // Floor
-		{
-			std::wstring hasFloor;
-			if (info[i] == 0)
+			else if (tuCost == 0)
 			{
-				hasFloor = L"F";
-				color = Palette::blockOffset(3); // green, Floor
+				if (moveType == MT_FLY
+					|| moveType == MT_FLOAT)
+				{
+					tuCost = 4;
+				}
+				else
+					tuCost = 255;
 			}
-			else
+		}
+
+
+		const int info[] =
+		{
+			static_cast<int>(tile->hasNoFloor(_battleSave->getTile(tile->getPosition() + Position(0,0,-1)))),
+			tile->getSmoke(),
+			tile->getFire(),
+			tuCost
+		};
+
+		std::vector<std::wstring> infoType;
+		infoType.push_back(L"F"); // Floor
+		infoType.push_back(L"S"); // smoke
+		infoType.push_back(L"I"); // fire
+		infoType.push_back(L"M"); // tuCost
+
+
+		Uint8 color = Palette::blockOffset(8); // blue, avoid VC++ linker warning.
+
+		for (size_t
+				i = 0;
+				i != rows;
+				++i)
+		{
+			if (i == 0) // Floor
 			{
-				hasFloor = L"-";
-				color = Palette::blockOffset(1); // orange, NO Floor
+				std::wstring hasFloor;
+				if (info[i] == 0)
+				{
+					hasFloor = L"F";
+					color = Palette::blockOffset(3); // green, Floor
+				}
+				else
+				{
+					hasFloor = L"-";
+					color = Palette::blockOffset(1); // orange, NO Floor
+				}
+
+				_lstTileInfo->addRow(
+								2,
+								hasFloor.c_str(),
+								infoType.at(i).c_str());
+			}
+			else if (i < 3) // smoke & fire
+			{
+				if (i == 1)
+					color = Palette::blockOffset(5); // brown, smoke
+				else
+					color = Palette::blockOffset(2); // red, fire
+
+				std::wstring value;
+				if (info[i] != 0)
+					value = Text::formatNumber(info[i]).c_str();
+				else
+					value = L"";
+
+				_lstTileInfo->addRow(
+								2,
+								value.c_str(),
+								infoType.at(i).c_str());
+			}
+			else if (unit != NULL) // tuCost
+			{
+				color = Palette::blockOffset(8); // blue
+
+				std::wstring cost;
+				if (info[i] < 255)
+					cost = Text::formatNumber(info[i]).c_str();
+				else
+					cost = L"-";
+
+				_lstTileInfo->addRow(
+								2,
+								cost.c_str(),
+								infoType.at(i).c_str());
 			}
 
-			_lstTileInfo->addRow(
-							2,
-							hasFloor.c_str(),
-							infoType.at(i).c_str());
+			_lstTileInfo->setCellColor(
+									i,0,
+									color,
+									true);
 		}
-		else if (i < 3) // smoke & fire
-		{
-			if (i == 1)
-				color = Palette::blockOffset(5); // brown, smoke
-			else
-				color = Palette::blockOffset(2); // red, fire
-
-			std::wstring value;
-			if (info[i] != 0)
-				value = Text::formatNumber(info[i]).c_str();
-			else
-				value = L"";
-
-			_lstTileInfo->addRow(
-							2,
-							value.c_str(),
-							infoType.at(i).c_str());
-		}
-		else if (unit != NULL) // tuCost
-		{
-			color = Palette::blockOffset(8); // blue
-
-			std::wstring cost;
-			if (info[i] < 255)
-				cost = Text::formatNumber(info[i]).c_str();
-			else
-				cost = L"-";
-
-			_lstTileInfo->addRow(
-							2,
-							cost.c_str(),
-							infoType.at(i).c_str());
-		}
-
-		_lstTileInfo->setCellColor(
-								i,
-								0,
-								color,
-								true);
 	}
 }
 
@@ -4038,7 +3846,6 @@ void BattlescapeState::updateTileInfo(const Tile* const tile)
 void BattlescapeState::saveAIMap()
 {
 //	Uint32 start = SDL_GetTicks(); // kL_note: Not used.
-
 	const BattleUnit* const unit = _battleSave->getSelectedUnit();
 	if (unit == NULL)
 		return;
@@ -4069,30 +3876,20 @@ void BattlescapeState::saveAIMap()
 	rect.w = 8;
 
 /*	Tile* t; // kL_note: Not used ->
-	for (int
-			y = 0;
-			y < h;
-			++y)
+	for (int y = 0; y < h; ++y)
 	{
 		tilePos.y = y;
-		for (int
-				x = 0;
-				x < w;
-				++x)
+		for (int x = 0; x < w; ++x)
 		{
 			tilePos.x = x;
 			t = _battleSave->getTile(tilePos);
 
-			if (t == NULL)
-				continue;
-			if (t->isDiscovered(2) == false)
-				continue;
+			if (t == NULL) continue;
+			if (t->isDiscovered(2) == false) continue;
 		}
 	}
-
 	int expMax = 0;
-	if (expMax < 100)
-		expMax = 100; */
+	if (expMax < 100) expMax = 100; */
 
 	const Tile* t;
 	const BattleUnit* wat;

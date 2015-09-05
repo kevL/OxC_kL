@@ -101,10 +101,10 @@ void Camera::setScrollTimer(
  * @param minValue	- the minimum value
  * @param maxValue	- the maximum value
  */
-void Camera::minMaxInt( // private.
+void Camera::intMinMax( // private.
 		int* value,
-		const int minValue,
-		const int maxValue) const
+		int minValue,
+		int maxValue) const
 {
 	if (*value < minValue)
 		*value = minValue;
@@ -546,16 +546,16 @@ int Camera::getViewLevel() const
  * Sets the view level.
  * @param viewLevel - new view level
  */
-void Camera::setViewLevel(int viewLevel)
-{
-	_mapOffset.z = viewLevel;
-	minMaxInt(
+void Camera::setViewLevel(int viewLevel)	// The call from Map::drawTerrain() causes a stack overflow loop when projectile in FoV.
+{											// Solution: remove draw() call below_
+	_mapOffset.z = viewLevel;				// - might have to pass in a 'redraw' bool to compensate for other calls ...
+	intMinMax(
 			&_mapOffset.z,
 			0,
 			_mapsize_z - 1);
 
 	_map->getBattleSave()->getBattleState()->setLayerValue(_mapOffset.z);
-	_map->draw();
+//	_map->draw();
 }
 
 /**
@@ -569,11 +569,11 @@ void Camera::centerOnPosition(
 {
 	_center = posMap;
 
-	minMaxInt(
+	intMinMax(
 			&_center.x,
 			-1,
 			_mapsize_x);
-	minMaxInt(
+	intMinMax(
 			&_center.y,
 			-1,
 			_mapsize_y);
@@ -628,11 +628,11 @@ void Camera::convertScreenToMap(
 	*mapX /= (_spriteWidth / 4);
 	*mapY /= _spriteWidth;
 
-	minMaxInt(
+	intMinMax(
 			mapX,
 			-1,
 			_mapsize_x);
-	minMaxInt(
+	intMinMax(
 			mapY,
 			-1,
 			_mapsize_y);

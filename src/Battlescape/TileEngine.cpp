@@ -5980,24 +5980,16 @@ bool TileEngine::psiAttack(BattleAction* const action)
 						true);
 
 /*				// if all units from either faction are mind controlled - auto-end the mission.
-				if (Options::allowPsionicCapture == true
-					&& Options::battleAutoEnd == true
-					&& _battleSave->getSide() == FACTION_PLAYER)
+				if (Options::allowPsionicCapture == true && Options::battleAutoEnd == true && _battleSave->getSide() == FACTION_PLAYER)
 				{
 					//Log(LOG_INFO) << ". . . . inside tallyUnits";
-					int
-						liveAliens,
-						liveSoldiers;
-					_battleSave->getBattleGame()->tallyUnits(
-														liveAliens,
-														liveSoldiers);
+					int liveAliens, liveSoldiers;
+					_battleSave->getBattleGame()->tallyUnits(liveAliens, liveSoldiers);
 
-					if (liveAliens == 0
-						|| liveSoldiers == 0)
+					if (liveAliens == 0 || liveSoldiers == 0)
 					{
 						_battleSave->setSelectedUnit(NULL);
 						_battleSave->getBattleGame()->cancelCurrentAction(true);
-
 						_battleSave->getBattleGame()->requestEndTurn();
 					}
 				} */

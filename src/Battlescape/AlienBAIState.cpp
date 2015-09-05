@@ -2632,7 +2632,6 @@ bool AlienBAIState::psiAction() // private.
 		}
 		else // do it -> further evaluation req'd.
 		{
-			const bool losReq = itRule->isLOSRequired();
 			const int
 				losFactor = 50, // increase chance of attack against a unit that is currently in LoS.
 				attackStr = static_cast<int>(std::floor(
@@ -2655,7 +2654,7 @@ bool AlienBAIState::psiAction() // private.
 					&& validTarget( // will check for Mc, Exposed, etc.
 								*i,
 								true) == true
-					&& (losReq == false
+					&& (itRule->isLosRequired() == false
 						|| std::find(
 								_unit->getHostileUnits()->begin(),
 								_unit->getHostileUnits()->end(),

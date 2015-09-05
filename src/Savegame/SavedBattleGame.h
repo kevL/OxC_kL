@@ -136,7 +136,7 @@ private:
 	BattleUnit* selectFactionUnit(
 			int dir,
 			bool checkReselect = false,
-			bool setDontReselect = false,
+			bool dontReselect = false,
 			bool checkInventory = false);
 
 	/// Sets the TacticalType from the mission type.
@@ -251,12 +251,12 @@ private:
 		/// Selects the previous soldier.
 		BattleUnit* selectPreviousFactionUnit(
 				bool checkReselect = false,
-				bool setDontReselect = false,
+				bool dontReselect = false,
 				bool checkInventory = false);
 		/// Selects the next soldier.
 		BattleUnit* selectNextFactionUnit(
 				bool checkReselect = false,
-				bool setDontReselect = false,
+				bool dontReselect = false,
 				bool checkInventory = false);
 		/// Selects the unit with position on map.
 		BattleUnit* selectUnit(const Position& pos);

@@ -147,8 +147,7 @@ OptionsBattlescapeState::OptionsBattlescapeState(OptionsOrigin origin)
 
 	_txtXcomSpeed->setText(tr("STR_PLAYER_MOVEMENT_SPEED"));
 
-//kL	_slrXcomSpeed->setRange(40, 1);
-	_slrXcomSpeed->setRange(80, 1); // kL
+	_slrXcomSpeed->setRange(80, 1); // was 40
 	_slrXcomSpeed->setValue(Options::battleXcomSpeed);
 	_slrXcomSpeed->onChange((ActionHandler)& OptionsBattlescapeState::slrXcomSpeedChange);
 //	_slrXcomSpeed->setTooltip("STR_PLAYER_MOVEMENT_SPEED_DESC");
@@ -167,14 +166,14 @@ OptionsBattlescapeState::OptionsBattlescapeState(OptionsOrigin origin)
 	_txtPathPreview->setText(tr("STR_PATH_PREVIEW"));
 
 	_btnArrows->setText(tr("STR_PATH_ARROWS"));
-	_btnArrows->setPressed((Options::battleNewPreviewPath & PATH_ARROWS) != 0);
+	_btnArrows->setPressed((Options::battlePreviewPath & PATH_ARROWS) != 0);
 	_btnArrows->onMouseClick((ActionHandler)& OptionsBattlescapeState::btnPathPreviewClick);
 //	_btnArrows->setTooltip("STR_PATH_ARROWS_DESC");
 //	_btnArrows->onMouseIn((ActionHandler)& OptionsBattlescapeState::txtTooltipIn);
 //	_btnArrows->onMouseOut((ActionHandler)& OptionsBattlescapeState::txtTooltipOut);
 
 	_btnTuCost->setText(tr("STR_PATH_TIME_UNIT_COST"));
-	_btnTuCost->setPressed((Options::battleNewPreviewPath & PATH_TU_COST) != 0);
+	_btnTuCost->setPressed((Options::battlePreviewPath & PATH_TU_COST) != 0);
 	_btnTuCost->onMouseClick((ActionHandler)& OptionsBattlescapeState::btnPathPreviewClick);
 //	_btnTuCost->setTooltip("STR_PATH_TIME_UNIT_COST_DESC");
 //	_btnTuCost->onMouseIn((ActionHandler)& OptionsBattlescapeState::txtTooltipIn);
@@ -265,13 +264,13 @@ void OptionsBattlescapeState::btnPathPreviewClick(Action*)
 {
 	int mode = PATH_NONE;
 
-	if (_btnArrows->getPressed())
+	if (_btnArrows->getPressed() == true)
 		mode |= PATH_ARROWS;
 
-	if (_btnTuCost->getPressed())
+	if (_btnTuCost->getPressed() == true)
 		mode |= PATH_TU_COST;
 
-	Options::battleNewPreviewPath = (PathPreview)mode;
+	Options::battlePreviewPath = static_cast<PathPreview>(mode);
 }
 
 /**

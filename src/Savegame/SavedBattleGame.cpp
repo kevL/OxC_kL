@@ -1025,40 +1025,40 @@ void SavedBattleGame::setSelectedUnit(BattleUnit* const unit)
 /**
 * Selects the previous player unit.
  * @param checkReselect		- true to check the reselectable flag (default false)
- * @param setDontReselect	- true to set the reselectable flag FALSE (default false)
+ * @param dontReselect		- true to set the reselectable flag FALSE (default false)
  * @param checkInventory	- true to check if the unit has an inventory (default false)
  * @return, pointer to newly selected BattleUnit or NULL if none can be selected
 * @sa selectFactionUnit
 */
 BattleUnit* SavedBattleGame::selectPreviousFactionUnit(
 		bool checkReselect,
-		bool setDontReselect,
+		bool dontReselect,
 		bool checkInventory)
 {
 	return selectFactionUnit(
 						-1,
 						checkReselect,
-						setDontReselect,
+						dontReselect,
 						checkInventory);
 }
 
 /**
  * Selects the next player unit.
  * @param checkReselect		- true to check the reselectable flag (default false)
- * @param setDontReselect	- true to set the reselectable flag FALSE (default false)
+ * @param dontReselect		- true to set the reselectable flag FALSE (default false)
  * @param checkInventory	- true to check if the unit has an inventory (default false)
  * @return, pointer to newly selected BattleUnit or NULL if none can be selected
  * @sa selectFactionUnit
  */
 BattleUnit* SavedBattleGame::selectNextFactionUnit(
 		bool checkReselect,
-		bool setDontReselect,
+		bool dontReselect,
 		bool checkInventory)
 {
 	return selectFactionUnit(
 						+1,
 						checkReselect,
-						setDontReselect,
+						dontReselect,
 						checkInventory);
 }
 
@@ -1066,14 +1066,14 @@ BattleUnit* SavedBattleGame::selectNextFactionUnit(
  * Selects the next player unit in a certain direction.
  * @param dir				- direction to select (1 for next and -1 for previous)
  * @param checkReselect		- true to check the reselectable flag (default false)
- * @param setDontReselect	- true to set the reselectable flag FALSE (default false)
+ * @param dontReselect		- true to set the reselectable flag FALSE (default false)
  * @param checkInventory	- true to check if the unit has an inventory (default false)
  * @return, pointer to newly selected BattleUnit or NULL if none can be selected
  */
 BattleUnit* SavedBattleGame::selectFactionUnit( // private.
 		int dir,
 		bool checkReselect,
-		bool setDontReselect,
+		bool dontReselect,
 		bool checkInventory)
 {
 	if (_units.empty() == true)
@@ -1084,7 +1084,7 @@ BattleUnit* SavedBattleGame::selectFactionUnit( // private.
 		return NULL;
 	}
 
-	if (setDontReselect == true
+	if (dontReselect == true
 		&& _selectedUnit != NULL)
 	{
 		_selectedUnit->dontReselect();
@@ -1092,18 +1092,18 @@ BattleUnit* SavedBattleGame::selectFactionUnit( // private.
 
 
 	std::vector<BattleUnit*>::const_iterator
-		unitFirst,
-		unitLast;
+		firstUnit,
+		lastUnit;
 
 	if (dir > 0)
 	{
-		unitFirst = _units.begin();
-		unitLast = _units.end() - 1;
+		firstUnit = _units.begin();
+		lastUnit = _units.end() - 1;
 	}
 	else
 	{
-		unitFirst = _units.end() - 1;
-		unitLast = _units.begin();
+		firstUnit = _units.end() - 1;
+		lastUnit = _units.begin();
 	}
 
 	std::vector<BattleUnit*>::const_iterator i = std::find(
@@ -1114,14 +1114,14 @@ BattleUnit* SavedBattleGame::selectFactionUnit( // private.
 	{
 		if (i == _units.end()) // no unit selected
 		{
-			i = unitFirst;
+			i = firstUnit;
 			continue;
 		}
 
-		if (i != unitLast)
+		if (i != lastUnit)
 			i += dir;
 		else // reached the end, wrap-around
-			i = unitFirst;
+			i = firstUnit;
 
 		if (*i == _selectedUnit) // back to start ... no more units found
 		{
@@ -1134,7 +1134,7 @@ BattleUnit* SavedBattleGame::selectFactionUnit( // private.
 			return _selectedUnit;
 		}
 		else if (_selectedUnit == NULL
-			&& i == unitFirst)
+			&& i == firstUnit)
 		{
 			return NULL;
 		}
@@ -1144,9 +1144,7 @@ BattleUnit* SavedBattleGame::selectFactionUnit( // private.
 						checkReselect,
 						checkInventory) == false);
 
-
 	_selectedUnit = *i;
-
 	return _selectedUnit;
 }
 
@@ -1691,16 +1689,6 @@ void SavedBattleGame::addDestroyedObjective()
 		if (allObjectivesDestroyed() == true)
 		{
 			_controlDestroyed = true;
-/*			if (getObjectiveType() == MUST_DESTROY)
-			{
-				if (Options::battleAutoEnd == true)
-				{
-					setSelectedUnit(NULL);
-					_battleState->getBattleGame()->cancelCurrentAction(true);
-					_battleState->getBattleGame()->requestEndTurn();
-				}
-			}
-			else */
 			_battleState->getBattleGame()->objectiveDone();
 		}
 	}

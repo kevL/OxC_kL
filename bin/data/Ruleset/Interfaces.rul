@@ -529,7 +529,7 @@ interfaces:
       - id: errorPalette
         color: 6     # brown
       - id: errorMessage
-        color: 100   # lavender 241=pinkmaybe blueprobably whothefuckknowsorevencaresanymore
+        color: 100   # lavender 241=pinkmaybe blueprobably whothefuckknowsorevencaresanymore-ohyeah 239=brightgreen
   - type: gameOver
     elements:
       - id: defeatText

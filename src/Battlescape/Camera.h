@@ -68,10 +68,10 @@ private:
 		* _scrollKeyTimer;
 
 	///
-	void minMaxInt(
+	void intMinMax(
 			int* value,
-			const int minValue,
-			const int maxValue) const;
+			int minValue,
+			int maxValue) const;
 
 
 	public:
