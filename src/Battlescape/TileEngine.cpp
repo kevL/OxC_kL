@@ -1967,13 +1967,8 @@ bool TileEngine::reactionShot(
 	if (_rfAction->targeting == true
 		&& _rfAction->actor->spendTimeUnits(_rfAction->TU) == true)
 	{
-//		if (_rfAction->actor->getFaction() != FACTION_HOSTILE)
-//		{
-//		Camera* const rfCam = _battleSave->getBattleState()->getMap()->getCamera();	// this is getting done in Map.
-//		rfCam->centerOnPosition(_rfAction->actor->getPosition());					// The stored shot-position is more accurate from there.
-//		_rfAction->cameraPosition = rfCam->getMapOffset();							// Unfortunately I don't know how to pre-calculate the voxelPosition that the shot will be
-//		}																			// fired from (which is done in Map) and convert it to a mapOffset so I can't store it here.
-
+		Log(LOG_INFO) << "rf by Actor " << _rfAction->actor->getId() << " RfTriggerPos " << _battleSave->getBattleGame()->getMap()->getCamera()->getMapOffset();
+		_battleSave->storeRfTriggerPosition(_battleSave->getBattleGame()->getMap()->getCamera()->getMapOffset());
 		_rfAction->TU = 0;
 
 		_battleSave->getBattleGame()->statePushBack(new UnitTurnBState(

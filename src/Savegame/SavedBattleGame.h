@@ -91,6 +91,7 @@ private:
 	size_t _mapSize;
 
 	BattleActionType _batReserved;
+	Position _rfTriggerPosition;
 	TacticalType _tacType;
 	UnitFaction _side;
 
@@ -464,6 +465,11 @@ private:
 		void setPacified();
 		/// Gets whether the aLiens have been pacified yet.
 		bool getPacified() const;
+
+		/// Stores the camera-position where the last RF-trigger happened.
+		void storeRfTriggerPosition(const Position& pos);
+		/// Gets the camera-position where the last RF-trigger happened.
+		const Position& getRfTriggerPosition() const;
 };
 
 }

@@ -1956,7 +1956,7 @@ void BattlescapeState::selectNextFactionUnit(
 			_map->getCamera()->centerOnPosition(unit->getPosition());
 
 		_battleGame->cancelCurrentAction();
-//		_battleGame->setupCursor(); // not sure why this not needed.
+		_battleGame->setupCursor();
 	}
 }
 
@@ -1984,7 +1984,7 @@ void BattlescapeState::selectPreviousFactionUnit(
 			_map->getCamera()->centerOnPosition(unit->getPosition());
 
 		_battleGame->cancelCurrentAction();
-//		_battleGame->setupCursor(); // not sure why this not needed.
+		_battleGame->setupCursor();
 	}
 }
 /**
@@ -1995,14 +1995,12 @@ void BattlescapeState::btnShowLayersClick(Action*)
 {
 	if (allowButtons() == true)
 	{
-		const bool showLayers = (_map->getCamera()->toggleShowAllLayers() == 2) ? true : false;
-
-		if (showLayers == false)
+		if (_map->getCamera()->toggleShowLayers() == false)
 			_iconsLayer->clear();
 		else
 		{
-			Surface* const iconsLayer = _game->getResourcePack()->getSurface("ICONS_LAYER");
-			iconsLayer->blit(_iconsLayer);
+			Surface* const allLayers = _game->getResourcePack()->getSurface("ICONS_LAYER");
+			allLayers->blit(_iconsLayer);
 		}
 	}
 }
@@ -3602,10 +3600,10 @@ void BattlescapeState::toggleIcons(bool vis)
 
 /**
  * Gets the TimeUnits field from icons.
- * @note These are for use in UnitWalkBState to update info when soldier walks.
+ * @note These are used in UnitWalkBState to update info while unit moves.
  * @return, pointer to time units NumberText
  */
-NumberText* BattlescapeState::getTimeUnitsField() const
+NumberText* BattlescapeState::getTuField() const
 {
 	return _numTimeUnits;
 }
@@ -3614,7 +3612,7 @@ NumberText* BattlescapeState::getTimeUnitsField() const
  * Gets the TimeUnits bar from icons.
  * @return, pointer to time units Bar
  */
-Bar* BattlescapeState::getTimeUnitsBar() const
+Bar* BattlescapeState::getTuBar() const
 {
 	return _barTimeUnits;
 }

@@ -402,9 +402,9 @@ private:
 		void toggleIcons(bool vis);
 
 		/// Gets the TimeUnits field from icons.
-		NumberText* getTimeUnitsField() const;
+		NumberText* getTuField() const;
 		/// Gets the TimeUnits bar from icons.
-		Bar* getTimeUnitsBar() const;
+		Bar* getTuBar() const;
 		/// Gets the Energy field from icons.
 		NumberText* getEnergyField() const;
 		/// Gets the Energy bar from icons.

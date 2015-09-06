@@ -72,7 +72,7 @@ Camera::Camera(
 		_scrollKeyX(0),
 		_scrollKeyY(0),
 		_scrollTrigger(false),
-		_showAllLayers(false),
+		_showLayers(false),
 		_pauseAfterShot(false)
 {}
 
@@ -713,27 +713,26 @@ Position Camera::getMapOffset() const
  */
 void Camera::setMapOffset(const Position& pos)
 {
+	Log(LOG_INFO) << "CAMERA setMapOffset " << pos;
 	_mapOffset = pos;
 }
 
 /**
  * Toggles showing all map layers.
- * @return, new layers setting
+ * @return, true if all layers showed
  */
-unsigned int Camera::toggleShowAllLayers()
+bool Camera::toggleShowLayers()
 {
-	_showAllLayers = !_showAllLayers;
-
-	return _showAllLayers ? 2 : 1;
+	return (_showLayers = !_showLayers);
 }
 
 /**
  * Checks if the camera is showing all map layers.
  * @return, true if all layers are currently showing
  */
-bool Camera::getShowAllLayers() const
+bool Camera::getShowLayers() const
 {
-	return _showAllLayers;
+	return _showLayers;
 }
 
 /**

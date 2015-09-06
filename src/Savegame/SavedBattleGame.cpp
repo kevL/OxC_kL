@@ -88,7 +88,8 @@ SavedBattleGame::SavedBattleGame(const std::vector<OperationPool*>* titles)
 		_tacType(TCT_DEFAULT),
 		_controlDestroyed(false),
 		_tiles(NULL),
-		_pacified(false)
+		_pacified(false),
+		_rfTriggerPosition(0,0,-1)
 //		_dragInvert(false),
 //		_dragTimeTolerance(0),
 //		_dragPixelTolerance(0)
@@ -3091,6 +3092,24 @@ void SavedBattleGame::setPacified()
 bool SavedBattleGame::getPacified() const
 {
 	return _pacified;
+}
+
+/**
+ * Stores the camera-position where the last RF-trigger happened.
+ * @param pos - position
+ */
+void SavedBattleGame::storeRfTriggerPosition(const Position& pos)
+{
+	_rfTriggerPosition = pos;
+}
+
+/**
+ * Gets the camera-position where the last RF-trigger happened.
+ * @return, position
+ */
+const Position& SavedBattleGame::getRfTriggerPosition() const
+{
+	return _rfTriggerPosition;
 }
 
 }

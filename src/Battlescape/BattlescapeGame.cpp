@@ -609,13 +609,23 @@ void BattlescapeGame::popState()
 		}
 	}
 
-	if (_states.empty() == true // note: endTurnPhase() above^ might develop problems w/ cursor visibility ...
-		&& _battleSave->getSide() == FACTION_PLAYER) //|| _debugPlay == true))
+	if (_states.empty() == true) // note: endTurnPhase() above^ might develop problems w/ cursor visibility ...
 	{
-		//Log(LOG_INFO) << ". states Empty, reable cursor";
-		setupCursor();
-		_parentState->getGame()->getCursor()->setHidden(false);
-//		_parentState->getGame()->getCursor()->setVisible(); // might not be needed here anymore. But safety.
+		if (_battleSave->getRfTriggerPosition().z != -1) // this refocuses the Camera back onto RF trigger unit after a brief delay.
+		{
+			SDL_Delay(336);
+			Log(LOG_INFO) << "popState - STATES EMPTY - set Camera to triggerPos & clear triggerPos";
+			getMap()->getCamera()->setMapOffset(_battleSave->getRfTriggerPosition());
+			_battleSave->storeRfTriggerPosition(Position(0,0,-1));
+		}
+
+		if (_battleSave->getSide() == FACTION_PLAYER) //|| _debugPlay == true))
+		{
+			//Log(LOG_INFO) << ". states Empty, reable cursor";
+			setupCursor();
+			_parentState->getGame()->getCursor()->setHidden(false);
+//			_parentState->getGame()->getCursor()->setVisible(); // might not be needed here anymore. But safety.
+		}
 	}
 	//Log(LOG_INFO) << "BattlescapeGame::popState() EXIT";
 }
@@ -1234,9 +1244,7 @@ void BattlescapeGame::setupCursor()
 			quadrants = _currentAction.actor->getArmor()->getSize();
 	}
 
-	getMap()->setCursorType(
-						cType,
-						quadrants);
+	getMap()->setCursorType(cType, quadrants);
 }
 
 /**
@@ -2512,7 +2520,7 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* const unit) // private.
 /**
   * Cancels the current action the Player has selected (firing, throwing, etc).
   * @note The return is used only by BattlescapeState::mapClick() to check if
-  * pathPreview was cancelled.
+  * pathPreview was cancelled or walking was aborted.
   * @param force - force the action to be cancelled (default false)
   * @return, true if pathPreview is cancelled
   */
@@ -2810,7 +2818,6 @@ void BattlescapeGame::primaryAction(const Position& pos)
 			_states.push_back(new ProjectileFlyBState(		// TODO: should check for valid LoF/LoT *before* invoking this
 													this,	// instead of the (flakey) checks in that state. Then conform w/ AI ...
 													_currentAction));
-
 			statePushFront(new UnitTurnBState(
 											this,
 											_currentAction));

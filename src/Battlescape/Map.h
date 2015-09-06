@@ -75,7 +75,7 @@ private:
 	CursorType _cursorType;
 
 	bool
-		_firstBulletFrame,
+		_bulletStart,
 		_explosionInFOV,
 //		_flashScreen,
 		_mapIsHidden,

@@ -595,17 +595,17 @@ bool ProjectileFlyBState::createNewProjectile() // private.
 			//Log(LOG_INFO) << ". shoot weapon[1], voxelType = " << (int)_prjImpact;
 		}
 		//Log(LOG_INFO) << ". shoot weapon, voxelType = " << (int)_prjImpact;
-		//Log(LOG_INFO) << ". finalTarget = " << projectile->getFinalTarget();
+		//Log(LOG_INFO) << ". finalTarget = " << projectile->getFinalPosition();
 
 		if (_prjImpact == VOXEL_OBJECT
 			&& _ammo->getRules()->getExplosionRadius() > 0)
 		{
-			const Tile* const tile = _battleSave->getTile(_parent->getMap()->getProjectile()->getFinalTarget());
+			const Tile* const tile = _battleSave->getTile(_parent->getMap()->getProjectile()->getFinalPosition());
 			if (tile->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NESW
 				|| tile->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NWSE)
 			{
 //				projectile->storeProjectileDirection();		// kL: used to handle explosions against diagonal bigWalls.
-				_prjVector = projectile->getFinalVector();	// ^supercedes above^ storeProjectileDirection()
+				_prjVector = projectile->getStrikeVector();	// ^supercedes above^ storeProjectileDirection()
 			}
 		}
 
@@ -706,32 +706,46 @@ void ProjectileFlyBState::think()
 		{
 			createNewProjectile();
 
-			if (_action.cameraPosition.z != -1) // this ought already be in Map draw, as camera follows projectile from barrel of weapon
+/*			if (_action.cameraPosition.z != -1) // this ought already be in Map draw, as camera follows projectile from barrel of weapon
 			{
 				camera->setMapOffset(_action.cameraPosition);
 
 //				_parent->getMap()->invalidate();
-				_parent->getMap()->draw();
-			}
+//				_parent->getMap()->draw();
+			} */
 		}
 		else // think() FINISH.
 		{
-			//Log(LOG_INFO) << "ProjectileFlyBState::think() -> finish " << _action.actor->getId();
-			if (_action.actor->getFaction() != _battleSave->getSide()	// rf -> note that actionActor there may not be the actual shooter
-				&& Options::battleSmoothCamera == true)					// but he/she will be on the same Side taking a reaction shot.
+			Log(LOG_INFO) << "ProjectileFlyBState::think() -> finish " << _action.actor->getId();
+			if (_action.actor->getFaction() != _battleSave->getSide()	// rf -> note that actionActor may not be the actual shooter,
+				&& Options::battleSmoothCamera == true)					// but he/she will be on the same Side, doing a reaction shot.
 			{
+				Log(LOG_INFO) << "reset Camera for " << _action.actor->getId();
 				const std::map<int, Position>* const rfShotList (_battleSave->getTileEngine()->getRfShotList()); // init.
-
 				std::map<int, Position>::const_iterator i = rfShotList->find(_action.actor->getId());
+				//for (std::map<int, Position>::const_iterator
+				//		j = rfShotList->begin();
+				//		j != rfShotList->end();
+				//		++j)
+				//{
+				//	Log(LOG_INFO) << ". . shotList";
+				//	Log(LOG_INFO) << ". . " << j->first << " " << j->second;
+				//}
 				if (i != rfShotList->end()) // note The shotList vector will be cleared in BattlescapeGame::think() after all BattleStates have popped.
+				{
 					_action.cameraPosition = i->second;
+					//Log(LOG_INFO) << ". to " << _action.cameraPosition;
+				}
 				else
+				{
 					_action.cameraPosition.z = -1;
+					//Log(LOG_INFO) << ". no reset";
+				}
 			}
 
-			//Log(LOG_INFO) << ". cameraPosition " << _action.cameraPosition;
-			if (_action.cameraPosition.z != -1)
-//				&& _action.waypoints.size() < 2)
+			Log(LOG_INFO) << ". stored cameraPosition " << _action.cameraPosition;
+			Log(LOG_INFO) << ". pauseAfterShot " << (int)camera->getPauseAfterShot();
+			if (_action.cameraPosition.z != -1) //&& _action.waypoints.size() < 2)
 			{
 				//Log(LOG_INFO) << "ProjectileFlyBState::think() FINISH: cameraPosition was Set";
 				if (_action.type == BA_THROW // jump screen back to pre-shot position
@@ -740,19 +754,24 @@ void ProjectileFlyBState::think()
 					|| _action.type == BA_AIMEDSHOT)
 				{
 					//Log(LOG_INFO) << "ProjectileFlyBState::think() FINISH: resetting Camera to original pos";
-					if (camera->getPauseAfterShot() == true) // TODO: move 'pauseAfterShot' to the BattleAction struct.
+					if (camera->getPauseAfterShot() == true) // TODO: move 'pauseAfterShot' to the BattleAction struct. done ->
+//					if (_action.pauseAfterShot == true)
 					{
 						camera->setPauseAfterShot(false);
-
 						if (_prjImpact != VOXEL_OUTOFBOUNDS)
+						{
+							Log(LOG_INFO) << ". . delay - inBounds";
 							SDL_Delay(336); // screen-pause when shot hits target before reverting camera to shooter.
+						}
+						else Log(LOG_INFO) << ". . final vox OutofBounds - do NOT pause";
 					}
 
+					Log(LOG_INFO) << ". . reset Camera Position " << _action.actor->getId();
 					camera->setMapOffset(_action.cameraPosition);
-					_action.cameraPosition = Position(0,0,-1); // reset.
+//					_action.cameraPosition = Position(0,0,-1); // reset.
 
+//					_parent->getMap()->draw();
 //					_parent->getMap()->invalidate();
-					_parent->getMap()->draw();
 				}
 			}
 

@@ -300,11 +300,8 @@ VoxelType Projectile::calculateShot(
 /*	if (_action.type == BA_LAUNCH)
 	{
 		extendLine = _action.waypoints.size() < 2;
-
-		if (_action.actor->getFaction() == FACTION_PLAYER)
-			accuracy = 0.60;
-		else
-			accuracy = 0.55;
+		if (_action.actor->getFaction() == FACTION_PLAYER) accuracy = 0.60;
+		else accuracy = 0.55;
 	} */
 
 	if (targetUnit != NULL
@@ -849,114 +846,50 @@ Surface* Projectile::getSprite() const
  */
 void Projectile::skipTrajectory()
 {
-//	_trjId = _trajectory.size() - 1; // old code
 	while (traceProjectile() == true);
+//	_trjId = _trajectory.size() - 1; // old code
 }
 
 /**
- * Gets the Position of origin for the projectile.
- * @note Instead of using the actor's position use the voxel origin translated
- * to a tile position - this is a workaround for large units.
- * @return, origin as a tile position
+ * Gets the BattleAction associated with this projectile.
+ * @return, pointer to the BattleAction
  */
-/* Position Projectile::getOrigin()
+BattleAction* Projectile::getActionPrj()
 {
-	return _trajectory.front() / Position(16,16,24); // returning this by const& might be okay due to 'extended temporaries' in C++
-} */
+	return &_action;
+}
 
 /**
- * Gets the INTENDED target for this projectile.
- * @note It is important to note that we do not use the final position of the
- * projectile here but rather the targeted tile.
- * @return, intended target as a tile position
- */
-/* Position Projectile::getTarget() const
-{
-	return _action.target; // returning this by const& might be okay
-} */
-
-/**
- * Gets the ACTUAL target for this projectile.
+ * Gets the ACTUAL target-position for this projectile.
  * @note It is important to note that we use the final position of the
  * projectile here.
  * @return, trajectory finish as a tile position
  */
-Position Projectile::getFinalTarget() const
+Position Projectile::getFinalPosition() const
 {
 	return _trajectory.back() / Position(16,16,24); // returning this by const& might be okay due to 'extended temporaries' in C++
 }
 
 /**
- * Stores the final direction of a missile or thrown-object for use by
- * TileEngine blast propagation.
- * @note This is to prevent blasts from propagating on both sides of diagonal
- * BigWalls. TODO: the blast itself needs tweaking in TileEngine ....
+ * Gets the final direction of this Projectile's trajectory as a unit-vector.
+ * @return, a unit vector indicating final direction
  */
-/* void Projectile::storeProjectileDirection() const
-{
-	int dir = -1;
-
-	const size_t trjSize = _trajectory.size();
-
-	if (trjSize > 2)
-	{
-		const Position
-			finalPos = _trajectory.back(),
-			prePos = _trajectory.at(trjSize - 3);
-
-		int
-			x,y;
-
-		if (finalPos.x - prePos.x != 0)
-		{
-			if (finalPos.x - prePos.x > 0)
-				x = 1;
-			else
-				x = -1;
-		}
-		else
-			x = 0;
-
-		if (finalPos.y - prePos.y != 0)
-		{
-			if (finalPos.y - prePos.y > 0)
-				y = 1;
-			else
-				y = -1;
-		}
-		else
-			y = 0;
-
-		Pathfinding::vectorToDirection(
-									Position(x,y,0),
-									dir);
-	}
-
-	_battleSave->getTileEngine()->setProjectileDirection(dir);
-} */
-
-/**
- * Gets the final vector of this Projectile's trajectory.
- * @return, a unit vector
- */
-Position Projectile::getFinalVector() const
+Position Projectile::getStrikeVector() const
 {
 	Position unitVect = Position(-1,-1,-1);
 
 	const size_t trjSize = _trajectory.size();
-
 	if (trjSize > 2)
 	{
 		const Position
-			finalPos = _trajectory.back(),
-			prePos = _trajectory.at(trjSize - 3);
+			posFinal = _trajectory.back(),
+			posPre = _trajectory.at(trjSize - 3);
 
-		int
-			x,y;
+		int x,y;
 
-		if (finalPos.x - prePos.x != 0)
+		if (posFinal.x - posPre.x != 0)
 		{
-			if (finalPos.x - prePos.x > 0)
+			if (posFinal.x - posPre.x > 0)
 				x = 1;
 			else
 				x = -1;
@@ -964,9 +897,9 @@ Position Projectile::getFinalVector() const
 		else
 			x = 0;
 
-		if (finalPos.y - prePos.y != 0)
+		if (posFinal.y - posPre.y != 0)
 		{
-			if (finalPos.y - prePos.y > 0)
+			if (posFinal.y - posPre.y > 0)
 				y = 1;
 			else
 				y = -1;
@@ -980,11 +913,67 @@ Position Projectile::getFinalVector() const
 	return unitVect;
 }
 
-/**
+/*
+ * Stores the final direction of a missile or thrown-object for use by
+ * TileEngine blast propagation.
+ * @note This is to prevent blasts from propagating on both sides of diagonal
+ * BigWalls. TODO: the blast itself needs tweaking in TileEngine ....
+ * @note Superceded by getStrikeVector() above^
+ *
+void Projectile::storeProjectileDirection() const
+{
+	int dir = -1;
+	const size_t trjSize = _trajectory.size();
+	if (trjSize > 2)
+	{
+		const Position
+			posFinal = _trajectory.back(),
+			posPre = _trajectory.at(trjSize - 3);
+		int x,y;
+		if (posFinal.x - posPre.x != 0)
+		{
+			if (posFinal.x - posPre.x > 0) x = 1;
+			else x = -1;
+		}
+		else x = 0;
+		if (posFinal.y - posPre.y != 0)
+		{
+			if (posFinal.y - posPre.y > 0) y = 1;
+			else y = -1;
+		}
+		else y = 0;
+		Pathfinding::vectorToDirection(Position(x,y,0), dir);
+	}
+	_battleSave->getTileEngine()->setProjectileDirection(dir);
+} */
+
+/*
+ * Gets the Position of origin for the projectile.
+ * @note Instead of using the actor's position use the voxel origin translated
+ * to a tile position - this is a workaround for large units.
+ * @return, origin as a tile position
+ *
+Position Projectile::getOrigin()
+{
+	return _trajectory.front() / Position(16,16,24); // returning this by const& might be okay due to 'extended temporaries' in C++
+} */
+
+/*
+ * Gets the INTENDED target for this projectile.
+ * @note It is important to note that we do not use the final position of the
+ * projectile here but rather the targeted tile.
+ * @return, intended target as a tile position
+ *
+Position Projectile::getTarget() const
+{
+	return _action.target; // returning this by const& might be okay
+} */
+
+/*
  * Gets if this projectile is to be drawn left to right or right to left.
  * @return, true if this is to be drawn in reverse order
- */
-/* bool Projectile::isReversed() const
+ *
+bool Projectile::isReversed() const
 {
 	return _reversed;
 } */

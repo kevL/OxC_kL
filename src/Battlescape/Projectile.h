@@ -110,17 +110,20 @@ private:
 		/// Skips the bullet flight.
 		void skipTrajectory();
 
-		/// Gets the Position of origin for the projectile.
-//		Position getOrigin();
-		/// Gets the targetted tile for the projectile.
-//		Position getTarget() const;
-		/// Gets the ACTUAL target for this projectile.
-		Position getFinalTarget() const;
+		/// Gets the BattleAction associated with this projectile.
+		BattleAction* getActionPrj();
+
+		/// Gets the ACTUAL target-position for this projectile.
+		Position getFinalPosition() const;
+		/// Gets the final direction of the projectile's trajectory as a unit-vector.
+		Position getStrikeVector() const;
+
 		/// Stores the final direction of a missile or thrown-object.
 //		void storeProjectileDirection() const;
-		/// Gets the final vector of the Projectile's trajectory.
-		Position getFinalVector() const;
-
+		/// Gets the Position of origin for the projectile.
+//		Position getOrigin();
+		/// Gets the INTENDED target-position for the projectile.
+//		Position getTarget() const;
 		/// Gets if this this projectile is being drawn back-to-front or front-to-back.
 //		bool isReversed() const;
 };

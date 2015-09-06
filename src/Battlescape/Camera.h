@@ -44,7 +44,7 @@ private:
 	bool
 		_pauseAfterShot,
 		_scrollTrigger,
-		_showAllLayers;
+		_showLayers;
 	int
 		_mapsize_x,
 		_mapsize_y,
@@ -163,14 +163,12 @@ private:
 		void setMapOffset(const Position& pos);
 
 		/// Toggles showing all map layers.
-		unsigned int toggleShowAllLayers();
+		bool toggleShowLayers();
 		/// Checks if the camera is showing all map layers.
-		bool getShowAllLayers() const;
+		bool getShowLayers() const;
 
 		/// Checks if map coordinates X,Y,Z are on screen.
-		bool isOnScreen(
-				const Position& posMap) const;
-//kL			const bool unitWalking, const int unitSize, const bool boundary) const;
+		bool isOnScreen(const Position& posMap) const;
 
 		/// Resizes the viewable area.
 		void resize();

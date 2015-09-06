@@ -116,7 +116,7 @@ Map::Map(
 		_projectileInFOV(false),
 		_explosionInFOV(false),
 		_waypointAction(false),
-		_firstBulletFrame(false),
+		_bulletStart(false),
 		_visibleMapHeight(visibleMapHeight),
 		_unitDying(false),
 		_reveal(0),
@@ -134,8 +134,7 @@ Map::Map(
 	_iconHeight = _game->getRuleset()->getInterface("battlescape")->getElement("icons")->h;
 
 	_previewSetting	= Options::battlePreviewPath;
-//	if (Options::traceAI == true) // turn everything on to see the markers.
-//		_previewSetting = PATH_FULL;
+//	if (Options::traceAI == true) _previewSetting = PATH_FULL; // turn everything on to see the markers.
 
 	_spriteWidth = _res->getSurfaceSet("BLANKS.PCK")->getFrame(0)->getWidth();
 	_spriteHeight = _res->getSurfaceSet("BLANKS.PCK")->getFrame(0)->getHeight();
@@ -167,14 +166,11 @@ Map::Map(
 						_scrollMouseTimer,
 						_scrollKeyTimer);
 
-/*	_txtAccuracy = new Text(24, 9, 0, 0);
+/*	_txtAccuracy = new Text(24,9);
 	_txtAccuracy->setSmall();
 	_txtAccuracy->setPalette(_game->getScreen()->getPalette());
 	_txtAccuracy->setHighContrast();
-	_txtAccuracy->initText(
-						_res->getFont("FONT_BIG"),
-						_res->getFont("FONT_SMALL"),
-						_game->getLanguage()); */
+	_txtAccuracy->initText(_res->getFont("FONT_BIG"), _res->getFont("FONT_SMALL"), _game->getLanguage()); */
 	_numAccuracy = new NumberText(24,9);
 	_numAccuracy->setPalette(_game->getScreen()->getPalette());
 
@@ -203,10 +199,9 @@ Map::~Map()
  */
 void Map::init()
 {
-	// load the unit-selected bobbing arrow into a surface
 	const Uint8
-		f = 16, // Fill, yellow // Palette::blockOffset(1)
-		b = 14; // Border, black
+		f = 16, // yellow Fill
+		b = 14; // black Border
 	const Uint8 pixels_stand[81] = { 0, 0, b, b, b, b, b, 0, 0,
 									 0, 0, b, f, f, f, b, 0, 0,
 									 0, 0, b, f, f, f, b, 0, 0,
@@ -217,7 +212,7 @@ void Map::init()
 									 0, 0, 0, b, f, b, 0, 0, 0,
 									 0, 0, 0, 0, b, 0, 0, 0, 0 };
 
-	_arrow = new Surface(9, 9);
+	_arrow = new Surface(9,9);
 	_arrow->setPalette(this->getPalette());
 
 	_arrow->lock();
@@ -239,7 +234,6 @@ void Map::init()
 	}
 	_arrow->unlock();
 
-	// DarkDefender_begin:
 	const Uint8 pixels_kneel[81] = { 0, 0, 0, 0, 0, 0, 0, 0, 0,
 									 0, 0, 0, 0, b, 0, 0, 0, 0,
 									 0, 0, 0, b, f, b, 0, 0, 0,
@@ -250,7 +244,7 @@ void Map::init()
 									 0, 0, b, f, f, f, b, 0, 0,
 									 0, 0, b, b, b, b, b, 0, 0 };
 
-	_arrow_kneel = new Surface(9, 9);
+	_arrow_kneel = new Surface(9,9);
 	_arrow_kneel->setPalette(this->getPalette());
 
 	_arrow_kneel->lock();
@@ -270,7 +264,7 @@ void Map::init()
 									pixels_kneel[x + (y * 9)]);
 		}
 	}
-	_arrow_kneel->unlock(); // DarkDefender_end.
+	_arrow_kneel->unlock();
 
 	_projectile = NULL;
 	_projectileSet = _res->getSurfaceSet("Projectiles");
@@ -280,29 +274,13 @@ void Map::init()
 		size_y = _battleSave->getMapSizeY(),
 		size_z = _battleSave->getMapSizeZ();
 
-	for (int
-			x = 0;
-			x < size_x;
-			++x)
-	{
-		for (int
-				y = 0;
-				y < size_y;
-				++y)
-		{
-			for (int
-					z = 0;
-					z < size_z;
-					++z)
-			{
-				if (x == 0
-					|| y == 0
-					|| x == size_x - 1
-					|| y == size_y - 1)
+	for (int x = 0; x < size_x; ++x)
+		for (int y = 0; y < size_y; ++y)
+			for (int z = 0; z < size_z; ++z)
+				if (x == 0 || y == 0 || x == size_x - 1 || y == size_y - 1)
 				{
 					Tile* tile = _battleSave->getTile(Position(x,y,z));
-					if (tile)
-						tile->setDiscovered(true, 2);
+					if (tile) tile->setDiscovered(true,2);
 				}
 			}
 		}
@@ -508,53 +486,50 @@ void Map::drawTerrain(Surface* const surface) // private.
 
 			if (Options::battleSmoothCamera == true)
 			{
-				if (_firstBulletFrame == true)
+				if (_bulletStart == true)
 				{
-					_firstBulletFrame = false;
+					_bulletStart = false;
 
-					if (   bullet.x < 0
+					const Position posFinal = _projectile->getFinalPosition();
+
+					BattleAction* const prjAction = _projectile->getActionPrj();
+					if (prjAction->actor->getFaction() != _battleSave->getSide()
+						|| bullet.x < 0
 						|| bullet.x > surface->getWidth() - 1
 						|| bullet.y < 0
 						|| bullet.y > _visibleMapHeight - 1)
 					{
 						_camera->centerOnPosition(
 												Position(
-														bulletLowX,
-														bulletLowY,
-														bulletHighZ),
+													bulletLowX,
+													bulletLowY,
+													bulletHighZ),
 												false);
 						_camera->convertVoxelToScreen(
 												_projectile->getPosition(),
 												&bullet);
 
-						BattleAction* const action = _battleSave->getTileEngine()->getRfAction(); // rf ->
-						if (action->actor != NULL
-							&& action->actor->getFaction() != _battleSave->getSide())	// moved here from TileEngine::reactionShot()
-						{																// because this is the (accurate) position of the bullet-shot-actor's Camera mapOffset.
-							std::map<int, Position>* const rfShotList (_battleSave->getTileEngine()->getRfShotList()); // init.
+						if (prjAction->actor->getFaction() != _battleSave->getSide()	// moved here from TileEngine::reactionShot()
+							&& _camera->isOnScreen(posFinal) == false)					// because this is the (accurate) position of the bullet-shot-actor's Camera mapOffset.
+						{
+							Log(LOG_INFO) << "Map add rfActor " << prjAction->actor->getId() << " " << _camera->getMapOffset() << " final Pos offScreen";
+							std::map<int, Position>* const rfShotList (_battleSave->getTileEngine()->getRfShotList());
 							rfShotList->insert(std::pair<int, Position>(
-																	action->actor->getId(),
+																	prjAction->actor->getId(),
 																	_camera->getMapOffset()));
 						}
 					}
+
+					if (_projectile->getItem() != NULL
+						|| _camera->isOnScreen(posFinal) == false)
+					{
+						_smoothingEngaged = true;
+						_camera->setPauseAfterShot();
+						Log(LOG_INFO) << ". shot going offScreen OR throw - setPauseAfterShot";
+					}
 				}
 
-				if (_smoothingEngaged == false)
-				{
-					const Position target = _projectile->getFinalTarget();
-					if (_camera->isOnScreen(target) == false
-						|| bullet.x < 1
-						|| bullet.x > surface->getWidth() - 1
-						|| bullet.y < 1
-						|| bullet.y > _visibleMapHeight - 1)
-					{
-						_camera->setPauseAfterShot();
-						_smoothingEngaged = true;
-					}
-					else if (_projectile->getItem() != NULL) // thrown item
-						_camera->setPauseAfterShot();
-				}
-				else // smoothing Engaged
+				if (_smoothingEngaged == true)
 					_camera->jumpXY(
 								surface->getWidth() / 2 - bullet.x,
 								_visibleMapHeight / 2 - bullet.y);
@@ -563,9 +538,9 @@ void Map::drawTerrain(Surface* const surface) // private.
 				if (_camera->getViewLevel() != posBullet_z)
 					_camera->setViewLevel(posBullet_z);
 			}
-			else // NOT smoothCamera
+			else // NOT smoothCamera: I don't use this.
 			// Camera remains stationary when xCom actively fires at target;
-			// that is, target is already onScreen due to targetting cursor click.
+			// that is, target is already onScreen due to targeting cursor click.
 //			if (_projectile->getActor()->getFaction() != FACTION_PLAYER)
 			{
 				bool enough;
@@ -627,7 +602,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 		endZ,
 		d;
 
-	if (_camera->getShowAllLayers() == true)
+	if (_camera->getShowLayers() == true)
 		endZ = _battleSave->getMapSizeZ() - 1;
 	else
 		endZ = _camera->getViewLevel();
@@ -1209,7 +1184,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 							const Tile* const tileAbove = _battleSave->getTile(posMap + Position(0,0,1));
 
 							if ((_camera->getViewLevel() == itZ
-									&& (_camera->getShowAllLayers() == false
+									&& (_camera->getShowLayers() == false
 										|| itZ == endZ))
 								|| (tileAbove != NULL
 									&& tileAbove->getSprite(O_FLOOR) == NULL))
@@ -2400,7 +2375,7 @@ void Map::setProjectile(Projectile* projectile)
 	if (projectile != NULL
 		&& Options::battleSmoothCamera == true)
 	{
-		_firstBulletFrame = true;
+		_bulletStart = true;
 	}
 }
 
@@ -2565,28 +2540,28 @@ int Map::getSoundAngle(const Position& pos) const
 	return (screenPos.x * 35 / midPoint) + 360;
 }
 
-/**
+/*
  * Resets the camera smoothing bool.
- */
-/*void Map::resetCameraSmoothing()
+ *
+void Map::resetCameraSmoothing()
 {
 	_smoothingEngaged = false;
 } */
 
-/**
+/*
  * Sets the "explosion flash" bool.
  * @param flash - true to render the screen in EGA this frame
- */
-/*void Map::setBlastFlash(bool flash)
+ *
+void Map::setBlastFlash(bool flash)
 {
 	_flashScreen = flash;
 } */
 
-/**
+/*
  * Checks if the screen is still being rendered in EGA.
  * @return, true if still in EGA mode
- */
-/*bool Map::getBlastFlash() const
+ *
+bool Map::getBlastFlash() const
 {
 	return _flashScreen;
 } */

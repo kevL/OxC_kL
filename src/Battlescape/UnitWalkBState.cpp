@@ -862,8 +862,8 @@ bool UnitWalkBState::doStatusStand_end() // private.
 
 		double stat = static_cast<double>(_unit->getBaseStats()->tu);
 		const int tu = _unit->getTimeUnits();
-		battleState->getTimeUnitsField()->setValue(static_cast<unsigned>(tu));
-		battleState->getTimeUnitsBar()->setValue(std::ceil(
+		battleState->getTuField()->setValue(static_cast<unsigned>(tu));
+		battleState->getTuBar()->setValue(std::ceil(
 											static_cast<double>(tu) / stat * 100.));
 
 		stat = static_cast<double>(_unit->getBaseStats()->stamina);
