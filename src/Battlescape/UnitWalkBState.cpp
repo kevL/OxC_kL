@@ -276,7 +276,7 @@ void UnitWalkBState::think()
 			else if (_walkCam->isOnScreen(_unit->getPosition()) == true)
 			{
 				//Log(LOG_INFO) << ". cam->onScreen";
-				int dest_z = _unit->getDestination().z;
+				const int dest_z = _unit->getDestination().z;
 				//Log(LOG_INFO) << ". dest_z == pos_z : " << (dest_z == pos_z);
 				//Log(LOG_INFO) << ". dest_z > pos_z : " << (dest_z > pos_z);
 				//Log(LOG_INFO) << ". _walkCam->getViewLevel() < pos_z : " << (_walkCam->getViewLevel() < pos_z);
@@ -402,8 +402,7 @@ bool UnitWalkBState::doStatusStand() // private.
 
 	if (dir != -1)
 	{
-		//Log(LOG_INFO) << "enter (dir!=-1) : " << _unit->getId();
-//		if (_pf->getStrafeMove() == true
+		//Log(LOG_INFO) << "enter (dir!= -1) : " << _unit->getId();
 		if (_action.strafe == true
 			&& _pf->getPath().empty() == false) // <- don't bother with this if it's the end of movement/ State.
 		{
@@ -422,7 +421,7 @@ bool UnitWalkBState::doStatusStand() // private.
 				if (_unit->getTurretType() != -1)
 				{
 					const int turretOffset = _unit->getTurretDirection() - _unit->getDirection();
-					_unit->setTurretDirection((turretOffset + dirStrafe) % 8); // might not need modulo there ... not sure. Occuppied w/ other things atm.
+					_unit->setTurretDirection((turretOffset + dirStrafe) % 8); // might not need modulo there ... not sure. Occupied w/ other things atm.
 					//Log(LOG_INFO) << ". STANDING strafeTank, setTurretDirection() -> " << (turretOffset + dirStrafe);
 				}
 			}
@@ -548,12 +547,9 @@ bool UnitWalkBState::doStatusStand() // private.
 
 			return false;
 		}
-		// unit is looking in the wrong way so turn first - unless strafe
-		// Do not use the turn state because turning during walking doesn't cost TU.
-		else if (dir != _unit->getDirection()
-			&& dir < _pf->DIR_UP
+		else if (dir != _unit->getDirection()	// unit is looking in the wrong way so turn first - unless strafe.
+			&& dir < _pf->DIR_UP				// Do not use TurnBState because turning during walking doesn't cost TU.
 			&& _action.strafe == false)
-//			&& _pf->getStrafeMove() == false)
 		{
 			//Log(LOG_INFO) << ". . dir != _unit->getDirection() -> turn";
 			_unit->lookAt(dir);
@@ -660,7 +656,7 @@ bool UnitWalkBState::doStatusStand() // private.
 			}
 		}
 
-		dir = _pf->dequeuePath(); // now start moving
+		dir = _pf->dequeuePath();
 		//Log(LOG_INFO) << ". dequeuePath() dir[0] = " << dir;
 
 		if (_falling == true)
@@ -670,40 +666,26 @@ bool UnitWalkBState::doStatusStand() // private.
 		}
 		//Log(LOG_INFO) << ". dequeuePath() dir[1] = " << dir;
 
-		if (_unit->spendTimeUnits(tuCost) == true	// These were checked above and don't really need to
-			&& _unit->spendEnergy(staCost) == true)	// be checked again here. Only subtract is required. but whatver
+		if (_unit->spendTimeUnits(tuCost) == true
+			&& _unit->spendEnergy(staCost) == true)
 		{
-			//Log(LOG_INFO) << ". . WalkBState: spend TU & Energy";
-			const Tile* const tileBelow = _battleSave->getTile(_unit->getPosition() + Position(0,0,-1));
+			//Log(LOG_INFO) << ". . WalkBState: spend TU & Energy -> establish tile-links";
+			_preStepTurn = false;
+
 			//Log(LOG_INFO) << ". . WalkBState: startWalking()";
 			_unit->startWalking(
 							dir,
 							dest,
-							tileBelow);
-//							_onScreen);
+							_battleSave->getTile(_unit->getPosition() + Position(0,0,-1)));
 
+			//Log(LOG_INFO) << ". . WalkBState: establishTilesLink()";
 			establishTilesLink();
-
-
-//			if (_unit->getMoveSound() != -1)
-//			{
-				//Log(LOG_INFO) << "doStatusStand() playSound";
-				//Log(LOG_INFO) << ". walkPhase = " << _unit->getWalkPhase();
-				//Log(LOG_INFO) << ". pos " << _unit->getPosition();
-//				playMovementSound();
-//			}
-			_preStepTurn = false;
 		}
-
-		// make sure the unit sprites are up to date
-		// kL_note: This could probably go up under spend tu+energy. but.....
-		// And since Status_Stand algorithm doesn't actually draw anything
-		// REMARK It.
 		//Log(LOG_INFO) << ". EXIT (dir!=-1) : " << _unit->getId();
 	}
 	else // dir == -1
 	{
-		//Log(LOG_INFO) << ". unit direction = " << _unit->getDirection();
+		//Log(LOG_INFO) << ". dir = " << _unit->getDirection();
 		//Log(LOG_INFO) << ". . CALL postPathProcedures()";
 		postPathProcedures();
 		return false;
@@ -751,7 +733,7 @@ bool UnitWalkBState::doStatusWalk() // private.
 	if (_tileSwitchDone == false
 		&& _unit->getPosition() != _unit->getLastPosition())
 	{
-		//Log(LOG_INFO) << ". tile switch from _lastpos to _destination";
+		Log(LOG_INFO) << ". tile switch from _lastpos to _destination";
 		_tileSwitchDone = true;
 
 		Tile* tile;
@@ -771,7 +753,7 @@ bool UnitWalkBState::doStatusWalk() // private.
 				//Log(LOG_INFO) << ". . remove unit from previous tile";
 				tile = _battleSave->getTile(_unit->getLastPosition() + Position(x,y,0));
 				tile->setUnit(NULL);
-				tile->setUnitOnly(_unit); // IMPORTANT: lastTile transiently holds onto this unit (all quads) for Map drawing.
+				tile->setTransitUnit(_unit); // IMPORTANT: lastTile transiently holds onto this unit (all quads) for Map drawing.
 			}
 		}
 
@@ -795,9 +777,7 @@ bool UnitWalkBState::doStatusWalk() // private.
 				}
 
 				//Log(LOG_INFO) << ". . set unit on new tile";
-				tile->setUnit(		// note: Tile will take each of unit's quadrants, but the Unit will associate only the last tile, at quad 0,0;
-							_unit,	// the previous quadrant-associations are overwritten by the last iteration here.
-							tileBelow);
+				tile->setUnit(_unit, tileBelow);
 				//Log(LOG_INFO) << ". . . NEW unitPos " << _unit->getPosition();
 			}
 		}
@@ -1370,11 +1350,8 @@ bool UnitWalkBState::groundCheck() const // private.
 		{
 			pos = _unit->getPosition() + Position(x,y,0);
 			tileBelow = _battleSave->getTile(pos + Position(0,0,-1));
-			if (_battleSave->getTile(pos + Position(0,0,0))
-										->hasNoFloor(tileBelow) == false)
-			{
+			if (_battleSave->getTile(pos + Position(0,0,0))->hasNoFloor(tileBelow) == false)
 				return true;
-			}
 		}
 	}
 
@@ -1386,6 +1363,9 @@ bool UnitWalkBState::groundCheck() const // private.
  */
 void UnitWalkBState::establishTilesLink() const // private.
 {
+	Log(LOG_INFO) << "UnitWalkBState::establishTilesLink()";
+//	Tile* tile;
+
 	const int armorSize = _unit->getArmor()->getSize() - 1;
 	for (int
 			x = armorSize;
@@ -1397,7 +1377,10 @@ void UnitWalkBState::establishTilesLink() const // private.
 				y != -1;
 				--y)
 		{
-			_battleSave->getTile(_unit->getDestination() + Position(x,y,0))->setUnitOnly(_unit);
+//			tile = _battleSave->getTile(_unit->getDestination() + Position(x,y,0));
+//			if (tile != NULL)
+//				tile->setTransitUnit(_unit);
+			_battleSave->getTile(_unit->getDestination() + Position(x,y,0))->setTransitUnit(_unit);
 		}
 	}
 }
@@ -1408,6 +1391,7 @@ void UnitWalkBState::establishTilesLink() const // private.
  */
 void UnitWalkBState::clearTilesLink(bool origin) const // private.
 {
+	Log(LOG_INFO) << "UnitWalkBState::clearTilesLink()";
 	std::vector<Position> posCurrent;
 	Position
 		pos = _unit->getPosition(),
@@ -1433,6 +1417,7 @@ void UnitWalkBState::clearTilesLink(bool origin) const // private.
 	else
 		pos = _unit->getDestination();
 
+//	Tile* tile;
 	for (int
 			x = armorSize;
 			x != -1;
@@ -1449,7 +1434,10 @@ void UnitWalkBState::clearTilesLink(bool origin) const // private.
 						posCurrent.end(),
 						posTest) == posCurrent.end())
 			{
-				_battleSave->getTile(posTest)->setUnitOnly(NULL);
+//				tile = _battleSave->getTile(posTest);
+//				if (tile != NULL)
+//					tile->setTransitUnit(NULL);
+				_battleSave->getTile(posTest)->setTransitUnit(NULL);
 			}
 		}
 	}

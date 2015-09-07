@@ -44,8 +44,7 @@ InteractiveSurface::InteractiveSurface(
 		Surface(
 			width,
 			height,
-			x,
-			y),
+			x,y),
 		_buttonsPressed(0),
 		_in(0),
 		_over(0),
@@ -110,14 +109,14 @@ void InteractiveSurface::setButtonPressed(
 
 /**
  * Changes the visibility of the surface.
- * @note A hidden surface isn't blitted nor receives events.
+ * @note A non-visible surface isn't blitted nor does it receive events.
  * @param visible - true if visible (default true)
  */
 void InteractiveSurface::setVisible(bool visible)
 {
 	Surface::setVisible(visible);
 
-	if (_visible == false) // Unpress button if it was hidden
+	if (_visible == false) // unpress button if it wasn't visible
 		unpress(NULL);
 }
 
@@ -132,111 +131,112 @@ void InteractiveSurface::handle( // virtual
 		Action* action,
 		State* state)
 {
-	if (_visible == false || _hidden == true)
-		return;
-
-	action->setSender(this);
-
-	if (action->getDetails()->type == SDL_MOUSEBUTTONUP
-		|| action->getDetails()->type == SDL_MOUSEBUTTONDOWN)
+	if (_visible == true
+		&& _hidden == false)
 	{
-		action->setMouseAction(
-							action->getDetails()->button.x,
-							action->getDetails()->button.y,
-							getX(),
-							getY());
-	}
-	else if (action->getDetails()->type == SDL_MOUSEMOTION)
-		action->setMouseAction(
-							action->getDetails()->motion.x,
-							action->getDetails()->motion.y,
-							getX(),
-							getY());
+		action->setSender(this);
 
-	if (action->isMouseAction() == true)
-	{
-		if (   action->getAbsoluteXMouse() >= getX()
-			&& action->getAbsoluteXMouse() < getX() + getWidth()
-			&& action->getAbsoluteYMouse() >= getY()
-			&& action->getAbsoluteYMouse() < getY() + getHeight())
+		if (action->getDetails()->type == SDL_MOUSEBUTTONUP
+			|| action->getDetails()->type == SDL_MOUSEBUTTONDOWN)
 		{
-			if (_isHovered == false)
-			{
-				_isHovered = true;
-				mouseIn(action, state);
-			}
-
-			if (_listButton == true
-				&& action->getDetails()->type == SDL_MOUSEMOTION)
-			{
-				_buttonsPressed = SDL_GetMouseState(NULL, NULL);
-				for (Uint8
-						i = 1;
-						i <= NUM_BUTTONS;
-						++i)
-				{
-					if (isButtonPressed(i) == true)
-					{
-						action->getDetails()->button.button = i;
-						mousePress(action, state);
-					}
-				}
-			}
-
-			mouseOver(action, state);
+			action->setMouseAction(
+								action->getDetails()->button.x,
+								action->getDetails()->button.y,
+								getX(),
+								getY());
 		}
-		else
+		else if (action->getDetails()->type == SDL_MOUSEMOTION)
+			action->setMouseAction(
+								action->getDetails()->motion.x,
+								action->getDetails()->motion.y,
+								getX(),
+								getY());
+
+		if (action->isMouseAction() == true)
 		{
-			if (_isHovered == true)
+			if (action->getAbsoluteXMouse() >= getX()
+				&& action->getAbsoluteXMouse() < getX() + getWidth()
+				&& action->getAbsoluteYMouse() >= getY()
+				&& action->getAbsoluteYMouse() < getY() + getHeight())
 			{
-				_isHovered = false;
-				mouseOut(action, state);
+				if (_isHovered == false)
+				{
+					_isHovered = true;
+					mouseIn(action, state);
+				}
 
 				if (_listButton == true
 					&& action->getDetails()->type == SDL_MOUSEMOTION)
 				{
+					_buttonsPressed = SDL_GetMouseState(NULL, NULL);
 					for (Uint8
 							i = 1;
 							i <= NUM_BUTTONS;
 							++i)
 					{
 						if (isButtonPressed(i) == true)
-							setButtonPressed(i, false);
+						{
+							action->getDetails()->button.button = i;
+							mousePress(action, state);
+						}
+					}
+				}
 
-						action->getDetails()->button.button = i;
-						mouseRelease(action, state);
+				mouseOver(action, state);
+			}
+			else
+			{
+				if (_isHovered == true)
+				{
+					_isHovered = false;
+					mouseOut(action, state);
+
+					if (_listButton == true
+						&& action->getDetails()->type == SDL_MOUSEMOTION)
+					{
+						for (Uint8
+								i = 1;
+								i <= NUM_BUTTONS;
+								++i)
+						{
+							if (isButtonPressed(i) == true)
+								setButtonPressed(i, false);
+
+							action->getDetails()->button.button = i;
+							mouseRelease(action, state);
+						}
 					}
 				}
 			}
 		}
-	}
 
-	if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN)
-	{
-		if (_isHovered == true
-			&& isButtonPressed(action->getDetails()->button.button) == false)
+		if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN)
 		{
-			setButtonPressed(action->getDetails()->button.button, true);
-			mousePress(action, state);
+			if (_isHovered == true
+				&& isButtonPressed(action->getDetails()->button.button) == false)
+			{
+				setButtonPressed(action->getDetails()->button.button, true);
+				mousePress(action, state);
+			}
 		}
-	}
-	else if (action->getDetails()->type == SDL_MOUSEBUTTONUP)
-	{
-		if (isButtonPressed(action->getDetails()->button.button) == true)
+		else if (action->getDetails()->type == SDL_MOUSEBUTTONUP)
 		{
-			setButtonPressed(action->getDetails()->button.button, false);
-			mouseRelease(action, state);
-			if (_isHovered == true)
-				mouseClick(action, state);
+			if (isButtonPressed(action->getDetails()->button.button) == true)
+			{
+				setButtonPressed(action->getDetails()->button.button, false);
+				mouseRelease(action, state);
+				if (_isHovered == true)
+					mouseClick(action, state);
+			}
 		}
-	}
 
-	if (_isFocused == true)
-	{
-		if (action->getDetails()->type == SDL_KEYDOWN)
-			keyboardPress(action, state);
-		else if (action->getDetails()->type == SDL_KEYUP)
-			keyboardRelease(action, state);
+		if (_isFocused == true)
+		{
+			if (action->getDetails()->type == SDL_KEYDOWN)
+				keyboardPress(action, state);
+			else if (action->getDetails()->type == SDL_KEYUP)
+				keyboardRelease(action, state);
+		}
 	}
 }
 

@@ -70,7 +70,6 @@ BattleUnit::BattleUnit(
 		_killedBy(FACTION_NONE), // was, FACTION_PLAYER
 		_murdererId(0),
 		_battleGame(NULL),
-		_rankInt(-1),
 		_turretType(-1),
 		_tile(NULL),
 		_pos(Position()),
@@ -275,7 +274,6 @@ BattleUnit::BattleUnit(
 		_moraleRestored(0),
 		_coverReserve(0),
 		_charging(NULL),
-		_turnsExposed(-1),
 		_hidingForTurn(false),
 //		_respawn(false),
 		_stopShot(false),
@@ -326,6 +324,8 @@ BattleUnit::BattleUnit(
 				diff,
 				month);
 	}
+	else
+		_turnsExposed = -1;
 
 	_tu = _stats.tu;
 	_energy = _stats.stamina;
@@ -435,9 +435,9 @@ BattleUnit::~BattleUnit()
  */
 void BattleUnit::load(const YAML::Node& node)
 {
-	_status					= static_cast<UnitStatus>(node["status"]			.as<int>(_status));
-	_killedBy				= static_cast<UnitFaction>(node["killedBy"]			.as<int>(_killedBy));
-	_faction				= static_cast<UnitFaction>(node["faction"]			.as<int>(_faction));
+	_status					= static_cast<UnitStatus>(node["status"]	.as<int>(_status));
+	_killedBy				= static_cast<UnitFaction>(node["killedBy"]	.as<int>(_killedBy));
+	_faction				= static_cast<UnitFaction>(node["faction"]	.as<int>(_faction));
 	if (node["originalFaction"])
 		_originalFaction	= static_cast<UnitFaction>(node["originalFaction"]	.as<int>());
 	else
@@ -464,7 +464,7 @@ void BattleUnit::load(const YAML::Node& node)
 	_kills				= node["kills"]					.as<int>(_kills);
 	_dontReselect		= node["dontReselect"]			.as<bool>(_dontReselect);
 	_charging			= NULL;
-	_motionPoints		= node["motionPoints"]			.as<int>(0);
+	_motionPoints		= node["motionPoints"]			.as<int>(_motionPoints); // was 0
 	_spawnUnit			= node["spawnUnit"]				.as<std::string>(_spawnUnit);
 //	_specab				= (SpecialAbility)node["specab"].as<int>(_specab);
 //	_respawn			= node["respawn"]				.as<bool>(_respawn);
@@ -562,15 +562,15 @@ YAML::Node BattleUnit::save() const
 {
 	YAML::Node node;
 
-	node["id"]				= _id;
+	node["id"] = _id;
 
 	if (getName().empty() == false)
-		node["name"]		= Language::wstrToUtf8(getName());
+		node["name"] = Language::wstrToUtf8(getName());
 
 	node["genUnitType"]		= _type;
 	node["genUnitArmor"]	= _armor->getType();
 
-	node["faction"]			= static_cast<int>(_faction);
+	node["faction"] = static_cast<int>(_faction);
 	if (_originalFaction != _faction)
 	{
 		node["originalFaction"]	= static_cast<int>(_originalFaction);
@@ -590,17 +590,21 @@ YAML::Node BattleUnit::save() const
 	node["health"]			= _health;
 	node["stunLevel"]		= _stunLevel;
 	node["energy"]			= _energy;
-	node["morale"]			= _morale;
-	node["floating"]		= _floating;
-	node["fire"]			= _fire;
-	node["turretType"]		= _turretType;
-	node["visible"]			= _visible;
 	node["turnsExposed"]	= _turnsExposed;
 	node["rankInt"]			= _rankInt;
-	node["moraleRestored"]	= _moraleRestored;
-	node["killedBy"]		= static_cast<int>(_killedBy);
-	node["motionPoints"]	= _motionPoints;
-	node["activeHand"]		= _activeHand;
+
+	if (_morale != 100)				node["morale"]			= _morale;
+	if (_floating != false)			node["floating"]		= _floating;
+	if (_fire != 0)					node["fire"]			= _fire;
+	if (_turretType != -1)			node["turretType"]		= _turretType; // TODO: use unitRule to get turretType.
+	if (_visible != false)			node["visible"]			= _visible;
+	if (_moraleRestored != 0)		node["moraleRestored"]	= _moraleRestored;
+	if (_killedBy != FACTION_NONE)	node["killedBy"]		= static_cast<int>(_killedBy);
+	if (_motionPoints != 0)			node["motionPoints"]	= _motionPoints;
+	if (_kills != 0)				node["kills"]			= _kills;
+	if (_drugDose != 0)				node["drugDose"]		= _drugDose;
+
+	node["activeHand"] = _activeHand;
 
 //	node["specab"]			= (int)_specab;
 //	node["respawn"]			= _respawn;
@@ -608,12 +612,6 @@ YAML::Node BattleUnit::save() const
 
 	if (getCurrentAIState() != NULL)
 		node["AI"] = getCurrentAIState()->save();
-
-	if (_kills != 0)
-		node["kills"] = _kills;
-
-	if (_drugDose != 0)
-		node["drugDose"] = _drugDose;
 
 	if (_faction == FACTION_PLAYER
 		&& _dontReselect == true)
@@ -643,18 +641,19 @@ YAML::Node BattleUnit::save() const
 		}
 
 		if (_statistics->statsDefault() == false)
-			node["diaryStatistics"]	= _statistics->save();
+			node["diaryStatistics"] = _statistics->save();
 
-		node["battleOrder"]		= _battleOrder;
-		node["kneeled"]			= _kneeled;
+		node["battleOrder"] = _battleOrder;
 
-		node["expBravery"]		= _expBravery;
-		node["expReactions"]	= _expReactions;
-		node["expFiring"]		= _expFiring;
-		node["expThrowing"]		= _expThrowing;
-		node["expPsiSkill"]		= _expPsiSkill;
-		node["expPsiStrength"]	= _expPsiStrength;
-		node["expMelee"]		= _expMelee;
+		if (_kneeled != false) node["kneeled"] = _kneeled;
+
+		if (_expBravery != 0)		node["expBravery"]		= _expBravery;
+		if (_expReactions != 0)		node["expReactions"]	= _expReactions;
+		if (_expFiring != 0)		node["expFiring"]		= _expFiring;
+		if (_expThrowing != 0)		node["expThrowing"]		= _expThrowing;
+		if (_expPsiSkill != 0)		node["expPsiSkill"]		= _expPsiSkill;
+		if (_expPsiStrength != 0)	node["expPsiStrength"]	= _expPsiStrength;
+		if (_expMelee != 0)			node["expMelee"]		= _expMelee;
 	}
 
 /*	for (size_t
@@ -939,34 +938,35 @@ void BattleUnit::startWalking(
 /**
  * This will increment '_walkPhase'.
  * @param tileBelow	- pointer to tile currently below this unit
- * @param cache		- true to refresh the unit cache / redraw this unit's sprite
+ * @param recache		- true to refresh the unit cache / redraw this unit's sprite
  */
 void BattleUnit::keepWalking(
 		const Tile* const tileBelow,
-		bool cache)
+		bool recache)
 {
 	++_walkPhase;
 
 	int
-		midPhase,
-		endPhase;
+		halfPhase,
+		fullPhase;
 
-	if (cache == false) // ie. not onScreen
+	if (recache == false) // ie. not onScreen
 	{
-		midPhase = 1;
-		endPhase = 2;
+		halfPhase = 1;
+		fullPhase = 2;
 	}
 	else
 		walkPhaseCutoffs(
-					midPhase,
-					endPhase);
+					halfPhase,
+					fullPhase);
 
-	if (_walkPhase == midPhase) // assume unit reached the destination tile
-		// This is actually a drawing hack so soldiers are not overlapped by floortiles
-		// kL_note: which they (large units) are half the time anyway ... fixed. uh yeah, no.
+	if (_walkPhase == halfPhase) // assume unit reached the destination tile; This is actually a drawing hack so soldiers are not overlapped by floortiles
+	{
+		Log(LOG_INFO) << "switch pos to DEST pos";
 		_pos = _posDest;
+	}
 
-	if (_walkPhase >= endPhase) // officially reached the destination tile
+	if (_walkPhase >= fullPhase) // officially reached the destination tile
 	{
 		_status = STATUS_STANDING;
 		_walkPhase =
@@ -998,40 +998,40 @@ void BattleUnit::keepWalking(
 		}
 	}
 
-	_cacheInvalid = cache;
+	_cacheInvalid = recache;
 }
 
 /**
- * Calculates the mid- and end-phases of walking.
- * @param midPhase - reference to the midPhase var
- * @param endPhase - reference to the endPhase var
+ * Calculates the half- and full-phases of walking.
+ * @param halfPhase - reference the halfPhase var
+ * @param fullPhase - reference the fullPhase var
  */
 void BattleUnit::walkPhaseCutoffs(
-		int& midPhase,
-		int& endPhase) const
+		int& halfPhase,
+		int& fullPhase) const
 {
 	if (_dirVertical != 0)
 	{
-		midPhase = 4;
-		endPhase = 8;
+		halfPhase = 4;
+		fullPhase = 8;
 	}
 	else // diagonal walking takes double the steps
 	{
-		endPhase = 8 + 8 * (_dir % 2);
+		fullPhase = 8 + 8 * (_dir % 2);
 
 		if (_armor->getSize() > 1)
 		{
 			if (_dir < 1 || _dir > 5) // dir = 0,7,6 (upward)
-				midPhase = endPhase;
+				halfPhase = fullPhase;
 			else if (_dir == 5)
-				midPhase = 12;
+				halfPhase = 12;
 			else if (_dir == 1)
-				midPhase = 5;
+				halfPhase = 5;
 			else
-				midPhase = 1;
+				halfPhase = 1;
 		}
 		else
-			midPhase = endPhase / 2;
+			halfPhase = fullPhase / 2;
 	}
 }
 
@@ -1244,15 +1244,15 @@ UnitFaction BattleUnit::getFaction() const
  * @param quadrant	- unit quadrant to cache (default 0)
  */
 void BattleUnit::setCache(
-		Surface* cache,
+		Surface* const cache,
 		int quadrant)
 {
 	if (cache == NULL)
 		_cacheInvalid = true;
 	else
 	{
-		_cache[static_cast<size_t>(quadrant)] = cache;
 		_cacheInvalid = false;
+		_cache[static_cast<size_t>(quadrant)] = cache;
 	}
 }
 
@@ -1260,7 +1260,7 @@ void BattleUnit::setCache(
  * Check if the unit is still cached in the Map cache.
  * @note When the unit needs to animate it needs to be re-cached.
  * @param invalid	- pointer to true if the cache is invalid
- * @param quadrant	- unit quadrant to check (default 0)
+ * @param quadrant	- quadrant to check (default 0)
  * @return, pointer to the cache Surface used
  */
 Surface* BattleUnit::getCache(
@@ -1613,10 +1613,10 @@ int BattleUnit::damage(
 		}
 
 //		if (isOut(true, true) == true)
-		if (isOut_t(OUT_DEAD_STUN) == true)
+		if (isOut_t(OUT_HLTH_STUN) == true)
 			_aboutToDie = true;
 
-		if (isOut_t(OUT_DEAD) == false
+		if (isOut_t(OUT_HLTH) == false
 			&& selfAware == true)
 		{
 			moraleChange(-wounds * 3);
@@ -1931,7 +1931,7 @@ const bool BattleUnit::isOut_t(const OutCheck test) const
 			}
 		break;
 
-		case OUT_DEAD:
+		case OUT_HLTH:
 			if (_health == 0)
 				return true;
 		break;
@@ -1941,7 +1941,7 @@ const bool BattleUnit::isOut_t(const OutCheck test) const
 				return true;
 		break;
 
-		case OUT_DEAD_STUN:
+		case OUT_HLTH_STUN:
 			if (_health == 0
 				|| _health <= _stunLevel)
 			{
@@ -3534,13 +3534,13 @@ void BattleUnit::morphine()
 		_stunLevel += 8 + RNG::generate(0,6);
 
 	if (isOut_t(OUT_STAT) == false
-		&& isOut_t(OUT_DEAD_STUN) == true)
+		&& isOut_t(OUT_HLTH_STUN) == true)
 	{
 		_battleGame->checkForCasualties(
 									_battleGame->getCurrentAction()->weapon,
 									_battleGame->getCurrentAction()->actor,
 									false,false,
-									isOut_t(OUT_DEAD));
+									isOut_t(OUT_HLTH));
 	}
 }
 
@@ -4088,15 +4088,15 @@ int BattleUnit::getRankInt() const
  */
 void BattleUnit::deriveRank()
 {
-	if (_faction == FACTION_PLAYER)
-	{
-		if		(_rank == "STR_COMMANDER")	_rankInt = 5;
-		else if (_rank == "STR_COLONEL")	_rankInt = 4;
-		else if (_rank == "STR_CAPTAIN")	_rankInt = 3;
-		else if (_rank == "STR_SERGEANT")	_rankInt = 2;
-		else if (_rank == "STR_SQUADDIE")	_rankInt = 1;
-		else if (_rank == "STR_ROOKIE")		_rankInt = 0;
-	}
+//	if (_faction == FACTION_PLAYER) // <- called only by xCom Soldiers, in cTor.
+//	{
+	if		(_rank == "STR_COMMANDER")	_rankInt = 5;
+	else if (_rank == "STR_COLONEL")	_rankInt = 4;
+	else if (_rank == "STR_CAPTAIN")	_rankInt = 3;
+	else if (_rank == "STR_SERGEANT")	_rankInt = 2;
+	else if (_rank == "STR_SQUADDIE")	_rankInt = 1;
+	else if (_rank == "STR_ROOKIE")		_rankInt = 0;
+//	}
 }
 
 /**

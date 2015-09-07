@@ -76,7 +76,7 @@ struct BattleAction
 		desperate, // ignoring newly-spotted units
 		finalAction,
 		dash,
-		pauseAfterShot,
+//		pauseAfterShot,
 		strafe,
 		takenXp,
 		targeting;
@@ -120,8 +120,8 @@ struct BattleAction
 			finalFacing(-1),
 			finalAction(false),
 			number(0),
-			takenXp(false),
-			pauseAfterShot(false)
+			takenXp(false)
+//			pauseAfterShot(false)
 	{}
 
 	public:
@@ -147,7 +147,7 @@ struct BattleAction
 			finalAction = false;
 			number = 0;
 			takenXp = false;
-			pauseAfterShot = false;
+//			pauseAfterShot = false;
 			waypoints.clear();
 		}
 };

@@ -34,7 +34,7 @@ namespace helper
 
 /**
  * This is empty argument to `ShaderDraw`.
- * When used in `ShaderDraw` return always 0 to `ColorFunc::func` for every pixel
+ * When used in `ShaderDraw` return always 0 to `ColorFunc::func` for every pixel.
  */
 class Nothing
 {};
@@ -42,7 +42,7 @@ class Nothing
 
 /**
  * This is scalar argument to `ShaderDraw`.
- * When used in `ShaderDraw` return value of `t` to `ColorFunc::func` for every pixel
+ * When used in `ShaderDraw` return value of `t` to `ColorFunc::func` for every pixel.
  */
 template<typename T>
 class Scalar

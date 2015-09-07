@@ -82,7 +82,7 @@ void UnitFallBState::think()
 	BattleUnit* unitBelow;
 	const Tile* tile;
 	Tile* tileBelow;
-	Position startPos;
+	Position posStart;
 
 	for (std::list<BattleUnit*>::const_iterator
 			i = _battleSave->getFallingUnits()->begin();
@@ -278,10 +278,10 @@ void UnitFallBState::think()
 							++dir)
 					{
 						//Log(LOG_INFO) << ". . checking directions to move";
-						Position unitVect;
+						Position posVect;
 						Pathfinding::directionToVector(
 													dir,
-													&unitVect);
+													&posVect);
 
 						for (std::vector<Position>::const_iterator
 								k = bodyPositions.begin();
@@ -289,9 +289,9 @@ void UnitFallBState::think()
 								)
 						{
 							//Log(LOG_INFO) << ". . . checking bodysections";
-							startPos = *k;
-							tile = _battleSave->getTile(startPos + unitVect);
-							tileBelow = _battleSave->getTile(startPos + unitVect + Position(0,0,-1));
+							posStart = *k;
+							tile = _battleSave->getTile(posStart + posVect);
+							tileBelow = _battleSave->getTile(posStart + posVect + Position(0,0,-1));
 
 							bool
 								aboutToBeOccupiedFromAbove = tile != NULL
@@ -310,7 +310,7 @@ void UnitFallBState::think()
 								hasFloor = tile != NULL
 										&& tile->hasNoFloor(tileBelow) == false,
 								blocked = _battleSave->getPathfinding()->isBlockedPath(
-																					_battleSave->getTile(startPos),
+																					_battleSave->getTile(posStart),
 																					dir,
 																					unitBelow),
 								unitCanFly = unitBelow->getMoveTypeUnit() == MT_FLY,
@@ -337,7 +337,7 @@ void UnitFallBState::think()
 									//Log(LOG_INFO) << ". . . . . add Falling Unit";
 									escape = true;
 
-									// Now ensure no other unit escapes to here too.
+									// Now ensure no other unit escapes here too.
 									for (int
 											x = belowSize;
 											x != -1;
@@ -356,9 +356,8 @@ void UnitFallBState::think()
 									//Log(LOG_INFO) << ". . . . startWalking() out of the way?";
 									unitBelow->startWalking(
 														dir,
-														unitBelow->getPosition() + unitVect,
-														_battleSave->getTile(startPos + Position(0,0,-1)));
-//														onScreen);
+														unitBelow->getPosition() + posVect,
+														_battleSave->getTile(posStart + Position(0,0,-1)));
 
 									j = _unitsToMove.erase(j);
 								}

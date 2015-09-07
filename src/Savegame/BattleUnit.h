@@ -102,9 +102,9 @@ enum OutCheck
 {
 	OUT_ALL,		// 0
 	OUT_STAT,		// 1
-	OUT_DEAD,		// 2
+	OUT_HLTH,		// 2
 	OUT_STUN,		// 3
-	OUT_DEAD_STUN	// 4
+	OUT_HLTH_STUN	// 4
 };
 
 
@@ -644,11 +644,11 @@ private:
 		/// Advances the walkingPhase.
 		void keepWalking(
 				const Tile* const tileBelow,
-				bool cache);
+				bool recache);
 		/// Calculates the mid- and end-phases of walking.
 		void walkPhaseCutoffs(
-				int& midPhase,
-				int& endPhase) const;
+				int& halfPhase,
+				int& fullPhase) const;
 		/// Gets the walking phase for animation and sound.
 		int getWalkPhase() const;
 		/// Gets the walking phase for diagonal walking.
@@ -675,7 +675,7 @@ private:
 
 		/// Sets this unit's cache and the cached flag.
 		void setCache(
-				Surface* cache,
+				Surface* const cache,
 				int quadrant = 0);
 		/// Gets this unit's cache for the battlescape.
 		Surface* getCache(

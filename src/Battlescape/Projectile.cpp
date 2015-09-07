@@ -876,7 +876,7 @@ Position Projectile::getFinalPosition() const
  */
 Position Projectile::getStrikeVector() const
 {
-	Position unitVect = Position(-1,-1,-1);
+	Position posVect; // inits to Position(0,0,0)
 
 	const size_t trjSize = _trajectory.size();
 	if (trjSize > 2)
@@ -907,10 +907,12 @@ Position Projectile::getStrikeVector() const
 		else
 			y = 0;
 
-		unitVect = Position(x,y,0);
+		posVect = Position(x,y,0);
 	}
 
-	return unitVect;
+	// TODO: Put some kind of safety if (x=0,y=0) after return to calling function;
+	// that is, isolate vertical shots & figure out what to do.
+	return posVect;
 }
 
 /*

@@ -20,7 +20,7 @@
 #ifndef OPENXCOM_SHADERREPEAT_H
 #define	OPENXCOM_SHADERREPEAT_H
 
-#include <vector>
+//#include <vector>
 
 #include "ShaderDraw.h"
 

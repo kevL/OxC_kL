@@ -716,21 +716,17 @@ void ProjectileFlyBState::think()
 		}
 		else // think() FINISH.
 		{
-			Log(LOG_INFO) << "ProjectileFlyBState::think() -> finish " << _action.actor->getId();
+			//Log(LOG_INFO) << "ProjectileFlyBState::think() -> finish " << _action.actor->getId();
 			if (_action.actor->getFaction() != _battleSave->getSide()	// rf -> note that actionActor may not be the actual shooter,
 				&& Options::battleSmoothCamera == true)					// but he/she will be on the same Side, doing a reaction shot.
 			{
-				Log(LOG_INFO) << "reset Camera for " << _action.actor->getId();
+				//Log(LOG_INFO) << "reset Camera for " << _action.actor->getId();
 				const std::map<int, Position>* const rfShotList (_battleSave->getTileEngine()->getRfShotList()); // init.
 				std::map<int, Position>::const_iterator i = rfShotList->find(_action.actor->getId());
-				//for (std::map<int, Position>::const_iterator
-				//		j = rfShotList->begin();
-				//		j != rfShotList->end();
-				//		++j)
-				//{
-				//	Log(LOG_INFO) << ". . shotList";
-				//	Log(LOG_INFO) << ". . " << j->first << " " << j->second;
-				//}
+
+				//for (std::map<int, Position>::const_iterator j = rfShotList->begin(); j != rfShotList->end(); ++j)
+				//{ Log(LOG_INFO) << ". . shotList"; Log(LOG_INFO) << ". . " << j->first << " " << j->second; }
+
 				if (i != rfShotList->end()) // note The shotList vector will be cleared in BattlescapeGame::think() after all BattleStates have popped.
 				{
 					_action.cameraPosition = i->second;
@@ -743,8 +739,8 @@ void ProjectileFlyBState::think()
 				}
 			}
 
-			Log(LOG_INFO) << ". stored cameraPosition " << _action.cameraPosition;
-			Log(LOG_INFO) << ". pauseAfterShot " << (int)camera->getPauseAfterShot();
+			//Log(LOG_INFO) << ". stored cameraPosition " << _action.cameraPosition;
+			//Log(LOG_INFO) << ". pauseAfterShot " << (int)camera->getPauseAfterShot();
 			if (_action.cameraPosition.z != -1) //&& _action.waypoints.size() < 2)
 			{
 				//Log(LOG_INFO) << "ProjectileFlyBState::think() FINISH: cameraPosition was Set";
@@ -754,19 +750,19 @@ void ProjectileFlyBState::think()
 					|| _action.type == BA_AIMEDSHOT)
 				{
 					//Log(LOG_INFO) << "ProjectileFlyBState::think() FINISH: resetting Camera to original pos";
-					if (camera->getPauseAfterShot() == true) // TODO: move 'pauseAfterShot' to the BattleAction struct. done ->
-//					if (_action.pauseAfterShot == true)
+					if (camera->getPauseAfterShot() == true)	// TODO: move 'pauseAfterShot' to the BattleAction struct. done -> but it didn't work; i'm a numby.
+//					if (_action.pauseAfterShot == true)			// note that trying to store the camera position in the BattleAction didn't work either ... double numby.
 					{
 						camera->setPauseAfterShot(false);
 						if (_prjImpact != VOXEL_OUTOFBOUNDS)
 						{
-							Log(LOG_INFO) << ". . delay - inBounds";
+							//Log(LOG_INFO) << ". . delay - inBounds";
 							SDL_Delay(336); // screen-pause when shot hits target before reverting camera to shooter.
 						}
-						else Log(LOG_INFO) << ". . final vox OutofBounds - do NOT pause";
+						//else Log(LOG_INFO) << ". . final vox OutofBounds - do NOT pause";
 					}
 
-					Log(LOG_INFO) << ". . reset Camera Position " << _action.actor->getId();
+					//Log(LOG_INFO) << ". . reset Camera Position " << _action.actor->getId();
 					camera->setMapOffset(_action.cameraPosition);
 //					_action.cameraPosition = Position(0,0,-1); // reset.
 

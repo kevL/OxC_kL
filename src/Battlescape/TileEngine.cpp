@@ -1967,7 +1967,7 @@ bool TileEngine::reactionShot(
 	if (_rfAction->targeting == true
 		&& _rfAction->actor->spendTimeUnits(_rfAction->TU) == true)
 	{
-		Log(LOG_INFO) << "rf by Actor " << _rfAction->actor->getId() << " RfTriggerPos " << _battleSave->getBattleGame()->getMap()->getCamera()->getMapOffset();
+		//Log(LOG_INFO) << "rf by Actor " << _rfAction->actor->getId() << " RfTriggerPos " << _battleSave->getBattleGame()->getMap()->getCamera()->getMapOffset();
 		_battleSave->storeRfTriggerPosition(_battleSave->getBattleGame()->getMap()->getCamera()->getMapOffset());
 		_rfAction->TU = 0;
 
@@ -2243,7 +2243,7 @@ BattleUnit* TileEngine::hit(
 			}
 
 			if (targetUnit != NULL)
-//				&& targetUnit->isOut_t(OUT_DEAD_STUN) == false)
+//				&& targetUnit->isOut_t(OUT_HLTH_STUN) == false)
 			{
 				//Log(LOG_INFO) << ". . . targetUnit Valid ID = " << targetUnit->getId();
 				const int wounds = targetUnit->getFatalWounds();
@@ -2340,7 +2340,7 @@ BattleUnit* TileEngine::hit(
 				{
 					if (attacker != NULL
 						&& (wounds < targetUnit->getFatalWounds()
-							|| targetUnit->isOut_t(OUT_DEAD) == true))
+							|| targetUnit->isOut_t(OUT_HLTH) == true))
 //							|| targetUnit->getHealth() == 0)) // .. just do this here and bDone with it. Regularly done in BattlescapeGame::checkForCasualties()
 					{
 						targetUnit->killedBy(attacker->getFaction());
@@ -2351,7 +2351,7 @@ BattleUnit* TileEngine::hit(
 					// And, probly don't have to state if killed by aLiens: probly assumed in DebriefingState.
 
 //					if (targetUnit->getHealth() > 0)
-/*					if (targetUnit->isOut_t(OUT_DEAD) == false // -> moved to BattleUnit::damage()
+/*					if (targetUnit->isOut_t(OUT_HLTH) == false // -> moved to BattleUnit::damage()
 						&& targetUnit->isFearable() == true)
 					{
 						int moraleLoss = (110 - targetUnit->getBaseStats()->bravery) / 10;
@@ -2374,7 +2374,7 @@ BattleUnit* TileEngine::hit(
 					//Log(LOG_INFO) << ". . stunLevel = " << targetUnit->getStun();
 					if (targetUnit->getSpecialAbility() == SPECAB_EXPLODE // cyberdiscs
 //						&& targetUnit->isOut_t(OUT_STAT) == false
-						&& targetUnit->isOut_t(OUT_DEAD_STUN) == true)
+						&& targetUnit->isOut_t(OUT_HLTH_STUN) == true)
 //						&& (targetUnit->getHealth() == 0
 //							|| targetUnit->getStun() >= targetUnit->getHealth()))
 					{
@@ -2874,7 +2874,7 @@ void TileEngine::explode(
 										//Log(LOG_INFO) << ". . . INVENTORY: damage = " << dam;
 
 //										if (bu->getHealth() == 0)
-										if (bu->isOut_t(OUT_DEAD) == true)
+										if (bu->isOut_t(OUT_HLTH) == true)
 										{
 											//Log(LOG_INFO) << ". . . . INVENTORY: instaKill";
 											bu->instaKill();
@@ -3097,7 +3097,7 @@ void TileEngine::explode(
 												true);
 
 //										if (bu->getHealth() == 0)
-										if (bu->isOut_t(OUT_DEAD) == true)
+										if (bu->isOut_t(OUT_HLTH) == true)
 										{
 											bu->instaKill();
 
@@ -3163,7 +3163,7 @@ void TileEngine::explode(
 						if (attacker != NULL)
 						{
 //							if (targetUnit->getHealth() == 0
-							if (targetUnit->isOut_t(OUT_DEAD) == true
+							if (targetUnit->isOut_t(OUT_HLTH) == true
 								|| wounds < targetUnit->getFatalWounds())
 							{
 								targetUnit->killedBy(attacker->getFaction()); // kL .. just do this here and bDone with it. Normally done in BattlescapeGame::checkForCasualties()

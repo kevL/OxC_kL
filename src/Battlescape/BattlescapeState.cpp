@@ -1598,7 +1598,7 @@ inline void BattlescapeState::handle(Action* action)
 										++i)
 								{
 									if ((*i)->getOriginalFaction() == FACTION_HOSTILE
-										&& (*i)->isOut_t(OUT_DEAD) == false)
+										&& (*i)->isOut_t(OUT_HLTH) == false)
 									{
 										checkCasualties = true;
 										(*i)->setHealth(0);
@@ -1616,7 +1616,7 @@ inline void BattlescapeState::handle(Action* action)
 									++i)
 								{
 									if ((*i)->getOriginalFaction() == FACTION_HOSTILE
-										&& (*i)->isOut_t(OUT_DEAD) == false)
+										&& (*i)->isOut_t(OUT_HLTH) == false)
 //										&& (*i)->isOut() == false)
 									{
 										checkCasualties = true;

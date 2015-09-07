@@ -1383,7 +1383,7 @@ bool SavedBattleGame::endBattlePhase()
 			i != _units.end();
 			++i)
 	{
-		if ((*i)->isOut_t(OUT_DEAD) == false
+		if ((*i)->isOut_t(OUT_HLTH) == false
 			&& (*i)->getStatus() != STATUS_LIMBO)
 		{
 			(*i)->setDashing(false);	// Safety. no longer dashing; dash is effective

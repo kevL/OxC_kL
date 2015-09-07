@@ -104,6 +104,7 @@ private:
 	PathPreview _previewSetting;
 
 	BattlescapeMessage* _hiddenScreen;
+	BattleUnit* _unit;
 	Camera* _camera;
 	Game* _game;
 	NumberText
@@ -126,10 +127,19 @@ private:
 
 	///
 	void drawTerrain(Surface* const surface);
+
+	/// Gets the unit's quadrant for drawing.
+	int getQuadrant() const;
+	/// Gets if a Tile is a/the true location of the unit.
+	bool isTrueLoc() const;
+	/// Calculates the offset of a soldier when it is moving between 2 tiles.
+	void calculateWalkingOffset(
+			Position* const offset,
+			int quadrant) const;
 	///
 	int getTerrainLevel(
 			const Position& pos,
-			int unitSize) const;
+			int armorSize) const;
 
 
 	public:
@@ -183,11 +193,6 @@ private:
 				int y);
 		/// Gets the currently selected position.
 		void getSelectorPosition(Position* const pos) const;
-
-		/// Calculates the offset of a soldier, when it is walking in the middle of 2 tiles.
-		void calculateWalkingOffset(
-				const BattleUnit* const unit,
-				Position* const offset) const;
 
 		/// Sets the 3D cursor type.
 		void setCursorType(

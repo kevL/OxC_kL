@@ -46,12 +46,11 @@ protected:
 		_hidden,
 		_redraw,
 		_visible;
-//		_tftdMode,
 	int
 		_x,
 		_y;
 
-	std::string _tooltip;
+//	std::string _tooltip;
 
 	SDL_Rect
 		_crop,
@@ -211,7 +210,7 @@ protected:
 				int x,
 				int y,
 				Uint8 color)
-		{	if (   x < 0
+		{	if (x < 0
 				|| x >= getWidth()
 				|| y < 0
 				|| y >= getHeight())
@@ -220,9 +219,8 @@ protected:
 			}
 
 			static_cast<Uint8*>(_surface->pixels)
-						[(y * static_cast<int>(_surface->pitch))
-						+ (x * static_cast<int>(_surface->format->BytesPerPixel))]
-					= color; }
+					 [y * static_cast<int>(_surface->pitch)
+					+ x * static_cast<int>(_surface->format->BytesPerPixel)] = color; }
 
 		/**
 		 * Changes the color of a pixel in the surface and returns the next
@@ -255,7 +253,7 @@ protected:
 		Uint8 getPixelColor(
 				int x,
 				int y) const
-		{	if (   x < 0
+		{	if (x < 0
 				|| x >= getWidth()
 				|| y < 0
 				|| y >= getHeight())

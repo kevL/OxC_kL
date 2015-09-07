@@ -1288,7 +1288,7 @@ void Tile::setUnit(
  * Sets a unit transitorily on this Tile.
  * @param unit - pointer to a BattleUnit
  */
-void Tile::setUnitOnly(BattleUnit* const unit)
+void Tile::setTransitUnit(BattleUnit* const unit)
 {
 	_unit = unit;
 }

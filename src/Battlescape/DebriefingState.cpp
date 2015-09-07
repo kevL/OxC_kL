@@ -1952,7 +1952,7 @@ void DebriefingState::recoverItems(std::vector<BattleItem*>* const battleItems) 
 							if (itRule->isRecoverable() == true
 								&& (unit->getStatus() == STATUS_DEAD
 									|| (unit->getStatus() == STATUS_LIMBO // kL_tentative.
-										&& unit->isOut_t(OUT_DEAD) == true)))
+										&& unit->isOut_t(OUT_HLTH) == true)))
 							{
 								//Log(LOG_INFO) << ". . corpse = " << itRule->getType();
 								addStat(

@@ -614,7 +614,7 @@ void BattlescapeGame::popState()
 		if (_battleSave->getRfTriggerPosition().z != -1) // this refocuses the Camera back onto RF trigger unit after a brief delay.
 		{
 			SDL_Delay(336);
-			Log(LOG_INFO) << "popState - STATES EMPTY - set Camera to triggerPos & clear triggerPos";
+			//Log(LOG_INFO) << "popState - STATES EMPTY - set Camera to triggerPos & clear triggerPos";
 			getMap()->getCamera()->setMapOffset(_battleSave->getRfTriggerPosition());
 			_battleSave->storeRfTriggerPosition(Position(0,0,-1));
 		}
@@ -1656,7 +1656,7 @@ void BattlescapeGame::checkForCasualties(
 					++i)
 			{
 //				if ((*i)->getHealth() != 0 && (*i)->getHealth() > (*i)->getStun())
-				if ((*i)->isOut_t(OUT_DEAD_STUN) == false)
+				if ((*i)->isOut_t(OUT_HLTH_STUN) == false)
 				{
 					attackUnit->setExposed(); // defender has been spotted on Player turn.
 					break;
@@ -1743,7 +1743,7 @@ void BattlescapeGame::checkForCasualties(
 		{
 //			dead = ((*i)->getHealth() == 0);
 //			stunned = ((*i)->getHealth() <= (*i)->getStun());
-			dead = (*i)->isOut_t(OUT_DEAD);
+			dead = (*i)->isOut_t(OUT_HLTH);
 			stunned = (*i)->isOut_t(OUT_STUN);
 
 			converted =
@@ -2522,7 +2522,7 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* const unit) // private.
   * @note The return is used only by BattlescapeState::mapClick() to check if
   * pathPreview was cancelled or walking was aborted.
   * @param force - force the action to be cancelled (default false)
-  * @return, true if pathPreview is cancelled
+  * @return, true if anything was cancelled
   */
 bool BattlescapeGame::cancelCurrentAction(bool force)
 {

@@ -153,7 +153,6 @@ Surface::Surface(
 		_hidden(false),
 		_redraw(false),
 		_alignedBuffer(NULL)
-//		_tftdMode(false),
 {
 	_alignedBuffer = NewAligned(
 							bpp,
@@ -258,7 +257,6 @@ Surface::Surface(const Surface& other)
 	_visible = other._visible;
 	_hidden = other._hidden;
 	_redraw = other._redraw;
-//	_tftdMode = other._tftdMode;
 }
 
 /**
@@ -1020,7 +1018,7 @@ void Surface::blitNShade(
 		int colorGroup,
 		bool halfLeft)
 {
-	ShaderMove<Uint8> src (this, x, y); // init.
+	ShaderMove<Uint8> src (this, x,y); // init.
 
 	if (halfRight == true)
 	{

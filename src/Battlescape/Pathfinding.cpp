@@ -1245,33 +1245,33 @@ int Pathfinding::getTuCostPf(
  * Converts direction to a unit-vector.
  * @note Direction starts north = 0 and goes clockwise.
  * @param dir		- source direction
- * @param unitVect	- pointer to a Position
+ * @param posVect	- pointer to a Position
  */
 void Pathfinding::directionToVector( // static.
 		const int dir,
-		Position* const unitVect)
+		Position* const posVect)
 {
-	const int
+	static const int
 		x[10] = { 0, 1, 1, 1, 0,-1,-1,-1, 0, 0},
 		y[10] = {-1,-1, 0, 1, 1, 1, 0,-1, 0, 0},
 		z[10] = { 0, 0, 0, 0, 0, 0, 0, 0, 1,-1};
 
-	unitVect->x = x[dir];
-	unitVect->y = y[dir];
-	unitVect->z = z[dir];
+	posVect->x = x[dir];
+	posVect->y = y[dir];
+	posVect->z = z[dir];
 }
 
 /**
  * Converts unit-vector to a direction.
  * @note Direction starts north = 0 and goes clockwise.
- * @param unitVect	- reference to a Position
+ * @param posVect	- reference to a Position
  * @param dir		- reference to the resulting direction (up/down & same-tile sets dir -1)
  */
 void Pathfinding::vectorToDirection( // static.
-		const Position& unitVect,
+		const Position& posVect,
 		int& dir)
 {
-	const int
+	static const int
 		x[8] = { 0, 1, 1, 1, 0,-1,-1,-1},
 		y[8] = {-1,-1, 0, 1, 1, 1, 0,-1};
 
@@ -1280,8 +1280,8 @@ void Pathfinding::vectorToDirection( // static.
 			i != 8;
 			++i)
 	{
-		if (x[i] == unitVect.x
-			&& y[i] == unitVect.y)
+		if (x[i] == posVect.x
+			&& y[i] == posVect.y)
 		{
 			dir = static_cast<int>(i);
 			return;

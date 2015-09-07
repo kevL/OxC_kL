@@ -713,7 +713,7 @@ Position Camera::getMapOffset() const
  */
 void Camera::setMapOffset(const Position& pos)
 {
-	Log(LOG_INFO) << "CAMERA setMapOffset " << pos;
+	//Log(LOG_INFO) << "CAMERA setMapOffset " << pos;
 	_mapOffset = pos;
 }
 
