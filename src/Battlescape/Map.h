@@ -128,14 +128,21 @@ private:
 	///
 	void drawTerrain(Surface* const surface);
 
-	/// Gets the unit's quadrant for drawing.
-	int getQuadrant() const;
 	/// Gets if a Tile is a/the true location of the unit.
-	bool isTrueLoc() const;
-	/// Calculates the offset of a soldier when it is moving between 2 tiles.
+	bool isTrueLoc(
+			const BattleUnit* const unit,
+			const Tile* const tile) const;
+	/// Gets the unit's quadrant for drawing.
+	int getQuadrant(
+			const BattleUnit* const unit,
+			const Tile* const tile,
+			bool trueLoc) const;
+	/// Calculates the offset of a unit-sprite when it is moving between 2 tiles.
 	void calculateWalkingOffset(
+			const BattleUnit* const unit,
 			Position* const offset,
-			int quadrant) const;
+//			int quadrant,
+			bool trueLoc) const;
 	///
 	int getTerrainLevel(
 			const Position& pos,

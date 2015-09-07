@@ -578,13 +578,13 @@ void Camera::centerOnPosition(
 			-1,
 			_mapsize_y);
 
-	Position screenPos;
+	Position posScreen;
 	convertMapToScreen(
 					_center,
-					&screenPos);
+					&posScreen);
 
-	_mapOffset.x = -(screenPos.x - (_screenWidth / 2) + 16);
-	_mapOffset.y = -(screenPos.y - (_visibleMapHeight / 2));
+	_mapOffset.x = -(posScreen.x - (_screenWidth / 2) + 16);
+	_mapOffset.y = -(posScreen.y - (_visibleMapHeight / 2));
 	_mapOffset.z = _center.z;
 
 	_map->getBattleSave()->getBattleState()->setLayerValue(_mapOffset.z);
@@ -640,44 +640,44 @@ void Camera::convertScreenToMap(
 
 /**
  * Converts map coordinates XYZ to screen positions XY.
- * @param mapPos	- reference the XYZ coordinates on the map (tilespace)
- * @param screenPos	- pointer to the screen Position pixel (upper left corner of sprite-rectangle)
+ * @param posMap	- reference the XYZ coordinates on the map (tilespace)
+ * @param posScreen	- pointer to the screen Position pixel (upper left corner of sprite-rectangle)
  */
 void Camera::convertMapToScreen(
-		const Position& mapPos,
-		Position* screenPos) const
+		const Position& posMap,
+		Position* const posScreen) const
 {
-	screenPos->x = mapPos.x * (_spriteWidth / 2) - mapPos.y * (_spriteWidth / 2);
-	screenPos->y = mapPos.x * (_spriteWidth / 4) + mapPos.y * (_spriteWidth / 4) - mapPos.z * ((_spriteHeight + _spriteWidth / 4) / 2);
-	screenPos->z = 0; // not used
+	posScreen->x = posMap.x * (_spriteWidth / 2) - posMap.y * (_spriteWidth / 2);
+	posScreen->y = posMap.x * (_spriteWidth / 4) + posMap.y * (_spriteWidth / 4) - posMap.z * ((_spriteHeight + _spriteWidth / 4) / 2);
+	posScreen->z = 0; // not used
 }
 
 /**
  * Converts voxel coordinates XYZ to screen positions XY.
- * @param voxelPos	- reference the XYZ coordinates of the voxel
- * @param screenPos	- pointer to the screen Position
+ * @param posVoxel	- reference the XYZ coordinates of the voxel
+ * @param posScreen	- pointer to the screen Position
  */
 void Camera::convertVoxelToScreen(
-		const Position& voxelPos,
-		Position* screenPos) const
+		const Position& posVoxel,
+		Position* const posScreen) const
 {
 	const Position mapPosition = Position(
-										voxelPos.x / 16,
-										voxelPos.y / 16,
-										voxelPos.z / 24);
+										posVoxel.x / 16,
+										posVoxel.y / 16,
+										posVoxel.z / 24);
 	convertMapToScreen(
 					mapPosition,
-					screenPos);
+					posScreen);
 
 	const double
-		dx = voxelPos.x - (mapPosition.x * 16),
-		dy = voxelPos.y - (mapPosition.y * 16),
-		dz = voxelPos.z - (mapPosition.z * 24);
+		dx = posVoxel.x - (mapPosition.x * 16),
+		dy = posVoxel.y - (mapPosition.y * 16),
+		dz = posVoxel.z - (mapPosition.z * 24);
 
-	screenPos->x += static_cast<int>(dx - dy) + (_spriteWidth / 2);
-	screenPos->y += static_cast<int>(((static_cast<double>(_spriteHeight) / 2.)) + (dx / 2.) + (dy / 2.) - dz);
-	screenPos->x += _mapOffset.x;
-	screenPos->y += _mapOffset.y;
+	posScreen->x += static_cast<int>(dx - dy) + (_spriteWidth / 2);
+	posScreen->y += static_cast<int>(((static_cast<double>(_spriteHeight) / 2.)) + (dx / 2.) + (dy / 2.) - dz);
+	posScreen->x += _mapOffset.x;
+	posScreen->y += _mapOffset.y;
 }
 
 /**
@@ -713,7 +713,6 @@ Position Camera::getMapOffset() const
  */
 void Camera::setMapOffset(const Position& pos)
 {
-	//Log(LOG_INFO) << "CAMERA setMapOffset " << pos;
 	_mapOffset = pos;
 }
 
@@ -743,32 +742,32 @@ bool Camera::getShowLayers() const
  */
 bool Camera::isOnScreen(const Position& posMap) const
 {
-	Position screenPos;
+	Position posScreen;
 	convertMapToScreen(
 					posMap,			// tile Position
-					&screenPos);	// pixel Position
-	screenPos.x += _mapOffset.x;
-	screenPos.y += _mapOffset.y;
+					&posScreen);	// pixel Position
+	posScreen.x += _mapOffset.x;
+	posScreen.y += _mapOffset.y;
 
 	static const int border = 28; // buffer the edges a bit.
 
-	return screenPos.x > 8 + border // -> try these
-		&& screenPos.x < _screenWidth - 8 - _spriteWidth - border
-		&& screenPos.y > -16 + border
-		&& screenPos.y < _screenHeight - 80 - border; // <- icons.
+	return posScreen.x > 8 + border // -> try these
+		&& posScreen.x < _screenWidth - 8 - _spriteWidth - border
+		&& posScreen.y > -16 + border
+		&& posScreen.y < _screenHeight - 80 - border; // <- icons.
 }
 /*
  * Checks if map coordinates X,Y,Z are on screen.
- * @param mapPos Coordinates to check.
+ * @param posMap Coordinates to check.
  * @param unitWalking True to offset coordinates for a unit walking.
  * @param unitSize size of unit (0 - single, 1 - 2x2, etc, used for walking only
  * @param boundary True if it's for caching calculation
  * @return True if the map coordinates are on screen.
  */
-/* bool Camera::isOnScreen(const Position &mapPos, const bool unitWalking, const int unitSize, const bool boundary) const
+/* bool Camera::isOnScreen(const Position &posMap, const bool unitWalking, const int unitSize, const bool boundary) const
 {
-	Position screenPos;
-	convertMapToScreen(mapPos, &screenPos);
+	Position posScreen;
+	convertMapToScreen(posMap, &posScreen);
 	int posx = _spriteWidth/2, posy = _spriteHeight - _spriteWidth/4;
 	int sizex = _spriteWidth/2, sizey = _spriteHeight/2;
 	if (unitSize > 0)
@@ -777,8 +776,8 @@ bool Camera::isOnScreen(const Position& posMap) const
 		sizex = _spriteWidth*unitSize;
 		sizey = _spriteWidth*unitSize/2;
 	}
-	screenPos.x += _mapOffset.x + posx;
-	screenPos.y += _mapOffset.y + posy;
+	posScreen.x += _mapOffset.x + posx;
+	posScreen.y += _mapOffset.y + posy;
 	if (unitWalking)
 	{
 //pretty hardcoded hack to handle overlapping by icons
@@ -796,21 +795,21 @@ bool Camera::isOnScreen(const Position& posMap) const
 			sizex += _spriteWidth;
 			sizey += _spriteWidth/2;
 		}
-		if ( screenPos.x < 0 - sizex
-			|| screenPos.x >= _screenWidth + sizex
-			|| screenPos.y < 0 - sizey
-			|| screenPos.y >= _screenHeight + sizey ) return false; //totally outside
+		if ( posScreen.x < 0 - sizex
+			|| posScreen.x >= _screenWidth + sizex
+			|| posScreen.y < 0 - sizey
+			|| posScreen.y >= _screenHeight + sizey ) return false; //totally outside
 		int side = ( _screenWidth - _map->getIconWidth() ) / 2;
-		if ( (screenPos.y < (_screenHeight - _map->getIconHeight()) + sizey) ) return true; //above icons
-		if ( (side > 1) && ( (screenPos.x < side + sizex) || (screenPos.x >= (_screenWidth - side - sizex)) ) ) return true; //at sides (if there are any)
+		if ( (posScreen.y < (_screenHeight - _map->getIconHeight()) + sizey) ) return true; //above icons
+		if ( (side > 1) && ( (posScreen.x < side + sizex) || (posScreen.x >= (_screenWidth - side - sizex)) ) ) return true; //at sides (if there are any)
 		return false;
 	}
 	else
 	{
-		return screenPos.x >= 0
-			&& screenPos.x <= _screenWidth - 10
-			&& screenPos.y >= 0
-			&& screenPos.y <= _screenHeight - 10;
+		return posScreen.x >= 0
+			&& posScreen.x <= _screenWidth - 10
+			&& posScreen.y >= 0
+			&& posScreen.y <= _screenHeight - 10;
 	}
 } */
 

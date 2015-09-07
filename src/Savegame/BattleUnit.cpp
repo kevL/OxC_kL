@@ -962,7 +962,7 @@ void BattleUnit::keepWalking(
 
 	if (_walkPhase == halfPhase) // assume unit reached the destination tile; This is actually a drawing hack so soldiers are not overlapped by floortiles
 	{
-		Log(LOG_INFO) << "switch pos to DEST pos";
+		//Log(LOG_INFO) << "switch pos to DEST pos";
 		_pos = _posDest;
 	}
 
@@ -4066,16 +4066,16 @@ void BattleUnit::invalidateCache()
 
 /**
  * Sets the numeric version of a unit's rank.
- * @param ranks - unit rank ( 0 = lowest ) kL_note: uh doesn't aLien & xCom go opposite ways
+ * @param rankInt - unit rank (0 = xCom lowest/aLien highest) TODO: straighten that out ...
  */
-void BattleUnit::setRankInt(int ranks)
+void BattleUnit::setRankInt(int rankInt)
 {
-	_rankInt = ranks;
+	_rankInt = rankInt;
 }
 
 /**
  * Gets the numeric version of a unit's rank.
- * @return, unit rank ( 0 = lowest ) kL_note: uh doesn't aLien & xCom go opposite ways
+ * @return, unit rank (0 = xCom lowest/aLien highest) TODO: straighten that out ...
  */
 int BattleUnit::getRankInt() const
 {

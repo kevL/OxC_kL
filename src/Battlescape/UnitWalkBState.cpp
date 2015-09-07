@@ -421,7 +421,7 @@ bool UnitWalkBState::doStatusStand() // private.
 				if (_unit->getTurretType() != -1)
 				{
 					const int turretOffset = _unit->getTurretDirection() - _unit->getDirection();
-					_unit->setTurretDirection((turretOffset + dirStrafe) % 8); // might not need modulo there ... not sure. Occupied w/ other things atm.
+					_unit->setTurretDirection((turretOffset + dirStrafe) % 8);
 					//Log(LOG_INFO) << ". STANDING strafeTank, setTurretDirection() -> " << (turretOffset + dirStrafe);
 				}
 			}
@@ -733,7 +733,7 @@ bool UnitWalkBState::doStatusWalk() // private.
 	if (_tileSwitchDone == false
 		&& _unit->getPosition() != _unit->getLastPosition())
 	{
-		Log(LOG_INFO) << ". tile switch from _lastpos to _destination";
+		//Log(LOG_INFO) << ". tile switch from _lastpos to _destination";
 		_tileSwitchDone = true;
 
 		Tile* tile;
@@ -1125,18 +1125,16 @@ void UnitWalkBState::postPathProcedures() // private.
 
 /**
  * Gets a suitable final facing direction for aLiens.
+ * @note This does not require any TU cost.
  * @return, direction to face
  */
 int UnitWalkBState::getFinalDirection() const // private.
 {
-	const int
-		diff = static_cast<int>(_parent->getBattlescapeState()->getSavedGame()->getDifficulty()),
-		alienRank = _unit->getRankInt();
-
-	if (RNG::percent((diff + 1) * 20 - alienRank * 5) == false)
+	const int diff = static_cast<int>(_parent->getBattlescapeState()->getSavedGame()->getDifficulty());
+	if (RNG::percent((diff + 1) * 20 - _unit->getRankInt() * 5) == false)
 		return -1;
 
-	const BattleUnit* faceUnit = NULL;
+	const BattleUnit* facedUnit = NULL;
 
 	int testDist = 255;
 	for (std::vector<BattleUnit*>::const_iterator
@@ -1156,13 +1154,13 @@ int UnitWalkBState::getFinalDirection() const // private.
 			if (dist < testDist)
 			{
 				testDist = dist;
-				faceUnit = *i;
+				facedUnit = *i;
 			}
 		}
 	}
 
-	if (faceUnit != NULL)
-		return _unit->directionTo(faceUnit->getPosition());
+	if (facedUnit != NULL)
+		return _unit->directionTo(facedUnit->getPosition());
 
 	return -1;
 }
@@ -1363,9 +1361,7 @@ bool UnitWalkBState::groundCheck() const // private.
  */
 void UnitWalkBState::establishTilesLink() const // private.
 {
-	Log(LOG_INFO) << "UnitWalkBState::establishTilesLink()";
-//	Tile* tile;
-
+	//Log(LOG_INFO) << "UnitWalkBState::establishTilesLink()";
 	const int armorSize = _unit->getArmor()->getSize() - 1;
 	for (int
 			x = armorSize;
@@ -1377,9 +1373,6 @@ void UnitWalkBState::establishTilesLink() const // private.
 				y != -1;
 				--y)
 		{
-//			tile = _battleSave->getTile(_unit->getDestination() + Position(x,y,0));
-//			if (tile != NULL)
-//				tile->setTransitUnit(_unit);
 			_battleSave->getTile(_unit->getDestination() + Position(x,y,0))->setTransitUnit(_unit);
 		}
 	}
@@ -1391,7 +1384,7 @@ void UnitWalkBState::establishTilesLink() const // private.
  */
 void UnitWalkBState::clearTilesLink(bool origin) const // private.
 {
-	Log(LOG_INFO) << "UnitWalkBState::clearTilesLink()";
+	//Log(LOG_INFO) << "UnitWalkBState::clearTilesLink()";
 	std::vector<Position> posCurrent;
 	Position
 		pos = _unit->getPosition(),
@@ -1417,7 +1410,6 @@ void UnitWalkBState::clearTilesLink(bool origin) const // private.
 	else
 		pos = _unit->getDestination();
 
-//	Tile* tile;
 	for (int
 			x = armorSize;
 			x != -1;
@@ -1434,9 +1426,6 @@ void UnitWalkBState::clearTilesLink(bool origin) const // private.
 						posCurrent.end(),
 						posTest) == posCurrent.end())
 			{
-//				tile = _battleSave->getTile(posTest);
-//				if (tile != NULL)
-//					tile->setTransitUnit(NULL);
 				_battleSave->getTile(posTest)->setTransitUnit(NULL);
 			}
 		}

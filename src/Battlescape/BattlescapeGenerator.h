@@ -130,7 +130,7 @@ private:
 	/// Adds an alien to the game.
 	BattleUnit* addAlien(
 			RuleUnit* const unitRule,
-			int alienRank,
+			int aLienRank,
 			bool outside);
 	/// Finds a spot near a friend to spawn at.
 	bool placeUnitNearFriend(BattleUnit* const unit);

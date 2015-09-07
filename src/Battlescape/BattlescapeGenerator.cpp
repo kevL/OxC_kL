@@ -1907,13 +1907,13 @@ void BattlescapeGenerator::deployAliens(AlienDeployment* const deployRule) // pr
 /**
  * Adds an alien to the game and places him on a free spawnpoint.
  * @param unitRule	- pointer to the Unit rule which holds info about aLiens
- * @param alienRank	- rank of the alien, used for spawn point search
+ * @param aLienRank	- rank of the alien used for spawn point search
  * @param outside	- true if the alien should spawn outside the UFO
  * @return, pointer to the created BattleUnit
  */
 BattleUnit* BattlescapeGenerator::addAlien( // private.
 		RuleUnit* const unitRule,
-		int alienRank,
+		int aLienRank,
 		bool outside)
 {
 	const GameDifficulty diff = _gameSave->getDifficulty();
@@ -1925,8 +1925,8 @@ BattleUnit* BattlescapeGenerator::addAlien( // private.
 										diff,
 										_gameSave->getMonthsPassed());
 
-	if (alienRank > 7) // safety to avoid index out of bounds errors
-		alienRank = 7;
+	if (aLienRank > 7) // safety to avoid index out of bounds errors
+		aLienRank = 7;
 
 	// following data is the order in which certain alien ranks spawn on certain node ranks;
 	// note that they all can fall back to rank 0 nodes - which is scout (outside ufo)
@@ -1949,7 +1949,7 @@ BattleUnit* BattlescapeGenerator::addAlien( // private.
 				++i)
 		{
 			node = _battleSave->getSpawnNode(
-										Node::nodeRank[alienRank][i],
+										Node::nodeRank[aLienRank][i],
 										unit);
 		}
 	}
@@ -1964,7 +1964,7 @@ BattleUnit* BattlescapeGenerator::addAlien( // private.
 										_battleSave,
 										unit,
 										node));
-		unit->setRankInt(alienRank);
+		unit->setRankInt(aLienRank);
 
 		Position posCraft = _battleSave->getUnits()->at(0)->getPosition(); // aLiens face Craft
 		int dir;

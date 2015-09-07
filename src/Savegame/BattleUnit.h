@@ -1052,7 +1052,7 @@ private:
 		{ return _unitRule; }
 
 		/// Sets this unit's rank integer.
-		void setRankInt(int ranks);
+		void setRankInt(int rankInt);
 		/// Gets this unit's rank integer.
 		int getRankInt() const;
 		/// Derives a rank integer based on rank string (for xcom soldiers ONLY)

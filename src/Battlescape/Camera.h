@@ -132,12 +132,12 @@ private:
 
 		/// Converts map coordinates to screen coordinates.
 		void convertMapToScreen(
-				const Position& mapPos,
-				Position* screenPos) const;
+				const Position& posMap,
+				Position* const posScreen) const;
 		/// Converts voxel coordinates to screen coordinates.
 		void convertVoxelToScreen(
-				const Position& voxelPos,
-				Position* screenPos) const;
+				const Position& posVoxel,
+				Position* const posScreen) const;
 		/// Converts screen coordinates to map coordinates.
 		void convertScreenToMap(
 				int screenX,
