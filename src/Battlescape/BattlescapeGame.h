@@ -186,7 +186,7 @@ private:
 
 	/// Determines whether there are any actions pending for the given unit.
 	bool noActionsPending(const BattleUnit* const unit) const;
-	/// Centers the battlesfield camera on a BattleUnit.
+	/// Centers the battlefield camera on a BattleUnit.
 	void centerOnUnit(const BattleUnit* const unit) const;
 	/// Summary execution.
 	void executeUnit();

@@ -665,7 +665,7 @@ void BattlescapeGame::setStateInterval(Uint32 interval)
 }
 
 /**
- * Centers the battlesfield camera on a BattleUnit.
+ * Centers the battlefield camera on a BattleUnit.
  * @param unit - pointer to a unit
  */
 void BattlescapeGame::centerOnUnit(const BattleUnit* const unit) const // private.

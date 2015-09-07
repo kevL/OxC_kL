@@ -24,7 +24,6 @@
 #include "BattlescapeGame.h"			// kL, for terrain explosions
 #include "BattlescapeState.h"
 #include "ExplosionBState.h"			// kL, for terrain explosions
-//#include "Map.h"						// kL, extern 'kL_noReveal'
 #include "TileEngine.h"					// kL, for terrain explosions
 #include "Position.h"					// kL, for terrain explosions
 
@@ -153,8 +152,6 @@ NextTurnState::NextTurnState(
 
 	_state->clearMouseScrollingState();
 
-//	kL_noReveal = true;
-
 /*	if (Options::skipNextTurnScreen == true)
 	{
 		_timer = new Timer(NEXT_TURN_DELAY);
@@ -192,10 +189,10 @@ void NextTurnState::handle(Action* action)
 	}
 }
 
-/**
+/*
  * Keeps the timer running.
- */
-/* void NextTurnState::think()
+ *
+void NextTurnState::think()
 {
 	if (_timer != NULL) _timer->think(this, NULL);
 } */

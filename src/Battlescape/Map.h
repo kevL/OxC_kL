@@ -31,9 +31,6 @@
 namespace OpenXcom
 {
 
-extern bool kL_noReveal;
-
-
 class BattlescapeMessage;
 class BattleUnit;
 class Camera;

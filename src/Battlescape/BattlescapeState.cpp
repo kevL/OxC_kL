@@ -1653,15 +1653,21 @@ inline void BattlescapeState::handle(Action* action)
 			{
 				// not works in debug mode to prevent conflict in hotkeys by default
 				if (action->getDetails()->key.keysym.sym == Options::keyQuickSave)		// f6 - quickSave
+				{
+					beep = true;
 					_game->pushState(new SaveGameState(
 													OPT_BATTLESCAPE,
 													SAVE_QUICK,
 													_palette));
+				}
 				else if (action->getDetails()->key.keysym.sym == Options::keyQuickLoad)	// f5 - quickLoad
+				{
+					beep = true;
 					_game->pushState(new LoadGameState(
 													OPT_BATTLESCAPE,
 													SAVE_QUICK,
 													_palette));
+				}
 			}
 
 			if (action->getDetails()->key.keysym.sym == Options::keyBattleVoxelView)	// f11 - voxel view pic
@@ -2117,7 +2123,7 @@ void BattlescapeState::btnLeftHandRightClick(Action*)
 {
 	if (playableUnitSelected() == true)
 	{
-		_battleGame->cancelCurrentAction(true);
+		_battleGame->cancelCurrentAction(); // was, force= true
 
 		_battleSave->getSelectedUnit()->setActiveHand("STR_LEFT_HAND");
 		updateSoldierInfo(false);
@@ -2156,7 +2162,7 @@ void BattlescapeState::btnRightHandRightClick(Action*)
 {
 	if (playableUnitSelected() == true)
 	{
-		_battleGame->cancelCurrentAction(true);
+		_battleGame->cancelCurrentAction(); // was, force= true
 
 		_battleSave->getSelectedUnit()->setActiveHand("STR_RIGHT_HAND");
 		updateSoldierInfo(false);

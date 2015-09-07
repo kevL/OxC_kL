@@ -76,9 +76,6 @@ y+ /  \ x+
 namespace OpenXcom
 {
 
-bool kL_noReveal = true;
-
-
 /**
  * Sets up a map with the specified size and position.
  * @param game				- pointer to the core Game
@@ -315,6 +312,7 @@ void Map::draw()
 	// color you DO want in all variations of the xcom palettes.
 //	Surface::draw();
 	clear(15); // black
+	static bool delayHiddenScreen;
 
 	if (_noDraw == false) // don't draw if MiniMap is open.
 	{
@@ -373,16 +371,16 @@ void Map::draw()
 			|| _battleSave->getDebugMode() == true)
 		{
 			// REVEAL //
-			kL_noReveal = false;
+			delayHiddenScreen = true;
 			_mapIsHidden = false;
 			drawTerrain(this);
 		}
 		else
 		{
 			// HIDE //
-			if (kL_noReveal == false)
+			if (delayHiddenScreen == true)
 			{
-				kL_noReveal = true;
+				delayHiddenScreen = false;
 				SDL_Delay(372);
 			}
 

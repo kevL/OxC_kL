@@ -112,7 +112,7 @@ LoadGameState::~LoadGameState()
 void LoadGameState::buildUi(SDL_Color* palette)
 {
 #ifdef _WIN32
-	MessageBeep(MB_OK);
+//	MessageBeep(MB_OK); // <- done in BattlescapeState::handle() for Fkeys
 #endif
 	_screen = false;
 

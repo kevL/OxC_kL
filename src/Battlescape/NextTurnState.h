@@ -78,9 +78,7 @@ private:
 		void nextTurn();
 
 		///
-/*		void resize(
-				int& dX,
-				int& dY); */
+//		void resize(int& dX, int& dY);
 };
 
 }

@@ -4650,7 +4650,7 @@
 	"../Ruleset/RuleItem.h"
 	"../Ruleset/RuleUnit.h"
 
-1441661864 f:\git\openxcom\src\battlescape\battlescapegame.h
+1441664210 f:\git\openxcom\src\battlescape\battlescapegame.h
 	"Position.h"
 
 1432586518 f:\git\openxcom\src\battlescape\position.h
@@ -5442,7 +5442,7 @@
 1440092817 f:\git\openxcom\src\battlescape\battlestate.h
 	"BattlescapeGame.h"
 
-1441655395 f:\git\openxcom\src\battlescape\map.h
+1441665509 f:\git\openxcom\src\battlescape\map.h
 	"Position.h"
 	"../Engine/InteractiveSurface.h"
 
@@ -5468,7 +5468,7 @@
 1432984133 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1441662437 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1441664203 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	"AlienBAIState.h"
 	"BattlescapeState.h"
@@ -5523,7 +5523,7 @@
 1431473372 f:\git\openxcom\src\battlescape\infoboxstate.h
 	"../Engine/State.h"
 
-1430149550 f:\git\openxcom\src\battlescape\nextturnstate.h
+1441664422 f:\git\openxcom\src\battlescape\nextturnstate.h
 	"../Engine/State.h"
 
 1440469582 f:\git\openxcom\src\battlescape\unitdiebstate.h
@@ -5963,7 +5963,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1441658472 source:f:\git\openxcom\src\battlescape\map.cpp
+1441665671 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	"BattlescapeMessage.h"
 	"BattlescapeState.h"
@@ -6071,7 +6071,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1441658007 source:f:\git\openxcom\src\battlescape\nextturnstate.cpp
+1441664471 source:f:\git\openxcom\src\battlescape\nextturnstate.cpp
 	"NextTurnState.h"
 	"BattlescapeGame.h"
 	"BattlescapeState.h"
@@ -10556,7 +10556,7 @@
 	"../Resource/ResourcePack.h"
 	"../Savegame/SavedGame.h"
 
-1438170750 source:f:\git\openxcom\src\menu\listloadstate.cpp
+1441663909 source:f:\git\openxcom\src\menu\listloadstate.cpp
 	"ListLoadState.h"
 	"ConfirmLoadState.h"
 	"LoadGameState.h"
@@ -10569,7 +10569,7 @@
 	"../Interface/TextList.h"
 	"../Resource/ResourcePack.h"
 
-1438170773 source:f:\git\openxcom\src\menu\listsavestate.cpp
+1441663708 source:f:\git\openxcom\src\menu\listsavestate.cpp
 	"ListSaveState.h"
 	"SaveGameState.h"
 	"../Engine/Action.h"
@@ -10596,7 +10596,7 @@
 	"../Engine/State.h"
 	"../Savegame/SavedGame.h"
 
-1440379499 source:f:\git\openxcom\src\menu\loadgamestate.cpp
+1441663794 source:f:\git\openxcom\src\menu\loadgamestate.cpp
 	"LoadGameState.h"
 	"ErrorMessageState.h"
 	"../Battlescape/BattlescapeState.h"
@@ -10609,7 +10609,7 @@
 	"../Ruleset/Ruleset.h"
 	"../Savegame/SavedBattleGame.h"
 
-1440339175 source:f:\git\openxcom\src\menu\savegamestate.cpp
+1441663383 source:f:\git\openxcom\src\menu\savegamestate.cpp
 	"SaveGameState.h"
 	"ErrorMessageState.h"
 	"MainMenuState.h"
