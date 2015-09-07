@@ -170,7 +170,7 @@ void BattlescapeGame::think()
 	if (_states.empty() == true)
 	{
 		//Log(LOG_INFO) << "BattlescapeGame::think() - _states is Empty. Clear rfShotList";
-		_battleSave->getTileEngine()->getRfShotList()->clear();
+		_battleSave->getTileEngine()->getRfShotList()->clear(); // TODO: move that to end of popState()
 
 		if (_battleSave->getSide() != FACTION_PLAYER) // it's a non player side (ALIENS or CIVILIANS)
 		{
@@ -180,7 +180,7 @@ void BattlescapeGame::think()
 				{
 					if (handlePanickingUnit(_battleSave->getSelectedUnit()) == false)
 					{
-						//Log(LOG_INFO) << "BattlescapeGame::think() call handleAI() ID " << _battleSave->getSelectedUnit()->getId();
+						//Log(LOG_INFO) << "BattlescapeGame::think() call handleAI() " << _battleSave->getSelectedUnit()->getId();
 						handleAI(_battleSave->getSelectedUnit());
 					}
 				}
@@ -665,12 +665,29 @@ void BattlescapeGame::setStateInterval(Uint32 interval)
 }
 
 /**
+ * Centers the battlesfield camera on a BattleUnit.
+ * @param unit - pointer to a unit
+ */
+void BattlescapeGame::centerOnUnit(const BattleUnit* const unit) const // private.
+{
+	Camera* const aiCam = getMap()->getCamera();
+
+//	if (aiCam->isOnScreen(unit->getPosition()) == false)
+	aiCam->centerOnPosition(unit->getPosition());
+
+	if (aiCam->getViewLevel() != unit->getPosition().z)
+		aiCam->setViewLevel(unit->getPosition().z);
+}
+
+/**
  * Handles the processing of the AI states of a unit.
  * @param unit - pointer to a BattleUnit
  */
 void BattlescapeGame::handleAI(BattleUnit* const unit)
 {
 	//Log(LOG_INFO) << "BattlescapeGame::handleAI() " << unit->getId();
+	centerOnUnit(unit); // if you're going to reveal the map at least show the aLien.
+
 	if (unit->getTimeUnits() == 0) // was <6
 		unit->dontReselect();
 
@@ -696,9 +713,13 @@ void BattlescapeGame::handleAI(BattleUnit* const unit)
 
 		if (_battleSave->getSelectedUnit() != NULL)
 		{
-			_parentState->updateSoldierInfo(); // what's this doing here these are aLiens or Civies calcFoV is done below
+//			getMap()->getCamera()->centerOnPosition(_battleSave->getSelectedUnit()->getPosition());
+			centerOnUnit(_battleSave->getSelectedUnit());
 
-			getMap()->getCamera()->centerOnPosition(_battleSave->getSelectedUnit()->getPosition());
+			// what's these doing here these are aLiens or Civies calcFoV is done below;
+			// could be useful when handing turn back to Player. not sure
+
+			_parentState->updateSoldierInfo();
 
 			if (_battleSave->getSelectedUnit()->getId() <= unit->getId())
 				_AISecondMove = true;

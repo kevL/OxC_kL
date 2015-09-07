@@ -29,7 +29,8 @@ namespace OpenXcom
 {
 
 /**
- * Sets up a blank Battlescape message with the specified size and position.
+ * Sets up a blank BattlescapeMessage with the specified size and position.
+ * @note This is the "Hidden Movement" screen.
  * @param width		- width in pixels
  * @param height	- height in pixels
  * @param x			- X position in pixels (default 0)
@@ -52,16 +53,12 @@ BattlescapeMessage::BattlescapeMessage(
 						height,
 						x,y,
 						POPUP_NONE);
-	_window->setColor(Palette::blockOffset(0)-1);
 	_window->setHighContrast();
 
-	// HIDDEN MOVEMENT... text
-	_text = new Text(
+	_text = new Text( // "Hidden Movement" text
 					width - 12,
 					height - 14,
-					x,
-					y + 14);
-	_text->setColor(Palette::blockOffset(0)-1);
+					x, y + 14);
 	_text->setAlign(ALIGN_CENTER);
 	_text->setVerticalAlign(ALIGN_MIDDLE);
 	_text->setHighContrast();

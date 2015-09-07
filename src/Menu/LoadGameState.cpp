@@ -112,7 +112,7 @@ LoadGameState::~LoadGameState()
 void LoadGameState::buildUi(SDL_Color* palette)
 {
 #ifdef _WIN32
-//	MessageBeep(MB_OK);
+	MessageBeep(MB_OK);
 #endif
 	_screen = false;
 
@@ -131,9 +131,9 @@ void LoadGameState::buildUi(SDL_Color* palette)
 	centerAllSurfaces();
 
 
-	_txtStatus->setBig();
-	_txtStatus->setAlign(ALIGN_CENTER);
 	_txtStatus->setText(tr("STR_LOADING_GAME"));
+	_txtStatus->setAlign(ALIGN_CENTER);
+	_txtStatus->setBig();
 
 	_game->getCursor()->setVisible(false);
 }

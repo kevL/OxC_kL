@@ -44,7 +44,7 @@ namespace OpenXcom
  * @param mapsize_y			- current map size in Y axis
  * @param mapsize_z			- current map size in Z axis
  * @param battleMap			- pointer to Map
- * @param visibleMapHeight	- height of Map surface minus icons-height
+ * @param playableHeight	- height of Map surface minus icons-height
  */
 Camera::Camera(
 		int spriteWidth,
@@ -53,7 +53,7 @@ Camera::Camera(
 		int mapsize_y,
 		int mapsize_z,
 		Map* battleMap,
-		int visibleMapHeight)
+		int playableHeight)
 	:
 		_spriteWidth(spriteWidth),
 		_spriteHeight(spriteHeight),
@@ -61,7 +61,7 @@ Camera::Camera(
 		_mapsize_y(mapsize_y),
 		_mapsize_z(mapsize_z),
 		_map(battleMap),
-		_visibleMapHeight(visibleMapHeight),
+		_playableHeight(playableHeight),
 		_screenWidth(battleMap->getWidth()),
 		_screenHeight(battleMap->getHeight()),
 		_mapOffset(-250,250,0),
@@ -251,8 +251,7 @@ void Camera::mouseOver(Action* action, State*)
 			_scrollMouseY = 0;
 		}
 
-		if ((_scrollMouseX != 0
-				|| _scrollMouseY != 0)
+		if ((_scrollMouseX != 0 || _scrollMouseY != 0)
 			&& _scrollMouseTimer->isRunning() == false
 			&& _scrollKeyTimer->isRunning() == false
 			&& (SDL_GetMouseState(0,0) & SDL_BUTTON(Options::battleDragScrollButton)) == 0)
@@ -443,7 +442,7 @@ void Camera::scrollXY(
 	{
 		convertScreenToMap(
 					_screenWidth / 2,
-					_visibleMapHeight / 2,
+					_playableHeight / 2,
 					&_center.x,
 					&_center.y);
 		// Handling map bounds...
@@ -502,7 +501,7 @@ void Camera::jumpXY(
 
 	convertScreenToMap(
 				_screenWidth / 2,
-				_visibleMapHeight / 2,
+				_playableHeight / 2,
 				&_center.x,
 				&_center.y);
 }
@@ -584,7 +583,7 @@ void Camera::centerOnPosition(
 					&posScreen);
 
 	_mapOffset.x = -(posScreen.x - (_screenWidth / 2) + 16);
-	_mapOffset.y = -(posScreen.y - (_visibleMapHeight / 2));
+	_mapOffset.y = -(posScreen.y - (_playableHeight / 2));
 	_mapOffset.z = _center.z;
 
 	_map->getBattleSave()->getBattleState()->setLayerValue(_mapOffset.z);
@@ -821,7 +820,7 @@ void Camera::resize()
 	_screenWidth = _map->getWidth();
 	_screenHeight = _map->getHeight();
 
-	_visibleMapHeight = _map->getHeight() - _map->getIconHeight();
+	_playableHeight = _map->getHeight() - _map->getIconHeight();
 }
 
 /**

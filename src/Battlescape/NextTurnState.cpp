@@ -24,7 +24,7 @@
 #include "BattlescapeGame.h"			// kL, for terrain explosions
 #include "BattlescapeState.h"
 #include "ExplosionBState.h"			// kL, for terrain explosions
-#include "Map.h"						// kL, extern 'kL_noReveal'
+//#include "Map.h"						// kL, extern 'kL_noReveal'
 #include "TileEngine.h"					// kL, for terrain explosions
 #include "Position.h"					// kL, for terrain explosions
 
@@ -36,12 +36,12 @@
 //#include "../Engine/Screen.h"
 //#include "../Engine/Timer.h"
 
-#include "../Menu/SaveGameState.h"
-
 #include "../Interface/Cursor.h"
 #include "../Interface/Text.h"
 //#include "../Interface/TurnCounter.h"	// kL, extern 'kL_TurnCount'
 #include "../Interface/Window.h"
+
+//#include "../Menu/SaveGameState.h"
 
 #include "../Resource/XcomResourcePack.h"
 
@@ -81,10 +81,8 @@ NextTurnState::NextTurnState(
 	}
 	else
 		_txtMessage	= new Text(320, 200);
-//	_bg			= new Surface(
-//							_game->getScreen()->getWidth(),
-//							_game->getScreen()->getHeight(),
-//							0,0);
+
+//	_bg = new Surface(_game->getScreen()->getWidth(), _game->getScreen()->getHeight());
 
 	setPalette("PAL_BATTLESCAPE");
 
@@ -107,10 +105,7 @@ NextTurnState::NextTurnState(
 	rect.w = _bg->getWidth();
 	rect.h = _bg->getHeight();
 	rect.x = rect.y = 0;
-	_bg->drawRect(
-				&rect,
-				Palette::blockOffset(0)+15); */
-
+	_bg->drawRect(&rect, Palette::blockOffset(0)+15); */
 /*	// line this screen up with the hidden movement screen
 	const int msg_y = state->getMap()->getMessageY();
 	_window->setY(msg_y);
@@ -121,12 +116,10 @@ NextTurnState::NextTurnState(
 		_txtSide->setY(msg_y + 109);
 		_txtMessage->setY(msg_y + 149);
 	}
-	else
-		_txtMessage->setY(msg_y); */
+	else _txtMessage->setY(msg_y); */
 
-	_window->setColor(Palette::blockOffset(0)-1);
-	_window->setHighContrast();
 	_window->setBackground(_game->getResourcePack()->getSurface("TAC00.SCR"));
+	_window->setHighContrast();
 
 	if (aliensPacified == false)
 	{
@@ -147,9 +140,6 @@ NextTurnState::NextTurnState(
 							.arg(tr(_battleSave->getSide() == FACTION_PLAYER ? "STR_XCOM" : "STR_ALIENS")));
 	}
 
-	_txtMessage->setBig();
-	_txtMessage->setAlign(ALIGN_CENTER);
-	_txtMessage->setHighContrast();
 	if (aliensPacified == false)
 		_txtMessage->setText(tr("STR_PRESS_BUTTON_TO_CONTINUE"));
 	else
@@ -157,10 +147,13 @@ NextTurnState::NextTurnState(
 		_txtMessage->setText(tr("STR_ALIENS_PACIFIED"));
 		_txtMessage->setVerticalAlign(ALIGN_MIDDLE);
 	}
+	_txtMessage->setAlign(ALIGN_CENTER);
+	_txtMessage->setHighContrast();
+	_txtMessage->setBig();
 
 	_state->clearMouseScrollingState();
 
-	kL_noReveal = true;
+//	kL_noReveal = true;
 
 /*	if (Options::skipNextTurnScreen == true)
 	{
@@ -204,8 +197,7 @@ void NextTurnState::handle(Action* action)
  */
 /* void NextTurnState::think()
 {
-	if (_timer != NULL)
-		_timer->think(this, NULL);
+	if (_timer != NULL) _timer->think(this, NULL);
 } */
 
 /**
@@ -222,17 +214,12 @@ void NextTurnState::nextTurn()
 	int
 		liveAliens,
 		liveSoldiers;
-	_state->getBattleGame()->tallyUnits(
-									liveAliens,
-									liveSoldiers);
-	if ((liveAliens == 0
-			|| liveSoldiers == 0)
-		&& _battleSave->getObjectiveType() != MUST_DESTROY) // not the final mission and all aliens dead.
+	_state->getBattleGame()->tallyUnits(liveAliens, liveSoldiers);
+	if ((liveAliens == 0 || liveSoldiers == 0)
+		&& _battleSave->getObjectiveType() != MUST_DESTROY) // not the final mission and all xCom/aLiens dead.
 	{
 		switchMusic = true;
-		_state->finishBattle(
-						false,
-						liveSoldiers);
+		_state->finishBattle(false, liveSoldiers);
 	}
 	else
 	{
@@ -289,12 +276,9 @@ void NextTurnState::nextTurn()
 				_battleSave->getBattleGame()->statePushBack(new ExplosionBState(
 																			_battleSave->getBattleGame(),
 																			pos,
-																			NULL,
-																			NULL,
+																			NULL,NULL,
 																			tile,
-																			false,
-																			false,
-																			true));
+																			false,false,true));
 			}
 		}
 		else // start non-Player turn

@@ -57,7 +57,7 @@ private:
 		_scrollKeyY,
 		_spriteHeight,
 		_spriteWidth,
-		_visibleMapHeight;
+		_playableHeight;
 
 	Map* _map;
 	Position
@@ -87,7 +87,7 @@ private:
 				int mapsize_y,
 				int mapsize_z,
 				Map* battleMap,
-				int visibleMapHeight);
+				int playableHeight);
 		/// Cleans up the camera.
 		~Camera();
 

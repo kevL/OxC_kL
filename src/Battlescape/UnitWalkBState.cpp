@@ -266,22 +266,19 @@ void UnitWalkBState::think()
 		if (_onScreen == true)
 		{
 			//Log(LOG_INFO) << ". onScreen";
-			const int pos_z = _unit->getPosition().z;
-
 			if (_unit->getFaction() != FACTION_PLAYER
 				&& _walkCam->isOnScreen(_unit->getPosition()) == false)
 			{
 				_walkCam->centerOnPosition(_unit->getPosition());
 			}
-			else if (_walkCam->isOnScreen(_unit->getPosition()) == true)
+			else if (_walkCam->isOnScreen(_unit->getPosition()) == true) // is Faction_Player
 			{
 				//Log(LOG_INFO) << ". cam->onScreen";
-				const int dest_z = _unit->getDestination().z;
-				//Log(LOG_INFO) << ". dest_z == pos_z : " << (dest_z == pos_z);
-				//Log(LOG_INFO) << ". dest_z > pos_z : " << (dest_z > pos_z);
-				//Log(LOG_INFO) << ". _walkCam->getViewLevel() < pos_z : " << (_walkCam->getViewLevel() < pos_z);
-				if (dest_z == pos_z
-					|| (dest_z > pos_z
+				const int
+					pos_z = _unit->getPosition().z,
+					dest_z = _unit->getDestination().z;
+				if (pos_z == dest_z
+					|| (pos_z < dest_z
 						&& _walkCam->getViewLevel() < dest_z))
 				{
 					//Log(LOG_INFO) << ". . setViewLevel(pos_z)";

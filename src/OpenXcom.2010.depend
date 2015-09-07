@@ -4650,7 +4650,7 @@
 	"../Ruleset/RuleItem.h"
 	"../Ruleset/RuleUnit.h"
 
-1441508639 f:\git\openxcom\src\battlescape\battlescapegame.h
+1441661864 f:\git\openxcom\src\battlescape\battlescapegame.h
 	"Position.h"
 
 1432586518 f:\git\openxcom\src\battlescape\position.h
@@ -5442,7 +5442,7 @@
 1440092817 f:\git\openxcom\src\battlescape\battlestate.h
 	"BattlescapeGame.h"
 
-1441623054 f:\git\openxcom\src\battlescape\map.h
+1441655395 f:\git\openxcom\src\battlescape\map.h
 	"Position.h"
 	"../Engine/InteractiveSurface.h"
 
@@ -5468,7 +5468,7 @@
 1432984133 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1441513012 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1441662437 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	"AlienBAIState.h"
 	"BattlescapeState.h"
@@ -5506,7 +5506,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1441615688 f:\git\openxcom\src\battlescape\camera.h
+1441655395 f:\git\openxcom\src\battlescape\camera.h
 	"Position.h"
 
 1433862595 f:\git\openxcom\src\battlescape\civilianbaistate.h
@@ -5626,7 +5626,7 @@
 1421694989 f:\git\openxcom\src\savegame\terrorsite.h
 	"Target.h"
 
-1435174868 source:f:\git\openxcom\src\battlescape\battlescapemessage.cpp
+1441657408 source:f:\git\openxcom\src\battlescape\battlescapemessage.cpp
 	"BattlescapeMessage.h"
 	"../Interface/Text.h"
 	"../Interface/Window.h"
@@ -5634,7 +5634,7 @@
 1430149550 f:\git\openxcom\src\battlescape\battlescapemessage.h
 	"../Engine/Surface.h"
 
-1441512947 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1441655598 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	"AbortMissionState.h"
 	"ActionMenuState.h"
@@ -5771,7 +5771,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Ufo.h"
 
-1441615712 source:f:\git\openxcom\src\battlescape\camera.cpp
+1441655448 source:f:\git\openxcom\src\battlescape\camera.cpp
 	"Camera.h"
 	"BattlescapeState.h"
 	"Map.h"
@@ -5963,7 +5963,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1441620710 source:f:\git\openxcom\src\battlescape\map.cpp
+1441658472 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	"BattlescapeMessage.h"
 	"BattlescapeState.h"
@@ -6071,17 +6071,15 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1441440009 source:f:\git\openxcom\src\battlescape\nextturnstate.cpp
+1441658007 source:f:\git\openxcom\src\battlescape\nextturnstate.cpp
 	"NextTurnState.h"
 	"BattlescapeGame.h"
 	"BattlescapeState.h"
 	"ExplosionBState.h"
-	"Map.h"
 	"TileEngine.h"
 	"Position.h"
 	"../Engine/Action.h"
 	"../Engine/Game.h"
-	"../Menu/SaveGameState.h"
 	"../Interface/Cursor.h"
 	"../Interface/Text.h"
 	"../Interface/Window.h"
@@ -6325,7 +6323,7 @@
 	"../Savegame/BattleUnit.h"
 	"../Savegame/SavedBattleGame.h"
 
-1441622354 source:f:\git\openxcom\src\battlescape\unitwalkbstate.cpp
+1441660312 source:f:\git\openxcom\src\battlescape\unitwalkbstate.cpp
 	"UnitWalkBState.h"
 	"BattlescapeState.h"
 	"Camera.h"
@@ -10534,7 +10532,7 @@
 	"OptionsBaseState.h"
 	"../Engine/State.h"
 
-1431486853 f:\git\openxcom\src\menu\listloadstate.h
+1441663918 f:\git\openxcom\src\menu\listloadstate.h
 	"ListGamesState.h"
 
 1430149550 f:\git\openxcom\src\menu\listgamesstate.h

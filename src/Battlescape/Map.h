@@ -97,7 +97,7 @@ private:
 		_selectorY,
 		_spriteWidth,
 		_spriteHeight,
-		_visibleMapHeight;
+		_playableHeight;
 	Uint8
 		_fuseColor;
 
@@ -156,7 +156,7 @@ private:
 				int height,
 				int x,
 				int y,
-				int visibleMapHeight);
+				int playableHeight);
 		/// Cleans up the map.
 		~Map();
 

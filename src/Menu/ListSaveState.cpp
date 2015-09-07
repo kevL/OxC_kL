@@ -87,14 +87,10 @@ ListSaveState::~ListSaveState()
  */
 void ListSaveState::updateList()
 {
-	_lstSaves->addRow(
-					1,
-					tr("STR_NEW_SAVED_GAME_SLOT").c_str());
+	_lstSaves->addRow(1, tr("STR_NEW_SAVED_GAME_SLOT").c_str());
 
 	if (_origin != OPT_BATTLESCAPE)
-		_lstSaves->setRowColor(
-							0,
-							_lstSaves->getSecondaryColor());
+		_lstSaves->setRowColor(0, _lstSaves->getSecondaryColor());
 
 	ListGamesState::updateList();
 }
@@ -153,7 +149,7 @@ void ListSaveState::lstSavesPress(Action* action)
 							0,
 							L"");
 
-		_edtSave->setTextStored(_selected); // kL
+		_edtSave->setTextStored(_selected);
 
 		if (_lstSaves->getSelectedRow() == 0)
 			_selected = L"";
@@ -220,31 +216,29 @@ void ListSaveState::btnSaveGameClick(Action*)
  */
 void ListSaveState::saveGame()
 {
-	// kL_begin:
 //	_inEditMode = false;				// safeties. Should not need these three <- ie.
 //	_btnSaveGame->setVisible(false);	// SaveGameState() below_ pops current state(s) all the way back to play.
 //	_lstSaves->setSelectable();
 //	_lstSaves->setScrollable();			// don't need this either ....
-	// kL_end.
 
 	hideElements();
 	_game->getSavedGame()->setName(_edtSave->getText());
 
 	std::string
-		oldFilename,
-		newFilename (CrossPlatform::sanitizeFilename(Language::wstrToFs(_edtSave->getText()))); // init.
+		oldFile,
+		newFile (CrossPlatform::sanitizeFilename(Language::wstrToFs(_edtSave->getText()))); // init.
 
 	if (_selectedRow > 0)
 	{
-		oldFilename = _saves[_selectedRow - 1].fileName;
-		if (oldFilename != newFilename + ".sav")
+		oldFile = _saves[_selectedRow - 1].fileName;
+		if (oldFile != newFile + ".sav")
 		{
-			while (CrossPlatform::fileExists(Options::getUserFolder() + newFilename + ".sav"))
-				newFilename += "_";
+			while (CrossPlatform::fileExists(Options::getUserFolder() + newFile + ".sav"))
+				newFile += "_";
 
 			const std::string
-				oldPath = Options::getUserFolder() + oldFilename,
-				newPath = Options::getUserFolder() + newFilename + ".sav";
+				oldPath = Options::getUserFolder() + oldFile,
+				newPath = Options::getUserFolder() + newFile + ".sav";
 			CrossPlatform::moveFile(
 								oldPath,
 								newPath);
@@ -252,14 +246,14 @@ void ListSaveState::saveGame()
 	}
 	else
 	{
-		while (CrossPlatform::fileExists(Options::getUserFolder() + newFilename + ".sav"))
-			newFilename += "_";
+		while (CrossPlatform::fileExists(Options::getUserFolder() + newFile + ".sav"))
+			newFile += "_";
 	}
 
-	newFilename += ".sav";
+	newFile += ".sav";
 	_game->pushState(new SaveGameState(
 									_origin,
-									newFilename,
+									newFile,
 									_palette));
 }
 

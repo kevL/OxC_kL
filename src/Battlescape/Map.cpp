@@ -86,7 +86,7 @@ bool kL_noReveal = true;
  * @param height			- height in pixels
  * @param x					- X position in pixels
  * @param y					- Y position in pixels
- * @param visibleMapHeight	- current visible map height
+ * @param playableHeight	- current visible map height
  */
 Map::Map(
 		Game* game,
@@ -94,7 +94,7 @@ Map::Map(
 		int height,
 		int x,
 		int y,
-		int visibleMapHeight)
+		int playableHeight)
 	:
 		InteractiveSurface(
 			width,
@@ -116,7 +116,7 @@ Map::Map(
 		_explosionInFOV(false),
 		_waypointAction(false),
 		_bulletStart(false),
-		_visibleMapHeight(visibleMapHeight),
+		_playableHeight(playableHeight),
 		_unitDying(false),
 		_reveal(0),
 		_smoothingEngaged(false),
@@ -146,14 +146,17 @@ Map::Map(
 					_battleSave->getMapSizeY(),
 					_battleSave->getMapSizeZ(),
 					this,
-					visibleMapHeight);
+					playableHeight);
 
-	_hiddenScreen = new BattlescapeMessage( // "Hidden Movement..." screen
-										320,
-										visibleMapHeight < 200 ? visibleMapHeight : 200);
+	int hiddenHeight;
+	if (playableHeight < 200)
+		hiddenHeight = playableHeight;
+	else
+		hiddenHeight = 200;
+	_hiddenScreen = new BattlescapeMessage(320, hiddenHeight); // "Hidden Movement..." screen
 	_hiddenScreen->setX(_game->getScreen()->getDX());
 	_hiddenScreen->setY(_game->getScreen()->getDY());
-//	_hiddenScreen->setY((visibleMapHeight - _hiddenScreen->getHeight()) / 2);
+//	_hiddenScreen->setY((playableHeight - _hiddenScreen->getHeight()) / 2);
 	_hiddenScreen->setTextColor(static_cast<Uint8>(_game->getRuleset()->getInterface("battlescape")->getElement("messageWindows")->color));
 
 	_scrollMouseTimer = new Timer(SCROLL_INTERVAL);
@@ -317,8 +320,7 @@ void Map::draw()
 	{
 		const Tile* tile;
 
-		if (_projectile != NULL)
-//			&& _battleSave->getSide() == FACTION_PLAYER)
+		if (_projectile != NULL) //&& _battleSave->getSide() == FACTION_PLAYER)
 		{
 			tile = _battleSave->getTile(Position(
 											_projectile->getPosition(0).x / 16,
@@ -365,18 +367,19 @@ void Map::draw()
 		if (_battleSave->getSelectedUnit() == NULL
 			|| _battleSave->getSelectedUnit()->getUnitVisible() == true
 			|| _unitDying == true
-			|| _battleSave->getDebugMode() == true
+			|| _explosionInFOV == true
 			|| _projectileInFOV == true
 			|| _waypointAction == true // stop flashing the Hidden Movement screen between waypoints.
-			|| _explosionInFOV == true)
+			|| _battleSave->getDebugMode() == true)
 		{
-			_mapIsHidden = false;
-
+			// REVEAL //
 			kL_noReveal = false;
+			_mapIsHidden = false;
 			drawTerrain(this);
 		}
 		else
 		{
+			// HIDE //
 			if (kL_noReveal == false)
 			{
 				kL_noReveal = true;
@@ -497,7 +500,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 						|| bullet.x < 0
 						|| bullet.x > surface->getWidth() - 1
 						|| bullet.y < 0
-						|| bullet.y > _visibleMapHeight - 1)
+						|| bullet.y > _playableHeight - 1)
 					{
 						_camera->centerOnPosition( // note that this centers each reaction-shooter.
 												Position(
@@ -531,7 +534,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 				else if (_smoothingEngaged == true)
 					_camera->jumpXY(
 								surface->getWidth() / 2 - bullet.x,
-								_visibleMapHeight / 2 - bullet.y);
+								_playableHeight / 2 - bullet.y);
 
 				const int posBullet_z = (_projectile->getPosition().z) / 24;
 				if (_camera->getViewLevel() != posBullet_z)
@@ -548,7 +551,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 					enough = true;
 					if (bullet.x < 0)
 					{
-						_camera->jumpXY(+surface->getWidth(), 0);
+						_camera->jumpXY(surface->getWidth(), 0);
 						enough = false;
 					}
 					else if (bullet.x > surface->getWidth())
@@ -558,12 +561,12 @@ void Map::drawTerrain(Surface* const surface) // private.
 					}
 					else if (bullet.y < 0)
 					{
-						_camera->jumpXY(0, +_visibleMapHeight);
+						_camera->jumpXY(0, _playableHeight);
 						enough = false;
 					}
-					else if (bullet.y > _visibleMapHeight)
+					else if (bullet.y > _playableHeight)
 					{
-						_camera->jumpXY(0, -_visibleMapHeight);
+						_camera->jumpXY(0, -_playableHeight);
 						enough = false;
 					}
 					_camera->convertVoxelToScreen(
@@ -2521,15 +2524,15 @@ void Map::setHeight(int height)
 {
 	Surface::setHeight(height);
 
-	_visibleMapHeight = height - _iconHeight;
+	_playableHeight = height - _iconHeight;
 
-	if (_visibleMapHeight < 200)
-		height = _visibleMapHeight;
+	if (_playableHeight < 200)
+		height = _playableHeight;
 	else
 		height = 200;
 
 	_hiddenScreen->setHeight(height);
-	_hiddenScreen->setY((_visibleMapHeight - _hiddenScreen->getHeight()) / 2);
+	_hiddenScreen->setY((_playableHeight - _hiddenScreen->getHeight()) / 2);
 }
 
 /**

@@ -130,13 +130,13 @@ BattlescapeState::BattlescapeState()
 {
 	//Log(LOG_INFO) << "Create BattlescapeState";
 	const int
-		screenWidth			= Options::baseXResolution,
-		screenHeight		= Options::baseYResolution,
-		iconsWidth			= _rules->getInterface("battlescape")->getElement("icons")->w, // 320
-		iconsHeight			= _rules->getInterface("battlescape")->getElement("icons")->h, // 56
-		visibleMapHeight	= screenHeight - iconsHeight,
-		x					= screenWidth / 2 - iconsWidth / 2,
-		y					= screenHeight - iconsHeight;
+		screenWidth		= Options::baseXResolution,
+		screenHeight	= Options::baseYResolution,
+		iconsWidth		= _rules->getInterface("battlescape")->getElement("icons")->w, // 320
+		iconsHeight		= _rules->getInterface("battlescape")->getElement("icons")->h, // 56
+		playableHeight	= screenHeight - iconsHeight,
+		x				= screenWidth / 2 - iconsWidth / 2,
+		y				= screenHeight - iconsHeight;
 
 	_txtBaseLabel			= new Text(120, 9, screenWidth - 121, 0);
 	_txtRegion				= new Text(120, 9, screenWidth - 121, 10);
@@ -159,7 +159,7 @@ BattlescapeState::BattlescapeState()
 				screenWidth,
 				screenHeight,
 				0,0,
-				visibleMapHeight);
+				playableHeight);
 
 	_numLayers	= new NumberText(3, 5, x + 232, y + 6);
 	_numDir		= new NumberText(3, 5, x + 150, y + 6);
@@ -205,7 +205,10 @@ BattlescapeState::BattlescapeState()
 //		visibleUnitX = _rules->getInterface("battlescape")->getElement("visibleUnits")->x,
 //		visibleUnitY = _rules->getInterface("battlescape")->getElement("visibleUnits")->y;
 
-	_hostileTargeter = new Surface(32, 40, screenWidth / 2 - 16, visibleMapHeight / 2);
+	_hostileTargeter = new Surface(
+								32,40,
+								screenWidth / 2 - 16,
+								playableHeight / 2);
 
 	std::fill_n(
 			_hostileUnit,
