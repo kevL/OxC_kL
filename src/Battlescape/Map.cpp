@@ -1686,8 +1686,8 @@ void Map::drawTerrain(Surface* const surface) // private.
 			if (_unit->isKneeled() == true)
 				_arrow_kneel->blitNShade(
 								surface,
-								posScreen.x - _arrow_kneel->getWidth() / 2,
-								posScreen.y - _arrow_kneel->getHeight() - phaseCycle,
+								posScreen.x - (_arrow_kneel->getWidth() / 2),
+								posScreen.y - _arrow_kneel->getHeight() - 4 - phaseCycle,
 								0);
 			else
 				_arrow->blitNShade(
@@ -2068,8 +2068,9 @@ bool Map::isTrueLoc(
 
 /**
  * Gets the unit's quadrant for drawing.
- * @param unit - pointer to a unit
- * @param tile - pointer to a tile
+ * @param unit		- pointer to a unit
+ * @param tile		- pointer to a tile
+ * @param trueLoc	- true if real location; false if transient
  * @return, quadrant
  */
 int Map::getQuadrant(

@@ -141,7 +141,6 @@ private:
 	void calculateWalkingOffset(
 			const BattleUnit* const unit,
 			Position* const offset,
-//			int quadrant,
 			bool trueLoc) const;
 	///
 	int getTerrainLevel(

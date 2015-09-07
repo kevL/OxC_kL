@@ -5442,7 +5442,7 @@
 1440092817 f:\git\openxcom\src\battlescape\battlestate.h
 	"BattlescapeGame.h"
 
-1441620760 f:\git\openxcom\src\battlescape\map.h
+1441623054 f:\git\openxcom\src\battlescape\map.h
 	"Position.h"
 	"../Engine/InteractiveSurface.h"
 
@@ -6325,7 +6325,7 @@
 	"../Savegame/BattleUnit.h"
 	"../Savegame/SavedBattleGame.h"
 
-1441610272 source:f:\git\openxcom\src\battlescape\unitwalkbstate.cpp
+1441622354 source:f:\git\openxcom\src\battlescape\unitwalkbstate.cpp
 	"UnitWalkBState.h"
 	"BattlescapeState.h"
 	"Camera.h"
