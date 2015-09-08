@@ -90,7 +90,7 @@ Projectile::Projectile(
 		{
 			//Log(LOG_INFO) << "Create Projectile -> BA_THROW";
 			_throwSprite = res->getSurfaceSet("FLOOROB.PCK")->getFrame(getItem()->getRules()->getFloorSprite());
-			_speed = _speed / 2;
+			_speed /= 2;
 		}
 		else // ba_SHOOT!! or hit, or spit
 		{
@@ -102,7 +102,6 @@ Projectile::Projectile(
 			if (bullet != NULL) // try to get the required info from the bullet
 			{
 				_bulletSprite = bullet->getRules()->getBulletSprite();
-
 				_speed += bullet->getRules()->getBulletSpeed();
 			}
 
@@ -113,24 +112,25 @@ Projectile::Projectile(
 			if (_speed == Options::battleFireSpeed)
 				_speed += _action.weapon->getRules()->getBulletSpeed();
 
-			if (_action.type == BA_AUTOSHOT)
-				_speed *= 3;
+//			if (_action.type == BA_AUTOSHOT) _speed *= 3;
 
 			if (_bulletSprite == -1)
 			{
 				std::ostringstream oststr;
-				oststr << "No bullet sprite";
+				oststr << "Missing bullet sprite";
 				if (_action.weapon != NULL)
 					oststr << " for " << _action.weapon->getRules()->getType().c_str();
-				if (_action.weapon->getAmmoItem() != NULL)
+				if (_action.weapon->getAmmoItem() != NULL
+					&& _action.weapon->getAmmoItem() != _action.weapon)
+				{
 					oststr << " w/ " << _action.weapon->getAmmoItem()->getRules()->getType().c_str();
+				}
 				Log(LOG_WARNING) << oststr.str();
 			}
 		}
 	}
 
-	if (_speed < 1)
-		_speed = 1;
+	if (_speed < 1) _speed = 1;
 	//Log(LOG_INFO) << "Projectile cTor EXIT";
 }
 //	if ((targetVoxel.x - origin.x) + (targetVoxel.y - origin.y) > -1)
