@@ -109,7 +109,7 @@ BaseDetectionState::BaseDetectionState(Base* base)
 					Options::keyOk);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& BaseDetectionState::btnOkClick,
-					SDLK_KP_ENTER);
+					Options::keyOkKeypad);
 
 	_txtFacilities->setText(tr("STR_FACILITIES"));
 	_txtFacilities->setColor(color1);

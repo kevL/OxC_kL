@@ -64,14 +64,14 @@ private:
 	const SavedBattleGame* _battleSave;
 	Surface* _throwSprite;
 
-	std::vector<Position> _trajectory;
+	std::vector<Position> _trj;
 
 	///
 	void applyAccuracy(
 			const Position& origin,
-			Position* target,
+			Position* const target,
 			double accuracy,
-			const bool keepRange = false,
+//			bool keepRange = false,
 			const Tile* const targetTile = NULL);
 //			const bool extendLine = true);
 

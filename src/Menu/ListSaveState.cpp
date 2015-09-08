@@ -169,7 +169,7 @@ void ListSaveState::lstSavesPress(Action* action)
 
 /**
  * Saves the selected slot or cancels it.
- * @param action, Pointer to an action.
+ * @param action - pointer to an Action
  */
 void ListSaveState::edtSaveKeyPress(Action* action)
 {

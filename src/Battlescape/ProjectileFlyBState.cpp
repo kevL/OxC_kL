@@ -483,14 +483,14 @@ bool ProjectileFlyBState::createNewProjectile() // private.
 	//Log(LOG_INFO) << "projFlyB create() targetVoxel.y = " << static_cast<float>(_targetVoxel.y) / 16.f;
 	//Log(LOG_INFO) << "projFlyB create() targetVoxel.z = " << static_cast<float>(_targetVoxel.z) / 24.f;
 
-	Projectile* const projectile = new Projectile(
-											_parent->getResourcePack(),
-											_battleSave,
-											_action,
-											_origin,
-											_targetVoxel);
+	Projectile* const prj = new Projectile(
+										_parent->getResourcePack(),
+										_battleSave,
+										_action,
+										_origin,
+										_targetVoxel);
 
-	_parent->getMap()->setProjectile(projectile); // add projectile to Map.
+	_parent->getMap()->setProjectile(prj); // add projectile to Map.
 
 
 	_parent->setStateInterval(16); // set the speed of the state think cycle to 16 ms (roughly one think-cycle per frame)
@@ -500,7 +500,7 @@ bool ProjectileFlyBState::createNewProjectile() // private.
 
 	if (_action.type == BA_THROW)
 	{
-		_prjImpact = projectile->calculateThrow(_unit->getAccuracy(_action)); // this should probly be TE:validateThrow() - cf. else(error) below_
+		_prjImpact = prj->calculateThrow(_unit->getAccuracy(_action)); // this should probly be TE:validateThrow() - cf. else(error) below_
 		//Log(LOG_INFO) << ". BA_THROW, part = " << (int)_prjImpact;
 
 		if (_prjImpact == VOXEL_FLOOR
@@ -530,8 +530,7 @@ bool ProjectileFlyBState::createNewProjectile() // private.
 		else // unable to throw here; Note that BattleUnit accuracy^ should *not* be considered before this. Unless this is some sort of failsafe/exploit for the AI ...
 		{
 			//Log(LOG_INFO) << ". . no throw, Voxel_Empty or _Wall or _OutofBounds";
-			delete projectile;
-
+			delete prj;
 			_parent->getMap()->setProjectile(NULL);
 
 			_action.result = "STR_UNABLE_TO_THROW_HERE";
@@ -544,7 +543,7 @@ bool ProjectileFlyBState::createNewProjectile() // private.
 	}
 	else if (_action.weapon->getRules()->getArcingShot() == true) // special code for the "spit" trajectory
 	{
-		_prjImpact = projectile->calculateThrow(_unit->getAccuracy(_action)); // this should probly be TE:validateThrow() - cf. else(error) below_
+		_prjImpact = prj->calculateThrow(_unit->getAccuracy(_action)); // this should probly be TE:validateThrow() - cf. else(error) below_
 		//Log(LOG_INFO) << ". acid spit, part = " << (int)_prjImpact;
 
 		if (_prjImpact != VOXEL_EMPTY
@@ -568,7 +567,7 @@ bool ProjectileFlyBState::createNewProjectile() // private.
 		else // no line of fire; Note that BattleUnit accuracy^ should *not* be considered before this. Unless this is some sort of failsafe/exploit for the AI ...
 		{
 			//Log(LOG_INFO) << ". . no spit, no LoF, Voxel_Empty";
-			delete projectile;
+			delete prj;
 
 			_parent->getMap()->setProjectile(NULL);
 
@@ -584,18 +583,19 @@ bool ProjectileFlyBState::createNewProjectile() // private.
 	{
 		if (_originVoxel != Position(-1,-1,-1)) // here, origin is a BL waypoint
 		{
-			_prjImpact = projectile->calculateShot( // this should probly be TE:plotLine() - cf. else(error) below_
-												_unit->getAccuracy(_action),
-												_originVoxel);
+			_prjImpact = prj->calculateShot( // this should probly be TE:plotLine() - cf. else(error) below_
+										_unit->getAccuracy(_action),
+										_originVoxel);
 			//Log(LOG_INFO) << ". shoot weapon[0], voxelType = " << (int)_prjImpact;
 		}
 		else // this is non-BL weapon shooting
 		{
-			_prjImpact = projectile->calculateShot(_unit->getAccuracy(_action)); // this should probly be TE:plotLine() - cf. else(error) below_
+			_prjImpact = prj->calculateShot(_unit->getAccuracy(_action)); // this should probly be TE:plotLine() - cf. else(error) below_
 			//Log(LOG_INFO) << ". shoot weapon[1], voxelType = " << (int)_prjImpact;
+			//Log(LOG_INFO) << "prjFlyB accuracy = " << _unit->getAccuracy(_action);
 		}
 		//Log(LOG_INFO) << ". shoot weapon, voxelType = " << (int)_prjImpact;
-		//Log(LOG_INFO) << ". finalTarget = " << projectile->getFinalPosition();
+		//Log(LOG_INFO) << ". finalTarget = " << prj->getFinalPosition();
 
 		if (_prjImpact == VOXEL_OBJECT
 			&& _ammo->getRules()->getExplosionRadius() > 0)
@@ -604,8 +604,8 @@ bool ProjectileFlyBState::createNewProjectile() // private.
 			if (tile->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NESW
 				|| tile->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NWSE)
 			{
-//				projectile->storeProjectileDirection();		// kL: used to handle explosions against diagonal bigWalls.
-				_prjVector = projectile->getStrikeVector();	// ^supercedes above^ storeProjectileDirection()
+//				prj->storeProjectileDirection();		// kL: used to handle explosions against diagonal bigWalls.
+				_prjVector = prj->getStrikeVector();	// ^supercedes above^ storeProjectileDirection()
 			}
 		}
 
@@ -634,7 +634,7 @@ bool ProjectileFlyBState::createNewProjectile() // private.
 		else // VOXEL_EMPTY, no line of fire; Note that BattleUnit accuracy^ should *not* be considered before this. Unless this is some sort of failsafe/exploit for the AI ...
 		{
 			//Log(LOG_INFO) << ". no shot, no LoF, Voxel_Empty";
-			delete projectile;
+			delete prj;
 
 			_parent->getMap()->setProjectile(NULL);
 

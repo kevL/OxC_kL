@@ -42,6 +42,10 @@ class InfoboxOKState
 {
 
 private:
+	bool
+		_cursorVisible,
+		_cursorHidden;
+
 	Frame* _frame;
 	Text* _txtTitle;
 	TextButton* _btnOk;

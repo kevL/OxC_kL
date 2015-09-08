@@ -95,7 +95,7 @@ LowFuelState::LowFuelState(
 					Options::keyOk);
 	_btnOk5Secs->onKeyboardPress(
 					(ActionHandler)& LowFuelState::btnOk5SecsClick,
-					SDLK_KP_ENTER);
+					Options::keyOkKeypad);
 	_btnOk5Secs->setVisible(_state->is5Sec() == false);
 
 	_btnOk->setText(tr("STR_OK"));

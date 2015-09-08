@@ -2296,14 +2296,14 @@ double BattleUnit::getAccuracy(
 		return 1.;
 
 		case BA_HIT:
-			ret = static_cast<double>(action.weapon->getRules()->getAccuracyMelee()) / 100.;
+			ret = static_cast<double>(action.weapon->getRules()->getAccuracyMelee()) * 0.01;
 
 			if (action.weapon->getRules()->isSkillApplied() == true)
-				ret *= static_cast<double>(_stats.melee) / 100.;
+				ret *= static_cast<double>(_stats.melee) * 0.01;
 		break;
 
 		case BA_THROW:
-			ret = static_cast<double>(_stats.throwing) / 100.;
+			ret = static_cast<double>(_stats.throwing) * 0.01;
 			if (_kneeled == true)
 				ret *= 0.86;
 		break;
@@ -2312,18 +2312,18 @@ double BattleUnit::getAccuracy(
 			switch (baType)
 			{
 				case BA_AIMEDSHOT:
-					ret = static_cast<double>(action.weapon->getRules()->getAccuracyAimed()) / 100.;
+					ret = static_cast<double>(action.weapon->getRules()->getAccuracyAimed()) * 0.01;
 				break;
 
 				case BA_AUTOSHOT:
-					ret = static_cast<double>(action.weapon->getRules()->getAccuracyAuto()) / 100.;
+					ret = static_cast<double>(action.weapon->getRules()->getAccuracyAuto()) * 0.01;
 				break;
 
 				default:
-					ret = static_cast<double>(action.weapon->getRules()->getAccuracySnap()) / 100;
+					ret = static_cast<double>(action.weapon->getRules()->getAccuracySnap()) * 0.01;
 			}
 
-			ret *= static_cast<double>(_stats.firing) / 100.;
+			ret *= static_cast<double>(_stats.firing) * 0.01;
 			if (_kneeled == true)
 				ret *= 1.16;
 	}
@@ -2340,6 +2340,7 @@ double BattleUnit::getAccuracy(
 	if (_battleGame->getPanicHandled() == false) // berserk xCom agents get lowered accuracy.
 		ret *= 0.68;
 
+	//Log(LOG_INFO) << "BattleUnit::getAccuracy() ret = " << ret;
 	return ret;
 }
 
@@ -2368,11 +2369,9 @@ double BattleUnit::getAccuracyModifier(const BattleItem* const item) const
 		}
 	}
 
-	ret *= std::max(
-				0.,
-				1. - 0.1 * static_cast<double>(wounds));
-
-	if (ret < 0.1) ret = 0.1;
+	ret *= std::max(0., 1. - 0.1 * static_cast<double>(wounds));
+	ret = std::max(0.1, ret);
+	//Log(LOG_INFO) << "BattleUnit::getAccuracyModifier() ret = " << ret;
 	return ret;
 }
 

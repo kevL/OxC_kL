@@ -900,9 +900,18 @@ void Surface::setPalette( // virtual.
  * @note Do not confuse with setVisible!
  * @param hidden - shown or hidden (default true)
  */
-void Surface::setHidden(bool hidden)
+void Surface::setHidden(bool hidden) // note: is not virtual.
 {
 	_hidden = hidden;
+}
+
+/**
+ * Gets the surface's special hidden flag.
+ * @return, true if hidden
+ */
+bool Surface::getHidden() const
+{
+	return _hidden;
 }
 
 /**

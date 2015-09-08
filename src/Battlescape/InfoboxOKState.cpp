@@ -42,6 +42,9 @@ namespace OpenXcom
  * @param msg - reference the message string
  */
 InfoboxOKState::InfoboxOKState(const std::wstring& msg)
+	:
+		_cursorVisible(_game->getCursor()->getVisible()),
+		_cursorHidden(_game->getCursor()->getHidden())
 {
 	_screen = false;
 
@@ -82,6 +85,7 @@ InfoboxOKState::InfoboxOKState(const std::wstring& msg)
 	_btnOk->setHighContrast();
 
 	_game->getCursor()->setVisible();
+	_game->getCursor()->setHidden(false);
 }
 
 /**
@@ -96,11 +100,13 @@ InfoboxOKState::~InfoboxOKState()
  */
 void InfoboxOKState::btnOkClick(Action*)
 {
-	if (_game->getSavedGame()->getBattleSave()->getSide() != FACTION_PLAYER
+/*	if (_game->getSavedGame()->getBattleSave()->getSide() != FACTION_PLAYER
 		&& _game->getSavedGame()->getBattleSave()->getDebugMode() == false)
 	{
 		_game->getCursor()->setVisible(false);
-	}
+	} */
+	_game->getCursor()->setVisible(_cursorVisible);
+	_game->getCursor()->setHidden(_cursorHidden);
 
 	_game->popState();
 }

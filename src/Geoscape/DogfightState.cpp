@@ -334,7 +334,7 @@ DogfightState::DogfightState(
 					Options::keyOk); // used to Maximize all minimized interceptor icons.
 	_btnMinimizedIcon->onKeyboardPress(
 					(ActionHandler)& DogfightState::btnMaximizeDfPress,
-					SDLK_KP_ENTER); // used to Maximize all minimized interceptor icons.
+					Options::keyOkKeypad); // used to Maximize all minimized interceptor icons.
 	_btnMinimizedIcon->setVisible(false);
 
 	std::wostringstream woststr;

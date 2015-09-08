@@ -112,7 +112,7 @@ StoresMatrixState::StoresMatrixState(Base* base)
 					Options::keyOk);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& StoresMatrixState::btnOkClick,
-					SDLK_KP_ENTER);
+					Options::keyOkKeypad);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& StoresMatrixState::btnOkClick,
 					Options::keyCancel);

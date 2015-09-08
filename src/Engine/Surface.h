@@ -289,7 +289,9 @@ protected:
 		virtual void setHeight(int height); // should be Unit16
 
 		/// Sets the surface's special hidden flag.
-		void setHidden(bool hidden = true);
+		void setHidden(bool hidden = true); // note: is not virtual.
+		/// Gets the surface's special hidden flag.
+		bool getHidden() const;
 
 		/// Locks the surface.
 		void lock();

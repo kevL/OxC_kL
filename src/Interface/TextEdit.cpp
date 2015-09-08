@@ -412,7 +412,7 @@ void TextEdit::draw()
 
 			for (size_t
 					i = 0;
-					i < _caretPos;
+					i != _caretPos;
 					++i)
 			{
 				x += _text->getFont()->getCharSize(_value[i]).w;
@@ -450,8 +450,8 @@ bool TextEdit::exceedsMaxWidth(wchar_t fontChar)
 
 /**
  * Focuses the text edit when it's pressed on.
- * @param action - pointer to an Action
- * @param state - state that the action handlers belong to
+ * @param action	- pointer to an Action
+ * @param state		- State that the action handlers belong to
  */
 void TextEdit::mousePress(Action* action, State* state)
 {
@@ -491,10 +491,10 @@ void TextEdit::mousePress(Action* action, State* state)
 }
 
 /**
- * Changes the text edit according to keyboard input,
- * and unfocuses the text if Enter is pressed.
- * @param action - pointer to an Action
- * @param state - state that the action handlers belong to
+ * Changes the text edit according to keyboard input and unfocuses the text if
+ * Enter is pressed.
+ * @param action	- pointer to an Action
+ * @param state		- State that the action handlers belong to
  */
 void TextEdit::keyboardPress(Action* action, State* state)
 {
@@ -587,7 +587,7 @@ void TextEdit::keyboardPress(Action* action, State* state)
 
 /**
  * Sets a function to be called every time the text changes.
- * @param handler Action handler.
+ * @param handler - ActionHandler
  */
 void TextEdit::onChange(ActionHandler handler)
 {

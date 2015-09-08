@@ -77,14 +77,14 @@ ExtraAlienInfoState::ExtraAlienInfoState(ArticleDefinitionTextImage* defs)
 					Options::keyOk);
 	_btnExit->onKeyboardPress(
 					(ActionHandler)& ExtraAlienInfoState::btnExit,
-					SDLK_KP_ENTER);
+					Options::keyOkKeypad);
 
 	_lstInfo->setColumns(2, 125, 25);
 	_lstInfo->setColor(Palette::blockOffset(14)+15); // lavender
 	_lstInfo->setDot();
 
 	_lstWeapon->setColumns(3, 100, 25, 25);
-	_lstWeapon->setColor(Palette::blockOffset(14)+15); // lavender
+	_lstWeapon->setColor(Palette::blockOffset(14)+15);
 	_lstWeapon->setDot();
 
 
@@ -107,8 +107,7 @@ ExtraAlienInfoState::ExtraAlienInfoState(ArticleDefinitionTextImage* defs)
 
 	if (unitRule != NULL)
 	{
-		const std::string stArmor = unitRule->getArmor();
-		const RuleArmor* const armorRule = _game->getRuleset()->getArmor(stArmor);
+		const RuleArmor* const armorRule = _game->getRuleset()->getArmor(unitRule->getArmor());
 
 		size_t row = 0;
 
