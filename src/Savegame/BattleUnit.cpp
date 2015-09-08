@@ -933,6 +933,9 @@ void BattleUnit::startWalking(
 		_kneeled = false;
 		_dir = dir;
 	}
+	//Log(LOG_INFO) << "start Phase = " << _walkPhase;
+	//Log(LOG_INFO) << ". status = " << (int)_status;
+	//Log(LOG_INFO) << ". float = " << (int)_floating;
 }
 
 /**
@@ -999,6 +1002,9 @@ void BattleUnit::keepWalking(
 	}
 
 	_cacheInvalid = recache;
+	//Log(LOG_INFO) << "cont. Phase = " << _walkPhase;
+	//Log(LOG_INFO) << ". status = " << (int)_status;
+	//Log(LOG_INFO) << ". float = " << (int)_floating;
 }
 
 /**

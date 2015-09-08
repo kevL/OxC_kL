@@ -74,7 +74,8 @@ UnitWalkBState::UnitWalkBState(
 		_onScreen(false),
 		_walkCam(parent->getMap()->getCamera()),
 		_dirStart(-1),
-		_kneelCheck(true)
+		_kneelCheck(true),
+		_playFly(false)
 {}
 
 /**
@@ -668,6 +669,7 @@ bool UnitWalkBState::doStatusStand() // private.
 		{
 			//Log(LOG_INFO) << ". . WalkBState: spend TU & Energy -> establish tile-links";
 			_preStepTurn = false;
+			_playFly = false;
 
 			//Log(LOG_INFO) << ". . WalkBState: startWalking()";
 			_unit->startWalking(
@@ -1217,90 +1219,90 @@ void UnitWalkBState::setWalkSpeed(bool gravLift) const // private.
 /**
  * Handles walking/ flying/ other movement sounds.
  */
-void UnitWalkBState::playMovementSound() const // private.
+void UnitWalkBState::playMovementSound() // private.
 {
-	if (_unit->getUnitVisible() == false
-		&& _battleSave->getDebugMode() == false)
-	{
-		return;
-	}
+	const int phase = _unit->getWalkPhase();
 
-	int sound = -1;
-
-	if (_unit->getMoveSound() != -1)
+	if (_unit->getUnitVisible() == true
+		|| _battleSave->getDebugMode() == true)
 	{
-		if (_unit->getWalkPhase() == 0)
+		int sound = -1;
+
+		if (_unit->getMoveSound() != -1)
 		{
-			if (_unit->getStatus() == STATUS_FLYING
-				&& _unit->isFloating() == false
-				&& _falling == false)
+			if (phase == 0)
 			{
-				sound = 40; // GravLift note: isFloating() might be redundant w/ (_falling=false). See below_
-			}
-			else
-				sound = _unit->getMoveSound();
-		}
-	}
-	else
-	{
-		if (_unit->getStatus() == STATUS_WALKING)
-		{
-			const int walkPhase = _unit->getWalkPhase();
-			if (walkPhase == 3
-				|| walkPhase == 7)
-			{
-				const Tile
-					* const tile = _unit->getTile(),
-					* const belowTile = _battleSave->getTile(tile->getPosition() + Position(0,0,-1));
-
-				const int stepSound = tile->getFootstepSound(belowTile);
-				if (stepSound > -1)
+				if (_unit->getStatus() == STATUS_FLYING
+					&& _unit->isFloating() == false
+					&& _falling == false)
 				{
-					if (walkPhase == 3)
-						sound = stepSound * 2 + ResourcePack::WALK_OFFSET + 1;
-					else //if (walkPhase == 7)
-						sound = stepSound * 2 + ResourcePack::WALK_OFFSET;
+					sound = ResourcePack::GRAVLIFT_SOUND; // GravLift note: isFloating() might be redundant w/ (_falling=false). See below_
 				}
+				else
+					sound = _unit->getMoveSound();
 			}
 		}
-		else if (_unit->getStatus() == STATUS_FLYING)
+		else
 		{
-			if (_unit->getWalkPhase() == 0)
+			if (_unit->getStatus() == STATUS_WALKING)
 			{
-				if (_falling == false)
+				_playFly = true;
+				if (phase == 3 || phase == 7)
 				{
-					if (_unit->isFloating() == false) // GravLift note: isFloating() might be redundant w/ (_falling=false). See above^
-						sound = 40;
-					else
+					const Tile
+						* const tile = _unit->getTile(),
+						* const tileBelow = _battleSave->getTile(tile->getPosition() + Position(0,0,-1));
+
+					const int stepSound = tile->getFootstepSound(tileBelow);
+					if (stepSound > -1)
 					{
-						if (_unit->getUnitRules() != NULL
-							&& _unit->getUnitRules()->isMechanical() == true)
-						{
-							sound = ResourcePack::FLYING_SOUND;		// hoverSound flutter
-						}
-						else
-							sound = ResourcePack::FLYING_SOUND_HQ;	// HQ hoverSound
+						if (phase == 3)
+							sound = stepSound * 2 + ResourcePack::WALK_OFFSET + 1;
+						else //if (phase == 7)
+							sound = stepSound * 2 + ResourcePack::WALK_OFFSET;
 					}
 				}
 			}
-			else if (_unit->getWalkPhase() == 7
-				&& groundCheck() == true
-				&& (_falling == true
-					|| (_unit->isFloating() == true
-						&& _pf->getMoveTypePf() == MT_WALK)))
+			else if (_unit->getStatus() == STATUS_FLYING)
 			{
-				sound = ResourcePack::ITEM_DROP; // *thunk*
+				if (phase == 0 || _playFly == true)
+				{
+					_playFly = false;
+					if (_falling == false)
+					{
+						if (_unit->isFloating() == false) // GravLift note: isFloating() might be redundant w/ (_falling=false). See above^
+							sound = ResourcePack::GRAVLIFT_SOUND;
+						else
+						{
+							if (_unit->getUnitRules() != NULL
+								&& _unit->getUnitRules()->isMechanical() == true)
+							{
+								sound = ResourcePack::FLYING_SOUND;		// hoverSound flutter
+							}
+							else
+								sound = ResourcePack::FLYING_SOUND_HQ;	// HQ hoverSound
+						}
+					}
+				}
+				else if (phase == 7
+					&& groundCheck() == true
+					&& (_falling == true
+						|| (_unit->isFloating() == true
+							&& _pf->getMoveTypePf() == MT_WALK)))
+				{
+					sound = ResourcePack::ITEM_DROP; // *thunk*
+				}
 			}
 		}
-	}
 
-	if (sound != -1)
-		_parent->getResourcePack()->getSound(
-										"BATTLE.CAT",
-										sound)
-									->play(
-										-1,
-										_parent->getMap()->getSoundAngle(_unit->getPosition()));
+		if (sound != -1)
+			_parent->getResourcePack()->getSound(
+											"BATTLE.CAT",
+											sound)
+										->play(
+											-1,
+											_parent->getMap()->getSoundAngle(_unit->getPosition()));
+	}
 }
 
 /**

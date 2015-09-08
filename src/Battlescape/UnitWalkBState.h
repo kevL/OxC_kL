@@ -49,6 +49,7 @@ private:
 		_falling,
 		_kneelCheck,
 		_onScreen,
+		_playFly,
 		_tileSwitchDone,
 		_preStepTurn;
 	int
@@ -83,7 +84,7 @@ private:
 	void setWalkSpeed(bool gravLift) const;
 
 	/// Handles the stepping sounds.
-	void playMovementSound() const;
+	void playMovementSound();
 
 	/// For determining if a flying unit turns flight off at start of movement.
 	void doFallCheck();

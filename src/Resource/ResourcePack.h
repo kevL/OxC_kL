@@ -76,7 +76,7 @@ private:
 
 
 		public:
-			static int
+			static int // TODO: relabel these identifiers w/ appropriate prefixes, eg. sfx_GRAVLIFT, gfx_SMOKE ... See ResourcePack.cpp
 				BUTTON_PRESS,
 				WINDOW_POPUP[3],
 
@@ -92,6 +92,7 @@ private:
 				ITEM_UNLOAD_HQ,
 				SLIDING_DOOR_OPEN,
 				SLIDING_DOOR_CLOSE,
+				GRAVLIFT_SOUND,
 				WALK_OFFSET,
 				ITEM_DROP,
 				ITEM_THROW,
