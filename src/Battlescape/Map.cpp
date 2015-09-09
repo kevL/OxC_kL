@@ -1022,21 +1022,22 @@ void Map::drawTerrain(Surface* const surface) // private.
 					if (_showProjectile == true // <- used to hide Celatid glob while its spitting animation plays.
 						&& _projectile != NULL)
 					{
+						Position voxel;
 						if (_projectile->getItem() != NULL) // thrown item ( grenade, etc.)
 						{
 							sprite = _projectile->getSprite();
 							if (sprite)
 							{
-								Position voxelPos = _projectile->getPosition(); // draw shadow on the floor
-								voxelPos.z = _battleSave->getTileEngine()->castedShade(voxelPos);
-								if (   voxelPos.x / 16 >= itX
-									&& voxelPos.y / 16 >= itY
-									&& voxelPos.x / 16 <= itX + 1
-									&& voxelPos.y / 16 <= itY + 1
-									&& voxelPos.z / 24 == itZ)
+								voxel = _projectile->getPosition(); // draw shadow on the floor
+								voxel.z = _battleSave->getTileEngine()->castShadow(voxel);
+								if (   voxel.x / 16 >= itX
+									&& voxel.y / 16 >= itY
+									&& voxel.x / 16 < itX + 2
+									&& voxel.y / 16 < itY + 2
+									&& voxel.z / 24 == itZ)
 								{
 									_camera->convertVoxelToScreen(
-																voxelPos,
+																voxel,
 																&bullet);
 									sprite->blitNShade(
 											surface,
@@ -1045,15 +1046,15 @@ void Map::drawTerrain(Surface* const surface) // private.
 											16);
 								}
 
-								voxelPos = _projectile->getPosition(); // draw thrown object
-								if (   voxelPos.x / 16 >= itX
-									&& voxelPos.y / 16 >= itY
-									&& voxelPos.x / 16 <= itX + 1
-									&& voxelPos.y / 16 <= itY + 1
-									&& voxelPos.z / 24 == itZ)
+								voxel = _projectile->getPosition(); // draw thrown object
+								if (   voxel.x / 16 >= itX
+									&& voxel.y / 16 >= itY
+									&& voxel.x / 16 < itX + 2
+									&& voxel.y / 16 < itY + 2
+									&& voxel.z / 24 == itZ)
 								{
 									_camera->convertVoxelToScreen(
-																voxelPos,
+																voxel,
 																&bullet);
 									sprite->blitNShade(
 											surface,
@@ -1070,23 +1071,22 @@ void Map::drawTerrain(Surface* const surface) // private.
 								&& itY >= bulletLowY
 								&& itY <= bulletHighY)
 							{
-								Position posVoxel;
 								for (int
-										i = 0;
-										i != BULLET_SPRITES;
-										++i)
+										id = 0;
+										id != BULLET_SPRITES;
+										++id)
 								{
-									sprite = _projectileSet->getFrame(_projectile->getParticle(i));
+									sprite = _projectileSet->getFrame(_projectile->getParticle(id));
 									if (sprite)
 									{
-										posVoxel = _projectile->getPosition(1 - i); // draw shadow on the floor
-										posVoxel.z = _battleSave->getTileEngine()->castedShade(posVoxel);
-										if (   posVoxel.x / 16 == itX
-											&& posVoxel.y / 16 == itY
-											&& posVoxel.z / 24 == itZ)
+										voxel = _projectile->getPosition(1 - id); // draw shadow on the floor
+										voxel.z = _battleSave->getTileEngine()->castShadow(voxel);
+										if (   voxel.x / 16 == itX
+											&& voxel.y / 16 == itY
+											&& voxel.z / 24 == itZ)
 										{
 											_camera->convertVoxelToScreen(
-																		posVoxel,
+																		voxel,
 																		&bullet);
 
 											bullet.x -= sprite->getWidth() / 2;
@@ -1098,13 +1098,13 @@ void Map::drawTerrain(Surface* const surface) // private.
 													16);
 										}
 
-										posVoxel = _projectile->getPosition(1 - i); // draw bullet itself
-										if (   posVoxel.x / 16 == itX
-											&& posVoxel.y / 16 == itY
-											&& posVoxel.z / 24 == itZ)
+										voxel = _projectile->getPosition(1 - id); // draw bullet itself
+										if (   voxel.x / 16 == itX
+											&& voxel.y / 16 == itY
+											&& voxel.z / 24 == itZ)
 										{
 											_camera->convertVoxelToScreen(
-																		posVoxel,
+																		voxel,
 																		&bullet);
 
 											bullet.x -= sprite->getWidth() / 2;

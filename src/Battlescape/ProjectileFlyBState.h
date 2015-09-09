@@ -57,7 +57,7 @@ private:
 	SavedBattleGame* _battleSave;
 
 	Position
-		_origin,
+		_posOrigin,
 		_originVoxel,
 		_targetVoxel,
 		_prjVector;

@@ -377,7 +377,7 @@ int Tile::getTuCostTile(
 /**
  * Gets whether this tile has a floor or not.
  * @note If no tile-part defined as floor then it has no floor.
- * @param tileBelow - the tile below this tile
+ * @param tileBelow - the tile below this tile (default NULL)
  * @return, true if tile has no floor
  */
 bool Tile::hasNoFloor(const Tile* const tileBelow) const

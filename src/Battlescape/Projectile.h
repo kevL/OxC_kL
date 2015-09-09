@@ -62,7 +62,7 @@ private:
 
 	BattleAction _action;
 	Position
-		_origin,
+		_posOrigin,
 		_targetVoxel;
 	const SavedBattleGame* _battleSave;
 	Surface* _throwSprite;
@@ -92,8 +92,8 @@ private:
 				const ResourcePack* const res,
 				const SavedBattleGame* const battleSave,
 				const BattleAction& action,
-				const Position& origin,
-				const Position& target);
+				const Position& posOrigin,
+				const Position& targetVoxel);
 		/// Cleans up the Projectile.
 		~Projectile();
 

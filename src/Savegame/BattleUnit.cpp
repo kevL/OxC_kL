@@ -3762,7 +3762,7 @@ bool BattleUnit::isWoundable() const
 {
 	return _status != STATUS_DEAD
 		&& (_geoscapeSoldier != NULL
-			|| (Options::alienBleeding == true
+			|| (Options::battleAlienBleeding == true
 				&& _unitRule->isMechanical() == false
 				&& _isZombie == false));
 }

@@ -2323,7 +2323,7 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* const unit) // private.
 		_parentState->getMap()->setCursorType(CT_NONE);
 		_battleSave->setSelectedUnit(unit);
 
-		if (Options::alienPanicMessages == true
+		if (Options::battleAlienPanicMessages == true
 			|| unit->getUnitVisible() == true)
 		{
 			getMap()->getCamera()->centerOnPosition(unit->getPosition());
@@ -2961,7 +2961,7 @@ void BattlescapeGame::secondaryAction(const Position& pos)
 		_currentAction.target = pos;
 		_currentAction.strafe = _currentAction.actor->getTurretType() != -1
 							 && (SDL_GetModState() & KMOD_CTRL) != 0
-							 && Options::strafe == true;
+							 && Options::battleStrafe == true;
 
 		statePushBack(new UnitTurnBState( // open door or rotate turret.
 										this,
@@ -3594,7 +3594,7 @@ BattleActionType BattlescapeGame::getReservedAction() const
  * Tallies the living units in the game.
  * @param liveAliens	- reference in which to store the live alien tally
  * @param liveSoldiers	- reference in which to store the live XCom tally
- * @return, true if all aliens are dead or pacified independent of allowPsionicCapture option
+ * @return, true if all aliens are dead or pacified independent of battleAllowPsionicCapture option
  */
 bool BattlescapeGame::tallyUnits(
 		int& liveAliens,
@@ -3616,7 +3616,7 @@ bool BattlescapeGame::tallyUnits(
 			if ((*j)->getOriginalFaction() == FACTION_HOSTILE)
 			{
 				if ((*j)->getFaction() != FACTION_PLAYER
-					|| Options::allowPsionicCapture == false)
+					|| Options::battleAllowPsionicCapture == false)
 				{
 					++liveAliens;
 				}

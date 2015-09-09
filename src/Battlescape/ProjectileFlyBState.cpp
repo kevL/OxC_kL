@@ -51,7 +51,7 @@ namespace OpenXcom
 {
 
 /**
- * Sets up a ProjectileFlyBState [0].
+ * Sets up a ProjectileFlyBState [0] for a unit shooting.
  * @param parent - pointer to the BattlescapeGame
  * @param action - the current BattleAction struct (BattlescapeGame.h)
  */
@@ -63,7 +63,7 @@ ProjectileFlyBState::ProjectileFlyBState( // origin is unitTile
 			parent,
 			action),
 		_battleSave(parent->getBattleSave()),
-		_origin(action.actor->getPosition()),
+		_posOrigin(action.actor->getPosition()),
 		_originVoxel(-1,-1,-1), // for BL waypoints
 		_targetVoxel(-1,-1,-1),
 		_unit(NULL),
@@ -79,21 +79,21 @@ ProjectileFlyBState::ProjectileFlyBState( // origin is unitTile
 }
 
 /**
- * Sets up a ProjectileFlyBState [1].
- * @param parent - pointer to the BattlescapeGame
- * @param action - the current BattleAction struct (BattlescapeGame.h)
- * @param origin - an origin Position in tile-space
+ * Sets up a ProjectileFlyBState [1] for a waypoint.
+ * @param parent	- pointer to the BattlescapeGame
+ * @param action	- the current BattleAction struct (BattlescapeGame.h)
+ * @param posOrigin	- origin Position in tile-space
  */
 ProjectileFlyBState::ProjectileFlyBState( // blaster launch, BattlescapeGame::launchAction()
 		BattlescapeGame* const parent,
 		BattleAction action,
-		Position origin)
+		Position posOrigin)
 	:
 		BattleState(
 			parent,
 			action),
 		_battleSave(parent->getBattleSave()),
-		_origin(origin),
+		_posOrigin(posOrigin),
 		_originVoxel(-1,-1,-1), // for BL waypoints
 		_targetVoxel(-1,-1,-1),
 		_unit(NULL),
@@ -125,6 +125,7 @@ void ProjectileFlyBState::init()
 	if (_initialized == true)
 		return;
 
+	//Log(LOG_INFO) << "projFlyB init() targetPosTile = " << _action.target;
 	_initialized = true;
 	_parent->getCurrentAction()->takenXp = false;
 
@@ -249,7 +250,7 @@ void ProjectileFlyBState::init()
 			{
 				_prjItem = _action.weapon;
 				if (tileDest->getTerrainLevel() == -24
-					&& tileDest->getPosition().z + 1 < _battleSave->getMapSizeZ())
+					&& tileDest->getPosition().z < _battleSave->getMapSizeZ() - 1)
 				{
 					++_action.target.z;
 				}
@@ -259,20 +260,20 @@ void ProjectileFlyBState::init()
 
 		case BA_HIT:
 			performMeleeAttack();
-			//Log(LOG_INFO) << ". . BA_HIT performMeleeAttack() DONE";
+			//Log(LOG_INFO) << ". . BA_HIT performMeleeAttack() DONE - EXIT flyBState::init()";
 		return;
 
 		case BA_PSIPANIC:
 		case BA_PSICONTROL:
 		case BA_PSICONFUSE:
 		case BA_PSICOURAGE:
-			//Log(LOG_INFO) << ". . BA_PSIPANIC/CONTROL/CONFUSE/ENCOURAGE, new ExplosionBState, EXIT";
+			//Log(LOG_INFO) << ". . BA_PSIPANIC/CONTROL/CONFUSE/COURAGE, new ExplosionBState - EXIT flyBState::init()";
 			_parent->statePushFront(new ExplosionBState(
 													_parent,
 													Position(
-															(_action.target.x * 16) + 8,
-															(_action.target.y * 16) + 8,
-															(_action.target.z * 24) + 10),
+															_action.target.x * 16 + 8,
+															_action.target.y * 16 + 8,
+															_action.target.z * 24 + 10),
 													_action.weapon,
 													_unit));
 		return;
@@ -289,51 +290,55 @@ void ProjectileFlyBState::init()
 	}
 
 
-	// ** TARGETING ** ->
-	if ((_unit->getFaction() == FACTION_PLAYER // force fire by pressing CTRL(center) [+ ALT(floor)] but *not* SHIFT
-			&& (SDL_GetModState() & KMOD_CTRL) != 0
-			&& (SDL_GetModState() & KMOD_SHIFT) == 0
-			&& Options::forceFire == true)
-		|| _parent->getPanicHandled() == false // note that nonPlayer berserk bypasses this and targets according to targetUnit OR tileParts below_
-		|| _action.type == BA_LAUNCH)
+//	const bool allowForceFire = _action.type == BA_SNAPSHOT
+//							 || _action.type == BA_AIMEDSHOT
+//							 || _action.type == BA_AUTOSHOT; // ie. not Throw
+
+	// ** find TARGET voxel ** ->
+	if (_action.type == BA_LAUNCH)
 	{
-		//Log(LOG_INFO) << "projFlyB init() targetPosTile[0] = " << _action.target;
-		_targetVoxel = Position( // target nothing, targets the middle of the tile
+		//Log(LOG_INFO) << "projFlyB init() B-Launch";
+		_targetVoxel = Position(
 							_action.target.x * 16 + 8,
 							_action.target.y * 16 + 8,
-							_action.target.z * 24 + 10);
+							_action.target.z * 24);
 
-		if (_action.type == BA_LAUNCH)
-		{
-			if (_targetFloor == true) // kL_note: was, if(_action.target==_origin)
-				_targetVoxel.z -= 10; // launched missiles with two waypoints placed on the same tile: target the floor.
-			else
-				_targetVoxel.z += 6; // launched missiles go higher than the middle.
+		if (_targetFloor == false)
+			_targetVoxel.z += 16;
+	}
+	else if ((//allowForceFire == true &&
+			_unit->getFaction() == FACTION_PLAYER	// force fire at center of Tile by pressing [CTRL] but *not* SHIFT
+			&& (SDL_GetModState() & KMOD_CTRL) != 0	// force fire at Floor w/ [CTRL+ALT]
+			&& (SDL_GetModState() & KMOD_SHIFT) == 0
+			&& Options::battleForceFire == true)
+		|| _parent->getPanicHandled() == false) // note that nonPlayer berserk bypasses this and targets according to targetUnit OR tileParts below_
+	{
+		//Log(LOG_INFO) << "projFlyB init() Player panic OR Ctrl [!Shift]";
+		_targetVoxel = Position(
+							_action.target.x * 16 + 8,
+							_action.target.y * 16 + 8,
+							_action.target.z * 24); // force fire at floor w/ Alt
 
-			//Log(LOG_INFO) << "projFlyB init() targetPosVoxel[0].x = " << static_cast<float>(_targetVoxel.x) / 16.f;
-			//Log(LOG_INFO) << "projFlyB init() targetPosVoxel[0].y = " << static_cast<float>(_targetVoxel.y) / 16.f;
-			//Log(LOG_INFO) << "projFlyB init() targetPosVoxel[0].z = " << static_cast<float>(_targetVoxel.z) / 24.f;
-		}
-		else if (_parent->getPanicHandled() == true
-			&& (SDL_GetModState() & KMOD_ALT) != 0) // CTRL+ALT targets floor even if a unit is at targetTile.
+		if ((SDL_GetModState() & KMOD_ALT) == 0
+			|| _parent->getPanicHandled() == false)
 		{
-			//Log(LOG_INFO) << "projFlyB targetPos[1] = " << _action.target;
-			_targetVoxel.z -= 10; // force fire at floor (useful for HE ammo-types)
+			_targetVoxel.z += 10;
 		}
 	}
 	else
 	{
 		// determine the target voxel.
 		// aim at (in this priority)
-		//		- the center of the targetUnit, or the floor if origin=target
-		//		- the content-object
-		//		- the north wall
-		//		- the west wall
+		//		- the center of the targetUnit, or the floor if target=origin
+		//		- the object
+		//		- the northwall
+		//		- the westwall
 		//		- the floor
-		// if there is no LOF to the center try elsewhere (more outward).
-		// Store that target voxel.
+		// if there is no LoF to the center canTarget*() tries moving the target-voxel outward.
+		// Store that voxel.
 		//
 		// Force Fire keyboard modifiers:
+		// note non-Player units cannot target tileParts ... but they might someday.
 		// none			- See above^
 		// CTRL			- center
 		// CTRL+ALT		- floor
@@ -341,17 +346,17 @@ void ProjectileFlyBState::init()
 		// SHIFT+CTRL	- westwall
 		const Position originVoxel = _parent->getTileEngine()->getOriginVoxel(
 																		_action,
-																		_battleSave->getTile(_origin));
+																		_battleSave->getTile(_posOrigin));
 		const Tile* const tileTarget = _battleSave->getTile(_action.target);
 
 		if (tileTarget->getUnit() != NULL
 			&& (_unit->getFaction() != FACTION_PLAYER
 				|| (((SDL_GetModState() & KMOD_SHIFT) == 0
 						&& (SDL_GetModState() & KMOD_CTRL) == 0)
-					|| Options::forceFire == false)))
+					|| Options::battleForceFire == false)))
 		{
 			//Log(LOG_INFO) << ". tileTarget has unit";
-			if (_origin == _action.target
+			if (_action.target == _posOrigin
 				|| tileTarget->getUnit() == _unit)
 			{
 				//Log(LOG_INFO) << "projFlyB targetPos[2] = " << _action.target;
@@ -368,10 +373,10 @@ void ProjectileFlyBState::init()
 													&_targetVoxel,
 													_unit);
 		}
-		else if (tileTarget->getMapData(O_OBJECT) != NULL	// bypass Content-Object when pressing SHIFT
-			&& (_unit->getFaction() != FACTION_PLAYER		// non-Player units cannot target tileParts ... but they might someday.
-				|| (SDL_GetModState() & KMOD_SHIFT) == 0	// force vs. Object by using CTRL above^
-				|| Options::forceFire == false))
+		else if (tileTarget->getMapData(O_OBJECT) != NULL	// force vs. Object by using CTRL above^
+			&& (_unit->getFaction() != FACTION_PLAYER		// bypass Object by pressing SHIFT
+				|| (SDL_GetModState() & KMOD_SHIFT) == 0
+				|| Options::battleForceFire == false))
 		{
 			//Log(LOG_INFO) << ". tileTarget has content-object";
 			if (_parent->getTileEngine()->canTargetTile(
@@ -387,10 +392,10 @@ void ProjectileFlyBState::init()
 									_action.target.z * 24 + 10);
 			}
 		}
-		else if (tileTarget->getMapData(O_NORTHWALL) != NULL // force Northwall when pressing SHIFT but not CTRL
+		else if (tileTarget->getMapData(O_NORTHWALL) != NULL // force Northwall by pressing [SHIFT] but not CTRL
 			&& (_unit->getFaction() != FACTION_PLAYER
 				|| (SDL_GetModState() & KMOD_CTRL) == 0
-				|| Options::forceFire == false))
+				|| Options::battleForceFire == false))
 		{
 			//Log(LOG_INFO) << ". tileTarget has northwall";
 			if (_parent->getTileEngine()->canTargetTile(
@@ -406,7 +411,7 @@ void ProjectileFlyBState::init()
 									_action.target.z * 24 + 10);
 			}
 		}
-		else if (tileTarget->getMapData(O_WESTWALL) != NULL) // force Westwall when pressing SHIFT+CTRL
+		else if (tileTarget->getMapData(O_WESTWALL) != NULL) // force Westwall by pressing [CTRL+SHIFT]
 		{
 			//Log(LOG_INFO) << ". tileTarget has westwall";
 			if (_parent->getTileEngine()->canTargetTile(
@@ -422,7 +427,7 @@ void ProjectileFlyBState::init()
 									_action.target.z * 24 + 10);
 			}
 		}
-		else if (tileTarget->getMapData(O_FLOOR) != NULL) // CTRL+ALT forced-shot is handled above^
+		else if (tileTarget->getMapData(O_FLOOR) != NULL) // forced-shot at Floor is handled above^ [CTRL+ALT]
 		{
 			//Log(LOG_INFO) << ". tileTarget has floor";
 			if (_parent->getTileEngine()->canTargetTile(
@@ -444,9 +449,13 @@ void ProjectileFlyBState::init()
 			_targetVoxel = Position(
 								_action.target.x * 16 + 8,
 								_action.target.y * 16 + 8,
-								_action.target.z * 24 + 12);
+								_action.target.z * 24 + 10);
 		}
 	}
+
+	//Log(LOG_INFO) << "projFlyB init() targetPosVoxel.x = " << static_cast<float>(_targetVoxel.x) / 16.f;
+	//Log(LOG_INFO) << "projFlyB init() targetPosVoxel.y = " << static_cast<float>(_targetVoxel.y) / 16.f;
+	//Log(LOG_INFO) << "projFlyB init() targetPosVoxel.z = " << static_cast<float>(_targetVoxel.z) / 24.f;
 
 	if (createNewProjectile() == true)
 	{
@@ -474,7 +483,7 @@ bool ProjectileFlyBState::createNewProjectile() // private.
 		++_unit->getStatistics()->shotsFiredCounter;
 	}
 
-	//Log(LOG_INFO) << "projFlyB create() originTile = " << _origin;
+	//Log(LOG_INFO) << "projFlyB create() originTile = " << _posOrigin;
 	//Log(LOG_INFO) << "projFlyB create() targetVoxel = " << _targetVoxel;
 	//Log(LOG_INFO) << "projFlyB create() targetVoxel.x = " << static_cast<float>(_targetVoxel.x) / 16.f;
 	//Log(LOG_INFO) << "projFlyB create() targetVoxel.y = " << static_cast<float>(_targetVoxel.y) / 16.f;
@@ -484,7 +493,7 @@ bool ProjectileFlyBState::createNewProjectile() // private.
 										_parent->getResourcePack(),
 										_battleSave,
 										_action,
-										_origin,
+										_posOrigin,
 										_targetVoxel);
 
 	_parent->getMap()->setProjectile(prj); // add projectile to Map.
@@ -547,6 +556,18 @@ bool ProjectileFlyBState::createNewProjectile() // private.
 			 && _prjImpact != VOXEL_OUTOFBOUNDS)
 		{
 			//Log(LOG_INFO) << ". . spit/ arcing shot";
+			if (_prjImpact == VOXEL_OBJECT
+				&& _ammo->getRules()->getExplosionRadius() > 0)
+			{
+				const Tile* const tile = _battleSave->getTile(_parent->getMap()->getProjectile()->getFinalPosition());
+				if (tile->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NESW
+					|| tile->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NWSE)
+				{
+//					prj->storeProjectileDirection();		// kL: used to handle explosions against diagonal bigWalls.
+					_prjVector = prj->getStrikeVector();	// ^supercedes above^ storeProjectileDirection()
+				}
+			}
+
 			_unit->startAiming();
 			_unit->setCache(NULL);
 			_parent->getMap()->cacheUnit(_unit);
@@ -864,7 +885,7 @@ void ProjectileFlyBState::think()
 				&& _prjImpact == VOXEL_EMPTY
 				&& _action.waypoints.size() > 1)
 			{
-				_origin = _action.waypoints.front();
+				_posOrigin = _action.waypoints.front();
 				_action.waypoints.pop_front();
 				_action.target = _action.waypoints.front();
 
@@ -872,14 +893,14 @@ void ProjectileFlyBState::think()
 				ProjectileFlyBState* const wpNext = new ProjectileFlyBState(
 																		_parent,
 																		_action,
-																		_origin); // -> tilePos for BL.
+																		_posOrigin); // -> tilePos for BL.
 				wpNext->_originVoxel = _parent->getMap()->getProjectile()->getPosition();
 //				wpNext->setOriginVoxel(_parent->getMap()->getProjectile()->getPosition()); // !getPosition(-1) -> tada, fixed. // -> voxlPos
 
 				// this follows BL as it hits through waypoints
-				camera->centerOnPosition(_origin);
+				camera->centerOnPosition(_posOrigin);
 
-				if (_origin == _action.target)
+				if (_posOrigin == _action.target)
 					wpNext->targetFloor();
 
 				_parent->statePushNext(wpNext);
@@ -977,7 +998,7 @@ void ProjectileFlyBState::think()
 																	_parent->getResourcePack(),
 																	_battleSave,
 																	_action,
-																	_origin,
+																	_posOrigin,
 																	_targetVoxel);
 
 								const double accuracy = std::max(

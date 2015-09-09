@@ -378,7 +378,7 @@ bool TileEngine::calculateFOV(BattleUnit* const unit) const
 	const size_t hostiles_pre = unit->getHostileUnitsThisTurn().size();
 
 	int dir;
-	if (Options::strafe == true
+	if (Options::battleStrafe == true
 		&& unit->getTurretType() > -1)
 	{
 		dir = unit->getTurretDirection();
@@ -429,7 +429,7 @@ bool TileEngine::calculateFOV(BattleUnit* const unit) const
 	{
 		const Tile* const tileAbove = _battleSave->getTile(posUnit + Position(0,0,1));
 		if (tileAbove != NULL
-			&& tileAbove->hasNoFloor(NULL))
+			&& tileAbove->hasNoFloor())
 		{
 			++posUnit.z;
 		}
@@ -874,7 +874,7 @@ Position TileEngine::getSightOriginVoxel(const BattleUnit* const unit) const
 	{
 		const Tile* const tileAbove = _battleSave->getTile(unit->getPosition() + Position(0,0,1));
 		if (tileAbove == NULL
-			|| tileAbove->hasNoFloor(NULL) == false)
+			|| tileAbove->hasNoFloor() == false)
 		{
 			while (posOrigin_voxel.z > heightLimit)
 				--posOrigin_voxel.z; // careful with that ceiling, Eugene.
@@ -930,7 +930,7 @@ Position TileEngine::getOriginVoxel(
 		{
 			const Tile* const tileAbove = _battleSave->getTile(posOrigin_tile + Position(0,0,1));
 			if (tileAbove == NULL
-				|| tileAbove->hasNoFloor(NULL) == false)
+				|| tileAbove->hasNoFloor() == false)
 			{
 				while (posOrigin_voxel.z > heightLimit)
 					--posOrigin_voxel.z;
@@ -941,7 +941,7 @@ Position TileEngine::getOriginVoxel(
 		{
 			const Tile* const tileAbove = _battleSave->getTile(posOrigin_tile + Position(0,0,1));
 			if (tileAbove != NULL
-				&& tileAbove->hasNoFloor(NULL) == true)
+				&& tileAbove->hasNoFloor() == true)
 			{
 				++posOrigin_tile.z;
 			}
@@ -2292,7 +2292,7 @@ BattleUnit* TileEngine::hit(
 
 				double delta;
 				if (dType == DT_HE
-					|| Options::TFTDDamage == true)
+					|| Options::battleTFTDDamage == true)
 				{
 					delta = 50.;
 				}
@@ -4985,19 +4985,21 @@ int TileEngine::closeUfoDoors() const
 /**
  * Calculates a line trajectory using bresenham algorithm in 3D.
  * @note Accuracy is NOT considered; this is a true path/trajectory.
- * @param origin		- reference the origin (voxelspace for 'doVoxelCheck'; tilespace otherwise)
- * @param target		- reference the target (voxelspace for 'doVoxelCheck'; tilespace otherwise)
+ * @param origin		- reference the origin (voxel-space for 'doVoxelCheck'; tile-space otherwise)
+ * @param target		- reference the target (voxel-space for 'doVoxelCheck'; tile-space otherwise)
  * @param storeTrj		- true will store the whole trajectory; otherwise only the last position gets stored
  * @param trj			- pointer to a vector of Positions in which the trajectory will be stored
  * @param excludeUnit	- pointer to a BattleUnit to be excluded from collision detection
- * @param doVoxelCheck	- true to check against a voxel; false to check tile blocking for FoV (true for unit visibility and line of fire, false for terrain visibility) (default true)
+ * @param doVoxelCheck	- true to check against a voxel; false to check tile blocking for FoV
+ *						  (true for unit visibility and LoS/LoF; false for terrain visibility) (default true)
  * @param onlyVisible	- true to skip invisible units (default false) [used in FPS view]
- * @param excludeAllBut	- pointer to a unit that's to be considered exclusively for ray hits [optional] (default NULL)
- * @return,  -1 hit nothing
+ * @param excludeAllBut	- pointer to a unit that's to be considered exclusively for targeting (default NULL)
+ * @return, VoxelType (MapData.h)
+ *			 -1 hit nothing
  *			0-3 tile-part
  *			  4 unit
  *			  5 out-of-map
- *			-99 special case for calculateFOV() so as not to remove the last tile of the trajectory
+ *		   +/-1 special case for calculateFOV() to remove or not the last tile in the trajectory
  * VOXEL_EMPTY			// -1
  * VOXEL_FLOOR			//  0
  * VOXEL_WESTWALL		//  1
@@ -5228,15 +5230,16 @@ VoxelType TileEngine::plotLine(
 /**
  * Calculates a parabolic trajectory for thrown items.
  * @note Accuracy is NOT considered; this is a true path/trajectory.
- * @param originVoxel		- reference the origin in voxelspace
- * @param targetVoxel		- reference the target in voxelspace
+ * @param originVoxel	- reference the origin in voxelspace
+ * @param targetVoxel	- reference the target in voxelspace
  * @param storeTrj		- true will store the whole trajectory - otherwise it stores the last position only
  * @param trj			- pointer to a vector of Positions in which the trajectory will be stored
  * @param excludeUnit	- pointer to a unit to exclude - makes sure the trajectory does not hit the shooter itself
  * @param arc			- how high the parabola goes: 1.0 is almost straight throw, 3.0 is a very high throw, to throw over a fence for example
- * @param posDelta			- reference the deviation of the angles that should be taken into account (0,0,0) is perfection (default Position(0,0,0))
- * @return,  -1 hit nothing
- *			0-3 tile-part (floor / westwall / northwall / content)
+ * @param deltaVoxel	- reference the deviation of the angles that should be taken into account (0,0,0) is perfection (default Position(0,0,0))
+ * @return, VoxelType (MapData.h)
+ *			 -1 hit nothing
+ *			0-3 tile-part (floor / westwall / northwall / object)
  *			  4 unit
  *			  5 out-of-map
  * VOXEL_EMPTY			// -1
@@ -5254,7 +5257,7 @@ VoxelType TileEngine::plotParabola(
 		std::vector<Position>* const trj,
 		const BattleUnit* const excludeUnit,
 		const double arc,
-		const Position& posDelta) const
+		const Position& deltaVoxel) const
 {
 	//Log(LOG_INFO) << "TileEngine::plotParabola()";
 	const double ro = std::sqrt(static_cast<double>(
@@ -5271,8 +5274,8 @@ VoxelType TileEngine::plotParabola(
 				static_cast<double>(targetVoxel.y - originVoxel.y),
 				static_cast<double>(targetVoxel.x - originVoxel.x));
 
-	te += posDelta.x * M_PI / (ro * 2.);						// horizontal
-	fi += (posDelta.z + posDelta.y) * M_PI * arc / (ro * 14.);	// vertical
+	te += deltaVoxel.x * M_PI / (ro * 2.);							// horizontal
+	fi += (deltaVoxel.z + deltaVoxel.y) * M_PI * arc / (ro * 14.);	// vertical
 
 	const double
 		zA = std::sqrt(ro) * arc,
@@ -5481,19 +5484,20 @@ bool TileEngine::validateThrow(
  * @param voxel - reference the voxel to trace down
  * @return, z-coord of 'ground'
  */
-int TileEngine::castedShade(const Position& voxel) const
+int TileEngine::castShadow(const Position& voxel) const
 {
 	int startZ = voxel.z;
-	Position pos = voxel / Position(16,16,24);
 
-	const Tile* tile = _battleSave->getTile(pos);
+	Position posTile = voxel / Position(16,16,24);
+	const Tile* tile = _battleSave->getTile(posTile);
 	while (tile != NULL
 		&& tile->isVoid(false, false) == true
 		&& tile->getUnit() == NULL)
 	{
-		startZ = pos.z * 24;
-		--pos.z;
-		tile = _battleSave->getTile(pos);
+//		startZ = posTile.z * 24;
+		startZ = (posTile.z + 1) * 24; // kL
+		--posTile.z;
+		tile = _battleSave->getTile(posTile);
 	}
 
 	Position voxelTest = voxel;
@@ -5508,6 +5512,12 @@ int TileEngine::castedShade(const Position& voxel) const
 		if (voxelCheck(voxelTest) != VOXEL_EMPTY)
 			break;
 	}
+/*	retZ = startZ;
+	while (retZ != 0
+		&& voxelCheck(voxelTest) != VOXEL_EMPTY)
+	{
+		voxelTest.z = retZ--;
+	} */
 
 	return retZ;
 }
@@ -5554,8 +5564,9 @@ bool TileEngine::isVoxelVisible(const Position& voxel) const
  * @param excludeAllUnits	- true to NOT do checks on any unit (default false)
  * @param onlyVisible		- true to consider only visible units (default false)
  * @param excludeAllBut		- pointer to an only unit to be considered (default NULL)
- * @return,  -1 hit nothing
- *			0-3 tile-part (floor / westwall / northwall / content)
+ * @return, VoxelType (MapData.h)
+ *			 -1 hit nothing
+ *			0-3 tile-part (floor / westwall / northwall / object)
  *			  4 unit
  *			  5 out-of-map
  * VOXEL_EMPTY			// -1
@@ -5656,7 +5667,7 @@ VoxelType TileEngine::voxelCheck(
 	{
 		const BattleUnit* targetUnit = tile->getUnit();
 		if (targetUnit == NULL
-			&& tile->hasNoFloor(NULL) == true)
+			&& tile->hasNoFloor() == true)
 		{
 			tileBelow = _battleSave->getTile(tile->getPosition() + Position(0,0,-1));
 			if (tileBelow != NULL)
@@ -5966,7 +5977,7 @@ bool TileEngine::psiAttack(BattleAction* const action)
 						true);
 
 /*				// if all units from either faction are mind controlled - auto-end the mission.
-				if (Options::allowPsionicCapture == true && Options::battleAutoEnd == true && _battleSave->getSide() == FACTION_PLAYER)
+				if (Options::battleAllowPsionicCapture == true && Options::battleAutoEnd == true && _battleSave->getSide() == FACTION_PLAYER)
 				{
 					//Log(LOG_INFO) << ". . . . inside tallyUnits";
 					int liveAliens, liveSoldiers;
@@ -6669,18 +6680,22 @@ void TileEngine::setTrueTile(Tile* const tile)
 /**
  * Gets a valid target-unit given a Tile.
  * @param tile - pointer to a tile
- * @return, pointer to a unit
+ * @return, pointer to a unit (NULL if none)
  */
 BattleUnit* TileEngine::getTargetUnit(const Tile* const tile) const
 {
 	if (tile != NULL)
 	{
-		if (tile->getUnit() != NULL)
+		if (tile->getUnit() != NULL) // warning: Careful not to use this when UnitWalkBState has transient units placed.
 			return tile->getUnit();
 
-		const Tile* const tileBelow = _battleSave->getTile(tile->getPosition() - Position(0,0,-1));
-		if (tileBelow->getUnit() != NULL)
-			return tileBelow->getUnit();
+		if (tile->hasNoFloor() == true
+			&& tile->getPosition().z > 0)
+		{
+			const Tile* const tileBelow = _battleSave->getTile(tile->getPosition() - Position(0,0,-1));
+			if (tileBelow->getUnit() != NULL) // no safety.
+				return tileBelow->getUnit();
+		}
 	}
 
 	return NULL;

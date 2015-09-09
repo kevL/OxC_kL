@@ -18,7 +18,7 @@ OPT SDLKey keyOk, keyOkKeypad, keyCancel, keyScreenshot, keyFps, keyQuickLoad, k
 
 // Geoscape options
 OPT int geoClockSpeed, dogfightSpeed, geoScrollSpeed, geoDragScrollButton, geoscapeScale;
-OPT bool includePrimeStateInSavedLayout, anytimePsiTraining, weaponSelfDestruction, spendResearchedItems, craftLaunchAlways, globeSeasons, globeDetail, globeRadarLines, globeFlightPaths, globeAllRadarsOnBaseBuild,
+OPT bool includePrimeStateInSavedLayout, anytimePsiTraining, battleWeaponSelfDestruction, spendResearchedItems, craftLaunchAlways, globeSeasons, globeDetail, globeRadarLines, globeFlightPaths, globeAllRadarsOnBaseBuild,
 	storageLimitsEnforced, canSellLiveAliens, canTransferCraftsWhileAirborne, canManufactureMoreItemsPerHour, customInitialBase, aggressiveRetaliation, geoDragScrollInvert,
 	allowBuildingQueue, showFundsOnGeoscape, psiStrengthEval, allowPsiStrengthImprovement, fieldPromotions;
 OPT SDLKey keyGeoLeft, keyGeoRight, keyGeoUp, keyGeoDown, keyGeoZoomIn, keyGeoZoomOut, keyGeoSpeed1, keyGeoSpeed2, keyGeoSpeed3, keyGeoSpeed4, keyGeoSpeed5, keyGeoSpeed6,
@@ -30,8 +30,8 @@ OPT ScrollType battleEdgeScroll;
 OPT PathPreview battlePreviewPath;
 OPT int battleScrollSpeed, battleDragScrollButton, battleFireSpeed, battleXcomSpeed, battleAlienSpeed, battleExplosionHeight, battlescapeScale;
 OPT bool traceAI, sneakyAI, battleInstantGrenade, battleNotifyDeath, battleTooltips, battleHairBleach, battleAutoEnd,
-	strafe, forceFire, showMoreStatsInInventoryView, allowPsionicCapture, skipNextTurnScreen, battleDragScrollInvert,
-	battleUFOExtenderAccuracy, battleConfirmFireMode, battleSmoothCamera, TFTDDamage, battleRangeBasedAccuracy, alienPanicMessages, alienBleeding;
+	battleStrafe, battleForceFire, showMoreStatsInInventoryView, battleAllowPsionicCapture, skipNextTurnScreen, battleDragScrollInvert,
+	battleUFOExtenderAccuracy, battleConfirmFireMode, battleSmoothCamera, battleTFTDDamage, battleRangeBasedAccuracy, battleAlienPanicMessages, battleAlienBleeding;
 OPT SDLKey keyBattleLeft, keyBattleRight, keyBattleUp, keyBattleDown, keyBattleLevelUp, keyBattleLevelDown, keyBattleCenterUnit, keyBattlePrevUnit, keyBattleNextUnit, keyBattleDeselectUnit,
 	keyBattleUseLeftHand, keyBattleUseRightHand, keyBattleInventory, keyBattleMap, keyBattleOptions, keyBattleEndTurn, keyBattleAbort, keyBattleStats, keyBattleKneel,
 	keyBattleReserveKneel, keyBattleReload, keyBattlePersonalLighting, keyBattleReserveNone, keyBattleReserveSnap, keyBattleReserveAimed, keyBattleReserveAuto,

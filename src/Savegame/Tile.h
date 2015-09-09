@@ -157,7 +157,7 @@ protected:
 				MovementType moveType) const;
 
 		/// Checks if this tile has a floor.
-		bool hasNoFloor(const Tile* const tileBelow) const;
+		bool hasNoFloor(const Tile* const tileBelow = NULL) const;
 
 		/// Checks if the Tile is a big wall.
 		bool isBigWall() const;

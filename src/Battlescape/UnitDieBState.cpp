@@ -304,7 +304,7 @@ void UnitDieBState::convertToCorpse() // private.
 	// move inventory from unit to the ground for non-large units
 	const bool drop = unitSize == 0
 				   && carried == false
-				   && (Options::weaponSelfDestruction == false
+				   && (Options::battleWeaponSelfDestruction == false
 						|| _unit->getOriginalFaction() != FACTION_HOSTILE
 						|| _unit->getStatus() == STATUS_UNCONSCIOUS);
 	if (drop == true)

@@ -45,7 +45,7 @@ namespace Options
 {
 
 #define OPT
-	#include "Options.inc.h"
+#include "Options.inc.h"
 #undef OPT
 
 
@@ -162,9 +162,9 @@ void create()
 	// todo: ask grussel how badly i messed this up.
 	#include "TargetConditionals.h"
 	#if TARGET_IPHONE_SIMULATOR || TARGET_OS_IPHONE
-		_info.push_back(OptionInfo("maximizeInfoScreens", &maximizeInfoScreens, true, "STR_MAXIMIZE_INFO_SCREENS", "STR_GENERAL"));
+	_info.push_back(OptionInfo("maximizeInfoScreens", &maximizeInfoScreens, true, "STR_MAXIMIZE_INFO_SCREENS", "STR_GENERAL"));
 	#else
-		_info.push_back(OptionInfo("maximizeInfoScreens", &maximizeInfoScreens, false, "STR_MAXIMIZE_INFO_SCREENS", "STR_GENERAL"));
+	_info.push_back(OptionInfo("maximizeInfoScreens", &maximizeInfoScreens, false, "STR_MAXIMIZE_INFO_SCREENS", "STR_GENERAL"));
 	#endif
 #else
 	_info.push_back(OptionInfo("maximizeInfoScreens", &maximizeInfoScreens, false, "STR_MAXIMIZE_INFO_SCREENS", "STR_GENERAL"));
@@ -196,16 +196,16 @@ void create()
 	_info.push_back(OptionInfo("battleAutoEnd", &battleAutoEnd, false, "STR_BATTLEAUTOEND", "STR_BATTLESCAPE"));
 	_info.push_back(OptionInfo("battleSmoothCamera", &battleSmoothCamera, false, "STR_BATTLESMOOTHCAMERA", "STR_BATTLESCAPE"));
 	_info.push_back(OptionInfo("battleConfirmFireMode", &battleConfirmFireMode, false, "STR_BATTLECONFIRMFIREMODE", "STR_BATTLESCAPE"));
-	_info.push_back(OptionInfo("weaponSelfDestruction", &weaponSelfDestruction, false, "STR_WEAPONSELFDESTRUCTION", "STR_BATTLESCAPE"));
-	_info.push_back(OptionInfo("allowPsionicCapture", &allowPsionicCapture, false, "STR_ALLOWPSIONICCAPTURE", "STR_BATTLESCAPE"));
+	_info.push_back(OptionInfo("battleWeaponSelfDestruction", &battleWeaponSelfDestruction, false, "STR_WEAPONSELFDESTRUCTION", "STR_BATTLESCAPE"));
+	_info.push_back(OptionInfo("battleAllowPsionicCapture", &battleAllowPsionicCapture, false, "STR_ALLOWPSIONICCAPTURE", "STR_BATTLESCAPE"));
 	_info.push_back(OptionInfo("allowPsiStrengthImprovement", &allowPsiStrengthImprovement, false, "STR_ALLOWPSISTRENGTHIMPROVEMENT", "STR_BATTLESCAPE"));
-	_info.push_back(OptionInfo("strafe", &strafe, false, "STR_STRAFE", "STR_BATTLESCAPE"));
-	_info.push_back(OptionInfo("forceFire", &forceFire, true, "STR_FORCE_FIRE", "STR_BATTLESCAPE"));
+	_info.push_back(OptionInfo("battleStrafe", &battleStrafe, false, "STR_STRAFE", "STR_BATTLESCAPE"));
+	_info.push_back(OptionInfo("battleForceFire", &battleForceFire, true, "STR_FORCE_FIRE", "STR_BATTLESCAPE"));
 	_info.push_back(OptionInfo("skipNextTurnScreen", &skipNextTurnScreen, false, "STR_SKIPNEXTTURNSCREEN", "STR_BATTLESCAPE"));
-	_info.push_back(OptionInfo("TFTDDamage", &TFTDDamage, false, "STR_TFTDDAMAGE", "STR_BATTLESCAPE"));
+	_info.push_back(OptionInfo("battleTFTDDamage", &battleTFTDDamage, false, "STR_TFTDDAMAGE", "STR_BATTLESCAPE"));
 	_info.push_back(OptionInfo("battleRangeBasedAccuracy", &battleRangeBasedAccuracy, false, "STR_BATTLERANGEBASEDACCURACY", "STR_BATTLESCAPE")); // kL
-	_info.push_back(OptionInfo("alienPanicMessages", &alienPanicMessages, true, "STR_ALIENPANICMESSAGES", "STR_BATTLESCAPE"));
-	_info.push_back(OptionInfo("alienBleeding", &alienBleeding, false, "STR_ALIENBLEEDING", "STR_BATTLESCAPE"));
+	_info.push_back(OptionInfo("battleAlienPanicMessages", &battleAlienPanicMessages, true, "STR_ALIENPANICMESSAGES", "STR_BATTLESCAPE"));
+	_info.push_back(OptionInfo("battleAlienBleeding", &battleAlienBleeding, false, "STR_ALIENBLEEDING", "STR_BATTLESCAPE"));
 
 	// controls
 	_info.push_back(OptionInfo("keyOk", &keyOk, SDLK_RETURN, "STR_OK", "STR_GENERAL"));

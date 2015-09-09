@@ -244,7 +244,7 @@ private:
 				std::vector<Position>* const trj,
 				const BattleUnit* const excludeUnit,
 				const double arc,
-				const Position& posDelta = Position(0,0,0)) const;
+				const Position& deltaVoxel = Position(0,0,0)) const;
 		/// Validates a throwing action.
 		bool validateThrow(
 				const BattleAction& action,
@@ -295,7 +295,7 @@ private:
 		int faceWindow(const Position& pos) const;
 
 		/// Calculates the z voxel for shadows.
-		int castedShade(const Position& voxel) const;
+		int castShadow(const Position& voxel) const;
 
 		/// Checks the visibility of a given voxel.
 //		bool isVoxelVisible(const Position& voxel) const;

@@ -57,25 +57,25 @@ const double
  * @param res			- pointer to ResourcePack
  * @param battleSave	- pointer to SavedBattleGame
  * @param action		- reference the BattleAction (BattlescapeGame.h)
- * @param origin		- reference position that this projectile originates at in tilespace
- * @param targetVoxel	- reference position that this projectile is targeted at in voxelspace
+ * @param posOrigin		- reference position that this projectile originates at in tile-space
+ * @param targetVoxel	- reference position that this projectile is targeted at in voxel-space
  */
 Projectile::Projectile(
 		const ResourcePack* const res,
 		const SavedBattleGame* const battleSave,
 		const BattleAction& action,
-		const Position& origin,
+		const Position& posOrigin,
 		const Position& targetVoxel)
 	:
 		_battleSave(battleSave),
 		_action(action),
-		_origin(origin),
+		_posOrigin(posOrigin),
 		_targetVoxel(targetVoxel),
 		_trjId(0),
 		_bulletSprite(-1)
 {
 	//Log(LOG_INFO) << "\n";
-	//Log(LOG_INFO) << "cTor origin = " << origin;
+	//Log(LOG_INFO) << "cTor origin = " << posOrigin;
 	//Log(LOG_INFO) << "cTor target = " << targetVoxel << " tSpace " << (targetVoxel / Position(16,16,24));
 
 	//Log(LOG_INFO) << "Projectile cTor";
@@ -146,8 +146,9 @@ Projectile::~Projectile()
  * @note This is a wrapper for calculateShot() below - it calculates and
  * passes on the acting unit's originVoxel.
  * @param accuracy - accuracy of the projectile's trajectory (a battleunit's accuracy)
- * @return,  -1 nothing to hit / no line of fire
- *			0-3 tile-part (floor / westwall / northwall / content)
+ * @return, VoxelType (MapData.h)
+ *			 -1 nothing to hit / no line of fire
+ *			0-3 tile-part (floor / westwall / northwall / object)
  *			  4 unit
  *			  5 out-of-map
  * VOXEL_EMPTY			// -1
@@ -164,7 +165,7 @@ VoxelType Projectile::calculateShot(double accuracy)
 					accuracy,
 					_battleSave->getTileEngine()->getOriginVoxel(
 															_action,
-															_battleSave->getTile(_origin)));
+															_battleSave->getTile(_posOrigin)));
 }
 
 /**
@@ -174,8 +175,9 @@ VoxelType Projectile::calculateShot(double accuracy)
  * trajectory that is actually pathed.
  * @param accuracy		- accuracy of the projectile's trajectory (a BattleUnit's accuracy)
  * @param originVoxel	- for Blaster launch; ie trajectories that start at a position other than unit's
- * @return,  -1 nothing to hit / no line of fire
- *			0-3 tile-part (floor / westwall / northwall / content)
+ * @return, VoxelType (MapData.h)
+ *			 -1 nothing to hit / no line of fire
+ *			0-3 tile-part (floor / westwall / northwall / object)
  *			  4 unit
  *			  5 out-of-map
  * VOXEL_EMPTY			// -1
@@ -200,7 +202,7 @@ VoxelType Projectile::calculateShot(
 		&& _action.type != BA_LAUNCH
 		&& _battleSave->getBattleGame()->getPanicHandled() == true
 		&& ((SDL_GetModState() & KMOD_CTRL) == 0
-			|| Options::forceFire == false))
+			|| Options::battleForceFire == false))
 	{
 		//Log(LOG_INFO) << ". autoshotCount[0] = " << _action.autoShotCount;
 		const VoxelType voxelType = _battleSave->getTileEngine()->plotLine(
@@ -272,21 +274,15 @@ VoxelType Projectile::calculateShot(
 	_trj.clear();
 	//Log(LOG_INFO) << ". autoshotCount[1] = " << _action.autoShotCount;
 
-//	bool extendLine = true;
-	// even guided missiles drift, but how much is based on
-	// the shooter's faction, rather than accuracy.
+	// guided missiles drift, but how much is based on the shooter's faction rather than accuracy.
 /*	if (_action.type == BA_LAUNCH)
 	{
 		extendLine = _action.waypoints.size() < 2;
 		if (_action.actor->getFaction() == FACTION_PLAYER) accuracy = 0.60;
 		else accuracy = 0.55;
 	} */
-
-	if (targetUnit != NULL
-		&& targetUnit->isDashing() == true)
-	{
-		accuracy -= 0.16;
-	}
+/*	if (targetUnit != NULL && targetUnit->isDashing() == true)
+		accuracy -= 0.16; */
 
 	//Log(LOG_INFO) << "\n";
 	//Log(LOG_INFO) << ". preAcu target = " << _targetVoxel << " tSpace " << (_targetVoxel / Position(16,16,24));
@@ -325,8 +321,9 @@ VoxelType Projectile::calculateShot(
  * Calculates the trajectory for a parabolic path.
  * @note Accuracy affects the VoxelType result.
  * @param accuracy - accuracy of the projectile's trajectory (a battleunit's accuracy)
- * @return,  -1 nothing to hit / no line of fire
- *			0-3 tile-part (floor / westwall / northwall / content)
+ * @return, VoxelType (MapData.h)
+ *			 -1 nothing to hit / no line of fire
+ *			0-3 tile-part (floor / westwall / northwall / object)
  *			  4 unit
  *			  5 out-of-map
  * VOXEL_EMPTY			// -1
@@ -340,40 +337,35 @@ VoxelType Projectile::calculateShot(
 VoxelType Projectile::calculateThrow(double accuracy)
 {
 	//Log(LOG_INFO) << "Projectile calculateThrow()";
-/*	BattleUnit* bu = _battleSave->getTile(_origin)->getUnit();
+/*	BattleUnit* bu = _battleSave->getTile(_posOrigin)->getUnit();
 	if (bu == NULL)
 		bu = _battleSave->getTile(Position(
-										_origin.x,
-										_origin.y,
-										_origin.z - 1))->getUnit(); */
+										_posOrigin.x,
+										_posOrigin.y,
+										_posOrigin.z - 1))->getUnit(); */
 
-	Position targetVoxel = Position( // determine the target voxel, aim at the center of the floor
-								_action.target.x * 16 + 8,
-								_action.target.y * 16 + 8,
-								_action.target.z * 24 + 2 - _battleSave->getTile(_action.target)->getTerrainLevel());
+//	const Position targetVoxel = Position(
+//									_action.target.x * 16 + 8,
+//									_action.target.y * 16 + 8,
+//									_action.target.z * 24 + 2 - _battleSave->getTile(_action.target)->getTerrainLevel());
 
-	if (_action.type != BA_THROW) // ie. celatid acid-spit
-	{
-		const BattleUnit* targetUnit = _battleSave->getTile(_action.target)->getUnit();
+//	if (_action.type != BA_THROW) // ie. celatid acid-spit
+//	{
+//		const BattleUnit* const targetUnit = _battleSave->getTileEngine()->getTargetUnit(_battleSave->getTile(_action.target));
+/*		const BattleUnit* targetUnit = _battleSave->getTile(_action.target)->getUnit();
 		if (targetUnit == NULL
 			&& _action.target.z > 0
-			&& _battleSave->getTile(_action.target)->hasNoFloor(NULL))
+			&& _battleSave->getTile(_action.target)->hasNoFloor())
 		{
-			targetUnit = _battleSave->getTile(Position(
-													_action.target.x,
-													_action.target.y,
-													_action.target.z - 1))->getUnit();
+			targetUnit = _battleSave->getTile(Position(_action.target.x, _action.target.y, _action.target.z - 1))->getUnit();
 		}
-
 		if (targetUnit != NULL)
 		{
-			targetVoxel.z += targetUnit->getHeight() / 2
-						   + targetUnit->getFloatHeight();
-
+			targetVoxel.z += targetUnit->getHeight() / 2 + targetUnit->getFloatHeight();
 			if (targetUnit->isDashing() == true)
 				accuracy -= 0.16; // acid-spit, arcing shot.
-		}
-	}
+		} */
+//	}
 
 
 	const Position originVoxel = _battleSave->getTileEngine()->getOriginVoxel(_action);
@@ -382,7 +374,7 @@ VoxelType Projectile::calculateThrow(double accuracy)
 	if (_battleSave->getTileEngine()->validateThrow(
 												_action,
 												originVoxel,
-												targetVoxel,
+												_targetVoxel, // use targetVoxel from ProjectileFlyBState instead of the arbitrary one that's been commented-out above^ Tks.
 												&arc,
 												&voxelType) == true)
 	{
@@ -392,24 +384,24 @@ VoxelType Projectile::calculateThrow(double accuracy)
 		{
 			_trj.clear();
 
-			Position posDelta = targetVoxel;
+			Position deltaVoxel = _targetVoxel;
 			applyAccuracy(
 						originVoxel,
-						&posDelta,
+						&deltaVoxel,
 						accuracy,
 						_battleSave->getTile(_action.target));
 //						true,
 //						false);
 
-			posDelta -= targetVoxel;
+			deltaVoxel -= _targetVoxel;
 			test = _battleSave->getTileEngine()->plotParabola(
 															originVoxel,
-															targetVoxel,
+															_targetVoxel,
 															true,
 															&_trj,
 															_action.actor,
 															arc,
-															posDelta);
+															deltaVoxel);
 
 			// Don't let thrown items land on diagonal bigwalls.
 			// this prevents exploiting blast-propagation routine to both sides of a bigWall.diag
@@ -680,7 +672,7 @@ void Projectile::applyAccuracy( // private.
 		} */
 
 /**
- * Gets distance modifiers to accuracy.
+ * Gets distance modifier to accuracy.
  * @param itRule	- pointer to RuleItem of weapon
  * @param dist		- distance to target in tilespace
  * @return, linear accuracy modification
@@ -689,28 +681,26 @@ double Projectile::rangeAccuracy( // private.
 		const RuleItem* const itRule,
 		int dist) const
 {
-	int retAccu = 0;
+	const int shortRange = itRule->getMinRange();
+	if (dist < shortRange)
+		return static_cast<double>((shortRange - dist) * itRule->getDropoff()) * PCT;
 
-	const int shortLimit = itRule->getMinRange();
-	int longLimit;
-
+	int longRange;
 	switch (_action.type)
 	{
-		case BA_SNAPSHOT:	longLimit = itRule->getSnapRange();	break;
-		case BA_AUTOSHOT:	longLimit = itRule->getAutoRange();	break;
-		default:			longLimit = itRule->getAimRange();
+		case BA_SNAPSHOT: longRange = itRule->getSnapRange(); break;
+		case BA_AUTOSHOT: longRange = itRule->getAutoRange(); break;
+		default:		  longRange = itRule->getAimRange();
 	}
 
-	if (dist < shortLimit)
-		retAccu = (shortLimit - dist) * itRule->getDropoff();
-	else if (longLimit < dist)
-		retAccu = (dist - longLimit) * itRule->getDropoff();
+	if (longRange < dist)
+		return static_cast<double>((dist - longRange) * itRule->getDropoff()) * PCT;
 
-	return static_cast<double>(retAccu) * PCT;
+	return 0.;
 }
 
 /**
- * Gets target-terrain and/or target-unit modifiers to accuracy.
+ * Gets target-terrain and/or target-unit modifier to accuracy.
  * @param targetUnit	- pointer to a BattleUnit
  * @param elevation		- vertical offset of target in voxels
  * @param tileTarget	- pointer to a Tile (NULL unless force-firing on tile-parts)
@@ -736,7 +726,7 @@ double Projectile::targetAccuracy( // private.
 
 	if (tileTarget != NULL)
 	{
-		retAccu -= tileTarget->getSmoke(); // TODO: add Smoke-values [per TE::visible()] for tiles enroute.
+		retAccu -= tileTarget->getSmoke(); // TODO: add Smoke-values for tiles enroute [per TE::visible()].
 		retAccu -= tileTarget->getShade();
 	}
 

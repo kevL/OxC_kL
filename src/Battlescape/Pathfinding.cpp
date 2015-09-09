@@ -277,7 +277,7 @@ void Pathfinding::calculate(
 						 && unit->getUnitRules()->isMechanical();
 
 		_strafe = strafeRejected == false
-			   && Options::strafe == true
+			   && Options::battleStrafe == true
 			   && ((_Ctrl == true
 						&& isMech == false)
 					|| (_Alt == true
@@ -331,7 +331,7 @@ void Pathfinding::calculate(
 						maxTuCost,
 						true); // <- sets '_strafe' FALSE so loop never gets back in here.
 			}
-			else if (Options::strafe == true
+			else if (Options::battleStrafe == true
 				&& _Ctrl == true
 				&& unit->getGeoscapeSoldier() != NULL
 				&& (_strafe == false
@@ -965,7 +965,7 @@ int Pathfinding::getTuCostPf(
 			{
 				// if not fell down and there is no floor can't know the TUs so it defaults to 4
 				if (fall == false
-					&& tileDest->hasNoFloor(NULL) == true)
+					&& tileDest->hasNoFloor() == true)
 				{
 					cost = 4;
 				}
@@ -1676,7 +1676,7 @@ BIGWALL_E_S		// 8
 				return true; // AI knows only spotted xCom units.
 			}
 		}
-		else if (tile->hasNoFloor(NULL) == true	// this whole section is devoted to making large units
+		else if (tile->hasNoFloor() == true	// this whole section is devoted to making large units
 			&& _mType != MT_FLY)				// not take part in any kind of falling behaviour
 		{
 			Position pos = tile->getPosition();
@@ -1705,7 +1705,7 @@ BIGWALL_E_S		// 8
 				}
 
 				// not gonna fall any further so stop checking.
-				if (testTile->hasNoFloor(NULL) == false)
+				if (testTile->hasNoFloor() == false)
 					break;
 
 				--pos.z;

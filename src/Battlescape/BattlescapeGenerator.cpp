@@ -3134,7 +3134,7 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*>* const scri
 
 /**
  * Generates a map based on the base's layout.
- * @note This doesn't drill or fill with dirt, the script must do that.
+ * @note This doesn't drill or fill with dirt - the script must do that.
  */
 void BattlescapeGenerator::generateBaseMap() // private.
 {
@@ -3198,7 +3198,7 @@ void BattlescapeGenerator::generateBaseMap() // private.
 							if (_battleSave->getTile(Position(
 															x * 10,
 															y * 10,
-															groundLevel))->hasNoFloor(NULL) == false)
+															groundLevel))->hasNoFloor() == false)
 							{
 								break;
 							}
