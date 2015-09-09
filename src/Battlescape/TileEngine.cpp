@@ -4943,11 +4943,11 @@ void TileEngine::openAdjacentDoors( // private.
 
 /**
  * Closes ufo doors.
- * @return, # of doors that get closed
+ * @return, qty of doors that got closed
  */
 int TileEngine::closeUfoDoors() const
 {
-	int closed = 0;
+	int retClosed = 0;
 
 	for (size_t // prepare a list of tiles on fire/smoke & close any ufo doors
 			i = 0;
@@ -4961,8 +4961,8 @@ int TileEngine::closeUfoDoors() const
 
 			const Tile
 				* const tile = _battleSave->getTiles()[i],
-				* const tileNorth = _battleSave->getTile(tile->getPosition() + Position( 0,-1, 0)),
-				* const tileWest  = _battleSave->getTile(tile->getPosition() + Position(-1, 0, 0));
+				* const tileNorth = _battleSave->getTile(tile->getPosition() + Position( 0,-1,0)),
+				* const tileWest  = _battleSave->getTile(tile->getPosition() + Position(-1, 0,0));
 			if ((tile->isUfoDoorOpen(O_NORTHWALL) == true
 					&& tileNorth != NULL
 					&& tileNorth->getUnit() != NULL // probly not needed.
@@ -4976,10 +4976,10 @@ int TileEngine::closeUfoDoors() const
 			}
 		}
 
-		closed += _battleSave->getTiles()[i]->closeUfoDoor();
+		retClosed += _battleSave->getTiles()[i]->closeUfoDoor();
 	}
 
-	return closed;
+	return retClosed;
 }
 
 /**
@@ -5016,22 +5016,24 @@ VoxelType TileEngine::plotLine(
 		const bool onlyVisible,
 		const BattleUnit* const excludeAllBut) const
 {
-	VoxelType ret;
+	VoxelType voxelType;
 	bool
 		swap_xy,
 		swap_xz;
 	int
-		x,x0,x1, delta_x,step_x,
-		y,y0,y1, delta_y,step_y,
-		z,z0,z1, delta_z,step_z,
+		x,x0,x1, delta_x, step_x,
+		y,y0,y1, delta_y, step_y,
+		z,z0,z1, delta_z, step_z,
 
-		drift_xy,drift_xz,
+		drift_xy,
+		drift_xz,
 
 		cx,cy,cz,
 
-		horiBlock,vertBlock;
+		horiBlock,
+		vertBlock;
 
-	Position lastPoint (origin); // init.
+	Position posLast (origin); // init.
 
 
 	x0 = origin.x; // start & end points
@@ -5046,25 +5048,26 @@ VoxelType TileEngine::plotLine(
 	swap_xy = std::abs(y1 - y0) > std::abs(x1 - x0); // 'steep' xy Line, make longest delta x plane
 	if (swap_xy == true)
 	{
-		std::swap(x0, y0);
-		std::swap(x1, y1);
+		std::swap(x0,y0);
+		std::swap(x1,y1);
 	}
 
 	swap_xz = std::abs(z1 - z0) > std::abs(x1 - x0); // do same for xz
 	if (swap_xz == true)
 	{
-		std::swap(x0, z0);
-		std::swap(x1, z1);
+		std::swap(x0,z0);
+		std::swap(x1,z1);
 	}
 
 	delta_x = std::abs(x1 - x0); // delta is Length in each plane
 	delta_y = std::abs(y1 - y0);
 	delta_z = std::abs(z1 - z0);
 
-	drift_xy = drift_xz = delta_x / 2;	// drift controls when to step in 'shallow' planes;
-//	drift_xz = delta_x / 2;				// starting value keeps Line centered
+	drift_xy =				// drift controls when to step in 'shallow' planes;
+	drift_xz = delta_x / 2;	// starting value keeps Line centered
 
-	step_x = step_y = step_z = 1; // direction of Line
+	step_x =				// direction of Line
+	step_y = step_z = 1;
 	if (x0 > x1) step_x = -1;
 	if (y0 > y1) step_y = -1;
 	if (z0 > z1) step_z = -1;
@@ -5076,14 +5079,6 @@ VoxelType TileEngine::plotLine(
 			x != x1 + step_x;
 			x += step_x)
 	{
-/*		if (x < 0 || y < 0 || z < 0
-			|| x > _battleSave->getMapSizeX() * 16
-			|| y > _battleSave->getMapSizeY() * 16
-			|| z > _battleSave->getMapSizeZ() * 24)
-		{
-			break;
-		} */
-
 		cx = x; cy = y; cz = z; // copy position
 		if (swap_xz == true) std::swap(cx,cz); // unswap (in reverse)
 		if (swap_xy == true) std::swap(cx,cy);
@@ -5096,26 +5091,26 @@ VoxelType TileEngine::plotLine(
 
 		if (doVoxelCheck == true) // passes through this voxel, for Unit visibility & LoS/LoF
 		{
-			ret = voxelCheck(
-						Position(cx,cy,cz),
-						excludeUnit,
-						false,
-						onlyVisible,
-						excludeAllBut);
+			voxelType = voxelCheck(
+								Position(cx,cy,cz),
+								excludeUnit,
+								false,
+								onlyVisible,
+								excludeAllBut);
 
-			if (ret != VOXEL_EMPTY) // hit.
+			if (voxelType != VOXEL_EMPTY) // hit.
 			{
 				if (trj != NULL) // store the position of impact
 					trj->push_back(Position(cx,cy,cz));
 
-				return ret;
+				return voxelType;
 			}
 		}
 		else // for Terrain visibility, ie. FoV / Fog of War.
 		{
 			Tile
-				* const startTile = _battleSave->getTile(lastPoint),
-				* const endTile = _battleSave->getTile(Position(cx,cy,cz));
+				* const tileStart = _battleSave->getTile(posLast),
+				* const tileDest = _battleSave->getTile(Position(cx,cy,cz));
 
 /*			if (_battleSave->getSelectedUnit()->getId() == 389)
 			{
@@ -5124,18 +5119,18 @@ VoxelType TileEngine::plotLine(
 			} */
 
 			horiBlock = horizontalBlockage(
-										startTile,
-										endTile,
+										tileStart,
+										tileDest,
 										DT_NONE);
 			vertBlock = verticalBlockage(
-										startTile,
-										endTile,
+										tileStart,
+										tileDest,
 										DT_NONE);
 			// kL_TEST:
 /*			BattleUnit* selUnit = _battleSave->getSelectedUnit();
 			if (selUnit
 				&& selUnit->getId() == 389
-				&& startTile != endTile)
+				&& tileStart != tileDest)
 			{
 //				Position posUnit = selUnit->getPosition();
 //				if ((posUnit.x == cx
@@ -5143,14 +5138,13 @@ VoxelType TileEngine::plotLine(
 //					(posUnit.y == cy
 //						&& std::abs(posUnit.x - cx) > 4))
 				{
-					Log(LOG_INFO) << ". start " << lastPoint << " hori = " << horiBlock;
+					Log(LOG_INFO) << ". start " << posLast << " hori = " << horiBlock;
 					Log(LOG_INFO) << ". . end " << Position(cx,cy,cz) << " vert = " << vertBlock;
 				}
 			} */ // kL_TEST_end.
 
-			// TODO: The returns here should be mapped to something more
-			// meaningful for passing back to calculateFOV(), which is the only
-			// function that uses this quirky bit.
+			// TODO: These returns should be mapped to something more meaningful before passing
+			// back to calculateFOV() - which is the only call that uses this quirky bit.
 			if (horiBlock < 0) // hit content-object
 			{
 				if (vertBlock < 1)
@@ -5162,10 +5156,10 @@ VoxelType TileEngine::plotLine(
 
 			horiBlock += vertBlock;
 			if (horiBlock != 0) // horiBlock > 0)
-				return VOXEL_WESTWALL; // 1 <- this might need to be +1 OR -1 .....
+				return VOXEL_WESTWALL; // 1 <- this might need to be +1 OR -1 .... but i doubt it.
 //				return horiBlock;
 
-			lastPoint = Position(cx,cy,cz);
+			posLast = Position(cx,cy,cz);
 		}
 
 		drift_xy = drift_xy - delta_y; // update progress in other planes
@@ -5182,19 +5176,19 @@ VoxelType TileEngine::plotLine(
 				if (swap_xz == true) std::swap(cx,cz);
 				if (swap_xy == true) std::swap(cx,cy);
 
-				ret = voxelCheck(
-							Position(cx,cy,cz),
-							excludeUnit,
-							false,
-							onlyVisible,
-							excludeAllBut);
+				voxelType = voxelCheck(
+									Position(cx,cy,cz),
+									excludeUnit,
+									false,
+									onlyVisible,
+									excludeAllBut);
 
-				if (ret != VOXEL_EMPTY)
+				if (voxelType != VOXEL_EMPTY)
 				{
 					if (trj != NULL)
 						trj->push_back(Position(cx,cy,cz)); // store the position of impact
 
-					return ret;
+					return voxelType;
 				}
 			}
 		}
@@ -5210,19 +5204,19 @@ VoxelType TileEngine::plotLine(
 				if (swap_xz == true) std::swap(cx,cz);
 				if (swap_xy == true) std::swap(cx,cy);
 
-				ret = voxelCheck(
-							Position(cx,cy,cz),
-							excludeUnit,
-							false,
-							onlyVisible,
-							excludeAllBut);
+				voxelType = voxelCheck(
+									Position(cx,cy,cz),
+									excludeUnit,
+									false,
+									onlyVisible,
+									excludeAllBut);
 
-				if (ret != VOXEL_EMPTY)
+				if (voxelType != VOXEL_EMPTY)
 				{
 					if (trj != NULL) // store the position of impact
 						trj->push_back(Position(cx,cy,cz));
 
-					return ret;
+					return voxelType;
 				}
 			}
 		}
@@ -5234,14 +5228,13 @@ VoxelType TileEngine::plotLine(
 /**
  * Calculates a parabolic trajectory for thrown items.
  * @note Accuracy is NOT considered; this is a true path/trajectory.
- * @param origin		- reference the origin in voxelspace
- * @param target		- reference the target in voxelspace
+ * @param originVoxel		- reference the origin in voxelspace
+ * @param targetVoxel		- reference the target in voxelspace
  * @param storeTrj		- true will store the whole trajectory - otherwise it stores the last position only
  * @param trj			- pointer to a vector of Positions in which the trajectory will be stored
  * @param excludeUnit	- pointer to a unit to exclude - makes sure the trajectory does not hit the shooter itself
  * @param arc			- how high the parabola goes: 1.0 is almost straight throw, 3.0 is a very high throw, to throw over a fence for example
- * @param acu			- the deviation of the angles that should be taken into account. 1.0 is perfection. // now superceded by @param delta...
- * @param delta			- reference the deviation of the angles that should be taken into account, (0,0,0) is perfection (default Position(0,0,0))
+ * @param posDelta			- reference the deviation of the angles that should be taken into account (0,0,0) is perfection (default Position(0,0,0))
  * @return,  -1 hit nothing
  *			0-3 tile-part (floor / westwall / northwall / content)
  *			  4 unit
@@ -5255,50 +5248,51 @@ VoxelType TileEngine::plotLine(
  * VOXEL_OUTOFBOUNDS	//  5
  */
 VoxelType TileEngine::plotParabola(
-		const Position& origin,
-		const Position& target,
+		const Position& originVoxel,
+		const Position& targetVoxel,
 		const bool storeTrj,
 		std::vector<Position>* const trj,
 		const BattleUnit* const excludeUnit,
 		const double arc,
-		const Position& delta) const
+		const Position& posDelta) const
 {
 	//Log(LOG_INFO) << "TileEngine::plotParabola()";
 	const double ro = std::sqrt(static_cast<double>(
-					 (target.x - origin.x) * (target.x - origin.x)
-				   + (target.y - origin.y) * (target.y - origin.y)
-				   + (target.z - origin.z) * (target.z - origin.z)));
-	double
-		fi = std::acos(static_cast<double>(target.z - origin.z) / ro),
-		te = std::atan2(
-				static_cast<double>(target.y - origin.y),
-				static_cast<double>(target.x - origin.x));
+					 (targetVoxel.x - originVoxel.x) * (targetVoxel.x - originVoxel.x)
+				   + (targetVoxel.y - originVoxel.y) * (targetVoxel.y - originVoxel.y)
+				   + (targetVoxel.z - originVoxel.z) * (targetVoxel.z - originVoxel.z)));
 
 	if (AreSame(ro, 0.)) // jic.
 		return VOXEL_EMPTY;
 
-	te += delta.x * M_PI / (ro * 2.);						// horizontal
-	fi += (delta.z + delta.y) * M_PI * arc / (ro * 14.);	// vertical
+	double
+		fi = std::acos(static_cast<double>(targetVoxel.z - originVoxel.z) / ro),
+		te = std::atan2(
+				static_cast<double>(targetVoxel.y - originVoxel.y),
+				static_cast<double>(targetVoxel.x - originVoxel.x));
+
+	te += posDelta.x * M_PI / (ro * 2.);						// horizontal
+	fi += (posDelta.z + posDelta.y) * M_PI * arc / (ro * 14.);	// vertical
 
 	const double
 		zA = std::sqrt(ro) * arc,
 		zK = (4. * zA) / (ro * ro);
 
 	int
-		x = origin.x,
-		y = origin.y,
-		z = origin.z,
+		x = originVoxel.x,
+		y = originVoxel.y,
+		z = originVoxel.z,
 		i = 8;
 
 	Position
-		pos1 = Position(x,y,z),
-		pos2;
+		start = Position(x,y,z),
+		dest;
 
 	while (z > 0)
 	{
-		x = static_cast<int>(static_cast<double>(origin.x) + static_cast<double>(i) * std::cos(te) * std::sin(fi));
-		y = static_cast<int>(static_cast<double>(origin.y) + static_cast<double>(i) * std::sin(te) * std::sin(fi));
-		z = static_cast<int>(static_cast<double>(origin.z) + static_cast<double>(i) * std::cos(fi)
+		x = static_cast<int>(static_cast<double>(originVoxel.x) + static_cast<double>(i) * std::cos(te) * std::sin(fi));
+		y = static_cast<int>(static_cast<double>(originVoxel.y) + static_cast<double>(i) * std::sin(te) * std::sin(fi));
+		z = static_cast<int>(static_cast<double>(originVoxel.z) + static_cast<double>(i) * std::cos(fi)
 				- zK * (static_cast<double>(i) - ro / 2.) * (static_cast<double>(i) - ro / 2.)
 				+ zA);
 
@@ -5308,30 +5302,30 @@ VoxelType TileEngine::plotParabola(
 			trj->push_back(Position(x,y,z));
 		}
 
-		pos2 = Position(x,y,z);
-		VoxelType ret = plotLine(
-								pos1,
-								pos2,
-								false,
-								NULL,
-								excludeUnit);
+		dest = Position(x,y,z);
+		VoxelType voxelType = plotLine(
+									start,
+									dest,
+									false,
+									NULL,
+									excludeUnit);
 
-		if (ret != VOXEL_EMPTY)
+		if (voxelType != VOXEL_EMPTY)
 		{
-			if (pos1.z < pos2.z)
-				ret = VOXEL_OUTOFBOUNDS;
+			if (start.z < dest.z)
+				voxelType = VOXEL_OUTOFBOUNDS;
 
 			if (storeTrj == false
 				&& trj != NULL)
 			{
-				trj->push_back(pos2);
+				trj->push_back(dest);
 			}
 
-			//Log(LOG_INFO) << "TileEngine::plotParabola() EXIT w/ ret = " << ret;
-			return ret;
+			//Log(LOG_INFO) << "TileEngine::plotParabola() EXIT w/ voxelType = " << voxelType;
+			return voxelType;
 		}
 
-		pos1 = Position(x,y,z);
+		start = Position(x,y,z);
 		++i;
 	}
 
@@ -5364,120 +5358,119 @@ bool TileEngine::validateThrow(
 		VoxelType* const voxelType) const
 {
 	//Log(LOG_INFO) << "\nTileEngine::validateThrow()";
-	const Tile* const tile = _battleSave->getTile(action.target);
-	if (ProjectileFlyBState::validThrowRange(
-										&action,
-										originVoxel,
-										tile) == false)
+	if (action.type == BA_THROW) // ie. Do not check the following for acid-spit, grenade-launcher, etc.
 	{
-		//Log(LOG_INFO) << ". vT() ret FALSE, ThrowRange not valid";
-		return false;
+		const Tile* const tile = _battleSave->getTile(action.target); // safety Off.
+
+		if (ProjectileFlyBState::validThrowRange(
+											&action,
+											originVoxel,
+											tile) == false)
+		{
+			//Log(LOG_INFO) << ". vT() ret FALSE, ThrowRange not valid";
+			return false;
+		}
+
+		if (tile->getMapData(O_OBJECT) != NULL
+			&& (tile->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NESW
+				|| tile->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NWSE))
+//			&& tile->getMapData(O_OBJECT)->getTuCostPart(MT_WALK) == 255
+//			&& (action.weapon->getRules()->getBattleType() == BT_GRENADE
+//				|| action.weapon->getRules()->getBattleType() == BT_PROXYGRENADE))
+		{
+			//Log(LOG_INFO) << ". vT() ret FALSE, no diag BigWalls";
+			return false; // prevent Grenades from landing on diagonal BigWalls.
+		}
 	}
 
-	if (action.type == BA_THROW
-		&& tile != NULL
-		&& tile->getMapData(O_OBJECT) != NULL
-		&& (tile->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NESW
-			|| tile->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NWSE))
-//		&& (action.weapon->getRules()->getBattleType() == BT_GRENADE
-//			|| action.weapon->getRules()->getBattleType() == BT_PROXYGRENADE)
-//		&& tile->getMapData(O_OBJECT)->getTuCostPart(MT_WALK) == 255)
-	{
-		//Log(LOG_INFO) << ". vT() ret FALSE, no diag BigWalls";
-		return false; // prevent Grenades from landing on diagonal BigWalls.
-	}
-
+	static const double DEC = 0.3;
 
 	const Position posTarget = targetVoxel / Position(16,16,24);
-	double parabolicCoefficient; // higher parabolicCoefficient means higher arc IG. eh ......
+	double parabolicCoefficient_Low; // higher parabolicCoefficient means higher arc IG. eh ......
 
 	if (posTarget != originVoxel / Position(16,16,24))
 	{
-		parabolicCoefficient = 0.81;
-
+		parabolicCoefficient_Low = 0.81;
 		if (action.actor->isKneeled() == true)
-			parabolicCoefficient += 0.3; // increase the arc reasons.
+			parabolicCoefficient_Low += DEC; // increase the arc reasons.
 	}
 	else
-		parabolicCoefficient = 0.;
-	//Log(LOG_INFO) << ". starting arc = " << parabolicCoefficient;
+		parabolicCoefficient_Low = 0.;
+	//Log(LOG_INFO) << ". starting arc = " << parabolicCoefficient_Low;
 
-	// check for test up from the lowest trajectory
-	bool found = false;
-	while (found == false // try several different curvatures
-		&& parabolicCoefficient < 6.1)
+
+	// check for voxelTest up from the lowest arc
+	VoxelType voxelTest;
+
+	bool stop = false;
+	while (stop == false && static_cast<int>(parabolicCoefficient_Low) < 6)
 	{
-		//Log(LOG_INFO) << ". . arc = " << parabolicCoefficient;
+		//Log(LOG_INFO) << ". . arc[1] = " << parabolicCoefficient_Low;
 		std::vector<Position> trj;
-		const VoxelType test = plotParabola(
-										originVoxel,
-										targetVoxel,
-										false,
-										&trj,
-										action.actor,
-										parabolicCoefficient);
-		//Log(LOG_INFO) << ". . plotParabola() = " << test;
+		voxelTest = plotParabola(
+							originVoxel,
+							targetVoxel,
+							false,
+							&trj,
+							action.actor,
+							parabolicCoefficient_Low);
+		//Log(LOG_INFO) << ". . plotParabola()[1] = " << voxelTest;
 
-		if (test != VOXEL_OUTOFBOUNDS
-			&& test != VOXEL_WESTWALL
-			&& test != VOXEL_NORTHWALL
+		if (voxelTest != VOXEL_OUTOFBOUNDS
+			&& voxelTest != VOXEL_WESTWALL
+			&& voxelTest != VOXEL_NORTHWALL
 			&& (trj.at(0) / Position(16,16,24)) == posTarget)
 		{
-			//Log(LOG_INFO) << ". . . found TRUE";
-			found = true;
-
+			//Log(LOG_INFO) << ". . . stop TRUE";
+			stop = true;
 			if (voxelType != NULL)
-				*voxelType = test;
+				*voxelType = voxelTest;
 		}
 		else
-			parabolicCoefficient += 0.3;
+			parabolicCoefficient_Low += DEC;
 	}
 
-	if (parabolicCoefficient >= 6.1)
+	if (static_cast<int>(parabolicCoefficient_Low) >= 6)
 	{
 		//Log(LOG_INFO) << ". vT() ret FALSE, arc > 6.1";
 		return false;
 	}
 
-
-	// now test continues rising to find upper limit
-	double parabolicCoefficient2 = parabolicCoefficient;
-
-	found = false;
-	while (found == false // try several different curvatures
-		&& parabolicCoefficient2 < 6.1)
-	{
-		//Log(LOG_INFO) << ". . arc = " << parabolicCoefficient2;
-		std::vector<Position> trj;
-		const VoxelType test = plotParabola(
-										originVoxel,
-										targetVoxel,
-										false,
-										&trj,
-										action.actor,
-										parabolicCoefficient2);
-		//Log(LOG_INFO) << ". . plotParabola() = " << test;
-
-		if (test == VOXEL_OUTOFBOUNDS
-			|| test == VOXEL_WESTWALL
-			|| test == VOXEL_NORTHWALL
-			|| (trj.at(0) / Position(16,16,24)) != posTarget)
-		{
-			//Log(LOG_INFO) << ". . . found TRUE";
-			found = true;
-			parabolicCoefficient2 -= 0.3; // back off from the upper lip.
-		}
-		else
-			parabolicCoefficient2 += 0.3;
-	}
-
-	// use the average of upper & lower limits:
-	// Lessens chance of bouncing a thrown item back off a wall by barely
-	// skimming overtop once accuracy is applied.
-	parabolicCoefficient = (parabolicCoefficient + parabolicCoefficient2) / 2.;
-
 	if (arc != NULL)
-		*arc = parabolicCoefficient;
+	{
+		// arc continues rising to find upper limit
+		double parabolicCoefficient_High = parabolicCoefficient_Low;
+
+		stop = false;
+		while (stop == false && static_cast<int>(parabolicCoefficient_High) < 6) // TODO: should use (pC2 < pC+2.0) or so; this just needs to get over the lower limit with some leeway - not 'to the moon'.
+		{
+			//Log(LOG_INFO) << ". . arc[2] = " << parabolicCoefficient_High;
+			std::vector<Position> trj;
+			voxelTest = plotParabola(
+								originVoxel,
+								targetVoxel,
+								false,
+								&trj,
+								action.actor,
+								parabolicCoefficient_High);
+			//Log(LOG_INFO) << ". . plotParabola()[2] = " << voxelTest;
+
+			if (voxelTest == VOXEL_OUTOFBOUNDS
+				|| voxelTest == VOXEL_WESTWALL
+				|| voxelTest == VOXEL_NORTHWALL
+				|| (trj.at(0) / Position(16,16,24)) != posTarget)
+			{
+				//Log(LOG_INFO) << ". . . stop TRUE";
+				stop = true;
+			}
+			else
+				parabolicCoefficient_High += DEC;
+		}
+
+		// use the average of upper & lower limits:
+		// Lessens chance of bouncing a thrown item back off a wall by barely skimming overtop once accuracy is applied.
+		*arc = (parabolicCoefficient_Low + parabolicCoefficient_High - DEC) / 2.; // back off #2 from the upper limit
+	}
 
 	//Log(LOG_INFO) << ". vT() ret TRUE";
 	return true;
@@ -5490,43 +5483,41 @@ bool TileEngine::validateThrow(
  */
 int TileEngine::castedShade(const Position& voxel) const
 {
-	int start_z = voxel.z;
-	Position testCoord = voxel / Position(16,16,24);
+	int startZ = voxel.z;
+	Position pos = voxel / Position(16,16,24);
 
-	const Tile* tile = _battleSave->getTile(testCoord);
+	const Tile* tile = _battleSave->getTile(pos);
 	while (tile != NULL
 		&& tile->isVoid(false, false) == true
 		&& tile->getUnit() == NULL)
 	{
-		start_z = testCoord.z * 24;
-		--testCoord.z;
-
-		tile = _battleSave->getTile(testCoord);
+		startZ = pos.z * 24;
+		--pos.z;
+		tile = _battleSave->getTile(pos);
 	}
 
-	Position testVoxel = voxel;
+	Position voxelTest = voxel;
 
-	int z;
+	int retZ;
 	for (
-			z = start_z;
-			z != 0;
-			--z)
+			retZ = startZ;
+			retZ != 0;
+			--retZ)
 	{
-		testVoxel.z = z;
-
-		if (voxelCheck(testVoxel, NULL) != VOXEL_EMPTY)
+		voxelTest.z = retZ;
+		if (voxelCheck(voxelTest) != VOXEL_EMPTY)
 			break;
 	}
 
-	return z;
+	return retZ;
 }
 
-/**
+/*
  * Traces voxel visibility.
  * @param voxel - reference the voxel coordinates
  * @return, true if visible
- */
-/* bool TileEngine::isVoxelVisible(const Position& voxel) const
+ *
+bool TileEngine::isVoxelVisible(const Position& voxel) const
 {
 	const int start_z = voxel.z + 3; // slight Z adjust
 	if (start_z / 24 != voxel.z / 24)
@@ -6672,6 +6663,27 @@ void TileEngine::setDangerZone(
 void TileEngine::setTrueTile(Tile* const tile)
 {
 	_trueTile = tile;
+}
+
+
+/**
+ * Gets a valid target-unit given a Tile.
+ * @param tile - pointer to a tile
+ * @return, pointer to a unit
+ */
+BattleUnit* TileEngine::getTargetUnit(const Tile* const tile) const
+{
+	if (tile != NULL)
+	{
+		if (tile->getUnit() != NULL)
+			return tile->getUnit();
+
+		const Tile* const tileBelow = _battleSave->getTile(tile->getPosition() - Position(0,0,-1));
+		if (tileBelow->getUnit() != NULL)
+			return tileBelow->getUnit();
+	}
+
+	return NULL;
 }
 
 }

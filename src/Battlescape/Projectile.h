@@ -48,6 +48,9 @@ class Projectile
 {
 
 private:
+	static const double
+		ACCU_LIMIT,
+		PCT;
 	static Position targetVoxel_cache;
 
 
@@ -68,12 +71,19 @@ private:
 
 	///
 	void applyAccuracy(
-			const Position& origin,
-			Position* const target,
+			const Position& originVoxel,
+			Position* const targetVoxel,
 			double accuracy,
-//			bool keepRange = false,
-			const Tile* const targetTile = NULL);
-//			const bool extendLine = true);
+			const Tile* const tileTarget = NULL);
+	/// Gets distance modifiers to accuracy.
+	double rangeAccuracy( // private.
+			const RuleItem* const itRule,
+			int dist) const;
+	/// Gets target-terrain and/or target-unit modifiers to accuracy.
+	double targetAccuracy(
+			const BattleUnit* const targetUnit,
+			int elevation,
+			const Tile* tileTarget) const;
 
 
 	public:
@@ -101,7 +111,7 @@ private:
 		/// Gets the current position in voxel space.
 		Position getPosition(int offset = 0) const;
 		/// Gets a particle from the particle array.
-		int getParticle(int i) const;
+		int getParticle(int id) const;
 		/// Gets the item.
 		BattleItem* getItem() const;
 		/// Gets the sprite.

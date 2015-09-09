@@ -238,13 +238,13 @@ private:
 				const BattleUnit* const excludeAllBut = NULL) const;
 		/// Calculates a parabola trajectory.
 		VoxelType plotParabola(
-				const Position& origin,
-				const Position& target,
+				const Position& originVoxel,
+				const Position& targetVoxel,
 				bool storeTrj,
 				std::vector<Position>* const trj,
 				const BattleUnit* const excludeUnit,
 				const double arc,
-				const Position& delta = Position(0,0,0)) const;
+				const Position& posDelta = Position(0,0,0)) const;
 		/// Validates a throwing action.
 		bool validateThrow(
 				const BattleAction& action,
@@ -320,6 +320,9 @@ private:
 
 		/// Sets a tile with a diagonal bigwall as the true epicenter of an explosion.
 		void setTrueTile(Tile* const tile);
+
+		/// Gets a valid target-unit given a Tile.
+		BattleUnit* getTargetUnit(const Tile* const tile) const;
 };
 
 }

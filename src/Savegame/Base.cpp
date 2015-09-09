@@ -259,7 +259,8 @@ void Base::load(
 
 	_items->load(node["items"]);
 	// old saves might have bad items, better get rid of them to avoid bugs
-	for (std::map<std::string, int>::const_iterator
+	// TODO: for this to be effective it also has to be done to EquipmentLayouts and god knows what else ... Craft eqp ... etc.
+/*	for (std::map<std::string, int>::const_iterator
 			i = _items->getContents()->begin();
 			i != _items->getContents()->end();
 			)
@@ -273,7 +274,7 @@ void Base::load(
 		}
 		else
 			++i;
-	}
+	} */
 
 	_cashIncome	= node["cashIncome"].as<int>(_cashIncome);
 	_cashSpent	= node["cashSpent"]	.as<int>(_cashSpent);

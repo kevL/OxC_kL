@@ -35,7 +35,7 @@ class MovingTarget
 {
 
 protected:
-	static const double GLOBE_RADIUS;
+//	static const double GLOBE_RADIUS;
 
 	int _speed;
 	double

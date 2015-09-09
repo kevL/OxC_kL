@@ -4359,7 +4359,7 @@ void BattleUnit::setDashing(bool dash)
  * Gets if this unit is dashing.
  * @return, true if dashing
  */
-bool BattleUnit::getDashing() const
+bool BattleUnit::isDashing() const
 {
 	return _dashing;
 }

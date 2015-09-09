@@ -1088,7 +1088,7 @@ private:
 		/// Sets this unit as dashing.
 		void setDashing(bool dash = true);
 		/// Gets if this unit is dashing.
-		bool getDashing() const;
+		bool isDashing() const;
 
 		/// Sets this unit as having been damaged in a single explosion.
 		void setTakenExpl(bool beenhit = true);

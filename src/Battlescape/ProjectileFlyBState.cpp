@@ -70,7 +70,7 @@ ProjectileFlyBState::ProjectileFlyBState( // origin is unitTile
 		_ammo(NULL),
 		_prjItem(NULL),
 		_prjImpact(VOXEL_FLOOR),
-		_prjVector(-1,-1,-1),
+		_prjVector(0,0,-1),
 		_initialized(false),
 		_targetFloor(false),
 		_initUnitAnim(0)
@@ -100,7 +100,7 @@ ProjectileFlyBState::ProjectileFlyBState( // blaster launch, BattlescapeGame::la
 		_ammo(NULL),
 		_prjItem(NULL),
 		_prjImpact(VOXEL_FLOOR),
-		_prjVector(-1,-1,-1),
+		_prjVector(0,0,-1),
 		_initialized(false),
 		_targetFloor(false),
 		_initUnitAnim(0)
@@ -203,8 +203,6 @@ void ProjectileFlyBState::init()
 		_action.type = BA_HIT;
 	}
 
-	const Tile* const destTile = _battleSave->getTile(_action.target);
-
 	switch (_action.type)
 	{
 		case BA_SNAPSHOT:
@@ -237,10 +235,11 @@ void ProjectileFlyBState::init()
 		case BA_THROW:
 		{
 			//Log(LOG_INFO) << ". . BA_THROW panic = " << (int)(_parent->getPanicHandled() == false);
+			const Tile* const tileDest = _battleSave->getTile(_action.target); // always Valid.
 			if (validThrowRange(
 							&_action,
 							_parent->getTileEngine()->getOriginVoxel(_action),
-							destTile) == false)
+							tileDest) == false)
 			{
 				//Log(LOG_INFO) << ". . . not valid throw range, EXIT";
 				_action.result = "STR_OUT_OF_RANGE";
@@ -249,10 +248,8 @@ void ProjectileFlyBState::init()
 			else
 			{
 				_prjItem = _action.weapon;
-
-				if (destTile != NULL
-					&& destTile->getTerrainLevel() == -24
-					&& destTile->getPosition().z + 1 < _battleSave->getMapSizeZ())
+				if (tileDest->getTerrainLevel() == -24
+					&& tileDest->getPosition().z + 1 < _battleSave->getMapSizeZ())
 				{
 					++_action.target.z;
 				}
@@ -549,7 +546,7 @@ bool ProjectileFlyBState::createNewProjectile() // private.
 		if (_prjImpact != VOXEL_EMPTY
 			 && _prjImpact != VOXEL_OUTOFBOUNDS)
 		{
-			//Log(LOG_INFO) << ". . spit";
+			//Log(LOG_INFO) << ". . spit/ arcing shot";
 			_unit->startAiming();
 			_unit->setCache(NULL);
 			_parent->getMap()->cacheUnit(_unit);
@@ -597,23 +594,22 @@ bool ProjectileFlyBState::createNewProjectile() // private.
 		//Log(LOG_INFO) << ". shoot weapon, voxelType = " << (int)_prjImpact;
 		//Log(LOG_INFO) << ". finalTarget = " << prj->getFinalPosition();
 
-		if (_prjImpact == VOXEL_OBJECT
-			&& _ammo->getRules()->getExplosionRadius() > 0)
-		{
-			const Tile* const tile = _battleSave->getTile(_parent->getMap()->getProjectile()->getFinalPosition());
-			if (tile->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NESW
-				|| tile->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NWSE)
-			{
-//				prj->storeProjectileDirection();		// kL: used to handle explosions against diagonal bigWalls.
-				_prjVector = prj->getStrikeVector();	// ^supercedes above^ storeProjectileDirection()
-			}
-		}
-
-
 		if (_prjImpact != VOXEL_EMPTY
 			|| _action.type == BA_LAUNCH)
 		{
 			//Log(LOG_INFO) << ". . _prjImpact AIM";
+			if (_prjImpact == VOXEL_OBJECT
+				&& _ammo->getRules()->getExplosionRadius() > 0)
+			{
+				const Tile* const tile = _battleSave->getTile(_parent->getMap()->getProjectile()->getFinalPosition());
+				if (tile->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NESW
+					|| tile->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NWSE)
+				{
+//					prj->storeProjectileDirection();		// kL: used to handle explosions against diagonal bigWalls.
+					_prjVector = prj->getStrikeVector();	// ^supercedes above^ storeProjectileDirection()
+				}
+			}
+
 			if (_action.type == BA_LAUNCH)
 				_parent->getMap()->setWaypointAction(); // reveal the Map until waypoint action completes.
 
@@ -791,7 +787,7 @@ void ProjectileFlyBState::think()
 			//Log(LOG_INFO) << "ProjectileFlyBState::think() current Status = " << (int)_unit->getStatus();
 			if (_unit->isOut_t() == false
 //				_unit->isOut() == false
-				&& _action.type != BA_HIT)	// huh? -> ie. melee & psi attacks shouldn't even get in here. But code needs cosmetic surgery .....
+				&& _action.type != BA_HIT)
 			{
 				_unit->setStatus(STATUS_STANDING);
 			}
@@ -1137,21 +1133,21 @@ void ProjectileFlyBState::cancel()
  * Validates the throwing range.
  * @param action		- pointer to BattleAction struct (BattlescapeGame.h)
  * @param originVoxel	- reference the origin in voxelspace
- * @param target		- pointer to the targeted Tile
+ * @param tile			- pointer to the targeted Tile
  * @return, true if the range is valid
  */
 bool ProjectileFlyBState::validThrowRange( // static.
 		const BattleAction* const action,
 		const Position& originVoxel,
-		const Tile* const target)
+		const Tile* const tile)
 {
 	//Log(LOG_INFO) << "ProjectileFlyBState::validThrowRange()";
-	if (action->type != BA_THROW) // this is a celatid spit.
-//		&& target->getUnit())
+/*	if (action->type != BA_THROW) // this is a celatid spit. Arc-shots never get here.
+//		&& tile->getUnit())
 	{
-//		offset_z = target->getUnit()->getHeight() / 2 + target->getUnit()->getFloatHeight();
+//		offset_z = tile->getUnit()->getHeight() / 2 + tile->getUnit()->getFloatHeight();
 		return true;
-	}
+	} */
 
 	int weight = action->weapon->getRules()->getWeight();
 	if (action->weapon->getAmmoItem() != NULL
@@ -1165,7 +1161,7 @@ bool ProjectileFlyBState::validThrowRange( // static.
 		delta_z = originVoxel.z
 				- action->target.z * 24
 				- offset_z
-				+ target->getTerrainLevel();
+				+ tile->getTerrainLevel();
 	const double maxDist = static_cast<double>(
 						   getMaxThrowDistance( // tilespace
 											weight,

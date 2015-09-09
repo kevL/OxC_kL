@@ -4507,7 +4507,7 @@
 	"CraftId.h"
 	"MovingTarget.h"
 
-1440095965 f:\git\openxcom\src\savegame\movingtarget.h
+1441749669 f:\git\openxcom\src\savegame\movingtarget.h
 	"Target.h"
 
 1441141948 f:\git\openxcom\src\savegame\region.h
@@ -4641,7 +4641,7 @@
 1441491240 f:\git\openxcom\src\savegame\savedbattlegame.h
 	"BattleUnit.h"
 
-1441600517 f:\git\openxcom\src\savegame\battleunit.h
+1441745927 f:\git\openxcom\src\savegame\battleunit.h
 	"SavedGame.h"
 	"Soldier.h"
 	"../Battlescape/BattlescapeGame.h"
@@ -5397,7 +5397,7 @@
 1433916034 f:\git\openxcom\src\battlescape\scannerstate.h
 	"../Engine/State.h"
 
-1440973999 f:\git\openxcom\src\battlescape\tileengine.h
+1441746501 f:\git\openxcom\src\battlescape\tileengine.h
 	"BattlescapeGame.h"
 	"Position.h"
 	"../Ruleset/MapData.h"
@@ -5435,7 +5435,7 @@
 
 1432984116 f:\git\openxcom\src\battlescape\battleaistate.h
 
-1440975551 f:\git\openxcom\src\battlescape\projectileflybstate.h
+1441715639 f:\git\openxcom\src\battlescape\projectileflybstate.h
 	"BattleState.h"
 	"../Ruleset/MapData.h"
 
@@ -5995,7 +5995,7 @@
 	"../Ruleset/RuleItem.h"
 	"../Ruleset/Ruleset.h"
 
-1441690365 f:\git\openxcom\src\battlescape\projectile.h
+1441756809 f:\git\openxcom\src\battlescape\projectile.h
 	"BattlescapeGame.h"
 	"Position.h"
 	"../Ruleset/MapData.h"
@@ -6135,7 +6135,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1441691091 source:f:\git\openxcom\src\battlescape\projectile.cpp
+1441757916 source:f:\git\openxcom\src\battlescape\projectile.cpp
 	"Projectile.h"
 	"Map.h"
 	"Camera.h"
@@ -6150,7 +6150,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1441690795 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
+1441715718 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
 	"ProjectileFlyBState.h"
 	"AlienBAIState.h"
 	"BattlescapeState.h"
@@ -6208,7 +6208,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1441513012 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1441746996 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	"AlienBAIState.h"
 	"BattlescapeState.h"
@@ -7092,7 +7092,7 @@
 
 1440173244 f:\git\openxcom\src\ufopaedia\ufopaedia.h
 
-1441400328 source:f:\git\openxcom\src\geoscape\globe.cpp
+1441749750 source:f:\git\openxcom\src\geoscape\globe.cpp
 	"Globe.h"
 	"GeoscapeState.h"
 	"../Engine/Action.h"
@@ -8399,7 +8399,7 @@
 	"../Ruleset/RuleRegion.h"
 	"../Ruleset/Ruleset.h"
 
-1441252192 source:f:\git\openxcom\src\savegame\base.cpp
+1441696355 source:f:\git\openxcom\src\savegame\base.cpp
 	"Base.h"
 	"BaseFacility.h"
 	"Craft.h"
@@ -8439,7 +8439,7 @@
 	"../Ruleset/RuleItem.h"
 	"../Savegame/SavedBattleGame.h"
 
-1441694543 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1441745927 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	"BattleItem.h"
 	"SavedGame.h"
