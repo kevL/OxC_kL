@@ -488,13 +488,13 @@ void Surface::clear(Uint32 color)
  * @param delta		- amount to shift
  * @param minColor	- minimum color to shift to (default -1)
  * @param maxColor	- maximum color to shift to (default -1)
- * @param mult		- shift multiplier (default 1)
+ * @param multi		- shift multiplier (default 1)
  */
 void Surface::offset(
 		int delta,
 		int minColor,
 		int maxColor,
-		int mult)
+		int multi)
 {
 	if (delta != 0)
 	{
@@ -510,9 +510,9 @@ void Surface::offset(
 			int p;													// the new color
 
 			if (delta > 0)
-				p = (pixel * mult) + delta;
+				p = (pixel * multi) + delta;
 			else
-				p = (pixel + delta) / mult;
+				p = (pixel + delta) / multi;
 
 			if (minColor != -1
 				&& p < minColor)

@@ -206,15 +206,15 @@ private:
 			GLM_CITY		= 8;
 
 		static Uint8
-			CLO_LABELBASE,
-			CLO_LABELCITY,
-			CLO_LABELCOUNTRY,
-			CLO_LINE,
-//			CLO_RADAR1,
-			CLO_RADAR2,
-			CLO_FLIGHT,
-			CLO_OCEAN,
-			CLO_BLACK;
+			C_LBLBASE,
+			C_LBLCITY,
+			C_LBLCOUNTRY,
+			C_LINE,
+//			C_RADAR1,
+			C_RADAR2,
+			C_FLIGHT,
+			C_OCEAN,
+			C_BLACK;
 
 		/// Creates a new globe at the specified position and size.
 		Globe(

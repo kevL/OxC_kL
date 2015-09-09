@@ -162,14 +162,14 @@ void RuleGlobe::load(const YAML::Node& node)
 		}
 	}
 
-	Globe::CLO_LABELBASE	= static_cast<Uint8>(node["baseColor"]		.as<int>(Globe::CLO_LABELBASE));
-	Globe::CLO_LABELCITY	= static_cast<Uint8>(node["cityColor"]		.as<int>(Globe::CLO_LABELCITY));
-	Globe::CLO_LABELCOUNTRY	= static_cast<Uint8>(node["countryColor"]	.as<int>(Globe::CLO_LABELCOUNTRY));
-	Globe::CLO_LINE			= static_cast<Uint8>(node["lineColor"]		.as<int>(Globe::CLO_LINE));			// country lines
-//	Globe::CLO_RADAR1		= static_cast<Uint8>(node["radar1Color"]	.as<int>(Globe::CLO_RADAR1));		// base radars
-	Globe::CLO_RADAR2		= static_cast<Uint8>(node["radar2Color"]	.as<int>(Globe::CLO_RADAR2));		// craft radars
-	Globe::CLO_FLIGHT		= static_cast<Uint8>(node["flightColor"]	.as<int>(Globe::CLO_FLIGHT));		// flight paths
-	Globe::CLO_OCEAN		= static_cast<Uint8>(node["oceanPalette"]	.as<int>(Globe::CLO_OCEAN));
+	Globe::C_LBLBASE	= static_cast<Uint8>(node["baseColor"]		.as<int>(Globe::C_LBLBASE));
+	Globe::C_LBLCITY	= static_cast<Uint8>(node["cityColor"]		.as<int>(Globe::C_LBLCITY));
+	Globe::C_LBLCOUNTRY	= static_cast<Uint8>(node["countryColor"]	.as<int>(Globe::C_LBLCOUNTRY));
+	Globe::C_LINE		= static_cast<Uint8>(node["lineColor"]		.as<int>(Globe::C_LINE));		// country lines
+//	Globe::C_RADAR1		= static_cast<Uint8>(node["radar1Color"]	.as<int>(Globe::C_RADAR1));		// base radars
+	Globe::C_RADAR2		= static_cast<Uint8>(node["radar2Color"]	.as<int>(Globe::C_RADAR2));		// craft radars
+	Globe::C_FLIGHT		= static_cast<Uint8>(node["flightColor"]	.as<int>(Globe::C_FLIGHT));		// flight paths
+	Globe::C_OCEAN		= static_cast<Uint8>(node["oceanPalette"]	.as<int>(Globe::C_OCEAN));
 }
 
 /**
