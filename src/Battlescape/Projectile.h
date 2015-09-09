@@ -84,6 +84,8 @@ private:
 			const BattleUnit* const targetUnit,
 			int elevation,
 			const Tile* tileTarget) const;
+	///
+	bool verifyTarget(const Position& originVoxel);
 
 
 	public:

@@ -194,80 +194,21 @@ VoxelType Projectile::calculateShot(
 {
 	//Log(LOG_INFO) << "Projectile::calculateShot() accuracy = " << accuracy;
 	const Tile* const tileTarget = _battleSave->getTile(_action.target);
-	const BattleUnit* const targetUnit = tileTarget->getUnit();
 
 	// test for LoF
 	if (_action.actor->getFaction() == FACTION_PLAYER // aLiens don't even get in here!
 		&& _action.autoShotCount == 1
 		&& _action.type != BA_LAUNCH
 		&& _battleSave->getBattleGame()->getPanicHandled() == true
-		&& ((SDL_GetModState() & KMOD_CTRL) == 0
-			|| Options::battleForceFire == false))
+		&& (((SDL_GetModState() & KMOD_CTRL) == 0
+			&& (SDL_GetModState() & KMOD_ALT) == 0
+			&& (SDL_GetModState() & KMOD_SHIFT) == 0)
+				|| Options::battleForceFire == false))
 	{
-		//Log(LOG_INFO) << ". autoshotCount[0] = " << _action.autoShotCount;
-		const VoxelType voxelType = _battleSave->getTileEngine()->plotLine(
-																		originVoxel,
-																		_targetVoxel,
-																		false,
-																		&_trj,
-																		_action.actor);
-		//Log(LOG_INFO) << ". voxelType = " << (int)voxelType;
-
-		if (voxelType != VOXEL_EMPTY
-			&& _trj.empty() == false)
+		if (verifyTarget(originVoxel) == false)
 		{
-			Position posTest = Position(
-									_trj.at(0).x / 16,
-									_trj.at(0).y / 16,
-									_trj.at(0).z / 24);
-
-			if (voxelType == VOXEL_UNIT)
-			{
-				const Tile* const tileTest = _battleSave->getTile(posTest);
-				if (tileTest != NULL && tileTest->getUnit() == NULL)
-				{
-					posTest = Position( // must be poking head up from tileBelow
-									posTest.x,
-									posTest.y,
-									posTest.z - 1);
-				}
-			}
-
-			if (posTest != _action.target
-				&& _action.result.empty() == true)
-			{
-				if (voxelType == VOXEL_NORTHWALL)
-				{
-					if (posTest.y - 1 != _action.target.y)
-					{
-						_trj.clear();
-						return VOXEL_EMPTY;
-					}
-				}
-				else if (voxelType == VOXEL_WESTWALL)
-				{
-					if (posTest.x - 1 != _action.target.x)
-					{
-						_trj.clear();
-						return VOXEL_EMPTY;
-					}
-				}
-				else if (voxelType == VOXEL_UNIT)
-				{
-					const BattleUnit* const testUnit = _battleSave->getTile(posTest)->getUnit();
-					if (testUnit != targetUnit
-						&& testUnit->getUnitVisible() == true)
-					{
-						_trj.clear();
-						return VOXEL_EMPTY;
-					}
-				}
-				else
-				{
-					_trj.clear();
-					return VOXEL_EMPTY;
-				}
-			}
+//			_trj.clear();
+			return VOXEL_EMPTY;
 		}
 	}
 
@@ -390,8 +331,6 @@ VoxelType Projectile::calculateThrow(double accuracy)
 						&deltaVoxel,
 						accuracy,
 						_battleSave->getTile(_action.target));
-//						true,
-//						false);
 
 			deltaVoxel -= _targetVoxel;
 			test = _battleSave->getTileEngine()->plotParabola(
@@ -489,6 +428,9 @@ void Projectile::applyAccuracy( // private.
 		double
 			deltaHori,
 			deltaVert;
+		static const double
+			div_HORI = 6.,
+			div_VERT = 6. * 1.69;
 
 		if (_action.autoShotCount == 1)
 		{
@@ -508,8 +450,8 @@ void Projectile::applyAccuracy( // private.
 				//Log(LOG_INFO) << ". deviation = " << deviation;
 
 				// The angle deviations are spread using a normal distribution:
-				deltaHori = RNG::boxMuller(0., deviation / (6.));			// horizontal miss in radians
-				deltaVert = RNG::boxMuller(0., deviation / (6. * 1.69));	// vertical miss in radians
+				deltaHori = RNG::boxMuller(0., deviation / div_HORI);	// horizontal miss in radians
+				deltaVert = RNG::boxMuller(0., deviation / div_VERT);	// vertical miss in radians
 			}
 			else
 			{
@@ -522,8 +464,8 @@ void Projectile::applyAccuracy( // private.
 		{
 			// The angle deviations are spread using a normal distribution:
 			const double kick = static_cast<double>(itRule->getAutoKick()) * PCT;
-			deltaHori = RNG::boxMuller(0., kick / (6.));		// horizontal miss in radians
-			deltaVert = RNG::boxMuller(0., kick / (6. * 1.69));	// vertical miss in radians
+			deltaHori = RNG::boxMuller(0., kick / div_HORI);	// horizontal miss in radians
+			deltaVert = RNG::boxMuller(0., kick / div_VERT);	// vertical miss in radians
 		}
 		//Log(LOG_INFO) << "deltaHori = " << deltaHori;
 		//Log(LOG_INFO) << "deltaVert = " << deltaVert;
@@ -545,7 +487,7 @@ void Projectile::applyAccuracy( // private.
 		else
 		{
 			calcHori = false;
-			te = 0.; // avoid VC++ linker warnings
+			te = 0.; // avoid vc++ linker warnings
 		}
 
 		if (targetVoxel->z != originVoxel.z
@@ -561,18 +503,17 @@ void Projectile::applyAccuracy( // private.
 		{
 			calcVert = false;
 			cos_fi = 1.;
-			fi = 0.; // avoid VC++ linker warnings
+			fi = 0.; // avoid vc++ linker warnings
 		}
 
-		static const double range = 3200.;
+		static const double OUTER_LIMIT = 3200.;
 		if (calcHori == true)
 		{
-			targetVoxel->x = static_cast<int>(Round(static_cast<double>(originVoxel.x) + range * std::cos(te) * cos_fi));
-			targetVoxel->y = static_cast<int>(Round(static_cast<double>(originVoxel.y) + range * std::sin(te) * cos_fi));
+			targetVoxel->x = static_cast<int>(Round(static_cast<double>(originVoxel.x) + OUTER_LIMIT * std::cos(te) * cos_fi));
+			targetVoxel->y = static_cast<int>(Round(static_cast<double>(originVoxel.y) + OUTER_LIMIT * std::sin(te) * cos_fi));
 		}
-
 		if (calcVert == true)
-			targetVoxel->z = static_cast<int>(Round(static_cast<double>(originVoxel.z) + range * std::sin(fi)));
+			targetVoxel->z = static_cast<int>(Round(static_cast<double>(originVoxel.z) + OUTER_LIMIT * std::sin(fi)));
 
 		//Log(LOG_INFO) << ". x = " << targetVoxel->x;
 		//Log(LOG_INFO) << ". y = " << targetVoxel->y;
@@ -736,6 +677,76 @@ double Projectile::targetAccuracy( // private.
 	retAccu -= elevation / 6; // +/-1 per 6 delta.
 
 	return static_cast<double>(retAccu) * PCT;
+}
+
+/**
+ * Verifies that a targeted position really has LoF.
+ * @note Go figure. Checks if the voxel with a/the previously determined
+ * VoxelType is really a voxel in the target tile and if not then if it's an
+ * acceptable substitute in an adjacent tile.
+ * @param originVoxel - origin in voxel-space
+ * @return, true if LoF
+ */
+bool Projectile::verifyTarget(const Position& originVoxel) // private.
+{
+	const VoxelType voxelType = _battleSave->getTileEngine()->plotLine(
+																	originVoxel,
+																	_targetVoxel,
+																	false,
+																	&_trj,
+																	_action.actor);
+	if (voxelType != VOXEL_EMPTY
+		&& _trj.empty() == false)
+	{
+		Position posTest = Position(
+								_trj.at(0).x / 16,
+								_trj.at(0).y / 16,
+								_trj.at(0).z / 24);
+
+		if (voxelType == VOXEL_UNIT)
+		{
+			const Tile* const tileTest = _battleSave->getTile(posTest);
+			if (tileTest != NULL && tileTest->getUnit() == NULL)
+			{
+				posTest = Position( // must be poking head up from tileBelow
+								posTest.x,
+								posTest.y,
+								posTest.z - 1);
+			}
+		}
+
+		if (posTest != _action.target
+			&& _action.result.empty() == true)
+		{
+			switch (voxelType)
+			{
+				case VOXEL_NORTHWALL:
+					if (posTest.y - 1 != _action.target.y)
+						return false;
+				break;
+
+				case VOXEL_WESTWALL:
+					if (posTest.x - 1 != _action.target.x)
+						return false;
+				break;
+
+				case VOXEL_UNIT:
+				{
+					const BattleUnit
+						* const targetUnit = _battleSave->getTile(_action.target)->getUnit(),
+						* const testUnit = _battleSave->getTile(posTest)->getUnit();
+					if (testUnit != targetUnit && testUnit->getUnitVisible() == true)
+						return false;
+				}
+				break;
+
+				default:
+					return false;
+			}
+		}
+	}
+
+	return true;
 }
 
 /**

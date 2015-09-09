@@ -1455,6 +1455,8 @@ void Map::drawTerrain(Surface* const surface) // private.
 								// TODO: Use stuff from ProjectileFlyBState::init()
 								// as well as TileEngine::canTargetUnit() & TileEngine::canTargetTile()
 								// to turn accuracy to 'red 0' if target is out of LoS/LoF.
+								//
+								// TODO: use Projectile::rangeAccuracy() as a static function.
 								const BattleAction* const action = _battleSave->getBattleGame()->getCurrentAction();
 
 								int accuracy = static_cast<int>(Round(action->actor->getAccuracy(*action) * 100.));
@@ -1524,7 +1526,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 
 								const Position
 									originVoxel = _battleSave->getTileEngine()->getOriginVoxel(*action),
-									targetVoxel = Position(
+									targetVoxel = Position( // TODO: conform this to ProjectileFlyBState (modifier keys) & Projectile::_targetVoxel
 														itX * 16 + 8,
 														itY * 16 + 8,
 														itZ * 24 + 2 - _battleSave->getTile(action->target)->getTerrainLevel());
