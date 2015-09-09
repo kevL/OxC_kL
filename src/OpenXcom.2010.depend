@@ -4629,7 +4629,7 @@
 1441600658 f:\git\openxcom\src\battlescape\battlescapegenerator.h
 	"../Ruleset/MapScript.h"
 
-1440983562 f:\git\openxcom\src\battlescape\inventorystate.h
+1441837119 f:\git\openxcom\src\battlescape\inventorystate.h
 	"../Engine/State.h"
 
 1440174951 f:\git\openxcom\src\engine\logger.h
@@ -10807,7 +10807,7 @@
 1439224668 source:f:\git\openxcom\src\ruleset\polyline.cpp
 	"Polyline.h"
 
-1441399002 source:f:\git\openxcom\src\ruleset\ruleglobe.cpp
+1441830458 source:f:\git\openxcom\src\ruleset\ruleglobe.cpp
 	"RuleGlobe.h"
 	"Polygon.h"
 	"Polyline.h"

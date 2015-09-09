@@ -89,12 +89,7 @@ InventoryState::InventoryState(
 	}
 	else if (!_battleSave->getTileEngine())
 	{
-		Screen::updateScale(
-						Options::battlescapeScale,
-						Options::battlescapeScale,
-						Options::baseXBattlescape,
-						Options::baseYBattlescape,
-						true);
+		Screen::updateScale(Options::battlescapeScale, Options::battlescapeScale, Options::baseXBattlescape, Options::baseYBattlescape, true);
 		_game->getScreen()->resetDisplay(false);
 	} */
 
@@ -137,21 +132,9 @@ InventoryState::InventoryState(
 	_btnUnload	= new BattlescapeButton(32, 25, 288,  32);
 	_btnGround	= new BattlescapeButton(32, 15, 288, 137);
 
-/*	_btnCreateTemplate	= new BattlescapeButton(
-											32,
-											22,
-											_templateBtnX,
-											_createTemplateBtnY);
-	_btnApplyTemplate	= new BattlescapeButton(
-											32,
-											22,
-											_templateBtnX,
-											_applyTemplateBtnY);
-	_btnClearInventory	= new BattlescapeButton(
-											32,
-											22,
-											_templateBtnX,
-											_clearInventoryBtnY); */
+/*	_btnCreateTemplate = new BattlescapeButton(32,22, _templateBtnX, _createTemplateBtnY);
+	_btnApplyTemplate = new BattlescapeButton(32,22, _templateBtnX, _applyTemplateBtnY);
+	_btnClearInventory = new BattlescapeButton(32,22, _templateBtnX, _clearInventoryBtnY); */
 
 	_txtAmmo	= new Text(40, 24, 288, 64);
 	_selAmmo	= new Surface(
@@ -159,11 +142,9 @@ InventoryState::InventoryState(
 						RuleInventory::HAND_H * RuleInventory::SLOT_H,
 						288, // 272,
 						88);
-
 	_inv		= new Inventory(
 							_game,
-							320,
-							200,
+							320,200,
 							0,0,
 							_parent == NULL);
 
@@ -513,11 +494,13 @@ void InventoryState::init()
 	}
 
 
-	const Soldier* const soldier = unit->getGeoscapeSoldier();
-	if (soldier != NULL)
+	SurfaceSet* const srtRank = _game->getResourcePack()->getSurfaceSet("SMOKE.PCK");
+
+	const Soldier* const sol = unit->getGeoscapeSoldier();
+	if (sol != NULL)
 	{
 		Surface* gender = NULL;
-		if (soldier->getGender() == GENDER_MALE)
+		if (sol->getGender() == GENDER_MALE)
 			gender = _game->getResourcePack()->getSurface("GENDER_M");
 		else
 			gender = _game->getResourcePack()->getSurface("GENDER_F");
@@ -525,38 +508,40 @@ void InventoryState::init()
 		if (gender != NULL)
 			gender->blit(_gender);
 
-		SurfaceSet* const sstRank = _game->getResourcePack()->getSurfaceSet("SMOKE.PCK");
-//		sstRank->getFrame(20 + soldier->getRank())->setX(0);
-//		sstRank->getFrame(20 + soldier->getRank())->setY(0);
-		sstRank->getFrame(20 + soldier->getRank())->blit(_btnRank);
+//		srtRank->getFrame(20 + sol->getRank())->setX(0);
+//		srtRank->getFrame(20 + sol->getRank())->setY(0);
+		srtRank->getFrame(20 + sol->getRank())->blit(_btnRank);
 
-		std::string look = soldier->getArmor()->getSpriteInventory();
-		if (soldier->getGender() == GENDER_MALE)
-			look += "M";
-		else
-			look += "F";
-
-		if		(soldier->getLook() == LOOK_BLONDE)		look += "0";
-		else if (soldier->getLook() == LOOK_BROWNHAIR)	look += "1";
-		else if (soldier->getLook() == LOOK_ORIENTAL)	look += "2";
-		else if (soldier->getLook() == LOOK_AFRICAN)	look += "3";
-
+		std::string look = sol->getArmor()->getSpriteInventory();
+		switch (sol->getGender())
+		{
+			default:
+			case GENDER_MALE:	look += "M"; break;
+			case GENDER_FEMALE:	look += "F";
+		}
+		switch (sol->getLook())
+		{
+			default:
+			case LOOK_BLONDE:		look += "0"; break;
+			case LOOK_BROWNHAIR:	look += "1"; break;
+			case LOOK_ORIENTAL:		look += "2"; break;
+			case LOOK_AFRICAN:		look += "3";
+		}
 		look += ".SPK";
 
 		if (CrossPlatform::fileExists(CrossPlatform::getDataFile("UFOGRAPH/" + look)) == false
 			&& _game->getResourcePack()->getSurface(look) == NULL)
 		{
-			look = soldier->getArmor()->getSpriteInventory() + ".SPK";
+			look = sol->getArmor()->getSpriteInventory() + ".SPK";
 		}
 
 		_game->getResourcePack()->getSurface(look)->blit(_soldier);
 	}
 	else
 	{
-		SurfaceSet* const sstRank = _game->getResourcePack()->getSurfaceSet("SMOKE.PCK");
-//		sstRank->getFrame(26)->setX(0);
-//		sstRank->getFrame(26)->setY(0);
-		sstRank->getFrame(26)->blit(_btnRank);
+//		srtRank->getFrame(26)->setX(0);
+//		srtRank->getFrame(26)->setY(0);
+		srtRank->getFrame(26)->blit(_btnRank);
 
 		Surface* const srfArmor = _game->getResourcePack()->getSurface(unit->getArmor()->getSpriteInventory());
 		if (srfArmor != NULL)
@@ -579,7 +564,6 @@ void InventoryState::updateStats() // private.
 	{
 		_numOrder->setValue(unit->getBattleOrder());
 		_numOrder->setVisible();
-//		_numOrder->setVisible(unit->getOriginalFaction() == FACTION_PLAYER);
 	}
 	else
 		_numOrder->setVisible(false);
@@ -1328,12 +1312,12 @@ void InventoryState::setExtraInfo( // private.
 			|| itRule->getBattleType() == BT_AMMO))
 	{
 		std::string actionType;
-		int tuUse;
+		int tu;
 
 		if (itRule->getBattleType() == BT_AMMO)
 		{
 			actionType = "STR_RELOAD_";
-			tuUse = 15;
+			tu = 15;
 		}
 		else
 		{
@@ -1350,12 +1334,10 @@ void InventoryState::setExtraInfo( // private.
 				case BA_HIT:		actionType = "STR_ATTACK_";
 			}
 
-			tuUse = unit->getActionTUs(
-									bat,
-									item);
+			tu = unit->getActionTUs(bat, item);
 		}
 
-		_txtUseTU->setText(tr(actionType).arg(tuUse));
+		_txtUseTU->setText(tr(actionType).arg(tu));
 	}
 	else
 		_txtUseTU->setText(L"");

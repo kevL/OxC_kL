@@ -47,7 +47,7 @@ class InventoryState
 {
 
 private:
-//	std::string _currentTooltip;
+/*	std::string _currentTooltip; */
 	const bool _tuMode;
 
 	int _flarePower;
@@ -59,9 +59,9 @@ private:
 		* _btnPrev,
 		* _btnRank,
 		* _btnUnload;
-//		* _btnCreateTemplate,
-//		* _btnApplyTemplate,
-//		* _btnClearInventory;
+/*		* _btnCreateTemplate,
+		* _btnApplyTemplate,
+		* _btnClearInventory; */
 	BattlescapeState* _parent;
 	Inventory* _inv;
 	NumberText
@@ -94,7 +94,7 @@ private:
 		* _txtUseTU,
 		* _txtThrowTU,
 		* _txtPsiTU;
-//	std::vector<EquipmentLayoutItem*> _curInventoryTemplate;
+/*	std::vector<EquipmentLayoutItem*> _curInventoryTemplate; */
 
 	/// Updates the selected unit's info - weight, TU, etc.
 	void updateStats();
@@ -110,10 +110,7 @@ private:
 	bool saveLayout(BattleUnit* const unit) const;
 
 /*	/// Clears current unit's inventory. (was static)
-	void clearInventory(
-			Game* game,
-			std::vector<BattleItem*>* unitInv,
-			Tile* groundTile); */
+	void clearInventory(Game* game, std::vector<BattleItem*>* unitInv, Tile* groundTile); */
 
 	/// Sets the extra-info fields on mouseover and mouseclicks.
 	void setExtraInfo(
@@ -121,7 +118,7 @@ private:
 			const RuleItem* const itemRule,
 			const BattleItem* const ammo);
 	/// Update the visibility and icons for the template buttons.
-//	void _updateTemplateButtons(bool isVisible);
+/*	void _updateTemplateButtons(bool isVisible); */
 
 
 	public:
@@ -167,14 +164,14 @@ private:
 		/// Handles keypresses.
 		void handle(Action* action);
 
-		/// Handler for showing tooltip.
-//		void txtTooltipIn(Action* action);
+/*		/// Handler for showing tooltip.
+		void txtTooltipIn(Action* action);
 		/// Handler for hiding tooltip.
-//		void txtTooltipOut(Action* action);
-		/// Handler for clicking on the Create Template button.
-//		void btnCreateTemplateClick(Action* action);
+		void txtTooltipOut(Action* action); */
+/*		/// Handler for clicking on the Create Template button.
+		void btnCreateTemplateClick(Action* action);
 		/// Handler for clicking the Apply Template button.
-//		void btnApplyTemplateClick(Action* action);
+		void btnApplyTemplateClick(Action* action); */
 };
 
 }

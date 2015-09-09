@@ -453,14 +453,16 @@ void Inventory::moveItem( // private.
 			else if (item->getSlot() == NULL					// unload a weapon clip to left hand
 				|| item->getSlot()->getType() == INV_GROUND)	// or pick up item.
 			{
-				if (item->getSlot()->getType() == INV_GROUND)	// if from Ground its weight becomes an extra tu-burden
-					_selUnit->setTimeUnits(std::max(			// This prevents units from picking up large objects and running round with nearly full TU on the same turn.
+				if (_tuMode == true									// To prevents units from picking up large objects and running around with
+					&& item->getSlot()->getType() == INV_GROUND)	// nearly full TU on the same turn its weight becomes an extra tu-burden
+				{
+					_selUnit->setTimeUnits(std::max(
 												0,
 												_selUnit->getTimeUnits() - item->getRules()->getWeight()));
+				}
 
 				item->moveToOwner(_selUnit);
 				_selUnit->getTile()->removeItem(item);
-//				item->setTurnFlag(false);
 
 				if (item->getUnit() != NULL
 					&& item->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
@@ -626,11 +628,8 @@ void Inventory::think()
 		_prime = -1;
 	}
 
-/*	int
-		x,
-		y;
+/*	int x,y;
 	SDL_GetMouseState(&x, &y);
-
 	SDL_WarpMouse(x + 1, y);	// send a mouse motion event to refresh any hover actions
 	SDL_WarpMouse(x, y);		// move the mouse back to avoid cursor creep */
 

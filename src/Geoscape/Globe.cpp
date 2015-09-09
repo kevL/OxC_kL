@@ -81,7 +81,7 @@ Uint8 // these are only fallbacks for Geography.rul->globe
 	Globe::C_LBLBASE	= 100,	// Palette::blockOffset(6)+4;	// stock 133;
 	Globe::C_LBLCITY	= 167,	// Palette::blockOffset(10)+7;	// stock 138
 	Globe::C_LBLCOUNTRY	= 227,	// Palette::blockOffset(14)+3;	// stock 239
-	Globe::C_LINE			= 162,	// Palette::blockOffset(10)+2;	// light gray
+	Globe::C_LINE		= 162,	// Palette::blockOffset(10)+2;	// light gray
 //	Globe::C_RADAR1		=		// let base radars do its own thing in XuLine()
 	Globe::C_RADAR2		= 150,	// Palette::blockOffset(9)+6;	// brown
 	Globe::C_FLIGHT		= 166,	// Palette::blockOffset(10)+6;	// steel gray

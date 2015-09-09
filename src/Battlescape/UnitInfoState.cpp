@@ -514,15 +514,14 @@ void UnitInfoState::init()
 
 	std::wostringstream woststr;
 
-//	int minPsi;
-	const Soldier* const soldier = _unit->getGeoscapeSoldier();
-	if (soldier != NULL)
+	const Soldier* const sol = _unit->getGeoscapeSoldier();
+	if (sol != NULL)
 	{
 		woststr << tr(_unit->getRankString());
 		woststr << L" ";
 
 		Surface* gender = NULL;
-		if (soldier->getGender() == GENDER_MALE)
+		if (sol->getGender() == GENDER_MALE)
 			gender = _game->getResourcePack()->getSurface("GENDER_M");
 		else
 			gender = _game->getResourcePack()->getSurface("GENDER_F");
@@ -538,14 +537,9 @@ void UnitInfoState::init()
 
 		_numOrder->setValue(order);
 		_numOrder->setVisible();
-//		_numOrder->setVisible(unit->getOriginalFaction() == FACTION_PLAYER);
-
-//		minPsi = _unit->getGeoscapeSoldier()->getRules()->getMinStats().psiSkill;
-//		minPsi = _game->getSavedGame()->getSoldier(_unit->getId())->getRules()->getMinStats().psiSkill - 1; // kL, shit..
 	}
 	else
 		_numOrder->setVisible(false);
-//		minPsi = 0;
 
 	woststr << _unit->getName(_game->getLanguage(), BattlescapeGame::_debugPlay);
 	_txtName->setBig();
@@ -654,7 +648,7 @@ void UnitInfoState::init()
 
 	const int psiSkill = _unit->getBaseStats()->psiSkill;
 	if (psiSkill > 0
-		|| _unit->getGeoscapeSoldier() == NULL)
+		|| sol == NULL)
 //		|| (Options::psiStrengthEval == true
 //			&& _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements())))
 	{
@@ -821,12 +815,7 @@ void UnitInfoState::exitClick(Action*) // private.
 	{
 		if (Options::maximizeInfoScreens)
 		{
-			Screen::updateScale(
-							Options::battlescapeScale,
-							Options::battlescapeScale,
-							Options::baseXBattlescape,
-							Options::baseYBattlescape,
-							true);
+			Screen::updateScale(Options::battlescapeScale, Options::battlescapeScale, Options::baseXBattlescape, Options::baseYBattlescape, true);
 			_game->getScreen()->resetDisplay(false);
 		}
 	} else */
