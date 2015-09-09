@@ -499,25 +499,23 @@ void InventoryState::init()
 	const Soldier* const sol = unit->getGeoscapeSoldier();
 	if (sol != NULL)
 	{
-		Surface* gender = NULL;
-		if (sol->getGender() == GENDER_MALE)
-			gender = _game->getResourcePack()->getSurface("GENDER_M");
-		else
-			gender = _game->getResourcePack()->getSurface("GENDER_F");
-
-		if (gender != NULL)
-			gender->blit(_gender);
-
 //		srtRank->getFrame(20 + sol->getRank())->setX(0);
 //		srtRank->getFrame(20 + sol->getRank())->setY(0);
 		srtRank->getFrame(20 + sol->getRank())->blit(_btnRank);
 
+		Surface* gender = NULL;
 		std::string look = sol->getArmor()->getSpriteInventory();
 		switch (sol->getGender())
 		{
 			default:
-			case GENDER_MALE:	look += "M"; break;
-			case GENDER_FEMALE:	look += "F";
+			case GENDER_MALE:
+				gender = _game->getResourcePack()->getSurface("GENDER_M");
+				look += "M";
+			break;
+
+			case GENDER_FEMALE:
+				gender = _game->getResourcePack()->getSurface("GENDER_F");
+				look += "F";
 		}
 		switch (sol->getLook())
 		{
@@ -536,6 +534,8 @@ void InventoryState::init()
 		}
 
 		_game->getResourcePack()->getSurface(look)->blit(_soldier);
+		if (gender != NULL) gender->blit(_gender);
+
 	}
 	else
 	{
