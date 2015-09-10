@@ -98,6 +98,7 @@ private:
 		* _numTimeUnits,
 		* _numEnergy,
 		* _numHealth,
+		* _numStun,
 		* _numFatalWounds,
 		* _numBravery,
 		* _numMorale,

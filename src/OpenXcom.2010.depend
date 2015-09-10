@@ -5533,7 +5533,7 @@
 1440380682 f:\git\openxcom\src\battlescape\unitfallbstate.h
 	"BattleState.h"
 
-1433916325 f:\git\openxcom\src\battlescape\unitinfostate.h
+1441886227 f:\git\openxcom\src\battlescape\unitinfostate.h
 	"../Engine/State.h"
 
 1440469589 f:\git\openxcom\src\battlescape\unitpanicbstate.h
@@ -6262,7 +6262,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1441835954 source:f:\git\openxcom\src\battlescape\unitinfostate.cpp
+1441888196 source:f:\git\openxcom\src\battlescape\unitinfostate.cpp
 	"UnitInfoState.h"
 	"BattlescapeGame.h"
 	"BattlescapeState.h"
@@ -8291,7 +8291,7 @@
 1440461473 source:f:\git\openxcom\src\ruleset\ruleresearch.cpp
 	"RuleResearch.h"
 
-1441142821 source:f:\git\openxcom\src\ruleset\ruleset.cpp
+1441884526 source:f:\git\openxcom\src\ruleset\ruleset.cpp
 	"Ruleset.h"
 	"AlienRace.h"
 	"AlienDeployment.h"
@@ -8646,7 +8646,7 @@
 	"../Engine/Language.h"
 	"../Ruleset/Ruleset.h"
 
-1441881651 source:f:\git\openxcom\src\savegame\ufo.cpp
+1441885279 source:f:\git\openxcom\src\savegame\ufo.cpp
 	"Ufo.h"
 	"AlienMission.h"
 	"Craft.h"

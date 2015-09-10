@@ -105,6 +105,7 @@ UnitInfoState::UnitInfoState(
 	yPos += step;
 	_txtHealth		= new Text(140, 9, 8, yPos);
 	_numHealth		= new Text(18, 9, 151, yPos);
+	_numStun		= new Text(18, 9, 127, yPos);
 	_barHealth		= new Bar(280, 5, 170, yPos + 1);
 
 	yPos += step;
@@ -207,6 +208,7 @@ UnitInfoState::UnitInfoState(
 
 	add(_txtHealth);
 	add(_numHealth);
+	add(_numStun);
 	add(_barHealth, "barHealth", "stats");
 
 	add(_txtFatalWounds);
@@ -326,6 +328,10 @@ UnitInfoState::UnitInfoState(
 
 	_numHealth->setColor(color2);
 	_numHealth->setHighContrast();
+
+	_numStun->setColor(80); // brown
+	_numStun->setHighContrast();
+	_numStun->setAlign(ALIGN_RIGHT);
 
 	_barHealth->setScale();
 
@@ -563,9 +569,19 @@ void UnitInfoState::init()
 	woststr.str(L"");
 	woststr << stat;
 	_numHealth->setText(woststr.str());
+	int stat2 = _unit->getStun();
+	if (stat2 != 0)
+	{
+		woststr.str(L"");
+		woststr << stat2;
+		_numStun->setText(woststr.str());
+		_numStun->setVisible();
+	}
+	else
+		_numStun->setVisible(false);
 	_barHealth->setMax(static_cast<double>(_unit->getBaseStats()->health));
 	_barHealth->setValue(static_cast<double>(stat));
-	_barHealth->setValue2(static_cast<double>(_unit->getStun()));
+	_barHealth->setValue2(static_cast<double>(stat2));
 
 	woststr.str(L"");
 	if (_unit->isWoundable() == true)

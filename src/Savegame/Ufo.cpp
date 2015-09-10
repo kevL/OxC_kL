@@ -337,14 +337,15 @@ int Ufo::getMarker() const
 {
 	if (_detected == true)
 	{
+		if (_rules->getMarker() != -1) // for a custom marker.
+			return _rules->getMarker();
+
 		switch (_status)
 		{
 			case Ufo::FLYING:	return Globe::GLM_UFO_FLYING;
 			case Ufo::LANDED:	return Globe::GLM_UFO_LANDED;
 			case Ufo::CRASHED:	return Globe::GLM_UFO_CRASHED;
 		}
-
-		return _rules->getMarker();
 	}
 
 	return -1;
