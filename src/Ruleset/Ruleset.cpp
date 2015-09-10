@@ -706,8 +706,7 @@ void Ruleset::loadFile(const std::string& file) // protected.
 		RuleTerrain* const rule = loadRule(
 										*i,
 										&_terrains,
-										&_terrainIndex,
-										"type");
+										&_terrainIndex);
 		if (rule != NULL)
 			rule->load(
 					*i,
@@ -778,8 +777,7 @@ void Ruleset::loadFile(const std::string& file) // protected.
 		AlienRace* const rule = loadRule(
 									*i,
 									&_alienRaces,
-									&_aliensIndex,
-									"id");
+									&_aliensIndex);
 		if (rule != NULL)
 			rule->load(*i);
 	}
@@ -1229,8 +1227,7 @@ void Ruleset::loadFile(const std::string& file) // protected.
 		RuleMissionScript* const rule = loadRule(
 											*i,
 											&_missionScripts,
-											&_missionScriptIndex,
-											"type");
+											&_missionScriptIndex);
 		if (rule != NULL)
 			rule->load(*i);
 	}
@@ -1266,7 +1263,7 @@ void Ruleset::loadFile(const std::string& file) // protected.
  * @param node	- reference a YAML node
  * @param types	- pointer to a map associated to the rule type
  * @param index	- pointer to a vector of indices for the rule type (default NULL)
- * @param key	- reference the rule's key name (default "type")
+ * @param keyId	- reference the rule's key-ID (default "type")
  * @return, pointer to new rule if one was created or NULL if one was removed
  */
 template<typename T>
@@ -1274,13 +1271,13 @@ T* Ruleset::loadRule(
 		const YAML::Node& node,
 		std::map<std::string, T*>* types,
 		std::vector<std::string>* index,
-		const std::string& key)
+		const std::string& keyId)
 {
 	T* rule = NULL;
 
-	if (node[key])
+	if (node[keyId])
 	{
-		const std::string type = node[key].as<std::string>();
+		const std::string type = node[keyId].as<std::string>();
 		typename std::map<std::string, T*>::const_iterator i = types->find(type);
 		if (i != types->end())
 			rule = i->second;
@@ -1667,12 +1664,12 @@ RuleUnit* Ruleset::getUnit(const std::string& type) const
 
 /**
  * Returns the info about a specific alien race.
- * @param name - reference a Race type
+ * @param type - reference a Race type
  * @return, pointer to the Rule for AlienRaces
  */
-AlienRace* Ruleset::getAlienRace(const std::string& name) const
+AlienRace* Ruleset::getAlienRace(const std::string& type) const
 {
-	std::map<std::string, AlienRace*>::const_iterator i = _alienRaces.find(name);
+	std::map<std::string, AlienRace*>::const_iterator i = _alienRaces.find(type);
 	if (i != _alienRaces.end())
 		return i->second;
 

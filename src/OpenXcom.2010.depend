@@ -4555,7 +4555,7 @@
 1440346956 f:\git\openxcom\src\interface\window.h
 	"../Engine/Surface.h"
 
-1440608706 f:\git\openxcom\src\ruleset\ruleset.h
+1441884336 f:\git\openxcom\src\ruleset\ruleset.h
 	"../Ruleset/RuleAlienMission.h"
 	"../Savegame/GameTime.h"
 
@@ -5553,7 +5553,7 @@
 
 1440163450 f:\git\openxcom\src\ruleset\ruleinventory.h
 
-1441863198 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
+1441880456 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
 	"BattlescapeGenerator.h"
 	"AlienBAIState.h"
 	"CivilianBAIState.h"
@@ -6208,7 +6208,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1441855094 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1441872422 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	"AlienBAIState.h"
 	"BattlescapeState.h"
@@ -6792,7 +6792,7 @@
 1432527783 f:\git\openxcom\src\savegame\waypoint.h
 	"Target.h"
 
-1441844115 source:f:\git\openxcom\src\geoscape\confirmlandingstate.cpp
+1441881761 source:f:\git\openxcom\src\geoscape\confirmlandingstate.cpp
 	"ConfirmLandingState.h"
 	"../Battlescape/BattlescapeGenerator.h"
 	"../Battlescape/BriefingState.h"
@@ -7439,7 +7439,7 @@
 1441236147 source:f:\git\openxcom\src\interface\numbertext.cpp
 	"NumberText.h"
 
-1430149550 source:f:\git\openxcom\src\interface\slider.cpp
+1441882663 source:f:\git\openxcom\src\interface\slider.cpp
 	"Slider.h"
 	<algorithm>
 	"../fmath.h"
@@ -7581,7 +7581,7 @@
 	"OptionsBaseState.h"
 	"../Engine/State.h"
 
-1441844029 source:f:\git\openxcom\src\menu\newbattlestate.cpp
+1441882872 source:f:\git\openxcom\src\menu\newbattlestate.cpp
 	"NewBattleState.h"
 	"../Basescape/CraftInfoState.h"
 	"../Battlescape/BattlescapeGenerator.h"
@@ -8255,7 +8255,7 @@
 	"MCDPatch.h"
 	"MapDataSet.h"
 
-1440531520 source:f:\git\openxcom\src\ruleset\rulealienmission.cpp
+1441871098 source:f:\git\openxcom\src\ruleset\rulealienmission.cpp
 	"RuleAlienMission.h"
 	"../Savegame/WeightedOptions.h"
 
@@ -8349,7 +8349,7 @@
 	"MapDataSet.h"
 	"Ruleset.h"
 
-1439307006 source:f:\git\openxcom\src\ruleset\ruleufo.cpp
+1441881110 source:f:\git\openxcom\src\ruleset\ruleufo.cpp
 	"RuleUfo.h"
 	"RuleTerrain.h"
 
@@ -8646,7 +8646,7 @@
 	"../Engine/Language.h"
 	"../Ruleset/Ruleset.h"
 
-1441252418 source:f:\git\openxcom\src\savegame\ufo.cpp
+1441881651 source:f:\git\openxcom\src\savegame\ufo.cpp
 	"Ufo.h"
 	"AlienMission.h"
 	"Craft.h"
@@ -8668,7 +8668,7 @@
 	"../Engine/Language.h"
 	"../Geoscape/Globe.h"
 
-1440546315 source:f:\git\openxcom\src\savegame\weightedoptions.cpp
+1441871593 source:f:\git\openxcom\src\savegame\weightedoptions.cpp
 	"WeightedOptions.h"
 
 1439868213 source:f:\git\openxcom\src\ufopaedia\articlestate.cpp

@@ -200,7 +200,7 @@ protected:
 			const YAML::Node& node,
 			std::map<std::string, T*>* types,
 			std::vector<std::string>* index = NULL,
-			const std::string& key = "type");
+			const std::string& keyId = "type");
 
 
 	public:
@@ -276,7 +276,7 @@ protected:
 		RuleUnit* getUnit(const std::string& type) const;
 
 		/// Gets alien race rules.
-		AlienRace* getAlienRace(const std::string& name) const;
+		AlienRace* getAlienRace(const std::string& type) const;
 		/// Gets the available alien races.
 		const std::vector<std::string>& getAlienRacesList() const;
 		/// Gets deployment rules.

@@ -280,7 +280,7 @@ void BattlescapeGenerator::run()
 		{
 			// trouble: no texture and no deployment terrain, most likely scenario is a UFO landing on water: use the first available terrain.
 			_terraRule = _game->getRuleset()->getTerrain(_game->getRuleset()->getTerrainList().front());
-			Log(LOG_WARNING) << "BattlescapeGenerator::run() - Could not find a terrain rule . . . using first terrainType: "
+			Log(LOG_WARNING) << "BattlescapeGenerator::run() - Could not find a terrain rule ... using first terrainType: "
 							 << _terraRule->getType();
 		}
 	}
@@ -596,8 +596,7 @@ void BattlescapeGenerator::nextStage()
 						&_mapsize_y,
 						&_mapsize_z);
 
-	const size_t pick = static_cast<size_t>(RNG::generate(
-						0,
+	const size_t pick = static_cast<size_t>(RNG::generate(0,
 						static_cast<int>(deployRule->getDeployTerrains().size()) - 1));
 	_terraRule = _rules->getTerrain(deployRule->getDeployTerrains().at(pick));
 
@@ -1679,18 +1678,17 @@ void BattlescapeGenerator::deployAliens(AlienDeployment* const deployRule) // pr
 		if (month > itemLevel_top)
 			month = itemLevel_top;
 
-		// race re-defined by deployment if there is one.
-		if (deployRule->getRace().empty() == false)
+		if (deployRule->getRace().empty() == false) // race re-defined by deployment if there is one.
 			_alienRace = deployRule->getRace();
 	}
 	else
 		month = _alienItemLevel;
 
-	const AlienRace* const race = _game->getRuleset()->getAlienRace(_alienRace);
-	if (race == NULL)
+	const AlienRace* const raceRule = _game->getRuleset()->getAlienRace(_alienRace);
+	if (raceRule == NULL)
 	{
 		throw Exception("Map generator encountered an error: Unknown race: ["
-				+ _alienRace + "] defined in deployRule: " + deployRule->getType());
+				+ _alienRace + "] defined in deployAliens()");
 	}
 
 
@@ -1709,7 +1707,7 @@ void BattlescapeGenerator::deployAliens(AlienDeployment* const deployRule) // pr
 			data != deployRule->getDeploymentData()->end();
 			++data)
 	{
-		aLien = race->getMember((*data).alienRank);
+		aLien = raceRule->getMember((*data).alienRank);
 
 		if (_gameSave->getDifficulty() < DIFF_VETERAN)
 			qty = (*data).lowQty

@@ -357,7 +357,7 @@ void ConfirmLandingState::btnYesClick(Action*)
 	_game->popState();
 
 	Ufo* const ufo = dynamic_cast<Ufo*>(_craft->getDestination());
-	MissionSite* const missionSite = dynamic_cast<MissionSite*>(_craft->getDestination());
+	MissionSite* const site = dynamic_cast<MissionSite*>(_craft->getDestination());
 	AlienBase* const alienBase = dynamic_cast<AlienBase*>(_craft->getDestination());
 
 	SavedBattleGame* battleSave = new SavedBattleGame(&_game->getRuleset()->getOperations());
@@ -380,12 +380,12 @@ void ConfirmLandingState::btnYesClick(Action*)
 //		bGen.setTacTexture(_texRule); // was an INT <- !!!
 //		bGen.setIsCity(_city != NULL); // kL
 	}
-	else if (missionSite != NULL)
+	else if (site != NULL)
 	{
-		battleSave->setTacticalType(missionSite->getDeployment()->getType());
+		battleSave->setTacticalType(site->getDeployment()->getType());
 
-		bGen.setMissionSite(missionSite);
-		bGen.setAlienRace(missionSite->getAlienRace());
+		bGen.setMissionSite(site);
+		bGen.setAlienRace(site->getAlienRace());
 		bGen.setTerrain(_terrainRule); // kL
 		bGen.setShade(_shade);
 //		bGen.setTacTexture(_texRule); // was an INT <- !!!

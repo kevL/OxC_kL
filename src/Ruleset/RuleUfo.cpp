@@ -143,7 +143,7 @@ int RuleUfo::getSprite() const
 
 /**
  * Returns the globe marker for the UFO type.
- * @return, marker sprite -1 if none
+ * @return, marker sprite -1 if none defined in YAML
  */
 int RuleUfo::getMarker() const
 {

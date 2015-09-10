@@ -634,32 +634,32 @@ void NewBattleState::btnRandomClick(Action*)
 {
 	initPlay();
 
-	_cbxMission->setSelected(RNG::generate(
-										0,
-										_missionTypes.size() - 1));
+	size_t pick = static_cast<size_t>(RNG::generate(0,
+				  static_cast<int>(_missionTypes.size()) - 1));
+	_cbxMission->setSelected(pick);
 	cbxMissionChange(NULL);
 
-	_cbxCraft->setSelected(RNG::generate(
-										0,
-										_crafts.size() - 1));
+	pick = static_cast<size_t>(RNG::generate(0,
+		   static_cast<int>(_crafts.size()) - 1));
+	_cbxCraft->setSelected(pick);
 	cbxCraftChange(NULL);
 
 	_slrDarkness->setValue(RNG::generate(0,15));
 
-	_cbxTerrain->setSelected(RNG::generate(
-										0,
-										_terrainTypes.size() - 1));
+	pick = static_cast<size_t>(RNG::generate(0,
+		   static_cast<int>(_terrainTypes.size()) - 1));
+	_cbxTerrain->setSelected(pick);
 //	cbxTerrainChange(NULL);
 
-	_cbxAlienRace->setSelected(RNG::generate(
-										0,
-										_alienRaces.size() - 1));
+	pick = static_cast<size_t>(RNG::generate(0,
+		   static_cast<int>(_alienRaces.size()) - 1));
+	_cbxAlienRace->setSelected(pick);
 
-	_cbxDifficulty->setSelected(RNG::generate(0,4));
+	_cbxDifficulty->setSelected(static_cast<size_t>(RNG::generate(0,4)));
 
-	_slrAlienTech->setValue(RNG::generate(
-										0,
-										_rules->getAlienItemLevels().size() - 1));
+	const int pick_i = RNG::generate(0,
+					   static_cast<int>(_rules->getAlienItemLevels().size()) - 1);
+	_slrAlienTech->setValue(pick_i);
 }
 
 /**

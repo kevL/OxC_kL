@@ -335,17 +335,19 @@ std::wstring Ufo::getName(const Language* const lang) const
  */
 int Ufo::getMarker() const
 {
-	if (_detected == false)
-		return -1;
-
-	switch (_status)
+	if (_detected == true)
 	{
-		case Ufo::FLYING:	return Globe::GLM_UFO_FLYING;
-		case Ufo::LANDED:	return Globe::GLM_UFO_LANDED;
-		case Ufo::CRASHED:	return Globe::GLM_UFO_CRASHED;
+		switch (_status)
+		{
+			case Ufo::FLYING:	return Globe::GLM_UFO_FLYING;
+			case Ufo::LANDED:	return Globe::GLM_UFO_LANDED;
+			case Ufo::CRASHED:	return Globe::GLM_UFO_CRASHED;
+		}
+
+		return _rules->getMarker();
 	}
 
-	return _rules->getMarker();
+	return -1;
 }
 
 /**
@@ -354,10 +356,9 @@ int Ufo::getMarker() const
  */
 void Ufo::setDamage(int damage)
 {
-	_damage = damage;
-
-	if (_damage < 0)
-		_damage = 0;
+	if (damage < 0) _damage = 0;
+	else
+		_damage = damage;
 
 	if (_damage >= _rules->getMaxDamage())
 		_status = DESTROYED;
@@ -423,7 +424,8 @@ bool Ufo::getHyperDetected() const
 
 /**
  * Changes the amount of remaining seconds the UFO has left on the ground.
- * After this many seconds this Ufo will take off if landed or disappear if crashed.
+ * @note After this many seconds this Ufo will take off if landed or disappear
+ * if crashed.
  * @param sec - time in seconds
  */
 void Ufo::setSecondsLeft(int sec)
@@ -433,7 +435,8 @@ void Ufo::setSecondsLeft(int sec)
 
 /**
  * Returns the amount of remaining seconds the UFO has left on the ground.
- * After this many seconds this Ufo will take off if landed or disappear if crashed.
+ * @note After this many seconds this Ufo will take off if landed or disappear
+ * if crashed.
  * @return, amount of seconds
  */
 int Ufo::getSecondsLeft() const

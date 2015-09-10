@@ -900,9 +900,9 @@ Position TileEngine::getOriginVoxel(
 	Position
 		posOrigin = tile->getPosition(),
 		originVoxel = Position(
-								posOrigin.x * 16,
-								posOrigin.y * 16,
-								posOrigin.z * 24);
+							posOrigin.x * 16,
+							posOrigin.y * 16,
+							posOrigin.z * 24);
 
 	if (action.type != BA_LAUNCH
 		|| action.actor->getPosition() == posOrigin)

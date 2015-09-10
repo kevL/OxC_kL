@@ -37,8 +37,8 @@ namespace OpenXcom
  * Sets up a slider with the specified size and position.
  * @param width		- width in pixels
  * @param height	- height in pixels
- * @param x			- X position in pixels
- * @param y			- Y position in pixels
+ * @param x			- X position in pixels (default 0)
+ * @param y			- Y position in pixels (default 0)
  */
 Slider::Slider(
 		int width,
@@ -49,9 +49,8 @@ Slider::Slider(
 		InteractiveSurface(
 			width,
 			height,
-			x,
-			y),
-		_pos(0.0),
+			x,y),
+		_pos(0.),
 		_min(0),
 		_max(100),
 		_pressed(false),
@@ -76,7 +75,7 @@ Slider::Slider(
 					_thickness,
 					x + _textness,
 					y + (height - _thickness) / 2);
-	_button = new TextButton(10, height, x, y);
+	_button = new TextButton(10, height, x,y);
 
 
 	_frame->setThickness(_thickness);
@@ -92,8 +91,7 @@ Slider::Slider(
 	_minX = _frame->getX();
 	_maxX = _frame->getX() + _frame->getWidth() - _button->getWidth();
 
-//kL	setValue(_pos);
-	setValue(static_cast<int>(_pos)); // kL
+	setValue(static_cast<int>(_pos));
 }
 
 /**
@@ -123,8 +121,7 @@ void Slider::setX(int x)
 	_minX = _frame->getX();
 	_maxX = _frame->getX() + _frame->getWidth() - _button->getWidth();
 
-//kL	setValue(_pos);
-	setValue(static_cast<int>(_pos)); // kL
+	setValue(static_cast<int>(_pos));
 }
 
 /**
@@ -226,19 +223,18 @@ void Slider::handle(Action* action, State* state)
 {
 	InteractiveSurface::handle(action, state);
 //	_button->handle(action, state);
-	if (_pressed
+	if (_pressed == true
 		&& (action->getDetails()->type == SDL_MOUSEMOTION
 			|| action->getDetails()->type == SDL_MOUSEBUTTONDOWN))
 	{
-		int cursorX = static_cast<int>(action->getAbsoluteXMouse());
-		double buttonX = static_cast<double>(std::min(
-													std::max(
-															_minX,
-															cursorX + _offsetX),
-													_maxX));
-		double pos = (buttonX - static_cast<double>(_minX)) / static_cast<double>(_maxX - _minX);
-
-		int value = _min + static_cast<int>(Round(static_cast<double>(_max - _min) * pos));
+		const int cursorX = static_cast<int>(action->getAbsoluteXMouse());
+		const double buttonX = static_cast<double>(std::min(
+														_maxX,
+														std::max(
+																_minX,
+																cursorX + _offsetX)));
+		const double pos = (buttonX - static_cast<double>(_minX)) / static_cast<double>(_maxX - _minX);
+		const int value = _min + static_cast<int>(Round(static_cast<double>(_max - _min) * pos));
 		setValue(value);
 
 		if (_change)
@@ -253,20 +249,20 @@ void Slider::handle(Action* action, State* state)
 void Slider::setPosition(double pos)
 {
 	_pos = pos;
-	_button->setX(static_cast<int>(floor(static_cast<double>(_minX) + static_cast<double>(_maxX - _minX) * _pos)));
+	_button->setX(static_cast<int>(std::floor(static_cast<double>(_minX) + static_cast<double>(_maxX - _minX) * _pos)));
 }
 
 /**
  * Changes the range of values the slider can contain.
- * @param min - minimum value
- * @param max - maximum value
+ * @param minVal - minimum value
+ * @param maxVal - maximum value
  */
 void Slider::setRange(
-		int min,
-		int max)
+		int minVal,
+		int maxVal)
 {
-	_min = min;
-	_max = max;
+	_min = minVal;
+	_max = maxVal;
 
 	setValue(_value);
 }
@@ -282,13 +278,13 @@ void Slider::setValue(int value)
 	else
 		_value = std::min(std::max(_max, value), _min);
 
-	double pos = (double)(_value - _min) / (double)(_max - _min);
+	const double pos = static_cast<double>(_value - _min) / static_cast<double>(_max - _min);
 	setPosition(pos);
 }
 
 /**
 * Returns the current value of the slider.
-* @return Value.
+* @return, value
 */
 int Slider::getValue() const
 {
@@ -316,8 +312,8 @@ void Slider::blit(Surface* surface)
 
 /**
  * The slider only moves while the button is pressed.
- * @param action - pointer to an Action
- * @param state - state that the action handlers belong to
+ * @param action	- pointer to an Action
+ * @param state		- State that the action handlers belong to
  */
 void Slider::mousePress(Action* action, State* state)
 {
@@ -340,8 +336,8 @@ void Slider::mousePress(Action* action, State* state)
 
 /**
  * The slider stops moving when the button is released.
- * @param action - pointer to an Action
- * @param state - state that the action handlers belong to
+ * @param action	- pointer to an Action
+ * @param state		- State that the action handlers belong to
  */
 void Slider::mouseRelease(Action* action, State* state)
 {
@@ -356,7 +352,7 @@ void Slider::mouseRelease(Action* action, State* state)
 
 /**
  * Sets a function to be called every time the slider's value changes.
- * @param handler Action handler.
+ * @param handler - ActionHandler
  */
 void Slider::onChange(ActionHandler handler)
 {
