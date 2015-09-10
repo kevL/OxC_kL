@@ -369,30 +369,30 @@ void ConfirmLandingState::btnYesClick(Action*)
 	if (ufo != NULL)
 	{
 		if (ufo->getStatus() == Ufo::CRASHED)
-			battleSave->setMissionType("STR_UFO_CRASH_RECOVERY");
+			battleSave->setTacticalType("STR_UFO_CRASH_RECOVERY");
 		else
-			battleSave->setMissionType("STR_UFO_GROUND_ASSAULT");
+			battleSave->setTacticalType("STR_UFO_GROUND_ASSAULT");
 
 		bGen.setUfo(ufo);
 		bGen.setAlienRace(ufo->getAlienRace());
-		bGen.setTacTerrain(_terrainRule); // kL
-		bGen.setTacShade(_shade);
+		bGen.setTerrain(_terrainRule); // kL
+		bGen.setShade(_shade);
 //		bGen.setTacTexture(_texRule); // was an INT <- !!!
 //		bGen.setIsCity(_city != NULL); // kL
 	}
 	else if (missionSite != NULL)
 	{
-		battleSave->setMissionType(missionSite->getDeployment()->getType());
+		battleSave->setTacticalType(missionSite->getDeployment()->getType());
 
 		bGen.setMissionSite(missionSite);
 		bGen.setAlienRace(missionSite->getAlienRace());
-		bGen.setTacTerrain(_terrainRule); // kL
-		bGen.setTacShade(_shade);
+		bGen.setTerrain(_terrainRule); // kL
+		bGen.setShade(_shade);
 //		bGen.setTacTexture(_texRule); // was an INT <- !!!
 	}
 	else if (alienBase != NULL)
 	{
-		battleSave->setMissionType("STR_ALIEN_BASE_ASSAULT");
+		battleSave->setTacticalType("STR_ALIEN_BASE_ASSAULT");
 
 		bGen.setAlienBase(alienBase);
 		bGen.setAlienRace(alienBase->getAlienRace());
@@ -410,7 +410,6 @@ void ConfirmLandingState::btnYesClick(Action*)
 
 /**
  * Returns the craft to base and closes the window.
- * @note CHANGE: the craft goes into Patrol mode.
  * @param action - pointer to an Action
  */
 void ConfirmLandingState::btnNoClick(Action*)

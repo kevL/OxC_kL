@@ -43,8 +43,8 @@ class AbortMissionState
 
 private:
 	int
-		_inExitArea,
-		_outExitArea;
+		_insideExitArea,
+		_outsideExitArea;
 
 	BattlescapeState* _state;
 	Text

@@ -94,7 +94,7 @@ private:
 		void load(const YAML::Node& node);
 
 		/// Gets a race based on the game time and the racial distribution.
-		std::string generateRace(const size_t monthsPassed) const;
+		std::string generateRace(size_t monthsPassed) const;
 		/// Gets the most likely race based on the game time and the racial distribution.
 //		std::string getTopRace(const size_t monthsPassed) const;
 

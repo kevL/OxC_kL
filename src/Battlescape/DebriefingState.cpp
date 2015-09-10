@@ -368,17 +368,17 @@ DebriefingState::DebriefingState()
 
 
 	// Soldier Diary ->
-	SavedBattleGame* const battle = _gameSave->getBattleSave();
+	SavedBattleGame* const battleSave = _gameSave->getBattleSave();
 
 	_missionStatistics->id = _gameSave->getMissionStatistics()->size();
-	_missionStatistics->shade = battle->getGlobalShade();
+	_missionStatistics->shade = battleSave->getTacticalShade();
 
 	//Log(LOG_INFO) << "DebriefingState::cTor";
 	Soldier* sol;
 
 	for (std::vector<BattleUnit*>::const_iterator
-			i = battle->getUnits()->begin();
-			i != battle->getUnits()->end();
+			i = battleSave->getUnits()->begin();
+			i != battleSave->getUnits()->end();
 			++i)
 	{
 		//Log(LOG_INFO) << ". iter BattleUnits";
@@ -702,7 +702,7 @@ void DebriefingState::prepareDebriefing() // private.
 		objectiveFailedScore = 0;	// dang vc++ compiler warnings.
 
 	SavedBattleGame* const battleSave = _gameSave->getBattleSave();
-	const AlienDeployment* const deployRule = _rules->getDeployment(battleSave->getMissionType());
+	const AlienDeployment* const deployRule = _rules->getDeployment(battleSave->getTacticalType());
 	// kL_note: I have a strong suspicion that although checks are made for
 	// a valid deployRule below if there isn't one you're borked anyway.
 
@@ -768,7 +768,7 @@ void DebriefingState::prepareDebriefing() // private.
 	std::vector<Craft*>::const_iterator ptrCraft;
 
 	_missionStatistics->timeStat = *_gameSave->getTime();
-	_missionStatistics->type = battleSave->getMissionType();
+	_missionStatistics->type = battleSave->getTacticalType();
 
 	if (_skirmish == false) // Do all aLienRace types here for SoldierDiary stat.
 	{
@@ -1091,7 +1091,7 @@ void DebriefingState::prepareDebriefing() // private.
 	}
 
 
-	const TacticalType tacType = battleSave->getTacticalType();
+	const TacticalType tacType = battleSave->getTacType();
 
 	// time to care about units.
 	for (std::vector<BattleUnit*>::const_iterator

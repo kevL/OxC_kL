@@ -71,10 +71,8 @@ YAML::Node AlienBase::save() const
 	node["race"]	= _race;
 	node["edit"]	= _edit;
 
-	if (_tactical == true)
-		node["tactical"]	= _tactical;
-	if (_discovered == true)
-		node["discovered"]	= _discovered;
+	if (_tactical == true)		node["tactical"]	= _tactical;
+	if (_discovered == true)	node["discovered"]	= _discovered;
 
 	return node;
 }

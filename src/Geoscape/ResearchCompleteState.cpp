@@ -84,6 +84,9 @@ ResearchCompleteState::ResearchCompleteState(
 	_btnReport->onKeyboardPress(
 						(ActionHandler)& ResearchCompleteState::btnReportClick,
 						Options::keyOk);
+	_btnReport->onKeyboardPress(
+						(ActionHandler)& ResearchCompleteState::btnReportClick,
+						Options::keyOkKeypad);
 
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);

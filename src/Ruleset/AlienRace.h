@@ -53,13 +53,13 @@ class AlienRace
 private:
 	bool _retaliation;
 
-	std::string _id;
+	std::string _type;
 	std::vector<std::string> _members;
 
 
 	public:
 		/// Creates a blank alien race ruleset.
-		explicit AlienRace(const std::string& id);
+		explicit AlienRace(const std::string& type);
 		/// Cleans up the alien race ruleset.
 		~AlienRace();
 
@@ -67,7 +67,7 @@ private:
 		void load(const YAML::Node& node);
 
 		/// Gets the alien race's id.
-		std::string getId() const;
+//		std::string getAlienType() const;
 		/// Gets a certain member of this alien race family.
 		std::string getMember(int rankId) const;
 

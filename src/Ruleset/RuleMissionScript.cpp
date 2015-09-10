@@ -39,7 +39,7 @@ RuleMissionScript::RuleMissionScript(const std::string& type)
 		_label(0),
 		_executionOdds(100),
 		_targetBaseOdds(0),
-		_minDifficulty(0),
+		_minDifficulty(DIFF_BEGINNER),
 		_maxRuns(-1),
 		_avoidRepeats(0),
 		_delay(0),
@@ -90,11 +90,12 @@ void RuleMissionScript::load(const YAML::Node& node)
 	_label			= node["label"]			.as<unsigned int>(_label);
 	_executionOdds	= node["executionOdds"]	.as<int>(_executionOdds);
 	_targetBaseOdds	= node["targetBaseOdds"].as<int>(_targetBaseOdds);
-	_minDifficulty	= node["minDifficulty"]	.as<int>(_minDifficulty);
 	_maxRuns		= node["maxRuns"]		.as<int>(_maxRuns);
 	_avoidRepeats	= node["avoidRepeats"]	.as<int>(_avoidRepeats);
 	_delay			= node["startDelay"]	.as<int>(_delay);
 	_conditionals	= node["conditionals"]	.as<std::vector<int> >(_conditionals);
+
+	_minDifficulty = static_cast<GameDifficulty>(node["minDifficulty"].as<int>(_minDifficulty));
 
 	WeightedOptions* weightOpt;
 
@@ -210,9 +211,9 @@ int RuleMissionScript::getTargetBaseOdds() const
 
 /**
  * Gets the minimum difficulty for this script to run.
- * @return, minimum difficulty
+ * @return, minimum difficulty (SavedGame.h)
  */
-int RuleMissionScript::getMinDifficulty() const
+GameDifficulty RuleMissionScript::getMinDifficulty() const
 {
 	return _minDifficulty;
 }

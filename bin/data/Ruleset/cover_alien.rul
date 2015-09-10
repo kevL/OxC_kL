@@ -348,17 +348,6 @@ units:
     mechanical: true
     psiImmune: true
     hasHands: false
-alienRaces:
-  - id: STR_WASPITE
-    members:
-      - STR_WASPITE_COMMANDER
-      - STR_WASPITE_LEADER
-      - STR_WASPITE_ENGINEER
-      - STR_WASPITE_MEDIC
-      - STR_WASPITE_NAVIGATOR
-      - STR_WASPITE_SOLDIER
-      - STR_CYBERMITE_TERRORIST
-      - STR_CYBERMITE_TERRORIST
 ufopaedia:
   - id: STR_WASPITE
     type_id: 7
@@ -396,55 +385,6 @@ ufopaedia:
     text: STR_CYBERMITE_AUTOPSY_UFOPAEDIA
     text_width: 158
     listOrder: 9351
-alienMissions: #kL_note: have not doubled the month-value yet
-  - type: STR_ALIEN_RESEARCH
-    raceWeights:
-      0:
-          STR_WASPITE: 0
-      1:
-          STR_WASPITE: 0
-      3:
-          STR_WASPITE: 0
-      5:
-          STR_WASPITE: 20
-      7:
-          STR_WASPITE: 20
-  - type: STR_ALIEN_INFILTRATION
-    raceWeights:
-      0:
-          STR_WASPITE: 0
-      1:
-          STR_WASPITE: 0
-      3:
-          STR_WASPITE: 10
-      5:
-          STR_WASPITE: 20
-      7:
-          STR_WASPITE: 20
-  - type: STR_ALIEN_BASE
-    raceWeights:
-      0:
-          STR_WASPITE: 0
-      1:
-          STR_WASPITE: 0
-      3:
-          STR_WASPITE: 10
-      5:
-          STR_WASPITE: 30
-      7:
-          STR_WASPITE: 20
-  - type: STR_ALIEN_TERROR
-    raceWeights:
-      0:
-          STR_WASPITE: 0
-      1:
-          STR_WASPITE: 0
-      3:
-          STR_WASPITE: 10
-      5:
-          STR_WASPITE: 40
-      7:
-          STR_WASPITE: 30
 extraSprites:
   - type: WASPITE.PCK
     width: 512

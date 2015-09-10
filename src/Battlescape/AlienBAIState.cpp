@@ -599,8 +599,8 @@ void AlienBAIState::setupPatrol() // private.
 		scout = true; // look for a new node to walk towards
 
 		// note: aLiens attacking XCOM Base are always on scout.
-//		if (_battleSave->getMissionType() != "STR_BASE_DEFENSE")
-		if (_battleSave->getTacticalType() != TCT_BASEDEFENSE)
+//		if (_battleSave->getTacticalType() != "STR_BASE_DEFENSE")
+		if (_battleSave->getTacType() != TCT_BASEDEFENSE)
 		{
 			// after turn 20 or if the morale is low, everyone moves out the UFO and scout
 
@@ -1718,8 +1718,8 @@ void AlienBAIState::evaluateAIMode() // private.
 			ambushOdds = 0.f;
 
 		// factor in mission type
-//		if (_battleSave->getMissionType() == "STR_BASE_DEFENSE")
-		if (_battleSave->getTacticalType() == TCT_BASEDEFENSE)
+//		if (_battleSave->getTacticalType() == "STR_BASE_DEFENSE")
+		if (_battleSave->getTacType() == TCT_BASEDEFENSE)
 		{
 			escapeOdds *= 0.8f; // was 0.75
 			ambushOdds *= 0.5f; // was 0.6
@@ -1975,28 +1975,11 @@ bool AlienBAIState::explosiveEfficacy(
 		if (dist < explRadius + 1)
 		{
 			pct -= (explRadius - dist + 1) * 5;
-
 			if (std::abs(attacker->getPosition().z - targetPos.z) < Options::battleExplosionHeight + 1)
 				pct -= 15;
 		}
 
-/*		std::string missionType = _battleSave->getMissionType();
-		if (missionType == "STR_ALIEN_BASE_ASSAULT")
-			pct -= 23;
-		else if (missionType == "STR_BASE_DEFENSE"
-			|| missionType == "STR_TERROR_MISSION")
-		{
-			pct += 56;
-		} */
-/*		TacticalType tacType = _battleSave->getTacticalType();
-		if (tacType == TCT_BASEASSAULT)
-			pct -= 23;
-		else if (tacType == TCT_BASEDEFENSE
-			|| tacType == TCT_MISSIONSITE)
-		{
-			pct += 56;
-		} */
-		switch (_battleSave->getTacticalType())
+		switch (_battleSave->getTacType())
 		{
 			case TCT_BASEASSAULT:
 				pct -= 23;
@@ -2072,7 +2055,6 @@ bool AlienBAIState::explosiveEfficacy(
 						if ((*i)->getOriginalFaction() == FACTION_HOSTILE)
 						{
 							pct -= 6;
-
 							if ((*i)->getFaction() == FACTION_HOSTILE)
 								pct -= 12;
 						}

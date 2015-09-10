@@ -119,7 +119,7 @@ void ConfirmCydoniaState::btnYesClick(Action*)
 		const AlienDeployment* const ruleDeploy = _game->getRuleset()->getDeployment(*i);
 		if (ruleDeploy->isFinalDestination() == true)
 		{
-			battleSave->setMissionType(*i);
+			battleSave->setTacticalType(*i);
 			bGen.setAlienRace(ruleDeploy->getRace());
 
 			break;

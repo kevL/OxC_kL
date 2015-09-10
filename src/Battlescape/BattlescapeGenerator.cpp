@@ -208,7 +208,7 @@ void BattlescapeGenerator::setAlienBase(AlienBase* base)
  * or nextStage().
  * @param texture - pointer to RuleTerrain
  */
-void BattlescapeGenerator::setTacTerrain(RuleTerrain* terrain)
+void BattlescapeGenerator::setTerrain(RuleTerrain* terrain)
 {
 	_terraRule = terrain;
 }
@@ -218,12 +218,10 @@ void BattlescapeGenerator::setTacTerrain(RuleTerrain* terrain)
  * @note This is used to determine the battlescape light level.
  * @param shade - shade of the polygon on the globe
  */
-void BattlescapeGenerator::setTacShade(int shade)
+void BattlescapeGenerator::setShade(int shade)
 {
-	if (shade > 15)
-		shade = 15;
-	else if (shade < 0)
-		shade = 0;
+	if (shade > 15) shade = 15;
+	else if (shade < 0) shade = 0;
 
 	_shade = shade;
 }
@@ -265,27 +263,23 @@ void BattlescapeGenerator::run()
 	if (_ufo != NULL)
 		deployRule = _rules->getDeployment(_ufo->getRules()->getType());
 	else
-		deployRule = _rules->getDeployment(_battleSave->getMissionType());
-
-	if (deployRule->getShade() != -1)
-		_shade = deployRule->getShade();
+		deployRule = _rules->getDeployment(_battleSave->getTacticalType());
 
 	deployRule->getDimensions(
 						&_mapsize_x,
 						&_mapsize_y,
 						&_mapsize_z);
-
-	if (_terraRule == NULL)	// ie. if not NewBattleState ...... & not UFO, & not missionSite -> is Set for those.
-	{						// '_terraRule' NOT set for Cydonia, Base assault/defense.
-		const size_t pick = static_cast<size_t>(RNG::generate(
-									0,
-									static_cast<int>(deployRule->getDeployTerrains().size()) - 1));
+	size_t pick;
+	if (_terraRule == NULL)	// '_terraRule' NOT set for Cydonia, Base assault/defense. Already set for NewBattleState ...... & UFO, & missionSite.
+	{
+		pick = static_cast<size_t>(RNG::generate(0,
+			   static_cast<int>(deployRule->getDeployTerrains().size()) - 1));
 		_terraRule = _rules->getTerrain(deployRule->getDeployTerrains().at(pick));
 
 		if (_terraRule == NULL)
 		{
-			// trouble: no texture and no deployment terrain, most likely scenario is a UFO landing on water: use the first available terrain
-			_terraRule = _game->getRuleset()->getTerrain(_game->getRuleset()->getTerrainList().front()); // Choose first from ruleset list ...
+			// trouble: no texture and no deployment terrain, most likely scenario is a UFO landing on water: use the first available terrain.
+			_terraRule = _game->getRuleset()->getTerrain(_game->getRuleset()->getTerrainList().front());
 			Log(LOG_WARNING) << "BattlescapeGenerator::run() - Could not find a terrain rule . . . using first terrainType: "
 							 << _terraRule->getType();
 		}
@@ -297,19 +291,14 @@ void BattlescapeGenerator::run()
 			|| _texture->getTerrainCriteria()->empty() == true
 			|| deployRule->getDeployTerrains().empty() == false)
 		{
-			size_t pick = RNG::generate(
-									0,
-									deployRule->getDeployTerrains().size() - 1);
+			size_t pick = RNG::generate(0, deployRule->getDeployTerrains().size() - 1);
 			_terraRule = _rules->getTerrain(deployRule->getDeployTerrains().at(pick));
 		}
 		else // UFO crashed/landed or MissionSite
 		{
 			const Target* target;
-			if (_mission != NULL)
-				target = _mission;
-			else
-				target = _ufo;
-
+			if (_mission != NULL) target = _mission;
+			else target = _ufo;
 			_terraRule = _rules->getTerrain(_texture->getRandomTerrain(target));
 		}
 	} */
@@ -320,14 +309,9 @@ void BattlescapeGenerator::run()
 		{
 			Log(LOG_INFO) << ". siteTexture = " << _texture;
 			double lat;
-			if (_ufo != NULL)
-				lat = _ufo->getLatitude();
-			else
-				lat = 0.;
-
-			_terraRule = getTerrain(
-								_texture,
-								lat);
+			if (_ufo != NULL) lat = _ufo->getLatitude();
+			else lat = 0.;
+			_terraRule = getTerrain(_texture, lat);
 		}
 		else
 		{
@@ -344,22 +328,18 @@ void BattlescapeGenerator::run()
 	else // set-piece battle like Cydonia or Terror site or Base assault/defense
 	{
 		Log(LOG_INFO) << "bGen::run() Choose terrain from deployment, qty = " << deployRule->getDeployTerrains().size();
-		const size_t pick = RNG::generate(
-										0,
-										deployRule->getDeployTerrains().size() - 1);
+		const size_t pick = RNG::generate(0, deployRule->getDeployTerrains().size() - 1);
 		_terraRule = _rules->getTerrain(deployRule->getDeployTerrains().at(pick));
 	} */
 
 	const std::vector<MapScript*>* script = NULL; // alienDeployment script overrides terrain script <-
-
 	const std::string scriptDeploy = deployRule->getScript();
 	//Log(LOG_INFO) << "bgen: scriptDeploy = " << scriptDeploy;
 	if (scriptDeploy.empty() == false)
 	{
 		script = _rules->getMapScript(scriptDeploy);
-		if (script == NULL)
-			Log(LOG_WARNING) << "BattlescapeGenerator::nextStage() - There is a Deployment script defined ["
-							 << scriptDeploy << "] but could not find its rule.";
+		if (script == NULL) Log(LOG_WARNING) << "BattlescapeGenerator::nextStage() - There is a Deployment script defined ["
+											 << scriptDeploy << "] but could not find its rule.";
 	}
 
 	if (script == NULL)
@@ -369,9 +349,8 @@ void BattlescapeGenerator::run()
 		if (scriptTerra.empty() == false)
 		{
 			script = _rules->getMapScript(scriptTerra);
-			if (script == NULL)
-				Log(LOG_WARNING) << "BattlescapeGenerator::nextStage() - There is a Terrain script defined ["
-								 << scriptTerra << "] but could not find its rule.";
+			if (script == NULL) Log(LOG_WARNING) << "BattlescapeGenerator::nextStage() - There is a Terrain script defined ["
+												 << scriptTerra << "] but could not find its rule.";
 		}
 	}
 
@@ -382,6 +361,11 @@ void BattlescapeGenerator::run()
 
 	generateMap(script); // <-- BATTLE MAP GENERATION.
 	setupObjectives(deployRule);
+
+	if (deployRule->getShade() != -1)
+		setShade(deployRule->getShade());
+
+	_battleSave->setTacticalShade(_shade);
 
 	_battleSave->setBattleTerrain(_terraRule->getType());
 	setTacticalSprites();
@@ -402,33 +386,19 @@ void BattlescapeGenerator::run()
 	if (_generateFuel == true)
 		fuelPowerSources();
 
-//	if (_missionType == "STR_UFO_CRASH_RECOVERY")
-	if (_ufo != NULL
-		&& _ufo->getStatus() == Ufo::CRASHED)
-	{
+	if (_ufo != NULL && _ufo->getStatus() == Ufo::CRASHED)
 		explodePowerSources();
-	}
 
 /*	if (_missionType == "STR_BASE_DEFENSE")
 	{
-		for (int
-				i = 0;
-				i < _battleSave->getMapSizeXYZ();
-				++i)
-		{
+		for (int i = 0; i < _battleSave->getMapSizeXYZ(); ++i)
 			_battleSave->getTiles()[i]->setDiscovered(true, 2);
-		}
-
 		_battleSave->calculateModuleMap();
 	}
-
 	if (_missionType == "STR_ALIEN_BASE_ASSAULT"
 		|| _missionType == "STR_MARS_THE_FINAL_ASSAULT")
 	{
-		for (int
-				i = 0;
-				i < _battleSave->getMapSizeXYZ();
-				++i)
+		for (int i = 0; i < _battleSave->getMapSizeXYZ(); ++i)
 		{
 			if (_battleSave->getTiles()[i]->getMapData(O_FLOOR)
 				&& (_battleSave->getTiles()[i]->getMapData(O_FLOOR)->getSpecialType() == START_POINT
@@ -440,13 +410,9 @@ void BattlescapeGenerator::run()
 			}
 		}
 	} */
-
 /*	if (_craftDeployed == false)
 	{
-		for (int
-				i = 0;
-				i < _battleSave->getMapSizeXYZ();
-				++i)
+		for (int i = 0; i < _battleSave->getMapSizeXYZ(); ++i)
 		{
 			if (_battleSave->getTiles()[i]->getMapData(O_FLOOR) != NULL
 				&& _battleSave->getTiles()[i]->getMapData(O_FLOOR)->getSpecialType() == START_POINT)
@@ -461,20 +427,21 @@ void BattlescapeGenerator::run()
 
 	std::vector<std::string> deployMusic = deployRule->getMusic(); // this is const but I don't want to deal with it.
 	if (deployMusic.empty() == false)
-		_battleSave->setMusic(deployMusic.at(static_cast<size_t>(RNG::generate(
-																			0,
-																			deployMusic.size() - 1))));
+	{
+		pick = static_cast<size_t>(RNG::generate(0,
+			   static_cast<int>(deployMusic.size()) - 1));
+		_battleSave->setMusic(deployMusic.at(pick));
+	}
 	else
 	{
 		std::vector<std::string> terrainMusic = _terraRule->getMusic(); // this is const but I don't want to deal with it.
 		if (terrainMusic.empty() == false)
-			_battleSave->setMusic(terrainMusic.at(static_cast<size_t>(RNG::generate(
-																				0,
-																				terrainMusic.size() - 1))));
+		{
+			pick = static_cast<size_t>(RNG::generate(0,
+				   static_cast<int>(terrainMusic.size()) - 1));
+			_battleSave->setMusic(terrainMusic.at(pick));
+		}
 	}
-
-	// set shade (alien bases are a little darker, sites depend on worldshade)
-	_battleSave->setGlobalShade(_shade);
 
 	_battleSave->getTileEngine()->calculateSunShading();
 	_battleSave->getTileEngine()->calculateTerrainLighting();
@@ -492,7 +459,7 @@ void BattlescapeGenerator::nextStage()
 
 	int aliensAlive = 0;
 
-	const Position posInit (Position(-1,-1,-1)); // init 'posInit'.
+	const Position posBogus (Position(-1,-1,-1));
 	for (std::vector<BattleUnit*>::const_iterator // kill all enemy units or those not in endpoint area if aborted
 			i = _battleSave->getUnits()->begin();
 			i != _battleSave->getUnits()->end();
@@ -515,10 +482,8 @@ void BattlescapeGenerator::nextStage()
 		if ((*i)->getTile() != NULL) // break old Tile's link to unit.
 			(*i)->getTile()->setUnit(NULL);
 
-		(*i)->setTile(NULL);	// break unit's link to all Tiles.
-		(*i)->setPosition(		// and give it a bogus Position
-						posInit,
-						false);
+		(*i)->setTile(NULL);				// break unit's link to all Tiles.
+		(*i)->setPosition(posBogus, false);	// and give it a bogus Position
 	}
 
 	// Remove all items not belonging to soldiers from the map;
@@ -625,17 +590,15 @@ void BattlescapeGenerator::nextStage()
 	}
 
 
-	AlienDeployment* const deployRule = _rules->getDeployment(_battleSave->getMissionType());
-
-	_shade = deployRule->getShade();
+	AlienDeployment* const deployRule = _rules->getDeployment(_battleSave->getTacticalType());
 	deployRule->getDimensions(
 						&_mapsize_x,
 						&_mapsize_y,
 						&_mapsize_z);
 
 	const size_t pick = static_cast<size_t>(RNG::generate(
-													0,
-													static_cast<int>(deployRule->getDeployTerrains().size()) - 1));
+						0,
+						static_cast<int>(deployRule->getDeployTerrains().size()) - 1));
 	_terraRule = _rules->getTerrain(deployRule->getDeployTerrains().at(pick));
 
 
@@ -670,8 +633,13 @@ void BattlescapeGenerator::nextStage()
 	generateMap(script); // <-- BATTLE MAP GENERATION.
 	setupObjectives(deployRule);
 
-	bool selectDone = false;
+	setShade(deployRule->getShade()); // note: 2nd stage must have deployment-shade set, else 0 (bright).
+	_battleSave->setTacticalShade(_shade);
+	_battleSave->setBattleTerrain(_terraRule->getType());
+//	setTacticalSprites();
+	_battleSave->setAborted(false);
 
+	bool selectDone = false;
 	for (std::vector<BattleUnit*>::const_iterator // <-- XCOM DEPLOYMENT.
 			i = _battleSave->getUnits()->begin();
 			i != _battleSave->getUnits()->end();
@@ -691,16 +659,12 @@ void BattlescapeGenerator::nextStage()
 				selectDone = true;
 			}
 
-			const Node* const node = _battleSave->getSpawnNode(
-															NR_XCOM,
-															*i);
+			const Node* const node = _battleSave->getSpawnNode(NR_XCOM, *i);
 			if (node != NULL
 				|| placeUnitNearFriend(*i) == true)
 			{
 				if (node != NULL)
-					_battleSave->setUnitPosition(
-											*i,
-											node->getPosition());
+					_battleSave->setUnitPosition(*i, node->getPosition());
 
 				if (_tileEquipt == NULL)
 				{
@@ -714,9 +678,9 @@ void BattlescapeGenerator::nextStage()
 			}
 			else
 			{
+				(*i)->setStatus(STATUS_LIMBO);
 				Log(LOG_WARNING) << "BattlescapeGenerator::nextStage() - Could not place xCom unit ["
 								 << (*i)->getId() << "] Send to Limbo.";
-				(*i)->setStatus(STATUS_LIMBO);
 			}
 		}
 	}
@@ -734,9 +698,7 @@ void BattlescapeGenerator::nextStage()
 		++i)
 	{
 		_battleSave->getItems()->push_back(*i);
-		_tileEquipt->addItem(
-						*i,
-						grndRule);
+		_tileEquipt->addItem(*i, grndRule);
 	}
 
 
@@ -791,10 +753,7 @@ void BattlescapeGenerator::nextStage()
 	deployCivilians(deployRule->getCivilians()); // <-- CIVILIAN DEPLOYMENT.
 
 /*	// Probly don't need this anymore; it's done via "revealedFloors" in MapScripting ... but not quite.
-	for (int
-			i = 0;
-			i < _battleSave->getMapSizeXYZ();
-			++i)
+	for (int i = 0; i < _battleSave->getMapSizeXYZ(); ++i)
 	{
 		if (_battleSave->getTiles()[i]->getMapData(O_FLOOR) != NULL
 			&& _battleSave->getTiles()[i]->getMapData(O_FLOOR)->getSpecialType() == START_POINT)
@@ -805,10 +764,6 @@ void BattlescapeGenerator::nextStage()
 			_battleSave->getTiles()[i]->setDiscovered(true, 2);
 		}
 	} */
-
-	_battleSave->setAborted(false);
-
-	_battleSave->setGlobalShade(_shade);
 
 	_battleSave->getTileEngine()->calculateSunShading();
 	_battleSave->getTileEngine()->calculateTerrainLighting();
@@ -1234,7 +1189,7 @@ BattleUnit* BattlescapeGenerator::addXCOMUnit(BattleUnit* const unit) // private
 
 			return unit;
 		}
-		else if (_battleSave->getTacticalType() != TCT_BASEDEFENSE)
+		else if (_battleSave->getTacType() != TCT_BASEDEFENSE)
 		{
 			//Log(LOG_INFO) << ". . spawnNode NOT valid - not baseDefense";
 			if (placeUnitNearFriend(unit) == true)
@@ -2412,7 +2367,7 @@ void BattlescapeGenerator::loadRMP( // private.
 			if		(unitType == 3) unitType = 4; // for bit-wise
 			else if (unitType == 4) unitType = 8;
 
-			if (_battleSave->getTacticalType() != TCT_BASEDEFENSE)
+			if (_battleSave->getTacType() != TCT_BASEDEFENSE)
 				aLienObject = 0; // ensure these get zero'd for nonBaseDefense battles; cf. Node::isTarget()
 
 			node = new Node(
@@ -2671,7 +2626,7 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*>* const scri
 	// generate the map now and store it inside the tile objects
 
 	// this mission type is "hard-coded" in terms of map layout
-	if (_battleSave->getTacticalType() == TCT_BASEDEFENSE)
+	if (_battleSave->getTacType() == TCT_BASEDEFENSE)
 		generateBaseMap();
 
 	bool success;
@@ -2948,7 +2903,7 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*>* const scri
 					break;
 
 					case MSC_RESIZE:
-						if (_battleSave->getTacticalType() == TCT_BASEDEFENSE)
+						if (_battleSave->getTacType() == TCT_BASEDEFENSE)
 						{
 							throw Exception("Map Generator encountered an error: Base defense map cannot be resized.");
 						}
@@ -2990,7 +2945,7 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*>* const scri
 
 	loadNodes();
 
-	if (_battleSave->getTacticalType() == TCT_BASEASSAULT)
+	if (_battleSave->getTacType() == TCT_BASEASSAULT)
 		placeXcomProperty();
 
 
@@ -3857,7 +3812,7 @@ bool BattlescapeGenerator::addBlock( // private.
 		y * 10,
 		_terraRule,
 		0,
-		_battleSave->getTacticalType() == TCT_BASEDEFENSE);
+		_battleSave->getTacType() == TCT_BASEDEFENSE);
 
 	return true;
 }

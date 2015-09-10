@@ -340,7 +340,8 @@ Globe::Globe(
 		_radiusStep(0.),
 		_debugType(0),
 		_radarDetail(2),
-		_blink(true)
+		_blink(true),
+		_blinkVal(-1)
 {
 	_texture	= new SurfaceSet(*_game->getResourcePack()->getSurfaceSet("TEXTURE.DAT"));
 	_markerSet	= new SurfaceSet(*_game->getResourcePack()->getSurfaceSet("GlobeMarkers"));
@@ -1171,11 +1172,9 @@ void Globe::think()
  */
 void Globe::blink()
 {
-	static int blink (-1);
-
 	if (_blink == true)
 	{
-		blink = -blink;
+		_blinkVal = -_blinkVal; // can't use static because, reload.
 
 		const int j = static_cast<int>(_markerSet->getTotalFrames());
 		for (int
@@ -1184,7 +1183,7 @@ void Globe::blink()
 				++i)
 		{
 			if (i != GLM_CITY)
-				_markerSet->getFrame(i)->offset(blink);
+				_markerSet->getFrame(i)->offset(_blinkVal);
 		}
 
 		drawMarkers();

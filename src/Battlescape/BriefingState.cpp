@@ -72,15 +72,8 @@ BriefingState::BriefingState(
 	_btnOk			= new TextButton(288, 16, 16, 177);
 
 
-	int bgColor;
-	std::string
-		bg,		// default defined in Ruleset/AlienDeployment.h: "BACK16.SCR",
-		music;	// default defined in Ruleset/AlienDeployment.h: OpenXcom::res_MUSIC_GEO_BRIEFING,
-
-	const TacticalType tacType = _game->getSavedGame()->getBattleSave()->getTacticalType();
-
-	const std::string stType = _game->getSavedGame()->getBattleSave()->getMissionType();
-	const AlienDeployment* deployRule = _game->getRuleset()->getDeployment(stType); // check, Xcom1Ruleset->alienDeployments for a missionType
+	std::string type = _game->getSavedGame()->getBattleSave()->getTacticalType();
+	const AlienDeployment* deployRule = _game->getRuleset()->getDeployment(type); // check, Xcom1Ruleset->alienDeployments for a missionType
 
 	if (deployRule == NULL // landing site or crash site -> define BG & Music by ufoType instead
 		&& craft != NULL)
@@ -91,15 +84,17 @@ BriefingState::BriefingState(
 	}
 
 	std::string
-		title = stType,
-		desc = stType + "_BRIEFING";
+		description = type + "_BRIEFING",
+		track,	// default defined in Ruleset/AlienDeployment.h: OpenXcom::res_MUSIC_GEO_BRIEFING,
+		bg;		// default defined in Ruleset/AlienDeployment.h: "BACK16.SCR",
+	int bgColor;
 
 	if (deployRule == NULL) // should never happen
 	{
-		Log(LOG_WARNING) << "No deployment rule for Briefing: " << stType;
+		Log(LOG_WARNING) << "No deployment rule for Briefing: " << type;
 		bg = "BACK16.SCR";
 		bgColor = _game->getRuleset()->getInterface("briefing")->getElement("palette")->color;
-		music = OpenXcom::res_MUSIC_GEO_BRIEFING;
+		track = OpenXcom::res_MUSIC_GEO_BRIEFING;
 	}
 	else
 	{
@@ -108,12 +103,13 @@ BriefingState::BriefingState(
 		bg = dataBrief.background;
 		bgColor = dataBrief.palette;
 
+		const TacticalType tacType = _game->getSavedGame()->getBattleSave()->getTacType();
 		if (tacType == TCT_UFOCRASHED)
-			music = OpenXcom::res_MUSIC_GEO_BRIEF_UFOCRASHED;
+			track = OpenXcom::res_MUSIC_GEO_BRIEF_UFOCRASHED;
 		else if (tacType == TCT_UFOLANDED)
-			music = OpenXcom::res_MUSIC_GEO_BRIEF_UFOLANDED;
+			track = OpenXcom::res_MUSIC_GEO_BRIEF_UFOLANDED;
 		else
-			music = dataBrief.music;	// note This currently conflicts w/ UFO Recovery/Assault.
+			track = dataBrief.music;	// note This currently conflicts w/ UFO Recovery/Assault.
 										// that is, the music assigned to a UFO will be overridden ...
 
 //		_txtBriefing->setY(_txtBriefing->getY() + dataBrief.textOffset);
@@ -122,12 +118,12 @@ BriefingState::BriefingState(
 //		_txtCraft->setVisible(dataBrief.showCraftText);
 
 		if (dataBrief.title.empty() == false)
-			title = dataBrief.title;
+			type = dataBrief.title;
 
 		if (dataBrief.desc.empty() == false)
-			desc = dataBrief.desc;
+			description = dataBrief.desc;
 	}
-	_game->getResourcePack()->playMusic(music);
+	_game->getResourcePack()->playMusic(track);
 
 	setPalette(
 			"PAL_GEOSCAPE",
@@ -154,9 +150,9 @@ BriefingState::BriefingState(
 					Options::keyCancel);
 
 	_txtTitle->setBig();
-	_txtTitle->setText(tr(title));
+	_txtTitle->setText(tr(type));
 
-	_txtBriefing->setText(tr(desc));
+	_txtBriefing->setText(tr(description));
 	_txtBriefing->setWordWrap();
 
 	std::wstring craftLabel;

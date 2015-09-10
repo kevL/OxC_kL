@@ -428,7 +428,7 @@ void SavedGame::load(
 	YAML::Node doc = nodes[1]; // Get full save data
 
 	if (doc["rng"]
-		&& (Options::newSeedOnLoad == false
+		&& (Options::reSeedOnLoad == false
 			|| _ironman == true))
 	{
 		RNG::setSeed(doc["rng"].as<uint64_t>());
@@ -682,7 +682,7 @@ void SavedGame::save(const std::string& file) const
 
 	if (_battleSave != NULL)
 	{
-		brief["mission"]	= _battleSave->getMissionType();
+		brief["mission"]	= _battleSave->getTacticalType();
 		brief["turn"]		= _battleSave->getTurn();
 		brief["mode"]		= static_cast<int>(MODE_BATTLESCAPE);
 	}

@@ -2076,7 +2076,7 @@ void BattlescapeGame::checkForCasualties(
 //									 && unit->isOut(true, true) == false);
 		}
 
-/*		if (_battleSave->getTacticalType() == TCT_BASEASSAULT // do this in SavedBattleGame::addDestroyedObjective()
+/*		if (_battleSave->getTacType() == TCT_BASEASSAULT // do this in SavedBattleGame::addDestroyedObjective()
 			&& _battleSave->getControlDestroyed() == false)
 		{
 			bool controlDestroyed = true;
@@ -3797,7 +3797,7 @@ BattleItem* BattlescapeGame::getAlienPsi() const
 void BattlescapeGame::objectiveDone()
 {
 	const Game* const game = _parentState->getGame();
-	const AlienDeployment* const deployRule = game->getRuleset()->getDeployment(_battleSave->getMissionType());
+	const AlienDeployment* const deployRule = game->getRuleset()->getDeployment(_battleSave->getTacticalType());
 	if (deployRule != NULL)
 	{
 		const std::string messagePop = deployRule->getObjectivePopup();

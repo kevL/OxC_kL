@@ -78,7 +78,7 @@ private:
 		_pacified,
 		_unitsFalling;
 	int
-		_globalShade,
+		_tacticalShade,
 		_groundLevel,
 		_itemId,
 		_mapsize_x,
@@ -107,9 +107,9 @@ private:
 
 	std::string
 		_alienRace,
-		_missionType,
+		_tacticalType,
 		_music,
-		_terrain; // sza_MusicRules
+		_terrain;
 	std::wstring _operationTitle;
 
 	std::list<BattleUnit*> _fallingUnits;
@@ -141,7 +141,7 @@ private:
 			bool checkInventory = false);
 
 	/// Sets the TacticalType from the mission type.
-	void setTacticalType(const std::string& missionType);
+	void setTacType(const std::string& type);
 
 
 	public:
@@ -172,16 +172,16 @@ private:
 		std::vector<MapDataSet*>* getMapDataSets();
 
 		/// Gets the TacticalType of this battle.
-		TacticalType getTacticalType() const;
+		TacticalType getTacType() const;
 		/// Sets the mission type.
-		void setMissionType(const std::string& missionType);
+		void setTacticalType(const std::string& type);
 		/// Gets the mission type.
-		std::string getMissionType() const;
+		std::string getTacticalType() const;
 
 		/// Sets the global shade.
-		void setGlobalShade(int shade);
+		void setTacticalShade(int shade);
 		/// Gets the global shade.
-		int getGlobalShade() const;
+		int getTacticalShade() const;
 
 		/// Gets a pointer to the tiles.
 		Tile** getTiles() const;

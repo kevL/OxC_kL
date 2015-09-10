@@ -80,7 +80,7 @@ void AlienStrategy::init(const Ruleset* const rules)
 
 /**
  * Loads the data from a YAML file.
- * @param node	- reference a YAML node
+ * @param node - reference a YAML node
  */
 void AlienStrategy::load(const YAML::Node& node)
 {
@@ -119,7 +119,7 @@ void AlienStrategy::load(const YAML::Node& node)
 
 /**
  * Saves the alien data to a YAML file.
- * @return, YAML node.
+ * @return, YAML node
  */
 YAML::Node AlienStrategy::save() const
 {

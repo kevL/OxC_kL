@@ -25,6 +25,7 @@
 //#include <vector>
 //#include <yaml-cpp/yaml.h>
 
+#include "../Savegame/SavedGame.h"
 #include "../Savegame/WeightedOptions.h"
 
 
@@ -59,7 +60,6 @@ private:
 		_label,
 		_lastMonth,
 		_maxRuns,
-		_minDifficulty,
 		_targetBaseOdds;
 
 	std::string
@@ -74,6 +74,8 @@ private:
 		_regionWeights;
 
 	std::map<std::string, bool> _researchTriggers;
+
+	GameDifficulty _minDifficulty;
 
 
 	public:
@@ -111,7 +113,7 @@ private:
 		int getTargetBaseOdds() const;
 
 		/// Gets the minimum difficulty for this command to run
-		int getMinDifficulty() const;
+		GameDifficulty getMinDifficulty() const;
 		/// Gets the maximum number of times to run a command with this varName
 		int getMaxRuns() const;
 		/// Gets how many previous mission sites to track.

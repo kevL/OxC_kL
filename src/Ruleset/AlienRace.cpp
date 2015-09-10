@@ -25,11 +25,11 @@ namespace OpenXcom
 
 /**
  * Creates a blank alien race.
- * @param id - reference the defining id.
+ * @param type - reference the defining type
  */
-AlienRace::AlienRace(const std::string& id)
+AlienRace::AlienRace(const std::string& type)
 	:
-		_id(id),
+		_type(type),
 		_retaliation(true)
 {}
 
@@ -45,29 +45,28 @@ AlienRace::~AlienRace()
  */
 void AlienRace::load(const YAML::Node& node)
 {
-	_id				= node["id"]			.as<std::string>(_id);
+	_type			= node["type"]			.as<std::string>(_type);
 	_members		= node["members"]		.as<std::vector<std::string> >(_members);
 	_retaliation	= node["retaliation"]	.as<bool>(_retaliation);
 }
 
 /**
  * Returns the language string that names this AlienRace.
- * @note Each race has a unique name.
- * @return, race name
+ * @return, race type
  */
-std::string AlienRace::getId() const
+/* std::string AlienRace::getAlienType() const
 {
-	return _id;
-}
+	return _type;
+} */
 
 /**
  * Gets a certain member of this AlienRace family.
- * @param rankId - the member's rank
- * @return, the member's name
+ * @param rankId - AlienRank (AlienRace.h)
+ * @return, the member's race & rank
  */
 std::string AlienRace::getMember(int rankId) const
 {
-	return _members[rankId];
+	return _members[static_cast<size_t>(rankId)];
 }
 
 /**

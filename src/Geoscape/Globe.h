@@ -68,6 +68,7 @@ private:
 		_mouseOverThreshold,
 		_blink;
 	int
+		_blinkVal,
 		_debugType,
 		_radarDetail,
 		_totalMouseMoveX,

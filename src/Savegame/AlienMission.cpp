@@ -1116,13 +1116,10 @@ void AlienMission::addScore( // private.
 			i != _gameSave.getRegions()->end();
 			++i)
 	{
-		if ((*i)->getRules()->insideRegion(
-										lon,
-										lat) == true)
+		if ((*i)->getRules()->insideRegion(lon,lat) == true)
 		{
 			(*i)->addActivityAlien(aLienPts);
 			(*i)->recentActivityAlien();
-
 			break;
 		}
 	}
@@ -1132,13 +1129,10 @@ void AlienMission::addScore( // private.
 			i != _gameSave.getCountries()->end();
 			++i)
 	{
-		if ((*i)->getRules()->insideCountry(
-										lon,
-										lat) == true)
+		if ((*i)->getRules()->insideCountry(lon,lat) == true)
 		{
 			(*i)->addActivityAlien(aLienPts);
 			(*i)->recentActivityAlien();
-
 			break;
 		}
 	}

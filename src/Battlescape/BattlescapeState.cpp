@@ -538,7 +538,7 @@ BattlescapeState::BattlescapeState()
 	}
 
 	if (missionLabel.empty() == true)
-		missionLabel = tr(_battleSave->getMissionType());
+		missionLabel = tr(_battleSave->getTacticalType());
 
 	_txtMissionLabel->setText(missionLabel.c_str()); // there'd better be a missionLabel ... or else. Pow! To the moon!!!
 	_txtMissionLabel->setAlign(ALIGN_CENTER);
@@ -612,7 +612,7 @@ BattlescapeState::BattlescapeState()
 	_txtTerrain->setText(tr("STR_TEXTURE_").arg(tr(_battleSave->getBattleTerrain())));
 
 	_txtShade->setHighContrast();
-	_txtShade->setText(tr("STR_SHADE_").arg(_battleSave->getGlobalShade()));
+	_txtShade->setText(tr("STR_SHADE_").arg(_battleSave->getTacticalShade()));
 
 	_txtTurn->setHighContrast();
 	_txtTurn->setText(tr("STR_TURN").arg(_battleSave->getTurn()));
@@ -3292,19 +3292,19 @@ void BattlescapeState::finishBattle(
 	_game->getResourcePack()->fadeMusic(_game, 975);
 
 
-	const std::string stType = _battleSave->getMissionType();
-	std::string nextStage;
+	const std::string type = _battleSave->getTacticalType();
+	std::string next;
 
-	if (_battleSave->getTacticalType() != TCT_UFOCRASHED
-		&& _battleSave->getTacticalType() != TCT_UFOLANDED)
+	if (_battleSave->getTacType() != TCT_UFOCRASHED
+		&& _battleSave->getTacType() != TCT_UFOLANDED)
 	{
-		nextStage = _rules->getDeployment(stType)->getNextStage();
+		next = _rules->getDeployment(type)->getNextStage();
 	}
 
-	if (nextStage.empty() == false	// if there is a next mission stage, and
+	if (next.empty() == false	// if there is a next mission stage, and
 		&& inExitArea > 0)			// there are soldiers in Exit_Area OR all aLiens are dead, Load the Next Stage!!!
 	{
-/*		std::string nextStageRace = _rules->getDeployment(stType)->getNextStageRace();
+/*		std::string nextStageRace = _rules->getDeployment(type)->getNextStageRace();
 
 		for (std::vector<TerrorSite*>::const_iterator
 				ts = _gameSave->getTerrorSites()->begin();
@@ -3334,7 +3334,7 @@ void BattlescapeState::finishBattle(
 		} */
 
 		_popups.clear();
-		_battleSave->setMissionType(nextStage);
+		_battleSave->setTacticalType(next);
 
 		BattlescapeGenerator bgen = BattlescapeGenerator(_game);
 //		bgen.setAlienRace("STR_MIXED");
@@ -3354,8 +3354,8 @@ void BattlescapeState::finishBattle(
 		if (abort == true		// abort was done or no player is still alive
 			|| inExitArea == 0)	// this concludes to defeat when in mars or mars landing mission
 		{
-			if (_rules->getDeployment(stType) != NULL
-				&& _rules->getDeployment(stType)->isNoRetreat() == true
+			if (_rules->getDeployment(type) != NULL
+				&& _rules->getDeployment(type)->isNoRetreat() == true
 				&& _gameSave->getMonthsPassed() != -1)
 			{
 				_game->pushState(new DefeatState());
@@ -3365,8 +3365,8 @@ void BattlescapeState::finishBattle(
 		}
 		else					// no abort was done and at least a player is still alive
 		{						// this concludes to victory when in mars mission
-			if (_rules->getDeployment(stType) != NULL
-				&& _rules->getDeployment(stType)->isFinalMission() == true
+			if (_rules->getDeployment(type) != NULL
+				&& _rules->getDeployment(type)->isFinalMission() == true
 				&& _gameSave->getMonthsPassed() != -1)
 			{
 				_game->pushState(new VictoryState());

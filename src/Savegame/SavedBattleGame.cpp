@@ -70,7 +70,7 @@ SavedBattleGame::SavedBattleGame(const std::vector<OperationPool*>* titles)
 		_lastSelectedUnit(NULL),
 		_pf(NULL),
 		_te(NULL),
-		_globalShade(0),
+		_tacticalShade(0),
 		_side(FACTION_PLAYER),
 		_turn(1),
 		_debugMode(false),
@@ -216,15 +216,15 @@ void SavedBattleGame::load(
 		const SavedGame* const savedGame)
 {
 	//Log(LOG_INFO) << "SavedBattleGame::load()";
-	_mapsize_x			= node["width"]			.as<int>(_mapsize_x);
-	_mapsize_y			= node["length"]		.as<int>(_mapsize_y);
-	_mapsize_z			= node["height"]		.as<int>(_mapsize_z);
-	_missionType		= node["missionType"]	.as<std::string>(_missionType);
-	_globalShade		= node["globalshade"]	.as<int>(_globalShade);
-	_turn				= node["turn"]			.as<int>(_turn);
-	_terrain			= node["terrain"]		.as<std::string>(_terrain); // sza_MusicRules
+	_mapsize_x		= node["width"]		.as<int>(_mapsize_x);
+	_mapsize_y		= node["length"]	.as<int>(_mapsize_y);
+	_mapsize_z		= node["height"]	.as<int>(_mapsize_z);
+	_tacticalType	= node["type"]		.as<std::string>(_tacticalType);
+	_tacticalShade	= node["shade"]		.as<int>(_tacticalShade);
+	_turn			= node["turn"]		.as<int>(_turn);
+	_terrain		= node["terrain"]	.as<std::string>(_terrain);
 
-	setTacticalType(_missionType);
+	setTacType(_tacticalType);
 
 	const int selectedUnit = node["selectedUnit"].as<int>();
 
@@ -303,7 +303,7 @@ void SavedBattleGame::load(
 		}
 	}
 
-	if (_missionType == "STR_BASE_DEFENSE")
+	if (_tacticalType == "STR_BASE_DEFENSE")
 	{
 		Log(LOG_INFO) << ". load xcom base";
 		if (node["moduleMap"])
@@ -380,7 +380,7 @@ void SavedBattleGame::load(
 		{
 			if (unit->getId() == selectedUnit
 				|| (_selectedUnit == NULL
-					&& unit->isOut() == false))
+					&& unit->isOut_t(OUT_STAT) == false))
 			{
 				_selectedUnit = unit;
 			}
@@ -644,8 +644,8 @@ YAML::Node SavedBattleGame::save() const
 	node["width"]			= _mapsize_x;
 	node["length"]			= _mapsize_y;
 	node["height"]			= _mapsize_z;
-	node["missionType"]		= _missionType;
-	node["globalshade"]		= _globalShade;
+	node["type"]			= _tacticalType;
+	node["shade"]			= _tacticalShade;
 	node["turn"]			= _turn;
 	node["terrain"]			= _terrain; // kL sza_MusicRules
 	node["selectedUnit"]	= (_selectedUnit != NULL) ? _selectedUnit->getId() : -1;
@@ -721,7 +721,7 @@ YAML::Node SavedBattleGame::save() const
 		node["nodes"].push_back((*i)->save());
 	}
 
-	if (_missionType == "STR_BASE_DEFENSE")
+	if (_tacticalType == "STR_BASE_DEFENSE")
 		node["moduleMap"] = _baseModules;
 
 	for (std::vector<BattleUnit*>::const_iterator
@@ -853,30 +853,27 @@ void SavedBattleGame::initUtilities(const ResourcePack* const res)
 }
 
 /**
- * Sets the TacticalType based on the Mission Type.
- * @note "missionType" is actually a misnomer and it should be "tacticalType" to distinguish it from the aLiens' mission(Type)s. Cf, "AlienDeployment" and "RuleAlienMission" (which should have just stayed as "RuleAlienTerror" for the sake of argument) and "AlienMission" but they're not the same ofc; Deployments can lead to aLien Missions but not vice versa.
- * @note That is aLiens do 'deployments' - which may be 'missions' - but only xCom does 'tacticals'.
- * @note They may overlap - terrorMission/terrorTactical as an example.
- * @param missionType - reference the missionType
+ * Sets the TacticalType based on the battle Type.
+ * @param type - reference the battle type
  */
-void SavedBattleGame::setTacticalType(const std::string& missionType) // private.
+void SavedBattleGame::setTacType(const std::string& type) // private.
 {
-	if (missionType.compare("STR_UFO_CRASH_RECOVERY") == 0)
+	if (type.compare("STR_UFO_CRASH_RECOVERY") == 0)
 		_tacType = TCT_UFOCRASHED;
-	else if (missionType.compare("STR_UFO_GROUND_ASSAULT") == 0)
+	else if (type.compare("STR_UFO_GROUND_ASSAULT") == 0)
 		_tacType = TCT_UFOLANDED;
-	else if (missionType.compare("STR_BASE_DEFENSE") == 0)
+	else if (type.compare("STR_BASE_DEFENSE") == 0)
 		_tacType = TCT_BASEDEFENSE;
-	else if (missionType.compare("STR_ALIEN_BASE_ASSAULT") == 0)
+	else if (type.compare("STR_ALIEN_BASE_ASSAULT") == 0)
 		_tacType = TCT_BASEASSAULT;
-	else if (missionType.compare("STR_TERROR_MISSION") == 0
-		|| missionType.compare("STR_PORT_ATTACK") == 0)
+	else if (type.compare("STR_TERROR_MISSION") == 0
+		|| type.compare("STR_PORT_ATTACK") == 0)
 	{
 		_tacType = TCT_MISSIONSITE;
 	}
-	else if (missionType.compare("STR_MARS_CYDONIA_LANDING") == 0)
+	else if (type.compare("STR_MARS_CYDONIA_LANDING") == 0)
 		_tacType = TCT_MARS1;
-	else if (missionType.compare("STR_MARS_THE_FINAL_ASSAULT") == 0)
+	else if (type.compare("STR_MARS_THE_FINAL_ASSAULT") == 0)
 		_tacType = TCT_MARS2;
 	else
 		_tacType = TCT_DEFAULT; // <- the default should probly be TCT_UFOCRASHED.
@@ -884,21 +881,21 @@ void SavedBattleGame::setTacticalType(const std::string& missionType) // private
 
 /**
  * Gets the TacticalType of this battle.
- * @return, the TacticalType enum (SavedBattleGame.h)
+ * @return, the TacticalType (SavedBattleGame.h)
  */
-TacticalType SavedBattleGame::getTacticalType() const
+TacticalType SavedBattleGame::getTacType() const
 {
 	return _tacType;
 }
 
 /**
  * Sets the mission type.
- * @param missionType - reference a mission type
+ * @param type - reference a mission type
  */
-void SavedBattleGame::setMissionType(const std::string& missionType)
+void SavedBattleGame::setTacticalType(const std::string& type)
 {
-	_missionType = missionType;
-	setTacticalType(_missionType);
+	_tacticalType = type;
+	setTacType(_tacticalType);
 }
 
 /**
@@ -908,27 +905,27 @@ void SavedBattleGame::setMissionType(const std::string& missionType)
  * and creates a new one wherein the ref is no longer valid.
  * @return, the mission type
  */
-std::string SavedBattleGame::getMissionType() const
+std::string SavedBattleGame::getTacticalType() const
 {
-	return _missionType;
+	return _tacticalType;
 }
 
 /**
- * Sets the global shade.
- * @param shade - the global shade
+ * Sets the tactical shade.
+ * @param shade - the tactical shade
  */
-void SavedBattleGame::setGlobalShade(int shade)
+void SavedBattleGame::setTacticalShade(int shade)
 {
-	_globalShade = shade;
+	_tacticalShade = shade;
 }
 
 /**
- * Gets the global shade.
- * @return, the global shade
+ * Gets the tactical shade.
+ * @return, the tactical shade
  */
-int SavedBattleGame::getGlobalShade() const
+int SavedBattleGame::getTacticalShade() const
 {
-	return _globalShade;
+	return _tacticalShade;
 }
 
 /**
@@ -2620,8 +2617,8 @@ int SavedBattleGame::getMoraleModifier( // note: Add bonus to aLiens for Cydonia
 					ret += 15;	// 115
 			}
 
-			if (_missionType == "STR_MARS_CYDONIA_LANDING"
-				|| _missionType == "STR_MARS_THE_FINAL_ASSAULT")
+			if (_tacticalType == "STR_MARS_CYDONIA_LANDING"
+				|| _tacticalType == "STR_MARS_THE_FINAL_ASSAULT")
 			{
 				ret /= 2; // less hit for losing a unit on Cydonia.
 			}
@@ -2682,14 +2679,14 @@ int SavedBattleGame::getMoraleModifier( // note: Add bonus to aLiens for Cydonia
 				}
 			}
 
-			if (_missionType == "STR_TERROR_MISSION"
-				|| _missionType == "STR_ALIEN_BASE_ASSAULT"
-				|| _missionType == "STR_BASE_DEFENSE")
+			if (_tacticalType == "STR_TERROR_MISSION"
+				|| _tacticalType == "STR_ALIEN_BASE_ASSAULT"
+				|| _tacticalType == "STR_BASE_DEFENSE")
 			{
 				ret += 50; // higher morale.
 			}
-			else if (_missionType == "STR_MARS_CYDONIA_LANDING"
-						|| _missionType == "STR_MARS_THE_FINAL_ASSAULT")
+			else if (_tacticalType == "STR_MARS_CYDONIA_LANDING"
+						|| _tacticalType == "STR_MARS_THE_FINAL_ASSAULT")
 			{
 				ret += 100; // higher morale.
 			}
@@ -3033,25 +3030,25 @@ void SavedBattleGame::calibrateMusic(
 {
 	if (_music.empty() == false)
 		music = _music;
-	else if (_missionType == "STR_UFO_CRASH_RECOVERY")
+	else if (_tacticalType == "STR_UFO_CRASH_RECOVERY")
 	{
 		music = OpenXcom::res_MUSIC_TAC_BATTLE_UFOCRASHED;
 		terrain = _terrain;
 	}
-	else if (_missionType == "STR_UFO_GROUND_ASSAULT")
+	else if (_tacticalType == "STR_UFO_GROUND_ASSAULT")
 	{
 		music = OpenXcom::res_MUSIC_TAC_BATTLE_UFOLANDED;
 		terrain = _terrain;
 	}
-	else if (_missionType == "STR_ALIEN_BASE_ASSAULT")
+	else if (_tacticalType == "STR_ALIEN_BASE_ASSAULT")
 		music = OpenXcom::res_MUSIC_TAC_BATTLE_BASEASSAULT;
-	else if (_missionType == "STR_BASE_DEFENSE")
+	else if (_tacticalType == "STR_BASE_DEFENSE")
 		music = OpenXcom::res_MUSIC_TAC_BATTLE_BASEDEFENSE;
-	else if (_missionType == "STR_TERROR_MISSION")
+	else if (_tacticalType == "STR_TERROR_MISSION")
 		music = OpenXcom::res_MUSIC_TAC_BATTLE_TERRORSITE;
-	else if (_missionType == "STR_MARS_CYDONIA_LANDING")
+	else if (_tacticalType == "STR_MARS_CYDONIA_LANDING")
 		music = OpenXcom::res_MUSIC_TAC_BATTLE_MARS1;
-	else if (_missionType == "STR_MARS_THE_FINAL_ASSAULT")
+	else if (_tacticalType == "STR_MARS_THE_FINAL_ASSAULT")
 		music = OpenXcom::res_MUSIC_TAC_BATTLE_MARS2;
 	else
 		music = OpenXcom::res_MUSIC_TAC_BATTLE; // default/ safety.

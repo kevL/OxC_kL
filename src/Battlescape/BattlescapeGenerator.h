@@ -226,9 +226,9 @@ private:
 		/// Sets the alien base
 		void setAlienBase(AlienBase* base);
 		/// Sets the terrain.
-		void setTacTerrain(RuleTerrain* terrain);
+		void setTerrain(RuleTerrain* terrain);
 		/// Sets the polygon shade.
-		void setTacShade(int shade);
+		void setShade(int shade);
 		/// Sets the alien race.
 		void setAlienRace(const std::string& alienRace);
 		/// Sets the alien item level.

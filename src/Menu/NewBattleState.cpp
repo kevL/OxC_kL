@@ -533,11 +533,11 @@ void NewBattleState::btnOkClick(Action*)
 
 	SavedBattleGame* const battleSave = new SavedBattleGame();
 	_game->getSavedGame()->setBattleSave(battleSave);
-	battleSave->setMissionType(_missionTypes[_cbxMission->getSelected()]);
+	battleSave->setTacticalType(_missionTypes[_cbxMission->getSelected()]);
 	BattlescapeGenerator bGen = BattlescapeGenerator(_game);
 	Base* base = NULL;
 
-	bGen.setTacTerrain(_rules->getTerrain(_terrainTypes[_cbxTerrain->getSelected()]));
+	bGen.setTerrain(_rules->getTerrain(_terrainTypes[_cbxTerrain->getSelected()]));
 
 	if (_missionTypes[_cbxMission->getSelected()] == "STR_BASE_DEFENSE") // base defense
 	{
@@ -565,15 +565,15 @@ void NewBattleState::btnOkClick(Action*)
 		bGen.setUfo(ufo);
 
 		if (RNG::percent(50) == true) // either ground assault or ufo crash
-			battleSave->setMissionType("STR_UFO_GROUND_ASSAULT");
+			battleSave->setTacticalType("STR_UFO_GROUND_ASSAULT");
 		else
-			battleSave->setMissionType("STR_UFO_CRASH_RECOVERY");
+			battleSave->setTacticalType("STR_UFO_CRASH_RECOVERY");
 
 		_game->getSavedGame()->getUfos()->push_back(ufo);
 	}
 	else // mission site
 	{
-		const AlienDeployment* const deployment = _rules->getDeployment(battleSave->getMissionType());
+		const AlienDeployment* const deployment = _rules->getDeployment(battleSave->getTacticalType());
 		const RuleAlienMission* const mission = _rules->getAlienMission(_rules->getAlienMissionList().front()); // doesn't matter
 		MissionSite* const missionSite = new MissionSite(
 													mission,
@@ -595,7 +595,7 @@ void NewBattleState::btnOkClick(Action*)
 
 	_game->getSavedGame()->setDifficulty(static_cast<GameDifficulty>(_cbxDifficulty->getSelected()));
 
-	bGen.setTacShade(_slrDarkness->getValue());
+	bGen.setShade(_slrDarkness->getValue());
 	bGen.setAlienRace(_alienRaces[_cbxAlienRace->getSelected()]);
 	bGen.setAlienItemlevel(_slrAlienTech->getValue());
 //	battleSave->setDepth(_slrDepth->getValue());

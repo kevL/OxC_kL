@@ -55,8 +55,8 @@ AbortMissionState::AbortMissionState(
 	:
 		_battleSave(battleSave),
 		_state(state),
-		_inExitArea(0),
-		_outExitArea(0)
+		_insideExitArea(0),
+		_outsideExitArea(0)
 {
 	_screen = false;
 
@@ -67,10 +67,9 @@ AbortMissionState::AbortMissionState(
 
 	_txtAbort		= new Text(320, 17, 0, 84);
 
-	_btnCancel		= new TextButton(134, 18, 16, 116);
+	_btnCancel		= new TextButton(134, 18,  16, 116);
 	_btnOk			= new TextButton(134, 18, 170, 116);
 
-//	_battleSave->setPaletteByDepth(this);
 	setPalette("PAL_BATTLESCAPE");
 
 	add(_window,			"messageWindowBorder",	"battlescape");
@@ -84,12 +83,10 @@ AbortMissionState::AbortMissionState(
 
 
 	std::string nextStage;
-//	if (_battleSave->getMissionType() != "STR_UFO_GROUND_ASSAULT"
-//		&& _battleSave->getMissionType() != "STR_UFO_CRASH_RECOVERY")
-	if (_battleSave->getTacticalType() != TCT_UFOLANDED
-		&& _battleSave->getTacticalType() != TCT_UFOCRASHED)
+	if (_battleSave->getTacType() != TCT_UFOLANDED
+		&& _battleSave->getTacType() != TCT_UFOCRASHED)
 	{
-		nextStage = _game->getRuleset()->getDeployment(_battleSave->getMissionType())->getNextStage();
+		nextStage = _game->getRuleset()->getDeployment(_battleSave->getTacticalType())->getNextStage();
 	}
 
 	for (std::vector<BattleUnit*>::const_iterator
@@ -105,10 +102,10 @@ AbortMissionState::AbortMissionState(
 				|| (nextStage == ""
 					&& (*i)->isInExitArea() == true))
 			{
-				++_inExitArea;
+				++_insideExitArea;
 			}
 			else
-				++_outExitArea;
+				++_outsideExitArea;
 		}
 	}
 
@@ -116,17 +113,17 @@ AbortMissionState::AbortMissionState(
 	_window->setBackground(_game->getResourcePack()->getSurface("TAC00.SCR"));
 	_window->setHighContrast();
 
-	_txtInExit->setText(tr("STR_UNITS_IN_EXIT_AREA", _inExitArea));
+	_txtInExit->setText(tr("STR_UNITS_IN_EXIT_AREA", _insideExitArea));
 	_txtInExit->setBig();
 	_txtInExit->setAlign(ALIGN_CENTER);
 	_txtInExit->setHighContrast();
 
-	_txtOutsideExit->setText(tr("STR_UNITS_OUTSIDE_EXIT_AREA", _outExitArea));
+	_txtOutsideExit->setText(tr("STR_UNITS_OUTSIDE_EXIT_AREA", _outsideExitArea));
 	_txtOutsideExit->setBig();
 	_txtOutsideExit->setAlign(ALIGN_CENTER);
 	_txtOutsideExit->setHighContrast();
 
-	if (_battleSave->getTacticalType() == TCT_BASEDEFENSE)
+	if (_battleSave->getTacType() == TCT_BASEDEFENSE)
 	{
 		_txtInExit->setVisible(false);
 		_txtOutsideExit->setVisible(false);
@@ -170,9 +167,7 @@ void AbortMissionState::btnOkClick(Action*)
 	_game->popState();
 
 	_battleSave->setAborted(true);
-	_state->finishBattle(
-					true,
-					_inExitArea);
+	_state->finishBattle(true, _insideExitArea);
 }
 
 /**

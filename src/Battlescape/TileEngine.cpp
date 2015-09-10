@@ -123,10 +123,10 @@ void TileEngine::calculateSunShading(Tile* const tile) const
 {
 	//Log(LOG_INFO) << "TileEngine::calculateSunShading()";
 	const size_t layer = 0; // Ambient lighting layer.
-	int light = 15 - _battleSave->getGlobalShade();
+	int light = 15 - _battleSave->getTacticalShade();
 
 	// At night/dusk sun isn't dropping shades blocked by roofs
-	if (_battleSave->getGlobalShade() < 5)
+	if (_battleSave->getTacticalShade() < 5)
 	{
 		// kL: old code
 		if (verticalBlockage(
@@ -769,12 +769,8 @@ bool TileEngine::visible(
 		return false;
 
 	const BattleUnit* const targetUnit = tile->getUnit();
-	if (targetUnit == NULL
-		|| targetUnit->isOut_t() == true)
-//		|| targetUnit->isOut(true, true) == true)
-	{
+	if (targetUnit == NULL || targetUnit->isOut_t() == true)
 		return false;
-	}
 
 	if (unit->getFaction() == targetUnit->getFaction())
 		return true;
@@ -788,7 +784,7 @@ bool TileEngine::visible(
 
 	if (unit->getFaction() == FACTION_PLAYER
 		&& tile->getShade() > MAX_SHADE_TO_SEE_UNITS
-		&& dist > 23 - _battleSave->getGlobalShade())
+		&& dist > 23 - _battleSave->getTacticalShade())
 	{
 		return false;
 	}
@@ -834,16 +830,18 @@ bool TileEngine::visible(
 				return false;
 		}
 
-		if (scanTile->getUnit() == targetUnit)
+		if (scanTile->getUnit() == getTargetUnit(tile))
 			return true;
 
+/*		if (scanTile->getUnit() == targetUnit)
+			return true;
 		const Tile* const tileBelow = _battleSave->getTile(scanTile->getPosition() + Position(0,0,-1));
 		if (tileBelow != NULL
 			&& scanTile->hasNoFloor(tileBelow) == true
 			&& tileBelow->getUnit() == targetUnit)
 		{
 			return true;
-		}
+		} */
 	}
 
 	return false;
@@ -856,32 +854,31 @@ bool TileEngine::visible(
  */
 Position TileEngine::getSightOriginVoxel(const BattleUnit* const unit) const
 {
-	// determine the origin (and target) voxels for calculations
-	Position posOrigin_voxel = Position(
-									unit->getPosition().x * 16,
-									unit->getPosition().y * 16,
-									unit->getPosition().z * 24);
-	posOrigin_voxel.z += unit->getHeight(true)
-					   - _battleSave->getTile(unit->getPosition())->getTerrainLevel()
-					   - 4; // kL_note: now equal to getOriginVoxel()
+	Position originVoxel = Position(
+								unit->getPosition().x * 16,
+								unit->getPosition().y * 16,
+								unit->getPosition().z * 24);
+	originVoxel.z += unit->getHeight(true)
+				   - _battleSave->getTile(unit->getPosition())->getTerrainLevel()
+				   - 4; // kL_note: now equal to getOriginVoxel()
 
 	const int offset = unit->getArmor()->getSize() * 8;
-	posOrigin_voxel.x += offset;
-	posOrigin_voxel.y += offset;
+	originVoxel.x += offset;
+	originVoxel.y += offset;
 
-	const int heightLimit = ((unit->getPosition().z + 1) * 24) - 1;
-	if (posOrigin_voxel.z > heightLimit)
+	const int heightLimit = (unit->getPosition().z + 1) * 24 - 1;
+	if (originVoxel.z > heightLimit)
 	{
 		const Tile* const tileAbove = _battleSave->getTile(unit->getPosition() + Position(0,0,1));
 		if (tileAbove == NULL
 			|| tileAbove->hasNoFloor() == false)
 		{
-			while (posOrigin_voxel.z > heightLimit)
-				--posOrigin_voxel.z; // careful with that ceiling, Eugene.
+			while (originVoxel.z > heightLimit)
+				--originVoxel.z; // careful with that ceiling, Eugene.
 		}
 	}
 
-	return posOrigin_voxel;
+	return originVoxel;
 }
 
 /**
@@ -901,56 +898,46 @@ Position TileEngine::getOriginVoxel(
 		tile = action.actor->getTile();
 
 	Position
-		posOrigin_tile = tile->getPosition(),
-		posOrigin_voxel = Position(
-								posOrigin_tile.x * 16,
-								posOrigin_tile.y * 16,
-								posOrigin_tile.z * 24);
+		posOrigin = tile->getPosition(),
+		originVoxel = Position(
+								posOrigin.x * 16,
+								posOrigin.y * 16,
+								posOrigin.z * 24);
 
-	// take into account soldier height and terrain level if the projectile is launched from a soldier
 	if (action.type != BA_LAUNCH
-		|| action.actor->getPosition() == posOrigin_tile)
+		|| action.actor->getPosition() == posOrigin)
 	{
-		// calculate vertical offset of the starting point of the projectile
-		posOrigin_voxel.z += action.actor->getHeight(true)
+		originVoxel.z += action.actor->getHeight(true)
 						   - tile->getTerrainLevel();
-						   - 4; // for good luck. kL_note: now equal to getSightOriginVoxel()
+						   - 4; // kL_note: now equal to getSightOriginVoxel()
 		// Ps. don't need luck - need precision.
 
-		// hey, here's an idea: make Autos shoot from hip, Snaps shoot from chest, & Aimed from shoulders or eyes.
-//		if (action.type == BA_THROW)	// kL
-//			posOrigin_voxel.z -= 4;		// kL
-/*		if (action.type == BA_THROW)
-			posOrigin_voxel.z -= 3;
-		else
-			posOrigin_voxel.z -= 4; */
+		// hey, here's an idea: make Autos shoot from hip, Snaps shoot from chest, & Aimed from shoulders or eyes. Throw from ......
+/*		if (action.type == BA_THROW) originVoxel.z -= 3;
+		else originVoxel.z -= 4; */
 
-		const int heightLimit = ((posOrigin_tile.z + 1) * 24) - 1;
-		if (posOrigin_voxel.z > heightLimit)
+		const int heightLimit = (posOrigin.z + 1) * 24 - 1;
+		if (originVoxel.z > heightLimit)
 		{
-			const Tile* const tileAbove = _battleSave->getTile(posOrigin_tile + Position(0,0,1));
+			const Tile* const tileAbove = _battleSave->getTile(posOrigin + Position(0,0,1));
 			if (tileAbove == NULL
 				|| tileAbove->hasNoFloor() == false)
 			{
-				while (posOrigin_voxel.z > heightLimit)
-					--posOrigin_voxel.z;
+				while (originVoxel.z > heightLimit)
+					--originVoxel.z;
 			}
 		}
-/*		const int heightLimit = ((posOrigin_tile.z + 1) * 24) - 1;
-		if (posOrigin_voxel.z > heightLimit)
+/*		const int heightLimit = ((posOrigin.z + 1) * 24) - 1;
+		if (originVoxel.z > heightLimit)
 		{
-			const Tile* const tileAbove = _battleSave->getTile(posOrigin_tile + Position(0,0,1));
-			if (tileAbove != NULL
-				&& tileAbove->hasNoFloor() == true)
-			{
-				++posOrigin_tile.z;
-			}
+			const Tile* const tileAbove = _battleSave->getTile(posOrigin + Position(0,0,1));
+			if (tileAbove != NULL && tileAbove->hasNoFloor() == true)
+				++posOrigin.z;
 			else
 			{
-				while (posOrigin_voxel.z > heightLimit)
-					--posOrigin_voxel.z;
-
-				posOrigin_voxel.z -= 4; // keep posOrigin_voxel 4 voxels below any ceiling.
+				while (originVoxel.z > heightLimit)
+					--originVoxel.z;
+				originVoxel.z -= 4; // keep originVoxel 4 voxels below any ceiling.
 			}
 		} */
 
@@ -958,30 +945,27 @@ Position TileEngine::getOriginVoxel(
 		//
 		// Originally used the dirXShift and dirYShift as detailed above;
 		// this however results in MUCH more predictable results.
-		// center Origin in the posOrigin_tile (or the center of all four tiles for large units):
+		// center Origin in the posOrigin (or the center of all four tiles for large units):
 		const int offset = action.actor->getArmor()->getSize() * 8;
-		posOrigin_voxel.x += offset;
-		posOrigin_voxel.y += offset;
+		originVoxel.x += offset;
+		originVoxel.y += offset;
 		// screw Warboy's obscurantist glamor-driven elitist campaign!!!! Have fun with that!!
 		// MUCH more predictable results. <- I didn't write that; just iterating it.
 		// ... better now but still waiting on it. Eg, the AI needs to account for it.
-/*
-		int direction = getDirectionTo(
-									posOrigin_tile,
-									action.target);
-		posOrigin_voxel.x += dirXshift[direction]*action.actor->getArmor()->getSize();
-		posOrigin_voxel.y += dirYshift[direction]*action.actor->getArmor()->getSize(); */
+/*		int direction = getDirectionTo(posOrigin, action.target);
+		originVoxel.x += dirXshift[direction]*action.actor->getArmor()->getSize();
+		originVoxel.y += dirYshift[direction]*action.actor->getArmor()->getSize(); */
 	}
 	else // action.type == BA_LAUNCH
 	{
 		// don't take into account soldier height and terrain level if the
 		// projectile is not launched from a soldier (ie. is from a waypoint)
-		posOrigin_voxel.x += 8;
-		posOrigin_voxel.y += 8;
-		posOrigin_voxel.z += 16;
+		originVoxel.x += 8;
+		originVoxel.y += 8;
+		originVoxel.z += 16;
 	}
 
-	return posOrigin_voxel;
+	return originVoxel;
 }
 
 /**
@@ -2197,7 +2181,7 @@ BattleUnit* TileEngine::hit(
 			if (power > 0)
 			{
 				if (partType == O_OBJECT
-					&& _battleSave->getTacticalType() == TCT_BASEDEFENSE
+					&& _battleSave->getTacType() == TCT_BASEDEFENSE
 					&& tile->getMapData(O_OBJECT)->isBaseModule() == true
 					&& tile->getMapData(O_OBJECT)->getArmor() <= power)
 				{
@@ -4476,7 +4460,7 @@ bool TileEngine::detonate(Tile* const tile) const
 				diagWallDestroyed = true;
 			}
 
-			if (_battleSave->getTacticalType() == TCT_BASEDEFENSE
+			if (_battleSave->getTacType() == TCT_BASEDEFENSE
 				&& tiles[i]->getMapData(part)->isBaseModule() == true)
 			{
 				_battleSave->getModuleMap()[tile->getPosition().x / 10]

@@ -102,6 +102,9 @@ ProductionCompleteState::ProductionCompleteState(
 	_btnGotoBase->onKeyboardPress(
 					(ActionHandler)& ProductionCompleteState::btnGotoBaseClick,
 					Options::keyOk);
+	_btnGotoBase->onKeyboardPress(
+					(ActionHandler)& ProductionCompleteState::btnGotoBaseClick,
+					Options::keyOkKeypad);
 
 	_txtMessage->setAlign(ALIGN_CENTER);
 	_txtMessage->setVerticalAlign(ALIGN_MIDDLE);

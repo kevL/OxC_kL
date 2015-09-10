@@ -104,7 +104,8 @@ void RuleAlienMission::load(const YAML::Node& node)
 	_specialUfo		= node["specialUfo"]	.as<std::string>(_specialUfo);
 	_specialZone	= node["specialZone"]	.as<size_t>(_specialZone);
 	_weights		= node["missionWeights"].as<std::map<size_t, int> >(_weights);
-	_objective		= static_cast<MissionObjective>(node["objective"].as<int>(_objective));
+
+	_objective = static_cast<MissionObjective>(node["objective"].as<int>(_objective));
 
 
 	if (const YAML::Node& weights = node["raceWeights"]) // allow only full replacement of mission racial distribution.
@@ -162,16 +163,18 @@ void RuleAlienMission::load(const YAML::Node& node)
 /**
  * Chooses one of the available races for this mission.
  * @note The racial distribution may vary based on the current game date.
- * @param monthsPassed - the number of months that have passed in the game world
+ * @param monthsPassed - the number of months that have passed
  * @return, the string ID of the race
  */
-std::string RuleAlienMission::generateRace(const size_t monthsPassed) const
+std::string RuleAlienMission::generateRace(size_t monthsPassed) const
 {
 	std::vector<std::pair<size_t, WeightedOptions*> >::const_reverse_iterator race = _raceDistribution.rbegin();
 	while (monthsPassed < race->first)
 		++race;
 
-	return race->second->choose();
+	std::string raceType = race->second->choose();
+	Log(LOG_INFO) << "RuleAlienMission::generateRace ret = " << raceType;
+	return raceType;
 }
 
 /*

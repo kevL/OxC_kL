@@ -73,24 +73,29 @@ YAML::Node WeightedOptions::save() const
  */
 std::string WeightedOptions::choose() const
 {
+	Log(LOG_INFO) << "WeightedOptions::choose()";
 	if (_totalWeight != 0)
 	{
-		const size_t pick = RNG::generate(
-									1,
-									_totalWeight);
-
+		const size_t pick = static_cast<size_t>(RNG::generate(1,
+							static_cast<int>(_totalWeight)));
+		Log(LOG_INFO) << ". pick = " << (int)pick;
 		size_t tally = 0;
 		std::map<std::string, size_t>::const_iterator i = _choices.begin();
 		while (i != _choices.end())
 		{
+			Log(LOG_INFO) << ". . type = " << i->first << " weight = " << i->second;
 			tally += i->second;
+			Log(LOG_INFO) << ". . tally = " << (int)tally;
 			if (pick <= tally)
+			{
+				Log(LOG_INFO) << ". . . choice = " << i->first;
 				return i->first;
-
+			}
 			++i;
 		}
 	}
 
+	Log(LOG_INFO) << "WeightedOptions::choose() EXIT w/ blank";
 	return "";
 }
 

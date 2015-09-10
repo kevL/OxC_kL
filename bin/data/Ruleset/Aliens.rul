@@ -1666,11 +1666,13 @@ alienMissions:
         STR_SECTOID: 20
         STR_SNAKEMAN: 10
         STR_MUTON: 40
+        STR_WASPITE: 20
       20:
         STR_FLOATER: 30
         STR_SECTOID: 30
         STR_SNAKEMAN: 20
         STR_MUTON: 20
+        STR_WASPITE: 20
     waves:
       - ufo: STR_SMALL_SCOUT
         count: 1
@@ -1797,18 +1799,21 @@ alienMissions:
         STR_SECTOID: 20
         STR_SNAKEMAN: 30
         STR_MUTON: 40
+        STR_WASPITE: 10
       12:
         STR_FLOATER: 10
         STR_SECTOID: 20
         STR_SNAKEMAN: 10
         STR_MUTON: 30
         STR_ETHEREAL: 30
+        STR_WASPITE: 20
       20:
         STR_FLOATER: 10
         STR_SECTOID: 20
         STR_SNAKEMAN: 20
         STR_MUTON: 40
         STR_ETHEREAL: 10
+        STR_WASPITE: 20
     waves:
       - ufo: STR_SMALL_SCOUT
         count: 1
@@ -1860,18 +1865,21 @@ alienMissions:
         STR_FLOATER: 20
         STR_SNAKEMAN: 40
         STR_MUTON: 30
+        STR_WASPITE: 10
       12:
         STR_FLOATER: 20
         STR_SECTOID: 10
         STR_SNAKEMAN: 40
         STR_MUTON: 20
         STR_ETHEREAL: 10
+        STR_WASPITE: 30
       20:
         STR_FLOATER: 20
         STR_SECTOID: 20
         STR_SNAKEMAN: 20
         STR_MUTON: 20
         STR_ETHEREAL: 20
+        STR_WASPITE: 20
     waves:
       - ufo: STR_SMALL_SCOUT
         count: 1
@@ -1911,18 +1919,21 @@ alienMissions:
         STR_FLOATER: 20
         STR_SECTOID: 30
         STR_SNAKEMAN: 50
+        STR_WASPITE: 10
       12:
         STR_FLOATER: 10
         STR_SECTOID: 20
         STR_SNAKEMAN: 40
         STR_MUTON: 20
         STR_ETHEREAL: 10
+        STR_WASPITE: 40
       20:
         STR_FLOATER: 10
         STR_SECTOID: 20
         STR_SNAKEMAN: 30
         STR_MUTON: 30
         STR_ETHEREAL: 10
+        STR_WASPITE: 30
     waves:
       - ufo: STR_MEDIUM_SCOUT
         count: 1
@@ -1982,7 +1993,7 @@ alienMissions:
         timer: 6000
         objective: true
 alienRaces: #new order: sectoid,snakemen,ethereal,muton,floater
-  - id: STR_SECTOID
+  - type: STR_SECTOID
     members:
       - STR_SECTOID_COMMANDER
       - STR_SECTOID_LEADER
@@ -1992,7 +2003,7 @@ alienRaces: #new order: sectoid,snakemen,ethereal,muton,floater
       - STR_SECTOID_SOLDIER
       - STR_REAPER_TERRORIST
       - STR_REAPER_TERRORIST
-  - id: STR_FLOATER
+  - type: STR_FLOATER
     members:
       - STR_FLOATER_COMMANDER
       - STR_FLOATER_LEADER
@@ -2002,7 +2013,7 @@ alienRaces: #new order: sectoid,snakemen,ethereal,muton,floater
       - STR_FLOATER_SOLDIER
       - STR_CYBERDISC_TERRORIST
       - STR_CYBERDISC_TERRORIST
-  - id: STR_SNAKEMAN
+  - type: STR_SNAKEMAN
     members:
       - STR_SNAKEMAN_COMMANDER
       - STR_SNAKEMAN_LEADER
@@ -2012,7 +2023,7 @@ alienRaces: #new order: sectoid,snakemen,ethereal,muton,floater
       - STR_SNAKEMAN_SOLDIER
       - STR_CHRYSSALID_TERRORIST
       - STR_CHRYSSALID_TERRORIST
-  - id: STR_MUTON
+  - type: STR_MUTON
     members:
       - STR_MUTON_SOLDIER
       - STR_MUTON_SOLDIER
@@ -2022,7 +2033,7 @@ alienRaces: #new order: sectoid,snakemen,ethereal,muton,floater
       - STR_MUTON_SOLDIER
       - STR_SILACOID_TERRORIST
       - STR_CELATID_TERRORIST
-  - id: STR_ETHEREAL
+  - type: STR_ETHEREAL
     members:
       - STR_ETHEREAL_COMMANDER
       - STR_ETHEREAL_LEADER
@@ -2032,7 +2043,7 @@ alienRaces: #new order: sectoid,snakemen,ethereal,muton,floater
       - STR_ETHEREAL_SOLDIER
       - STR_SECTOPOD_TERRORIST
       - STR_SECTOPOD_TERRORIST
-  - id: STR_MIXED
+  - type: STR_MIXED
     retaliation: false
     members:
       - STR_ETHEREAL_COMMANDER
@@ -2043,6 +2054,16 @@ alienRaces: #new order: sectoid,snakemen,ethereal,muton,floater
       - STR_CELATID_TERRORIST
       - STR_SECTOPOD_TERRORIST
       - STR_SECTOPOD_TERRORIST
+  - type: STR_WASPITE
+    members:
+      - STR_WASPITE_COMMANDER
+      - STR_WASPITE_LEADER
+      - STR_WASPITE_ENGINEER
+      - STR_WASPITE_MEDIC
+      - STR_WASPITE_NAVIGATOR
+      - STR_WASPITE_SOLDIER
+      - STR_CYBERMITE_TERRORIST
+      - STR_CYBERMITE_TERRORIST
 armors:
   - type: SECTOID_ARMOR0 #soldier, navigator, medic, engineer
     spriteSheet: SECTOID.PCK
