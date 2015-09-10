@@ -52,10 +52,10 @@ private:
 		_atBase,
 		_tuMode;
 	int
-		_fuseFrame,
 		_groundOffset,
 		_prime,
 		_tuCost;
+	size_t _fuseFrame;
 
 	BattleItem
 		* _mouseOverItem,

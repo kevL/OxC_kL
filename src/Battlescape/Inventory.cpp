@@ -1465,7 +1465,16 @@ void Inventory::setPrimeGrenade(int turn)
  */
 int Inventory::getTuCostInventory() const
 {
-	return _tuCost;
+	int wt;
+	if (_tuCost > 0
+		&& _selItem->getSlot()->getId() == "STR_GROUND")
+	{
+		wt = _selItem->getRules()->getWeight();
+	}
+	else
+		wt = 0;
+
+	return (_tuCost + wt);
 }
 
 }

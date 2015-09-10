@@ -968,7 +968,7 @@ void InventoryState::btnUnequipUnitClick(Action*)
 		BattleUnit* const unit = _battleSave->getSelectedUnit();
 		std::vector<BattleItem*>* const unitInvent = unit->getInventory();
 		Tile* const unitTile = unit->getTile();
-		RuleInventory* const grdRule = _game->getRuleset()->getInventory("STR_GROUND");
+		RuleInventory* const slot = _game->getRuleset()->getInventory("STR_GROUND");
 
 		for (std::vector<BattleItem*>::const_iterator
 				i = unitInvent->begin();
@@ -978,7 +978,7 @@ void InventoryState::btnUnequipUnitClick(Action*)
 			(*i)->setOwner(NULL);
 			unitTile->addItem(
 							*i,
-							grdRule);
+							slot);
 
 			i = unitInvent->erase(i);
 		}
@@ -1001,20 +1001,12 @@ void InventoryState::btnUnequipUnitClick(Action*)
 		BattleUnit* const unit = _battleSave->getSelectedUnit();
 		std::vector<BattleItem*>* const unitInv = unit->getInventory();
 		Tile* const groundTile = unit->getTile();
-
-		clearInventory(
-					_game,
-					unitInv,
-					groundTile);
-
+		clearInventory(_game, unitInv, groundTile);
 		_inv->arrangeGround(false); // refresh ui
 		updateStats();
 		refreshMouse();
 
-		_game->getResourcePack()->getSound(
-										"BATTLE.CAT",
-										ResourcePack::ITEM_DROP)
-									->play();
+		_game->getResourcePack()->getSound("BATTLE.CAT", ResourcePack::ITEM_DROP)->play();
 	}
 } */
 /*
@@ -1030,17 +1022,10 @@ void InventoryState::clearInventory( // private.
 		Tile* groundTile)
 {
 	RuleInventory* const groundRule = game->getRuleset()->getInventory("STR_GROUND");
-
-	for (std::vector<BattleItem*>::const_iterator
-			i = unitInv->begin();
-			i != unitInv->end();
-			)
+	for (std::vector<BattleItem*>::const_iterator i = unitInv->begin(); i != unitInv->end();)
 	{
 		(*i)->setOwner(NULL);
-		groundTile->addItem(
-						*i,
-						groundRule);
-
+		groundTile->addItem(*i, groundRule);
 		i = unitInv->erase(i);
 	}
 } */
@@ -1110,9 +1095,7 @@ void InventoryState::invClick(Action*)
 				++rect.y;
 				rect.w -= 2;
 				rect.h -= 2;
-				_selAmmo->drawRect(
-								&rect,
-								15);
+				_selAmmo->drawRect(&rect,15);
 
 				ammo->getRules()->drawHandSprite(
 											_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"),
@@ -1176,9 +1159,7 @@ void InventoryState::invMouseOver(Action*)
 			++rect.y;
 			rect.w -= 2;
 			rect.h -= 2;
-			_selAmmo->drawRect(
-							&rect,
-							15);
+			_selAmmo->drawRect(&rect,15);
 
 			ammo->getRules()->drawHandSprite(
 										_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"),

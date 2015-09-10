@@ -5593,7 +5593,7 @@
 	"../Savegame/Ufo.h"
 	"../Savegame/Vehicle.h"
 
-1440429801 f:\git\openxcom\src\battlescape\inventory.h
+1441925834 f:\git\openxcom\src\battlescape\inventory.h
 	"../Engine/InteractiveSurface.h"
 
 1440037317 f:\git\openxcom\src\engine\crossplatform.h
@@ -5906,7 +5906,7 @@
 	"../Interface/Frame.h"
 	"../Interface/Text.h"
 
-1441837727 source:f:\git\openxcom\src\battlescape\inventory.cpp
+1441924081 source:f:\git\openxcom\src\battlescape\inventory.cpp
 	"Inventory.h"
 	"PrimeGrenadeState.h"
 	"TileEngine.h"
@@ -5937,7 +5937,7 @@
 	<SDL.h>
 	<yaml-cpp/yaml.h>
 
-1441838080 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
+1441923349 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
 	"InventoryState.h"
 	"BattlescapeState.h"
 	"Inventory.h"
@@ -8272,7 +8272,7 @@
 1441278142 source:f:\git\openxcom\src\ruleset\rulecraftweapon.cpp
 	"RuleCraftWeapon.h"
 
-1440164247 source:f:\git\openxcom\src\ruleset\ruleinventory.cpp
+1441923563 source:f:\git\openxcom\src\ruleset\ruleinventory.cpp
 	"RuleInventory.h"
 	"RuleItem.h"
 
@@ -8646,7 +8646,7 @@
 	"../Engine/Language.h"
 	"../Ruleset/Ruleset.h"
 
-1441885279 source:f:\git\openxcom\src\savegame\ufo.cpp
+1441920885 source:f:\git\openxcom\src\savegame\ufo.cpp
 	"Ufo.h"
 	"AlienMission.h"
 	"Craft.h"

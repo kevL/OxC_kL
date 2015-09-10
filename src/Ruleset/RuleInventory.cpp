@@ -98,12 +98,11 @@ void RuleInventory::load(
 	_costs		= node["costs"]		.as<std::map<std::string, int> >(_costs);
 	_listOrder	= node["listOrder"]	.as<int>(listOrder);
 
-	_type		= static_cast<InventoryType>(node["type"].as<int>(_type));
+	_type = static_cast<InventoryType>(node["type"].as<int>(_type));
 }
 
 /**
  * Gets the language string that names this inventory section.
- * @note Each section has a unique name.
  * @return, section name
  */
 std::string RuleInventory::getId() const
@@ -169,22 +168,21 @@ bool RuleInventory::checkSlotInPosition(
 		case INV_HAND:
 			for (int
 					xx = 0;
-					xx < HAND_W;
+					xx != HAND_W;
 					++xx)
 			{
 				for (int
 						yy = 0;
-						yy < HAND_H;
+						yy != HAND_H;
 						++yy)
 				{
-					if (   mouseX >= _x + xx * SLOT_W
+					if (mouseX >= _x + xx * SLOT_W
 						&& mouseX < _x + (xx + 1) * SLOT_W
 						&& mouseY >= _y + yy * SLOT_H
 						&& mouseY < _y + (yy + 1) * SLOT_H)
 					{
 						*x =
 						*y = 0;
-
 						return true;
 					}
 				}
@@ -192,7 +190,7 @@ bool RuleInventory::checkSlotInPosition(
 		break;
 
 		case INV_GROUND:
-			if (   mouseX >= _x
+			if (mouseX >= _x
 				&& mouseX < 320
 				&& mouseY >= _y
 				&& mouseY < 200)
@@ -212,7 +210,7 @@ bool RuleInventory::checkSlotInPosition(
 					i != _slots.end();
 					++i)
 			{
-				if (   mouseX >= _x + i->x * SLOT_W
+				if (mouseX >= _x + i->x * SLOT_W
 					&& mouseX < _x + (i->x + 1) * SLOT_W
 					&& mouseY >= _y + i->y * SLOT_H
 					&& mouseY < _y + (i->y + 1) * SLOT_H)
@@ -263,7 +261,7 @@ bool RuleInventory::fitItemInSlot(
 						++find_y)
 				{
 					if (!
-							(  find_x >= xOffset
+							(find_x >= xOffset
 							&& find_x < xOffset + width
 							&& find_y > -1
 							&& find_y < height))
@@ -287,7 +285,7 @@ bool RuleInventory::fitItemInSlot(
 						&& slotsFound < slotsTotal;
 					++i)
 			{
-				if (   i->x >= x
+				if (i->x >= x
 					&& i->x < x + item->getInventoryWidth()
 					&& i->y >= y
 					&& i->y < y + item->getInventoryHeight())
