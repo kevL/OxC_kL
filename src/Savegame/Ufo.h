@@ -78,7 +78,7 @@ private:
 		_trajectoryPoint;
 
 	AlienMission* _mission;
-	const RuleUfo* _rules;
+	const RuleUfo* _ufoRule;
 	const UfoTrajectory* _trajectory;
 
 	std::string
@@ -96,14 +96,14 @@ private:
 
 	public:
 		/// Creates a UFO of the specified type.
-		explicit Ufo(const RuleUfo* const rules);
+		explicit Ufo(const RuleUfo* const ufoRule);
 		/// Cleans up the UFO.
 		~Ufo();
 
 		/// Loads the UFO from YAML.
 		void load(
 				const YAML::Node& node,
-				const Ruleset& ruleset,
+				const Ruleset& rules,
 				SavedGame& game);
 		/// Saves the UFO to YAML.
 		YAML::Node save(bool skirmish) const;
@@ -113,7 +113,7 @@ private:
 		/// Gets the UFO's ruleset.
 		const RuleUfo* const getRules() const;
 		/// Sets the UFO's ruleset.
-		void changeRules(const RuleUfo* const rules);
+		void changeRules(const RuleUfo* const ufoRule);
 
 		/// Handles UFO logic.
 		void think();

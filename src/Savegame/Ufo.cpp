@@ -47,12 +47,12 @@ namespace OpenXcom
 
 /**
  * Initializes a UFO of the specified type.
- * @param rules - pointer to RuleUfo
+ * @param ufoRule - pointer to RuleUfo
  */
-Ufo::Ufo(const RuleUfo* const rules)
+Ufo::Ufo(const RuleUfo* const ufoRule)
 	:
 		MovingTarget(),
-		_rules(rules),
+		_ufoRule(ufoRule),
 		_id(0),
 		_crashId(0),
 		_landId(0),
@@ -72,8 +72,7 @@ Ufo::Ufo(const RuleUfo* const rules)
 		_processedIntercept(false),
 		_fireCountdown(0),
 		_escapeCountdown(0),
-		_radius(rules->getRadius())
-//		_shotDownByCraftId() // kL
+		_radius(ufoRule->getRadius())
 {}
 
 /**
@@ -139,13 +138,13 @@ private:
 
 /**
  * Loads the UFO from a YAML file.
- * @param node		- reference a YAML node
- * @param ruleset	- reference the Ruleset (used to access trajectory data)
- * @param game		- reference the SavedGame (used to get the UFO's mission)
+ * @param node	- reference a YAML node
+ * @param rules	- reference the Ruleset (used to access trajectory data)
+ * @param game	- reference the SavedGame (used to get the UFO's mission)
  */
 void Ufo::load(
 		const YAML::Node& node,
-		const Ruleset& ruleset,
+		const Ruleset& rules,
 		SavedGame& game)
 {
 	MovingTarget::load(node);
@@ -179,9 +178,9 @@ void Ufo::load(
 		_status = (UfoStatus)status.as<int>();
 	else
 	{
-		if (_damage >= _rules->getMaxDamage())
+		if (_damage >= _ufoRule->getMaxDamage())
 			_status = DESTROYED;
-		else if (_damage >= _rules->getMaxDamage() / 2)
+		else if (_damage >= _ufoRule->getMaxDamage() / 2)
 			_status = CRASHED;
 		else if (_altitude == "STR_GROUND")
 			_status = LANDED;
@@ -204,7 +203,7 @@ void Ufo::load(
 		_mission = *mission;
 
 		const std::string trjId	= node["trajectory"]		.as<std::string>();
-		_trajectory				= ruleset.getUfoTrajectory(trjId);
+		_trajectory				= rules.getUfoTrajectory(trjId);
 		_trajectoryPoint		= node["trajectoryPoint"]	.as<size_t>(_trajectoryPoint);
 	}
 
@@ -223,8 +222,8 @@ YAML::Node Ufo::save(bool skirmish) const
 {
 	YAML::Node node = MovingTarget::save();
 
-	node["type"]		= _rules->getType();
-	node["id"]			= _id;
+	node["type"]	= _ufoRule->getType();
+	node["id"]		= _id;
 
 	if (_terrain.empty() == false) node["terrain"] = _terrain;
 
@@ -274,17 +273,17 @@ YAML::Node Ufo::saveId() const
  */
 const RuleUfo* const Ufo::getRules() const
 {
-	return _rules;
+	return _ufoRule;
 }
 
 /**
  * Changes the ruleset for the UFO's type.
  * @warning ONLY FOR NEW BATTLE USE!
- * @param rules - pointer to RuleUfo
+ * @param ufoRule - pointer to RuleUfo
  */
-void Ufo::changeRules(const RuleUfo* const rules)
+void Ufo::changeRules(const RuleUfo* const ufoRule)
 {
-	_rules = rules;
+	_ufoRule = ufoRule;
 }
 
 /**
@@ -337,8 +336,8 @@ int Ufo::getMarker() const
 {
 	if (_detected == true)
 	{
-		if (_rules->getMarker() != -1) // for a custom marker.
-			return _rules->getMarker();
+		if (_ufoRule->getMarker() != -1) // for a custom marker.
+			return _ufoRule->getMarker();
 
 		switch (_status)
 		{
@@ -361,9 +360,9 @@ void Ufo::setDamage(int damage)
 	else
 		_damage = damage;
 
-	if (_damage >= _rules->getMaxDamage())
+	if (_damage >= _ufoRule->getMaxDamage())
 		_status = DESTROYED;
-	else if (_damage >= _rules->getMaxDamage() / 2)
+	else if (_damage >= _ufoRule->getMaxDamage() / 2)
 		_status = CRASHED;
 }
 
@@ -384,7 +383,7 @@ int Ufo::getDamage() const
 int Ufo::getDamagePercent() const
 {
 	return static_cast<int>(std::floor(
-		   static_cast<double>(_damage) / static_cast<double>(_rules->getMaxDamage()) * 100.));
+		   static_cast<double>(_damage) / static_cast<double>(_ufoRule->getMaxDamage()) * 100.));
 }
 
 /**
@@ -488,7 +487,7 @@ std::string Ufo::getDirection() const
  */
 bool Ufo::isCrashed() const
 {
-	return _damage > _rules->getMaxDamage() / 2;
+	return _damage > _ufoRule->getMaxDamage() / 2;
 }
 
 /**
@@ -497,11 +496,12 @@ bool Ufo::isCrashed() const
  */
 bool Ufo::isDestroyed() const
 {
-	return _damage >= _rules->getMaxDamage();
+	return _damage >= _ufoRule->getMaxDamage();
 }
 
 /**
- * Calculates the direction for this Ufo based on the current raw speed and destination.
+ * Calculates the direction for this Ufo based on the current raw speed and
+ * destination.
  */
 void Ufo::calculateSpeed()
 {
@@ -535,11 +535,10 @@ void Ufo::calculateSpeed()
 	}
 
 	double theta = std::atan2(y, x); // theta is radians.
-
 	// Convert radians to degrees so i don't go bonkers;
 	// ie. KILL IT WITH FIRE!!1@!
 	// note that this is between +/- 180 deg.
-	theta = theta * 180. / M_PI;
+	theta *= 180. / M_PI;
 
 	if (theta > 157.5 || theta < -157.5)
 		_direction = "STR_WEST";
@@ -568,7 +567,6 @@ void Ufo::think()
 	{
 		case FLYING:
 			moveTarget();
-
 			if (reachedDestination() == true)
 				setSpeed(0);
 		break;
@@ -649,14 +647,14 @@ int Ufo::getVictoryPoints() const
 		default:				ret = 1;
 	}
 
-//	if (_rules->getSize() == "STR_VERY_SMALL")
-	if (_rules->getSize() == "STR_SMALL")
+//	if (_ufoRule->getSize() == "STR_VERY_SMALL")
+	if (_ufoRule->getSize() == "STR_SMALL")
 		ret += 1;
-	else if (_rules->getSize() == "STR_MEDIUM_UC")
+	else if (_ufoRule->getSize() == "STR_MEDIUM_UC")
 		ret += 2;
-	else if (_rules->getSize() == "STR_LARGE")
+	else if (_ufoRule->getSize() == "STR_LARGE")
 		ret += 3;
-	else if (_rules->getSize() == "STR_VERY_LARGE")
+	else if (_ufoRule->getSize() == "STR_VERY_LARGE")
 		ret += 5;
 
 //	if (_altitude == "STR_GROUND") // Status _LANDED or _CRASHED above.
@@ -681,14 +679,14 @@ int Ufo::getVisibility() const
 {
 	int ret = 0;
 
-	if (_rules->getSize() == "STR_VERY_SMALL")
+	if (_ufoRule->getSize() == "STR_VERY_SMALL")
 		ret = -30;
-	else if (_rules->getSize() == "STR_SMALL")
+	else if (_ufoRule->getSize() == "STR_SMALL")
 		ret = -15;
-//	else if (_rules->getSize() == "STR_MEDIUM_UC")
-	else if (_rules->getSize() == "STR_LARGE")
+//	else if (_ufoRule->getSize() == "STR_MEDIUM_UC")
+	else if (_ufoRule->getSize() == "STR_LARGE")
 		ret = 15;
-	else if (_rules->getSize() == "STR_VERY_LARGE")
+	else if (_ufoRule->getSize() == "STR_VERY_LARGE")
 		ret = 30;
 
 	if (_altitude == "STR_GROUND")
@@ -712,15 +710,15 @@ int Ufo::getDetectors() const
 {
 	int ret = 0;
 
-	if (_rules->getSize() == "STR_VERY_SMALL")
+	if (_ufoRule->getSize() == "STR_VERY_SMALL")
 		ret = -12;
-	else if (_rules->getSize() == "STR_SMALL")
+	else if (_ufoRule->getSize() == "STR_SMALL")
 		ret = -8;
-	else if (_rules->getSize() == "STR_MEDIUM_UC")
+	else if (_ufoRule->getSize() == "STR_MEDIUM_UC")
 		ret = -5;
-	else if (_rules->getSize() == "STR_LARGE")
+	else if (_ufoRule->getSize() == "STR_LARGE")
 		ret = -2;
-//	else if (_rules->getSize() == "STR_VERY_LARGE")
+//	else if (_ufoRule->getSize() == "STR_VERY_LARGE")
 
 	if (_altitude == "STR_GROUND")
 		ret -= 30;
