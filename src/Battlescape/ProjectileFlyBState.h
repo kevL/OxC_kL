@@ -103,7 +103,7 @@ private:
 		static int getMaxThrowDistance(
 				int weight,
 				int strength,
-				int level);
+				int elevation);
 };
 
 }

@@ -224,17 +224,18 @@ InventoryState::InventoryState(
 	_tuCost->setColor(1);
 	_tuCost->setVisible(false);
 
-	_wndHead->setColor(Palette::blockOffset(2)+6); // red
+	const Uint8 color = Palette::blockOffset(2)+6; // red
+	_wndHead->setColor(color);
 	_wndHead->setVisible(false);
-	_wndTorso->setColor(Palette::blockOffset(2)+6);
+	_wndTorso->setColor(color);
 	_wndTorso->setVisible(false);
-	_wndRightArm->setColor(Palette::blockOffset(2)+6);
+	_wndRightArm->setColor(color);
 	_wndRightArm->setVisible(false);
-	_wndLeftArm->setColor(Palette::blockOffset(2)+6);
+	_wndLeftArm->setColor(color);
 	_wndLeftArm->setVisible(false);
-	_wndRightLeg->setColor(Palette::blockOffset(2)+6);
+	_wndRightLeg->setColor(color);
 	_wndRightLeg->setVisible(false);
-	_wndLeftLeg->setColor(Palette::blockOffset(2)+6);
+	_wndLeftLeg->setColor(color);
 	_wndLeftLeg->setVisible(false);
 
 	_txtItem->setHighContrast();
@@ -1095,7 +1096,7 @@ void InventoryState::invClick(Action*)
 				++rect.y;
 				rect.w -= 2;
 				rect.h -= 2;
-				_selAmmo->drawRect(&rect,15);
+				_selAmmo->drawRect(&rect, 15);
 
 				ammo->getRules()->drawHandSprite(
 											_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"),
@@ -1159,7 +1160,7 @@ void InventoryState::invMouseOver(Action*)
 			++rect.y;
 			rect.w -= 2;
 			rect.h -= 2;
-			_selAmmo->drawRect(&rect,15);
+			_selAmmo->drawRect(&rect, 15);
 
 			ammo->getRules()->drawHandSprite(
 										_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"),

@@ -48,9 +48,7 @@ class Projectile
 {
 
 private:
-	static const double
-		ACCU_LIMIT,
-		PCT;
+	static const double PCT;
 	static Position targetVoxel_cache;
 
 

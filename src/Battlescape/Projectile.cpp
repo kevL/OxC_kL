@@ -47,9 +47,7 @@ namespace OpenXcom
 {
 
 Position Projectile::targetVoxel_cache; // static across all Projectile invokations <-
-const double
-	Projectile::ACCU_LIMIT = 0.01,
-	Projectile::PCT = 0.01;
+const double Projectile::PCT = 0.01;
 
 
 /**
@@ -278,37 +276,6 @@ VoxelType Projectile::calculateShot(
 VoxelType Projectile::calculateThrow(double accuracy)
 {
 	//Log(LOG_INFO) << "Projectile calculateThrow()";
-/*	BattleUnit* bu = _battleSave->getTile(_posOrigin)->getUnit();
-	if (bu == NULL)
-		bu = _battleSave->getTile(Position(
-										_posOrigin.x,
-										_posOrigin.y,
-										_posOrigin.z - 1))->getUnit(); */
-
-//	const Position targetVoxel = Position(
-//									_action.target.x * 16 + 8,
-//									_action.target.y * 16 + 8,
-//									_action.target.z * 24 + 2 - _battleSave->getTile(_action.target)->getTerrainLevel());
-
-//	if (_action.type != BA_THROW) // ie. celatid acid-spit
-//	{
-//		const BattleUnit* const targetUnit = _battleSave->getTileEngine()->getTargetUnit(_battleSave->getTile(_action.target));
-/*		const BattleUnit* targetUnit = _battleSave->getTile(_action.target)->getUnit();
-		if (targetUnit == NULL
-			&& _action.target.z > 0
-			&& _battleSave->getTile(_action.target)->hasNoFloor())
-		{
-			targetUnit = _battleSave->getTile(Position(_action.target.x, _action.target.y, _action.target.z - 1))->getUnit();
-		}
-		if (targetUnit != NULL)
-		{
-			targetVoxel.z += targetUnit->getHeight() / 2 + targetUnit->getFloatHeight();
-			if (targetUnit->isDashing() == true)
-				accuracy -= 0.16; // acid-spit, arcing shot.
-		} */
-//	}
-
-
 	const Position originVoxel = _battleSave->getTileEngine()->getOriginVoxel(_action);
 	VoxelType voxelType = VOXEL_OUTOFBOUNDS;
 	double arc;
@@ -319,9 +286,8 @@ VoxelType Projectile::calculateThrow(double accuracy)
 												&arc,
 												&voxelType) == true)
 	{
-		// Do a parabola calculation and store that trajectory.
-		VoxelType test = VOXEL_OUTOFBOUNDS;
-		while (test == VOXEL_OUTOFBOUNDS)
+		VoxelType voxelTest = VOXEL_OUTOFBOUNDS;
+		while (voxelTest == VOXEL_OUTOFBOUNDS) // Do a parabola calculation and store the trajectory.
 		{
 			_trj.clear();
 
@@ -333,17 +299,17 @@ VoxelType Projectile::calculateThrow(double accuracy)
 						_battleSave->getTile(_action.target));
 
 			deltaVoxel -= _targetVoxel;
-			test = _battleSave->getTileEngine()->plotParabola(
-															originVoxel,
-															_targetVoxel,
-															true,
-															&_trj,
-															_action.actor,
-															arc,
-															deltaVoxel);
+			voxelTest = _battleSave->getTileEngine()->plotParabola(
+																originVoxel,
+																_targetVoxel,
+																true,
+																&_trj,
+																_action.actor,
+																arc,
+																deltaVoxel);
 
-			// Don't let thrown items land on diagonal bigwalls.
-			// this prevents exploiting blast-propagation routine to both sides of a bigWall.diag
+			// Don't let thrown items land on diagonal bigWalls.
+			// This prevents exploiting the blast-propagation routine onto both sides of a diagonal bigWall.
 			// See also TileEngine::validateThrow()
 			if (_action.type == BA_THROW)
 			{
@@ -356,7 +322,7 @@ VoxelType Projectile::calculateThrow(double accuracy)
 //					&& (action.weapon->getRules()->getBattleType() == BT_GRENADE
 //						|| action.weapon->getRules()->getBattleType() == BT_PROXYGRENADE))
 				{
-					test = VOXEL_OUTOFBOUNDS; // prevent Grenades from landing on diagonal BigWalls.
+					voxelTest = VOXEL_OUTOFBOUNDS; // prevent Grenades from landing on diagonal BigWalls.
 				}
 			}
 		}
@@ -388,6 +354,7 @@ void Projectile::applyAccuracy( // private.
 	//Log(LOG_INFO) << ". z = " << targetVoxel->z;
 
 	//Log(LOG_INFO) << "input Target = " << (*targetVoxel);
+	static const double ACU_MIN = 0.01;
 	const int
 		delta_x = originVoxel.x - targetVoxel->x,
 		delta_y = originVoxel.y - targetVoxel->y;
@@ -416,7 +383,7 @@ void Projectile::applyAccuracy( // private.
 										targetVoxel->z - originVoxel.z,
 										tileTarget);
 
-			accuracy = std::max(ACCU_LIMIT, accuracy);
+			accuracy = std::max(ACU_MIN, accuracy);
 			//Log(LOG_INFO) << "accu = " << accuracy;
 		}
 		else // 2nd+ shot of burst
@@ -446,7 +413,7 @@ void Projectile::applyAccuracy( // private.
 					deviation = 0.21;	// for Player
 
 				deviation /= accuracy + 0.13;
-				deviation = std::max(ACCU_LIMIT, deviation);
+				deviation = std::max(ACU_MIN, deviation);
 				//Log(LOG_INFO) << ". deviation = " << deviation;
 
 				// The angle deviations are spread using a normal distribution:
@@ -514,10 +481,6 @@ void Projectile::applyAccuracy( // private.
 		}
 		if (calcVert == true)
 			targetVoxel->z = static_cast<int>(Round(static_cast<double>(originVoxel.z) + OUTER_LIMIT * std::sin(fi)));
-
-		//Log(LOG_INFO) << ". x = " << targetVoxel->x;
-		//Log(LOG_INFO) << ". y = " << targetVoxel->y;
-		//Log(LOG_INFO) << ". z = " << targetVoxel->z;
 	}
 	else // *** This is for Throwing /*and AcidSpitt*/ only ***
 	{
@@ -532,7 +495,7 @@ void Projectile::applyAccuracy( // private.
 									_battleSave->getTileEngine()->getTargetUnit(tileTarget),
 									targetVoxel->z - originVoxel.z,
 									tileTarget);
-			accuracy = std::max(ACCU_LIMIT, accuracy);
+			accuracy = std::max(ACU_MIN, accuracy);
 
 			if (_action.actor->getGeoscapeSoldier() != NULL)
 				perfect = static_cast<double>(_battleSave->getBattleGame()->getRuleset()->getSoldier("XCOM")->getStatCaps().firing);
@@ -551,7 +514,7 @@ void Projectile::applyAccuracy( // private.
 
 		double deviation = perfect - accuracy;
 		deviation = std::max(
-						ACCU_LIMIT,
+						ACU_MIN,
 						deviation * targetDist * PCT);
 
 		const double
@@ -562,7 +525,27 @@ void Projectile::applyAccuracy( // private.
 		targetVoxel->x += static_cast<int>(Round(dx));
 		targetVoxel->y += static_cast<int>(Round(dy));
 		targetVoxel->z += static_cast<int>(Round(dz));
+
+		if (_action.type == BA_THROW)
+		{
+			const Tile* const tile = _battleSave->getTile(*targetVoxel / Position(16,16,24));
+			const int terrainZ = tile->getTerrainLevel();
+			//Log(LOG_INFO) << "terrainZ = " << terrainZ;
+
+			//Log(LOG_INFO) << ". x' = " << targetVoxel->x;
+			//Log(LOG_INFO) << ". y' = " << targetVoxel->y;
+			//Log(LOG_INFO) << ". z' = " << targetVoxel->z;
+			//Log(LOG_INFO) << ". x\" = " << targetVoxel->x / 16 * 16 + 8;
+			//Log(LOG_INFO) << ". y\" = " << targetVoxel->y / 16 * 16 + 8;
+			//Log(LOG_INFO) << ". z\" = " << targetVoxel->z / 24 * 24 - terrainZ;
+			targetVoxel->x = (targetVoxel->x & 0xFFF0) + 8;
+			targetVoxel->y = (targetVoxel->y & 0xFFF0) + 8;
+			targetVoxel->z = (targetVoxel->z / 24 * 24) - terrainZ;
+		}
 	}
+	//Log(LOG_INFO) << ". x = " << targetVoxel->x;
+	//Log(LOG_INFO) << ". y = " << targetVoxel->y;
+	//Log(LOG_INFO) << ". z = " << targetVoxel->z;
 	//Log(LOG_INFO) << "Projectile::applyAccuracy() EXIT";
 }
 /*		if (extendLine == true)
@@ -706,13 +689,11 @@ bool Projectile::verifyTarget(const Position& originVoxel) // private.
 		if (voxelType == VOXEL_UNIT)
 		{
 			const Tile* const tileTest = _battleSave->getTile(posTest);
-			if (tileTest != NULL && tileTest->getUnit() == NULL)
-			{
-				posTest = Position( // must be poking head up from tileBelow
+			if (tileTest != NULL && tileTest->getUnit() == NULL) // must be poking head up from tileBelow
+				posTest = Position(
 								posTest.x,
 								posTest.y,
 								posTest.z - 1);
-			}
 		}
 
 		if (posTest != _action.target

@@ -207,8 +207,8 @@ void ProjectileFlyBState::init()
 	switch (_action.type)
 	{
 		case BA_SNAPSHOT:
-		case BA_AIMEDSHOT:
 		case BA_AUTOSHOT:
+		case BA_AIMEDSHOT:
 		case BA_LAUNCH:
 			//Log(LOG_INFO) << ". . BA_SNAPSHOT, AIMEDSHOT, AUTOSHOT, or LAUNCH";
 			if (_ammo == NULL)
@@ -236,11 +236,11 @@ void ProjectileFlyBState::init()
 		case BA_THROW:
 		{
 			//Log(LOG_INFO) << ". . BA_THROW panic = " << (int)(_parent->getPanicHandled() == false);
-			const Tile* const tileDest = _battleSave->getTile(_action.target); // always Valid.
+			const Tile* const tileTarget = _battleSave->getTile(_action.target); // always Valid.
 			if (validThrowRange(
 							&_action,
 							_parent->getTileEngine()->getOriginVoxel(_action),
-							tileDest) == false)
+							tileTarget) == false)
 			{
 				//Log(LOG_INFO) << ". . . not valid throw range, EXIT";
 				_action.result = "STR_OUT_OF_RANGE";
@@ -249,8 +249,8 @@ void ProjectileFlyBState::init()
 			else
 			{
 				_prjItem = _action.weapon;
-				if (tileDest->getTerrainLevel() == -24
-					&& tileDest->getPosition().z < _battleSave->getMapSizeZ() - 1)
+				if (tileTarget->getTerrainLevel() == -24
+					&& tileTarget->getPosition().z < _battleSave->getMapSizeZ() - 1)
 				{
 					++_action.target.z;
 				}
@@ -290,24 +290,24 @@ void ProjectileFlyBState::init()
 	}
 
 
-//	const bool allowForceFire = _action.type == BA_SNAPSHOT
-//							 || _action.type == BA_AIMEDSHOT
-//							 || _action.type == BA_AUTOSHOT; // ie. not Throw
-
 	// ** find TARGET voxel ** ->
-	if (_action.type == BA_LAUNCH)
+	const Tile* const tileTarget = _battleSave->getTile(_action.target);
+
+	if (_action.type == BA_THROW
+		|| _action.type == BA_LAUNCH)
 	{
-		//Log(LOG_INFO) << "projFlyB init() B-Launch";
+		//Log(LOG_INFO) << "projFlyB init() B-Launch OR Throw";
 		_targetVoxel = Position(
 							_action.target.x * 16 + 8,
 							_action.target.y * 16 + 8,
 							_action.target.z * 24);
 
-		if (_targetFloor == false)
+		if (_action.type == BA_THROW)
+			_action.target.z -= tileTarget->getTerrainLevel();
+		else if (_targetFloor == false)
 			_targetVoxel.z += 16;
 	}
-	else if ((//allowForceFire == true &&
-			_unit->getFaction() == FACTION_PLAYER	// force fire at center of Tile by pressing [CTRL] but *not* SHIFT
+	else if ((_unit->getFaction() == FACTION_PLAYER	// force fire at center of Tile by pressing [CTRL] but *not* SHIFT
 			&& (SDL_GetModState() & KMOD_CTRL) != 0	// force fire at Floor w/ [CTRL+ALT]
 			&& (SDL_GetModState() & KMOD_SHIFT) == 0
 			&& Options::battleForceFire == true)
@@ -347,8 +347,6 @@ void ProjectileFlyBState::init()
 		const Position originVoxel = _parent->getTileEngine()->getOriginVoxel(
 																		_action,
 																		_battleSave->getTile(_posOrigin));
-		const Tile* const tileTarget = _battleSave->getTile(_action.target);
-
 		if (tileTarget->getUnit() != NULL
 			&& (_unit->getFaction() != FACTION_PLAYER
 				|| (((SDL_GetModState() & KMOD_SHIFT) == 0
@@ -477,8 +475,9 @@ bool ProjectileFlyBState::createNewProjectile() // private.
 	++_action.autoShotCount;
 
 	if (_unit->getGeoscapeSoldier() != NULL
-		&& (_action.type != BA_THROW
-			|| _action.type != BA_LAUNCH))
+		&& (_action.type == BA_SNAPSHOT
+			|| _action.type == BA_AUTOSHOT
+			|| _action.type == BA_AIMEDSHOT))
 	{
 		++_unit->getStatistics()->shotsFiredCounter;
 	}
@@ -1153,8 +1152,8 @@ void ProjectileFlyBState::cancel()
 /**
  * Validates the throwing range.
  * @param action		- pointer to BattleAction struct (BattlescapeGame.h)
- * @param originVoxel	- reference the origin in voxelspace
- * @param tile			- pointer to the targeted Tile
+ * @param originVoxel	- reference the origin in voxel-space
+ * @param tile			- pointer to the targeted tile
  * @return, true if the range is valid
  */
 bool ProjectileFlyBState::validThrowRange( // static.
@@ -1163,12 +1162,10 @@ bool ProjectileFlyBState::validThrowRange( // static.
 		const Tile* const tile)
 {
 	//Log(LOG_INFO) << "ProjectileFlyBState::validThrowRange()";
-/*	if (action->type != BA_THROW) // this is a celatid spit. Arc-shots never get here.
-//		&& tile->getUnit())
-	{
-//		offset_z = tile->getUnit()->getHeight() / 2 + tile->getUnit()->getFloatHeight();
-		return true;
-	} */
+	const int
+		delta_x = action->actor->getPosition().x - action->target.x,
+		delta_y = action->actor->getPosition().y - action->target.y;
+	const double throwDist = std::sqrt(static_cast<double>((delta_x * delta_x) + (delta_y * delta_y)));
 
 	int weight = action->weapon->getRules()->getWeight();
 	if (action->weapon->getAmmoItem() != NULL
@@ -1177,31 +1174,17 @@ bool ProjectileFlyBState::validThrowRange( // static.
 		weight += action->weapon->getAmmoItem()->getRules()->getWeight();
 	}
 
-	const int
-		offset_z = 2, // kL_note: this is prob +1 (.. +2) to get things up off the lowest voxel of a targetTile.
-		delta_z = originVoxel.z
-				- action->target.z * 24
-				- offset_z
-				+ tile->getTerrainLevel();
+	const int delta_z = originVoxel.z
+					  - action->target.z * 24 + tile->getTerrainLevel();
 	const double maxDist = static_cast<double>(
-						   getMaxThrowDistance( // tilespace
+						   getMaxThrowDistance( // tile-space
 											weight,
 											action->actor->getStrength(),
 											delta_z)
-										+ 8)
-									/ 16.;
-	// Throwing Distance was roughly = 2.5 \D7 Strength / Weight
-//	double range = 2.63 * static_cast<double>(action->actor->getBaseStats()->strength / action->weapon->getRules()->getWeight()); // old code.
-
-	const int
-		delta_x = action->actor->getPosition().x - action->target.x,
-		delta_y = action->actor->getPosition().y - action->target.y;
-	const double throwDist = std::sqrt(static_cast<double>((delta_x * delta_x) + (delta_y * delta_y)));
-
+										+ 8) / 16.;
 	// throwing off a building of 1 level lets you throw 2 tiles further than normal range,
-	// throwing up the roof of this building lets your throw 2 tiles less further
+	// throwing up to the roof of this building lets you throw 2 tiles less further
 /*	int delta_z = action->actor->getPosition().z - action->target.z;
-	distance -= static_cast<double>(delta_z);
 	distance -= static_cast<double>(delta_z); */
 
 	// since getMaxThrowDistance seems to return 1 less than maxDist, use "< throwDist" for this determination:
@@ -1210,7 +1193,6 @@ bool ProjectileFlyBState::validThrowRange( // static.
 	//Log(LOG_INFO) << ". throwDist " << (int)throwDist
 	//				<< " < maxDist " << (int)maxDist
 	//				<< " : return " << ret;
-
 	return (throwDist < maxDist);
 }
 
@@ -1218,46 +1200,45 @@ bool ProjectileFlyBState::validThrowRange( // static.
  * Helper for validThrowRange().
  * @param weight	- the weight of the object
  * @param strength	- the strength of the thrower
- * @param level		- the difference in height between the thrower and the target
+ * @param elevation	- the difference in height between the thrower and the target (voxel-space)
  * @return, the maximum throwing range
  */
 int ProjectileFlyBState::getMaxThrowDistance( // static.
 		int weight,
 		int strength,
-		int level)
+		int elevation)
 {
 	//Log(LOG_INFO) << "ProjectileFlyBState::getMaxThrowDistance()";
 	double
-		curZ = static_cast<double>(level) + 0.5,
-		delta_z = 1.;
+		z = static_cast<double>(elevation) + 0.5,
+		dz = 1.;
 
-	int dist = 0;
-	while (dist < 4000) // just in case
+	int retDist = 0;
+	while (retDist < 4000) // just in case
 	{
-		dist += 8;
+		retDist += 8;
 
-		if (delta_z < -1.)
-			curZ -= 8.;
+		if (dz < -1.)
+			z -= 8.;
 		else
-			curZ += delta_z * 8.;
+			z += dz * 8.;
 
-		if (curZ < 0.
-			&& delta_z < 0.) // roll back
+		if (z < 0. && dz < 0.) // roll back
 		{
-			delta_z = std::max(delta_z, -1.);
-			if (std::abs(delta_z) > 1e-10) // rollback horizontal
-				dist -= static_cast<int>(curZ / delta_z);
+			dz = std::max(dz, -1.);
+			if (std::abs(dz) > 1e-10) // rollback horizontal
+				retDist -= static_cast<int>(z / dz);
 
 			break;
 		}
 
-		delta_z -= static_cast<double>(weight * 50 / strength) / 100.;
-		if (delta_z <= -2.) // become falling
+		dz -= static_cast<double>(weight * 50 / strength) / 100.;
+		if (dz <= -2.) // become falling
 			break;
 	}
 
-	//Log(LOG_INFO) << ". dist = " << dist / 16;
-	return dist;
+	//Log(LOG_INFO) << ". retDist = " << retDist / 16;
+	return retDist;
 }
 
 /**
