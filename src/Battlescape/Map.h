@@ -125,7 +125,7 @@ private:
 	///
 	void drawTerrain(Surface* const surface);
 
-	/// Gets if a Tile is a/the true location of the unit.
+	/// Gets if a Tile is a/the true location of unit.
 	bool isTrueLoc(
 			const BattleUnit* const unit,
 			const Tile* const tile) const;

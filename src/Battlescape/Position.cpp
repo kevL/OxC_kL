@@ -19,5 +19,47 @@
 
 #include "Position.h"
 
+
 namespace OpenXcom
-{}
+{
+
+/**
+ * Converts voxel-space to tile-space.
+ * @param pos - reference a position
+ */
+Position Position::toTileSpace(const Position& pos)
+{
+	return Position(
+				pos.x >> 4,
+				pos.y >> 4,
+				pos.z / 24);
+}
+
+/**
+ * Converts tile-space to voxel-space.
+ * @param pos - reference a position
+ */
+Position Position::toVoxelSpace(const Position& pos)
+{
+	return Position(
+				pos.x << 4,
+				pos.y << 4,
+				pos.z * 24);
+}
+
+/**
+ * Converts tile-space to voxel-space and centers the voxel in its Tile.
+ * @param pos	- reference a position
+ * @param lift	- how many voxels to elevate along the z-axis (default 0)
+ */
+Position Position::toVoxelSpaceCentered(
+		const Position& pos,
+		int lift)
+{
+	return Position(
+				(pos.x << 4) + 8,
+				(pos.y << 4) + 8,
+				(pos.z * 24) + lift);
+}
+
+}

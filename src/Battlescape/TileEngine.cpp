@@ -5401,7 +5401,8 @@ bool TileEngine::validateThrow(
 		if (voxelTest != VOXEL_OUTOFBOUNDS
 			&& voxelTest != VOXEL_WESTWALL
 			&& voxelTest != VOXEL_NORTHWALL
-			&& (trj.at(0) / Position(16,16,24)) == posTarget)
+			&& Position::toTileSpace(trj.at(0)) == posTarget)
+//			&& (trj.at(0) / Position(16,16,24)) == posTarget)
 		{
 			//Log(LOG_INFO) << ". . . stop[1] TRUE";
 			stop = true;
@@ -5440,7 +5441,8 @@ bool TileEngine::validateThrow(
 			if (voxelTest == VOXEL_OUTOFBOUNDS
 				|| voxelTest == VOXEL_WESTWALL
 				|| voxelTest == VOXEL_NORTHWALL
-				|| (trj.at(0) / Position(16,16,24)) != posTarget)
+				|| Position::toTileSpace(trj.at(0)) != posTarget)
+//				|| (trj.at(0) / Position(16,16,24)) != posTarget)
 			{
 				//Log(LOG_INFO) << ". . . stop[2] TRUE";
 				stop = true;
@@ -5467,7 +5469,8 @@ int TileEngine::castShadow(const Position& voxel) const
 {
 	int startZ = voxel.z;
 
-	Position posTile = voxel / Position(16,16,24);
+//	Position posTile = voxel / Position(16,16,24);
+	Position posTile = Position::toTileSpace(voxel);
 	const Tile* tile = _battleSave->getTile(posTile);
 	while (tile != NULL
 		&& tile->isVoid(false, false) == true

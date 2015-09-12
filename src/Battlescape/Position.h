@@ -43,7 +43,7 @@ public:
 			y(0),
 			z(0)
 	{};
-	/// X Y Z position constructor.
+	/// 3d position constructor.
 	Position(
 			int x_,
 			int y_,
@@ -69,7 +69,6 @@ public:
 			y = pos.y;
 			z = pos.z;
 		}
-
 		return *this;
 	}
 
@@ -85,7 +84,6 @@ public:
 		x += pos.x;
 		y += pos.y;
 		z += pos.z;
-
 		return *this;
 	}
 
@@ -101,7 +99,6 @@ public:
 		x -= pos.x;
 		y -= pos.y;
 		z -= pos.z;
-
 		return *this;
 	}
 
@@ -117,7 +114,6 @@ public:
 		x *= pos.x;
 		y *= pos.y;
 		z *= pos.z;
-
 		return *this;
 	}
 	Position operator* (const int vect) const
@@ -132,7 +128,6 @@ public:
 		x *= vect;
 		y *= vect;
 		z *= vect;
-
 		return *this;
 	}
 
@@ -148,7 +143,6 @@ public:
 		x /= pos.x;
 		y /= pos.y;
 		z /= pos.z;
-
 		return *this;
 	}
 	Position operator/ (const int vect) const
@@ -163,7 +157,6 @@ public:
 		x /= vect;
 		y /= vect;
 		z /= vect;
-
 		return *this;
 	}										// kL_end.
 
@@ -184,22 +177,29 @@ public:
 			|| y != pos.y
 			|| z != pos.z;
 	}
+
+	/// Converts voxel-space to tile-space.
+	static Position toTileSpace(const Position& pos);
+	/// Converts tile-space to voxel-space.
+	static Position toVoxelSpace(const Position& pos);
+	/// Converts tile-space to voxel-space and centers the voxel in its Tile.
+	static Position toVoxelSpaceCentered(
+			const Position& pos,
+			int lift = 0);
 };
 
+///
 inline std::ostream& operator<< (std::ostream& ostr, const Position& pos)
 {
 	ostr << "(" << pos.x << "," << pos.y << "," << pos.z << ")";
 	return ostr;
 }
-
+///
 inline std::wostream& operator<< (std::wostream& wostr, const Position& pos)
 {
 	wostr << "(" << pos.x << "," << pos.y << "," << pos.z << ")";
 	return wostr;
 }
-
-
-typedef Position Vector3i;
 
 }
 

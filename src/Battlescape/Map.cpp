@@ -2031,7 +2031,7 @@ void Map::getSelectorPosition(Position* const pos) const
 }
 
 /**
- * Gets if a Tile is a/the true location of the current unit.
+ * Gets if a Tile is a/the true location of current unit.
  * @param unit - pointer to a unit
  * @param tile - pointer to a tile
  * @return, true if true location
@@ -2041,9 +2041,10 @@ bool Map::isTrueLoc(
 		const Tile* const tile) const // private.
 {
 	if (unit->getTile() == tile
-		|| tile->getPosition() + Position(-1, 0,0) == unit->getPosition()
-		|| tile->getPosition() + Position( 0,-1,0) == unit->getPosition()
-		|| tile->getPosition() + Position(-1,-1,0) == unit->getPosition())
+		|| (unit->getArmor()->getSize() == 2
+			&& (tile->getPosition() + Position(-1,0,0) == unit->getPosition()
+				|| tile->getPosition() + Position(0,-1,0) == unit->getPosition()
+				|| tile->getPosition() + Position(-1,-1,0) == unit->getPosition())))
 	{
 		return true;
 	}

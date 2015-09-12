@@ -4638,7 +4638,7 @@
 
 1432464769 f:\git\openxcom\src\savegame\itemcontainer.h
 
-1441843379 f:\git\openxcom\src\savegame\savedbattlegame.h
+1442087674 f:\git\openxcom\src\savegame\savedbattlegame.h
 	"BattleUnit.h"
 
 1441745927 f:\git\openxcom\src\savegame\battleunit.h
@@ -4653,7 +4653,7 @@
 1441664210 f:\git\openxcom\src\battlescape\battlescapegame.h
 	"Position.h"
 
-1432586518 f:\git\openxcom\src\battlescape\position.h
+1442088032 f:\git\openxcom\src\battlescape\position.h
 
 1440096185 f:\git\openxcom\src\savegame\vehicle.h
 
@@ -5442,7 +5442,7 @@
 1440092817 f:\git\openxcom\src\battlescape\battlestate.h
 	"BattlescapeGame.h"
 
-1441665509 f:\git\openxcom\src\battlescape\map.h
+1442085583 f:\git\openxcom\src\battlescape\map.h
 	"Position.h"
 	"../Engine/InteractiveSurface.h"
 
@@ -5963,7 +5963,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1442029677 source:f:\git\openxcom\src\battlescape\map.cpp
+1442085574 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	"BattlescapeMessage.h"
 	"BattlescapeState.h"
@@ -6118,7 +6118,7 @@
 	"PathfindingOpenSet.h"
 	"PathfindingNode.h"
 
-1430149550 source:f:\git\openxcom\src\battlescape\position.cpp
+1442088637 source:f:\git\openxcom\src\battlescape\position.cpp
 	"Position.h"
 
 1440380104 source:f:\git\openxcom\src\battlescape\primegrenadestate.cpp
@@ -6208,7 +6208,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1442034673 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1442087918 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	"AlienBAIState.h"
 	"BattlescapeState.h"

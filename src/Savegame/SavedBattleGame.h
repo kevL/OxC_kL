@@ -234,7 +234,7 @@ private:
 		 * @return, pointer to the tile at that position
 		 */
 		inline Tile* getTile(const Position& pos) const
-		{	if (   pos.x < 0
+		{	if (pos.x < 0
 				|| pos.y < 0
 				|| pos.z < 0
 				|| pos.x >= _mapsize_x
