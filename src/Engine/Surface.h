@@ -303,7 +303,7 @@ protected:
 				Surface* surface,
 				int x,
 				int y,
-				int colorOffset,
+				int colorOffset = 0,
 				bool halfRight = false,
 				int colorGroup = 0,
 				bool halfLeft = false);

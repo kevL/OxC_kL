@@ -303,7 +303,7 @@ void ProjectileFlyBState::init()
 							_action.target.z * 24);
 
 		if (_action.type == BA_THROW)
-			_action.target.z -= tileTarget->getTerrainLevel();
+			_targetVoxel.z -= tileTarget->getTerrainLevel();
 		else if (_targetFloor == false)
 			_targetVoxel.z += 16;
 	}
@@ -1328,7 +1328,7 @@ void ProjectileFlyBState::performMeleeAttack() // private.
 
 
 	const BattleUnit* const targetUnit = _battleSave->getTile(_action.target)->getUnit();
-	const int height = (targetUnit->getHeight() / 2)
+	const int height = targetUnit->getHeight() / 2
 					 + targetUnit->getFloatHeight()
 					 - _battleSave->getTile(_action.target)->getTerrainLevel();
 
@@ -1336,10 +1336,8 @@ void ProjectileFlyBState::performMeleeAttack() // private.
 	_battleSave->getPathfinding()->directionToVector(
 												_unit->getDirection(),
 												&posVoxel);
-	posVoxel = _action.target * Position(16,16,24) + Position(
-															8,8,
-															height)
-													- posVoxel;
+	posVoxel = _action.target * Position(16,16,24)
+			 + Position(8,8, height) - posVoxel;
 
 	_parent->statePushNext(new ExplosionBState(
 											_parent,

@@ -176,7 +176,6 @@ Map::Map(
 
 	_numExposed = new NumberText(24,9);
 	_numExposed->setPalette(_game->getScreen()->getPalette());
-	_numExposed->setColor(3);
 }
 
 /**
@@ -642,11 +641,16 @@ void Map::drawTerrain(Surface* const surface) // private.
 		posScreen,
 		walkOffset;
 
+	static const int SHADE_BLACK = 16;
+	static const Uint8
+		ACU_GREEN = 51,
+		ACU_ORANGE = 18,
+		ACU_RED = 35;
+
 	int
 		frame,
 		tileShade,
-		wallShade,
-		shade = 16, // avoid VC++ linker warning.
+		shade,
 		animOffset,
 		quadrant;	// The quadrant is 0 for small units; large units have quadrants 1,2 & 3 also; describes		0|1
 					// the relative x/y Position of the unit's primary quadrant vs. the current tile's Position.	2|3
@@ -656,23 +660,24 @@ void Map::drawTerrain(Surface* const surface) // private.
 		hasFloor, // these denote characteristics of 'tile' as in the current Tile of the loop.
 		hasObject,
 		halfRight = false, // avoid VC++ linker warning.
-		trueLoc;
+		trueLoc,
+		exposedColorDone = false;
 
 
 	surface->lock();
 	for (int
 			itZ = beginZ; // 3. finally lap the levels bottom to top
-			itZ < endZ + 1;
+			itZ <= endZ;
 			++itZ)
 	{
 		for (int
 				itX = beginX; // 2. next draw those columns eastward
-				itX < endX + 1;
+				itX <= endX;
 				++itX)
 		{
 			for (int
 					itY = beginY; // 1. first draw terrain in columns north to south
-					itY < endY + 1;
+					itY <= endY;
 					++itY)
 			{
 				posMap = Position(itX, itY, itZ);
@@ -694,7 +699,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 					if (_tile->isDiscovered(2) == true)
 						tileShade = _tile->getShade();
 					else
-						tileShade = 16;
+						tileShade = SHADE_BLACK;
 
 					_unit = _tile->getUnit();
 
@@ -752,8 +757,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 													posScreen.x + 2 + 16,
 													posScreen.y + 3 + 32 + getTerrainLevel(
 																						unitEastBelow->getPosition(),
-																						unitEastBelow->getArmor()->getSize()),
-													0);
+																						unitEastBelow->getArmor()->getSize()));
 
 										sprite = _res->getSurfaceSet("SCANG.DAT")->getFrame(11); // small gray cross
 										if (sprite != NULL)
@@ -778,9 +782,8 @@ void Map::drawTerrain(Surface* const surface) // private.
 													surface,
 													posScreen.x + 2 + 16,
 													posScreen.y + 3 + 32 + getTerrainLevel(
-																							unitEastBelow->getPosition(),
-																							unitEastBelow->getArmor()->getSize()),
-													0);
+																						unitEastBelow->getPosition(),
+																						unitEastBelow->getArmor()->getSize()));
 									}
 								}
 							}
@@ -791,8 +794,8 @@ void Map::drawTerrain(Surface* const surface) // private.
 					if (_cursorType != CT_NONE
 						&& _selectorX > itX - _cursorSize
 						&& _selectorY > itY - _cursorSize
-						&& _selectorX < itX + 1
-						&& _selectorY < itY + 1
+						&& _selectorX <= itX
+						&& _selectorY <= itY
 						&& _battleSave->getBattleState()->getMouseOverIcons() == false)
 					{
 						if (_camera->getViewLevel() == itZ)
@@ -806,17 +809,17 @@ void Map::drawTerrain(Surface* const surface) // private.
 											|| (_battleSave->getBattleGame()->getCurrentAction()->type != BA_PSICOURAGE
 												&& _unit->getFaction() != FACTION_PLAYER))))
 								{
-									frame = (_animFrame % 2); // yellow box
+									frame = (_animFrame % 2);		// yellow flashing box
 								}
 								else
-									frame = 0; // red box
+									frame = 0;						// red static box
 							}
 							else // CT_AIM ->
 							{
 								if (hasUnit == true)
-									frame = 7 + (_animFrame / 2); // yellow animated crosshairs
+									frame = 7 + (_animFrame / 2);	// yellow animated crosshairs
 								else
-									frame = 6; // red static crosshairs
+									frame = 6;						// red static crosshairs
 							}
 
 							sprite = _res->getSurfaceSet("CURSOR.PCK")->getFrame(frame);
@@ -824,20 +827,18 @@ void Map::drawTerrain(Surface* const surface) // private.
 								sprite->blitNShade(
 										surface,
 										posScreen.x,
-										posScreen.y,
-										0);
+										posScreen.y);
 						}
 						else if (_camera->getViewLevel() > itZ)
 						{
-							frame = 2; // blue box
+							frame = 2;								// blue static box
 
 							sprite = _res->getSurfaceSet("CURSOR.PCK")->getFrame(frame);
 							if (sprite != NULL)
 								sprite->blitNShade(
 										surface,
 										posScreen.x,
-										posScreen.y,
-										0);
+										posScreen.y);
 						}
 					}
 					// end cursor bg
@@ -853,16 +854,16 @@ void Map::drawTerrain(Surface* const surface) // private.
 								&& (_tile->getMapData(O_WESTWALL)->isDoor() == true
 									|| _tile->getMapData(O_WESTWALL)->isUfoDoor() == true))
 							{
-								wallShade = _tile->getShade();
+								shade = std::min(9, _tile->getShade());
 							}
 							else
-								wallShade = tileShade;
+								shade = tileShade;
 
 							sprite->blitNShade(
 									surface,
 									posScreen.x,
 									posScreen.y - _tile->getMapData(O_WESTWALL)->getYOffset(),
-									wallShade);
+									shade);
 						}
 
 // Draw North Wall
@@ -873,10 +874,10 @@ void Map::drawTerrain(Surface* const surface) // private.
 								&& (_tile->getMapData(O_NORTHWALL)->isDoor() == true
 									|| _tile->getMapData(O_NORTHWALL)->isUfoDoor() == true))
 							{
-								wallShade = _tile->getShade();
+								shade = std::min(9, _tile->getShade());
 							}
 							else
-								wallShade = tileShade;
+								shade = tileShade;
 
 							if (_tile->getMapData(O_WESTWALL) != NULL)
 								halfRight = true;
@@ -887,7 +888,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 									surface,
 									posScreen.x,
 									posScreen.y - _tile->getMapData(O_NORTHWALL)->getYOffset(),
-									wallShade,
+									shade,
 									halfRight);
 						}
 
@@ -929,8 +930,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 									sprite->blitNShade(
 											surface,
 											posScreen.x,
-											posScreen.y + _tile->getTerrainLevel(),
-											0);
+											posScreen.y + _tile->getTerrainLevel());
 								break;
 							}
 						}
@@ -950,7 +950,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 								if (val == true
 									&& _tile->isDiscovered(2) == true)	// spriteId== 21, standard proxy grenade
 								{
-									sprite->setPixelColor(			// cycles from 31 down to 16 and jumps to 31 again
+									sprite->setPixelColor(				// cycles from 31 down to 16 and jumps to 31 again
 														16,28,			// <- the pixel coords
 														_fuseColor);	// 17 is the proxy-pixel's spritesheet color
 								}
@@ -981,9 +981,8 @@ void Map::drawTerrain(Surface* const surface) // private.
 													surface,
 													posScreen.x + 2,
 													posScreen.y + 3 + 24 + getTerrainLevel(
-																							unitBelow->getPosition(),
-																							unitBelow->getArmor()->getSize()),
-													0);
+																						unitBelow->getPosition(),
+																						unitBelow->getArmor()->getSize()));
 
 										sprite = _res->getSurfaceSet("SCANG.DAT")->getFrame(11); // small gray cross
 										if (sprite)
@@ -991,8 +990,8 @@ void Map::drawTerrain(Surface* const surface) // private.
 													surface,
 													posScreen.x + 4,
 													posScreen.y + 4 + 24 + getTerrainLevel(
-																							unitBelow->getPosition(),
-																							unitBelow->getArmor()->getSize()),
+																						unitBelow->getPosition(),
+																						unitBelow->getArmor()->getSize()),
 													_animFrame * 2,
 													false,
 													3); // red
@@ -1009,9 +1008,8 @@ void Map::drawTerrain(Surface* const surface) // private.
 													surface,
 													posScreen.x + 2,
 													posScreen.y + 3 + 24 + getTerrainLevel(
-																							unitBelow->getPosition(),
-																							unitBelow->getArmor()->getSize()),
-													0);
+																						unitBelow->getPosition(),
+																						unitBelow->getArmor()->getSize()));
 									}
 								}
 							}
@@ -1030,7 +1028,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 							{
 								voxel = _projectile->getPosition(); // draw shadow on the floor
 								voxel.z = _battleSave->getTileEngine()->castShadow(voxel);
-								if (   voxel.x / 16 >= itX
+								if (voxel.x / 16 >= itX
 									&& voxel.y / 16 >= itY
 									&& voxel.x / 16 < itX + 2
 									&& voxel.y / 16 < itY + 2
@@ -1043,11 +1041,11 @@ void Map::drawTerrain(Surface* const surface) // private.
 											surface,
 											bullet.x - 16,
 											bullet.y - 26,
-											16);
+											SHADE_BLACK);
 								}
 
 								voxel = _projectile->getPosition(); // draw thrown object
-								if (   voxel.x / 16 >= itX
+								if (voxel.x / 16 >= itX
 									&& voxel.y / 16 >= itY
 									&& voxel.x / 16 < itX + 2
 									&& voxel.y / 16 < itY + 2
@@ -1059,14 +1057,13 @@ void Map::drawTerrain(Surface* const surface) // private.
 									sprite->blitNShade(
 											surface,
 											bullet.x - 16,
-											bullet.y - 26,
-											0);
+											bullet.y - 26);
 								}
 							}
 						}
 						else // fired projectile (a bullet-sprite, not a thrown item)
 						{
-							if (   itX >= bulletLowX // draw bullet on the correct tile
+							if (itX >= bulletLowX // draw bullet on the correct tile
 								&& itX <= bulletHighX
 								&& itY >= bulletLowY
 								&& itY <= bulletHighY)
@@ -1081,7 +1078,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 									{
 										voxel = _projectile->getPosition(1 - id); // draw shadow on the floor
 										voxel.z = _battleSave->getTileEngine()->castShadow(voxel);
-										if (   voxel.x / 16 == itX
+										if (voxel.x / 16 == itX
 											&& voxel.y / 16 == itY
 											&& voxel.z / 24 == itZ)
 										{
@@ -1095,11 +1092,11 @@ void Map::drawTerrain(Surface* const surface) // private.
 													surface,
 													bullet.x,
 													bullet.y,
-													16);
+													SHADE_BLACK);
 										}
 
 										voxel = _projectile->getPosition(1 - id); // draw bullet itself
-										if (   voxel.x / 16 == itX
+										if (voxel.x / 16 == itX
 											&& voxel.y / 16 == itY
 											&& voxel.z / 24 == itZ)
 										{
@@ -1112,8 +1109,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 											sprite->blitNShade(
 													surface,
 													bullet.x,
-													bullet.y,
-													0);
+													bullet.y);
 										}
 									}
 								}
@@ -1161,8 +1157,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 									sprite->blitNShade(
 											surface,
 											posScreen.x + walkOffset.x,
-											posScreen.y + walkOffset.y,
-											0);
+											posScreen.y + walkOffset.y);
 							}
 
 							// kL_begin #3 of 3:
@@ -1185,8 +1180,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 											sprite->blitNShade(
 													surface,
 													posScreen.x + walkOffset.x + 2,
-													posScreen.y + walkOffset.y + 3,
-													0);
+													posScreen.y + walkOffset.y + 3);
 
 										sprite = _res->getSurfaceSet("SCANG.DAT")->getFrame(11); // small gray cross;
 										if (sprite)
@@ -1197,7 +1191,6 @@ void Map::drawTerrain(Surface* const surface) // private.
 													_animFrame * 2,
 													false,
 													3); // red
-
 									}
 									else
 									{
@@ -1209,8 +1202,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 											sprite->blitNShade(
 													surface,
 													posScreen.x + walkOffset.x + 2,
-													posScreen.y + walkOffset.y + 3,
-													0);
+													posScreen.y + walkOffset.y + 3);
 									}
 								}
 
@@ -1223,15 +1215,30 @@ void Map::drawTerrain(Surface* const surface) // private.
 									const int exposure = _unit->getExposed();
 									if (exposure != -1)
 									{
-										_numExposed->setValue(static_cast<unsigned int>(exposure));
+										static int colorGroup;
+										if (exposedColorDone == false
+											&& _animFrame == 0)
+										{
+											exposedColorDone = true;
+											switch (RNG::seedless(0,2))
+											{
+												default:
+												case 0: colorGroup =  0; break;	// white
+												case 1: colorGroup = 10; break;	// yellow
+												case 2: colorGroup = 14;		// blue
+											}
+										}
+//										if (_animFrame < 4) colorGroup = 10;
+//										else colorGroup = 14;
+
+										_numExposed->setValue(static_cast<unsigned>(exposure));
 										_numExposed->draw();
 										_numExposed->blitNShade(
 															surface,
 															posScreen.x + walkOffset.x + 21,
-															posScreen.y + walkOffset.y + 5,
-															0,
-															false,
-															12); // pinkish
+															posScreen.y + walkOffset.y + 4,
+															4, false,
+															colorGroup);
 									}
 								}
 							} // kL_end.
@@ -1251,8 +1258,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 								sprite->blitNShade(
 										surface,
 										posScreen.x,
-										posScreen.y,
-										0);
+										posScreen.y);
 
 							Uint8 color;
 							if (status == 2)
@@ -1292,7 +1298,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 								if (tileBelow->isDiscovered(2) == true)
 									shade = tileBelow->getShade();
 								else
-									shade = 16;
+									shade = SHADE_BLACK;
 
 								calculateWalkingOffset(unitBelow, &walkOffset, trueLoc);
 								sprite->blitNShade(
@@ -1309,8 +1315,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 										sprite->blitNShade(
 												surface,
 												posScreen.x + walkOffset.x,
-												posScreen.y + walkOffset.y + 24,
-												0);
+												posScreen.y + walkOffset.y + 24);
 								}
 							}
 						}
@@ -1361,8 +1366,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 										surface,
 										posScreen.x,
 										posScreen.y + 2,
-										0,
-										false,
+										0, false,
 										_tile->getPreviewColor());
 						}
 
@@ -1372,8 +1376,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 									surface,
 									posScreen.x,
 									posScreen.y,
-									0,
-									false,
+									0, false,
 									_tile->getPreviewColor());
 					}
 
@@ -1394,8 +1397,8 @@ void Map::drawTerrain(Surface* const surface) // private.
 					if (_cursorType != CT_NONE
 						&& _selectorX > itX - _cursorSize
 						&& _selectorY > itY - _cursorSize
-						&& _selectorX < itX + 1
-						&& _selectorY < itY + 1
+						&& _selectorX <= itX
+						&& _selectorY <= itY
 						&& _battleSave->getBattleState()->getMouseOverIcons() == false)
 					{
 						if (_camera->getViewLevel() == itZ)
@@ -1412,7 +1415,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 									frame = 3 + (_animFrame % 2);	// yellow flashing box
 								}
 								else
-									frame = 3;						// red standard box
+									frame = 3;						// red static box
 							}
 							else // CT_AIM ->
 							{
@@ -1426,8 +1429,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 							sprite->blitNShade(
 									surface,
 									posScreen.x,
-									posScreen.y,
-									0);
+									posScreen.y);
 
 // UFOExtender Accuracy
 							// display adjusted accuracy value on crosshair (and more).
@@ -1465,10 +1467,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 								const int
 									lowerLimit = weaponRule->getMinRange(),
 									distance = _battleSave->getTileEngine()->distance(
-																					Position(
-																							itX,
-																							itY,
-																							itZ),
+																					Position(itX,itY,itZ),
 																					action->actor->getPosition());
 								int upperLimit;
 								switch (action->type)
@@ -1484,64 +1483,65 @@ void Map::drawTerrain(Surface* const surface) // private.
 									break;
 
 									default:
-										upperLimit = 200;
+										upperLimit = 200; // arbitrary.
 								}
 
-								Uint8 color = Palette::blockOffset(3)+3; // green
-
+								Uint8 color;
 								if (distance > upperLimit)
 								{
 									accuracy -= (distance - upperLimit) * weaponRule->getDropoff();
-									color = Palette::blockOffset(1)+2; // orange
+									color = ACU_ORANGE;
 								}
 								else if (distance < lowerLimit)
 								{
 									accuracy -= (lowerLimit - distance) * weaponRule->getDropoff();
-									color = Palette::blockOffset(1)+2; // orange
+									color = ACU_ORANGE;
 								}
+								else
+									color = ACU_GREEN;
 
 								if (accuracy < 1 // zero accuracy or out of range: set it red.
 									|| distance > weaponRule->getMaxRange())
 								{
 									accuracy = 0;
-									color = Palette::blockOffset(2)+3; // red
+									color = ACU_RED;
 								}
 
-								_numAccuracy->setValue(static_cast<unsigned int>(accuracy));
+								_numAccuracy->setValue(static_cast<unsigned>(accuracy));
 								_numAccuracy->setColor(color);
 								_numAccuracy->draw();
 								_numAccuracy->blitNShade(
 													surface,
 													posScreen.x,
-													posScreen.y,
-													0);
+													posScreen.y);
 							}
 							else if (_cursorType == CT_THROW) // indicator for Throwing.
 							{
 								BattleAction* const action = _battleSave->getBattleGame()->getCurrentAction();
-								action->target = Position(
-														itX,
-														itY,
-														itZ);
+								action->target = Position(itX,itY,itZ);
 
 								const Position
 									originVoxel = _battleSave->getTileEngine()->getOriginVoxel(*action),
 									targetVoxel = Position( // TODO: conform this to ProjectileFlyBState (modifier keys) & Projectile::_targetVoxel
 														itX * 16 + 8,
 														itY * 16 + 8,
-														itZ * 24 + 2 - _battleSave->getTile(action->target)->getTerrainLevel());
-
-								unsigned int accuracy = 0;
-								Uint8 color = Palette::blockOffset(2)+3; // red
+														itZ * 24 - _battleSave->getTile(action->target)->getTerrainLevel());
 
 								const bool canThrow = _battleSave->getTileEngine()->validateThrow(
 																							*action,
 																							originVoxel,
 																							targetVoxel);
+								unsigned accuracy;
+								Uint8 color;
 								if (canThrow == true)
 								{
 									accuracy = static_cast<unsigned int>(Round(_battleSave->getSelectedUnit()->getAccuracy(*action) * 100.));
-									color = Palette::blockOffset(3)+3; // green
+									color = ACU_GREEN;
+								}
+								else
+								{
+									accuracy = 0;
+									color = ACU_RED;
 								}
 
 								_numAccuracy->setValue(accuracy);
@@ -1550,19 +1550,17 @@ void Map::drawTerrain(Surface* const surface) // private.
 								_numAccuracy->blitNShade(
 													surface,
 													posScreen.x,
-													posScreen.y,
-													0);
+													posScreen.y);
 							}
 						}
 						else if (_camera->getViewLevel() > itZ)
 						{
-							frame = 5; // blue box
+							frame = 5; // blue static box
 							sprite = _res->getSurfaceSet("CURSOR.PCK")->getFrame(frame);
 							sprite->blitNShade(
 									surface,
 									posScreen.x,
-									posScreen.y,
-									0);
+									posScreen.y);
 						}
 
 						if (_cursorType > CT_AIM // Psi, Waypoint, Throw
@@ -1573,8 +1571,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 							sprite->blitNShade(
 									surface,
 									posScreen.x,
-									posScreen.y,
-									0);
+									posScreen.y);
 						}
 					}
 					// end cursor front.
@@ -1599,8 +1596,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 								sprite->blitNShade(
 										surface,
 										posScreen.x,
-										posScreen.y,
-										0);
+										posScreen.y);
 							}
 
 							if (_battleSave->getBattleGame()->getCurrentAction()->type == BA_LAUNCH)
@@ -1610,8 +1606,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 								numWp->blitNShade(
 										surface,
 										posScreen.x + waypXOff,
-										posScreen.y + waypYOff,
-										0);
+										posScreen.y + waypYOff);
 
 								waypXOff += (waypId > 9) ? 8 : 6;
 								if (waypXOff > 25)
@@ -1640,8 +1635,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 							sprite->blitNShade(
 									surface,
 									posScreen.x + 14,
-									posScreen.y + 31,
-									0);
+									posScreen.y + 31);
 						}
 					}
 					// end border icon.
@@ -1690,14 +1684,12 @@ void Map::drawTerrain(Surface* const surface) // private.
 				_arrow_kneel->blitNShade(
 								surface,
 								posScreen.x - (_arrow_kneel->getWidth() / 2),
-								posScreen.y - _arrow_kneel->getHeight() - 4 - phaseCycle,
-								0);
+								posScreen.y - _arrow_kneel->getHeight() - 4 - phaseCycle);
 			else
 				_arrow->blitNShade(
 								surface,
 								posScreen.x - _arrow->getWidth() / 2,
-								posScreen.y - _arrow->getHeight() + phaseCycle,
-								0);
+								posScreen.y - _arrow->getHeight() + phaseCycle);
 		}
 	}
 	// end arrow.
@@ -1722,7 +1714,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 						itY <= endY;
 						++itY)
 				{
-					posMap = Position(itX, itY, itZ);
+					posMap = Position(itX,itY,itZ);
 					_camera->convertMapToScreen(posMap, &posScreen);
 					posScreen += _camera->getMapOffset();
 
@@ -1733,77 +1725,71 @@ void Map::drawTerrain(Surface* const surface) // private.
 					{
 						_tile = _battleSave->getTile(posMap);
 
-						if (_tile == NULL
-							|| _tile->isDiscovered(0) == false
-							|| _tile->getPreviewDir() == -1)
+						if (_tile != NULL
+							&& _tile->isDiscovered(2) == true
+							&& _tile->getPreviewDir() != -1)
 						{
-							continue;
-						}
+							int offset_y = -_tile->getTerrainLevel();
 
-						int offset_y = -_tile->getTerrainLevel();
-
-						if (_previewSetting & PATH_ARROWS)
-						{
-							const Tile* const tileBelow = _battleSave->getTile(posMap + Position(0,0,-1));
-
-							if (itZ > 0
-								&& _tile->hasNoFloor(tileBelow) == true)
+							if (_previewSetting & PATH_ARROWS)
 							{
-								sprite = _res->getSurfaceSet("Pathfinding")->getFrame(23);
+								const Tile* const tileBelow = _battleSave->getTile(posMap + Position(0,0,-1));
+
+								if (itZ > 0
+									&& _tile->hasNoFloor(tileBelow) == true)
+								{
+									sprite = _res->getSurfaceSet("Pathfinding")->getFrame(23);
+									if (sprite)
+										sprite->blitNShade(
+												surface,
+												posScreen.x,
+												posScreen.y + 2,
+												0, false,
+												_tile->getPreviewColor());
+								}
+
+								const int overlay = _tile->getPreviewDir() + 12;
+								sprite = _res->getSurfaceSet("Pathfinding")->getFrame(overlay);
 								if (sprite)
 									sprite->blitNShade(
 											surface,
 											posScreen.x,
-											posScreen.y + 2,
-											0,
-											false,
+											posScreen.y - offset_y,
+											0, false,
 											_tile->getPreviewColor());
 							}
 
-							const int overlay = _tile->getPreviewDir() + 12;
-							sprite = _res->getSurfaceSet("Pathfinding")->getFrame(overlay);
-							if (sprite)
-								sprite->blitNShade(
-										surface,
-										posScreen.x,
-										posScreen.y - offset_y,
-										0,
-										false,
-										_tile->getPreviewColor());
-						}
-
-						if ((_previewSetting & PATH_TU_COST)
-							&& _tile->getPreviewTU() > -1)
-						{
-							int offset_x = 2;
-							if (_tile->getPreviewTU() > 9)
-								offset_x += 2;
-
-							if (_battleSave->getSelectedUnit() != NULL
-								&& _battleSave->getSelectedUnit()->getArmor()->getSize() > 1)
+							if ((_previewSetting & PATH_TU_COST)
+								&& _tile->getPreviewTU() > -1)
 							{
-								offset_y += 1;
+								int offset_x = 2;
+								if (_tile->getPreviewTU() > 9)
+									offset_x += 2;
+
+								if (_battleSave->getSelectedUnit() != NULL
+									&& _battleSave->getSelectedUnit()->getArmor()->getSize() > 1)
+								{
+									offset_y += 1;
+									if (!(_previewSetting & PATH_ARROWS))
+										offset_y += 7;
+								}
+
+								numWp->setValue(static_cast<unsigned>(_tile->getPreviewTU()));
+								numWp->draw();
+
 								if (!(_previewSetting & PATH_ARROWS))
-									offset_y += 7;
+									numWp->blitNShade(
+												surface,
+												posScreen.x + 16 - offset_x,
+												posScreen.y + 37 - offset_y,
+												0, false,
+												_tile->getPreviewColor());
+								else
+									numWp->blitNShade(
+												surface,
+												posScreen.x + 16 - offset_x,
+												posScreen.y + 30 - offset_y);
 							}
-
-							numWp->setValue(static_cast<unsigned>(_tile->getPreviewTU()));
-							numWp->draw();
-
-							if (!(_previewSetting & PATH_ARROWS))
-								numWp->blitNShade(
-											surface,
-											posScreen.x + 16 - offset_x,
-											posScreen.y + 37 - offset_y,
-											0,
-											false,
-											_tile->getPreviewColor());
-							else
-								numWp->blitNShade(
-											surface,
-											posScreen.x + 16 - offset_x,
-											posScreen.y + 30 - offset_y,
-											0);
 						}
 					}
 				}
@@ -1851,8 +1837,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 					sprite->blitNShade(
 							surface,
 							bullet.x - 64,
-							bullet.y - 64,
-							0);
+							bullet.y - 64);
 				}
 				else if ((*i)->isHit() == 0) // bullet, http://ufopaedia.org/index.php?title=SMOKE.PCK
 				{
@@ -1860,8 +1845,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 					sprite->blitNShade(
 							surface,
 							bullet.x - 15,
-							bullet.y - 15,
-							0);
+							bullet.y - 15);
 				}
 				else //if ((*i)->isHit() == 1) // melee or psiamp, http://ufopaedia.org/index.php?title=HIT.PCK
 				{	 // put that back in to acknowledge -1 as a no-animation melee miss.
@@ -1869,8 +1853,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 					sprite->blitNShade(
 							surface,
 							bullet.x - 15,
-							bullet.y - 25,
-							0);
+							bullet.y - 25);
 
 					if ((*i)->isHit() == 1) // temp kludge to show batman-type hit if melee is successful
 					{
@@ -1879,8 +1862,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 							sprite->blitNShade(
 									surface,
 									bullet.x - 15,
-									bullet.y - 25,
-									0);
+									bullet.y - 25);
 					}
 				}
 			}

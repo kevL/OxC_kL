@@ -277,6 +277,7 @@ VoxelType Projectile::calculateThrow(double accuracy)
 {
 	//Log(LOG_INFO) << "Projectile calculateThrow()";
 	const Position originVoxel = _battleSave->getTileEngine()->getOriginVoxel(_action);
+
 	VoxelType voxelType = VOXEL_OUTOFBOUNDS;
 	double arc;
 	if (_battleSave->getTileEngine()->validateThrow(
@@ -309,7 +310,7 @@ VoxelType Projectile::calculateThrow(double accuracy)
 																deltaVoxel);
 
 			// Don't let thrown items land on diagonal bigWalls.
-			// This prevents exploiting the blast-propagation routine onto both sides of a diagonal bigWall.
+			// This prevents exploiting the blast-propagation routine out from both sides of a diagonal bigWall.
 			// See also TileEngine::validateThrow()
 			if (_action.type == BA_THROW)
 			{
@@ -529,7 +530,7 @@ void Projectile::applyAccuracy( // private.
 		if (_action.type == BA_THROW)
 		{
 			const Tile* const tile = _battleSave->getTile(*targetVoxel / Position(16,16,24));
-			const int terrainZ = tile->getTerrainLevel();
+			//const int terrainZ = tile->getTerrainLevel();
 			//Log(LOG_INFO) << "terrainZ = " << terrainZ;
 
 			//Log(LOG_INFO) << ". x' = " << targetVoxel->x;
@@ -540,7 +541,7 @@ void Projectile::applyAccuracy( // private.
 			//Log(LOG_INFO) << ". z\" = " << targetVoxel->z / 24 * 24 - terrainZ;
 			targetVoxel->x = (targetVoxel->x & 0xFFF0) + 8;
 			targetVoxel->y = (targetVoxel->y & 0xFFF0) + 8;
-			targetVoxel->z = (targetVoxel->z / 24 * 24) - terrainZ;
+			targetVoxel->z = (targetVoxel->z / 24 * 24) - tile->getTerrainLevel();
 		}
 	}
 	//Log(LOG_INFO) << ". x = " << targetVoxel->x;

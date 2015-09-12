@@ -116,7 +116,7 @@ void LoadGameState::buildUi(SDL_Color* palette)
 #endif
 	_screen = false;
 
-	_txtStatus = new Text(320, 17, 0, 92);
+	_txtStatus = new Text(320, 17, 0, -18); // y was 92, centered vertically
 
 	setPalette(palette);
 

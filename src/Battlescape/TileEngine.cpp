@@ -5002,6 +5002,7 @@ VoxelType TileEngine::plotLine(
 		const bool onlyVisible,
 		const BattleUnit* const excludeAllBut) const
 {
+	//Log(LOG_INFO) << " ";
 	VoxelType voxelType;
 	bool
 		swap_xy,
@@ -5105,13 +5106,13 @@ VoxelType TileEngine::plotLine(
 			} */
 
 			horiBlock = horizontalBlockage(
-										tileStart,
-										tileDest,
-										DT_NONE);
+									tileStart,
+									tileDest,
+									DT_NONE);
 			vertBlock = verticalBlockage(
-										tileStart,
-										tileDest,
-										DT_NONE);
+									tileStart,
+									tileDest,
+									DT_NONE);
 			// kL_TEST:
 /*			BattleUnit* selUnit = _battleSave->getSelectedUnit();
 			if (selUnit
@@ -5243,6 +5244,7 @@ VoxelType TileEngine::plotParabola(
 		const double arc,
 		const Position& deltaVoxel) const
 {
+	//Log(LOG_INFO) << " ";
 	//Log(LOG_INFO) << "TileEngine::plotParabola()";
 	const double ro = std::sqrt(static_cast<double>(
 					 (targetVoxel.x - originVoxel.x) * (targetVoxel.x - originVoxel.x)
@@ -5272,8 +5274,8 @@ VoxelType TileEngine::plotParabola(
 		i = 8;
 
 	Position
-		start = Position(x,y,z),
-		dest;
+		startVoxel = Position(x,y,z),
+		destVoxel;
 
 	while (z > 0)
 	{
@@ -5283,44 +5285,35 @@ VoxelType TileEngine::plotParabola(
 				- zK * (static_cast<double>(i) - ro / 2.) * (static_cast<double>(i) - ro / 2.)
 				+ zA);
 
-		if (storeTrj == true
-			&& trj != NULL)
-		{
+		if (storeTrj == true && trj != NULL)
 			trj->push_back(Position(x,y,z));
-		}
 
-		dest = Position(x,y,z);
+		destVoxel = Position(x,y,z);
 		VoxelType voxelType = plotLine(
-									start,
-									dest,
+									startVoxel,
+									destVoxel,
 									false,
 									NULL,
 									excludeUnit);
 
 		if (voxelType != VOXEL_EMPTY)
 		{
-			if (start.z < dest.z)
+			if (startVoxel.z < destVoxel.z)
 				voxelType = VOXEL_OUTOFBOUNDS;
 
-			if (storeTrj == false
-				&& trj != NULL)
-			{
-				trj->push_back(dest);
-			}
+			if (storeTrj == false && trj != NULL)
+				trj->push_back(destVoxel);
 
 			//Log(LOG_INFO) << "TileEngine::plotParabola() EXIT w/ voxelType = " << voxelType;
 			return voxelType;
 		}
 
-		start = Position(x,y,z);
+		startVoxel = destVoxel;
 		++i;
 	}
 
-	if (storeTrj == false
-		&& trj != NULL)
-	{
+	if (storeTrj == false && trj != NULL)
 		trj->push_back(Position(x,y,z));
-	}
 
 	//Log(LOG_INFO) << "TileEngine::plotParabola() EXIT w/ Empty";
 	return VOXEL_EMPTY;
@@ -5344,7 +5337,8 @@ bool TileEngine::validateThrow(
 		double* const arc,
 		VoxelType* const voxelType) const
 {
-	//Log(LOG_INFO) << "\nTileEngine::validateThrow()";
+	//Log(LOG_INFO) << " ";
+	//Log(LOG_INFO) << "TileEngine::validateThrow()";
 	if (action.type == BA_THROW) // ie. Do not check the following for acid-spit, grenade-launcher, etc.
 	{
 		const Tile* const tile = _battleSave->getTile(action.target); // safety Off.
@@ -5377,13 +5371,14 @@ bool TileEngine::validateThrow(
 
 	if (posTarget != originVoxel / Position(16,16,24))
 	{
-		parabolicCoefficient_Low = 0.81;
+		parabolicCoefficient_Low = 0.8;
 		if (action.actor->isKneeled() == true)
 			parabolicCoefficient_Low += DEC; // increase the arc reasons.
 	}
 	else
 		parabolicCoefficient_Low = 0.;
 	//Log(LOG_INFO) << ". starting arc = " << parabolicCoefficient_Low;
+	//Log(LOG_INFO) << ". origin " << originVoxel << " target " << targetVoxel;
 
 
 	// check for voxelTest up from the lowest arc
@@ -5408,7 +5403,7 @@ bool TileEngine::validateThrow(
 			&& voxelTest != VOXEL_NORTHWALL
 			&& (trj.at(0) / Position(16,16,24)) == posTarget)
 		{
-			//Log(LOG_INFO) << ". . . stop TRUE";
+			//Log(LOG_INFO) << ". . . stop[1] TRUE";
 			stop = true;
 			if (voxelType != NULL)
 				*voxelType = voxelTest;
@@ -5419,7 +5414,7 @@ bool TileEngine::validateThrow(
 
 	if (static_cast<int>(parabolicCoefficient_Low) >= 6)
 	{
-		//Log(LOG_INFO) << ". vT() ret FALSE, arc > 6.1";
+		//Log(LOG_INFO) << ". vT() ret FALSE, arc > 6";
 		return false;
 	}
 
@@ -5447,7 +5442,7 @@ bool TileEngine::validateThrow(
 				|| voxelTest == VOXEL_NORTHWALL
 				|| (trj.at(0) / Position(16,16,24)) != posTarget)
 			{
-				//Log(LOG_INFO) << ". . . stop TRUE";
+				//Log(LOG_INFO) << ". . . stop[2] TRUE";
 				stop = true;
 			}
 			else

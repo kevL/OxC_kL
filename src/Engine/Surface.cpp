@@ -1012,9 +1012,9 @@ static inline void func(
  * @param surface		- Surface to blit to
  * @param x				- X position of Surface blitted to
  * @param y				- Y position of Surface blitted to
- * @param colorOffset	- color offset (generally 0-15)
+ * @param colorOffset	- color offset (generally 0-16) (default 0 = no offset)
  * @param halfRight		- some tiles blit only the right half (default false)
- * @param colorGroup	- Attention: the actual colorblock + 1 because 0 is no new base color (default 0)
+ * @param colorGroup	- the actual colorblock + 1 because 0 is no new base color (default 0)
  * @param halfLeft		- kL_add: blits only the left half - NOTE This conflicts w/ 'halfRight' (default false)
  *						  but i am far too lazy to refactor a gajillion blitNShade calls!
  */

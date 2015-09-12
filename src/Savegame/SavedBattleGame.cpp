@@ -276,8 +276,8 @@ void SavedBattleGame::load(
 		serKey._fire			= node["tileFireSize"]		.as<Uint8>(serKey._fire);
 		serKey._smoke			= node["tileSmokeSize"]		.as<Uint8>(serKey._smoke);
 		serKey._animOffset		= node["tileOffsetSize"]	.as<Uint8>(serKey._animOffset);
-		serKey._mapDataID		= node["tileIDSize"]		.as<Uint8>(serKey._mapDataID);
-		serKey._mapDataSetID	= node["tileSetIDSize"]		.as<Uint8>(serKey._mapDataSetID);
+		serKey._mapDataId		= node["tileIDSize"]		.as<Uint8>(serKey._mapDataId);
+		serKey._mapDataSetId	= node["tileSetIDSize"]		.as<Uint8>(serKey._mapDataSetId);
 		serKey.boolFields		= node["tileBoolFieldsSize"].as<Uint8>(1); // boolean flags used to be stored in an unmentioned byte (Uint8) :|
 
 		// load binary tile data!
@@ -647,7 +647,7 @@ YAML::Node SavedBattleGame::save() const
 	node["type"]			= _tacticalType;
 	node["shade"]			= _tacticalShade;
 	node["turn"]			= _turn;
-	node["terrain"]			= _terrain; // kL sza_MusicRules
+	node["terrain"]			= _terrain;
 	node["selectedUnit"]	= (_selectedUnit != NULL) ? _selectedUnit->getId() : -1;
 
 	for (std::vector<MapDataSet*>::const_iterator
@@ -674,8 +674,8 @@ YAML::Node SavedBattleGame::save() const
 	node["tileFireSize"]		= Tile::serializationKey._fire;
 	node["tileSmokeSize"]		= Tile::serializationKey._smoke;
 	node["tileOffsetSize"]		= Tile::serializationKey._animOffset;
-	node["tileIDSize"]			= Tile::serializationKey._mapDataID;
-	node["tileSetIDSize"]		= Tile::serializationKey._mapDataSetID;
+	node["tileIDSize"]			= Tile::serializationKey._mapDataId;
+	node["tileSetIDSize"]		= Tile::serializationKey._mapDataSetId;
 	node["tileBoolFieldsSize"]	= Tile::serializationKey.boolFields;
 
 	size_t tilesDataSize = static_cast<size_t>(Tile::serializationKey.totalBytes) * _mapSize;

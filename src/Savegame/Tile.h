@@ -65,10 +65,8 @@ protected:
 		_explosiveType,
 		_fire,
 		_light[LIGHTLAYERS],
-		_mapDataID[4],
-		_mapDataSetID[4],
-		_overlapsINC,
-		_overlapsSMK,
+		_mapDataId[4],
+		_mapDataSetId[4],
 		_preview,
 		_smoke,
 		_tuMarker;
@@ -101,13 +99,13 @@ protected:
 		{
 			// how many bytes to store for each variable or each member of array of the same name
 			Uint8 index; // for indexing the actual tile array
-			Uint8 _mapDataSetID;
-			Uint8 _mapDataID;
+			Uint8 _mapDataSetId;
+			Uint8 _mapDataId;
 			Uint8 _smoke;
 			Uint8 _fire;
 			Uint8 _animOffset;
 			Uint8 boolFields;
-			Uint32 totalBytes; // per structure, including any data not mentioned here and accounting for all array members!
+			Uint32 totalBytes; // per structure including any data not mentioned here and accounting for all array members
 		} serializationKey;
 
 		/// Creates a tile.
@@ -197,10 +195,10 @@ protected:
 
 		/// Sets the black fog of war status of this tile.
 		void setDiscovered(
-				bool vis,
-				int part);
+				bool visible,
+				int section);
 		/// Gets the black fog of war status of this tile.
-		bool isDiscovered(int part) const;
+		bool isDiscovered(int section) const;
 
 		/// Resets light to zero for this tile.
 		void resetLight(size_t layer);

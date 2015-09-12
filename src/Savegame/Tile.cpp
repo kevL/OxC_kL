@@ -41,8 +41,8 @@ namespace OpenXcom
 Tile::SerializationKey Tile::serializationKey =
 {
 	4, // index
-	2, // _mapDataSetID, four of these
-	2, // _mapDataID, four of these
+	2, // _mapDataSetId, four of these
+	2, // _mapDataId, four of these
 	1, // _fire
 	1, // _smoke
 	1, // _animOffset
@@ -68,8 +68,6 @@ Tile::Tile(const Position& pos)
 		_visible(false),
 		_preview(-1),
 		_tuMarker(-1),
-		_overlapsSMK(0),
-		_overlapsINC(0),
 		_danger(false)
 {
 	for (size_t
@@ -78,8 +76,8 @@ Tile::Tile(const Position& pos)
 			++i)
 	{
 		_objects[i]			=  0;
-		_mapDataID[i]		= -1;
-		_mapDataSetID[i]	= -1;
+		_mapDataId[i]		= -1;
+		_mapDataSetId[i]	= -1;
 		_curFrame[i]		=  0;
 	}
 
@@ -119,8 +117,8 @@ void Tile::load(const YAML::Node& node)
 			i != PARTS_TILE;
 			++i)
 	{
-		_mapDataID[i]		= node["mapDataID"][i]		.as<int>(_mapDataID[i]);
-		_mapDataSetID[i]	= node["mapDataSetID"][i]	.as<int>(_mapDataSetID[i]);
+		_mapDataId[i]		= node["mapDataID"][i]		.as<int>(_mapDataId[i]);
+		_mapDataSetId[i]	= node["mapDataSetID"][i]	.as<int>(_mapDataSetId[i]);
 	}
 
 	_fire		= node["fire"]		.as<int>(_fire);
@@ -154,15 +152,15 @@ void Tile::loadBinary(
 		Uint8* buffer,
 		Tile::SerializationKey& serKey)
 {
-	_mapDataID[0] = unserializeInt(&buffer, serKey._mapDataID);
-	_mapDataID[1] = unserializeInt(&buffer, serKey._mapDataID);
-	_mapDataID[2] = unserializeInt(&buffer, serKey._mapDataID);
-	_mapDataID[3] = unserializeInt(&buffer, serKey._mapDataID);
+	_mapDataId[0] = unserializeInt(&buffer, serKey._mapDataId);
+	_mapDataId[1] = unserializeInt(&buffer, serKey._mapDataId);
+	_mapDataId[2] = unserializeInt(&buffer, serKey._mapDataId);
+	_mapDataId[3] = unserializeInt(&buffer, serKey._mapDataId);
 
-	_mapDataSetID[0] = unserializeInt(&buffer, serKey._mapDataSetID);
-	_mapDataSetID[1] = unserializeInt(&buffer, serKey._mapDataSetID);
-	_mapDataSetID[2] = unserializeInt(&buffer, serKey._mapDataSetID);
-	_mapDataSetID[3] = unserializeInt(&buffer, serKey._mapDataSetID);
+	_mapDataSetId[0] = unserializeInt(&buffer, serKey._mapDataSetId);
+	_mapDataSetId[1] = unserializeInt(&buffer, serKey._mapDataSetId);
+	_mapDataSetId[2] = unserializeInt(&buffer, serKey._mapDataSetId);
+	_mapDataSetId[3] = unserializeInt(&buffer, serKey._mapDataSetId);
 
 	_smoke		= unserializeInt(&buffer, serKey._smoke);
 	_fire		= unserializeInt(&buffer, serKey._fire);
@@ -198,15 +196,15 @@ YAML::Node Tile::save() const
 			i != PARTS_TILE;
 			++i)
 	{
-		node["mapDataID"].push_back(_mapDataID[i]);
-		node["mapDataSetID"].push_back(_mapDataSetID[i]);
+		node["mapDataID"].push_back(_mapDataId[i]);
+		node["mapDataSetID"].push_back(_mapDataSetId[i]);
 	}
 
 	if (_smoke != 0)		node["smoke"]		= _smoke;
 	if (_fire != 0)			node["fire"]		= _fire;
 	if (_animOffset != 0)	node["animOffset"]	= _animOffset;
 
-	if (   _discovered[0] == true
+	if (_discovered[0] == true
 		|| _discovered[1] == true
 		|| _discovered[2] == true)
 	{
@@ -233,15 +231,15 @@ YAML::Node Tile::save() const
  */
 void Tile::saveBinary(Uint8** buffer) const
 {
-	serializeInt(buffer, serializationKey._mapDataID, _mapDataID[0]);
-	serializeInt(buffer, serializationKey._mapDataID, _mapDataID[1]);
-	serializeInt(buffer, serializationKey._mapDataID, _mapDataID[2]);
-	serializeInt(buffer, serializationKey._mapDataID, _mapDataID[3]);
+	serializeInt(buffer, serializationKey._mapDataId, _mapDataId[0]);
+	serializeInt(buffer, serializationKey._mapDataId, _mapDataId[1]);
+	serializeInt(buffer, serializationKey._mapDataId, _mapDataId[2]);
+	serializeInt(buffer, serializationKey._mapDataId, _mapDataId[3]);
 
-	serializeInt(buffer, serializationKey._mapDataSetID, _mapDataSetID[0]);
-	serializeInt(buffer, serializationKey._mapDataSetID, _mapDataSetID[1]);
-	serializeInt(buffer, serializationKey._mapDataSetID, _mapDataSetID[2]);
-	serializeInt(buffer, serializationKey._mapDataSetID, _mapDataSetID[3]);
+	serializeInt(buffer, serializationKey._mapDataSetId, _mapDataSetId[0]);
+	serializeInt(buffer, serializationKey._mapDataSetId, _mapDataSetId[1]);
+	serializeInt(buffer, serializationKey._mapDataSetId, _mapDataSetId[2]);
+	serializeInt(buffer, serializationKey._mapDataSetId, _mapDataSetId[3]);
 
 	serializeInt(buffer, serializationKey._smoke,		_smoke);
 	serializeInt(buffer, serializationKey._fire,		_fire);
@@ -272,8 +270,8 @@ void Tile::setMapData(
 		const MapDataType part)
 {
 	_objects[part] = data;
-	_mapDataID[part] = dataID;
-	_mapDataSetID[part] = dataSetID;
+	_mapDataId[part] = dataID;
+	_mapDataSetId[part] = dataSetID;
 }
 
 /**
@@ -288,8 +286,8 @@ void Tile::getMapData(
 		int* dataSetID,
 		MapDataType part) const
 {
-	*dataID = _mapDataID[part];
-	*dataSetID = _mapDataSetID[part];
+	*dataID = _mapDataId[part];
+	*dataSetID = _mapDataSetId[part];
 }
 
 /**
@@ -314,17 +312,10 @@ bool Tile::isVoid(
 
 	if (testVolatiles == true)
 		ret = ret
-		   && _smoke == 0;
-//		   && _fire == 0; // -> fireTiles always have smoke.
+		   && _smoke == 0; // -> fireTiles always have smoke.
 
 	return ret;
 }
-/*	return _objects[0] == NULL	// floor
-		&& _objects[1] == NULL	// westwall
-		&& _objects[2] == NULL	// northwall
-		&& _objects[3] == NULL	// content
-		&& _smoke == 0
-		&& _inventory.empty() == true; */
 
 /**
  * Gets the TU cost to move over a certain part of the tile.
@@ -336,14 +327,6 @@ int Tile::getTuCostTile(
 		MapDataType part,
 		MovementType moveType) const
 {
-	//if (_objects[part] != NULL)
-	//{
-	//	Log(LOG_INFO) << "part = " << (int)part;
-	//	Log(LOG_INFO) << "isUfoDoor = " << (int)_objects[part]->isUfoDoor();
-	//	Log(LOG_INFO) << "curFrame = " << (int)_curFrame[part];
-	//}
-	//else Log(LOG_INFO) << "part not valid";
-
 	if (_objects[part] != NULL
 		&& !(_objects[part]->isUfoDoor() == true
 			&& _curFrame[part] > 1)
@@ -355,24 +338,6 @@ int Tile::getTuCostTile(
 
 	return 0;
 }
-/*	if (_objects[part] != NULL)
-	{
-		if (_objects[part]->isUfoDoor() == true
-			&& _curFrame[part] > 1)
-		{
-			return 0;
-		}
-
-		if (part == O_OBJECT
-			&& _objects[part]->getBigWall() > BIGWALL_NWSE) // ie. side-walls
-		{
-			return 0;
-		}
-
-		return _objects[part]->getTuCostPart(moveType);
-	}
-
-	return 0; */
 
 /**
  * Gets whether this tile has a floor or not.
@@ -503,7 +468,7 @@ int Tile::openDoor(
 			setMapData(
 					_objects[part]->getDataset()->getObjects()->at(_objects[part]->getAltMCD()),
 					_objects[part]->getAltMCD(),
-					_mapDataSetID[part],
+					_mapDataSetId[part],
 					_objects[part]->getDataset()->getObjects()->at(_objects[part]->getAltMCD())->getPartType());
 
 			setMapData(NULL,-1,-1, part);
@@ -560,44 +525,45 @@ int Tile::closeUfoDoor()
 }
 
 /**
- * Sets this Tile's parts' cache flag.
- * @param vis	- true/false
- * @param part	- 0 westwall
- *				  1 northwall
- *				  2 content+floor
+ * Sets this Tile's sections' visible flag.
+ * @note Also re-caches the sprites for any unit on this Tile if the visibility
+ * of the tile changes.
+ * @param visible - true if discovered
+ * @param section - 0 westwall
+ *					1 northwall
+ *					2 object+floor
  */
 void Tile::setDiscovered(
-		bool vis,
-		int part)
+		bool visible,
+		int section)
 {
-	const size_t i = static_cast<size_t>(part);
+	const size_t i = static_cast<size_t>(section);
 
-	if (_discovered[i] != vis)
+	if (_discovered[i] != visible)
 	{
-		_discovered[i] = vis;
+		_discovered[i] = visible;
 
-		if (vis == true		// if content+floor is discovered
-			&& part == 2)	// set west & north walls discovered too.
+		if (visible == true && section == 2)
 		{
-			_discovered[0] =
+			_discovered[0] = // if object+floor is discovered set west & north walls discovered also.
 			_discovered[1] = true;
 		}
 
-		if (_unit != NULL)			// if visibility of tile changes
-			_unit->setCache(NULL);	// units on it change too.
+		if (_unit != NULL)
+			_unit->setCache(NULL);
 	}
 }
 
 /**
  * Get the black fog of war state of this Tile.
- * @param part - 0 westwall
- *				 1 northwall
- *				 2 content+floor
- * @return, true if tilepart has been discovered
+ * @param section - 0 westwall
+ *					1 northwall
+ *					2 object+floor
+ * @return, true if discovered
  */
-bool Tile::isDiscovered(int part) const
+bool Tile::isDiscovered(int section) const
 {
-	return _discovered[static_cast<size_t>(part)];
+	return _discovered[static_cast<size_t>(section)];
 }
 
 /**
@@ -676,7 +642,7 @@ bool Tile::destroy(
 		objective = (_objects[part]->getSpecialType() == type);
 
 		const MapData* const origPart = _objects[part];
-		const int origMapDataSetID = _mapDataSetID[part];
+		const int origMapDataSetID = _mapDataSetId[part];
 
 		setMapData(
 				 NULL,
