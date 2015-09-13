@@ -660,8 +660,8 @@ void Map::drawTerrain(Surface* const surface) // private.
 		hasFloor, // these denote characteristics of 'tile' as in the current Tile of the loop.
 		hasObject,
 		halfRight = false, // avoid VC++ linker warning.
-		trueLoc,
-		exposedColorDone = false;
+		trueLoc;
+//		exposedColorDone = false;
 
 
 	surface->lock();
@@ -789,6 +789,50 @@ void Map::drawTerrain(Surface* const surface) // private.
 							}
 						} // kL_end.
 					} // end draw floor
+
+// Redraw unitNorth to prevent current-Floor from overdrawing it.
+					const Tile* const tileNorth = _battleSave->getTile(posMap + Position(-1,0,0));
+					if (tileNorth != NULL
+						&& tileNorth->getUnit() != NULL)
+					{
+						const BattleUnit* const unitNorth = tileNorth->getUnit();
+						if (unitNorth != NULL
+							&& unitNorth->getUnitVisible() == true // don't bother checking DebugMode.
+							&& (unitNorth->getStatus() == STATUS_WALKING
+								|| unitNorth->getStatus() == STATUS_FLYING)
+							&& (unitNorth->getDirection() == 1
+								|| unitNorth->getDirection() == 5))
+						{
+							trueLoc = isTrueLoc(unitNorth, tileNorth);
+							quadrant = getQuadrant(unitNorth, tileNorth, trueLoc);
+							sprite = unitNorth->getCache(&invalid, quadrant);
+							if (sprite)
+							{
+								if (unitNorth->isOut_t(OUT_HLTH_STUN) == true)
+									shade = std::min(5, tileShade);
+								else
+									shade = tileShade;
+
+								calculateWalkingOffset(unitNorth, &walkOffset, trueLoc);
+								sprite->blitNShade(
+										surface,
+										posScreen.x + walkOffset.x - 16,
+										posScreen.y + walkOffset.y - 8,
+										shade);
+
+								if (unitNorth->getFireOnUnit() != 0)
+								{
+									frame = 4 + (_animFrame / 2);
+									sprite = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
+									if (sprite)
+										sprite->blitNShade(
+												surface,
+												posScreen.x + walkOffset.x - 16,
+												posScreen.y + walkOffset.y - 8);
+								}
+							}
+						}
+					}
 
 // Draw Cursor Background
 					if (_cursorType != CT_NONE
@@ -1137,11 +1181,6 @@ void Map::drawTerrain(Surface* const surface) // private.
 //								shade -= 1; // TODO: trickle this throughout this function!
 //							}
 
-							//if (_unit->getId() == 477)
-							//{
-							//	Log(LOG_INFO) << " ";
-							//	Log(LOG_INFO) << "drawMain " << _tile->getPosition() << " " << quadrant;
-							//}
 							calculateWalkingOffset(_unit, &walkOffset, trueLoc);
 							sprite->blitNShade(
 									surface,
@@ -1215,7 +1254,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 									const int exposure = _unit->getExposed();
 									if (exposure != -1)
 									{
-										static int colorGroup;
+/*										static int colorGroup;
 										if (exposedColorDone == false
 											&& _animFrame == 0)
 										{
@@ -1227,17 +1266,29 @@ void Map::drawTerrain(Surface* const surface) // private.
 												case 1: colorGroup = 10; break;	// yellow
 												case 2: colorGroup = 14;		// blue
 											}
+										} */
+										int
+											colorGroup,
+											color;
+										if (_animFrame < 4)
+										{
+											colorGroup = 0; // white
+											color = 0;
 										}
-//										if (_animFrame < 4) colorGroup = 10;
-//										else colorGroup = 14;
+										else
+										{
+											colorGroup = 10; // yellow
+											color = 3;
+										}
 
 										_numExposed->setValue(static_cast<unsigned>(exposure));
 										_numExposed->draw();
 										_numExposed->blitNShade(
 															surface,
 															posScreen.x + walkOffset.x + 21,
-															posScreen.y + walkOffset.y + 4,
-															4, false,
+															posScreen.y + walkOffset.y + 6,
+															color,
+															false,
 															colorGroup);
 									}
 								}

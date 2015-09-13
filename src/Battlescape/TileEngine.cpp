@@ -5304,7 +5304,7 @@ VoxelType TileEngine::plotParabola(
 			if (storeTrj == false && trj != NULL)
 				trj->push_back(destVoxel);
 
-			//Log(LOG_INFO) << "TileEngine::plotParabola() EXIT w/ voxelType = " << voxelType;
+			//Log(LOG_INFO) << "TE::plotParabola() EXIT w/ voxelType = " << voxelType << " " << trj->back() << " " << Position::toTileSpace(trj->back());
 			return voxelType;
 		}
 
@@ -5364,16 +5364,17 @@ bool TileEngine::validateThrow(
 		}
 	}
 
-	static const double DEC = 0.3;
+	static const double ARC_DELTA = 0.3;
 
-	const Position posTarget = targetVoxel / Position(16,16,24);
+//	const Position posTarget = targetVoxel / Position(16,16,24);
+	const Position posTarget = Position::toTileSpace(targetVoxel);
 	double parabolicCoefficient_Low; // higher parabolicCoefficient means higher arc IG. eh ......
 
-	if (posTarget != originVoxel / Position(16,16,24))
+	if (posTarget != Position::toTileSpace(originVoxel))
 	{
 		parabolicCoefficient_Low = 0.8;
 		if (action.actor->isKneeled() == true)
-			parabolicCoefficient_Low += DEC; // increase the arc reasons.
+			parabolicCoefficient_Low += ARC_DELTA; // increase the arc reasons.
 	}
 	else
 		parabolicCoefficient_Low = 0.;
@@ -5410,7 +5411,7 @@ bool TileEngine::validateThrow(
 				*voxelType = voxelTest;
 		}
 		else
-			parabolicCoefficient_Low += DEC;
+			parabolicCoefficient_Low += ARC_DELTA;
 	}
 
 	if (static_cast<int>(parabolicCoefficient_Low) >= 6)
@@ -5448,12 +5449,12 @@ bool TileEngine::validateThrow(
 				stop = true;
 			}
 			else
-				parabolicCoefficient_High += DEC;
+				parabolicCoefficient_High += ARC_DELTA;
 		}
 
 		// use the average of upper & lower limits:
 		// Lessens chance of bouncing a thrown item back off a wall by barely skimming overtop once accuracy is applied.
-		*arc = (parabolicCoefficient_Low + parabolicCoefficient_High - DEC) / 2.; // back off #2 from the upper limit
+		*arc = (parabolicCoefficient_Low + parabolicCoefficient_High - ARC_DELTA) / 2.; // back off #2 from the upper limit
 	}
 
 	//Log(LOG_INFO) << ". vT() ret TRUE";

@@ -2717,15 +2717,15 @@ void BattleUnit::setTile(
 	if (_tile != NULL)
 	{
 		if (_status == STATUS_WALKING
-			&& _tile->hasNoFloor(tileBelow) == true
-			&& _moveType == MT_FLY)
+			&& _moveType == MT_FLY
+			&& _tile->hasNoFloor(tileBelow) == true)
 		{
 			_status = STATUS_FLYING;
 			_floating = true;
 		}
 		else if (_status == STATUS_FLYING
-			&& _tile->hasNoFloor(tileBelow) == false
-			&& _dirVertical == 0)
+			&& _dirVertical == 0
+			&& _tile->hasNoFloor(tileBelow) == false)
 		{
 			_status = STATUS_WALKING;
 			_floating = false;

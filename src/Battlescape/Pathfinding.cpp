@@ -121,7 +121,7 @@ void Pathfinding::calculate(
 	_tuCostTotal = 0;
 
 	// i'm DONE with these out of bounds errors.
-	// kL_note: I really don't care what you're "DONE" with.....
+	// kL_note: I really don't care what you're "DONE" with .....
 	int armorSize = unit->getArmor()->getSize();
 	if (destPos.x < 0
 		|| destPos.y < 0
@@ -191,9 +191,7 @@ void Pathfinding::calculate(
 	// the air for non-flyers and they target the ground tile below that tile.
 	if (_mType != MT_FLY)
 	{
-		while (canFallDown(
-						tileDest,
-						armorSize))
+		while (canFallDown(tileDest, armorSize))
 		{
 			--destPos.z;
 			tileDest = _battleSave->getTile(destPos);
@@ -203,7 +201,7 @@ void Pathfinding::calculate(
 
 
 	if (isBlocked(		// recheck if destination is blocked.
-			tileDest,	// <- these are the actual destTiles so far.
+			tileDest,	// <- these are the actual destTiles.
 			O_FLOOR,
 			missileTarget) == false
 		&& isBlocked(
@@ -278,10 +276,8 @@ void Pathfinding::calculate(
 
 		_strafe = strafeRejected == false
 			   && Options::battleStrafe == true
-			   && ((_Ctrl == true
-						&& isMech == false)
-					|| (_Alt == true
-						&& isMech == true))
+			   && ((_Ctrl == true && isMech == false)
+					|| (_Alt == true && isMech == true))
 			   && startPos.z == destPos.z
 			   && std::abs(destPos.x - startPos.x) < 2
 			   && std::abs(destPos.y - startPos.y) < 2;
