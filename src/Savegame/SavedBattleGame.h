@@ -295,7 +295,7 @@ private:
 		bool isAborted() const;
 
 		/// Sets how many objectives need to be destroyed.
-		void setObjectiveCount(int var);
+		void setObjectiveCount(int qty);
 		/// Increments the objectives-destroyed counter.
 		void addDestroyedObjective();
 		/// Checks if all the objectives are destroyed.

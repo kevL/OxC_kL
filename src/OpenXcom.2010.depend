@@ -4638,7 +4638,7 @@
 
 1432464769 f:\git\openxcom\src\savegame\itemcontainer.h
 
-1442087674 f:\git\openxcom\src\savegame\savedbattlegame.h
+1442180055 f:\git\openxcom\src\savegame\savedbattlegame.h
 	"BattleUnit.h"
 
 1441745927 f:\git\openxcom\src\savegame\battleunit.h
@@ -5963,7 +5963,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1442104301 source:f:\git\openxcom\src\battlescape\map.cpp
+1442109138 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	"BattlescapeMessage.h"
 	"BattlescapeState.h"
@@ -6071,7 +6071,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1441664471 source:f:\git\openxcom\src\battlescape\nextturnstate.cpp
+1442180275 source:f:\git\openxcom\src\battlescape\nextturnstate.cpp
 	"NextTurnState.h"
 	"BattlescapeGame.h"
 	"BattlescapeState.h"
@@ -8189,7 +8189,7 @@
 	"../Engine/SurfaceSet.h"
 	"../Resource/XcomResourcePack.h"
 
-1441100164 source:f:\git\openxcom\src\resource\xcomresourcepack.cpp
+1442180952 source:f:\git\openxcom\src\resource\xcomresourcepack.cpp
 	"XcomResourcePack.h"
 	"../Engine/Language.h"
 	"../Engine/Sound.h"
@@ -8541,7 +8541,7 @@
 	"../Interface/Text.h"
 	"../Ruleset/RuleResearch.h"
 
-1442024981 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
+1442180065 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
 	"SavedBattleGame.h"
 	"BattleItem.h"
 	"Node.h"

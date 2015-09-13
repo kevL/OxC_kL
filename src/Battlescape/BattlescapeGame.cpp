@@ -1584,8 +1584,8 @@ void BattlescapeGame::endTurnPhase() // private.
 										liveAliens,
 										liveSoldiers);
 
-	if (_battleSave->allObjectivesDestroyed() == true // brain death.
-		&& _battleSave->getObjectiveType() == MUST_DESTROY)
+	if (_battleSave->getObjectiveType() == MUST_DESTROY // brain death, end Final Mission.
+		&& _battleSave->allObjectivesDestroyed() == true)
 	{
 		_parentState->finishBattle(
 								false,

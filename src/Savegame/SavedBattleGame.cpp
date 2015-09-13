@@ -1669,9 +1669,9 @@ bool SavedBattleGame::isAborted() const
  * @note Objectives were tile-parts marked w/ MUST_DESTROY in their MCD but now
  * can be any specially marked tile. See elsewhere.
  */
-void SavedBattleGame::setObjectiveCount(int var)
+void SavedBattleGame::setObjectiveCount(int qty)
 {
-	_objectivesNeeded = var;
+	_objectivesNeeded = qty;
 	_objectivesDestroyed = 0;
 }
 

@@ -1269,16 +1269,16 @@ void Map::drawTerrain(Surface* const surface) // private.
 										} */
 										int
 											colorGroup,
-											color;
+											colorOffset;
 										if (_animFrame < 4)
 										{
 											colorGroup = 0; // white
-											color = 0;
+											colorOffset = 2;
 										}
 										else
 										{
 											colorGroup = 10; // yellow
-											color = 3;
+											colorOffset = 3;
 										}
 
 										_numExposed->setValue(static_cast<unsigned>(exposure));
@@ -1287,7 +1287,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 															surface,
 															posScreen.x + walkOffset.x + 21,
 															posScreen.y + walkOffset.y + 6,
-															color,
+															colorOffset,
 															false,
 															colorGroup);
 									}
