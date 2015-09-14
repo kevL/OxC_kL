@@ -40,7 +40,7 @@ ArticleState::ArticleState(const std::string& article_id)
 	:
 		_id(article_id)
 {
-	_bg			= new Surface(320, 200);
+	_bg			= new InteractiveSurface(320, 200);
 	_btnOk		= new TextButton(30, 14,  5, 5);
 	_btnPrev	= new TextButton(30, 14, 40, 5);
 	_btnNext	= new TextButton(30, 14, 75, 5);
@@ -76,7 +76,7 @@ std::string ArticleState::getDamageTypeText(ItemDamageType dType) // static.
 }
 
 /**
- * Set captions and click handlers for the common control elements.
+ * Set captions and event handlers for the common control elements.
  * @param contrast - true to set buttons to high contrast (default true)
  */
 void ArticleState::initLayout(bool contrast)
@@ -86,11 +86,18 @@ void ArticleState::initLayout(bool contrast)
 	add(_btnPrev);
 	add(_btnNext);
 
+	_bg->onMouseClick(
+					(ActionHandler)& ArticleState::btnOkClick,
+					SDL_BUTTON_RIGHT);
+
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& ArticleState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& ArticleState::btnOkClick,
 					Options::keyOk);
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& ArticleState::btnOkClick,
+					Options::keyOkKeypad);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& ArticleState::btnOkClick,
 					Options::keyCancel);
@@ -100,12 +107,18 @@ void ArticleState::initLayout(bool contrast)
 	_btnPrev->onKeyboardPress(
 					(ActionHandler)& ArticleState::btnPrevClick,
 					Options::keyGeoLeft);
+	_btnPrev->onKeyboardPress(
+					(ActionHandler)& ArticleState::btnPrevClick,
+					SDLK_KP4);
 
 	_btnNext->setText(L">");
 	_btnNext->onMouseClick((ActionHandler)& ArticleState::btnNextClick);
 	_btnNext->onKeyboardPress(
 					(ActionHandler)& ArticleState::btnNextClick,
 					Options::keyGeoRight);
+	_btnNext->onKeyboardPress(
+					(ActionHandler)& ArticleState::btnNextClick,
+					SDLK_KP6);
 
 	if (contrast == true)
 	{

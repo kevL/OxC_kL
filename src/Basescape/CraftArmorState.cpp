@@ -56,14 +56,14 @@ namespace OpenXcom
 /**
  * Initializes all the elements in the Craft Armor screen.
  * @param base	- pointer to the base to get info from
- * @param craft	- ID of the selected craft
+ * @param craft	- ID of the selected craft (default 0)
  */
 CraftArmorState::CraftArmorState(
-		Base* base,
-		size_t craftID)
+		Base* const base,
+		size_t craftId)
 	:
 		_base(base),
-		_craftID(craftID)
+		_craftId(craftId)
 {
 	_window			= new Window(this, 320, 200);
 
@@ -139,7 +139,7 @@ void CraftArmorState::init()
 	// in case this is invoked from SoldiersState at a base without any Craft:
 	const Craft* craft;
 	if (_base->getCrafts()->empty() == false)
-		craft = _base->getCrafts()->at(_craftID);
+		craft = _base->getCrafts()->at(_craftId);
 	else
 		craft = NULL;
 
@@ -175,11 +175,11 @@ void CraftArmorState::init()
 		{
 			const int pct = (*i)->getRecoveryPCT();
 			if (pct > 50)
-				color = Palette::blockOffset(6); // orange
+				color = ORANGE;
 			else if (pct > 10)
-				color = Palette::blockOffset(9); // yellow
+				color = YELLOW;
 			else
-				color = Palette::blockOffset(3); // green
+				color = GREEN;
 
 			_lstSoldiers->setCellColor(
 									row,

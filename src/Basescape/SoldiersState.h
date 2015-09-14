@@ -42,6 +42,11 @@ class SoldiersState
 {
 
 private:
+	static const Uint8
+		GREEN	= 48,
+		ORANGE	= 96,
+		YELLOW	= 144;
+
 	Base* _base;
 	Text
 		* _txtBaseLabel,

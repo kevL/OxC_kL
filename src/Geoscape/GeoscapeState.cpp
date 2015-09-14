@@ -353,7 +353,8 @@ GeoscapeState::GeoscapeState()
 {
 	const int
 		screenWidth		= Options::baseXGeoscape,
-		screenHeight	= Options::baseYGeoscape;
+		screenHeight	= Options::baseYGeoscape,
+		halfHeight		= screenHeight / 2;
 
 	_srfSpace	= new Surface(
 						screenWidth,
@@ -361,7 +362,7 @@ GeoscapeState::GeoscapeState()
 	_globe		= new Globe(
 						_game,
 						(screenWidth - 64) / 2,
-						screenHeight / 2,
+						halfHeight,
 						screenWidth - 64,
 						screenHeight);
 	_sideBlack	= new Surface(
@@ -371,34 +372,34 @@ GeoscapeState::GeoscapeState()
 						0);
 
 	// revert to ImageButtons. Stock build uses TextButton's
-	_btnIntercept	= new ImageButton(63, 11, screenWidth - 63, screenHeight / 2 - 100);
-	_btnBases		= new ImageButton(63, 11, screenWidth - 63, screenHeight / 2 - 88);
-	_btnGraphs		= new ImageButton(63, 11, screenWidth - 63, screenHeight / 2 - 76);
-	_btnUfopaedia	= new ImageButton(63, 11, screenWidth - 63, screenHeight / 2 - 64);
-	_btnOptions		= new ImageButton(63, 11, screenWidth - 63, screenHeight / 2 - 52);
-	_btnFunding		= new ImageButton(63, 11, screenWidth - 63, screenHeight / 2 - 40);
-//	_btnOptions		= new ImageButton(63, 11, screenWidth - 63, screenHeight / 2 - 100); // change the GeoGraphic first .... ->
-//	_btnUfopaedia	= new ImageButton(63, 11, screenWidth - 63, screenHeight / 2 - 88);
-//	_btnFunding		= new ImageButton(63, 11, screenWidth - 63, screenHeight / 2 - 76);
-//	_btnGraphs		= new ImageButton(63, 11, screenWidth - 63, screenHeight / 2 - 64);
-//	_btnIntercept	= new ImageButton(63, 11, screenWidth - 63, screenHeight / 2 - 52);
-//	_btnBases		= new ImageButton(63, 11, screenWidth - 63, screenHeight / 2 - 40);
+	_btnIntercept	= new ImageButton(63, 11, screenWidth - 63, halfHeight - 100);
+	_btnBases		= new ImageButton(63, 11, screenWidth - 63, halfHeight - 88);
+	_btnGraphs		= new ImageButton(63, 11, screenWidth - 63, halfHeight - 76);
+	_btnUfopaedia	= new ImageButton(63, 11, screenWidth - 63, halfHeight - 64);
+	_btnOptions		= new ImageButton(63, 11, screenWidth - 63, halfHeight - 52);
+	_btnFunding		= new ImageButton(63, 11, screenWidth - 63, halfHeight - 40);
+//	_btnOptions		= new ImageButton(63, 11, screenWidth - 63, halfHeight - 100); // change the GeoGraphic first .... ->
+//	_btnUfopaedia	= new ImageButton(63, 11, screenWidth - 63, halfHeight - 88);
+//	_btnFunding		= new ImageButton(63, 11, screenWidth - 63, halfHeight - 76);
+//	_btnGraphs		= new ImageButton(63, 11, screenWidth - 63, halfHeight - 64);
+//	_btnIntercept	= new ImageButton(63, 11, screenWidth - 63, halfHeight - 52);
+//	_btnBases		= new ImageButton(63, 11, screenWidth - 63, halfHeight - 40);
 
-	_btn5Secs		= new ImageButton(31, 13, screenWidth - 63, screenHeight / 2 + 12);
-	_btn1Min		= new ImageButton(31, 13, screenWidth - 31, screenHeight / 2 + 12);
-	_btn5Mins		= new ImageButton(31, 13, screenWidth - 63, screenHeight / 2 + 26);
-	_btn30Mins		= new ImageButton(31, 13, screenWidth - 31, screenHeight / 2 + 26);
-	_btn1Hour		= new ImageButton(31, 13, screenWidth - 63, screenHeight / 2 + 40);
-	_btn1Day		= new ImageButton(31, 13, screenWidth - 31, screenHeight / 2 + 40);
-//	_btn5Secs		= new ImageButton(31, 13, screenWidth - 63, screenHeight / 2 + 12); // change the GeoGraphic first .... ->
-//	_btn1Min		= new ImageButton(31, 13, screenWidth - 63, screenHeight / 2 + 26);
-//	_btn5Mins		= new ImageButton(31, 13, screenWidth - 63, screenHeight / 2 + 40);
-//	_btn30Mins		= new ImageButton(31, 13, screenWidth - 31, screenHeight / 2 + 12);
-//	_btn1Hour		= new ImageButton(31, 13, screenWidth - 31, screenHeight / 2 + 26);
-//	_btn1Day		= new ImageButton(31, 13, screenWidth - 31, screenHeight / 2 + 40);
+	_btn5Secs		= new ImageButton(31, 13, screenWidth - 63, halfHeight + 12);
+	_btn1Min		= new ImageButton(31, 13, screenWidth - 31, halfHeight + 12);
+	_btn5Mins		= new ImageButton(31, 13, screenWidth - 63, halfHeight + 26);
+	_btn30Mins		= new ImageButton(31, 13, screenWidth - 31, halfHeight + 26);
+	_btn1Hour		= new ImageButton(31, 13, screenWidth - 63, halfHeight + 40);
+	_btn1Day		= new ImageButton(31, 13, screenWidth - 31, halfHeight + 40);
+//	_btn5Secs		= new ImageButton(31, 13, screenWidth - 63, halfHeight + 12); // change the GeoGraphic first .... ->
+//	_btn1Min		= new ImageButton(31, 13, screenWidth - 63, halfHeight + 26);
+//	_btn5Mins		= new ImageButton(31, 13, screenWidth - 63, halfHeight + 40);
+//	_btn30Mins		= new ImageButton(31, 13, screenWidth - 31, halfHeight + 12);
+//	_btn1Hour		= new ImageButton(31, 13, screenWidth - 31, halfHeight + 26);
+//	_btn1Day		= new ImageButton(31, 13, screenWidth - 31, halfHeight + 40);
 
 	// The old Globe rotate buttons have become the Detail & Radar toggles.
-	_btnDetail		= new ImageButton(63, 46, screenWidth - 63, screenHeight / 2 + 54);
+	_btnDetail		= new ImageButton(63, 46, screenWidth - 63, halfHeight + 54);
 /*	_btnRotateLeft	= new InteractiveSurface(12, 10, screenWidth-61, screenHeight/2+76);
 	_btnRotateRight	= new InteractiveSurface(12, 10, screenWidth-37, screenHeight/2+76);
 	_btnRotateUp	= new InteractiveSurface(13, 12, screenWidth-49, screenHeight/2+62);
@@ -411,12 +412,12 @@ GeoscapeState::GeoscapeState()
 							64,
 							height,
 							screenWidth - 64,
-							(screenHeight / 2) - (Screen::ORIGINAL_HEIGHT / 2) - (height + 12));
+							(halfHeight) - (Screen::ORIGINAL_HEIGHT / 2) - (height + 12));
 	_sideBottom	= new TextButton(
 							64,
 							height,
 							screenWidth - 64,
-							(screenHeight / 2) + (Screen::ORIGINAL_HEIGHT / 2) + 12);
+							(halfHeight) + (Screen::ORIGINAL_HEIGHT / 2) + 12);
 
 	_ufoDetected = new Text(17, 17, _sideBottom->getX() + 6, _sideBottom->getY() + 4);
 
@@ -447,19 +448,19 @@ GeoscapeState::GeoscapeState()
 										x + 2, y + 8);
 	}
 
-	_isfTime	= new InteractiveSurface(63, 39, screenWidth - 63, screenHeight / 2 - 28);
+	_isfTime	= new InteractiveSurface(63, 39, screenWidth - 63, halfHeight - 28);
 
-	_txtHour	= new Text(19, 17, screenWidth - 54, screenHeight / 2 - 22);
-	_txtColon	= new Text( 5, 17, screenWidth - 35, screenHeight / 2 - 22);
-	_txtMin		= new Text(19, 17, screenWidth - 30, screenHeight / 2 - 22);
-	_txtSec		= new Text( 6,  9, screenWidth -  8, screenHeight / 2 - 26);
+	_txtHour	= new Text(19, 17, screenWidth - 54, halfHeight - 22);
+	_txtColon	= new Text( 5, 17, screenWidth - 35, halfHeight - 22);
+	_txtMin		= new Text(19, 17, screenWidth - 30, halfHeight - 22);
+	_txtSec		= new Text( 6,  9, screenWidth -  8, halfHeight - 26);
 
-	_txtDay		= new Text(11, 9, screenWidth - 57, screenHeight / 2 - 5);
-	_txtMonth	= new Text(17, 9, screenWidth - 45, screenHeight / 2 - 5);
-	_txtYear	= new Text(21, 9, screenWidth - 27, screenHeight / 2 - 5);
+	_txtDay		= new Text(11, 9, screenWidth - 57, halfHeight - 4);
+	_txtMonth	= new Text(17, 9, screenWidth - 45, halfHeight - 4);
+	_txtYear	= new Text(21, 9, screenWidth - 27, halfHeight - 4);
 
-	_txtFunds	= new Text(63, 8, screenWidth - 64, screenHeight / 2 - 110);
-	_txtScore	= new Text(63, 8, screenWidth - 64, screenHeight / 2 + 102);
+	_txtFunds	= new Text(63, 8, screenWidth - 64, halfHeight - 110);
+	_txtScore	= new Text(63, 8, screenWidth - 64, halfHeight + 102);
 
 	_timeComp = _btn5Secs;
 	_geoTimer = new Timer(static_cast<Uint32>(Options::geoClockSpeed));
@@ -521,10 +522,7 @@ GeoscapeState::GeoscapeState()
 		_numUfoBlobs[i]->setVisible(false);
 		_numUfoBlobs[i]->setColor(11); // dk.yellow
 
-//		_isfUfoBlobs[i]->onKeyboardPress(
-//						(ActionHandler)& GeoscapeState::btnUfoBlobPress,
-//						buttons[i]);
-//		_numUfoBlobs[i]->setValue(static_cast<unsigned>(i) + 1);
+//		_isfUfoBlobs[i]->onKeyboardPress((ActionHandler)& GeoscapeState::btnUfoBlobPress, buttons[i]);
 	}
 
 	add(_isfTime);

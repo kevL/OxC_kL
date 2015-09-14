@@ -34,8 +34,7 @@ class Window;
 
 
 /**
- * Select Armor screen that lets the player
- * pick armor for the soldiers on the craft.
+ * Select Armor screen that lets the player pick armor for the soldiers on the craft.
  */
 class CraftArmorState
 	:
@@ -43,7 +42,12 @@ class CraftArmorState
 {
 
 private:
-	size_t _craftID;
+	static const Uint8
+		GREEN	= 48,
+		ORANGE	= 96,
+		YELLOW	= 144;
+
+	size_t _craftId;
 
 	Base* _base;
 	Text
@@ -60,8 +64,8 @@ private:
 	public:
 		/// Creates the Craft Armor state.
 		CraftArmorState(
-				Base* base,
-				size_t craftID);
+				Base* const base,
+				size_t craftId = 0);
 		/// Cleans up the Craft Armor state.
 		~CraftArmorState();
 

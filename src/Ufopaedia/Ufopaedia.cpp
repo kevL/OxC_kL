@@ -247,9 +247,7 @@ void Ufopaedia::list( // static.
 		const std::string& section,
 		ArticleDefinitionList& data)
 {
-	ArticleDefinitionList articles = getAvailableArticles(
-														gameSave,
-														rules);
+	ArticleDefinitionList articles = getAvailableArticles(gameSave, rules);
 	for (ArticleDefinitionList::const_iterator
 			i = articles.begin();
 			i != articles.end();
@@ -279,10 +277,8 @@ ArticleDefinitionList Ufopaedia::getAvailableArticles( // static.
 			++i)
 	{
 		ArticleDefinition* const article = rules->getUfopaediaArticle(*i);
-		if (isArticleAvailable(
-							gameSave,
-							article) == true
-			&& article->section != UFOPAEDIA_NOT_AVAILABLE)
+		if (article->section != UFOPAEDIA_NOT_AVAILABLE
+			&& isArticleAvailable(gameSave, article) == true)
 		{
 			articles.push_back(article);
 		}

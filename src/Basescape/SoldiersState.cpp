@@ -118,14 +118,14 @@ SoldiersState::SoldiersState(Base* base)
 	_btnPsi->onMouseClick((ActionHandler)& SoldiersState::btnPsiTrainingClick);
 	_btnPsi->setVisible(
 					Options::anytimePsiTraining == true
-					&& _base->getAvailablePsiLabs() > 0);
+					&& _base->getAvailablePsiLabs() != 0);
 
 	_btnArmor->setText(tr("STR_ARMOR"));
 	_btnArmor->onMouseClick((ActionHandler)& SoldiersState::btnArmorClick);
 
 	_btnEquip->setText(tr("STR_INVENTORY"));
 	_btnEquip->onMouseClick((ActionHandler)& SoldiersState::btnEquipClick);
-	_btnEquip->setVisible(_base->getAvailableSoldiers(true) > 0);
+	_btnEquip->setVisible(_base->getAvailableSoldiers(true) != 0);
 
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& SoldiersState::btnOkClick);
@@ -168,7 +168,7 @@ void SoldiersState::init()
 	}
 
 
-	std::wostringstream woststr; // in case soldier is told to GTFO.
+	std::wostringstream woststr; // in case soldier was told to GTFO.
 	woststr << _base->getTotalSoldiers();
 	_txtSoldiers->setText(woststr.str());
 
@@ -194,16 +194,16 @@ void SoldiersState::init()
 									row,
 									_lstSoldiers->getSecondaryColor());
 
-			if ((*i)->getRecovery() > 0)
+			if ((*i)->getRecovery() != 0)
 			{
 				Uint8 color;
 				const int pct = (*i)->getRecoveryPCT();
 				if (pct > 50)
-					color = Palette::blockOffset(6); // orange
+					color = ORANGE;
 				else if (pct > 10)
-					color = Palette::blockOffset(9); // yellow
+					color = YELLOW;
 				else
-					color = Palette::blockOffset(3); // green
+					color = GREEN;
 
 				_lstSoldiers->setCellColor(
 										row,
@@ -235,9 +235,7 @@ void SoldiersState::btnOkClick(Action*)
 void SoldiersState::btnArmorClick(Action*)
 {
 	_base->setCurrentSoldierSlot(_lstSoldiers->getScroll());
-	_game->pushState(new CraftArmorState(
-										_base,
-										0));
+	_game->pushState(new CraftArmorState(_base));
 }
 
 /**
@@ -250,14 +248,12 @@ void SoldiersState::btnEquipClick(Action*)
 
 	SavedBattleGame* battle = new SavedBattleGame();
 	_game->getSavedGame()->setBattleSave(battle);
-	BattlescapeGenerator bgen = BattlescapeGenerator(_game);
+	BattlescapeGenerator bGen = BattlescapeGenerator(_game);
 
-	bgen.runInventory(NULL, _base);
+	bGen.runInventory(NULL, _base);
 
 	_game->getScreen()->clear();
-	_game->pushState(new InventoryState(
-									false,
-									NULL));
+	_game->pushState(new InventoryState(false, NULL));
 }
 
 /**
@@ -288,7 +284,6 @@ std::sort(vPair.begin(), vPair.end(), sort_second()); */
 void SoldiersState::btnSortClick(Action*)
 {
 	_base->setCurrentSoldierSlot(_lstSoldiers->getScroll());
-
 	_base->sortSoldiers();
 
 	init();

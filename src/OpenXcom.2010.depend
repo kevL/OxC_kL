@@ -4476,7 +4476,7 @@
 1434619555 f:\git\openxcom\src\basescape\sellstate.h
 	"../Engine/State.h"
 
-1432157327 f:\git\openxcom\src\basescape\soldiersstate.h
+1442268091 f:\git\openxcom\src\basescape\soldiersstate.h
 	"../Engine/State.h"
 
 1431469888 f:\git\openxcom\src\basescape\transferbasestate.h
@@ -4561,7 +4561,7 @@
 
 1431493222 f:\git\openxcom\src\savegame\gametime.h
 
-1440097450 source:f:\git\openxcom\src\basescape\craftarmorstate.cpp
+1442268587 source:f:\git\openxcom\src\basescape\craftarmorstate.cpp
 	"CraftArmorState.h"
 	"SoldierArmorState.h"
 	"SoldierInfoState.h"
@@ -4582,7 +4582,7 @@
 	"../Savegame/Craft.h"
 	"../Savegame/Soldier.h"
 
-1430149549 f:\git\openxcom\src\basescape\craftarmorstate.h
+1442268562 f:\git\openxcom\src\basescape\craftarmorstate.h
 	"../Engine/State.h"
 
 1436901502 f:\git\openxcom\src\basescape\soldierarmorstate.h
@@ -4632,7 +4632,7 @@
 1441837119 f:\git\openxcom\src\battlescape\inventorystate.h
 	"../Engine/State.h"
 
-1440174951 f:\git\openxcom\src\engine\logger.h
+1442265022 f:\git\openxcom\src\engine\logger.h
 	<windows.h>
 	<time.h>
 
@@ -4749,7 +4749,7 @@
 	"CraftId.h"
 	"MovingTarget.h"
 
-1442236053 source:f:\git\openxcom\src\basescape\craftweaponsstate.cpp
+1442264282 source:f:\git\openxcom\src\basescape\craftweaponsstate.cpp
 	"CraftWeaponsState.h"
 	"../Engine/Game.h"
 	"../Interface/Text.h"
@@ -5214,7 +5214,7 @@
 1431492838 f:\git\openxcom\src\savegame\soldierdeath.h
 	"GameTime.h"
 
-1440380315 source:f:\git\openxcom\src\basescape\soldiersstate.cpp
+1442268661 source:f:\git\openxcom\src\basescape\soldiersstate.cpp
 	"SoldiersState.h"
 	"CraftArmorState.h"
 	"SoldierInfoState.h"
@@ -6959,7 +6959,7 @@
 1432346700 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1441870530 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1442267184 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	"AlienBaseState.h"
 	"BaseDefenseState.h"
@@ -8141,7 +8141,7 @@
 1431494724 f:\git\openxcom\src\ufopaedia\articlestatebasefacility.h
 	"ArticleState.h"
 
-1436410531 f:\git\openxcom\src\ufopaedia\articlestate.h
+1442269382 f:\git\openxcom\src\ufopaedia\articlestate.h
 	"../Engine/State.h"
 	"../Ruleset/RuleItem.h"
 
@@ -8671,7 +8671,7 @@
 1441871593 source:f:\git\openxcom\src\savegame\weightedoptions.cpp
 	"WeightedOptions.h"
 
-1439868213 source:f:\git\openxcom\src\ufopaedia\articlestate.cpp
+1442269411 source:f:\git\openxcom\src\ufopaedia\articlestate.cpp
 	"ArticleState.h"
 	"Ufopaedia.h"
 	"../Engine/Game.h"
