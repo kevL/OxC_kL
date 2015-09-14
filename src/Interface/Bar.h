@@ -77,7 +77,7 @@ private:
 		double getScale() const;
 
 		/// Sets the bar's maximum value.
-		void setMax(double maxVal);
+		void setMax(double maxVal = 100.);
 		/// Gets the bar's maximum value.
 		double getMax() const;
 

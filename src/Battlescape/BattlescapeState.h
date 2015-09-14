@@ -66,6 +66,18 @@ private:
 		TARGET_FRAMES	= 6,
 		PULSE_FRAMES	= 22;
 
+	static const Uint8
+		GRAY	=   7,
+		ORANGE	=  16,
+		RED		=  32,
+		RED_D	=  45,
+		GREEN	=  48,
+		BROWN_L	=  80,
+		BROWN_D	=  92,
+		BLUE	= 128,
+		YELLOW	= 144,
+		BROWN	= 160;
+
 	bool
 		_firstInit,
 		_iconsHidden,

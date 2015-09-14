@@ -4561,7 +4561,7 @@
 
 1431493222 f:\git\openxcom\src\savegame\gametime.h
 
-1442268587 source:f:\git\openxcom\src\basescape\craftarmorstate.cpp
+1442270347 source:f:\git\openxcom\src\basescape\craftarmorstate.cpp
 	"CraftArmorState.h"
 	"SoldierArmorState.h"
 	"SoldierInfoState.h"
@@ -4598,7 +4598,7 @@
 1441434413 f:\git\openxcom\src\ruleset\ruleitem.h
 	"../Battlescape/BattlescapeGame.h"
 
-1440380315 source:f:\git\openxcom\src\basescape\craftequipmentstate.cpp
+1442270591 source:f:\git\openxcom\src\basescape\craftequipmentstate.cpp
 	"CraftEquipmentState.h"
 	"../Battlescape/BattlescapeGenerator.h"
 	"../Battlescape/InventoryState.h"
@@ -4657,7 +4657,7 @@
 
 1440096185 f:\git\openxcom\src\savegame\vehicle.h
 
-1442234960 source:f:\git\openxcom\src\basescape\craftinfostate.cpp
+1442270597 source:f:\git\openxcom\src\basescape\craftinfostate.cpp
 	"CraftInfoState.h"
 	"CraftArmorState.h"
 	"CraftEquipmentState.h"
@@ -4694,7 +4694,7 @@
 
 1442236036 f:\git\openxcom\src\savegame\craftweapon.h
 
-1440380315 source:f:\git\openxcom\src\basescape\craftsoldiersstate.cpp
+1442270605 source:f:\git\openxcom\src\basescape\craftsoldiersstate.cpp
 	"CraftSoldiersState.h"
 	"SoldierInfoState.h"
 	"../Battlescape/BattlescapeGenerator.h"
@@ -5214,7 +5214,7 @@
 1431492838 f:\git\openxcom\src\savegame\soldierdeath.h
 	"GameTime.h"
 
-1442268661 source:f:\git\openxcom\src\basescape\soldiersstate.cpp
+1442270613 source:f:\git\openxcom\src\basescape\soldiersstate.cpp
 	"SoldiersState.h"
 	"CraftArmorState.h"
 	"SoldierInfoState.h"
@@ -5334,7 +5334,7 @@
 1441843552 f:\git\openxcom\src\battlescape\abortmissionstate.h
 	"../Engine/State.h"
 
-1441480073 f:\git\openxcom\src\battlescape\battlescapestate.h
+1442272973 f:\git\openxcom\src\battlescape\battlescapestate.h
 	"Position.h"
 	"../Engine/State.h"
 
@@ -5936,7 +5936,7 @@
 	<SDL.h>
 	<yaml-cpp/yaml.h>
 
-1441926373 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
+1442270582 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
 	"InventoryState.h"
 	"BattlescapeState.h"
 	"Inventory.h"
@@ -8671,7 +8671,7 @@
 1441871593 source:f:\git\openxcom\src\savegame\weightedoptions.cpp
 	"WeightedOptions.h"
 
-1442269411 source:f:\git\openxcom\src\ufopaedia\articlestate.cpp
+1442269466 source:f:\git\openxcom\src\ufopaedia\articlestate.cpp
 	"ArticleState.h"
 	"Ufopaedia.h"
 	"../Engine/Game.h"

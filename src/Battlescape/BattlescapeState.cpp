@@ -587,7 +587,7 @@ BattlescapeState::BattlescapeState()
 
 
 //	add(_turnCounter);
-//	_turnCounter->setColor(Palette::blockOffset(8));
+//	_turnCounter->setColor(BLUE);
 
 	add(_lstTileInfo,	"textName",	"battlescape"); // blue
 	add(_txtConsole1,	"textName",	"battlescape");
@@ -627,24 +627,24 @@ BattlescapeState::BattlescapeState()
 	_alienMark->setVisible(false);
 
 
-	_numDir->setColor(Palette::blockOffset(5)+12);
+	_numDir->setColor(BROWN_D);
 	_numDir->setValue(0);
 
-	_numDirTur->setColor(Palette::blockOffset(5)+12);
+	_numDirTur->setColor(BROWN_D);
 	_numDirTur->setValue(0);
 
 	_rank->setVisible(false);
 
-	_kneel->drawRect(0,0,2,2, Palette::blockOffset(5)+12);
+	_kneel->drawRect(0,0,2,2, BROWN_D);
 	_kneel->setVisible(false);
 
-	_overWeight->drawRect(0,0,2,2, Palette::blockOffset(2)+13); // dark.red
+	_overWeight->drawRect(0,0,2,2, RED_D);
 	_overWeight->setVisible(false);
 
 	_btnWounds->setVisible(false);
 	_btnWounds->onMousePress((ActionHandler)& BattlescapeState::btnWoundedPress);
 
-	_numWounds->setColor(Palette::blockOffset(9)); // yellow
+	_numWounds->setColor(YELLOW);
 	_numWounds->setValue(0);
 	_numWounds->setVisible(false);
 
@@ -910,22 +910,22 @@ BattlescapeState::BattlescapeState()
 
 	_txtName->setHighContrast();
 
-	_numTULaunch->setColor(Palette::blockOffset(0)+7);
-	_numTUAim->setColor(Palette::blockOffset(0)+7);
-	_numTUAuto->setColor(Palette::blockOffset(0)+7);
-	_numTUSnap->setColor(Palette::blockOffset(0)+7);
+	_numTULaunch->setColor(GRAY);
+	_numTUAim->setColor(GRAY);
+	_numTUAuto->setColor(GRAY);
+	_numTUSnap->setColor(GRAY);
 
 	_barTimeUnits->setScale();
-	_barTimeUnits->setMax(100.);
+	_barTimeUnits->setMax();
 
 	_barEnergy->setScale();
-	_barEnergy->setMax(100.);
+	_barEnergy->setMax();
 
 	_barHealth->setScale();
-	_barHealth->setMax(100.);
+	_barHealth->setMax();
 
 	_barMorale->setScale();
-	_barMorale->setMax(100.);
+	_barMorale->setMax();
 
 /*	_btnReserveNone->setGroup(&_reserve);
 	_btnReserveSnap->setGroup(&_reserve);
@@ -3092,7 +3092,7 @@ void BattlescapeState::flashMedic() // private.
 					3); // red
 	_btnWounds->unlock();
 
-	_numWounds->setColor(Palette::blockOffset(9) + static_cast<Uint8>(phase)); // yellow shades
+	_numWounds->setColor(YELLOW + static_cast<Uint8>(phase));
 
 
 	phase += 2;
@@ -3705,13 +3705,13 @@ void BattlescapeState::updateExperienceInfo()
 									Text::formatNumber(xp[i]).c_str());
 
 				if (xp[i] > 10)
-					_lstSoldierInfo->setCellColor(i, 1, Palette::blockOffset(5), true); // lt.brown
+					_lstSoldierInfo->setCellColor(i, 1, BROWN_L, true);
 				else if (xp[i] > 5)
-					_lstSoldierInfo->setCellColor(i, 1, Palette::blockOffset(10), true); // brown
+					_lstSoldierInfo->setCellColor(i, 1, BROWN, true);
 				else if (xp[i] > 2)
-					_lstSoldierInfo->setCellColor(i, 1, Palette::blockOffset(1), true); // orange
+					_lstSoldierInfo->setCellColor(i, 1, ORANGE, true);
 				else if (xp[i] > 0)
-					_lstSoldierInfo->setCellColor(i, 1, Palette::blockOffset(3), true); // green
+					_lstSoldierInfo->setCellColor(i, 1, GREEN, true);
 			}
 		}
 	}
@@ -3779,7 +3779,7 @@ void BattlescapeState::updateTileInfo(const Tile* const tile)
 		infoType.push_back(L"M"); // tuCost
 
 
-		Uint8 color = Palette::blockOffset(8); // blue, avoid VC++ linker warning.
+		Uint8 color = BLUE; // avoid VC++ linker warning.
 
 		for (size_t
 				i = 0;
@@ -3792,12 +3792,12 @@ void BattlescapeState::updateTileInfo(const Tile* const tile)
 				if (info[i] == 0)
 				{
 					hasFloor = L"F";
-					color = Palette::blockOffset(3); // green, Floor
+					color = GREEN; // Floor
 				}
 				else
 				{
 					hasFloor = L"-";
-					color = Palette::blockOffset(1); // orange, NO Floor
+					color = ORANGE; // NO Floor
 				}
 
 				_lstTileInfo->addRow(
@@ -3808,9 +3808,9 @@ void BattlescapeState::updateTileInfo(const Tile* const tile)
 			else if (i < 3) // smoke & fire
 			{
 				if (i == 1)
-					color = Palette::blockOffset(5); // brown, smoke
+					color = BROWN_L; // smoke
 				else
-					color = Palette::blockOffset(2); // red, fire
+					color = RED; // fire
 
 				std::wstring value;
 				if (info[i] != 0)
@@ -3825,7 +3825,7 @@ void BattlescapeState::updateTileInfo(const Tile* const tile)
 			}
 			else if (unit != NULL) // tuCost
 			{
-				color = Palette::blockOffset(8); // blue
+				color = BLUE;
 
 				std::wstring cost;
 				if (info[i] < 255)

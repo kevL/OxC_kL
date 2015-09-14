@@ -119,7 +119,7 @@ double Bar::getScale() const
 
 /**
  * Changes the maximum value used to draw the outer border.
- * @param maxVal - maximum value
+ * @param maxVal - maximum value (default 100.)
  */
 void Bar::setMax(double maxVal)
 {

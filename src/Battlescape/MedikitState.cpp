@@ -225,10 +225,10 @@ MedikitState::MedikitState(BattleAction* action)
 	_barEnergy->setScale();
 	_barMorale->setScale();
 	_barTimeUnits->setScale();
-	_barHealth->setMax(100.);
-	_barEnergy->setMax(100.);
-	_barMorale->setMax(100.);
-	_barTimeUnits->setMax(100.);
+	_barHealth->setMax();
+	_barEnergy->setMax();
+	_barMorale->setMax();
+	_barTimeUnits->setMax();
 
 	_barHealth->offsetSecond(-2);
 
