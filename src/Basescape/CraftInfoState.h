@@ -36,7 +36,7 @@ class Window;
 
 
 /**
- * Craft Info screen that shows all the info of a specific craft.
+ * Craft Info screen that shows all the info about a specific craft.
  */
 class CraftInfoState
 	:
@@ -44,6 +44,12 @@ class CraftInfoState
 {
 
 private:
+	static const Uint8
+		RED		=  32, // repairing
+		GREEN	=  48, // ready
+		ORANGE	=  96, // rearming
+		YELLOW	= 144; // refueling
+
 	size_t _craftId;
 	std::wstring _defaultName;
 
@@ -76,6 +82,7 @@ private:
 		* _btnW1,
 		* _btnW2;
 	TextEdit* _edtCraft;
+	Timer* _blinkTimer;
 	Window* _window;
 
 	/// Formats an amount of time.
@@ -96,6 +103,10 @@ private:
 
 		/// Updates the craft info.
 		void init();
+		/// Runs the blink timer.
+		void think();
+		/// Blinks the status text.
+		void blink();
 
 		/// Handler for clicking the OK button.
 		void btnOkClick(Action* action);

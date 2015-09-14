@@ -1222,8 +1222,8 @@ void DogfightState::updateDogfight()
 				{
 					std::string targetRegion;											// Spawn retaliation mission.
 					if (RNG::percent(62 - (_diff * 6)) == true)
-						targetRegion = _ufo->getAlienMission()->getRegion();			// Attack on UFO's mission region.
-					else																// or Try to find and attack the originating base.
+						targetRegion = _ufo->getAlienMission()->getRegion();			// Retaliation vs UFO's mission region.
+					else																// or Try to find the originating base.
 						targetRegion = _gameSave->locateRegion(*_craft->getBase())->getRules()->getType();
 					// TODO: If the base is removed, the mission is cancelled.
 
@@ -1244,7 +1244,7 @@ void DogfightState::updateDogfight()
 										targetRegion,
 										*_game->getRuleset());
 						mission->setRace(_ufo->getAlienRace());
-						mission->start(mission->getRules().getWave(0).spawnTimer); // delay for first scout
+						mission->start(mission->getRules().getWave(0).spawnTimer); // delay for first wave/scout
 
 						_gameSave->getAlienMissions().push_back(mission);
 					}
@@ -1868,7 +1868,7 @@ void DogfightState::drawUfo()
 					x != 13;
 					++x)
 			{
-				color = static_cast<Uint8>(GeoscapeState::_ufoBlobs[_ufoSize + _ufo->getHitFrame()]
+				color = static_cast<Uint8>(GeoscapeState::_ufoBlobs[static_cast<size_t>(_ufoSize + _ufo->getHitFrame())]
 																   [static_cast<size_t>(y)]
 																   [static_cast<size_t>(x)]);
 				if (color != 0)
@@ -1903,7 +1903,7 @@ void DogfightState::drawUfo()
  */
 void DogfightState::drawProjectile(const CraftWeaponProjectile* const prj)
 {
-	int posX = (_battle->getWidth() / 2) + (prj->getHorizontalPosition() * 2);
+	int posX = (_battle->getWidth() / 2) + (prj->getHorizontalPosition() * 3);
 	Uint8
 		color,
 		colorOffset;
@@ -1922,14 +1922,14 @@ void DogfightState::drawProjectile(const CraftWeaponProjectile* const prj)
 					y != 6;
 					++y)
 			{
-				colorOffset = static_cast<Uint8>(_projectileBlobs[prj->getType()]
+				colorOffset = static_cast<Uint8>(_projectileBlobs[static_cast<size_t>(prj->getType())]
 																 [static_cast<size_t>(y)]
 																 [static_cast<size_t>(x)]);
 				if (colorOffset != 0)
 				{
 					color = _window->getPixelColor(
 												posX + x + 3,
-												posY + y + 3); // +3 cause of the window frame
+												posY + y + 3); // +3 'cause of the window frame
 					color -= colorOffset;
 					if (color < _colors[BLOB_MIN])
 						color = _colors[BLOB_MIN];

@@ -45,14 +45,14 @@ private:
 		_rearming;
 	int _ammo;
 
-	RuleCraftWeapon* _cwRule;
+	const RuleCraftWeapon* _cwRule;
 
 
 	public:
 		/// Creates a craft weapon of the specified type.
 		CraftWeapon(
-				RuleCraftWeapon* const cwRule,
-				int ammo);
+				const RuleCraftWeapon* const cwRule,
+				int ammo = 0);
 		/// Cleans up the craft weapon.
 		~CraftWeapon();
 
@@ -62,7 +62,7 @@ private:
 		YAML::Node save() const;
 
 		/// Gets the craft weapon's ruleset.
-		RuleCraftWeapon* getRules() const;
+		const RuleCraftWeapon* getRules() const;
 
 		/// Gets the craft weapon's ammo.
 		int getAmmo() const;

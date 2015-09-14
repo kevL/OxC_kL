@@ -1951,9 +1951,7 @@ const RuleAlienMission* Ruleset::getRandomMission(
 		}
 	}
 
-	const int pick = RNG::generate(
-								1,
-								totalWeight);
+	const int pick = RNG::generate(1, totalWeight);
 	for (std::map<int, RuleAlienMission*>::const_iterator
 			i = eligibleMissions.begin();
 			i != eligibleMissions.end();

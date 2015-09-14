@@ -20,7 +20,7 @@
 #ifndef OPENXCOM_CRAFTWEAPONSSTATE_H
 #define OPENXCOM_CRAFTWEAPONSSTATE_H
 
-#include <vector>
+//#include <vector>
 
 #include "../Engine/State.h"
 
@@ -37,8 +37,7 @@ class Window;
 
 
 /**
- * Select Armament window for
- * changing the weapon equipped on a craft.
+ * Select Armament window for changing the weapon equipped on a craft.
  */
 class CraftWeaponsState
 	:
@@ -57,8 +56,8 @@ private:
 	Window* _window;
 
 	size_t
-		_craftID,
-		_weaponID;
+		_craftId,
+		_pod;
 
 	std::vector<RuleCraftWeapon*> _weaponRules;
 
@@ -67,8 +66,8 @@ private:
 		/// Creates the Craft Weapons state.
 		CraftWeaponsState(
 				Base* base,
-				size_t craftID,
-				size_t weaponID);
+				size_t craftId,
+				size_t pod);
 		/// Cleans up the Craft Weapons state.
 		~CraftWeaponsState();
 

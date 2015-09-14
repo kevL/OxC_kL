@@ -32,10 +32,10 @@ namespace OpenXcom
 /**
  * Initializes a craft weapon of the specified type.
  * @param cwRule	- pointer to RuleCraftWeapon
- * @param ammo		- initial ammo quantity
+ * @param ammo		- initial ammo quantity (default 0)
  */
 CraftWeapon::CraftWeapon(
-		RuleCraftWeapon* const cwRule,
+		const RuleCraftWeapon* const cwRule,
 		int ammo)
 	:
 		_cwRule(cwRule),
@@ -83,7 +83,7 @@ YAML::Node CraftWeapon::save() const
  * Gets the ruleset for a craft weapon's type.
  * @return, pointer to RuleCraftWeapon
  */
-RuleCraftWeapon* CraftWeapon::getRules() const
+const RuleCraftWeapon* CraftWeapon::getRules() const
 {
 	return _cwRule;
 }
@@ -238,11 +238,11 @@ int CraftWeapon::getClipsLoaded(const Ruleset* const rules) const
 	if (clip != NULL
 		&& clip->getClipSize() > 0)
 	{
-		return static_cast<int>(floor(
+		return static_cast<int>(std::floor(
 			   static_cast<float>(_ammo) / static_cast<float>(clip->getClipSize())));
 	}
 
-	return static_cast<int>(floor(
+	return static_cast<int>(std::floor(
 		   static_cast<float>(_ammo) / static_cast<float>(_cwRule->getRearmRate())));
 }
 

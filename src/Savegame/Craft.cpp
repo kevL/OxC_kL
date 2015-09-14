@@ -462,8 +462,8 @@ void Craft::setBase(
  * Gets the current status of this Craft.
  *		STR_READY
  *		STR_REPAIRS
- *		STR_REFUELLING
  *		STR_REARMING
+ *		STR_REFUELLING
  *		STR_OUT
  * @return, status string
  */

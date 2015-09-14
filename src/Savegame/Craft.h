@@ -42,7 +42,6 @@ class Vehicle;
 
 enum CraftWarning
 {
-//	CW_STOP = -1,	// -1
 	CW_NONE,		//  0
 	CW_CANTREPAIR,	//  1
 	CW_CANTREARM,	//  2

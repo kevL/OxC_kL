@@ -110,7 +110,8 @@ CraftInfoState::CraftInfoState(
 	add(_window,		"window",	"craftInfo");
 	add(_edtCraft,		"text1",	"craftInfo");
 	add(_txtBaseLabel,	"text1",	"craftInfo");
-	add(_txtStatus,		"text2",	"craftInfo");
+//	add(_txtStatus,		"text2",	"craftInfo");
+	add(_txtStatus);
 	add(_txtRadar,		"text2",	"craftInfo");
 	add(_txtKills,		"text2",	"craftInfo");
 	add(_txtFuel,		"text2",	"craftInfo");
@@ -179,13 +180,19 @@ CraftInfoState::CraftInfoState(
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& CraftInfoState::btnOkClick,
 					Options::keyCancel);
+
+
+	_blinkTimer = new Timer(325);
+	_blinkTimer->onTimer((StateHandler)& CraftInfoState::blink);
 }
 
 /**
  * dTor.
  */
 CraftInfoState::~CraftInfoState()
-{}
+{
+	delete _blinkTimer;
+}
 
 /**
  * The craft's info can change after going into other screens.
@@ -210,7 +217,33 @@ void CraftInfoState::init()
 	if (skirmish == true)
 		_txtStatus->setText(L"");
 	else
-		_txtStatus->setText(tr(_craft->getStatus()));
+	{
+		const std::string status = _craft->getStatus();
+
+		Uint8 color;
+		if (status == "STR_READY")
+		{
+			color = GREEN;
+			if (_blinkTimer->isRunning() == true)
+				_blinkTimer->stop();
+		}
+		else
+		{
+			if (_blinkTimer->isRunning() == false)
+				_blinkTimer->start();
+
+			if (status == "STR_REPAIRS")
+				color = RED;
+			else if (status == "STR_REARMING")
+				color = ORANGE;
+			else // STR_REFUELLING
+				color = YELLOW;
+		}
+
+		_txtStatus->setText(tr(status));
+		_txtStatus->setColor(color);
+		_txtStatus->setHighContrast();
+	}
 
 
 	const RuleCraft* const crRule = _craft->getRules();
@@ -429,7 +462,7 @@ void CraftInfoState::init()
  * @param delayed	- true to add '+' (unable to rearm due to lack of materiel)
  * @return, day/hour string
  */
-std::wstring CraftInfoState::formatTime(
+std::wstring CraftInfoState::formatTime( // private.
 		const int total,
 		const bool delayed) const
 {
@@ -457,6 +490,25 @@ std::wstring CraftInfoState::formatTime(
 	woststr << L")";
 
 	return woststr.str();
+}
+
+/**
+ * Runs the blink timer.
+ */
+void CraftInfoState::think()
+{
+	if (_window->isPopupDone() == false)
+		_window->think();
+	else if (_blinkTimer->isRunning() == true)
+		_blinkTimer->think(this, NULL);
+}
+
+/**
+ * Blinks the status text.
+ */
+void CraftInfoState::blink()
+{
+	_txtStatus->setVisible(!_txtStatus->getVisible());
 }
 
 /**

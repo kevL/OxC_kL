@@ -127,7 +127,7 @@ BaseDetectionState::BaseDetectionState(Base* base)
 		_blinkTimer->start();
 
 		_txtSpotted->setText(tr("STR_SPOTTED"));
-		_txtSpotted->setColor(Palette::blockOffset(2)); // red
+		_txtSpotted->setColor(32); // red
 		_txtSpotted->setHighContrast();
 		_txtSpotted->setAlign(ALIGN_CENTER);
 	}
