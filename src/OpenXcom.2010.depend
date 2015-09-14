@@ -4629,7 +4629,7 @@
 1441844029 f:\git\openxcom\src\battlescape\battlescapegenerator.h
 	"../Ruleset/MapScript.h"
 
-1441837119 f:\git\openxcom\src\battlescape\inventorystate.h
+1442270571 f:\git\openxcom\src\battlescape\inventorystate.h
 	"../Engine/State.h"
 
 1442265022 f:\git\openxcom\src\engine\logger.h
@@ -8783,7 +8783,7 @@
 	"../Ruleset/Ruleset.h"
 	"../Ruleset/RuleUnit.h"
 
-1440180220 source:f:\git\openxcom\src\ufopaedia\ufopaedia.cpp
+1442269094 source:f:\git\openxcom\src\ufopaedia\ufopaedia.cpp
 	"Ufopaedia.h"
 	"ArticleState.h"
 	"ArticleStateArmor.h"

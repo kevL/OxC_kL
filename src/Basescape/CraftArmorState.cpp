@@ -55,8 +55,8 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Craft Armor screen.
- * @param base	- pointer to the base to get info from
- * @param craft	- ID of the selected craft (default 0)
+ * @param base		- pointer to the base to get info from
+ * @param craftId	- ID of the selected craft (default 0)
  */
 CraftArmorState::CraftArmorState(
 		Base* const base,

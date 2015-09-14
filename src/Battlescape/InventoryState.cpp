@@ -68,8 +68,8 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Inventory screen.
- * @param tuMode - true if in battle when inventory usage costs time units
- * @param parent - pointer to parent BattlescapeState
+ * @param tuMode - true if in battle when inventory usage costs time units (default false)
+ * @param parent - pointer to parent BattlescapeState (default NULL)
  */
 InventoryState::InventoryState(
 		bool tuMode,
@@ -224,7 +224,7 @@ InventoryState::InventoryState(
 	_tuCost->setColor(1);
 	_tuCost->setVisible(false);
 
-	const Uint8 color = Palette::blockOffset(2)+6; // red
+	const Uint8 color = 38; // red
 	_wndHead->setColor(color);
 	_wndHead->setVisible(false);
 	_wndTorso->setColor(color);

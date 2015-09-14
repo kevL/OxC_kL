@@ -750,9 +750,7 @@ void CraftEquipmentState::btnInventoryClick(Action*)
 					_selUnit);
 
 	_game->getScreen()->clear();
-	_game->pushState(new InventoryState(
-									false,
-									NULL));
+	_game->pushState(new InventoryState());
 }
 
 /**

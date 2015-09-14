@@ -445,9 +445,7 @@ void CraftSoldiersState::btnInventoryClick(Action*)
 	bgen.runInventory(_craft);
 
 	_game->getScreen()->clear();
-	_game->pushState(new InventoryState(
-									false,
-									NULL));
+	_game->pushState(new InventoryState());
 }
 
 /**

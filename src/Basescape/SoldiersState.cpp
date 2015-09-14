@@ -253,7 +253,7 @@ void SoldiersState::btnEquipClick(Action*)
 	bGen.runInventory(NULL, _base);
 
 	_game->getScreen()->clear();
-	_game->pushState(new InventoryState(false, NULL));
+	_game->pushState(new InventoryState());
 }
 
 /**
