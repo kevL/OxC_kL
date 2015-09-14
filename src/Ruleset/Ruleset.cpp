@@ -106,7 +106,8 @@ Ruleset::Ruleset(const Game* const game)
 		_ufopaediaListOrder(0),
 		_invListOrder(0),
 		_radarCutoff(1500),
-		_firstGrenade(-1)
+		_firstGrenade(-1),
+		_retalChance(0)
 {
 	//Log(LOG_INFO) << "Create Ruleset";
 	_globe = new RuleGlobe();
@@ -919,6 +920,7 @@ void Ruleset::loadFile(const std::string& file) // protected.
 	_font			= doc["font"]			.as<std::string>(_font);
 	_radarCutoff	= doc["radarCutoff"]	.as<int>(_radarCutoff);
 	_firstGrenade	= doc["firstGrenade"]	.as<int>(_firstGrenade);
+	_retalChance	= doc["retalChance"]	.as<int>(_retalChance);
 
 	for (YAML::const_iterator
 			i = doc["ufoTrajectories"].begin();
@@ -2454,6 +2456,7 @@ int Ruleset::getMaxRadarRange() const
 
 /**
  * Gets the cutoff between small & large radars for determining base info values.
+ * @return, range boundary between small & large radars
  */
 int Ruleset::getRadarCutoffRange() const
 {
@@ -2462,10 +2465,20 @@ int Ruleset::getRadarCutoffRange() const
 
 /**
  * Gets the turn aliens are allowed to throw their first grenades.
+ * @return, first grenade turn
  */
 int Ruleset::getFirstGrenade() const
 {
 	return _firstGrenade;
+}
+
+/**
+ * Gets the basic retaliation chance.
+ * @return, basic retaliation chance
+ */
+int Ruleset::getRetaliationChance() const
+{
+	return _retalChance;
 }
 
 /**

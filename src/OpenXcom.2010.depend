@@ -4555,7 +4555,7 @@
 1440346956 f:\git\openxcom\src\interface\window.h
 	"../Engine/Surface.h"
 
-1441884336 f:\git\openxcom\src\ruleset\ruleset.h
+1442190651 f:\git\openxcom\src\ruleset\ruleset.h
 	"../Ruleset/RuleAlienMission.h"
 	"../Savegame/GameTime.h"
 
@@ -5468,7 +5468,7 @@
 1432984133 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1441843379 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1442180358 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	"AlienBAIState.h"
 	"BattlescapeState.h"
@@ -6882,7 +6882,7 @@
 	"../Resource/XcomResourcePack.h"
 	"../Savegame/SavedGame.h"
 
-1441693511 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
+1442191077 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
 	"DogfightState.h"
 	"GeoscapeCraftState.h"
 	"GeoscapeState.h"
@@ -6903,6 +6903,7 @@
 	"../Ruleset/Ruleset.h"
 	"../Ruleset/RuleTerrain.h"
 	"../Ruleset/RuleUfo.h"
+	"../Ruleset/UfoTrajectory.h"
 	"../Savegame/AlienMission.h"
 	"../Savegame/Base.h"
 	"../Savegame/Country.h"

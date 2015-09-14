@@ -90,6 +90,7 @@ protected:
 	int
 		_initialFunding,
 		_firstGrenade,
+		_retalChance,
 
 		_costEngineer,
 		_costScientist,
@@ -385,6 +386,9 @@ protected:
 
 		/// Gets the turn aliens are allowed to throw their first grenades.
 		int getFirstGrenade() const;
+
+		/// Gets the basic retaliation chance.
+		int getRetaliationChance() const;
 
 		/// Gets information on an interface element.
 		RuleInterface* getInterface(const std::string& id) const;

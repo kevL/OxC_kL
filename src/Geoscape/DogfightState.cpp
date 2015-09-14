@@ -48,6 +48,7 @@
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleTerrain.h"
 #include "../Ruleset/RuleUfo.h"
+#include "../Ruleset/UfoTrajectory.h"
 
 #include "../Savegame/AlienMission.h"
 #include "../Savegame/Base.h"
@@ -1153,9 +1154,8 @@ void DogfightState::updateDogfight()
 					}
 					else // This is where the magic happens, Lulzor!!
 					{
-						const size_t pick = static_cast<size_t>(RNG::generate(
-																		0,
-																		static_cast<int>(altIntercepts.size())));
+						const size_t pick = static_cast<size_t>(RNG::generate(0,
+											static_cast<int>(altIntercepts.size())));
 						_ufo->setShootingAt(altIntercepts.at(pick));
 					}
 				}
@@ -1165,14 +1165,13 @@ void DogfightState::updateDogfight()
 		}
 	}
 
-	if (_end == true // Check when battle is over.
+	if (_end == true // Check when dogfight is over.
 		&& (((_dist > DST_ENGAGE
 					|| _minimized == true)
 				&& (_craftStance == _btnDisengage
 					|| _ufoBreakingOff == true))
 			|| (_timeout == 0
-				&& (_ufo->isCrashed() == true
-					|| _craft->isDestroyed() == true))))
+				&& _ufo->isCrashed() == true)))
 	{
 		if (_ufoBreakingOff == true)
 		{
@@ -1216,35 +1215,39 @@ void DogfightState::updateDogfight()
 		{
 			_ufo->getAlienMission()->ufoShotDown(*_ufo);
 
-			if (RNG::percent(4 + (_diff * 4)) == true)						// Check retaliation trigger.
+			if (_ufo->getTrajectory().getId() != UfoTrajectory::RETALIATION_ASSAULT_RUN) // shooting down an assault-battleship does *not* generate a Retal-Mission.
 			{
-				std::string targetRegion;									// Spawn retaliation mission.
-				if (RNG::percent(62 - (_diff * 6)) == true)
-					targetRegion = _ufo->getAlienMission()->getRegion();	// Attack on UFO's mission region.
-				else														// or Try to find and attack the originating base.
-					targetRegion = _gameSave->locateRegion(*_craft->getBase())->getRules()->getType();
-				// TODO: If the base is removed, the mission is cancelled.
-
-				// Difference from original: No retaliation until final UFO lands (Original: Is spawned).
-				if (_game->getSavedGame()->findAlienMission(
-														targetRegion,
-														alm_RETAL) == false)
+				const int retalChance = _game->getRuleset()->getRetaliationChance();
+				if (RNG::percent((_diff + 1) * retalChance) == true)					// Check retaliation trigger.
 				{
-					const RuleAlienMission& rule = *_game->getRuleset()->getRandomMission(
-																					alm_RETAL,
-																					_game->getSavedGame()->getMonthsPassed());
-					AlienMission* const mission = new AlienMission(
-																rule,
-																*_gameSave);
+					std::string targetRegion;											// Spawn retaliation mission.
+					if (RNG::percent(62 - (_diff * 6)) == true)
+						targetRegion = _ufo->getAlienMission()->getRegion();			// Attack on UFO's mission region.
+					else																// or Try to find and attack the originating base.
+						targetRegion = _gameSave->locateRegion(*_craft->getBase())->getRules()->getType();
+					// TODO: If the base is removed, the mission is cancelled.
 
-					mission->setId(_gameSave->getId("ALIEN_MISSIONS"));
-					mission->setRegion(
-									targetRegion,
-									*_game->getRuleset());
-					mission->setRace(_ufo->getAlienRace());
-					mission->start(mission->getRules().getWave(0).spawnTimer); // delay for first scout
+					// Difference from original: No retaliation until final UFO lands (Original: Is spawned).
+					if (_game->getSavedGame()->findAlienMission(
+															targetRegion,
+															alm_RETAL) == false)
+					{
+						const RuleAlienMission& rule = *_game->getRuleset()->getRandomMission(
+																						alm_RETAL,
+																						_game->getSavedGame()->getMonthsPassed());
+						AlienMission* const mission = new AlienMission(
+																	rule,
+																	*_gameSave);
 
-					_gameSave->getAlienMissions().push_back(mission);
+						mission->setId(_gameSave->getId("ALIEN_MISSIONS"));
+						mission->setRegion(
+										targetRegion,
+										*_game->getRuleset());
+						mission->setRace(_ufo->getAlienRace());
+						mission->start(mission->getRules().getWave(0).spawnTimer); // delay for first scout
+
+						_gameSave->getAlienMissions().push_back(mission);
+					}
 				}
 			}
 
