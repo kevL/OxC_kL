@@ -50,10 +50,10 @@ namespace OpenXcom
  * Initializes all the elements in the Craft Weapons window.
  * @param base		- pointer to the Base to get info from
  * @param craftId	- ID of the selected craft
- * @param pod	- hardpoint for the weapon
+ * @param pod		- hardpoint for the weapon
  */
 CraftWeaponsState::CraftWeaponsState(
-		Base* base,
+		Base* const base,
 		size_t craftId,
 		size_t pod)
 	:
@@ -122,8 +122,7 @@ CraftWeaponsState::CraftWeaponsState(
 		RuleCraftWeapon* const cwRule = _game->getRuleset()->getCraftWeapon(*i);
 		const RuleItem* const laRule = _game->getRuleset()->getItem(cwRule->getLauncherItem());
 
-//		if (_base->getItems()->getItem(cwRule->getLauncherItem()) > 0)
-		if (_game->getSavedGame()->isResearched(laRule->getRequirements()) == true)	// requirements have been researched or does not have requirements.
+		if (_game->getSavedGame()->isResearched(laRule->getRequirements()) == true)
 		{
 			_weaponRules.push_back(cwRule);
 
@@ -193,7 +192,7 @@ void CraftWeaponsState::lstWeaponsClick(Action*)
 
 	if (cwRule != NULL
 		&& (cw == NULL || cw->getRules() != cwRule)
-		&& _base->getItems()->getItemQty(cwRule->getLauncherItem()) > 0)
+		&& _base->getItems()->getItemQty(cwRule->getLauncherItem()) != 0)
 	{
 		closeState = true;
 

@@ -117,7 +117,7 @@ inline std::ostringstream& Logger::get(SeverityLevel level)
 inline Logger::~Logger()
 {
 	_oststr << std::endl;
-	if (reportingLevel() == LOG_DEBUG)
+	if (reportingLevel() == LOG_DEBUG || reportingLevel() == LOG_VERBOSE)
 	{
 		std::fprintf(
 					stderr,
@@ -161,7 +161,8 @@ inline std::string Logger::toString(SeverityLevel level)
 		"ERROR",
 		"WARN",
 		"INFO",
-		"DEBUG"
+		"DEBUG",
+		"VERBOSE"
 	};
 
 	return buffer[level];

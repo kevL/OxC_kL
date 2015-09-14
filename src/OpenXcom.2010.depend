@@ -4448,7 +4448,7 @@
 1436387299 f:\git\openxcom\src\basescape\buildfacilitiesstate.h
 	"../Engine/State.h"
 
-1442231332 f:\git\openxcom\src\basescape\craftinfostate.h
+1442263754 f:\git\openxcom\src\basescape\craftinfostate.h
 	"../Engine/State.h"
 
 1431912709 f:\git\openxcom\src\basescape\craftsstate.h
@@ -4684,7 +4684,7 @@
 1438341095 f:\git\openxcom\src\basescape\craftsoldiersstate.h
 	"../Engine/State.h"
 
-1442235489 f:\git\openxcom\src\basescape\craftweaponsstate.h
+1442264117 f:\git\openxcom\src\basescape\craftweaponsstate.h
 	"../Engine/State.h"
 
 1441277723 f:\git\openxcom\src\ruleset\rulecraftweapon.h
@@ -8489,7 +8489,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Transfer.h"
 
-1441270467 source:f:\git\openxcom\src\savegame\craftweapon.cpp
+1442236046 source:f:\git\openxcom\src\savegame\craftweapon.cpp
 	"CraftWeapon.h"
 	"CraftWeaponProjectile.h"
 	"../Ruleset/RuleCraftWeapon.h"

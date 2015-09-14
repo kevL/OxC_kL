@@ -65,7 +65,7 @@ private:
 	public:
 		/// Creates the Craft Weapons state.
 		CraftWeaponsState(
-				Base* base,
+				Base* const base,
 				size_t craftId,
 				size_t pod);
 		/// Cleans up the Craft Weapons state.
