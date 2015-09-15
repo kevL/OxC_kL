@@ -17,8 +17,8 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef OPENXCOM_COMMENDATIONDEADSTATE_H
-#define OPENXCOM_COMMENDATIONDEADSTATE_H
+#ifndef OPENXCOM_CEREMONYSTATE_H
+#define OPENXCOM_CEREMONYSTATE_H
 
 #include "../Engine/State.h"
 
@@ -26,7 +26,7 @@
 namespace OpenXcom
 {
 
-class SoldierDead;
+class Soldier;
 class Text;
 class TextButton;
 class TextList;
@@ -34,38 +34,42 @@ class Window;
 
 
 /**
- * Medals screen that displays Lost Soldier medals.
+ * Screen that displays new soldier Awards.
  */
-class CommendationDeadState
+class CeremonyState
 	:
 		public State
 {
 
 private:
+	static const Uint8
+		CYAN	= 133,
+		OLIVE	= 138,
+		SLATE	= 160,
+		GREEN	= 239;
+
 	Text
 		* _txtMedalInfo,
 		* _txtTitle;
 	TextButton* _btnOk;
-	TextList
-		* _lstLost,
-		* _lstSoldiers;
+	TextList* _lstSoldiers;
 	Window* _window;
 
 	std::map<size_t, std::string> _titleRows; // for mouseOver info.
 
 
 	public:
-		/// Creates the Medals state.
-		explicit CommendationDeadState(std::vector<SoldierDead*> soldiersLost);
-		/// Cleans up the Medals state.
-		~CommendationDeadState();
+		/// Creates the Ceremony state.
+		explicit CeremonyState(std::vector<Soldier*> soldiers);
+		/// Cleans up the Ceremony state.
+		~CeremonyState();
 
 		/// Handler for clicking the OK button.
 		void btnOkClick(Action* action);
 
-		/// Handler for moving the mouse over a medal title.
+		/// Handler for moving the mouse over an Award title.
 		void lstInfoMouseOver(Action* action);
-		/// Handler for moving the mouse outside the medals list.
+		/// Handler for moving the mouse outside the Awards list.
 		void lstInfoMouseOut(Action* action);
 };
 

@@ -26,7 +26,7 @@
 #include "DefeatState.h"
 //#include "PsiTrainingState.h"
 
-#include "../Battlescape/CommendationState.h"
+#include "../Battlescape/CeremonyState.h"
 
 #include "../Engine/Game.h"
 //#include "../Engine/LocalizedText.h"
@@ -493,7 +493,7 @@ void MonthlyReportState::btnOkClick(Action*)
 		}
 
 		if (_soldiersMedalled.empty() == false)
-			_game->pushState(new CommendationState(_soldiersMedalled));
+			_game->pushState(new CeremonyState(_soldiersMedalled));
 
 //		if (_psi == true)
 //			_game->pushState(new PsiTrainingState());

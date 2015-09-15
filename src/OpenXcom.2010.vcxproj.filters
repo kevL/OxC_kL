@@ -862,12 +862,6 @@
     <ClCompile Include="Basescape\SoldierDiaryPerformanceState.cpp">
       <Filter>Basescape</Filter>
     </ClCompile>
-    <ClCompile Include="Battlescape\CommendationState.cpp">
-      <Filter>Battlescape</Filter>
-    </ClCompile>
-    <ClCompile Include="Ruleset\RuleCommendations.cpp">
-      <Filter>Ruleset</Filter>
-    </ClCompile>
     <ClCompile Include="Savegame\SoldierDiary.cpp">
       <Filter>Savegame</Filter>
     </ClCompile>
@@ -891,9 +885,6 @@
     </ClCompile>
     <ClCompile Include="Ruleset\RuleVideo.cpp">
       <Filter>Ruleset</Filter>
-    </ClCompile>
-    <ClCompile Include="Battlescape\CommendationDeadState.cpp">
-      <Filter>Battlescape</Filter>
     </ClCompile>
     <ClCompile Include="Basescape\AlienContainmentState.cpp">
       <Filter>Basescape</Filter>
@@ -922,6 +913,9 @@
     <ClCompile Include="Ufopaedia\ExtraAlienInfoState.cpp" />
     <ClCompile Include="Ruleset\RuleMissionScript.cpp" />
     <ClCompile Include="Battlescape\ExecuteState.cpp" />
+    <ClCompile Include="Battlescape\CeremonyDeadState.cpp" />
+    <ClCompile Include="Battlescape\CeremonyState.cpp" />
+    <ClCompile Include="Ruleset\RuleAward.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1806,12 +1800,6 @@
     <ClInclude Include="Basescape\SoldierDiaryPerformanceState.h">
       <Filter>Basescape</Filter>
     </ClInclude>
-    <ClInclude Include="Battlescape\CommendationState.h">
-      <Filter>Battlescape</Filter>
-    </ClInclude>
-    <ClInclude Include="Ruleset\RuleCommendations.h">
-      <Filter>Ruleset</Filter>
-    </ClInclude>
     <ClInclude Include="Savegame\SoldierDiary.h">
       <Filter>Savegame</Filter>
     </ClInclude>
@@ -1838,9 +1826,6 @@
     </ClInclude>
     <ClInclude Include="Ruleset\RuleVideo.h">
       <Filter>Ruleset</Filter>
-    </ClInclude>
-    <ClInclude Include="Battlescape\CommendationDeadState.h">
-      <Filter>Battlescape</Filter>
     </ClInclude>
     <ClInclude Include="Basescape\AlienContainmentState.h">
       <Filter>Basescape</Filter>
@@ -1870,6 +1855,9 @@
     <ClInclude Include="Ufopaedia\ExtraAlienInfoState.h" />
     <ClInclude Include="Ruleset\RuleMissionScript.h" />
     <ClInclude Include="Battlescape\ExecuteState.h" />
+    <ClInclude Include="Battlescape\CeremonyDeadState.h" />
+    <ClInclude Include="Battlescape\CeremonyState.h" />
+    <ClInclude Include="Ruleset\RuleAward.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Geoscape">

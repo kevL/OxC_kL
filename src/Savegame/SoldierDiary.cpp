@@ -19,9 +19,7 @@
 
 #include "SoldierDiary.h"
 
-#include "GameTime.h"
-
-#include "../Ruleset/RuleCommendations.h"
+#include "../Ruleset/RuleAward.h"
 #include "../Ruleset/Ruleset.h"
 
 
@@ -177,7 +175,7 @@ SoldierDiary::SoldierDiary(const SoldierDiary& copyThis)
 				type = copyThis._awards.at(i)->getType(),
 				noun = copyThis._awards.at(i)->getNoun();
 
-			_awards.push_back(new SoldierCommendations(
+			_awards.push_back(new SoldierAward(
 													type,
 													noun));
 		}
@@ -222,7 +220,7 @@ SoldierDiary::SoldierDiary(const SoldierDiary& copyThis)
  */
 SoldierDiary::~SoldierDiary()
 {
-	for (std::vector<SoldierCommendations*>::const_iterator
+	for (std::vector<SoldierAward*>::const_iterator
 			i = _awards.begin();
 			i != _awards.end();
 			++i)
@@ -332,7 +330,7 @@ SoldierDiary& SoldierDiary::operator=(const SoldierDiary& assignThis)
 		}
 
 
-		for (std::vector<SoldierCommendations*>::const_iterator
+		for (std::vector<SoldierAward*>::const_iterator
 				i = _awards.begin();
 				i != _awards.end();
 				++i)
@@ -359,9 +357,7 @@ SoldierDiary& SoldierDiary::operator=(const SoldierDiary& assignThis)
 					type = assignThis._awards.at(i)->getType(),
 					noun = assignThis._awards.at(i)->getNoun();
 
-				_awards.push_back(new SoldierCommendations(
-														type,
-														noun));
+				_awards.push_back(new SoldierAward(type, noun));
 			}
 		}
 
@@ -415,7 +411,7 @@ void SoldierDiary::load(const YAML::Node& node)
 				i != commendations.end();
 				++i)
 		{
-			_awards.push_back(new SoldierCommendations(*i));
+			_awards.push_back(new SoldierAward(*i));
 		}
 	}
 
@@ -482,7 +478,7 @@ YAML::Node SoldierDiary::save() const
 {
 	YAML::Node node;
 
-	for (std::vector<SoldierCommendations*>::const_iterator
+	for (std::vector<SoldierAward*>::const_iterator
 			i = _awards.begin();
 			i != _awards.end();
 			++i)
@@ -593,7 +589,7 @@ void SoldierDiary::updateDiary(
 	{
 		++_winTotal;
 
-		if (   missionStatistics->type != "STR_SMALL_SCOUT"
+		if (missionStatistics->type != "STR_SMALL_SCOUT"
 			&& missionStatistics->type != "STR_MEDIUM_SCOUT"
 			&& missionStatistics->type != "STR_LARGE_SCOUT"
 			&& missionStatistics->type != "STR_SUPPLY_SHIP")
@@ -664,9 +660,9 @@ void SoldierDiary::updateDiary(
 
 /**
  * Get soldier commendations.
- * @return, pointer to a vector of pointers to SoldierCommendations - a list of soldier's commendations
+ * @return, pointer to a vector of pointers to SoldierAward - a list of soldier's commendations
  */
-std::vector<SoldierCommendations*>* SoldierDiary::getSoldierCommendations()
+std::vector<SoldierAward*>* SoldierDiary::getSoldierAwards()
 {
 	return &_awards;
 }
@@ -678,7 +674,7 @@ std::vector<SoldierCommendations*>* SoldierDiary::getSoldierCommendations()
  */
 bool SoldierDiary::manageAwards(const Ruleset* const rules)
 {
-	//Log(LOG_INFO) << "sd:manageAwards()";
+	//Log(LOG_INFO) << "SD:manageAwards()";
 	bool
 		doCeremony = false,	// this value is returned TRUE if at least one award is given
 		doAward;			// this value determines if an award will be given
@@ -686,9 +682,9 @@ bool SoldierDiary::manageAwards(const Ruleset* const rules)
 	std::map<std::string, size_t> reqdLevel;	// <noun, qtyLevels>
 	std::vector<std::string> modularAwards;		// <types>
 
-	// loop over all possible RuleCommendations
-	const std::map<std::string, RuleCommendations*> awardList = rules->getCommendations();
-	for (std::map<std::string, RuleCommendations*>::const_iterator
+	// loop over all possible RuleAward
+	const std::map<std::string, RuleAward*> awardList = rules->getAwardsList();
+	for (std::map<std::string, RuleAward*>::const_iterator
 			i = awardList.begin();
 			i != awardList.end();
 			)
@@ -699,9 +695,9 @@ bool SoldierDiary::manageAwards(const Ruleset* const rules)
 		reqdLevel.clear();
 		reqdLevel["noNoun"] = 0;
 
-		// loop over all of soldier's SoldierCommendations, see if he/she
+		// loop over all of soldier's SoldierAward, see if he/she
 		// already has the award; get the level and noun if so
-		for (std::vector<SoldierCommendations*>::const_iterator
+		for (std::vector<SoldierAward*>::const_iterator
 				j = _awards.begin();
 				j != _awards.end();
 				++j)
@@ -710,8 +706,8 @@ bool SoldierDiary::manageAwards(const Ruleset* const rules)
 				reqdLevel[(*j)->getNoun()] = (*j)->getDecorLevelInt() + 1;
 		}
 
-		// go through each possible criteria. Assume the award is awarded, set to false if not;
-		// as soon as an award criteria that *fails to be achieved* is found, then NO award
+		// go through each possible criteria. Assume the award is awarded, set to FALSE if not;
+		// ie, as soon as an award criteria that *fails to be achieved* is found, then no award
 		modularAwards.clear();
 
 		doAward = true;
@@ -735,14 +731,12 @@ bool SoldierDiary::manageAwards(const Ruleset* const rules)
 				break;
 			}
 
-
 			// these criteria have no nouns, so only the reqdLevel["noNoun"] will ever be compared
-			// kL_NOTE: All these class variables ought be 'size_t'!!!!
 			val = (*j).second.at(reqdLevel["noNoun"]);
 			if (//reqdLevel.count("noNoun") == 1 && // <- this is relevant only if entry "noNoun" were removed from the map in the sections following this one.
 //				reqdLevel["noNoun"] != 0 && // kL_add
 //				reqdLevel["noNoun"] == 0 || // kL_add
-				(   (   criterion == "totalKills"				&& static_cast<int>(_killList.size()) < val)
+				(   (criterion == "totalKills"					&& static_cast<int>(_killList.size()) < val)
 					|| (criterion == "totalMissions"			&& static_cast<int>(_missionIdList.size()) < val)
 					|| (criterion == "totalWins"				&& _winTotal < val)
 					|| (criterion == "totalScore"				&& _scoreTotal < val)
@@ -778,16 +772,15 @@ bool SoldierDiary::manageAwards(const Ruleset* const rules)
 				doAward = false;
 				break;
 			}
-else
 			// awards with the following criteria are unique because they need a noun
 			// and they loop over a map<> (this allows for "maximum" mod-ability)
-			if (   criterion == "totalKillsWithAWeapon"
+			else if (criterion == "totalKillsWithAWeapon"
 				|| criterion == "totalMissionsInARegion"
 				|| criterion == "totalKillsByRace"
 				|| criterion == "totalKillsByRank")
 			{
 				std::map<std::string, int> total;
-				if (	 criterion == "totalKillsWithAWeapon")
+				if (criterion == "totalKillsWithAWeapon")
 					total = getWeaponTotal();
 				else if (criterion == "totalMissionsInARegion")
 					total = _regionTotal;
@@ -826,10 +819,8 @@ else
 					doAward = false;
 					break;
 				}
-//kL			else doAward = true;
 			}
-else
-			if (   criterion == "killsWithCriteriaCareer"
+			else if (criterion == "killsWithCriteriaCareer"
 				|| criterion == "killsWithCriteriaMission"
 				|| criterion == "killsWithCriteriaTurn")
 			{
@@ -847,11 +838,8 @@ else
 							++andCriteria)
 					{
 						int qty = 0; // how many AND vectors (list of DETAILs) have been successful
-						if (//criterion == "killsWithCriteriaTurn" || criterion == "killsWithCriteriaMission"
-							criterion != "killsWithCriteriaCareer")
-						{
+						if (criterion != "killsWithCriteriaCareer")
 							++qty; // turns and missions start at 1 because of how thisIteration and lastIteration work
-						}
 
 						bool goToNextIteration = false;
 						int // time, being a turn or a mission
@@ -896,7 +884,6 @@ else
 							{
 								qty = 1; // reset.
 								goToNextIteration = false;
-
 								continue;
 							}
 
@@ -963,9 +950,9 @@ else
 								}
 
 								// see if there are NO matches with any criteria; break and try the next Criteria if so
-								if (   (*singleKill)->_weapon == "STR_WEAPON_UNKNOWN"
+								if ((*singleKill)->_weapon == "STR_WEAPON_UNKNOWN"
 									|| (*singleKill)->_weaponAmmo == "STR_WEAPON_UNKNOWN"
-									|| (   (*singleKill)->_rank != *detail
+									|| ((*singleKill)->_rank != *detail
 										&& (*singleKill)->_race != *detail
 										&& (*singleKill)->_weapon != *detail
 										&& (*singleKill)->_weaponAmmo != *detail
@@ -1022,7 +1009,7 @@ else
 					++j)
 			{
 				bool newAward = true;
-				for (std::vector<SoldierCommendations*>::const_iterator
+				for (std::vector<SoldierAward*>::const_iterator
 						k = _awards.begin();
 						k != _awards.end();
 						++k)
@@ -1032,15 +1019,12 @@ else
 					{
 						newAward = false;
 						(*k)->addDecoration();
-
 						break;
 					}
 				}
 
 				if (newAward == true)
-					_awards.push_back(new SoldierCommendations(
-															type,
-															*j));
+					_awards.push_back(new SoldierAward(type, *j));
 			}
 		}
 		else
@@ -1066,10 +1050,8 @@ else
 {
 	// If criteria is 0, we don't have this noun OR if we meet
 	// the criteria, remember the noun for award purposes.
-	if ((modularCommendations.count(statTotal.first) == 0
-			&& statTotal.second >= criteria)
-		|| (modularCommendations.count(statTotal.first) != 0
-			&& nextCommendationLevel.at(statTotal.first) >= criteria))
+	if ((modularCommendations.count(statTotal.first) == 0 && statTotal.second >= criteria)
+		|| (modularCommendations.count(statTotal.first) != 0 && nextCommendationLevel.at(statTotal.first) >= criteria))
 	{
 		modularCommendations[statTotal.first]++;
 	}
@@ -1085,26 +1067,18 @@ else
 		const std::string& noun)
 {
 	bool newAward = true;
-
-	for (std::vector<SoldierCommendations*>::const_iterator
-			i = _awards.begin();
-			i != _awards.end();
-			++i)
+	for (std::vector<SoldierAward*>::const_iterator i = _awards.begin(); i != _awards.end(); ++i)
 	{
-		if ((*i)->getType() == type
-			&& (*i)->getNoun() == noun)
+		if ((*i)->getType() == type && (*i)->getNoun() == noun)
 		{
 			(*i)->addDecoration();
 			newAward = false;
-
 			break;
 		}
 	}
 
 	if (newAward == true)
-		_awards.push_back(new SoldierCommendations(
-												type,
-												noun));
+		_awards.push_back(new SoldierAward(type, noun));
 } */
 
 /**
@@ -1327,7 +1301,7 @@ void SoldierDiary::addMonthlyService()
  */
 void SoldierDiary::awardOriginalEight()
 {
-	_awards.push_back(new SoldierCommendations(
+	_awards.push_back(new SoldierAward(
 										"STR_MEDAL_ORIGINAL8_NAME",
 										"noNoun"));
 }
@@ -1338,25 +1312,25 @@ void SoldierDiary::awardOriginalEight()
 /* ** SOLDIER COMMENDATIONS class ***
 /*___________________________________*/
 /**
- * Initializes a SoldierCommendations.
+ * Initializes a SoldierAward.
  * @param type - reference the type
  * @param noun - reference the noun (default "noNoun")
  */
-SoldierCommendations::SoldierCommendations(
+SoldierAward::SoldierAward(
 		const std::string& type,
 		const std::string& noun)
 	:
 		_type(type),
 		_noun(noun),
 		_decorLevel(0),
-		_isNew(true)
+		_new(true)
 {}
 
 /**
- * Initializes a new SoldierCommendations entry from YAML.
+ * Initializes a new SoldierAward entry from YAML.
  * @param node - YAML node
  */
-SoldierCommendations::SoldierCommendations(const YAML::Node& node)
+SoldierAward::SoldierAward(const YAML::Node& node)
 {
 	load(node);
 }
@@ -1364,26 +1338,26 @@ SoldierCommendations::SoldierCommendations(const YAML::Node& node)
 /**
  * dTor.
  */
-SoldierCommendations::~SoldierCommendations()
+SoldierAward::~SoldierAward()
 {}
 
 /**
- * Loads the SoldierCommendations from a YAML file.
+ * Loads the SoldierAward from a YAML file.
  * @param node - reference a YAML node
  */
-void SoldierCommendations::load(const YAML::Node& node)
+void SoldierAward::load(const YAML::Node& node)
 {
 	_type		= node["type"]	.as<std::string>(_type);
 	_noun		= node["noun"]	.as<std::string>("noNoun");
-	_isNew		= node["isNew"]	.as<bool>(false);
+	_new		= node["isNew"]	.as<bool>(false);
 	_decorLevel	= static_cast<size_t>(node["decorLevel"].as<int>(_decorLevel));
 }
 
 /**
- * Saves this SoldierCommendations to a YAML file.
+ * Saves this SoldierAward to a YAML file.
  * @return, YAML node
  */
-YAML::Node SoldierCommendations::save() const
+YAML::Node SoldierAward::save() const
 {
 	YAML::Node node;
 
@@ -1397,93 +1371,90 @@ YAML::Node SoldierCommendations::save() const
 }
 
 /**
- * Gets this SoldierCommendations' name.
+ * Gets this SoldierAward' name.
  * @return, commendation name
  */
-const std::string SoldierCommendations::getType() const
+const std::string SoldierAward::getType() const
 {
 	return _type;
 }
 
 /**
- * Get this SoldierCommendations' noun.
+ * Get this SoldierAward' noun.
  * @return, commendation noun
  */
-const std::string SoldierCommendations::getNoun() const
+const std::string SoldierAward::getNoun() const
 {
 	return _noun;
 }
 
 /**
- * Gets this SoldierCommendations' level's name.
+ * Gets this SoldierAward' level's name.
  * @param skip -
  * @return, commendation level
  */
-const std::string SoldierCommendations::getDecorLevelType(const int skip) const
+const std::string SoldierAward::getDecorLevelType(int skip) const
 {
 	std::ostringstream oststr;
 	oststr << "STR_AWARD_" << _decorLevel - skip;
-
 	return oststr.str();
 }
 
 /**
- * Gets this SoldierCommendations' level's description.
+ * Gets this SoldierAward' level's description.
  * @return, commendation level description
  */
-const std::string SoldierCommendations::getDecorDesc() const
+const std::string SoldierAward::getDecorDesc() const
 {
 	std::ostringstream oststr;
 	oststr << "STR_AWARD_DECOR_" << _decorLevel;
-
 	return oststr.str();
 }
 
 /**
- * Gets this SoldierCommendations' level's class - stars.
+ * Gets this SoldierAward' level's class - stars.
  * @return, commendation level class
  */
-const std::string SoldierCommendations::getDecorClass() const
+const std::string SoldierAward::getDecorClass() const
 {
 	std::ostringstream oststr;
 	oststr << "STR_AWARD_CLASS_" << _decorLevel;
-
 	return oststr.str();
 }
 
 /**
- * Gets this SoldierCommendations' level's int.
+ * Gets this SoldierAward' level's int.
  * @return, commendation level int
  */
-size_t SoldierCommendations::getDecorLevelInt() const
+size_t SoldierAward::getDecorLevelInt() const
 {
 	return _decorLevel;
 }
 
 /**
- * Gets newness of this SoldierCommendations.
+ * Gets newness of this SoldierAward.
  * @return, true if the commendation is new
  */
-bool SoldierCommendations::isNew() const
+bool SoldierAward::isNew() const
 {
-	return _isNew;
+	return _new;
 }
 
 /**
- * Sets the newness of this SoldierCommendations to old.
+ * Sets the newness of this SoldierAward to old.
  */
-void SoldierCommendations::makeOld()
+void SoldierAward::setOld()
 {
-	_isNew = false;
+	_new = false;
 }
 
 /**
- * Adds a level of decoration to this SoldierCommendations.
+ * Adds a level of decoration to this SoldierAward.
  */
-void SoldierCommendations::addDecoration()
+void SoldierAward::addDecoration()
 {
 	++_decorLevel;
-	_isNew = true;
+	_new = true;
 }
 
 }

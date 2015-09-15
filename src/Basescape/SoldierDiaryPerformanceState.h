@@ -50,7 +50,13 @@ class SoldierDiaryPerformanceState
 private:
 	static const int LIST_SPRITES_y = 49;
 	static const size_t LIST_ROWS = 12;
-
+	static const Uint8
+		BROWN	= 160,
+		WHITE	= 208,
+		YELLOW	= 213,
+		BLUE	= 218,
+		PINK	= 241,
+		PURPLE	= 246;
 
 	bool
 		_displayKills,
@@ -70,11 +76,11 @@ private:
 
 	Base* _base;
 	SoldierDiary* _diary;
-	SoldierDiaryOverviewState* _soldierDiaryOverviewState;
+	SoldierDiaryOverviewState* _overview;
 
 	SurfaceSet
-		* _sstSprite,
-		* _sstDecor;
+		* _srtSprite,
+		* _srtDecor;
 	Text
 		* _txtTitle,
 		* _txtBaseLabel,

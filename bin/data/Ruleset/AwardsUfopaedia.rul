@@ -246,241 +246,241 @@ extraSprites:
     width: 320
     height: 200
     files:
-      0: Resources/Commendations/UfoPaedia/100_MEDAL_MERIT_STAR.png
+      0: Resources/Awards/UfoPaedia/100_MEDAL_MERIT_STAR.png
   - type: MILITARY_CROSS
     singleImage: true
     width: 320
     height: 200
     files:
-      0: Resources/Commendations/UfoPaedia/101_MEDAL_MILITARY_CROSS.png
+      0: Resources/Awards/UfoPaedia/101_MEDAL_MILITARY_CROSS.png
   - type: ORDER_OF_RESTRAINT
     singleImage: true
     width: 320
     height: 200
     files:
-      0: Resources/Commendations/UfoPaedia/102_MEDAL_ORDER_OF_RESTRAINT.png
+      0: Resources/Awards/UfoPaedia/102_MEDAL_ORDER_OF_RESTRAINT.png
   - type: DEFENDER
     singleImage: true
     width: 320
     height: 200
     files:
-      0: Resources/Commendations/UfoPaedia/103_MEDAL_DEFENDER.png
+      0: Resources/Awards/UfoPaedia/103_MEDAL_DEFENDER.png
   - type: LONGEST_NIGHT
     singleImage: true
     width: 320
     height: 200
     files:
-      0: Resources/Commendations/UfoPaedia/104_MEDAL_LONGEST_NIGHT.png
+      0: Resources/Awards/UfoPaedia/104_MEDAL_LONGEST_NIGHT.png
   - type: WEAPON_PROFICIENCY
     singleImage: true
     width: 320
     height: 200
     files:
-      0: Resources/Commendations/UfoPaedia/105_MEDAL_WEAPON_PROFICIENCY.png
+      0: Resources/Awards/UfoPaedia/105_MEDAL_WEAPON_PROFICIENCY.png
   - type: SERVICE
     singleImage: true
     width: 320
     height: 200
     files:
-      0: Resources/Commendations/UfoPaedia/106_MEDAL_SERVICE_MEDAL.png
+      0: Resources/Awards/UfoPaedia/106_MEDAL_SERVICE_MEDAL.png
   - type: HONOR_CROSS
     singleImage: true
     width: 320
     height: 200
     files:
-      0: Resources/Commendations/UfoPaedia/107_MEDAL_HONOR_CROSS.png
+      0: Resources/Awards/UfoPaedia/107_MEDAL_HONOR_CROSS.png
   - type: CAMPAIGN_RIBBON
     singleImage: true
     width: 320
     height: 200
     files:
-      0: Resources/Commendations/UfoPaedia/108_MEDAL_CAMPAIGN_RIBBON.png
+      0: Resources/Awards/UfoPaedia/108_MEDAL_CAMPAIGN_RIBBON.png
   - type: XENOCIDE
     singleImage: true
     width: 320
     height: 200
     files:
-      0: Resources/Commendations/UfoPaedia/109_MEDAL_XENOCIDE_MEDAL.png
+      0: Resources/Awards/UfoPaedia/109_MEDAL_XENOCIDE_MEDAL.png
   - type: MEDAL_OF_HEROISM
     singleImage: true
     width: 320
     height: 200
     files:
-      0: Resources/Commendations/UfoPaedia/110_MEDAL_MEDAL_OF_HEROISM.png
+      0: Resources/Awards/UfoPaedia/110_MEDAL_MEDAL_OF_HEROISM.png
   - type: HELLRAISER
     singleImage: true
     width: 320
     height: 200
     files:
-      0: Resources/Commendations/UfoPaedia/111_MEDAL_HELLRAISER.png
+      0: Resources/Awards/UfoPaedia/111_MEDAL_HELLRAISER.png
   - type: DISTINGUISHED_SERVICE
     singleImage: true
     width: 320
     height: 200
     files:
-      0: Resources/Commendations/UfoPaedia/112_MEDAL_DISTINGUISHED_SERVICE.png
+      0: Resources/Awards/UfoPaedia/112_MEDAL_DISTINGUISHED_SERVICE.png
   - type: BOLTS_CROSS
     singleImage: true
     width: 320
     height: 200
     files:
-      0: Resources/Commendations/UfoPaedia/113_MEDAL_BOLTS_CROSS.png
+      0: Resources/Awards/UfoPaedia/113_MEDAL_BOLTS_CROSS.png
   - type: GRENADIERS_MEDAL
     singleImage: true
     width: 320
     height: 200
     files:
-      0: Resources/Commendations/UfoPaedia/114_MEDAL_GRENADIERS_MEDAL.png
+      0: Resources/Awards/UfoPaedia/114_MEDAL_GRENADIERS_MEDAL.png
   - type: STAR_OF_ASCLEPIUS
     singleImage: true
     width: 320
     height: 200
     files:
-      0: Resources/Commendations/UfoPaedia/115_MEDAL_STAR_OF_ASCLEPIUS.png
+      0: Resources/Awards/UfoPaedia/115_MEDAL_STAR_OF_ASCLEPIUS.png
   - type: MAN_OF_STEEL
     singleImage: true
     width: 320
     height: 200
     files:
-      0: Resources/Commendations/UfoPaedia/116_MEDAL_MAN_OF_STEEL.png
+      0: Resources/Awards/UfoPaedia/116_MEDAL_MAN_OF_STEEL.png
   - type: BLACK_CROSS
     singleImage: true
     width: 320
     height: 200
     files:
-      0: Resources/Commendations/UfoPaedia/117_MEDAL_BLACK_CROSS.png
+      0: Resources/Awards/UfoPaedia/117_MEDAL_BLACK_CROSS.png
   - type: STAR_OF_VALOR
     singleImage: true
     width: 320
     height: 200
     files:
-      0: Resources/Commendations/UfoPaedia/118_MEDAL_STAR_OF_VALOR.png
+      0: Resources/Awards/UfoPaedia/118_MEDAL_STAR_OF_VALOR.png
   - type: IRON_MAN
     singleImage: true
     width: 320
     height: 200
     files:
-      0: Resources/Commendations/UfoPaedia/119_MEDAL_IRON_MAN.png
+      0: Resources/Awards/UfoPaedia/119_MEDAL_IRON_MAN.png
   - type: ORDER_OF_EARTH
     singleImage: true
     width: 320
     height: 200
     files:
-      0: Resources/Commendations/UfoPaedia/120_MEDAL_ORDER_OF_EARTH.png
+      0: Resources/Awards/UfoPaedia/120_MEDAL_ORDER_OF_EARTH.png
   - type: SNIPER
     singleImage: true
     width: 320
     height: 200
     files:
-      0: Resources/Commendations/UfoPaedia/121_MEDAL_SNIPER.png
+      0: Resources/Awards/UfoPaedia/121_MEDAL_SNIPER.png
   - type: LUCKYSHOT
     singleImage: true
     width: 320
     height: 200
     files:
-      0: Resources/Commendations/UfoPaedia/122_MEDAL_LUCKYSHOT.png
+      0: Resources/Awards/UfoPaedia/122_MEDAL_LUCKYSHOT.png
   - type: DBLKILL
     singleImage: true
     width: 320
     height: 200
     files:
-      0: Resources/Commendations/UfoPaedia/123_MEDAL_DBLKILL.png
+      0: Resources/Awards/UfoPaedia/123_MEDAL_DBLKILL.png
   - type: REACTIONFIRE
     singleImage: true
     width: 320
     height: 200
     files:
-      0: Resources/Commendations/UfoPaedia/124_MEDAL_REACTIONFIRE.png
+      0: Resources/Awards/UfoPaedia/124_MEDAL_REACTIONFIRE.png
   - type: PURPLE_HEART
     singleImage: true
     width: 320
     height: 200
     files:
-      0: Resources/Commendations/UfoPaedia/125_MEDAL_PURPLE_HEART.png
+      0: Resources/Awards/UfoPaedia/125_MEDAL_PURPLE_HEART.png
   - type: CRIMSON_HEART
     singleImage: true
     width: 320
     height: 200
     files:
-      0: Resources/Commendations/UfoPaedia/126_MEDAL_CRIMSON_HEART.png
+      0: Resources/Awards/UfoPaedia/126_MEDAL_CRIMSON_HEART.png
   - type: ORDER_OF_GLORY
     singleImage: true
     width: 320
     height: 200
     files:
-      0: Resources/Commendations/UfoPaedia/127_MEDAL_ORDER_OF_GLORY.png
+      0: Resources/Awards/UfoPaedia/127_MEDAL_ORDER_OF_GLORY.png
   - type: VALIANT_CRUX
     singleImage: true
     width: 320
     height: 200
     files:
-      0: Resources/Commendations/UfoPaedia/128_MEDAL_VALIANT_CRUX.png
+      0: Resources/Awards/UfoPaedia/128_MEDAL_VALIANT_CRUX.png
   - type: FALLEN
     singleImage: true
     width: 320
     height: 200
     files:
-      0: Resources/Commendations/UfoPaedia/129_MEDAL_FALLEN.png
+      0: Resources/Awards/UfoPaedia/129_MEDAL_FALLEN.png
   - type: TRAP
     singleImage: true
     width: 320
     height: 200
     files:
-      0: Resources/Commendations/UfoPaedia/130_MEDAL_TRAP.png
+      0: Resources/Awards/UfoPaedia/130_MEDAL_TRAP.png
   - type: ALIEN_BASE_ASSAULT
     singleImage: true
     width: 320
     height: 200
     files:
-      0: Resources/Commendations/UfoPaedia/131_MEDAL_ALIEN_BASE_ASSAULT.png
+      0: Resources/Awards/UfoPaedia/131_MEDAL_ALIEN_BASE_ASSAULT.png
   - type: NIKE_CROSS
     singleImage: true
     width: 320
     height: 200
     files:
-      0: Resources/Commendations/UfoPaedia/132_MEDAL_NIKE_CROSS.png
+      0: Resources/Awards/UfoPaedia/132_MEDAL_NIKE_CROSS.png
   - type: SAPPER
     singleImage: true
     width: 320
     height: 200
     files:
-      0: Resources/Commendations/UfoPaedia/133_MEDAL_SAPPER.png
+      0: Resources/Awards/UfoPaedia/133_MEDAL_SAPPER.png
   - type: MELEE_KILL
     singleImage: true
     width: 320
     height: 200
     files:
-      0: Resources/Commendations/UfoPaedia/134_MEDAL_MELEE.png
+      0: Resources/Awards/UfoPaedia/134_MEDAL_MELEE.png
   - type: SECTOPOD_KILL
     singleImage: true
     width: 320
     height: 200
     files:
-      0: Resources/Commendations/UfoPaedia/135_MEDAL_SECTOPOD_KILL.png
+      0: Resources/Awards/UfoPaedia/135_MEDAL_SECTOPOD_KILL.png
   - type: HEALER
     singleImage: true
     width: 320
     height: 200
     files:
-      0: Resources/Commendations/UfoPaedia/136_MEDAL_HEALER.png
+      0: Resources/Awards/UfoPaedia/136_MEDAL_HEALER.png
   - type: REVIVE
     singleImage: true
     width: 320
     height: 200
     files:
-      0: Resources/Commendations/UfoPaedia/137_MEDAL_ANGEL.png
+      0: Resources/Awards/UfoPaedia/137_MEDAL_ANGEL.png
   - type: MIA
     singleImage: true
     width: 320
     height: 200
     files:
-      0: Resources/Commendations/UfoPaedia/138_MEDAL_MIA.png
+      0: Resources/Awards/UfoPaedia/138_MEDAL_MIA.png
   - type: ORIGINAL8
     singleImage: true
     width: 320
     height: 200
     files:
-      0: Resources/Commendations/UfoPaedia/139_MEDAL_ORIGINAL8.png
+      0: Resources/Awards/UfoPaedia/139_MEDAL_ORIGINAL8.png
 extraStrings:
   - type: en-US
     strings:

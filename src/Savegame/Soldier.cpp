@@ -88,7 +88,6 @@ Soldier::Soldier(
 		_initialStats.psiStrength	= RNG::generate(minStats.psiStrength,	maxStats.psiStrength);
 		_initialStats.melee			= RNG::generate(minStats.melee,			maxStats.melee);
 
-//		_initialStats.psiSkill = minStats.psiSkill;
 		_initialStats.psiSkill = 0;
 
 		_currentStats = _initialStats;
@@ -125,9 +124,9 @@ Soldier::Soldier(
 		}
 		else
 		{
-			_name	= L"";
-			_gender = (RNG::percent(_rules->getFemaleFrequency())? GENDER_FEMALE: GENDER_MALE);
-			_look	= (SoldierLook)RNG::generate(0, 3);
+			_name = L"";
+			_gender = (RNG::percent(_rules->getFemaleFrequency()) ? GENDER_FEMALE : GENDER_MALE);
+			_look = (SoldierLook)RNG::generate(0, 3);
 		} */
 	}
 }
@@ -248,7 +247,7 @@ YAML::Node Soldier::save() const
 	}
 
 	if (_diary->getMissionIdList().empty() == false
-		|| _diary->getSoldierCommendations()->empty() == false)
+		|| _diary->getSoldierAwards()->empty() == false)
 	{
 		node["diary"] = _diary->save();
 	}
@@ -303,24 +302,16 @@ std::wstring Soldier::getName() const
 {
 	return _name;
 }
-/*
-std::wstring Soldier::getName(
+/* std::wstring Soldier::getName(
 		bool statstring,
 		size_t maxLength) const
 {
-	if (statstring == true
-		&& _statString.empty() == false)
+	if (statstring == true && _statString.empty() == false)
 	{
 		if (_name.length() + _statString.length() > maxLength)
-		{
-			return _name.substr(
-							0,
-							maxLength - _statString.length()) + L"/" + _statString;
-		}
-		else
-			return _name + L"/" + _statString;
+			return _name.substr(0, maxLength - _statString.length()) + L"/" + _statString;
+		else return _name + L"/" + _statString;
 	}
-
 	return _name;
 } */
 

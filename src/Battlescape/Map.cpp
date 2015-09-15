@@ -641,12 +641,6 @@ void Map::drawTerrain(Surface* const surface) // private.
 		posScreen,
 		walkOffset;
 
-	static const int SHADE_BLACK = 16;
-	static const Uint8
-		ACU_GREEN = 51,
-		ACU_ORANGE = 18,
-		ACU_RED = 35;
-
 	int
 		frame,
 		tileShade,
@@ -661,7 +655,6 @@ void Map::drawTerrain(Surface* const surface) // private.
 		hasObject,
 		halfRight = false, // avoid VC++ linker warning.
 		trueLoc;
-//		exposedColorDone = false;
 
 
 	surface->lock();
@@ -1254,19 +1247,6 @@ void Map::drawTerrain(Surface* const surface) // private.
 									const int exposure = _unit->getExposed();
 									if (exposure != -1)
 									{
-/*										static int colorGroup;
-										if (exposedColorDone == false
-											&& _animFrame == 0)
-										{
-											exposedColorDone = true;
-											switch (RNG::seedless(0,2))
-											{
-												default:
-												case 0: colorGroup =  0; break;	// white
-												case 1: colorGroup = 10; break;	// yellow
-												case 2: colorGroup = 14;		// blue
-											}
-										} */
 										int
 											colorGroup,
 											colorOffset;

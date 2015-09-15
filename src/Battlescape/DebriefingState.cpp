@@ -22,8 +22,8 @@
 //#include <sstream>
 
 #include "CannotReequipState.h"
-#include "CommendationDeadState.h"
-#include "CommendationState.h"
+#include "CeremonyDeadState.h"
+#include "CeremonyState.h"
 #include "NoContainmentState.h"
 #include "PromotionsState.h"
 
@@ -260,7 +260,7 @@ DebriefingState::DebriefingState()
 
 	_missionStatistics->score = total;
 
-	if (civiliansSaved > 0
+	if (civiliansSaved != 0
 		&& civiliansDead == 0
 		&& _missionStatistics->success == true)
 	{
@@ -274,7 +274,7 @@ DebriefingState::DebriefingState()
 					tr("STR_TOTAL_UC").c_str(),
 					woststr.str().c_str());
 
-	if (recov_offY > 0)
+	if (recov_offY != 0)
 	{
 		_txtRecovery->setY(_lstStats->getY() + stats_offY + 5);
 		_lstRecovery->setY(_txtRecovery->getY() + 8);
@@ -287,11 +287,12 @@ DebriefingState::DebriefingState()
 	}
 
 
+	const int aLienPts = (_diff + 1) * 235;
 	if (_region != NULL)
 	{
 		if (_destroyXComBase == true)
 		{
-			_region->addActivityAlien((_diff + 1) * 235);
+			_region->addActivityAlien(aLienPts);
 			_region->recentActivityAlien();
 		}
 		else
@@ -305,7 +306,7 @@ DebriefingState::DebriefingState()
 	{
 		if (_destroyXComBase == true)
 		{
-			_country->addActivityAlien((_diff + 1) * 235);
+			_country->addActivityAlien(aLienPts);
 			_country->recentActivityAlien();
 		}
 		else
@@ -451,7 +452,6 @@ DebriefingState::DebriefingState()
 												_missionStatistics,
 												_rules);
 				deadSoldier->getDiary()->manageAwards(_rules);
-
 				_soldiersLost.push_back(deadSoldier);
 			}
 			else
@@ -545,13 +545,13 @@ void DebriefingState::btnOkClick(Action*)
 			if (_soldiersLost.empty() == false)
 			{
 				playAwardMusic = true;
-				_game->pushState(new CommendationDeadState(_soldiersLost));
+				_game->pushState(new CeremonyDeadState(_soldiersLost));
 			}
 
 			if (_soldiersMedalled.empty() == false)
 			{
 				playAwardMusic = true;
-				_game->pushState(new CommendationState(_soldiersMedalled));
+				_game->pushState(new CeremonyState(_soldiersMedalled));
 			}
 
 			if (_gameSave->handlePromotions(participants) == true)

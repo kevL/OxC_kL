@@ -288,8 +288,8 @@
     <ClCompile Include="Battlescape\BriefingState.cpp" />
     <ClCompile Include="Battlescape\Camera.cpp" />
     <ClCompile Include="Battlescape\CannotReequipState.cpp" />
-    <ClCompile Include="Battlescape\CommendationDeadState.cpp" />
-    <ClCompile Include="Battlescape\CommendationState.cpp" />
+    <ClCompile Include="Battlescape\CeremonyDeadState.cpp" />
+    <ClCompile Include="Battlescape\CeremonyState.cpp" />
     <ClCompile Include="Battlescape\DebriefingState.cpp" />
     <ClCompile Include="Battlescape\ExecuteState.cpp" />
     <ClCompile Include="Battlescape\Explosion.cpp" />
@@ -461,6 +461,7 @@
     <ClCompile Include="Ruleset\ExtraSprites.cpp" />
     <ClCompile Include="Ruleset\ExtraStrings.cpp" />
     <ClCompile Include="Ruleset\RuleArmor.cpp" />
+    <ClCompile Include="Ruleset\RuleAward.cpp" />
     <ClCompile Include="Ruleset\RuleCity.cpp" />
     <ClCompile Include="Ruleset\RuleMissionScript.cpp" />
     <ClCompile Include="Ruleset\RuleTexture.cpp" />
@@ -480,7 +481,6 @@
     <ClCompile Include="Ruleset\RuleMusic.cpp" />
     <ClCompile Include="Ruleset\RuleUnit.cpp" />
     <ClCompile Include="Ruleset\RuleVideo.cpp" />
-    <ClCompile Include="Ruleset\RuleCommendations.cpp" />
     <ClCompile Include="Ruleset\SoundDefinition.cpp" />
     <ClCompile Include="Ruleset\RuleInterface.cpp" />
     <ClCompile Include="Ruleset\RuleBaseFacility.cpp" />
@@ -608,8 +608,8 @@
     <ClInclude Include="Battlescape\BriefingState.h" />
     <ClInclude Include="Battlescape\Camera.h" />
     <ClInclude Include="Battlescape\CannotReequipState.h" />
-    <ClInclude Include="Battlescape\CommendationDeadState.h" />
-    <ClInclude Include="Battlescape\CommendationState.h" />
+    <ClInclude Include="Battlescape\CeremonyDeadState.h" />
+    <ClInclude Include="Battlescape\CeremonyState.h" />
     <ClInclude Include="Battlescape\DebriefingState.h" />
     <ClInclude Include="Battlescape\ExecuteState.h" />
     <ClInclude Include="Battlescape\Explosion.h" />
@@ -787,6 +787,7 @@
     <ClInclude Include="Ruleset\ExtraSprites.h" />
     <ClInclude Include="Ruleset\ExtraStrings.h" />
     <ClInclude Include="Ruleset\RuleArmor.h" />
+    <ClInclude Include="Ruleset\RuleAward.h" />
     <ClInclude Include="Ruleset\RuleCity.h" />
     <ClInclude Include="Ruleset\RuleMissionScript.h" />
     <ClInclude Include="Ruleset\RuleTexture.h" />
@@ -804,7 +805,6 @@
     <ClInclude Include="Ruleset\RuleMusic.h" />
     <ClInclude Include="Ruleset\RuleUnit.h" />
     <ClInclude Include="Ruleset\RuleVideo.h" />
-    <ClInclude Include="Ruleset\RuleCommendations.h" />
     <ClInclude Include="Ruleset\SoundDefinition.h" />
     <ClInclude Include="Ruleset\RuleInterface.h" />
     <ClInclude Include="Ruleset\RuleAlienMission.h" />

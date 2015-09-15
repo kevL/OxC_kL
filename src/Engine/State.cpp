@@ -564,10 +564,10 @@ void State::setModal(InteractiveSurface* surface)
  * @param colors		- pointer to the set of colors
  * @param firstcolor	- offset of the first color to replace (default 0)
  * @param ncolors		- amount of colors to replace (default 256)
- * @param immediately	- apply changes immediately, otherwise wait in case of multiple setPalettes (default true)
+ * @param immediately	- apply changes immediately otherwise wait in case of multiple setPalettes (default true)
  */
 void State::setPalette(
-		SDL_Color* colors,
+		SDL_Color* const colors,
 		int firstcolor,
 		int ncolors,
 		bool immediately)

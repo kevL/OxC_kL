@@ -17,31 +17,31 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "RuleCommendations.h"
+#include "RuleAward.h"
 
 
 namespace OpenXcom
 {
 
 /**
- * Creates a blank set of commendation data.
+ * Creates a blank set of Award data.
  */
-RuleCommendations::RuleCommendations()
+RuleAward::RuleAward()
 	:
 		_sprite(-1)
 {}
 
 /**
- * Cleans up the commendation.
+ * Cleans up the Award.
  */
-RuleCommendations::~RuleCommendations()
+RuleAward::~RuleAward()
 {}
 
 /**
- * Loads the commendations from YAML.
+ * Loads the Award from YAML.
  * @param node - reference a YAML node
  */
-void RuleCommendations::load(const YAML::Node& node)
+void RuleAward::load(const YAML::Node& node)
 {
 	_description	= node["description"]	.as<std::string>(_description);
 	_descGeneral	= node["descGeneral"]	.as<std::string>(_descGeneral);
@@ -51,46 +51,46 @@ void RuleCommendations::load(const YAML::Node& node)
 }
 
 /**
- * Get the commendation's description.
- * @return, commendation description
+ * Gets the Award's description.
+ * @return, award description
  */
-std::string RuleCommendations::getDescription() const
+std::string RuleAward::getDescription() const
 {
 	return _description;
 }
 
 /**
- * Get the commendation's non-specific description.
+ * Gets the Award's non-specific description.
  * @return, generic description
  */
-std::string RuleCommendations::getDescriptionGeneral() const
+std::string RuleAward::getDescriptionGeneral() const
 {
 	return _descGeneral;
 }
 
 /**
- * Get the commendation's sprite.
+ * Gets the Award's sprite.
  * @return, sprite number
  */
-int RuleCommendations::getSprite() const
+int RuleAward::getSprite() const
 {
 	return _sprite;
 }
 
 /**
- * Get the commendation's award criteria.
- * @return, pointer to a map of (strings & vectors of ints) that denote commendation criteria
+ * Gets the Award's criteria.
+ * @return, pointer to a map of (strings & vectors of ints) that denote award criteria
  */
-std::map<std::string, std::vector<int> >* RuleCommendations::getCriteria()
+std::map<std::string, std::vector<int> >* RuleAward::getCriteria()
 {
 	return &_criteria;
 }
 
 /**
- * Get the commendation's award kill criteria.
- * @return, pointer to a vector of maps of (ints & vectors of strings) that denote commendation kill criteria
+ * Gets the Award's kill criteria.
+ * @return, pointer to a vector of maps of (ints & vectors of strings) that denote award kill criteria
  */
-std::vector<std::map<int, std::vector<std::string> > >* RuleCommendations::getKillCriteria()
+std::vector<std::map<int, std::vector<std::string> > >* RuleAward::getKillCriteria()
 {
 	return &_killCriteria;
 }

@@ -38,7 +38,6 @@ class AlienDeployment;
 class AlienRace;
 class ArticleDefinition;
 class Base;
-//class ExtraMusic; // sza_ExtraMusic
 class ExtraSounds;
 class ExtraSprites;
 class ExtraStrings;
@@ -50,8 +49,8 @@ class OperationPool;
 class ResourcePack;
 class RuleAlienMission;
 class RuleArmor;
+class RuleAward;
 class RuleBaseFacility;
-class RuleCommendations;
 class RuleCountry;
 class RuleCraft;
 class RuleCraftWeapon;
@@ -61,7 +60,7 @@ class RuleInventory;
 class RuleItem;
 class RuleManufacture;
 class RuleMissionScript;
-class RuleMusic; // sza_MusicRules
+class RuleMusic;
 class RuleRegion;
 class RuleResearch;
 class RuleSoldier;
@@ -126,7 +125,6 @@ protected:
 		_craftsIndex,
 		_craftWeaponsIndex,
 		_deploymentsIndex,
-//		_extraMusicIndex, // sza_ExtraMusic
 		_extraSoundsIndex,
 		_extraSpritesIndex,
 		_extraStringsIndex,
@@ -136,7 +134,7 @@ protected:
 		_manufactureIndex,
 		_MCDPatchesIndex,
 		_missionScriptIndex,
-		_musicIndex, // sza_MusicRules
+		_musicIndex,
 		_regionsIndex,
 		_researchIndex,
 		_terrainIndex,
@@ -159,8 +157,8 @@ protected:
 	std::map<std::string, MapDataSet*>			_mapDataSets;
 	std::map<std::string, MCDPatch*>			_MCDPatches;
 	std::map<std::string, RuleAlienMission*>	_alienMissions;
+	std::map<std::string, RuleAward*>			_awards;
 	std::map<std::string, RuleBaseFacility*>	_facilities;
-	std::map<std::string, RuleCommendations*>	_commendations;
 	std::map<std::string, RuleCountry*>			_countries;
 	std::map<std::string, RuleCraft*>			_crafts;
 	std::map<std::string, RuleCraftWeapon*>		_craftWeapons;
@@ -181,12 +179,9 @@ protected:
 
 	std::map<std::string, std::vector<MapScript*> >	_mapScripts;
 
-//	std::vector<std::pair<std::string, ExtraMusic*> >	_extraMusic; // sza_ExtraMusic
 	std::vector<std::pair<std::string, ExtraSounds*> >	_extraSounds;
 	std::vector<std::pair<std::string, ExtraSprites*> >	_extraSprites;
-	std::vector<std::pair<std::string, RuleMusic*> >	_music; // sza_MusicRules
-
-//	std::vector<SDL_Color> _transparencies;
+	std::vector<std::pair<std::string, RuleMusic*> >	_music;
 
 	std::pair<std::string, int> _alienFuel;
 
@@ -268,8 +263,8 @@ protected:
 		/// Gets mapdatafile for battlescape games.
 		MapDataSet* getMapDataSet(const std::string& name);
 
-		/// Gets commendation rules.
-		std::map<std::string, RuleCommendations*> getCommendations() const;
+		/// Gets award rules.
+		std::map<std::string, RuleAward*> getAwardsList() const;
 
 		/// Gets soldier unit rules.
 		RuleSoldier* getSoldier(const std::string& type) const;
@@ -344,13 +339,12 @@ protected:
 		MCDPatch* getMCDPatch(const std::string& name) const;
 
 		/// Gets the music rules
-		std::vector<std::pair<std::string, RuleMusic*> > getMusic() const; // sza_MusicRules
+		std::vector<std::pair<std::string, RuleMusic*> > getMusic() const;
+
 		/// Gets the list of external Sprites.
 		std::vector<std::pair<std::string, ExtraSprites*> > getExtraSprites() const;
 		/// Gets the list of external Sounds.
 		std::vector<std::pair<std::string, ExtraSounds*> > getExtraSounds() const;
-		/// Gets the list of external music rules.
-//		std::vector<std::pair<std::string, ExtraMusic*> > getExtraMusic() const; // sza_ExtraMusic
 		/// Gets the list of external Strings.
 		std::map<std::string, ExtraStrings*> getExtraStrings() const;
 
@@ -398,9 +392,6 @@ protected:
 
 		/// Gets the list of selective files for insertion into internal Cat files.
 		const std::map<std::string, SoundDefinition*>* getSoundDefinitions() const;
-
-		/// Gets the list of transparency colors.
-//		const std::vector<SDL_Color>* getTransparencies() const;
 
 		/// Gets the list of videos for intro/outro etc.
 		const std::map<std::string, RuleVideo*>* getVideos() const;

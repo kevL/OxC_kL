@@ -17,8 +17,8 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef OPENXCOM_RULECOMMENDATIONS_H
-#define OPENXCOM_RULECOMMENDATIONS_H
+#ifndef OPENXCOM_RULEAWARD_H
+#define OPENXCOM_RULEAWARD_H
 
 //#include <yaml-cpp/yaml.h>
 
@@ -27,12 +27,10 @@ namespace OpenXcom
 {
 
 /**
- * Represents a specific type of commendation.
- * Contains constant info about a commendation like
- * award criteria, sprite, description, etc.
- * @sa Commendation
+ * Represents a specific type of Award.
+ * @note Contains constant info about the Award.
  */
-class RuleCommendations
+class RuleAward
 {
 
 private:
@@ -46,25 +44,25 @@ private:
 
 
 	public:
-		/// Creates a blank commendation ruleset.
-		RuleCommendations();
-		/// Cleans up the commendation ruleset.
-		~RuleCommendations();
+		/// Creates a blank Award ruleset.
+		RuleAward();
+		/// Cleans up the Award ruleset.
+		~RuleAward();
 
-		/// Loads commendation data from YAML.
+		/// Loads Award data from YAML.
 		void load(const YAML::Node& node);
 
-		/// Get the commendation's description.
+		/// Gets the Award's description.
 		std::string getDescription() const;
-		/// Get the commendation's generic description.
+		/// Gets the Award's generic description.
 		std::string getDescriptionGeneral() const;
 
-		/// Get the commendation's sprite.
+		/// Gets the Award's sprite.
 		int getSprite() const;
 
-		/// Get the commendation's award criteria.
+		/// Gets the Award's criteria.
 		std::map<std::string, std::vector<int> >* getCriteria();
-		/// Get the commendation's award kill-related criteria.
+		/// Gets the Award's kill-related criteria.
 		std::vector<std::map<int, std::vector<std::string> > >* getKillCriteria();
 };
 

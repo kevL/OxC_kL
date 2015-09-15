@@ -4658,7 +4658,7 @@ MCDPatches:
 extraSprites:
   - type: Pathfinding
     files:
-      0: Resources/Pathfinding/Pathfinding.png
+      0: Resources/UI/Pathfinding.png
     width: 384
     height: 80
     subX: 32

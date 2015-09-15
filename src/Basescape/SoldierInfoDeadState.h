@@ -113,8 +113,8 @@ private:
 		/// Updates the dead soldier info.
 		void init();
 
-		/// Sets the soldier Id.
-		void setSoldierID(size_t soldierId);
+		/// Sets the soldier ID.
+		void setSoldierId(size_t soldierId);
 
 		/// Handler for clicking the OK button.
 		void btnOkClick(Action* action);

@@ -78,20 +78,21 @@ SoldierDiaryOverviewState::SoldierDiaryOverviewState(
 	}
 
 	_window			= new Window(this, 320, 200);
-	_txtTitle		= new Text(310, 16, 5, 8);
-	_txtBaseLabel	= new Text(310, 9, 5, 25);
 
-	_btnPrev		= new TextButton(28, 14, 8, 8);
+	_txtTitle		= new Text(310, 16, 5, 8);
+	_txtBaseLabel	= new Text(310,  9, 5, 25);
+
+	_btnPrev		= new TextButton(28, 14,   8, 8);
 	_btnNext		= new TextButton(28, 14, 284, 8);
 
-	_txtLocation	= new Text(94, 9, 16, 36);
+	_txtLocation	= new Text( 94, 9,  16, 36);
 	_txtStatus		= new Text(108, 9, 110, 36);
-	_txtDate		= new Text(90, 9, 218, 36);
+	_txtDate		= new Text( 90, 9, 218, 36);
 
 	_lstDiary		= new TextList(285, 129, 16, 44);
 
-	_btnMissions	= new TextButton(70, 16, 8, 177);
-	_btnKills		= new TextButton(70, 16, 86, 177);
+	_btnMissions	= new TextButton(70, 16,   8, 177);
+	_btnKills		= new TextButton(70, 16,  86, 177);
 	_btnAwards		= new TextButton(70, 16, 164, 177);
 	_btnOk			= new TextButton(70, 16, 242, 177);
 
@@ -118,23 +119,23 @@ SoldierDiaryOverviewState::SoldierDiaryOverviewState(
 	centerAllSurfaces();
 
 
-	_window->setColor(Palette::blockOffset(15)+1);
+	_window->setColor(PINK);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK02.SCR"));
 
-	_txtTitle->setColor(Palette::blockOffset(13)+10);
+	_txtTitle->setColor(BLUE);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 
 	if (_base != NULL)
 	{
-		_txtBaseLabel->setColor(Palette::blockOffset(13)+10);
+		_txtBaseLabel->setColor(BLUE);
 		_txtBaseLabel->setAlign(ALIGN_CENTER);
 		_txtBaseLabel->setText(_base->getName(_game->getLanguage()));
 	}
 	else
 		_txtBaseLabel->setVisible(false);
 
-	_btnPrev->setColor(Palette::blockOffset(15)+6);
+	_btnPrev->setColor(PURPLE);
 	_btnPrev->setText(L"<");
 	if (_base == NULL)
 	{
@@ -151,7 +152,7 @@ SoldierDiaryOverviewState::SoldierDiaryOverviewState(
 						Options::keyBattlePrevUnit);
 	}
 
-	_btnNext->setColor(Palette::blockOffset(15)+6);
+	_btnNext->setColor(PURPLE);
 	_btnNext->setText(L">");
 	if (_base == NULL)
 	{
@@ -169,17 +170,17 @@ SoldierDiaryOverviewState::SoldierDiaryOverviewState(
 	}
 
 	_txtLocation->setText(tr("STR_LOCATION"));
-	_txtLocation->setColor(Palette::blockOffset(15)+1);
+	_txtLocation->setColor(PINK);
 
 	_txtStatus->setText(tr("STR_STATUS"));
-	_txtStatus->setColor(Palette::blockOffset(15)+1);
+	_txtStatus->setColor(PINK);
 
 	_txtDate->setText(tr("STR_DATE_MISSION"));
-	_txtDate->setColor(Palette::blockOffset(15)+1);
+	_txtDate->setColor(PINK);
 
 	_lstDiary->setColumns(5, 94, 108, 25, 22, 30);
-	_lstDiary->setColor(Palette::blockOffset(13));
-	_lstDiary->setArrowColor(Palette::blockOffset(15)+1);
+	_lstDiary->setColor(WHITE);
+	_lstDiary->setArrowColor(PINK);
 	_lstDiary->setBackground(_window);
 	_lstDiary->setSelectable();
 	_lstDiary->setMargin();
@@ -187,19 +188,19 @@ SoldierDiaryOverviewState::SoldierDiaryOverviewState(
 
 
 	_btnMissions->setText(tr("STR_MISSIONS_UC"));
-	_btnMissions->setColor(Palette::blockOffset(13)+10);
+	_btnMissions->setColor(BLUE);
 	_btnMissions->onMouseClick((ActionHandler)& SoldierDiaryOverviewState::btnMissionsClick);
 
 	_btnKills->setText(tr("STR_KILLS_UC"));
-	_btnKills->setColor(Palette::blockOffset(13)+10);
+	_btnKills->setColor(BLUE);
 	_btnKills->onMouseClick((ActionHandler)& SoldierDiaryOverviewState::btnKillsClick);
 
 	_btnAwards->setText(tr("STR_AWARDS_UC"));
-	_btnAwards->setColor(Palette::blockOffset(13)+10);
+	_btnAwards->setColor(BLUE);
 	_btnAwards->onMouseClick((ActionHandler)& SoldierDiaryOverviewState::btnCommendationsClick);
 
 	_btnOk->setText(tr("STR_OK"));
-	_btnOk->setColor(Palette::blockOffset(13)+10);
+	_btnOk->setColor(BLUE);
 	_btnOk->onMouseClick((ActionHandler)& SoldierDiaryOverviewState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& SoldierDiaryOverviewState::btnOkClick,
@@ -213,23 +214,16 @@ SoldierDiaryOverviewState::~SoldierDiaryOverviewState()
 {}
 
 /**
- *  Clears all the variables and reinitializes the list of medals for the soldier.
- *
+ * Clears all the variables and reinitializes the list of medals for the soldier.
  */
 void SoldierDiaryOverviewState::init()
 {
 	State::init();
 
-	SoldierDiary* diary = NULL;
+	SoldierDiary* diary;
 
 	if (_base == NULL)
 	{
-/*		if (_listDead->empty() == true)
-		{
-			_game->popState();
-			return;
-		} */ // should never happen. Btn won't be visible if listDead is empty.
-
 		if (_soldierId >= _listDead->size())
 			_soldierId = 0;
 
@@ -240,12 +234,6 @@ void SoldierDiaryOverviewState::init()
 	}
 	else
 	{
-/*		if (_list->empty() == true)
-		{
-			_game->popState();
-			return;
-		} */ // should never happen. Btn won't be visible unless viewing at least one soldier.
-
 		if (_soldierId >= _list->size())
 			_soldierId = 0;
 
@@ -314,18 +302,11 @@ void SoldierDiaryOverviewState::init()
 
 	_lstDiary->scrollTo(_curRow);
 }
-/*	if (row > 0 // all taken care of in TextList
-		&& _lstDiary->getScroll() >= row)
-	{
-		_lstDiary->scrollTo(0);
-	}
-	else if (_curRow > 0)
-		_lstDiary->scrollTo(_curRow); */
 
 /**
- * Set the soldier's ID.
+ * Sets the soldier's ID.
  */
-void SoldierDiaryOverviewState::setSoldierID(size_t soldierId)
+void SoldierDiaryOverviewState::setSoldierId(size_t soldierId)
 {
 	_soldierId = soldierId;
 }
@@ -337,9 +318,9 @@ void SoldierDiaryOverviewState::setSoldierID(size_t soldierId)
 void SoldierDiaryOverviewState::btnOkClick(Action*)
 {
 	if (_base == NULL)
-		_soldierInfoDeadState->setSoldierID(_soldierId);
+		_soldierInfoDeadState->setSoldierId(_soldierId);
 	else
-		_soldierInfoState->setSoldierID(_soldierId);
+		_soldierInfoState->setSoldierId(_soldierId);
 
 	_game->popState();
 }
@@ -428,8 +409,7 @@ void SoldierDiaryOverviewState::btnNextClick(Action*)
 	else
 		rows = _list->size();
 
-	++_soldierId;
-	if (_soldierId >= rows)
+	if (++_soldierId >= rows)
 		_soldierId = 0;
 
 	init();
@@ -441,8 +421,6 @@ void SoldierDiaryOverviewState::btnNextClick(Action*)
  */
 void SoldierDiaryOverviewState::lstDiaryInfoClick(Action*)
 {
-//	if (_lstDiary->getRows() > 0)
-//	{
 	_curRow = _lstDiary->getScroll();
 
 	const size_t row = _lstDiary->getRows() - _lstDiary->getSelectedRow() - 1;
@@ -450,7 +428,6 @@ void SoldierDiaryOverviewState::lstDiaryInfoClick(Action*)
 												_base,
 												_soldierId,
 												row));
-//	}
 }
 
 }

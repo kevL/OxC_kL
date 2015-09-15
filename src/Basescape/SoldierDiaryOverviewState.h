@@ -46,6 +46,14 @@ class SoldierDiaryOverviewState
 {
 
 private:
+	static const Uint8
+		BROWN	= 160,
+		WHITE	= 208,//
+		YELLOW	= 213,
+		BLUE	= 218, //
+		PINK	= 241, //
+		PURPLE	= 246; //
+
 	size_t
 		_soldierId,
 		_curRow;
@@ -87,8 +95,8 @@ private:
 		/// Updates the soldier info.
 		void init();
 
-		/// Set the soldier's ID.
-		void setSoldierID(size_t soldierId);
+		/// Sets the soldier's ID.
+		void setSoldierId(size_t soldierId);
 
 		/// Handler for clicking the OK button.
 		void btnOkClick(Action* action);

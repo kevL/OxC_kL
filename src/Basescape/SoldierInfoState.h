@@ -47,6 +47,13 @@ class SoldierInfoState
 {
 
 private:
+	static const Uint8
+		GREEN		= 48,
+		PURPLE_OUT	= 73,
+		ORANGE		= 96,
+		YELLOW		= 144,
+		PURPLE		= 246;
+
 	bool _allowExit;
 	size_t _soldierId;
 
@@ -134,8 +141,8 @@ private:
 		/// Updates the soldier info.
 		void init();
 
-		/// Sets the soldier Id.
-		void setSoldierID(size_t soldierId);
+		/// Sets the soldier ID.
+		void setSoldierId(size_t soldierId);
 		/// Handler for changing text on the Name edit.
 		void edtSoldierChange(Action* action);
 		/// Handler for pressing on the Name edit (disables editing).

@@ -1,14 +1,14 @@
 extraSprites:
-  - type: Commendations
+  - type: Awards
     width: 31
     height: 8
     files:
-      0: Resources/Commendations/
-  - type: CommendationDecorations
+      0: Resources/Awards/
+  - type: AwardDecorations
     width: 31
     height: 8
     files:
-      0: Resources/Commendations/Decorations/
+      0: Resources/Awards/Decorations/
 extraStrings:
   - type: en-US
     strings:
@@ -182,10 +182,10 @@ extraStrings:
       STR_HEAVY_WEAPONS_PLATFORM_LC: "HWP"
       STR_KIA: "KIA"
       STR_MIA: "MIA"
-# Ruleset for diary and commendations mod
+# Ruleset for diary and Awards mod
 # When stats reach the criteria threshold, the commendation is awarded
 # Any vector greater than 10 will require more strings and more sprites decorations.
-# Commendations may have multiple criteria.
+# Awards may have multiple criteria.
 # List of possible criteria:
 #   totalKills
 #   totalMissions
@@ -237,7 +237,7 @@ extraStrings:
 # For example, [5, 10, 20, 20, 20, 20, 40, 40, 40, 40] will have one award for 5, will have a
 # second award for 10 (bronze star), will have a third award for 20 (2 silver stars) and
 # will have a fourth award for 40 (3 gold stars).
-commendations:
+awards:
   - type: STR_MEDAL_MERIT_STAR_NAME
     description: STR_MEDAL_MERIT_STAR_DESCRIPTION
     sprite: 0

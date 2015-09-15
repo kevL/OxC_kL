@@ -23,9 +23,6 @@
 //#include <yaml-cpp/yaml.h>
 
 #include "BattleUnit.h"
-#include "SavedGame.h"
-
-#include "../Ruleset/Ruleset.h"
 
 
 namespace OpenXcom
@@ -35,13 +32,13 @@ class Ruleset;
 
 
 /**
- * Each entry will be its own commendation.
+ * Each entry is its own Award.
  */
-class SoldierCommendations
+class SoldierAward
 {
 
 private:
-	bool _isNew;
+	bool _new;
 	size_t _decorLevel;
 	std::string
 		_type,
@@ -50,13 +47,13 @@ private:
 
 	public:
 		/// Creates a commendation of the specified type.
-		SoldierCommendations(
+		SoldierAward(
 				const std::string& type,
 				const std::string& noun = "noNoun");
 		/// Creates a new commendation and loads its contents from YAML.
-		explicit SoldierCommendations(const YAML::Node& node);
+		explicit SoldierAward(const YAML::Node& node);
 		/// Cleans up the commendation.
-		~SoldierCommendations();
+		~SoldierAward();
 
 		/// Loads the commendation information from YAML.
 		void load(const YAML::Node& node);
@@ -68,7 +65,7 @@ private:
 		/// Gets commendation noun.
 		const std::string getNoun() const;
 		/// Gets the commendation's decoration level's name.
-		const std::string getDecorLevelType(const int skip) const;
+		const std::string getDecorLevelType(int skip) const;
 		/// Gets the commendation's decoration description.
 		const std::string getDecorDesc() const;
 		/// Gets the commendation's decoration class.
@@ -79,9 +76,9 @@ private:
 		/// Gets the newness of the commendation.
 		bool isNew() const;
 		/// Sets the commendation newness to false.
-		void makeOld();
+		void setOld();
 
-		/// Increment decoration level. Sets _isNew to true.
+		/// Increments decoration level and sets '_new' true.
 		void addDecoration();
 };
 
@@ -129,7 +126,7 @@ private:
 		_MIA;
 
 	std::vector<int> _missionIdList;
-	std::vector<SoldierCommendations*> _awards;
+	std::vector<SoldierAward*> _awards;
 	std::vector<BattleUnitKills*> _killList;
 
 	std::map<std::string, int>
@@ -209,7 +206,7 @@ private:
 		std::string getKiaOrMia() const;
 
 		/// Gets the solder's commendations.
-		std::vector<SoldierCommendations*>* getSoldierCommendations();
+		std::vector<SoldierAward*>* getSoldierAwards();
 
 		/// Manage commendations, return true if a medal is awarded.
 		bool manageAwards(const Ruleset* const rules);

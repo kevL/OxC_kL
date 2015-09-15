@@ -128,10 +128,7 @@ void SoldierDead::load(const YAML::Node& node)
 	_death->load(node["death"]);
 
 	if (node["diary"])
-	{
-//		_diary = new SoldierDiary();
 		_diary->load(node["diary"]);
-	}
 }
 
 /**
@@ -155,8 +152,8 @@ YAML::Node SoldierDead::save() const
 	node["death"]			= _death->save();
 
 	if (_diary != NULL
-		&& (   _diary->getMissionIdList().empty() == false
-			|| _diary->getSoldierCommendations()->empty() == false))
+		&& (_diary->getMissionIdList().empty() == false
+			|| _diary->getSoldierAwards()->empty() == false))
 	{
 		node["diary"] = _diary->save();
 	}

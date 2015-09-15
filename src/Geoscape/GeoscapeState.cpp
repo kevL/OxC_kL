@@ -2736,7 +2736,7 @@ void GeoscapeState::time1Day()
 
 							(*j)->die(_gameSave); // holy * This copies the Diary-object
 							// so to delete Soldier-instance I need to use a CopyConstructor
-							// on either or both of SoldierDiary and SoldierCommendations.
+							// on either or both of SoldierDiary and SoldierAward.
 							// Oh, and maybe an operator= assignment overload also.
 							// Learning C++ is like standing around while 20 people constantly
 							// throw cow's dung at you. (But don't mention "const" or they'll throw

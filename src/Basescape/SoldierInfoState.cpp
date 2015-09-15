@@ -540,13 +540,13 @@ void SoldierInfoState::init()
 
 
 	_btnArmor->setText(tr(_soldier->getArmor()->getType()));
-	if (_soldier->getCraft() != NULL
-		&& _soldier->getCraft()->getStatus() == "STR_OUT")
+	if (_soldier->getCraft() == NULL
+		|| _soldier->getCraft()->getStatus() != "STR_OUT")
 	{
-		_btnArmor->setColor(Palette::blockOffset(4)+9); // dark pale purple
+		_btnArmor->setColor(PURPLE);
 	}
 	else
-		_btnArmor->setColor(Palette::blockOffset(15)+6);
+		_btnArmor->setColor(PURPLE_OUT);
 
 	std::wstring craft;
 	if (_soldier->getCraft() == NULL)
@@ -562,11 +562,11 @@ void SoldierInfoState::init()
 		Uint8 color;
 		const int pct = _soldier->getRecoveryPCT();
 		if (pct > 50)
-			color = Palette::blockOffset(6); // orange
+			color = ORANGE;
 		else if (pct > 10)
-			color = Palette::blockOffset(9); // yellow
+			color = YELLOW;
 		else
-			color = Palette::blockOffset(3); // green
+			color = GREEN;
 
 		_txtRecovery->setSecondaryColor(color);
 		_txtRecovery->setText(tr("STR_WOUND_RECOVERY").arg(tr("STR_DAY", recovery)));
@@ -594,8 +594,7 @@ void SoldierInfoState::init()
 //	const int minPsi = _soldier->getRules()->getMinStats().psiSkill;
 //		|| (Options::psiStrengthEval == true // for determination to show psiStrength
 //			&& _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements()) == true))
-
-	if (current->psiSkill > 0) // >= minPsi)
+	if (current->psiSkill != 0)
 	{
 		woststr.str(L"");
 		woststr << armored.psiStrength;
@@ -712,9 +711,9 @@ void SoldierInfoState::btnAutoStatAll(Action*)
 }
 
 /**
- * Sets the soldier Id.
+ * Sets the soldier ID.
  */
-void SoldierInfoState::setSoldierID(size_t soldierId)
+void SoldierInfoState::setSoldierId(size_t soldierId)
 {
 	_soldierId = soldierId;
 }

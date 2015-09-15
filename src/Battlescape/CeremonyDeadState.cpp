@@ -17,7 +17,7 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "CommendationDeadState.h"
+#include "CeremonyDeadState.h"
 
 //#include <sstream>
 
@@ -32,7 +32,8 @@
 
 #include "../Resource/XcomResourcePack.h"
 
-#include "../Ruleset/RuleCommendations.h"
+#include "../Ruleset/RuleAward.h"
+#include "../Ruleset/Ruleset.h"
 
 #include "../Savegame/SoldierDead.h"
 #include "../Savegame/SoldierDiary.h"
@@ -45,7 +46,7 @@ namespace OpenXcom
  * Initializes all the elements for Lost in the Medals screen post-mission.
  * @param soldiersLost - vector of pointers to SoldierDead objects
  */
-CommendationDeadState::CommendationDeadState(std::vector<SoldierDead*> soldiersLost)
+CeremonyDeadState::CeremonyDeadState(std::vector<SoldierDead*> soldiersLost)
 {
 	_window			= new Window(this, 320, 200);
 	_txtTitle		= new Text(300, 16, 10, 8);
@@ -66,48 +67,51 @@ CommendationDeadState::CommendationDeadState(std::vector<SoldierDead*> soldiersL
 	centerAllSurfaces();
 
 
-	_window->setColor(Palette::blockOffset(15)-1); // green
+	_window->setColor(GREEN);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
 	if (soldiersLost.size() == 1)
 		_txtTitle->setText(tr("STR_LOST"));
 	else
 		_txtTitle->setText(tr("STR_LOST_PL"));
-	_txtTitle->setColor(Palette::blockOffset(8)+5); // cyan
+	_txtTitle->setColor(CYAN);
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
 
-	_lstLost->setColor(Palette::blockOffset(8)+5);
+	_lstLost->setColor(CYAN);
 	_lstLost->setColumns(2, 200, 77);
 	_lstLost->setBackground(_window);
 	_lstLost->setSelectable();
 	_lstLost->setMargin();
 
-	_lstSoldiers->setColor(Palette::blockOffset(15)-1);
+	_lstSoldiers->setColor(GREEN); // note is Olive in CeremonyState
 	_lstSoldiers->setColumns(2, 200, 77);
 	_lstSoldiers->setBackground(_window);
 	_lstSoldiers->setSelectable();
 	_lstSoldiers->setMargin();
-	_lstSoldiers->onMouseOver((ActionHandler)& CommendationDeadState::lstInfoMouseOver);
-	_lstSoldiers->onMouseOut((ActionHandler)& CommendationDeadState::lstInfoMouseOut);
+	_lstSoldiers->onMouseOver((ActionHandler)& CeremonyDeadState::lstInfoMouseOver);
+	_lstSoldiers->onMouseOut((ActionHandler)& CeremonyDeadState::lstInfoMouseOut);
 
-	_txtMedalInfo->setColor(Palette::blockOffset(10)); // slate
+	_txtMedalInfo->setColor(SLATE);
 	_txtMedalInfo->setHighContrast();
 	_txtMedalInfo->setWordWrap();
 
 	_btnOk->setText(tr("STR_OK"));
-	_btnOk->setColor(Palette::blockOffset(15)-1);
-	_btnOk->onMouseClick((ActionHandler)& CommendationDeadState::btnOkClick);
+	_btnOk->setColor(GREEN);
+	_btnOk->onMouseClick((ActionHandler)& CeremonyDeadState::btnOkClick);
 	_btnOk->onKeyboardPress(
-					(ActionHandler)& CommendationDeadState::btnOkClick,
+					(ActionHandler)& CeremonyDeadState::btnOkClick,
 					Options::keyOk);
 	_btnOk->onKeyboardPress(
-					(ActionHandler)& CommendationDeadState::btnOkClick,
+					(ActionHandler)& CeremonyDeadState::btnOkClick,
+					Options::keyOkKeypad);
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& CeremonyDeadState::btnOkClick,
 					Options::keyCancel);
 
 
-	const int rowsLost = std::min(	// the soldiersLost list has maximum 8 rows
-								8,	// to leave room below for the awards List
+	const int rowsLost = std::min(	// the soldiersLost list has maximum 8 rows so that there's room below it for the awards List
+								8,
 								static_cast<int>(soldiersLost.size()));
 	_lstLost->setHeight(rowsLost * 8 + 1);
 
@@ -135,8 +139,8 @@ CommendationDeadState::CommendationDeadState(std::vector<SoldierDead*> soldiersL
 		row = 0,
 		titleRow;
 
-	std::map<std::string, RuleCommendations*> awardList = _game->getRuleset()->getCommendations();
-	for (std::map<std::string, RuleCommendations*>::const_iterator
+	std::map<std::string, RuleAward*> awardList = _game->getRuleset()->getAwardsList();
+	for (std::map<std::string, RuleAward*>::const_iterator
 			award = awardList.begin();
 			award != awardList.end();
 			)
@@ -160,16 +164,16 @@ CommendationDeadState::CommendationDeadState(std::vector<SoldierDead*> soldiersL
 				soldier != soldiersLost.end();
 				++soldier)
 		{
-			for (std::vector<SoldierCommendations*>::const_iterator
-					soldierAward = (*soldier)->getDiary()->getSoldierCommendations()->begin();
-					soldierAward != (*soldier)->getDiary()->getSoldierCommendations()->end();
+			for (std::vector<SoldierAward*>::const_iterator
+					soldierAward = (*soldier)->getDiary()->getSoldierAwards()->begin();
+					soldierAward != (*soldier)->getDiary()->getSoldierAwards()->end();
 					++soldierAward)
 			{
 				if ((*soldierAward)->getType() == (*award).first
 					&& (*soldierAward)->isNew() == true
 					&& noun == "noNoun")
 				{
-					(*soldierAward)->makeOld();
+					(*soldierAward)->setOld();
 					++row;
 
 					if ((*soldierAward)->getNoun() != "noNoun")
@@ -256,14 +260,14 @@ CommendationDeadState::CommendationDeadState(std::vector<SoldierDead*> soldiersL
 /**
  * dTor.
  */
-CommendationDeadState::~CommendationDeadState()
+CeremonyDeadState::~CeremonyDeadState()
 {}
 
 /**
  * Returns to the previous screen.
  * @param action - pointer to an Action
  */
-void CommendationDeadState::btnOkClick(Action*)
+void CeremonyDeadState::btnOkClick(Action*)
 {
 	if (_game->getQtyStates() == 2) // ie: (1) this, (2) Geoscape
 	{
@@ -277,7 +281,7 @@ void CommendationDeadState::btnOkClick(Action*)
 /**
  * Shows the Medal description.
  */
-void CommendationDeadState::lstInfoMouseOver(Action*)
+void CeremonyDeadState::lstInfoMouseOver(Action*)
 {
 	const size_t row = _lstSoldiers->getSelectedRow();
 	if (_titleRows.find(row) != _titleRows.end())
@@ -289,7 +293,7 @@ void CommendationDeadState::lstInfoMouseOver(Action*)
 /**
  * Clears the Medal description.
  */
-void CommendationDeadState::lstInfoMouseOut(Action*)
+void CeremonyDeadState::lstInfoMouseOut(Action*)
 {
 	_txtMedalInfo->setText(L"");
 }

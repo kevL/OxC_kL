@@ -17,10 +17,8 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef OPENXCOM_SOLDIERDIEDSTATE_H
-#define OPENXCOM_SOLDIERDIEDSTATE_H
-
-//#include <string>
+#ifndef OPENXCOM_CEREMONYDEADSTATE_H
+#define OPENXCOM_CEREMONYDEADSTATE_H
 
 #include "../Engine/State.h"
 
@@ -28,42 +26,54 @@
 namespace OpenXcom
 {
 
+class SoldierDead;
 class Text;
 class TextButton;
+class TextList;
 class Window;
 
 
 /**
- * Notifies the player when a soldier dies due to critical injuries while in Sickbay.
+ * Screen that displays Lost Soldier medals.
  */
-class SoldierDiedState
+class CeremonyDeadState
 	:
 		public State
 {
 
 private:
-	static const Uint8 CYAN = 133;
+	static const Uint8
+		CYAN	= 133,
+		SLATE	= 160,
+		GREEN	= 239;
 
 	Text
-		* _txtBase,
+		* _txtMedalInfo,
 		* _txtTitle;
 	TextButton* _btnOk;
+	TextList
+		* _lstLost,
+		* _lstSoldiers;
 	Window* _window;
+
+	std::map<size_t, std::string> _titleRows; // for mouseOver info.
 
 
 	public:
-		/// Creates the Soldier Died state.
-		SoldierDiedState(
-				const std::wstring& name,
-				const std::wstring& base);
-		/// Cleans up the Soldier Died state.
-		~SoldierDiedState();
+		/// Creates the Medals state.
+		explicit CeremonyDeadState(std::vector<SoldierDead*> soldiersLost);
+		/// Cleans up the Medals state.
+		~CeremonyDeadState();
 
 		/// Handler for clicking the OK button.
 		void btnOkClick(Action* action);
+
+		/// Handler for moving the mouse over a medal title.
+		void lstInfoMouseOver(Action* action);
+		/// Handler for moving the mouse outside the medals list.
+		void lstInfoMouseOut(Action* action);
 };
 
 }
 
 #endif
-

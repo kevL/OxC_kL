@@ -56,20 +56,20 @@ SoldierInfoDeadState::SoldierInfoDeadState(size_t soldierId)
 
 	_bg				= new Surface(320, 200);
 
-	_rank			= new Surface(26, 23, 4, 4);
-	_gender			= new Surface(7, 7, 240, 8);
+	_rank			= new Surface(26, 23,   4, 4);
+	_gender			= new Surface( 7,  7, 240, 8);
 
 	_txtSoldier		= new Text(179, 16, 40, 9);
 	_btnDiary		= new TextButton(60, 16, 248, 8);
 
-	_btnPrev		= new TextButton(29, 16, 0, 32);
+	_btnPrev		= new TextButton(29, 16,  0, 32);
 	_btnOk			= new TextButton(49, 16, 30, 32);
 	_btnNext		= new TextButton(29, 16, 80, 32);
 
 	_txtDeath		= new Text(60, 9, 130, 36);
 	_txtDate		= new Text(80, 9, 196, 36);
 
-	_txtRank		= new Text(130, 9, 0, 49);
+	_txtRank		= new Text(130, 9,   0, 49);
 	_txtMissions	= new Text(100, 9, 130, 49);
 	_txtKills		= new Text(100, 9, 230, 49);
 
@@ -219,7 +219,7 @@ SoldierInfoDeadState::SoldierInfoDeadState(size_t soldierId)
 	_txtSoldier->setBig();
 
 	_txtDeath->setText(tr("STR_DATE_DEATH"));
-	_txtDate->setColor(Palette::blockOffset(13)); // <- text1->color2
+	_txtDate->setColor(208); // <- text1->color2
 
 	_btnDiary->setText(tr("STR_DIARY"));
 	_btnDiary->onMouseClick((ActionHandler)& SoldierInfoDeadState::btnDiaryClick);
@@ -417,8 +417,7 @@ void SoldierInfoDeadState::init()
 //	const int minPsi = _game->getRuleset()->getSoldier("XCOM")->getMinStats().psiSkill;
 //		|| (Options::psiStrengthEval == true // for determination to show psiStrength
 //			&& _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements()) == true))
-
-	if (current->psiSkill > 0) //>= minPsi)
+	if (current->psiSkill != 0)
 	{
 		woststr.str(L"");
 		woststr << current->psiStrength;
@@ -490,10 +489,10 @@ void SoldierInfoDeadState::btnPrevClick(Action*)
 }
 
 /**
- * Set the soldier Id.
+ * Sets the soldier ID.
  * @param soldierId - the ID for the current soldier
  */
-void SoldierInfoDeadState::setSoldierID(size_t soldierId)
+void SoldierInfoDeadState::setSoldierId(size_t soldierId)
 {
 	_soldierId = soldierId;
 }

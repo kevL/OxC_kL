@@ -35,8 +35,8 @@
 #include "OperationPool.h"
 #include "RuleAlienMission.h"
 #include "RuleArmor.h"
+#include "RuleAward.h"
 #include "RuleBaseFacility.h"
-#include "RuleCommendations.h"
 #include "RuleCountry.h"
 #include "RuleCraft.h"
 #include "RuleCraftWeapon.h"
@@ -46,7 +46,7 @@
 #include "RuleItem.h"
 #include "RuleManufacture.h"
 #include "RuleMissionScript.h"
-#include "RuleMusic.h" // sza_MusicRules
+#include "RuleMusic.h"
 #include "RuleRegion.h"
 #include "RuleResearch.h"
 #include "RuleSoldier.h"
@@ -372,9 +372,9 @@ Ruleset::~Ruleset()
 		delete i->second;
 	}
 
-	for (std::map<std::string, RuleCommendations*>::const_iterator
-			i = _commendations.begin();
-			i != _commendations.end();
+	for (std::map<std::string, RuleAward*>::const_iterator
+			i = _awards.begin();
+			i != _awards.end();
 			++i)
 	{
 		delete i->second;
@@ -1043,22 +1043,19 @@ void Ruleset::loadFile(const std::string& file) // protected.
 	}
 
 	for (YAML::const_iterator
-			i = doc["commendations"].begin();
-			i != doc["commendations"].end();
+			i = doc["awards"].begin();
+			i != doc["awards"].end();
 			++i)
 	{
 		const std::string type = (*i)["type"].as<std::string>();
 
-		std::auto_ptr<RuleCommendations> commendations (new RuleCommendations()); // init.
-		commendations->load(*i);
+		std::auto_ptr<RuleAward> award (new RuleAward()); // init.
+		award->load(*i);
 
-		_commendations[type] = commendations.release();
+		_awards[type] = award.release();
 	}
 
-/*	for (YAML::const_iterator
-			i = doc["statStrings"].begin();
-			i != doc["statStrings"].end();
-			++i)
+/*	for (YAML::const_iterator i = doc["statStrings"].begin(); i != doc["statStrings"].end(); ++i)
 	{
 		StatString* const statString = new StatString();
 		statString->load(*i);
@@ -1628,12 +1625,12 @@ MapDataSet* Ruleset::getMapDataSet(const std::string& name)
 }
 
 /**
- * Gets the list of commendations.
- * @return, map of commendations
+ * Gets the list of Awards.
+ * @return, map of awards
  */
-std::map<std::string, RuleCommendations*> Ruleset::getCommendations() const
+std::map<std::string, RuleAward*> Ruleset::getAwardsList() const
 {
-	return _commendations;
+	return _awards;
 }
 
 /**

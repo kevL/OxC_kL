@@ -45,8 +45,8 @@ SoldierDiedState::SoldierDiedState(
 	_screen = false;
 
 	_window		= new Window(this, 192, 104, 32, 48, POPUP_BOTH);
-	_txtTitle	= new Text(160, 44, 48, 58);
-	_txtBase	= new Text(160, 9, 48, 104);
+	_txtTitle	= new Text(160, 44, 48,  58);
+	_txtBase	= new Text(160,  9, 48, 104);
 	_btnOk		= new TextButton(80, 16, 88, 126);
 
 	setPalette("PAL_GEOSCAPE", 7);
@@ -59,10 +59,10 @@ SoldierDiedState::SoldierDiedState(
 	centerAllSurfaces();
 
 
-	_window->setColor(Palette::blockOffset(8)+5);
+	_window->setColor(CYAN);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK15.SCR"));
 
-	_btnOk->setColor(Palette::blockOffset(8)+5);
+	_btnOk->setColor(CYAN);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& SoldierDiedState::btnOkClick);
 	_btnOk->onKeyboardPress(
@@ -70,9 +70,12 @@ SoldierDiedState::SoldierDiedState(
 					Options::keyOk);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& SoldierDiedState::btnOkClick,
+					Options::keyOkKeypad);
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& SoldierDiedState::btnOkClick,
 					Options::keyCancel);
 
-	_txtTitle->setColor(Palette::blockOffset(8)+5);
+	_txtTitle->setColor(CYAN);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setVerticalAlign(ALIGN_MIDDLE);
@@ -81,7 +84,7 @@ SoldierDiedState::SoldierDiedState(
 	msg += tr("STR_SOLDIER_DIED");
 	_txtTitle->setText(msg);
 
-	_txtBase->setColor(Palette::blockOffset(8)+5);
+	_txtBase->setColor(CYAN);
 	_txtBase->setSmall();
 	_txtBase->setAlign(ALIGN_CENTER);
 	_txtBase->setText(base);

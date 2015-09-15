@@ -155,7 +155,7 @@ void RuleItem::load(
 	if (node["handSprite"])
 	{
 		_handSprite = node["handSprite"].as<int>(_handSprite);
-		if (_handSprite > 127) // HANDOBS.PCK: 128 entries
+		if (_handSprite > 127) // HANDOB.PCK: 128 entries
 			_handSprite += modIndex;
 	}
 
