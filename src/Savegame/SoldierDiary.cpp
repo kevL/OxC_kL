@@ -175,9 +175,7 @@ SoldierDiary::SoldierDiary(const SoldierDiary& copyThis)
 				type = copyThis._awards.at(i)->getType(),
 				noun = copyThis._awards.at(i)->getNoun();
 
-			_awards.push_back(new SoldierAward(
-													type,
-													noun));
+			_awards.push_back(new SoldierAward(type, noun));
 		}
 	}
 
@@ -404,11 +402,11 @@ SoldierDiary& SoldierDiary::operator=(const SoldierDiary& assignThis)
  */
 void SoldierDiary::load(const YAML::Node& node)
 {
-	if (const YAML::Node& commendations = node["commendations"])
+	if (const YAML::Node& awards = node["awards"])
 	{
 		for (YAML::const_iterator
-				i = commendations.begin();
-				i != commendations.end();
+				i = awards.begin();
+				i != awards.end();
 				++i)
 		{
 			_awards.push_back(new SoldierAward(*i));
@@ -483,7 +481,7 @@ YAML::Node SoldierDiary::save() const
 			i != _awards.end();
 			++i)
 	{
-		node["commendations"].push_back((*i)->save());
+		node["awards"].push_back((*i)->save());
 	}
 
 	for (std::vector<BattleUnitKills*>::const_iterator
@@ -659,8 +657,8 @@ void SoldierDiary::updateDiary(
 }
 
 /**
- * Get soldier commendations.
- * @return, pointer to a vector of pointers to SoldierAward - a list of soldier's commendations
+ * Get soldier awards.
+ * @return, pointer to a vector of pointers to SoldierAward - a list of soldier's awards
  */
 std::vector<SoldierAward*>* SoldierDiary::getSoldierAwards()
 {
@@ -668,7 +666,7 @@ std::vector<SoldierAward*>* SoldierDiary::getSoldierAwards()
 }
 
 /**
- * Manage the soldier's commendations - award new ones if earned.
+ * Manage the soldier's awards - award new ones if earned.
  * @param rules - pointer to Ruleset
  * @return, true if an award has been awarded
  */
@@ -695,7 +693,7 @@ bool SoldierDiary::manageAwards(const Ruleset* const rules)
 		reqdLevel.clear();
 		reqdLevel["noNoun"] = 0;
 
-		// loop over all of soldier's SoldierAward, see if he/she
+		// loop over all of soldier's Awards, see if he/she
 		// already has the award; get the level and noun if so
 		for (std::vector<SoldierAward*>::const_iterator
 				j = _awards.begin();
@@ -801,7 +799,7 @@ bool SoldierDiary::manageAwards(const Ruleset* const rules)
 					// if there is no matching noun get the first award criteria
 					if (reqdLevel.count(noun) == 0)
 						threshold = (*j).second.front();
-					// otherwise get the criteria per the SoldierCommendation level
+					// otherwise get the criteria per the SoldierAward level
 					else if (reqdLevel[noun] != (*j).second.size())
 						threshold = (*j).second.at(reqdLevel[noun]);
 
@@ -998,8 +996,7 @@ bool SoldierDiary::manageAwards(const Ruleset* const rules)
 		{
 			doCeremony = true;
 
-			// if there are NO modular awards but *are* awarded a different
-			// award its noun will be "noNoun"
+			// if there are NO modular awards but *are* awarded a different award its noun will be "noNoun"
 			if (modularAwards.empty() == true)
 				modularAwards.push_back("noNoun");
 
@@ -1035,14 +1032,14 @@ bool SoldierDiary::manageAwards(const Ruleset* const rules)
 	return doCeremony;
 }
 
-/**
- * Manages modular commendations. (private)
+/*
+ * Manages modular awards. (private)
  * @param nextCommendationLevel	- refrence map<string, int>
  * @param modularCommendations	- reference map<string, int>
  * @param statTotal				- pair<string, int>
  * @param criteria				- int
- */
-/* void SoldierDiary::manageModularCommendations(
+ *
+void SoldierDiary::manageModularCommendations(
 		std::map<std::string, int>& nextCommendationLevel,
 		std::map<std::string, int>& modularCommendations,
 		std::pair<std::string, int> statTotal,
@@ -1057,12 +1054,12 @@ bool SoldierDiary::manageAwards(const Ruleset* const rules)
 	}
 } */
 
-/**
- * Awards commendations to the soldier.
+/*
+ * Awards medals to the soldier.
  * @param type - reference the type
  * @param noun - reference the noun (default "noNoun")
- */
-/* void SoldierDiary::awardCommendation(
+ *
+void SoldierDiary::awardCommendation(
 		const std::string& type,
 		const std::string& noun)
 {
@@ -1297,19 +1294,18 @@ void SoldierDiary::addMonthlyService()
 }
 
 /**
- * Award special commendation to the original 8 soldiers.
+ * Awards special medal to the original 8 soldiers.
  */
 void SoldierDiary::awardOriginalEight()
 {
-	_awards.push_back(new SoldierAward(
-										"STR_MEDAL_ORIGINAL8_NAME",
-										"noNoun"));
+	_awards.push_back(new SoldierAward("STR_MEDAL_ORIGINAL8_NAME"));
 }
 
 
+//____________________________________//
 /*___________________________________/*
 /*
-/* ** SOLDIER COMMENDATIONS class ***
+/*        SOLDIER AWARD class
 /*___________________________________*/
 /**
  * Initializes a SoldierAward.
@@ -1347,10 +1343,10 @@ SoldierAward::~SoldierAward()
  */
 void SoldierAward::load(const YAML::Node& node)
 {
-	_type		= node["type"]	.as<std::string>(_type);
-	_noun		= node["noun"]	.as<std::string>("noNoun");
-	_new		= node["isNew"]	.as<bool>(false);
-	_decorLevel	= static_cast<size_t>(node["decorLevel"].as<int>(_decorLevel));
+	_type		= node["type"]		.as<std::string>(_type);
+	_noun		= node["noun"]		.as<std::string>("noNoun");
+	_new		= node["isNew"]		.as<bool>(false);
+	_decorLevel	= node["decorLevel"].as<size_t>(_decorLevel);
 }
 
 /**
@@ -1361,18 +1357,17 @@ YAML::Node SoldierAward::save() const
 {
 	YAML::Node node;
 
-	node["type"]		= _type;
-	node["decorLevel"]	= static_cast<int>(_decorLevel);
+	node["type"] = _type;
 
-	if (_noun != "noNoun")
-		node["noun"] = _noun;
+	if (_decorLevel != 0)	node["decorLevel"]	= static_cast<int>(_decorLevel);
+	if (_noun != "noNoun")	node["noun"]		= _noun;
 
 	return node;
 }
 
 /**
- * Gets this SoldierAward' name.
- * @return, commendation name
+ * Gets this SoldierAward's name.
+ * @return, award name
  */
 const std::string SoldierAward::getType() const
 {
@@ -1380,8 +1375,8 @@ const std::string SoldierAward::getType() const
 }
 
 /**
- * Get this SoldierAward' noun.
- * @return, commendation noun
+ * Get this SoldierAward's noun.
+ * @return, award noun
  */
 const std::string SoldierAward::getNoun() const
 {
@@ -1389,9 +1384,9 @@ const std::string SoldierAward::getNoun() const
 }
 
 /**
- * Gets this SoldierAward' level's name.
+ * Gets this SoldierAward's level's name.
  * @param skip -
- * @return, commendation level
+ * @return, award level
  */
 const std::string SoldierAward::getDecorLevelType(int skip) const
 {
@@ -1401,8 +1396,8 @@ const std::string SoldierAward::getDecorLevelType(int skip) const
 }
 
 /**
- * Gets this SoldierAward' level's description.
- * @return, commendation level description
+ * Gets this SoldierAward's level description.
+ * @return, award level description
  */
 const std::string SoldierAward::getDecorDesc() const
 {
@@ -1412,8 +1407,8 @@ const std::string SoldierAward::getDecorDesc() const
 }
 
 /**
- * Gets this SoldierAward' level's class - stars.
- * @return, commendation level class
+ * Gets this SoldierAward's level class - qty stars.
+ * @return, award level class
  */
 const std::string SoldierAward::getDecorClass() const
 {
@@ -1423,8 +1418,8 @@ const std::string SoldierAward::getDecorClass() const
 }
 
 /**
- * Gets this SoldierAward' level's int.
- * @return, commendation level int
+ * Gets this SoldierAward's level as an integer.
+ * @return, award level int
  */
 size_t SoldierAward::getDecorLevelInt() const
 {
@@ -1433,7 +1428,7 @@ size_t SoldierAward::getDecorLevelInt() const
 
 /**
  * Gets newness of this SoldierAward.
- * @return, true if the commendation is new
+ * @return, true if the award is new
  */
 bool SoldierAward::isNew() const
 {

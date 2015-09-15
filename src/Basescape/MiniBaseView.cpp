@@ -59,7 +59,7 @@ MiniBaseView::MiniBaseView(
 			x,y),
 		_mode(mode),
 		_texture(NULL),
-		_baseID(0),
+		_baseId(0),
 		_hoverBase(0),
 		_blink(false)
 {
@@ -114,7 +114,7 @@ size_t MiniBaseView::getHoveredBase() const
  */
 void MiniBaseView::setSelectedBase(size_t base)
 {
-	_baseID =
+	_baseId =
 	kL_curBase = base;
 
 	_redraw = true;
@@ -137,22 +137,31 @@ void MiniBaseView::draw()
 			i != MAX_BASES;
 			++i)
 	{
-		if (i == _baseID) // Draw base squares
+		if (i == _baseId) // Draw white border.
 		{
 			SDL_Rect rect;
 			rect.x = static_cast<Sint16>(static_cast<int>(i) * (MINI_SIZE + 2));
 			rect.y = 0;
 			rect.w =
 			rect.h = static_cast<Uint16>(MINI_SIZE + 2);
-			drawRect(&rect, 1);
+
+			color = WHITE;
+			if (i < _baseList->size())
+			{
+				base = _baseList->at(i);
+				if (base->getBaseExposed() == true)
+					color = RED_D;
+			}
+
+			drawRect(&rect, color);
 		}
 
-		_texture->getFrame(41)->setX(static_cast<int>(i) * (MINI_SIZE + 2));
+		_texture->getFrame(41)->setX(static_cast<int>(i) * (MINI_SIZE + 2)); // Draw base squares.
 		_texture->getFrame(41)->setY(0);
 		_texture->getFrame(41)->blit(this);
 
 
-		if (i < _baseList->size()) // Draw facilities
+		if (i < _baseList->size()) // Draw facilities.
 		{
 			base = _baseList->at(i);
 
@@ -168,19 +177,19 @@ void MiniBaseView::draw()
 			SDL_Rect rect;
 
 			for (std::vector<BaseFacility*>::const_iterator
-					fac = base->getFacilities()->begin();
-					fac != base->getFacilities()->end();
-					++fac)
+					j = base->getFacilities()->begin();
+					j != base->getFacilities()->end();
+					++j)
 			{
-				if ((*fac)->getBuildTime() == 0)
+				if ((*j)->getBuildTime() == 0)
 					color = GREEN;
 				else
 					color = RED_D;
 
-				rect.x = static_cast<Sint16>(static_cast<int>(i) * (MINI_SIZE + 2) + 2 + (*fac)->getX() * 2);
-				rect.y = static_cast<Sint16>(2 + (*fac)->getY() * 2);
+				rect.x = static_cast<Sint16>(static_cast<int>(i) * (MINI_SIZE + 2) + 2 + (*j)->getX() * 2);
+				rect.y = static_cast<Sint16>(2 + (*j)->getY() * 2);
 				rect.w =
-				rect.h = static_cast<Uint16>((*fac)->getRules()->getSize() * 2);
+				rect.h = static_cast<Uint16>((*j)->getRules()->getSize() * 2);
 				drawRect(&rect, color + 3);
 
 				++rect.x;
@@ -226,17 +235,17 @@ void MiniBaseView::draw()
 					y = 17;
 
 					for (std::vector<Craft*>::const_iterator
-							craft = base->getCrafts()->begin();
-							craft != base->getCrafts()->end();
-							++craft)
+							j = base->getCrafts()->begin();
+							j != base->getCrafts()->end();
+							++j)
 					{
-						if ((*craft)->getWarning() != CW_NONE)
+						if ((*j)->getWarning() != CW_NONE)
 						{
-							if ((*craft)->getWarning() == CW_CANTREFUEL)
+							if ((*j)->getWarning() == CW_CANTREFUEL)
 								color = ORANGE_L;
-							else if ((*craft)->getWarning() == CW_CANTREARM)
+							else if ((*j)->getWarning() == CW_CANTREARM)
 								color = ORANGE_D;
-							else //if ((*craft)->getWarning() == CW_CANTREPAIR) // should not happen without a repair mechanic!
+							else //if ((*j)->getWarning() == CW_CANTREPAIR) // should not happen without a repair mechanic!
 								color = RED_D;
 
 							setPixelColor( // Craft needs materiels
@@ -245,14 +254,14 @@ void MiniBaseView::draw()
 										color);
 						}
 
-						if ((*craft)->getStatus() == "STR_READY")
+						if ((*j)->getStatus() == "STR_READY")
 							setPixelColor(
 										x + 14,
 										y,
 										GREEN);
 
 
-						craftRule = (*craft)->getRules();
+						craftRule = (*j)->getRules();
 
 						if (craftRule->getRefuelItem().empty() == false)
 							color = YELLOW_L;
@@ -265,7 +274,7 @@ void MiniBaseView::draw()
 									color);
 
 						if (craftRule->getWeapons() > 0
-							&& craftRule->getWeapons() == (*craft)->getNumWeapons())
+							&& craftRule->getWeapons() == (*j)->getNumWeapons())
 						{
 							setPixelColor(
 										x + 10,

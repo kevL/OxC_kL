@@ -46,36 +46,36 @@ private:
 
 
 	public:
-		/// Creates a commendation of the specified type.
+		/// Creates a award of the specified type.
 		SoldierAward(
 				const std::string& type,
 				const std::string& noun = "noNoun");
-		/// Creates a new commendation and loads its contents from YAML.
+		/// Creates a new award and loads its contents from YAML.
 		explicit SoldierAward(const YAML::Node& node);
-		/// Cleans up the commendation.
+		/// Cleans up the award.
 		~SoldierAward();
 
-		/// Loads the commendation information from YAML.
+		/// Loads the award information from YAML.
 		void load(const YAML::Node& node);
-		/// Saves the commendation information to YAML.
+		/// Saves the award information to YAML.
 		YAML::Node save() const;
 
-		/// Gets commendation name.
+		/// Gets award name.
 		const std::string getType() const;
-		/// Gets commendation noun.
+		/// Gets award noun.
 		const std::string getNoun() const;
-		/// Gets the commendation's decoration level's name.
+		/// Gets the award's decoration level's name.
 		const std::string getDecorLevelType(int skip) const;
-		/// Gets the commendation's decoration description.
+		/// Gets the award's decoration description.
 		const std::string getDecorDesc() const;
-		/// Gets the commendation's decoration class.
+		/// Gets the award's decoration class.
 		const std::string getDecorClass() const;
-		/// Gets the commendation's decoration level's int.
+		/// Gets the award's decoration level's int.
 		size_t getDecorLevelInt() const;
 
-		/// Gets the newness of the commendation.
+		/// Gets the newness of the award.
 		bool isNew() const;
-		/// Sets the commendation newness to false.
+		/// Sets the award newness to false.
 		void setOld();
 
 		/// Increments decoration level and sets '_new' true.
@@ -160,12 +160,12 @@ private:
 		/// Overloads assignment operator.
 		SoldierDiary& operator= (const SoldierDiary& assignThis);
 
-		/// Load a diary.
+		/// Loads a diary.
 		void load(const YAML::Node& node);
-		/// Save a diary.
+		/// Saves a diary.
 		YAML::Node save() const;
 
-		/// Update the diary statistics.
+		/// Updates the diary statistics.
 		void updateDiary(
 				const BattleUnitStatistics* const unitStatistics,
 				MissionStatistics* const missionStatistics,
@@ -205,15 +205,15 @@ private:
 		/// Gets whether soldier died or went missing.
 		std::string getKiaOrMia() const;
 
-		/// Gets the solder's commendations.
+		/// Gets the solder's awards.
 		std::vector<SoldierAward*>* getSoldierAwards();
 
-		/// Manage commendations, return true if a medal is awarded.
+		/// Manages awards, returns true if a medal is awarded.
 		bool manageAwards(const Ruleset* const rules);
 
-		/// Increment the soldier's service time.
+		/// Increments the soldier's service time.
 		void addMonthlyService();
-		/// Award special commendation to the original 8 soldiers.
+		/// Awards special medal to the original 8 soldiers.
 		void awardOriginalEight();
 
 		/// Gets the mission id list.

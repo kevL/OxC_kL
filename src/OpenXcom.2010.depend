@@ -241,7 +241,7 @@
 1440212115 f:\git\openxcom\src\basescape\basescapestate.h
 	"../Engine/State.h"
 
-1430213397 f:\git\openxcom\src\basescape\minibaseview.h
+1442295829 f:\git\openxcom\src\basescape\minibaseview.h
 	"../Engine/InteractiveSurface.h"
 
 1440463028 f:\git\openxcom\src\engine\interactivesurface.h
@@ -4396,7 +4396,7 @@
 	"Soldier.h"
 	"../Ruleset/RuleAlienMission.h"
 
-1440212105 source:f:\git\openxcom\src\basescape\basescapestate.cpp
+1442295322 source:f:\git\openxcom\src\basescape\basescapestate.cpp
 	"BasescapeState.h"
 	"AlienContainmentState.h"
 	"BaseDetectionState.h"
@@ -4895,7 +4895,7 @@
 	<windows.h>
 	<stddef.h>
 
-1441079842 source:f:\git\openxcom\src\basescape\minibaseview.cpp
+1442296410 source:f:\git\openxcom\src\basescape\minibaseview.cpp
 	"MiniBaseView.h"
 	"../Engine/Action.h"
 	"../Engine/SurfaceSet.h"
@@ -10586,7 +10586,7 @@
 
 1431489805 f:\git\openxcom\src\ruleset\statstringcondition.h
 
-1440304522 f:\git\openxcom\src\menu\loadgamestate.h
+1442297273 f:\git\openxcom\src\menu\loadgamestate.h
 	"OptionsBaseState.h"
 	"../Engine/State.h"
 	"../Savegame/SavedGame.h"
@@ -10596,7 +10596,7 @@
 	"../Engine/State.h"
 	"../Savegame/SavedGame.h"
 
-1442030392 source:f:\git\openxcom\src\menu\loadgamestate.cpp
+1442297348 source:f:\git\openxcom\src\menu\loadgamestate.cpp
 	"LoadGameState.h"
 	"ErrorMessageState.h"
 	"../Battlescape/BattlescapeState.h"
@@ -10685,10 +10685,10 @@
 	"BattleState.h"
 	"../Savegame/SavedGame.h"
 
-1442279534 f:\git\openxcom\src\savegame\soldierdiary.h
+1442293152 f:\git\openxcom\src\savegame\soldierdiary.h
 	"BattleUnit.h"
 
-1442284482 f:\git\openxcom\src\basescape\soldierdiaryoverviewstate.h
+1442292349 f:\git\openxcom\src\basescape\soldierdiaryoverviewstate.h
 	"../Engine/State.h"
 
 1440092655 source:f:\git\openxcom\src\basescape\soldierdiarymissionstate.cpp
@@ -10766,7 +10766,7 @@
 	"../Savegame/SoldierDead.h"
 	"../Savegame/SoldierDiary.h"
 
-1442289897 source:f:\git\openxcom\src\savegame\soldierdiary.cpp
+1442294906 source:f:\git\openxcom\src\savegame\soldierdiary.cpp
 	"SoldierDiary.h"
 	"../Ruleset/RuleAward.h"
 	"../Ruleset/Ruleset.h"

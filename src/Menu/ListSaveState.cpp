@@ -44,8 +44,7 @@ ListSaveState::ListSaveState(OptionsOrigin origin)
 	:
 		ListGamesState(
 			origin,
-			1,
-			false),
+			1, false),
 		_selectedRowPre(-1),
 		_selectedRow(-1)
 {

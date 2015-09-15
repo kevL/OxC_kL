@@ -47,8 +47,7 @@ ListLoadState::ListLoadState(OptionsOrigin origin)
 	:
 		ListGamesState(
 			origin,
-			0,
-			true)
+			0, true)
 {
 	_txtTitle->setText(tr("STR_SELECT_GAME_TO_LOAD"));
 

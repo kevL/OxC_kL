@@ -779,9 +779,7 @@ void BasescapeState::miniLeftClick(Action*)
 		Base* const base = new Base(_game->getRuleset());
 
 		_game->popState();
-		_game->pushState(new BuildNewBaseState(
-											base,
-											_globe));
+		_game->pushState(new BuildNewBaseState(base, _globe));
 	}
 }
 

@@ -55,7 +55,7 @@ namespace OpenXcom
 LoadGameState::LoadGameState(
 		OptionsOrigin origin,
 		const std::string& file,
-		SDL_Color* palette)
+		SDL_Color* const palette)
 	:
 		_origin(origin),
 		_file(file),
@@ -73,7 +73,7 @@ LoadGameState::LoadGameState(
 LoadGameState::LoadGameState(
 		OptionsOrigin origin,
 		SaveType type,
-		SDL_Color* palette)
+		SDL_Color* const palette)
 	:
 		_origin(origin),
 		_firstRun(0)
@@ -92,7 +92,7 @@ LoadGameState::LoadGameState(
 			_file = SavedGame::AUTOSAVE_BATTLESCAPE;
 	}
 
-	buildUi(palette);
+	buildUi(palette, true);
 }
 
 /**
@@ -107,16 +107,25 @@ LoadGameState::~LoadGameState()
 
 /**
  * Builds the interface.
- * @param palette - pointer to parent state palette
+ * @param palette	- pointer to parent state palette
+ * @param dropText	- true if loading without a window (eg. quicksave)
  */
-void LoadGameState::buildUi(SDL_Color* palette)
+void LoadGameState::buildUi(
+		SDL_Color* const palette,
+		bool dropText)
 {
 #ifdef _WIN32
 //	MessageBeep(MB_OK); // <- done in BattlescapeState::handle() for Fkeys
 #endif
 	_screen = false;
 
-	_txtStatus = new Text(320, 17, 0, -18); // y was 92, centered vertically
+	int y;
+	if (dropText == true)
+		y = 92;
+	else
+		y = -18;
+
+	_txtStatus = new Text(320, 17, 0, y);
 
 	setPalette(palette);
 

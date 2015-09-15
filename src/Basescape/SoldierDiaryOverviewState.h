@@ -47,12 +47,10 @@ class SoldierDiaryOverviewState
 
 private:
 	static const Uint8
-		BROWN	= 160,
-		WHITE	= 208,//
-		YELLOW	= 213,
-		BLUE	= 218, //
-		PINK	= 241, //
-		PURPLE	= 246; //
+		WHITE	= 208,
+		BLUE	= 218,
+		PINK	= 241,
+		PURPLE	= 246;
 
 	size_t
 		_soldierId,

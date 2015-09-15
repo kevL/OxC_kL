@@ -55,6 +55,7 @@ class MiniBaseView
 private:
 	static const int MINI_SIZE = 14;
 	static const Uint8
+		WHITE		=   1,
 		RED_L		=  33,
 		RED_D		=  37,
 		GREEN		=  50,
@@ -69,7 +70,7 @@ private:
 
 	bool _blink;
 	size_t
-		_baseID,
+		_baseId,
 		_hoverBase;
 
 	SurfaceSet* _texture;
