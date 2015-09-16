@@ -64,7 +64,6 @@ ArticleStateCraft::ArticleStateCraft(const ArticleDefinitionCraft* const defs)
 	_txtTitle->setText(tr(defs->title));
 	_txtTitle->setColor(uPed_BLUE_SLATE);
 	_txtTitle->setBig();
-	_txtTitle->setWordWrap();
 
 	_txtInfo = new Text(
 					defs->rect_text.width,
@@ -91,7 +90,6 @@ ArticleStateCraft::ArticleStateCraft(const ArticleDefinitionCraft* const defs)
 	int range = craftRule->getMaxFuel();
 	if (craftRule->getRefuelItem().empty() == false)
 		range *= craftRule->getMaxSpeed();
-//	else range *= 100;
 
 	range /= 6; // six doses per hour on Geoscape.
 
@@ -102,14 +100,17 @@ ArticleStateCraft::ArticleStateCraft(const ArticleDefinitionCraft* const defs)
 				.arg(craftRule->getAcceleration()) << L'\n';
 	woststr << tr("STR_FUEL_CAPACITY")
 				.arg(Text::formatNumber(range)) << L'\n';
-	woststr << tr("STR_WEAPON_PODS")
-				.arg(craftRule->getWeapons()) << L'\n';
 	woststr << tr("STR_DAMAGE_CAPACITY_UC")
-				.arg(Text::formatNumber(craftRule->getMaxDamage())) << L'\n';
-	woststr << tr("STR_CARGO_SPACE")
-				.arg(craftRule->getSoldiers()) << L'\n';
-	woststr << tr("STR_HWP_CAPACITY")
-				.arg(craftRule->getVehicles());
+				.arg(Text::formatNumber(craftRule->getMaxDamage()));
+	if (craftRule->getWeapons() != 0)
+		woststr << L'\n' << tr("STR_WEAPON_PODS")
+							.arg(craftRule->getWeapons());
+	if (craftRule->getSoldiers() != 0)
+		woststr << L'\n' << tr("STR_CARGO_SPACE")
+							.arg(craftRule->getSoldiers());
+	if (craftRule->getVehicles() != 0)
+		woststr << L'\n' << tr("STR_HWP_CAPACITY")
+							.arg(craftRule->getVehicles());
 	_txtStats->setText(woststr.str());
 
 	centerAllSurfaces();

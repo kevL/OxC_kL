@@ -39,7 +39,7 @@
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 
-#include "../Resource/XcomResourcePack.h" // sza_MusicRules
+#include "../Resource/XcomResourcePack.h"
 
 
 namespace OpenXcom
@@ -67,12 +67,12 @@ MainMenuState::MainMenuState()
 
 	_window			= new Window(this, 256, 160, 32, 20, POPUP_BOTH);
 	_txtTitle		= new Text(256, 17, 32, 40);
-	_txtBuild		= new Text(256, 9, 32, 66);
+	_txtBuild		= new Text(256,  9, 32, 66);
 
-	_btnStart		= new TextButton(92, 20, 64, 88);
+	_btnStart		= new TextButton(92, 20,  64, 88);
 	_btnTactical	= new TextButton(92, 20, 164, 88);
 
-	_btnLoad		= new TextButton(92, 20, 64, 116);
+	_btnLoad		= new TextButton(92, 20,  64, 116);
 //	_btnOptions		= new TextButton(92, 20, 164, 116);
 	_btnIntro		= new TextButton(92, 20, 164, 116);
 
@@ -210,9 +210,7 @@ void MainMenuState::btnQuitClick(Action*)
  * @param dX - reference the delta of X
  * @param dY - reference the delta of Y
  */
-void MainMenuState::resize(
-		/*int& dX,
-		int& dY*/)
+void MainMenuState::resize(/*int& dX, int& dY*/)
 {
 /*	dX = Options::baseXResolution;
 	dY = Options::baseYResolution; */

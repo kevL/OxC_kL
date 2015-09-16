@@ -5854,7 +5854,7 @@
 1430149550 f:\git\openxcom\src\battlescape\promotionsstate.h
 	"../Engine/State.h"
 
-1433864080 f:\git\openxcom\src\menu\mainmenustate.h
+1442380126 f:\git\openxcom\src\menu\mainmenustate.h
 	"../Engine/State.h"
 
 1439224500 f:\git\openxcom\src\ruleset\rulecountry.h
@@ -6959,7 +6959,7 @@
 1432346700 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1442279466 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1442380307 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	"AlienBaseState.h"
 	"BaseDefenseState.h"
@@ -7556,7 +7556,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1438170825 source:f:\git\openxcom\src\menu\mainmenustate.cpp
+1442380175 source:f:\git\openxcom\src\menu\mainmenustate.cpp
 	"MainMenuState.h"
 	"IntroState.h"
 	"ListLoadState.h"
@@ -8141,7 +8141,7 @@
 1442351907 f:\git\openxcom\src\ufopaedia\articlestatebasefacility.h
 	"ArticleState.h"
 
-1442379197 f:\git\openxcom\src\ufopaedia\articlestate.h
+1442379879 f:\git\openxcom\src\ufopaedia\articlestate.h
 	"../Engine/State.h"
 	"../Ruleset/RuleItem.h"
 
@@ -8671,7 +8671,7 @@
 1441871593 source:f:\git\openxcom\src\savegame\weightedoptions.cpp
 	"WeightedOptions.h"
 
-1442379171 source:f:\git\openxcom\src\ufopaedia\articlestate.cpp
+1442379862 source:f:\git\openxcom\src\ufopaedia\articlestate.cpp
 	"ArticleState.h"
 	"Ufopaedia.h"
 	"../Engine/Game.h"

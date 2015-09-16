@@ -74,9 +74,7 @@ private:
 		void btnQuitClick(Action* action);
 
 		/// Update the resolution settings - just resized the window.
-		void resize(
-				/*int& dX,
-				int& dY*/);
+		void resize(/*int& dX, int& dY*/);
 };
 
 }

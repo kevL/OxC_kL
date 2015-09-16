@@ -680,7 +680,13 @@ GeoscapeState::GeoscapeState()
 	_btnOptions->onMouseClick((ActionHandler)& GeoscapeState::btnOptionsClick);
 	_btnOptions->onKeyboardPress(
 					(ActionHandler)& GeoscapeState::btnOptionsClick,
-					Options::keyGeoOptions);
+					Options::keyGeoOptions); // Escape key.
+	_btnOptions->onKeyboardPress(
+					(ActionHandler)& GeoscapeState::btnOptionsClick,
+					Options::keyOk);
+	_btnOptions->onKeyboardPress(
+					(ActionHandler)& GeoscapeState::btnOptionsClick,
+					Options::keyOkKeypad);
 
 	_btnFunding->copy(geobord);
 	_btnFunding->onMouseClick((ActionHandler)& GeoscapeState::btnFundingClick);
@@ -3438,8 +3444,7 @@ void GeoscapeState::btnUfopaediaClick(Action*)
 
 	_game->getResourcePack()->playMusic(
 									OpenXcom::res_MUSIC_UFOPAEDIA,
-									"",
-									1);
+									"", 1);
 }
 
 /**
