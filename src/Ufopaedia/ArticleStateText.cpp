@@ -39,7 +39,7 @@ namespace OpenXcom
  * cTor.
  * @param defs - pointer to ArticleDefinitionText (ArticleDefinition.h)
  */
-ArticleStateText::ArticleStateText(ArticleDefinitionText* defs)
+ArticleStateText::ArticleStateText(const ArticleDefinitionText* const defs)
 	:
 		ArticleState(defs->id)
 {
@@ -55,25 +55,26 @@ ArticleStateText::ArticleStateText(ArticleDefinitionText* defs)
 
 	centerAllSurfaces();
 
+
 	_game->getResourcePack()->getSurface("BACK10.SCR")->blit(_bg);
 
-	_btnOk->setColor(Palette::blockOffset(5));
-	_btnPrev->setColor(Palette::blockOffset(5));
-	_btnNext->setColor(Palette::blockOffset(5));
+	_btnOk->setColor(uPed_VIOLET);
+	_btnPrev->setColor(uPed_VIOLET);
+	_btnNext->setColor(uPed_VIOLET);
 
 	_txtTitle->setText(tr(defs->title));
-	_txtTitle->setColor(Palette::blockOffset(15)+4);
+	_txtTitle->setColor(uPed_GREEN_SLATE);
 	_txtTitle->setBig();
 
 	_txtInfo->setText(tr(defs->text));
-	_txtInfo->setColor(Palette::blockOffset(15)-1);
+	_txtInfo->setColor(uPed_BLUE_SLATE);
 	_txtInfo->setWordWrap();
 }
 
 /**
  * dTor.
  */
-ArticleStateText::~ArticleStateText()
+ArticleStateText::~ArticleStateText() // virtual.
 {}
 
 }

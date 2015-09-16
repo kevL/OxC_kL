@@ -51,7 +51,7 @@ namespace OpenXcom
 NewPossibleResearchState::NewPossibleResearchState(
 		Base* const base,
 		const std::vector<RuleResearch*>& possibilities,
-		bool showResearchButton) // myk002_add.
+		bool showResearchButton)
 	:
 		_base(base)
 {
@@ -107,7 +107,7 @@ NewPossibleResearchState::NewPossibleResearchState(
 	{
 		if (_game->getSavedGame()->wasResearchPopped(*i) == false
 			&& (*i)->getRequirements().empty() == true
-			&& _game->getRuleset()->getUnit((*i)->getName()) == NULL)
+			&& ((*i)->needItem() == false || _game->getRuleset()->getUnit((*i)->getName()) == NULL)) // not liveAlien.
 		{
 			_game->getSavedGame()->addPoppedResearch((*i));
 			_lstPossibilities->addRow(1, tr((*i)->getName ()).c_str());

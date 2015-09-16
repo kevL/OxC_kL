@@ -34,7 +34,7 @@ class TextList;
 
 /**
  * ArticleStateBaseFacility has a caption, text, preview image and a stats block.
- * The facility image is found using the RuleBaseFacility class.
+ * @note The facility image is found using the RuleBaseFacility class.
  */
 class ArticleStateBaseFacility
 	:
@@ -51,7 +51,7 @@ protected:
 
 	public:
 		/// cTor.
-		explicit ArticleStateBaseFacility(ArticleDefinitionBaseFacility* article_defs);
+		explicit ArticleStateBaseFacility(const ArticleDefinitionBaseFacility* const defs);
 		/// dTor.
 		virtual ~ArticleStateBaseFacility();
 };

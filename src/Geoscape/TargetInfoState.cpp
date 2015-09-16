@@ -62,7 +62,7 @@ TargetInfoState::TargetInfoState(
 
 	_edtTarget		= new TextEdit(this, 50, 9, 38, 46);
 
-	_txtTargetted	= new Text(182, 9, 37, 71);
+	_txtTargetted	= new Text(182,  9, 37, 71);
 	_txtFollowers	= new Text(182, 40, 37, 82);
 
 	_btnIntercept	= new TextButton(160, 16, 48, 119);
@@ -83,7 +83,6 @@ TargetInfoState::TargetInfoState(
 
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
-	_btnIntercept->setColor(Palette::blockOffset(8)+5);
 	_btnIntercept->setText(tr("STR_INTERCEPT"));
 	_btnIntercept->onMouseClick((ActionHandler)& TargetInfoState::btnInterceptClick);
 
@@ -150,6 +149,7 @@ TargetInfoState::~TargetInfoState()
 
 /**
  * Edits an aLienBase's name.
+ * @note For player to type in suspected race.
  * @param action - pointer to an Action
  */
 void TargetInfoState::edtTargetChange(Action*)
@@ -159,16 +159,14 @@ void TargetInfoState::edtTargetChange(Action*)
 
 /**
  * Picks a craft to intercept the UFO.
- * @param action, Pointer to an action.
+ * @param action - pointer to an Action
  */
 void TargetInfoState::btnInterceptClick(Action*)
 {
 	_state->resetTimer();
 
 	_game->popState();
-	_game->pushState(new InterceptState(
-									NULL,
-									_state));
+	_game->pushState(new InterceptState(NULL, _state));
 }
 
 /**

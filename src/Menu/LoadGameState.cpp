@@ -108,7 +108,7 @@ LoadGameState::~LoadGameState()
 /**
  * Builds the interface.
  * @param palette	- pointer to parent state palette
- * @param dropText	- true if loading without a window (eg. quicksave)
+ * @param dropText	- true if loading without a window (eg. quickload)
  */
 void LoadGameState::buildUi(
 		SDL_Color* const palette,

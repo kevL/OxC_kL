@@ -364,9 +364,7 @@ Globe::Globe(
 	_cenLat = _game->getSavedGame()->getGlobeLatitude();
 
 	_zoom = _game->getSavedGame()->getGlobeZoom();
-	setupRadii(
-			width,
-			height);
+	setupRadii(width, height);
 	setZoom(_zoom);
 
 	_randomNoiseData.resize(static_data.random_surf_size * static_data.random_surf_size);
@@ -2538,11 +2536,8 @@ void Globe::mousePress(Action* action, State* state)
 		_mouseScrollStartTime = SDL_GetTicks();
 	}
 
-	if (lat == lat // Check for errors
-		&& lon == lon)
-	{
+	if (lat == lat && lon == lon) // Check for errors
 		InteractiveSurface::mousePress(action, state);
-	}
 }
 
 /**
@@ -2562,11 +2557,8 @@ void Globe::mouseRelease(Action* action, State* state)
 //	if (action->getDetails()->button.button == Options::geoDragScrollButton)
 //		stopScrolling(action);
 
-	if (lat == lat // Check for errors
-		&& lon == lon)
-	{
+	if (lat == lat && lon == lon) // Check for errors
 		InteractiveSurface::mouseRelease(action, state);
-	}
 }
 
 /**

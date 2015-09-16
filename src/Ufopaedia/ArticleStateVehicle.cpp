@@ -26,11 +26,11 @@
 //#include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
 
-#include "../Resource/ResourcePack.h"
-
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/TextList.h"
+
+#include "../Resource/ResourcePack.h"
 
 #include "../Ruleset/ArticleDefinition.h"
 #include "../Ruleset/RuleArmor.h"
@@ -46,15 +46,15 @@ namespace OpenXcom
  * ArticleStateVehicle has a caption, text, and a stats block.
  * @param defs - pointer to ArticleDefinitionVehicle (ArticleDefinition.h)
  */
-ArticleStateVehicle::ArticleStateVehicle(ArticleDefinitionVehicle* defs)
+ArticleStateVehicle::ArticleStateVehicle(const ArticleDefinitionVehicle* const defs)
 	:
 		ArticleState(defs->id)
 {
 	RuleUnit* const unit = _game->getRuleset()->getUnit(defs->id);
-	const RuleArmor* const armor = _game->getRuleset()->getArmor(unit->getArmor());
+	const RuleArmor* const armorRule = _game->getRuleset()->getArmor(unit->getArmor());
 	const RuleItem* const itRule = _game->getRuleset()->getItem(defs->id);
 
-	_txtTitle	= new Text(310, 17, 5, 23);
+	_txtTitle	= new Text(310,  17,  5,  23);
 	_txtInfo	= new Text(300, 150, 10, 122);
 	_lstStats	= new TextList(300, 89, 10, 48);
 
@@ -68,20 +68,20 @@ ArticleStateVehicle::ArticleStateVehicle(ArticleDefinitionVehicle* defs)
 
 	_game->getResourcePack()->getSurface("BACK10.SCR")->blit(_bg);
 
-	_btnOk->setColor(Palette::blockOffset(5));
-	_btnPrev->setColor(Palette::blockOffset(5));
-	_btnNext->setColor(Palette::blockOffset(5));
+	_btnOk->setColor(uPed_VIOLET);
+	_btnPrev->setColor(uPed_VIOLET);
+	_btnNext->setColor(uPed_VIOLET);
 
 	_txtTitle->setText(tr(defs->title));
-	_txtTitle->setColor(Palette::blockOffset(15)+4);
+	_txtTitle->setColor(uPed_GREEN_SLATE);
 	_txtTitle->setBig();
 
 	_txtInfo->setText(tr(defs->text));
-	_txtInfo->setColor(Palette::blockOffset(15)-1);
+	_txtInfo->setColor(uPed_BLUE_SLATE);
 	_txtInfo->setWordWrap();
 
 	_lstStats->setColumns(2, 175, 145);
-	_lstStats->setColor(Palette::blockOffset(15)+4);
+	_lstStats->setColor(uPed_GREEN_SLATE);
 	_lstStats->setDot();
 
 	std::wostringstream woststr;
@@ -100,35 +100,35 @@ ArticleStateVehicle::ArticleStateVehicle(ArticleDefinitionVehicle* defs)
 				woststr.str().c_str());
 
 	woststr.str(L"");
-	woststr << armor->getFrontArmor();
+	woststr << armorRule->getFrontArmor();
 	_lstStats->addRow(
 				2,
 				tr("STR_FRONT_ARMOR").c_str(),
 				woststr.str().c_str());
 
 	woststr.str(L"");
-	woststr << armor->getSideArmor();
+	woststr << armorRule->getSideArmor();
 	_lstStats->addRow(
 				2,
 				tr("STR_LEFT_ARMOR").c_str(),
 				woststr.str().c_str());
 
 	woststr.str(L"");
-	woststr << armor->getSideArmor();
+	woststr << armorRule->getSideArmor();
 	_lstStats->addRow(
 				2,
 				tr("STR_RIGHT_ARMOR").c_str(),
 				woststr.str().c_str());
 
 	woststr.str(L"");
-	woststr << armor->getRearArmor();
+	woststr << armorRule->getRearArmor();
 	_lstStats->addRow(
 				2,
 				tr("STR_REAR_ARMOR").c_str(),
 				woststr.str().c_str());
 
 	woststr.str(L"");
-	woststr << armor->getUnderArmor();
+	woststr << armorRule->getUnderArmor();
 	_lstStats->addRow(
 				2,
 				tr("STR_UNDER_ARMOR").c_str(),
@@ -182,7 +182,7 @@ ArticleStateVehicle::ArticleStateVehicle(ArticleDefinitionVehicle* defs)
 /**
  * dTor.
  */
- ArticleStateVehicle::~ArticleStateVehicle()
+ ArticleStateVehicle::~ArticleStateVehicle() // virtual.
 {}
 
 }

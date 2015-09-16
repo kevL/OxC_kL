@@ -34,7 +34,7 @@ class TextList;
 
 /**
  * ArticleStateArmor has a caption, preview image and a stats block.
- * The image is found using the Armor class.
+ * @note The image is found using the Armor class.
  */
 class ArticleStateArmor
 	:
@@ -63,7 +63,7 @@ protected:
 
 	public:
 		/// cTor.
-		explicit ArticleStateArmor(ArticleDefinitionArmor* article_defs);
+		explicit ArticleStateArmor(const ArticleDefinitionArmor* const defs);
 		/// dTor.
 		virtual ~ArticleStateArmor();
 };

@@ -29,15 +29,15 @@
 //#include "../Engine/Palette.h"
 //#include "../Engine/Surface.h"
 
+//#include "../Interface/Text.h"
+#include "../Interface/TextButton.h"
+#include "../Interface/TextList.h"
+
 #include "../Resource/ResourcePack.h"
 
 #include "../Ruleset/ArticleDefinition.h"
 #include "../Ruleset/RuleItem.h"
 #include "../Ruleset/Ruleset.h"
-
-//#include "../Interface/Text.h"
-#include "../Interface/TextButton.h"
-#include "../Interface/TextList.h"
 
 
 namespace OpenXcom
@@ -47,7 +47,7 @@ namespace OpenXcom
  * cTor.
  * @param defs - pointer to ArticleDefinitionItem (ArticleDefinition.h)
  */
-ArticleStateItem::ArticleStateItem(ArticleDefinitionItem* defs)
+ArticleStateItem::ArticleStateItem(const ArticleDefinitionItem* const defs)
 	:
 		ArticleState(defs->id)
 {
@@ -66,7 +66,7 @@ ArticleStateItem::ArticleStateItem(ArticleDefinitionItem* defs)
 	_btnNext->setColor(Palette::blockOffset(9));
 
 	_txtTitle->setText(tr(defs->title));
-	_txtTitle->setColor(Palette::blockOffset(14)+15);
+	_txtTitle->setColor(uPed_BLUE_SLATE);
 	_txtTitle->setBig();
 	_txtTitle->setWordWrap();
 
@@ -86,7 +86,7 @@ ArticleStateItem::ArticleStateItem(ArticleDefinitionItem* defs)
 		_txtTwoHand = new Text(13, 9, 138, 52);
 		add(_txtTwoHand);
 		_txtTwoHand->setText(tr("STR_2HAND"));
-		_txtTwoHand->setColor(Palette::blockOffset(14)+15);
+		_txtTwoHand->setColor(uPed_BLUE_SLATE);
 	}
 
 	const std::vector<std::string>* const ammo_data = itRule->getCompatibleAmmo();
@@ -97,24 +97,21 @@ ArticleStateItem::ArticleStateItem(ArticleDefinitionItem* defs)
 		_txtShotType = new Text(100, 17, 8, 66);
 		add(_txtShotType);
 		_txtShotType->setText(tr("STR_SHOT_TYPE"));
-		_txtShotType->setColor(Palette::blockOffset(14)+15);
-//		_txtShotType->setWordWrap();
+		_txtShotType->setColor(uPed_BLUE_SLATE);
 
 		_txtAccuracy = new Text(50, 17, 108, 66);
 		add(_txtAccuracy);
 		_txtAccuracy->setText(tr("STR_ACCURACY_UC"));
-		_txtAccuracy->setColor(Palette::blockOffset(14)+15);
-//		_txtAccuracy->setWordWrap();
+		_txtAccuracy->setColor(uPed_BLUE_SLATE);
 
 		_txtTuCost = new Text(60, 17, 160, 66);
 		add(_txtTuCost);
 		_txtTuCost->setText(tr("STR_TIME_UNIT_COST"));
-		_txtTuCost->setColor(Palette::blockOffset(14)+15);
-//		_txtTuCost->setWordWrap();
+		_txtTuCost->setColor(uPed_BLUE_SLATE);
 
 		_lstInfo = new TextList(204, 57, 8, 82);
 		add(_lstInfo);
-		_lstInfo->setColor(Palette::blockOffset(15)+4); // color for %-data!
+		_lstInfo->setColor(uPed_GREEN_SLATE); // color for %-data!
 		_lstInfo->setColumns(3, 100, 52, 52);
 		_lstInfo->setBig();
 
@@ -134,7 +131,7 @@ ArticleStateItem::ArticleStateItem(ArticleDefinitionItem* defs)
 							tr("STR_SHOT_TYPE_AUTO").c_str(),
 							Text::formatNumber(itRule->getAccuracyAuto()).c_str(),
 							tu.c_str());
-			_lstInfo->setCellColor(current_row++, 0, Palette::blockOffset(14)+15);
+			_lstInfo->setCellColor(current_row++, 0, uPed_BLUE_SLATE);
 		}
 
 		if (itRule->getTUSnap() != 0)
@@ -149,7 +146,7 @@ ArticleStateItem::ArticleStateItem(ArticleDefinitionItem* defs)
 							tr("STR_SHOT_TYPE_SNAP").c_str(),
 							Text::formatNumber(itRule->getAccuracySnap()).c_str(),
 							tu.c_str());
-			_lstInfo->setCellColor(current_row++, 0, Palette::blockOffset(14)+15);
+			_lstInfo->setCellColor(current_row++, 0, uPed_BLUE_SLATE);
 		}
 
 		if (itRule->getTUAimed() != 0)
@@ -164,7 +161,7 @@ ArticleStateItem::ArticleStateItem(ArticleDefinitionItem* defs)
 							tr("STR_SHOT_TYPE_AIMED").c_str(),
 							Text::formatNumber(itRule->getAccuracyAimed()).c_str(),
 							tu.c_str());
-			_lstInfo->setCellColor(current_row++, 0, Palette::blockOffset(14)+15);
+			_lstInfo->setCellColor(current_row++, 0, uPed_BLUE_SLATE);
 		}
 
 		if (itRule->getTULaunch() != 0)
@@ -179,7 +176,7 @@ ArticleStateItem::ArticleStateItem(ArticleDefinitionItem* defs)
 							tr("STR_SHOT_TYPE_LAUNCH").c_str(),
 							L"",
 							tu.c_str());
-			_lstInfo->setCellColor(current_row, 0, Palette::blockOffset(14)+15);
+			_lstInfo->setCellColor(current_row, 0, uPed_BLUE_SLATE);
 		}
 
 		// text_info is BELOW the info table
@@ -190,7 +187,7 @@ ArticleStateItem::ArticleStateItem(ArticleDefinitionItem* defs)
 
 	add(_txtInfo);
 	_txtInfo->setText(tr(defs->text));
-	_txtInfo->setColor(Palette::blockOffset(14)+15);
+	_txtInfo->setColor(uPed_BLUE_SLATE);
 	_txtInfo->setWordWrap();
 
 
@@ -201,7 +198,7 @@ ArticleStateItem::ArticleStateItem(ArticleDefinitionItem* defs)
 	{
 		_txtAmmoType[i] = new Text(90, 9, 189, 24 + (static_cast<int>(i) * 49));
 		add(_txtAmmoType[i]);
-		_txtAmmoType[i]->setColor(Palette::blockOffset(14)+15);
+		_txtAmmoType[i]->setColor(uPed_BLUE_SLATE);
 		_txtAmmoType[i]->setAlign(ALIGN_CENTER);
 		_txtAmmoType[i]->setVerticalAlign(ALIGN_MIDDLE);
 		_txtAmmoType[i]->setWordWrap();
@@ -224,13 +221,13 @@ ArticleStateItem::ArticleStateItem(ArticleDefinitionItem* defs)
 			_txtDamage = new Text(80, 10, 199, 7);
 			add(_txtDamage);
 			_txtDamage->setText(tr("STR_DAMAGE_UC"));
-			_txtDamage->setColor(Palette::blockOffset(14)+15);
+			_txtDamage->setColor(uPed_BLUE_SLATE);
 			_txtDamage->setAlign(ALIGN_CENTER);
 
 			_txtAmmo = new Text(45, 10, 271, 7);
 			add(_txtAmmo);
 			_txtAmmo->setText(tr("STR_AMMO"));
-			_txtAmmo->setColor(Palette::blockOffset(14)+15);
+			_txtAmmo->setColor(uPed_BLUE_SLATE);
 			_txtAmmo->setAlign(ALIGN_CENTER);
 
 			if (ammo_data->empty() == true)
@@ -247,12 +244,12 @@ ArticleStateItem::ArticleStateItem(ArticleDefinitionItem* defs)
 			}
 			else
 			{
-				const size_t ammoSize = std::min(
-											ammo_data->size(),
-											static_cast<size_t>(3)); // yeh right.
+				const size_t AMMO_TYPES = std::min(
+												ammo_data->size(),
+												static_cast<size_t>(3)); // yeh right.
 				for (size_t
 						i = 0;
-						i != ammoSize;
+						i != AMMO_TYPES;
 						++i)
 				{
 					const ArticleDefinition* const ammo_article = _game->getRuleset()->getUfopaediaArticle((*ammo_data)[i]);
@@ -285,7 +282,7 @@ ArticleStateItem::ArticleStateItem(ArticleDefinitionItem* defs)
 		case BT_MELEE:
 /*			_txtDamage = new Text(82, 10, 194, 7);
 			add(_txtDamage);
-			_txtDamage->setColor(Palette::blockOffset(14)+15);
+			_txtDamage->setColor(uPed_BLUE_SLATE);
 			_txtDamage->setAlign(ALIGN_CENTER);
 			_txtDamage->setText(tr("STR_DAMAGE_UC")); */
 
@@ -303,7 +300,7 @@ ArticleStateItem::ArticleStateItem(ArticleDefinitionItem* defs)
 /**
  * dTor.
  */
-ArticleStateItem::~ArticleStateItem()
+ArticleStateItem::~ArticleStateItem() // virtual.
 {}
 
 }

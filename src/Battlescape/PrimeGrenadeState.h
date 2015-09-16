@@ -45,6 +45,11 @@ class PrimeGrenadeState
 {
 
 private:
+	static const Uint8
+		BLACK	= 15,
+		ORANGE	= 108,
+		BLUE	= 132;
+
 	bool _inInventoryView;
 
 	BattleAction* _action;

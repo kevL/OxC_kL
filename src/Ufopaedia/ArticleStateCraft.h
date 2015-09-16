@@ -32,8 +32,8 @@ class Text;
 
 /**
  * ArticleStateCraft has a caption, text, background image and a stats block.
- * The layout of the description text and stats block can vary depending on
- * the background craft image.
+ * @note The layout of the description text and stats block can vary depending
+ * on the background craft image.
  */
 class ArticleStateCraft
 	:
@@ -49,7 +49,7 @@ protected:
 
 	public:
 		/// cTor.
-		explicit ArticleStateCraft(ArticleDefinitionCraft* article_defs);
+		explicit ArticleStateCraft(const ArticleDefinitionCraft* const defs);
 		/// dTor.
 		virtual ~ArticleStateCraft();
 };

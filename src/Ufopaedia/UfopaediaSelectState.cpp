@@ -73,7 +73,16 @@ UfopaediaSelectState::UfopaediaSelectState(const std::string& section)
 	_btnOk->onMouseClick((ActionHandler)& UfopaediaSelectState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& UfopaediaSelectState::btnOkClick,
+					Options::keyOk);
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& UfopaediaSelectState::btnOkClick,
+					Options::keyOkKeypad);
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& UfopaediaSelectState::btnOkClick,
 					Options::keyCancel);
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& UfopaediaSelectState::btnOkClick,
+					Options::keyGeoUfopedia);
 
 	_lstSelection->setColumns(1, 206);
 	_lstSelection->setBackground(_window);
@@ -137,9 +146,7 @@ void UfopaediaSelectState::loadSelectionList()
 			i != _article_list.end();
 			++i)
 	{
-		_lstSelection->addRow(
-							1,
-							tr((*i)->title).c_str());
+		_lstSelection->addRow(1, tr((*i)->title).c_str());
 	}
 }
 

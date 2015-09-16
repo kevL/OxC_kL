@@ -33,8 +33,7 @@ const Uint32 accurate = 4;
 
 Uint32 slowTick()
 {
-/*kL
-	static Uint32 old_time = SDL_GetTicks();
+/*	static Uint32 old_time = SDL_GetTicks();
 	static Uint64 false_time = static_cast<Uint64>(old_time) << accurate;
 	Uint64 new_time = ((Uint64)SDL_GetTicks()) << accurate;
 	false_time += (new_time - old_time) / Timer::gameSlowSpeed;

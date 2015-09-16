@@ -43,14 +43,14 @@
 namespace OpenXcom
 {
 
-int Ufopaedia::_current_index = 0;
+int Ufopaedia::_current_index = 0; // static.
 
 
 /**
  * Checks if an article has already been released.
  * @param gameSave	- pointer to SavedGame
  * @param article	- ArticleDefinition to release
- * @returns, true if the article is available
+ * @return, true if the article is available
  */
 bool Ufopaedia::isArticleAvailable( // static.
 		const SavedGame* const gameSave,
@@ -66,14 +66,12 @@ bool Ufopaedia::isArticleAvailable( // static.
  * @param article_id	- reference the article ID to find
  * @return, index of the given article ID in the internal list (-1 if not found)
  */
-int Ufopaedia::getArticleIndex( // static.
+int Ufopaedia::getArticleIndex( // protected/static.
 		const SavedGame* const gameSave,
 		const Ruleset* const rules,
 		std::string& article_id)
 {
-	const ArticleDefinitionList articles = getAvailableArticles(
-															gameSave,
-															rules);
+	const ArticleDefinitionList articles = getAvailableArticles(gameSave, rules);
 	const std::string UC_Id = article_id + "_UC";
 
 	for (size_t
@@ -111,7 +109,7 @@ int Ufopaedia::getArticleIndex( // static.
  * @param article - pointer to ArticleDefinition to create from
  * @return, pointer to ArticleState object if created or NULL otherwise
  */
-ArticleState* Ufopaedia::createArticleState(ArticleDefinition* const article) // static.
+ArticleState* Ufopaedia::createArticleState(ArticleDefinition* const article) // protected/static.
 {
 	switch (article->getType())
 	{
@@ -264,7 +262,7 @@ void Ufopaedia::list( // static.
  * @param rules		- pointer to Ruleset
  * @return, ArticleDefinitionList of visible articles
  */
-ArticleDefinitionList Ufopaedia::getAvailableArticles( // static.
+ArticleDefinitionList Ufopaedia::getAvailableArticles( // protected/static.
 		const SavedGame* const gameSave,
 		const Ruleset* const rules)
 {

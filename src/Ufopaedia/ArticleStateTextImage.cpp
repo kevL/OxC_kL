@@ -44,7 +44,7 @@ namespace OpenXcom
  * cTor.
  * @param defs - pointer to ArticleDefinitionTextImage (ArticleDefinition.h)
  */
-ArticleStateTextImage::ArticleStateTextImage(ArticleDefinitionTextImage* defs)
+ArticleStateTextImage::ArticleStateTextImage(const ArticleDefinitionTextImage* const defs)
 	:
 		ArticleState(defs->id),
 		_defs(defs)
@@ -59,28 +59,32 @@ ArticleStateTextImage::ArticleStateTextImage(ArticleDefinitionTextImage* defs)
 
 	_game->getResourcePack()->getSurface(defs->image_id)->blit(_bg);
 
-	_btnOk->setColor(Palette::blockOffset(5)+3);
-	_btnPrev->setColor(Palette::blockOffset(5)+3);
-	_btnNext->setColor(Palette::blockOffset(5)+3);
+	_btnOk->setColor(uPed_VIOLET);
+	_btnPrev->setColor(uPed_VIOLET);
+	_btnNext->setColor(uPed_VIOLET);
 
 	_txtTitle->setText(tr(defs->title));
-	_txtTitle->setColor(Palette::blockOffset(15)+4);
+	_txtTitle->setColor(uPed_GREEN_SLATE);
 	_txtTitle->setBig();
 	_txtTitle->setWordWrap();
 
 	const int text_height = _txtTitle->getTextHeight();
-	_txtInfo = new Text(defs->text_width, 162, 5, 23 + text_height);
+	_txtInfo = new Text(
+					defs->text_width,
+					162,
+					5,
+					23 + text_height);
 	add(_txtInfo);
 	_txtInfo->setText(tr(defs->text));
-	_txtInfo->setColor(Palette::blockOffset(15)-1);
+	_txtInfo->setColor(uPed_BLUE_SLATE);
 	_txtInfo->setWordWrap();
 
 	_btnExtraInfo = new TextButton(50, 16, 0, 184);
 	add(_btnExtraInfo);
 	_btnExtraInfo->setText(L"info");
-	_btnExtraInfo->setColor(Palette::blockOffset(15)+4);
+	_btnExtraInfo->setColor(uPed_GREEN_SLATE);
 	_btnExtraInfo->setVisible(defs->section == UFOPAEDIA_ALIEN_LIFE_FORMS
-							&& showInfo() == true);
+							&& showInfoBtn() == true);
 	_btnExtraInfo->onMouseClick((ActionHandler)& ArticleStateTextImage::btnInfo);
 
 	centerAllSurfaces();
@@ -89,7 +93,7 @@ ArticleStateTextImage::ArticleStateTextImage(ArticleDefinitionTextImage* defs)
 /**
  * dTor.
  */
-ArticleStateTextImage::~ArticleStateTextImage()
+ArticleStateTextImage::~ArticleStateTextImage() // virtual.
 {}
 
 /**
@@ -106,7 +110,7 @@ void ArticleStateTextImage::btnInfo(Action*) // private.
  * @note Player needs to have both the alien and its autopsy researched.
  * @return, true if the researches have been done
  */
-bool ArticleStateTextImage::showInfo() // private.
+bool ArticleStateTextImage::showInfoBtn() // private.
 {
 	if (_defs->id.find("_AUTOPSY") != std::string::npos)
 	{

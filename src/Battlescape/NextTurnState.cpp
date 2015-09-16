@@ -104,7 +104,7 @@ NextTurnState::NextTurnState(
 	rect.w = _bg->getWidth();
 	rect.h = _bg->getHeight();
 	rect.x = rect.y = 0;
-	_bg->drawRect(&rect, Palette::blockOffset(0)+15); */
+	_bg->drawRect(&rect, 15); */
 /*	// line this screen up with the hidden movement screen
 	const int msg_y = state->getMap()->getMessageY();
 	_window->setY(msg_y);

@@ -36,7 +36,7 @@ namespace OpenXcom
  * Constructs an ArticleState.
  * @param article_id - reference the article id of this instance
  */
-ArticleState::ArticleState(const std::string& article_id)
+ArticleState::ArticleState(const std::string& article_id) // protected.
 	:
 		_id(article_id)
 {
@@ -44,13 +44,46 @@ ArticleState::ArticleState(const std::string& article_id)
 	_btnOk		= new TextButton(30, 14,  5, 5);
 	_btnPrev	= new TextButton(30, 14, 40, 5);
 	_btnNext	= new TextButton(30, 14, 75, 5);
+
+	_timer = new Timer(135);
+	_timer->onTimer((StateHandler)& ArticleState::repeat);
+	_timer->start();
 }
 
 /**
  * Destructor.
  */
-ArticleState::~ArticleState()
-{}
+ArticleState::~ArticleState() // virtual/protected.
+{
+	delete _timer;
+}
+
+/**
+ * Hits the think timer.
+ */
+void ArticleState::think()
+{
+	State::think();
+	_timer->think(this, NULL);
+}
+
+/**
+ * Advances to the next/previous Article when right/left key is depressed.
+ */
+void ArticleState::repeat()
+{
+	Uint8* keystate = SDL_GetKeyState(NULL);
+	if (keystate[Options::keyGeoRight] == 1
+		|| keystate[SDLK_KP6] == 1)
+	{
+		btnNextClick(NULL);
+	}
+	else if (keystate[Options::keyGeoLeft] == 1
+		|| keystate[SDLK_KP4] == 1)
+	{
+		btnPrevClick(NULL);
+	}
+}
 
 /**
  * Gets damage type as a string.
@@ -79,7 +112,7 @@ std::string ArticleState::getDamageTypeText(ItemDamageType dType) // static.
  * Set captions and event handlers for the common control elements.
  * @param contrast - true to set buttons to high contrast (default true)
  */
-void ArticleState::initLayout(bool contrast)
+void ArticleState::initLayout(bool contrast) // protected.
 {
 	add(_bg);
 	add(_btnOk);
@@ -101,6 +134,9 @@ void ArticleState::initLayout(bool contrast)
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& ArticleState::btnOkClick,
 					Options::keyCancel);
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& ArticleState::btnOkClick,
+					Options::keyGeoUfopedia);
 
 	_btnPrev->setText(L"<");
 	_btnPrev->onMouseClick((ActionHandler)& ArticleState::btnPrevClick);
@@ -130,27 +166,27 @@ void ArticleState::initLayout(bool contrast)
 
 /**
  * Returns to the previous screen.
- * @param action - Pointer to an Action
+ * @param action - pointer to an Action
  */
-void ArticleState::btnOkClick(Action*)
+void ArticleState::btnOkClick(Action*) // protected.
 {
 	_game->popState();
 }
 
 /**
  * Shows the previous available article. Loops to the last.
- * @param action - Pointer to an Action
+ * @param action - pointer to an Action
  */
-void ArticleState::btnPrevClick(Action*)
+void ArticleState::btnPrevClick(Action*) // protected.
 {
 	Ufopaedia::prev(_game);
 }
 
 /**
  * Shows the next available article. Loops to the first.
- * @param action - Pointer to an Action
+ * @param action - pointer to an Action
  */
-void ArticleState::btnNextClick(Action*)
+void ArticleState::btnNextClick(Action*) // protected.
 {
 	Ufopaedia::next(_game);
 }

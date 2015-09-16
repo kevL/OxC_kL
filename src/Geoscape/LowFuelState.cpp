@@ -58,7 +58,7 @@ LowFuelState::LowFuelState(
 
 	_txtTitle	= new Text(214, 17, 21, 51);
 	_txtMessage	= new Text(214, 50, 21, 68);
-	_btnOk5Secs	= new TextButton(90, 18, 30, 134);
+	_btnOk5Secs	= new TextButton(90, 18,  30, 134);
 	_btnOk		= new TextButton(90, 18, 136, 134);
 
 	_blinkTimer = new Timer(325);

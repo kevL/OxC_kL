@@ -20,7 +20,7 @@
 #ifndef OPENXCOM_EXTRAALIENINFOSTATE_H
 #define OPENXCOM_EXTRAALIENINFOSTATE_H
 
-#include "../Engine/State.h"
+#include "ArticleState.h"
 
 
 namespace OpenXcom
@@ -33,11 +33,11 @@ class Window;
 
 
 /**
- * Displays alien properties such as resistances.
+ * Displays alien properties such as vulnerabilities and fixed-weapon damage.
  */
 class ExtraAlienInfoState
 	:
-		public State
+		public ArticleState
 {
 
 private:
@@ -52,9 +52,9 @@ private:
 
 	public:
 		/// cTor.
-		ExtraAlienInfoState(ArticleDefinitionTextImage* defs);
+		explicit ExtraAlienInfoState(const ArticleDefinitionTextImage* const defs);
 		/// dTor.
-		~ExtraAlienInfoState();
+		virtual ~ExtraAlienInfoState();
 };
 
 }

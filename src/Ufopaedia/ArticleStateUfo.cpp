@@ -45,7 +45,7 @@ namespace OpenXcom
  * cTor.
  * @param defs - pointer to ArticleDefinitionUfo (ArticleDefinition.h)
  */
-ArticleStateUfo::ArticleStateUfo(ArticleDefinitionUfo* defs)
+ArticleStateUfo::ArticleStateUfo(const ArticleDefinitionUfo* const defs)
 	:
 		ArticleState(defs->id)
 {
@@ -59,12 +59,12 @@ ArticleStateUfo::ArticleStateUfo(ArticleDefinitionUfo* defs)
 
 	_game->getResourcePack()->getSurface("BACK11.SCR")->blit(_bg);
 
-	_btnOk->setColor(Palette::blockOffset(8)+5);
-	_btnPrev->setColor(Palette::blockOffset(8)+5);
-	_btnNext->setColor(Palette::blockOffset(8)+5);
+	_btnOk->setColor(GEOSCAPE_CYAN);
+	_btnPrev->setColor(GEOSCAPE_CYAN);
+	_btnNext->setColor(GEOSCAPE_CYAN);
 
 	_txtTitle->setText(tr(defs->title));
-	_txtTitle->setColor(Palette::blockOffset(8)+5);
+	_txtTitle->setColor(GEOSCAPE_CYAN);
 	_txtTitle->setBig();
 	_txtTitle->setWordWrap();
 
@@ -113,7 +113,7 @@ ArticleStateUfo::ArticleStateUfo(ArticleDefinitionUfo* defs)
 	_txtInfo = new Text(300, 50, 10, 140);
 	add(_txtInfo);
 	_txtInfo->setText(tr(defs->text));
-	_txtInfo->setColor(Palette::blockOffset(8)+5);
+	_txtInfo->setColor(GEOSCAPE_CYAN);
 	_txtInfo->setWordWrap();
 
 	_lstInfo = new TextList(300, 65, 10, 68);
@@ -122,9 +122,8 @@ ArticleStateUfo::ArticleStateUfo(ArticleDefinitionUfo* defs)
 	centerAllSurfaces();
 
 
-	_lstInfo->setColor(Palette::blockOffset(8)+5);
+	_lstInfo->setColor(GEOSCAPE_CYAN);
 	_lstInfo->setColumns(2, 200, 100);
-//	_lstInfo->setCondensed(true);
 	_lstInfo->setBig();
 	_lstInfo->setDot();
 
@@ -149,7 +148,7 @@ ArticleStateUfo::ArticleStateUfo(ArticleDefinitionUfo* defs)
 /**
  * dTor.
  */
-ArticleStateUfo::~ArticleStateUfo()
+ArticleStateUfo::~ArticleStateUfo() // virtual.
 {}
 
 }

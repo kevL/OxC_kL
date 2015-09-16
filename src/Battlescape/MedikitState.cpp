@@ -54,35 +54,34 @@ namespace OpenXcom
 
 /**
  * Helper function that returns a string representation of a type (mainly used for numbers).
- * @param t - the value to stringify
+ * @param val - the value to stringify
  * @return, a string representation of the value
  */
-template<typename type>
-std::wstring toString(type t)
+template<typename T>
+std::wstring toString(T val)
 {
 	std::wostringstream woststr;
-	woststr << t;
-
+	woststr << val;
 	return woststr.str();
 }
 
 
 /**
- * Helper class for the medikit title.
+ * Helper class for the Medikit.
  */
 class MedikitTitle
 	:
 		public Text
 {
 	public:
-		/// Creates a medikit title.
+		/// Creates a MedikitTitle.
 		MedikitTitle(
 				int y,
 				const std::wstring& title);
 };
 
 /**
- * Initializes a Medikit title.
+ * Initializes a MedikitTitle.
  * @param y		- the title's y origin
  * @param title	- reference the title
  */
@@ -98,19 +97,19 @@ MedikitTitle::MedikitTitle(
 }
 
 /**
- * Helper class for the medikit value.
+ * Helper class for the Medikit.
  */
 class MedikitText
 	:
 		public Text
 {
 	public:
-		/// Creates a medikit text.
+		/// Creates a MedikitText.
 		explicit MedikitText(int y);
 };
 
 /**
- * Initializes a Medikit text.
+ * Initializes a MedikitText.
  * @param y - the text's y origin
  */
 MedikitText::MedikitText(int y)
@@ -118,25 +117,25 @@ MedikitText::MedikitText(int y)
 		Text(33, 17, 220, y)
 {
 	// Note: can't set setBig here. The needed font is only set when added to State
-	this->setColor(Palette::blockOffset(1));
+	this->setColor(16); // orange
 	this->setHighContrast();
 	this->setAlign(ALIGN_CENTER);
 }
 
 /**
- * Helper class for the medikit button.
+ * Helper class for the Medikit.
  */
 class MedikitButton
 	:
 		public InteractiveSurface
 {
 	public:
-		/// Creates a medikit button.
+		/// Creates a MedikitButton.
 		explicit MedikitButton(int y);
 };
 
 /**
- * Initializes a Medikit button.
+ * Initializes a MedikitButton.
  * @param y - the button's y origin
  */
 MedikitButton::MedikitButton(int y)

@@ -44,7 +44,7 @@ namespace OpenXcom
  * cTor.
  * @param defs - pointer to ArticleDefinitionCraftWeapon (ArticleDefinition.h)
  */
-ArticleStateCraftWeapon::ArticleStateCraftWeapon(ArticleDefinitionCraftWeapon* defs)
+ArticleStateCraftWeapon::ArticleStateCraftWeapon(const ArticleDefinitionCraftWeapon* const defs)
 	:
 		ArticleState(defs->id)
 {
@@ -60,27 +60,26 @@ ArticleStateCraftWeapon::ArticleStateCraftWeapon(ArticleDefinitionCraftWeapon* d
 
 	_game->getResourcePack()->getSurface(defs->image_id)->blit(_bg);
 
-	_btnOk->setColor(Palette::blockOffset(1));
-	_btnPrev->setColor(Palette::blockOffset(1));
-	_btnNext->setColor(Palette::blockOffset(1));
+	_btnOk->setColor(uPed_ORANGE);
+	_btnPrev->setColor(uPed_ORANGE);
+	_btnNext->setColor(uPed_ORANGE);
 
 	_txtTitle->setText(tr(defs->title));
-	_txtTitle->setColor(Palette::blockOffset(14)+15);
+	_txtTitle->setColor(uPed_BLUE_SLATE);
 	_txtTitle->setBig();
-//	_txtTitle->setWordWrap();
 
 	_txtInfo = new Text(310, 32, 5, 160);
 	add(_txtInfo);
 
 	_txtInfo->setText(tr(defs->text));
-	_txtInfo->setColor(Palette::blockOffset(14)+15);
+	_txtInfo->setColor(uPed_BLUE_SLATE);
 	_txtInfo->setWordWrap();
 
 	_lstInfo = new TextList(310, 113, 5, 80);
 	add(_lstInfo);
 
 	_lstInfo->setColumns(2, 180, 130);
-	_lstInfo->setColor(Palette::blockOffset(14)+15);
+	_lstInfo->setColor(uPed_BLUE_SLATE);
 	_lstInfo->setBig();
 	_lstInfo->setDot();
 
@@ -108,23 +107,18 @@ ArticleStateCraftWeapon::ArticleStateCraftWeapon(ArticleDefinitionCraftWeapon* d
 				2,
 				tr("STR_RELOAD_TIME").c_str(),
 				tr("STR_SECONDS").arg(woststr.str()).c_str());
-//				tr("STR_SECONDS").arg(cwRule->getStandardReload()).c_str());
 
 	_lstInfo->addRow(
 				2,
 				tr("STR_ROUNDS").c_str(),
 				Text::formatNumber(cwRule->getAmmoMax()).c_str());
 
-	const size_t rows = 5;
 	for (size_t
 			i = 0;
-			i != rows;
+			i != 5; // rows.
 			++i)
 	{
-		_lstInfo->setCellColor(
-							i,
-							1,
-							Palette::blockOffset(15)+4);
+		_lstInfo->setCellColor(i, 1, uPed_GREEN_SLATE);
 	}
 
 	centerAllSurfaces();
@@ -133,7 +127,7 @@ ArticleStateCraftWeapon::ArticleStateCraftWeapon(ArticleDefinitionCraftWeapon* d
 /**
  * dTor.
  */
-ArticleStateCraftWeapon::~ArticleStateCraftWeapon()
+ArticleStateCraftWeapon::~ArticleStateCraftWeapon() // virtual.
 {}
 
 }

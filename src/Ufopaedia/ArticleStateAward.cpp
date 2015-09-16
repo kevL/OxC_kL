@@ -39,7 +39,7 @@ namespace OpenXcom
  * cTor.
  * @param defs - pointer to ArticleDefinitionAward (ArticleDefinition.h)
  */
-ArticleStateAward::ArticleStateAward(ArticleDefinitionAward* defs)
+ArticleStateAward::ArticleStateAward(const ArticleDefinitionAward* const defs)
 	:
 		ArticleState(defs->id)
 {
@@ -53,20 +53,23 @@ ArticleStateAward::ArticleStateAward(ArticleDefinitionAward* defs)
 
 	_game->getResourcePack()->getSurface(defs->image_id)->blit(_bg);
 
-	_btnOk->setColor(Palette::blockOffset(5)+3);
-	_btnPrev->setColor(Palette::blockOffset(5)+3);
-	_btnNext->setColor(Palette::blockOffset(5)+3);
+	_btnOk->setColor(uPed_VIOLET);
+	_btnPrev->setColor(uPed_VIOLET);
+	_btnNext->setColor(uPed_VIOLET);
 
 	_txtTitle->setText(tr(defs->title));
-	_txtTitle->setColor(Palette::blockOffset(15)+4); // sea green
+	_txtTitle->setColor(uPed_GREEN_SLATE);
 	_txtTitle->setBig();
-//	_txtTitle->setWordWrap();
 
-	_txtInfo = new Text(defs->text_width, 162, 5, 23 + _txtTitle->getTextHeight());
+	_txtInfo = new Text(
+					defs->text_width,
+					162,
+					5,
+					23 + _txtTitle->getTextHeight());
 	add(_txtInfo);
 	_txtInfo->setText(tr(defs->text));
-	_txtInfo->setColor(Palette::blockOffset(15)-1); // dark lavender
-	_txtInfo->setSecondaryColor(Palette::blockOffset(15)-1);
+	_txtInfo->setColor(uPed_BLUE_SLATE);
+	_txtInfo->setSecondaryColor(uPed_BLUE_SLATE);
 	_txtInfo->setWordWrap();
 
 	centerAllSurfaces();
@@ -75,7 +78,7 @@ ArticleStateAward::ArticleStateAward(ArticleDefinitionAward* defs)
 /**
  * dTor.
  */
-ArticleStateAward::~ArticleStateAward()
+ArticleStateAward::~ArticleStateAward() // virtual.
 {}
 
 }

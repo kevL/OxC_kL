@@ -27,7 +27,6 @@ namespace OpenXcom
 {
 
 class ArticleDefinitionTextImage;
-class ArticleStateTextImage;
 class Text;
 class TextButton;
 
@@ -41,7 +40,7 @@ class ArticleStateTextImage
 {
 
 protected:
-	ArticleDefinitionTextImage* _defs;
+	const ArticleDefinitionTextImage* _defs;
 
 	Text
 		* _txtInfo,
@@ -51,12 +50,12 @@ protected:
 	/// Shows extra info on researched aliens w/ autopsy.
 	void btnInfo(Action* action);
 	/// Finds out if necessary research has been done.
-	bool showInfo();
+	bool showInfoBtn();
 
 
 	public:
 		/// cTor.
-		explicit ArticleStateTextImage(ArticleDefinitionTextImage* defs);
+		explicit ArticleStateTextImage(const ArticleDefinitionTextImage* const defs);
 		/// dTor.
 		virtual ~ArticleStateTextImage();
 };

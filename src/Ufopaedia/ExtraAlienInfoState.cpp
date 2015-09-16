@@ -19,8 +19,6 @@
 
 #include "ExtraAlienInfoState.h"
 
-#include "ArticleState.h"
-
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
 
@@ -40,17 +38,19 @@ namespace OpenXcom
 {
 
 /**
- * Displays alien properties such as resistances.
+ * Displays alien properties such as vulnerabilities and fixed-weapon damage.
  * @param defs - pointer to an ArticleDefinitionTextImage
  */
-ExtraAlienInfoState::ExtraAlienInfoState(ArticleDefinitionTextImage* defs)
+ExtraAlienInfoState::ExtraAlienInfoState(const ArticleDefinitionTextImage* const defs)
+	:
+		ArticleState(defs->id)
 {
 	_screen = false;
 
 	_window		= new Window(this, 224, 168, 48, 16, POPUP_VERTICAL);
 	_btnExit	= new TextButton(62, 16, 129, 159);
-	_lstInfo	= new TextList(150, 73, 84, 28);
-	_lstWeapon	= new TextList(150, 9, 84, 110);
+	_lstInfo	= new TextList(150, 73, 84,  28);
+	_lstWeapon	= new TextList(150,  9, 84, 110);
 
 	setPalette("PAL_UFOPAEDIA");
 
@@ -64,10 +64,10 @@ ExtraAlienInfoState::ExtraAlienInfoState(ArticleDefinitionTextImage* defs)
 
 	const ResourcePack* const rp = _game->getResourcePack();
 	_window->setBackground(rp->getSurface(rp->getRandomBackground()));
-	_window->setColor(Palette::blockOffset(10)+1); // lt.brown
+	_window->setColor(uPed_PINK);
 
 	_btnExit->setText(tr("STR_OK"));
-	_btnExit->setColor(Palette::blockOffset(15)+4); // cyan
+	_btnExit->setColor(uPed_GREEN_SLATE);
 	_btnExit->onMouseClick((ActionHandler)& ExtraAlienInfoState::btnExit);
 	_btnExit->onKeyboardPress(
 					(ActionHandler)& ExtraAlienInfoState::btnExit,
@@ -80,11 +80,11 @@ ExtraAlienInfoState::ExtraAlienInfoState(ArticleDefinitionTextImage* defs)
 					Options::keyOkKeypad);
 
 	_lstInfo->setColumns(2, 125, 25);
-	_lstInfo->setColor(Palette::blockOffset(14)+15); // lavender
+	_lstInfo->setColor(uPed_BLUE_SLATE);
 	_lstInfo->setDot();
 
 	_lstWeapon->setColumns(3, 100, 25, 25);
-	_lstWeapon->setColor(Palette::blockOffset(14)+15);
+	_lstWeapon->setColor(uPed_BLUE_SLATE);
 	_lstWeapon->setDot();
 
 
@@ -125,10 +125,7 @@ ExtraAlienInfoState::ExtraAlienInfoState(ArticleDefinitionTextImage* defs)
 								2,
 								tr(st).c_str(),
 								Text::formatPercentage(vulnr).c_str());
-				_lstInfo->setCellColor(
-									row++,
-									1,
-									Palette::blockOffset(15)+4); // cyan
+				_lstInfo->setCellColor(row++, 1, uPed_GREEN_SLATE);
 			}
 		}
 
@@ -153,12 +150,8 @@ ExtraAlienInfoState::ExtraAlienInfoState(ArticleDefinitionTextImage* defs)
 									tr("STR_WEAPON").c_str(),
 									wstPower.c_str(),
 									tr(stType).c_str());
-					_lstWeapon->setCellColor(
-										0,1,
-										Palette::blockOffset(15)+4); // cyan
-					_lstWeapon->setCellColor(
-										0,2,
-										Palette::blockOffset(15)+4); // cyan
+					_lstWeapon->setCellColor(0,1, uPed_GREEN_SLATE);
+					_lstWeapon->setCellColor(0,2, uPed_GREEN_SLATE);
 				}
 			}
 		}
@@ -168,7 +161,7 @@ ExtraAlienInfoState::ExtraAlienInfoState(ArticleDefinitionTextImage* defs)
 /**
  * dTor.
  */
-ExtraAlienInfoState::~ExtraAlienInfoState()
+ExtraAlienInfoState::~ExtraAlienInfoState() // virtual.
 {}
 
 /**

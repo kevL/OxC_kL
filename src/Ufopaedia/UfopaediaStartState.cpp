@@ -115,6 +115,12 @@ UfopaediaStartState::UfopaediaStartState(bool tactical)
 	_btnOk->onMouseClick((ActionHandler)& UfopaediaStartState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& UfopaediaStartState::btnOkClick,
+					Options::keyOk);
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& UfopaediaStartState::btnOkClick,
+					Options::keyOkKeypad);
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& UfopaediaStartState::btnOkClick,
 					Options::keyCancel);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& UfopaediaStartState::btnOkClick,

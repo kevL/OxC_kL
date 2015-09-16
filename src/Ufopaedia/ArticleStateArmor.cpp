@@ -46,7 +46,7 @@ namespace OpenXcom
  * cTor.
  * @param defs - pointer to ArticleDefinitionArmor (ArticleDefinition.h)
  */
-ArticleStateArmor::ArticleStateArmor(ArticleDefinitionArmor* defs)
+ArticleStateArmor::ArticleStateArmor(const ArticleDefinitionArmor* const defs)
 	:
 		ArticleState(defs->id),
 		_row(0)
@@ -61,12 +61,12 @@ ArticleStateArmor::ArticleStateArmor(ArticleDefinitionArmor* defs)
 
 	add(_txtTitle);
 
-	_btnOk->setColor(Palette::blockOffset(0)+15);
-	_btnPrev->setColor(Palette::blockOffset(0)+15);
-	_btnNext->setColor(Palette::blockOffset(0)+15);
+	_btnOk->setColor(uPed_ORANGE);
+	_btnPrev->setColor(uPed_ORANGE);
+	_btnNext->setColor(uPed_ORANGE);
 
 	_txtTitle->setText(tr(defs->title));
-	_txtTitle->setColor(Palette::blockOffset(14)+15);
+	_txtTitle->setColor(uPed_BLUE_SLATE);
 	_txtTitle->setBig();
 
 	_image = new Surface(320, 200);
@@ -85,13 +85,13 @@ ArticleStateArmor::ArticleStateArmor(ArticleDefinitionArmor* defs)
 	_lstInfo = new TextList(150, 129, 150, 12);
 	add(_lstInfo);
 	_lstInfo->setColumns(2, 125, 25);
-	_lstInfo->setColor(Palette::blockOffset(14)+15);
+	_lstInfo->setColor(uPed_BLUE_SLATE);
 	_lstInfo->setDot();
 
 	_txtInfo = new Text(300, 56, 8, 150);
 	add(_txtInfo);
 	_txtInfo->setText(tr(defs->text));
-	_txtInfo->setColor(Palette::blockOffset(14)+15);
+	_txtInfo->setColor(uPed_BLUE_SLATE);
 	_txtInfo->setWordWrap();
 
 
@@ -115,9 +115,7 @@ ArticleStateArmor::ArticleStateArmor(ArticleDefinitionArmor* defs)
 		if (st != "STR_UNKNOWN")
 		{
 			const int vulnr = static_cast<int>(Round(static_cast<double>(armorRule->getDamageModifier(dType)) * 100.));
-			addStat(
-				st,
-				Text::formatPercentage(vulnr));
+			addStat(st, Text::formatPercentage(vulnr));
 		}
 	}
 
@@ -143,7 +141,7 @@ ArticleStateArmor::ArticleStateArmor(ArticleDefinitionArmor* defs)
 /**
  * dTor.
  */
-ArticleStateArmor::~ArticleStateArmor()
+ArticleStateArmor::~ArticleStateArmor() // virtual.
 {}
 
 /**
@@ -171,10 +169,7 @@ void ArticleStateArmor::addStat( // private.
 						2,
 						tr(stLabel).c_str(),
 						woststr.str().c_str());
-		_lstInfo->setCellColor(
-						_row++,
-						1,
-						Palette::blockOffset(15)+4);
+		_lstInfo->setCellColor(_row++, 1, uPed_GREEN_SLATE);
 	}
 }
 
@@ -191,10 +186,7 @@ void ArticleStateArmor::addStat( // private.
 					2,
 					tr(stLabel).c_str(),
 					wstStat.c_str());
-	_lstInfo->setCellColor(
-					_row++,
-					1,
-					Palette::blockOffset(15)+4);
+	_lstInfo->setCellColor(_row++, 1, uPed_GREEN_SLATE);
 }
 
 }

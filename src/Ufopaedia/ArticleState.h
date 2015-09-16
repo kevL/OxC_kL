@@ -33,6 +33,7 @@ namespace OpenXcom
 class Action;
 class Surface;
 class TextButton;
+class Timer;
 
 
 /**
@@ -46,6 +47,20 @@ class ArticleState
 {
 
 protected:
+	static const Uint8
+		uPed_ORANGE			= 16,
+		uPed_VIOLET			= 83,
+		uPed_PINK			= 162, // -> 192+ lt.brown for ExtraAlienInfo
+		uPed_BLUE_SLATE		= 239,
+		uPed_GREEN_SLATE	= 244,
+
+		GEOSCAPE_CYAN		= 133,
+
+		BASESCAPE_VIOLET	= 64,
+		BASESCAPE_BLUE		= 218,
+		BASESCAPE_WHITE		= 208;
+
+
 	std::string _id;
 
 	InteractiveSurface* _bg;
@@ -53,11 +68,15 @@ protected:
 		* _btnNext,
 		* _btnOk,
 		* _btnPrev;
+	Timer* _timer;
 
-	/// constructor (it can only be instantiated by derived classes)
+	/// constructor (can be instantiated by derived classes only)
 	explicit ArticleState(const std::string& article_id);
 	/// destructor
 	virtual ~ArticleState();
+
+	/// Advances to the next/previous Article when right/left key is depressed.
+	void repeat();
 
 	/// screen layout helpers
 	void initLayout(bool contrast = true);
@@ -71,10 +90,13 @@ protected:
 
 
 	public:
+		/// Runs the timer.
+		void think();
+
 		/// converts damage type to string
 		static std::string getDamageTypeText(ItemDamageType dType);
 
-		/// return the article id
+		/// returns the article id
 		std::string getId() const
 		{ return _id; }
 };

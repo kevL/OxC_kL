@@ -46,7 +46,7 @@ protected:
 
 	public:
 		/// cTor.
-		explicit ArticleStateText(ArticleDefinitionText* article_defs);
+		explicit ArticleStateText(const ArticleDefinitionText* const defs);
 		/// dTor.
 		virtual ~ArticleStateText();
 };

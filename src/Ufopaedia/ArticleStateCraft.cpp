@@ -43,7 +43,7 @@ namespace OpenXcom
  * cTor.
  * @param defs - pointer to ArticleDefinitionCraft (ArticleDefinition.h)
  */
-ArticleStateCraft::ArticleStateCraft(ArticleDefinitionCraft* defs)
+ArticleStateCraft::ArticleStateCraft(const ArticleDefinitionCraft* const defs)
 	:
 		ArticleState(defs->id)
 {
@@ -57,12 +57,12 @@ ArticleStateCraft::ArticleStateCraft(ArticleDefinitionCraft* defs)
 
 	_game->getResourcePack()->getSurface(defs->image_id)->blit(_bg);
 
-	_btnOk->setColor(Palette::blockOffset(15)-1);
-	_btnPrev->setColor(Palette::blockOffset(15)-1);
-	_btnNext->setColor(Palette::blockOffset(15)-1);
+	_btnOk->setColor(uPed_BLUE_SLATE);
+	_btnPrev->setColor(uPed_BLUE_SLATE);
+	_btnNext->setColor(uPed_BLUE_SLATE);
 
 	_txtTitle->setText(tr(defs->title));
-	_txtTitle->setColor(Palette::blockOffset(14)+15);
+	_txtTitle->setColor(uPed_BLUE_SLATE);
 	_txtTitle->setBig();
 	_txtTitle->setWordWrap();
 
@@ -74,7 +74,7 @@ ArticleStateCraft::ArticleStateCraft(ArticleDefinitionCraft* defs)
 	add(_txtInfo);
 
 	_txtInfo->setText(tr(defs->text));
-	_txtInfo->setColor(Palette::blockOffset(14)+15);
+	_txtInfo->setColor(uPed_BLUE_SLATE);
 	_txtInfo->setWordWrap();
 
 	_txtStats = new Text(
@@ -84,8 +84,8 @@ ArticleStateCraft::ArticleStateCraft(ArticleDefinitionCraft* defs)
 						defs->rect_stats.y);
 	add(_txtStats);
 
-	_txtStats->setColor(Palette::blockOffset(14)+15);
-	_txtStats->setSecondaryColor(Palette::blockOffset(15)+4);
+	_txtStats->setColor(uPed_BLUE_SLATE);
+	_txtStats->setSecondaryColor(uPed_GREEN_SLATE);
 
 	const RuleCraft* const craftRule = _game->getRuleset()->getCraft(defs->id);
 	int range = craftRule->getMaxFuel();
@@ -118,7 +118,7 @@ ArticleStateCraft::ArticleStateCraft(ArticleDefinitionCraft* defs)
 /**
  * dTor.
  */
-ArticleStateCraft::~ArticleStateCraft()
+ArticleStateCraft::~ArticleStateCraft() // virtual.
 {}
 
 }

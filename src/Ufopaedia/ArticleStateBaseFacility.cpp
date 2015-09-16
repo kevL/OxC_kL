@@ -44,7 +44,7 @@ namespace OpenXcom
  * cTor.
  * @param defs - pointer to ArticleDefinitionBaseFacility (ArticleDefinition.h)
  */
-ArticleStateBaseFacility::ArticleStateBaseFacility(ArticleDefinitionBaseFacility* defs)
+ArticleStateBaseFacility::ArticleStateBaseFacility(const ArticleDefinitionBaseFacility* const defs)
 	:
 		ArticleState(defs->id)
 {
@@ -60,12 +60,12 @@ ArticleStateBaseFacility::ArticleStateBaseFacility(ArticleDefinitionBaseFacility
 
 	_game->getResourcePack()->getSurface("BACK09.SCR")->blit(_bg);
 
-	_btnOk->setColor(Palette::blockOffset(4));
-	_btnPrev->setColor(Palette::blockOffset(4));
-	_btnNext->setColor(Palette::blockOffset(4));
+	_btnOk->setColor(BASESCAPE_VIOLET);
+	_btnPrev->setColor(BASESCAPE_VIOLET);
+	_btnNext->setColor(BASESCAPE_VIOLET);
 
 	_txtTitle->setText(tr(defs->title));
-	_txtTitle->setColor(Palette::blockOffset(13)+10);
+	_txtTitle->setColor(BASESCAPE_BLUE);
 	_txtTitle->setBig();
 
 
@@ -73,8 +73,7 @@ ArticleStateBaseFacility::ArticleStateBaseFacility(ArticleDefinitionBaseFacility
 	_image = new Surface( // build preview image
 						tile_size * 2,
 						tile_size * 2,
-						232,
-						16);
+						232,16);
 	add(_image);
 
 	SurfaceSet* const baseBits = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
@@ -131,21 +130,21 @@ ArticleStateBaseFacility::ArticleStateBaseFacility(ArticleDefinitionBaseFacility
 	add(_txtInfo);
 
 	_txtInfo->setText(tr(defs->text));
-	_txtInfo->setColor(Palette::blockOffset(13)+10);
+	_txtInfo->setColor(BASESCAPE_BLUE);
 	_txtInfo->setWordWrap();
 
 	_lstInfo = new TextList(200, 41, 10, 42);
 	add(_lstInfo);
 
 	_lstInfo->setColumns(2, 140, 60);
-	_lstInfo->setColor(Palette::blockOffset(13)+10);
+	_lstInfo->setColor(BASESCAPE_BLUE);
 	_lstInfo->setDot();
 
 	_lstInfo->addRow(
 				2,
 				tr("STR_CONSTRUCTION_TIME").c_str(),
 				tr("STR_DAY", facRule->getBuildTime()).c_str());
-	_lstInfo->setCellColor(0, 1, Palette::blockOffset(13)+0);
+	_lstInfo->setCellColor(0,1, BASESCAPE_WHITE);
 
 	std::wostringstream woststr;
 	woststr << Text::formatFunding(facRule->getBuildCost());
@@ -153,7 +152,7 @@ ArticleStateBaseFacility::ArticleStateBaseFacility(ArticleDefinitionBaseFacility
 				2,
 				tr("STR_CONSTRUCTION_COST").c_str(),
 				woststr.str().c_str());
-	_lstInfo->setCellColor(1, 1, Palette::blockOffset(13)+0);
+	_lstInfo->setCellColor(1,1, BASESCAPE_WHITE);
 
 	woststr.str(L"");
 	woststr.clear();
@@ -162,7 +161,7 @@ ArticleStateBaseFacility::ArticleStateBaseFacility(ArticleDefinitionBaseFacility
 				2,
 				tr("STR_MAINTENANCE_COST").c_str(),
 				woststr.str().c_str());
-	_lstInfo->setCellColor(2, 1, Palette::blockOffset(13)+0);
+	_lstInfo->setCellColor(2,1, BASESCAPE_WHITE);
 
 	if (facRule->getDefenseValue() != 0)
 	{
@@ -173,7 +172,7 @@ ArticleStateBaseFacility::ArticleStateBaseFacility(ArticleDefinitionBaseFacility
 					2,
 					tr("STR_DEFENSE_VALUE").c_str(),
 					woststr.str().c_str());
-		_lstInfo->setCellColor(3, 1, Palette::blockOffset(13)+0);
+		_lstInfo->setCellColor(3,1, BASESCAPE_WHITE);
 
 		woststr.str(L"");
 		woststr.clear();
@@ -182,7 +181,7 @@ ArticleStateBaseFacility::ArticleStateBaseFacility(ArticleDefinitionBaseFacility
 					2,
 					tr("STR_HIT_RATIO").c_str(),
 					woststr.str().c_str());
-		_lstInfo->setCellColor(4, 1, Palette::blockOffset(13)+0);
+		_lstInfo->setCellColor(4,1, BASESCAPE_WHITE);
 	}
 
 	centerAllSurfaces();
@@ -191,7 +190,7 @@ ArticleStateBaseFacility::ArticleStateBaseFacility(ArticleDefinitionBaseFacility
 /**
  * dTor.
  */
-ArticleStateBaseFacility::~ArticleStateBaseFacility()
+ArticleStateBaseFacility::~ArticleStateBaseFacility() // virtual.
 {}
 
 }
