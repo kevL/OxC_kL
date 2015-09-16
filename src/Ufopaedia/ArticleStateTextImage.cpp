@@ -106,7 +106,7 @@ void ArticleStateTextImage::btnInfo(Action*) // private.
 }
 
 /**
- * Finds if necessary research has been done before showing the extra info button.
+ * Checks if necessary research has been done before showing the ExtraInfo button.
  * @note Player needs to have both the alien and its autopsy researched.
  * @return, true if the researches have been done
  */

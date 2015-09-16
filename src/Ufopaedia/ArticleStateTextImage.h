@@ -47,9 +47,9 @@ protected:
 		* _txtTitle;
 	TextButton* _btnExtraInfo;
 
-	/// Shows extra info on researched aliens w/ autopsy.
+	/// Shows ExtraInfo on aliens researched w/ autopsy.
 	void btnInfo(Action* action);
-	/// Finds out if necessary research has been done.
+	/// Checks if necessary research has been done before showing the ExtraInfo button.
 	bool showInfoBtn();
 
 

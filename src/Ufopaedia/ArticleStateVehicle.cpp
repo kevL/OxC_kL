@@ -56,6 +56,7 @@ ArticleStateVehicle::ArticleStateVehicle(const ArticleDefinitionVehicle* const d
 
 	_txtTitle	= new Text(310,  17,  5,  23);
 	_txtInfo	= new Text(300, 150, 10, 122);
+
 	_lstStats	= new TextList(300, 89, 10, 48);
 
 	setPalette("PAL_UFOPAEDIA");
@@ -112,9 +113,6 @@ ArticleStateVehicle::ArticleStateVehicle(const ArticleDefinitionVehicle* const d
 				2,
 				tr("STR_LEFT_ARMOR").c_str(),
 				woststr.str().c_str());
-
-	woststr.str(L"");
-	woststr << armorRule->getSideArmor();
 	_lstStats->addRow(
 				2,
 				tr("STR_RIGHT_ARMOR").c_str(),
