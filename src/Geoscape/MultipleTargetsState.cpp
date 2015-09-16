@@ -53,8 +53,8 @@ namespace OpenXcom
  */
 MultipleTargetsState::MultipleTargetsState(
 		std::vector<Target*> targets,
-		Craft* craft,
-		GeoscapeState* state)
+		Craft* const craft,
+		GeoscapeState* const state)
 	:
 		_targets(targets),
 		_craft(craft),
@@ -112,6 +112,12 @@ MultipleTargetsState::MultipleTargetsState(
 		_btnCancel->onKeyboardPress(
 						(ActionHandler)& MultipleTargetsState::btnCancelClick,
 						Options::keyCancel);
+		_btnCancel->onKeyboardPress(
+						(ActionHandler)& MultipleTargetsState::btnCancelClick,
+						Options::keyOk);
+		_btnCancel->onKeyboardPress(
+						(ActionHandler)& MultipleTargetsState::btnCancelClick,
+						Options::keyOkKeypad);
 		add(_btnCancel, "button", "UFOInfo");
 
 		centerAllSurfaces();
@@ -139,7 +145,7 @@ void MultipleTargetsState::init()
  * Displays the right popup for a specific target.
  * @param target - pointer to a Target
  */
-void MultipleTargetsState::popupTarget(Target* target)
+void MultipleTargetsState::popupTarget(Target* const target)
 {
 	_game->popState();
 
@@ -150,13 +156,9 @@ void MultipleTargetsState::popupTarget(Target* target)
 		Ufo* const ufo = dynamic_cast<Ufo*>(target);
 
 		if (base != NULL)
-			_game->pushState(new InterceptState(
-											base,
-											_state));
+			_game->pushState(new InterceptState(base, _state));
 		else if (craft != NULL)
-			_game->pushState(new GeoscapeCraftState(
-											craft,
-											_state));
+			_game->pushState(new GeoscapeCraftState(craft, _state));
 		else if (ufo != NULL)
 			_game->pushState(new UfoDetectedState(
 											ufo,
@@ -164,14 +166,10 @@ void MultipleTargetsState::popupTarget(Target* target)
 											false,
 											ufo->getHyperDetected()));
 		else
-			_game->pushState(new TargetInfoState(
-											target,
-											_state));
+			_game->pushState(new TargetInfoState(target, _state));
 	}
 	else
-		_game->pushState(new ConfirmDestinationState(
-											_craft,
-											target));
+		_game->pushState(new ConfirmDestinationState(_craft, target));
 }
 
 /**

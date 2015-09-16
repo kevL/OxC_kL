@@ -59,8 +59,8 @@ namespace OpenXcom
  * @param globe	- pointer to the Globe
  */
 SelectDestinationState::SelectDestinationState(
-		Craft* craft,
-		Globe* globe)
+		Craft* const craft,
+		Globe* const globe)
 	:
 		_craft(craft),
 		_globe(globe)
@@ -149,6 +149,12 @@ SelectDestinationState::SelectDestinationState(
 	_btnCancel->onKeyboardPress(
 					(ActionHandler)& SelectDestinationState::btnCancelClick,
 					Options::keyCancel);
+	_btnCancel->onKeyboardPress(
+					(ActionHandler)& SelectDestinationState::btnCancelClick,
+					Options::keyOk);
+	_btnCancel->onKeyboardPress(
+					(ActionHandler)& SelectDestinationState::btnCancelClick,
+					Options::keyOkKeypad);
 
 //	_txtTitle->setText(tr("STR_SELECT_DESTINATION"));
 //	_txtTitle->setVerticalAlign(ALIGN_MIDDLE);
@@ -222,20 +228,18 @@ void SelectDestinationState::handle(Action* action)
  */
 void SelectDestinationState::globeClick(Action* action)
 {
-	const int mouseY = static_cast<int>(std::floor(action->getAbsoluteYMouse()));
+	const int mY = static_cast<int>(std::floor(action->getAbsoluteYMouse()));
 
-	if (mouseY < 30) // ignore window(this) clicks
+	if (mY < 30) // ignore window(this) clicks
 		return;
 
-	const int mouseX = static_cast<int>(std::floor(action->getAbsoluteXMouse()));
+	const int mX = static_cast<int>(std::floor(action->getAbsoluteXMouse()));
 	double
-		lon,
-		lat;
+		lon,lat;
 	_globe->cartToPolar(
-					static_cast<Sint16>(mouseX),
-					static_cast<Sint16>(mouseY),
-					&lon,
-					&lat);
+					static_cast<Sint16>(mX),
+					static_cast<Sint16>(mY),
+					&lon,&lat);
 
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) // set Waypoint
 	{
@@ -250,8 +254,8 @@ void SelectDestinationState::globeClick(Action* action)
 		wp->setLongitude(lon);
 		wp->setLatitude(lat);
 
-		if (range < static_cast<int>(std::floor(
-								(_craft->getDistance(wp) + _craft->getBase()->getDistance(wp)) * earthRadius)))
+		if (range < static_cast<int>(std::floor((_craft->getDistance(wp) + _craft->getBase()->getDistance(wp))
+					* earthRadius)))
 		{
 			_txtError->setVisible();
 			delete wp;
@@ -260,10 +264,8 @@ void SelectDestinationState::globeClick(Action* action)
 		{
 			_txtError->setVisible(false);
 
-			std::vector<Target*> targets = _globe->getTargets(
-															mouseX,
-															mouseY);
-			std::vector<Target*>::const_iterator i = std::find( // remove Craft's current target
+			std::vector<Target*> targets = _globe->getTargets(mX, mY);
+			std::vector<Target*>::const_iterator i = std::find( // do not show Craft's current target
 															targets.begin(),
 															targets.end(),
 															dynamic_cast<Target*>(_craft->getDestination()));
@@ -285,114 +287,6 @@ void SelectDestinationState::globeClick(Action* action)
 }
 
 /**
- * Starts rotating the globe to the left.
- * @param action - pointer to an Action
- */
-/* void SelectDestinationState::btnRotateLeftPress(Action*)
-{
-	_globe->rotateLeft();
-} */
-
-/**
- * Stops rotating the globe to the left.
- * @param action - pointer to an Action
- */
-/* void SelectDestinationState::btnRotateLeftRelease(Action*)
-{
-	_globe->rotateStopLon();
-} */
-
-/**
- * Starts rotating the globe to the right.
- * @param action - pointer to an Action
- */
-/* void SelectDestinationState::btnRotateRightPress(Action*)
-{
-	_globe->rotateRight();
-} */
-
-/**
- * Stops rotating the globe to the right.
- * @param action - pointer to an Action
- */
-/* void SelectDestinationState::btnRotateRightRelease(Action*)
-{
-	_globe->rotateStopLon();
-} */
-
-/**
- * Starts rotating the globe upwards.
- * @param action - pointer to an Action
- */
-/* void SelectDestinationState::btnRotateUpPress(Action*)
-{
-	_globe->rotateUp();
-} */
-
-/**
- * Stops rotating the globe upwards.
- * @param action - pointer to an Action
- */
-/* void SelectDestinationState::btnRotateUpRelease(Action*)
-{
-	_globe->rotateStopLat();
-} */
-
-/**
- * Starts rotating the globe downwards.
- * @param action - pointer to an Action
- */
-/* void SelectDestinationState::btnRotateDownPress(Action*)
-{
-	_globe->rotateDown();
-} */
-
-/**
- * Stops rotating the globe downwards.
- * @param action - pointer to an Action
- */
-/* void SelectDestinationState::btnRotateDownRelease(Action*)
-{
-	_globe->rotateStopLat();
-} */
-
-/**
- * Zooms into the globe.
- * @param action - pointer to an Action
- */
-/* void SelectDestinationState::btnZoomInLeftClick(Action*)
-{
-	_globe->zoomIn();
-} */
-
-/**
- * Zooms the globe maximum.
- * @param action - pointer to an Action
- */
-/* void SelectDestinationState::btnZoomInRightClick(Action*)
-{
-	_globe->zoomMax();
-} */
-
-/**
- * Zooms out of the globe.
- * @param action - pointer to an Action
- */
-/* void SelectDestinationState::btnZoomOutLeftClick(Action*)
-{
-	_globe->zoomOut();
-} */
-
-/**
- * Zooms the globe minimum.
- * @param action - pointer to an Action
- */
-/* void SelectDestinationState::btnZoomOutRightClick(Action*)
-{
-	_globe->zoomMin();
-} */
-
-/**
  * Returns to the previous screen.
  * @param action - pointer to an Action
  */
@@ -406,11 +300,8 @@ void SelectDestinationState::btnCancelClick(Action*)
  */
 void SelectDestinationState::btnCydoniaClick(Action*)
 {
-	if (_craft->getNumSoldiers() > 0)
-//		|| _craft->getNumVehicles() > 0)
-	{
+	if (_craft->getNumSoldiers() > 0) //|| _craft->getNumVehicles() > 0)
 		_game->pushState(new ConfirmCydoniaState(_craft));
-	}
 }
 
 /**
@@ -440,3 +331,99 @@ void SelectDestinationState::resize(
 }
 
 }
+/*
+ * Starts rotating the globe to the left.
+ * @param action - pointer to an Action
+ *
+void SelectDestinationState::btnRotateLeftPress(Action*)
+{
+	_globe->rotateLeft();
+} */
+/*
+ * Stops rotating the globe to the left.
+ * @param action - pointer to an Action
+ *
+void SelectDestinationState::btnRotateLeftRelease(Action*)
+{
+	_globe->rotateStopLon();
+} */
+/*
+ * Starts rotating the globe to the right.
+ * @param action - pointer to an Action
+ *
+void SelectDestinationState::btnRotateRightPress(Action*)
+{
+	_globe->rotateRight();
+} */
+/*
+ * Stops rotating the globe to the right.
+ * @param action - pointer to an Action
+ *
+void SelectDestinationState::btnRotateRightRelease(Action*)
+{
+	_globe->rotateStopLon();
+} */
+/*
+ * Starts rotating the globe upwards.
+ * @param action - pointer to an Action
+ *
+void SelectDestinationState::btnRotateUpPress(Action*)
+{
+	_globe->rotateUp();
+} */
+/*
+ * Stops rotating the globe upwards.
+ * @param action - pointer to an Action
+ *
+void SelectDestinationState::btnRotateUpRelease(Action*)
+{
+	_globe->rotateStopLat();
+} */
+/*
+ * Starts rotating the globe downwards.
+ * @param action - pointer to an Action
+ *
+void SelectDestinationState::btnRotateDownPress(Action*)
+{
+	_globe->rotateDown();
+} */
+/*
+ * Stops rotating the globe downwards.
+ * @param action - pointer to an Action
+ *
+void SelectDestinationState::btnRotateDownRelease(Action*)
+{
+	_globe->rotateStopLat();
+} */
+/*
+ * Zooms into the globe.
+ * @param action - pointer to an Action
+ *
+void SelectDestinationState::btnZoomInLeftClick(Action*)
+{
+	_globe->zoomIn();
+} */
+/*
+ * Zooms the globe maximum.
+ * @param action - pointer to an Action
+ *
+void SelectDestinationState::btnZoomInRightClick(Action*)
+{
+	_globe->zoomMax();
+} */
+/*
+ * Zooms out of the globe.
+ * @param action - pointer to an Action
+ *
+void SelectDestinationState::btnZoomOutLeftClick(Action*)
+{
+	_globe->zoomOut();
+} */
+/*
+ * Zooms the globe minimum.
+ * @param action - pointer to an Action
+ *
+void SelectDestinationState::btnZoomOutRightClick(Action*)
+{
+	_globe->zoomMin();
+} */

@@ -88,21 +88,34 @@ LowFuelState::LowFuelState(
 	_txtMessage->setBig();
 	_txtMessage->setVisible(false); // wait for blink.
 
-	_btnOk5Secs->setText(tr("STR_OK_5_SECONDS"));
-	_btnOk5Secs->onMouseClick((ActionHandler)& LowFuelState::btnOk5SecsClick);
-	_btnOk5Secs->onKeyboardPress(
-					(ActionHandler)& LowFuelState::btnOk5SecsClick,
-					Options::keyOk);
-	_btnOk5Secs->onKeyboardPress(
-					(ActionHandler)& LowFuelState::btnOk5SecsClick,
-					Options::keyOkKeypad);
-	_btnOk5Secs->setVisible(_state->is5Sec() == false);
-
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& LowFuelState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& LowFuelState::btnOkClick,
 					Options::keyCancel);
+
+	if (_state->is5Sec() == false)
+	{
+		_btnOk5Secs->setText(tr("STR_OK_5_SECONDS"));
+		_btnOk5Secs->onMouseClick((ActionHandler)& LowFuelState::btnOk5SecsClick);
+		_btnOk5Secs->onKeyboardPress(
+						(ActionHandler)& LowFuelState::btnOk5SecsClick,
+						Options::keyOk);
+		_btnOk5Secs->onKeyboardPress(
+						(ActionHandler)& LowFuelState::btnOk5SecsClick,
+						Options::keyOkKeypad);
+	}
+	else
+	{
+		_btnOk5Secs->setVisible(false);
+
+		_btnOk->onKeyboardPress(
+						(ActionHandler)& LowFuelState::btnOkClick,
+						Options::keyOk);
+		_btnOk->onKeyboardPress(
+						(ActionHandler)& LowFuelState::btnOkClick,
+						Options::keyOkKeypad);
+	}
 }
 
 /**

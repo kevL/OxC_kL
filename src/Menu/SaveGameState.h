@@ -59,17 +59,19 @@ private:
 		SaveGameState(
 				OptionsOrigin origin,
 				const std::string& file,
-				SDL_Color* palette);
+				SDL_Color* const palette);
 		/// Creates the Save Game state.
 		SaveGameState(
 				OptionsOrigin origin,
 				SaveType type,
-				SDL_Color* palette);
+				SDL_Color* const palette);
 		/// Cleans up the Save Game state.
 		~SaveGameState();
 
 		/// Creates the interface.
-		void buildUi(SDL_Color* palette);
+		void buildUi(
+				SDL_Color* const palette,
+				bool dropText = false);
 
 		/// Saves the game.
 		void think();

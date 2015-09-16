@@ -63,8 +63,8 @@ private:
 		/// Creates the Multiple Targets state.
 		MultipleTargetsState(
 				std::vector<Target*> targets,
-				Craft* craft,
-				GeoscapeState* state);
+				Craft* const craft,
+				GeoscapeState* const state);
 		/// Cleans up the Multiple Targets state.
 		~MultipleTargetsState();
 
@@ -72,7 +72,7 @@ private:
 		void init();
 
 		/// Popup for a target.
-		void popupTarget(Target* target);
+		void popupTarget(Target* const target);
 
 		/// Handler for clicking the Cancel button.
 		void btnCancelClick(Action* action);

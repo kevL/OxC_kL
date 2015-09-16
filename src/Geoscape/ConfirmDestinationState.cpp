@@ -45,8 +45,8 @@ namespace OpenXcom
  * @param target	- pointer to the selected Target (NULL if it's just a point on the globe)
  */
 ConfirmDestinationState::ConfirmDestinationState(
-		Craft* craft,
-		Target* target)
+		Craft* const craft,
+		Target* const target)
 	:
 		_craft(craft),
 		_target(target)
@@ -57,13 +57,13 @@ ConfirmDestinationState::ConfirmDestinationState(
 
 	_window		= new Window(this, 224, 72, 16, 64);
 	_txtTarget	= new Text(192, 32, 32, 75);
-	_btnCancel	= new TextButton(75, 16, 51, 111);
+
+	_btnCancel	= new TextButton(75, 16,  51, 111);
 	_btnOk		= new TextButton(75, 16, 130, 111);
 
 	setInterface(
 			"confirmDestination",
-			wp != NULL
-				&& wp->getId() == 0);
+			wp != NULL && wp->getId() == 0);
 
 	add(_window,	"window",	"confirmDestination");
 	add(_txtTarget,	"text",		"confirmDestination");
@@ -78,11 +78,8 @@ ConfirmDestinationState::ConfirmDestinationState(
 	_txtTarget->setBig();
 	_txtTarget->setAlign(ALIGN_CENTER);
 	_txtTarget->setVerticalAlign(ALIGN_MIDDLE);
-	if (wp != NULL
-		&& wp->getId() == 0)
-	{
+	if (wp != NULL && wp->getId() == 0)
 		_txtTarget->setText(tr("STR_TARGET_WAY_POINT"));
-	}
 	else
 		_txtTarget->setText(tr("STR_TARGET").arg(_target->getName(_game->getLanguage())));
 
@@ -91,6 +88,9 @@ ConfirmDestinationState::ConfirmDestinationState(
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& ConfirmDestinationState::btnOkClick,
 					Options::keyOk);
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& ConfirmDestinationState::btnOkClick,
+					Options::keyOkKeypad);
 
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)& ConfirmDestinationState::btnCancelClick);
@@ -112,8 +112,7 @@ ConfirmDestinationState::~ConfirmDestinationState()
 void ConfirmDestinationState::btnOkClick(Action*)
 {
 	Waypoint* const wp = dynamic_cast<Waypoint*>(_target);
-	if (wp != NULL
-		&& wp->getId() == 0)
+	if (wp != NULL && wp->getId() == 0)
 	{
 		wp->setId(_game->getSavedGame()->getId("STR_WAYPOINT"));
 		_game->getSavedGame()->getWaypoints()->push_back(wp);
@@ -121,30 +120,6 @@ void ConfirmDestinationState::btnOkClick(Action*)
 
 	_craft->setDestination(_target);
 	_craft->setStatus("STR_OUT");
-
-/*	if (_craft->getFlightOrder() == 0)
-	{
-		int
-			order = 0,
-			testVar;
-		for (std::vector<Base*>::const_iterator
-				i = _game->getSavedGame()->getBases()->begin();
-				i != _game->getSavedGame()->getBases()->end();
-				++i)
-		{
-			for (std::vector<Craft*>::const_iterator
-					j = (*i)->getCrafts()->begin();
-					j != (*i)->getCrafts()->end();
-					++j)
-			{
-				testVar = (*j)->getFlightOrder();
-				if (testVar > order)
-					order = testVar;
-			}
-		}
-
-		_craft->setFlightOrder(++order);
-	} */
 
 	_game->popState();
 	_game->popState();
@@ -157,11 +132,8 @@ void ConfirmDestinationState::btnOkClick(Action*)
 void ConfirmDestinationState::btnCancelClick(Action*)
 {
 	const Waypoint* const wp = dynamic_cast<Waypoint*>(_target);
-	if (wp != NULL
-		&& wp->getId() == 0)
-	{
+	if (wp != NULL && wp->getId() == 0)
 		delete wp;
-	}
 
 	_game->popState();
 }

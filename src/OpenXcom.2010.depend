@@ -6772,7 +6772,7 @@
 1431486741 f:\git\openxcom\src\geoscape\confirmcydoniastate.h
 	"../Engine/State.h"
 
-1438169269 source:f:\git\openxcom\src\geoscape\confirmdestinationstate.cpp
+1442441415 source:f:\git\openxcom\src\geoscape\confirmdestinationstate.cpp
 	"ConfirmDestinationState.h"
 	"../Engine/Game.h"
 	"../Interface/Text.h"
@@ -6785,7 +6785,7 @@
 	"../Savegame/Target.h"
 	"../Savegame/Waypoint.h"
 
-1430149550 f:\git\openxcom\src\geoscape\confirmdestinationstate.h
+1442441415 f:\git\openxcom\src\geoscape\confirmdestinationstate.h
 	"../Engine/State.h"
 
 1432527783 f:\git\openxcom\src\savegame\waypoint.h
@@ -6956,7 +6956,7 @@
 	"../Savegame/Ufo.h"
 	"../Savegame/Waypoint.h"
 
-1432346700 f:\git\openxcom\src\geoscape\selectdestinationstate.h
+1442441486 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
 1442380307 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
@@ -7057,7 +7057,7 @@
 1432007607 f:\git\openxcom\src\geoscape\monthlyreportstate.h
 	"../Engine/State.h"
 
-1430149550 f:\git\openxcom\src\geoscape\multipletargetsstate.h
+1442441015 f:\git\openxcom\src\geoscape\multipletargetsstate.h
 	"../Engine/State.h"
 
 1440480123 f:\git\openxcom\src\geoscape\newpossiblemanufacturestate.h
@@ -7204,7 +7204,7 @@
 	"../Savegame/Transfer.h"
 	"../Savegame/Vehicle.h"
 
-1442346964 source:f:\git\openxcom\src\geoscape\lowfuelstate.cpp
+1442440329 source:f:\git\openxcom\src\geoscape\lowfuelstate.cpp
 	"LowFuelState.h"
 	"GeoscapeState.h"
 	"../Engine/Game.h"
@@ -7235,7 +7235,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/SoldierDiary.h"
 
-1438170063 source:f:\git\openxcom\src\geoscape\multipletargetsstate.cpp
+1442441061 source:f:\git\openxcom\src\geoscape\multipletargetsstate.cpp
 	"MultipleTargetsState.h"
 	"ConfirmDestinationState.h"
 	"GeoscapeCraftState.h"
@@ -8671,7 +8671,7 @@
 1441871593 source:f:\git\openxcom\src\savegame\weightedoptions.cpp
 	"WeightedOptions.h"
 
-1442379862 source:f:\git\openxcom\src\ufopaedia\articlestate.cpp
+1442383758 source:f:\git\openxcom\src\ufopaedia\articlestate.cpp
 	"ArticleState.h"
 	"Ufopaedia.h"
 	"../Engine/Game.h"
@@ -8702,7 +8702,7 @@
 	"../Ruleset/RuleBaseFacility.h"
 	"../Ruleset/Ruleset.h"
 
-1442356856 source:f:\git\openxcom\src\ufopaedia\articlestatecraft.cpp
+1442380753 source:f:\git\openxcom\src\ufopaedia\articlestatecraft.cpp
 	"ArticleStateCraft.h"
 	"../Engine/Game.h"
 	"../Engine/Surface.h"
@@ -8745,7 +8745,7 @@
 	"../Resource/ResourcePack.h"
 	"../Ruleset/ArticleDefinition.h"
 
-1442357177 source:f:\git\openxcom\src\ufopaedia\articlestatetextimage.cpp
+1442381420 source:f:\git\openxcom\src\ufopaedia\articlestatetextimage.cpp
 	"ArticleStateTextImage.h"
 	"ExtraAlienInfoState.h"
 	"Ufopaedia.h"
@@ -8769,7 +8769,7 @@
 	"../Ruleset/Ruleset.h"
 	"../Ruleset/RuleUfo.h"
 
-1442357177 source:f:\git\openxcom\src\ufopaedia\articlestatevehicle.cpp
+1442381832 source:f:\git\openxcom\src\ufopaedia\articlestatevehicle.cpp
 	"ArticleStateVehicle.h"
 	"../Engine/Game.h"
 	"../Engine/Surface.h"
@@ -10591,7 +10591,7 @@
 	"../Engine/State.h"
 	"../Savegame/SavedGame.h"
 
-1440095647 f:\git\openxcom\src\menu\savegamestate.h
+1442442986 f:\git\openxcom\src\menu\savegamestate.h
 	"OptionsBaseState.h"
 	"../Engine/State.h"
 	"../Savegame/SavedGame.h"
@@ -10609,7 +10609,7 @@
 	"../Ruleset/Ruleset.h"
 	"../Savegame/SavedBattleGame.h"
 
-1441666598 source:f:\git\openxcom\src\menu\savegamestate.cpp
+1442443085 source:f:\git\openxcom\src\menu\savegamestate.cpp
 	"SaveGameState.h"
 	"ErrorMessageState.h"
 	"MainMenuState.h"

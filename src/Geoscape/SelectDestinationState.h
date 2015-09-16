@@ -57,8 +57,8 @@ private:
 	public:
 		/// Creates the Select Destination state.
 		SelectDestinationState(
-				Craft* craft,
-				Globe* globe);
+				Craft* const craft,
+				Globe* const globe);
 		/// Cleans up the Select Destination state.
 		~SelectDestinationState();
 
@@ -71,8 +71,18 @@ private:
 		void handle(Action* action);
 		/// Handler for clicking the globe.
 		void globeClick(Action* action);
-		/// Handler for pressing the Rotate Left arrow.
-/*		void btnRotateLeftPress(Action* action);
+		/// Handler for clicking the Cancel button.
+		void btnCancelClick(Action* action);
+		/// Handler for clicking the Cydonia mission button.
+		void btnCydoniaClick(Action* action);
+
+		/// Let the state know the window has been resized.
+		void resize(
+				int& dX,
+				int& dY);
+
+/*		/// Handler for pressing the Rotate Left arrow.
+		void btnRotateLeftPress(Action* action);
 		/// Handler for releasing the Rotate Left arrow.
 		void btnRotateLeftRelease(Action* action);
 		/// Handler for pressing the Rotate Right arrow.
@@ -95,15 +105,6 @@ private:
 		void btnZoomOutLeftClick(Action* action);
 		/// Handler for right-clicking the Zoom Out icon.
 		void btnZoomOutRightClick(Action* action); */
-		/// Handler for clicking the Cancel button.
-		void btnCancelClick(Action* action);
-		/// Handler for clicking the Cydonia mission button.
-		void btnCydoniaClick(Action* action);
-
-		/// Let the state know the window has been resized.
-		void resize(
-				int& dX,
-				int& dY);
 };
 
 }

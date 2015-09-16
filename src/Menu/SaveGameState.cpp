@@ -51,7 +51,7 @@ namespace OpenXcom
 SaveGameState::SaveGameState(
 		OptionsOrigin origin,
 		const std::string& file,
-		SDL_Color* palette)
+		SDL_Color* const palette)
 	:
 		_origin(origin),
 		_file(file),
@@ -70,7 +70,7 @@ SaveGameState::SaveGameState(
 SaveGameState::SaveGameState(
 		OptionsOrigin origin,
 		SaveType type,
-		SDL_Color* palette)
+		SDL_Color* const palette)
 	:
 		_origin(origin),
 		_type(type),
@@ -95,7 +95,7 @@ SaveGameState::SaveGameState(
 			_file = CrossPlatform::sanitizeFilename(Language::wstrToFs(_game->getSavedGame()->getName())) + ".sav";
 	}
 
-	buildUi(palette);
+	buildUi(palette, true);
 }
 
 /**
@@ -110,16 +110,25 @@ SaveGameState::~SaveGameState()
 
 /**
  * Builds the interface.
- * @param palette - pointer to parent state palette
+ * @param palette	- pointer to parent state palette
+ * @param dropText	- true if saving without a window (eg. quicksave)
  */
-void SaveGameState::buildUi(SDL_Color* palette)
+void SaveGameState::buildUi(
+		SDL_Color* const palette,
+		bool dropText)
 {
 #ifdef _WIN32
 //	MessageBeep(MB_OK); // <- done in BattlescapeState::handle() for Fkeys
 #endif
 	_screen = false;
 
-	_txtStatus = new Text(320, 17, 0, 92);
+	int y;
+	if (dropText == true)
+		y = 92;
+	else
+		y = -18;
+
+	_txtStatus = new Text(320, 17, 0, y);
 
 	setPalette(palette);
 

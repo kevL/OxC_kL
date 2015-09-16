@@ -54,8 +54,8 @@ private:
 	public:
 		/// Creates the Confirm Destination state.
 		ConfirmDestinationState(
-				Craft* craft,
-				Target* target);
+				Craft* const craft,
+				Target* const target);
 		/// Cleans up the Confirm Destination state.
 		~ConfirmDestinationState();
 

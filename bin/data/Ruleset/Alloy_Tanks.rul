@@ -238,7 +238,7 @@ extraSprites:
 extraStrings:
   - type: en-US
     strings:
-      STR_ALLOY_TANK_ARMOR: "Alloy HWP Armor"
+      STR_ALLOY_TANK_ARMOR: "HWP Alloy Armor"
       STR_TANK_CANNON_ALLOY: "Alloy Tank/Cannon"
       STR_TANK_CANNON_ALLOY_UFOPEDIA: "This is a standard Cannon HWP that has been refitted with light, strong alien alloy armor. Its performance is similar to the original, but it is slightly faster can take much more abuse."
       STR_TANK_LASER_CANNON_ALLOY: "Alloy Tank/Laser"
@@ -247,7 +247,7 @@ extraStrings:
       STR_TANK_ROCKET_LAUNCHER_ALLOY_UFOPEDIA: "This is a standard Rocket Launcher HWP that has been refitted with light, strong alien alloy armor. Its performance is similar to the original, but its longevity under fire has been greatly increased, and it is somewhat quicker."
   - type: en-GB
     strings:
-      STR_ALLOY_TANK_ARMOR: Alloy HWP Armour
+      STR_ALLOY_TANK_ARMOR: HWP Alloy Armour
       STR_TANK_CANNON_ALLOY: Alloy Tank/Cannon
       STR_TANK_CANNON_ALLOY_UFOPEDIA: This is a standard Cannon HWP that has been refitted with light, strong alien alloy armour. Its performance is similar to the original, but it is slightly faster can take much more abuse.
       STR_TANK_LASER_CANNON_ALLOY: Alloy Tank/Laser

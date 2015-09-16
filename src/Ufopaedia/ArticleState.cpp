@@ -45,7 +45,7 @@ ArticleState::ArticleState(const std::string& article_id) // protected.
 	_btnPrev	= new TextButton(30, 14, 40, 5);
 	_btnNext	= new TextButton(30, 14, 75, 5);
 
-	_timer = new Timer(135);
+	_timer = new Timer(132);
 	_timer->onTimer((StateHandler)& ArticleState::repeat);
 	_timer->start();
 }
