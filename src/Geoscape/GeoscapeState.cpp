@@ -274,14 +274,14 @@ struct ProductionCompleteInfo
 
 	Base* base;
 
-	ProductProgress endType;
+	ProductionProgress endType;
 
 	/// cTor.
 	ProductionCompleteInfo(
 			Base* a_base,
 			const std::wstring& a_item,
 			bool a_gotoBaseBtn,
-			ProductProgress a_endType)
+			ProductionProgress a_endType)
 		:
 			base(a_base),
 			item(a_item),
@@ -2546,7 +2546,7 @@ void GeoscapeState::time1Hour()
 			i != _gameSave->getBases()->end();
 			++i)
 	{
-		std::map<Production*, ProductProgress> progress;
+		std::map<Production*, ProductionProgress> progress;
 
 		for (std::vector<Production*>::const_iterator
 				j = (*i)->getProductions().begin();
@@ -2559,7 +2559,7 @@ void GeoscapeState::time1Hour()
 									_rules);
 		}
 
-		for (std::map<Production*, ProductProgress>::const_iterator
+		for (std::map<Production*, ProductionProgress>::const_iterator
 				j = progress.begin();
 				j != progress.end();
 				++j)

@@ -55,7 +55,7 @@ ProductionCompleteState::ProductionCompleteState(
 		const std::wstring& item,
 		GeoscapeState* state,
 		bool gotoBaseBtn,
-		ProductProgress endType)
+		ProductionProgress endType)
 	:
 		_base(base),
 		_state(state),

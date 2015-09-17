@@ -232,7 +232,7 @@ UfoDetectedState::UfoDetectedState(
 	woststr.str(L"");
 	std::string heading = _ufo->getDirection();
 	if (_ufo->getStatus() != Ufo::FLYING)
-		heading = "STR_UNKNOWN";
+		heading = "STR_NONE";
 	woststr << L'\x01' << tr(heading);
 	_lstInfo->addRow(
 					2,

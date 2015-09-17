@@ -138,6 +138,12 @@ ManufactureState::ManufactureState(
 	_btnOk->onMouseClick((ActionHandler)& ManufactureState::btnOkClick);
 	_btnOk->onKeyboardPress(
 						(ActionHandler)& ManufactureState::btnOkClick,
+						Options::keyOk);
+	_btnOk->onKeyboardPress(
+						(ActionHandler)& ManufactureState::btnOkClick,
+						Options::keyOkKeypad);
+	_btnOk->onKeyboardPress(
+						(ActionHandler)& ManufactureState::btnOkClick,
 						Options::keyCancel);
 
 	_txtTitle->setBig();
@@ -215,8 +221,6 @@ void ManufactureState::fillProductionList()
 			woststr3,
 			woststr4;
 
-//		if ((*i)->getSellItems() == true)
-//			woststr0 << L"$";
 		woststr0 << tr((*i)->getRules()->getName());
 		if ((*i)->getSellItems() == true)
 		{
@@ -229,8 +233,6 @@ void ManufactureState::fillProductionList()
 
 		woststr1 << (*i)->getAssignedEngineers();
 
-//		if ((*i)->getSellItems() == true)
-//			woststr2 << L"$";
 		woststr2 << (*i)->getAmountProduced() << L"/";
 		if ((*i)->getInfiniteAmount() == true)
 			woststr2 << L"oo";

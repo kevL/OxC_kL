@@ -26,13 +26,13 @@
 namespace OpenXcom
 {
 
-class RuleManufacture;
 class Base;
-class SavedGame;
+class RuleManufacture;
 class Ruleset;
+class SavedGame;
 
 
-enum ProductProgress
+enum ProductionProgress
 {
 	PROGRESS_NOT_COMPLETE,			// 0
 	PROGRESS_COMPLETE,				// 1
@@ -47,7 +47,7 @@ class Production
 {
 
 private:
-	const RuleManufacture* _prodRule;
+	const RuleManufacture* _manufRule;
 
 	bool
 		_infinite,
@@ -66,9 +66,10 @@ private:
 	public:
 		///
 		Production(
-				const RuleManufacture* prodRule,
+				const RuleManufacture* const manufRule,
 				int amount);
-		// no dTor !
+		///
+		~Production();
 
 		///
 		void load(const YAML::Node& node);
@@ -104,7 +105,7 @@ private:
 		void setSellItems(bool sell);
 
 		///
-		ProductProgress step(
+		ProductionProgress step(
 				Base* base,
 				SavedGame* gameSave,
 				const Ruleset* rules);

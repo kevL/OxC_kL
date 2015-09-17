@@ -56,7 +56,7 @@ private:
 		* _btnOk5Secs;
 	Window* _window;
 
-	ProductProgress _endType;
+	ProductionProgress _endType;
 
 
 	public:
@@ -66,7 +66,7 @@ private:
 				const std::wstring& item,
 				GeoscapeState* state,
 				bool gotoBaseBtn,
-				ProductProgress endType = PROGRESS_COMPLETE);
+				ProductionProgress endType = PROGRESS_COMPLETE);
 		/// Cleans up the Production Complete state.
 		~ProductionCompleteState();
 

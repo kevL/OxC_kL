@@ -66,9 +66,9 @@ ResearchState::ResearchState(
 	_window			= new Window(this, 320, 200);
 	_mini			= new MiniBaseView(128, 16, 180, 27, MBV_RESEARCH);
 
-	_txtTitle		= new Text(320, 17, 0, 10);
-	_txtBaseLabel	= new Text(80, 9, 16, 10);
-	_txtHoverBase	= new Text(80, 9, 224, 10);
+	_txtTitle		= new Text(320, 17,   0, 10);
+	_txtBaseLabel	= new Text( 80,  9,  16, 10);
+	_txtHoverBase	= new Text( 80,  9, 224, 10);
 
 	_txtAllocated	= new Text(60, 9, 16, 26);
 	_txtAvailable	= new Text(60, 9, 16, 35);
@@ -76,12 +76,12 @@ ResearchState::ResearchState(
 	_txtSpace		= new Text(100, 9, 80, 26);
 
 	_txtProject		= new Text(110, 9, 16, 49);
-	_txtScientists	= new Text(55, 9, 161, 49);
-	_txtProgress	= new Text(55, 9, 219, 49);
+	_txtScientists	= new Text( 55, 9, 161, 49);
+	_txtProgress	= new Text( 55, 9, 219, 49);
 
 	_lstResearch	= new TextList(288, 105, 16, 64);
 
-	_btnAliens		= new TextButton(92, 16, 16, 177);
+	_btnAliens		= new TextButton(92, 16,  16, 177);
 	_btnNew			= new TextButton(92, 16, 114, 177);
 	_btnOk			= new TextButton(92, 16, 212, 177);
 
@@ -91,7 +91,7 @@ ResearchState::ResearchState(
 	add(_mini,			"miniBase",	"basescape"); // <-
 	add(_txtTitle,		"text",		"researchMenu");
 	add(_txtBaseLabel,	"text",		"researchMenu");
-	add(_txtHoverBase,	"numbers",	"baseInfo");
+	add(_txtHoverBase,	"numbers",	"baseInfo"); // <-
 	add(_txtAvailable,	"text",		"researchMenu");
 	add(_txtAllocated,	"text",		"researchMenu");
 	add(_txtSpace,		"text",		"researchMenu");
@@ -131,13 +131,18 @@ ResearchState::ResearchState(
 
 	_btnAliens->setText(tr("STR_ALIENS"));
 	_btnAliens->onMouseClick((ActionHandler)& ResearchState::btnAliens);
-	_btnAliens->setVisible(false);
 
 	_btnNew->setText(tr("STR_NEW_PROJECT"));
 	_btnNew->onMouseClick((ActionHandler)& ResearchState::btnNewClick);
 
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& ResearchState::btnOkClick);
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& ResearchState::btnOkClick,
+					Options::keyOk);
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& ResearchState::btnOkClick,
+					Options::keyOkKeypad);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& ResearchState::btnOkClick,
 					Options::keyCancel);
@@ -177,13 +182,13 @@ void ResearchState::init()
 	_lstResearch->clearList();
 	_online.clear();
 
-	const std::vector<ResearchProject*>& rps (_base->getResearch()); // init.
+	const std::vector<ResearchProject*>& currentProjects (_base->getResearch()); // init.
 	for (std::vector<ResearchProject*>::const_iterator
-			rp = rps.begin();
-			rp != rps.end();
-			++rp)
+			i = currentProjects.begin();
+			i != currentProjects.end();
+			++i)
 	{
-		if ((*rp)->getOffline() == true)
+		if ((*i)->getOffline() == true)
 		{
 			_online.push_back(false);
 			continue;
@@ -191,16 +196,17 @@ void ResearchState::init()
 		_online.push_back(true);
 
 
+		const int assigned = (*i)->getAssigned();
 		std::wostringstream woststr;
-		woststr << (*rp)->getAssigned();
+		woststr << assigned;
 
 		std::wstring daysLeft;
 
-		if ((*rp)->getAssigned() > 0)
+		if (assigned > 0)
 		{
 			const int days = static_cast<int>(std::ceil(
-							(static_cast<double>((*rp)->getCost() - (*rp)->getSpent()))
-						   / static_cast<double>((*rp)->getAssigned())));
+							(static_cast<double>((*i)->getCost() - (*i)->getSpent()))
+						   / static_cast<double>(assigned)));
 			daysLeft = Text::formatNumber(days);
 		}
 		else
@@ -208,10 +214,10 @@ void ResearchState::init()
 
 		_lstResearch->addRow(
 						4,
-						tr((*rp)->getRules()->getName()).c_str(),
+						tr((*i)->getRules()->getName()).c_str(),
 						woststr.str().c_str(),
-						tr((*rp)->getResearchProgress()).c_str(),
-//						(*rp)->getCostCompleted().c_str());
+						tr((*i)->getResearchProgress()).c_str(),
+//						(*i)->getCostCompleted().c_str());
 						daysLeft.c_str());
 	}
 
@@ -222,9 +228,7 @@ void ResearchState::init()
 	_txtSpace->setText(tr("STR_LABORATORY_SPACE_AVAILABLE_")
 							.arg(_base->getFreeLaboratories()));
 
-
-	if (_base->getAvailableContainment() > 0)
-		_btnAliens->setVisible();
+	_btnAliens->setVisible(_base->getAvailableContainment() > 0);
 }
 
 /**
@@ -263,29 +267,26 @@ void ResearchState::btnAliens(Action*)
 void ResearchState::onSelectProject(Action*)
 {
 	size_t
-		sel = _lstResearch->getSelectedRow(),	// original listclick
-		sel2 = sel,								// entry of RP vector
-		entry = 0;								// to break when vector.at[entry] meets sel
+		sel = _lstResearch->getSelectedRow(),	// original row clicked
+		id = sel,								// test-index of RP vector
+		j = 0;									// break when vector.at[j] meets sel
 
 	for (std::vector<bool>::const_iterator
 			i = _online.begin();
 			i != _online.end();
 			++i)
 	{
-		if (*i == false)
-			++sel2;
-
-		if (entry == sel2)
+		if (*i == false && ++id == j)
 			break;
 
-		++entry;
+		++j;
 	}
 
-	const std::vector<ResearchProject*>& rps (_base->getResearch()); // init.
+	const std::vector<ResearchProject*>& currentProjects (_base->getResearch()); // init.
 	_game->pushState(new ResearchInfoState(
 										_base,
-										rps[sel2]));
-//										rps[_lstResearch->getSelectedRow()]));
+										currentProjects[id]));
+//										currentProjects[_lstResearch->getSelectedRow()]));
 }
 
 /**

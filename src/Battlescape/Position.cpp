@@ -49,16 +49,19 @@ Position Position::toVoxelSpace(const Position& pos)
 
 /**
  * Converts tile-space to voxel-space and centers the voxel in its Tile.
- * @param pos	- reference a position
- * @param lift	- how many voxels to elevate along the z-axis (default 0)
+ * @param pos		- reference a position
+ * @param lift		- how many voxels to elevate along the z-axis (default 0)
+ * @param armorSize	- tilesize of unit armor if applicable (default 1)
  */
 Position Position::toVoxelSpaceCentered(
 		const Position& pos,
-		int lift)
+		int lift,
+		int armorSize)
 {
+	const int voxelOffset = armorSize * 8;
 	return Position(
-				(pos.x << 4) + 8,
-				(pos.y << 4) + 8,
+				(pos.x << 4) + voxelOffset,
+				(pos.y << 4) + voxelOffset,
 				(pos.z * 24) + lift);
 }
 

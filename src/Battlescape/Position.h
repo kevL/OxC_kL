@@ -185,7 +185,8 @@ public:
 	/// Converts tile-space to voxel-space and centers the voxel in its Tile.
 	static Position toVoxelSpaceCentered(
 			const Position& pos,
-			int lift = 0);
+			int lift = 0,
+			int armorSize = 1);
 };
 
 ///

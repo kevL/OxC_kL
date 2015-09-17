@@ -53,7 +53,8 @@ private:
 		ResearchProject(
 				RuleResearch* project,
 				int cost = 0);
-		// kL_note: DESTRUCTOR?
+		/// dTor.
+		~ResearchProject();
 
 		/// Game logic. Called every new day to compute time spent.
 		bool step();

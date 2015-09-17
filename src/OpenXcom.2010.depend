@@ -4653,7 +4653,7 @@
 1441664210 f:\git\openxcom\src\battlescape\battlescapegame.h
 	"Position.h"
 
-1442088032 f:\git\openxcom\src\battlescape\position.h
+1442511421 f:\git\openxcom\src\battlescape\position.h
 
 1440096185 f:\git\openxcom\src\savegame\vehicle.h
 
@@ -4802,7 +4802,7 @@
 
 1440461462 f:\git\openxcom\src\ruleset\ruleresearch.h
 
-1436730035 f:\git\openxcom\src\savegame\researchproject.h
+1442515990 f:\git\openxcom\src\savegame\researchproject.h
 
 1440097586 source:f:\git\openxcom\src\basescape\manufactureinfostate.cpp
 	"ManufactureInfoState.h"
@@ -4835,7 +4835,7 @@
 
 1432766016 f:\git\openxcom\src\ruleset\rulemanufacture.h
 
-1431728713 f:\git\openxcom\src\savegame\production.h
+1442516469 f:\git\openxcom\src\savegame\production.h
 
 1438163565 source:f:\git\openxcom\src\basescape\manufacturestartstate.cpp
 	"ManufactureStartState.h"
@@ -4855,7 +4855,7 @@
 1432678018 f:\git\openxcom\src\basescape\manufacturestartstate.h
 	"../Engine/State.h"
 
-1440476320 source:f:\git\openxcom\src\basescape\manufacturestate.cpp
+1442518846 source:f:\git\openxcom\src\basescape\manufacturestate.cpp
 	"ManufactureState.h"
 	"BasescapeState.h"
 	"ManufactureInfoState.h"
@@ -4938,7 +4938,7 @@
 	"../Savegame/Base.h"
 	"../Savegame/SavedGame.h"
 
-1442471055 source:f:\git\openxcom\src\basescape\newresearchliststate.cpp
+1442518272 source:f:\git\openxcom\src\basescape\newresearchliststate.cpp
 	"NewResearchListState.h"
 	"ResearchInfoState.h"
 	"../Engine/Game.h"
@@ -5060,7 +5060,7 @@
 	<algorithm>
 	<cstdint>
 
-1438164615 source:f:\git\openxcom\src\basescape\researchstate.cpp
+1442517835 source:f:\git\openxcom\src\basescape\researchstate.cpp
 	"ResearchState.h"
 	"AlienContainmentState.h"
 	"BasescapeState.h"
@@ -5396,7 +5396,7 @@
 1433916034 f:\git\openxcom\src\battlescape\scannerstate.h
 	"../Engine/State.h"
 
-1441791139 f:\git\openxcom\src\battlescape\tileengine.h
+1442513438 f:\git\openxcom\src\battlescape\tileengine.h
 	"BattlescapeGame.h"
 	"Position.h"
 	"../Ruleset/MapData.h"
@@ -6117,7 +6117,7 @@
 	"PathfindingOpenSet.h"
 	"PathfindingNode.h"
 
-1442089728 source:f:\git\openxcom\src\battlescape\position.cpp
+1442511479 source:f:\git\openxcom\src\battlescape\position.cpp
 	"Position.h"
 
 1442353195 source:f:\git\openxcom\src\battlescape\primegrenadestate.cpp
@@ -6207,7 +6207,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1442509303 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1442515309 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	"AlienBAIState.h"
 	"BattlescapeState.h"
@@ -6959,7 +6959,7 @@
 1442441486 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1442380307 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1442516522 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	"AlienBaseState.h"
 	"BaseDefenseState.h"
@@ -7066,7 +7066,7 @@
 1440480134 f:\git\openxcom\src\geoscape\newpossibleresearchstate.h
 	"../Engine/State.h"
 
-1435963986 f:\git\openxcom\src\geoscape\productioncompletestate.h
+1442516522 f:\git\openxcom\src\geoscape\productioncompletestate.h
 	"../Engine/State.h"
 	"../Savegame/Production.h"
 
@@ -7287,7 +7287,7 @@
 1404096023 source:f:\git\openxcom\src\geoscape\polyline.cpp
 	"Polyline.h"
 
-1441839139 source:f:\git\openxcom\src\geoscape\productioncompletestate.cpp
+1442516522 source:f:\git\openxcom\src\geoscape\productioncompletestate.cpp
 	"ProductionCompleteState.h"
 	"GeoscapeState.h"
 	"../Basescape/BasescapeState.h"
@@ -8519,7 +8519,7 @@
 1439866399 source:f:\git\openxcom\src\savegame\node.cpp
 	"Node.h"
 
-1432677243 source:f:\git\openxcom\src\savegame\production.cpp
+1442516469 source:f:\git\openxcom\src\savegame\production.cpp
 	"Production.h"
 	"Base.h"
 	"Craft.h"
@@ -8536,7 +8536,7 @@
 	"Region.h"
 	"../Ruleset/RuleRegion.h"
 
-1438172449 source:f:\git\openxcom\src\savegame\researchproject.cpp
+1442516024 source:f:\git\openxcom\src\savegame\researchproject.cpp
 	"ResearchProject.h"
 	"../Interface/Text.h"
 	"../Ruleset/RuleResearch.h"

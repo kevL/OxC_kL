@@ -147,10 +147,10 @@ void NewResearchListState::fillProjectList() // private.
 	size_t row = 0;
 	const Uint8 color = _lstResearch->getSecondaryColor();
 
-	const std::vector<ResearchProject*>& baseProjects (_base->getResearch()); // init.
+	const std::vector<ResearchProject*>& currentProjects (_base->getResearch()); // init.
 	for (std::vector<ResearchProject*>::const_iterator
-			i = baseProjects.begin();
-			i != baseProjects.end();
+			i = currentProjects.begin();
+			i != currentProjects.end();
 			++i)
 	{
 		// If cancelled projects are not marked 'offline' they'd lose spent
@@ -159,7 +159,11 @@ void NewResearchListState::fillProjectList() // private.
 		// can't exploit the system by forcing a recalculation of totalCost ....
 		if ((*i)->getOffline() == true)
 		{
-			_lstResearch->addRow(1, tr((*i)->getRules()->getName()).c_str());
+			std::wstring wst = tr((*i)->getRules()->getName());
+			if ((*i)->getSpent() != 0)
+				wst += L" (" + Text::formatNumber((*i)->getSpent()) + L")";
+
+			_lstResearch->addRow(1, wst.c_str());
 			// Try to blend these in but doesn't really work due to ordering:
 //			if ((*i)->getSpent() > 0)
 			_lstResearch->setRowColor(row++, color, true);

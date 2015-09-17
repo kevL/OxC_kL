@@ -50,7 +50,11 @@ ResearchProject::ResearchProject(
 		_offline(false)
 {}
 
-// kL_note: DESTRUCTOR?
+/**
+ * dTor.
+ */
+ResearchProject::~ResearchProject()
+{}
 
 /**
  * Called every day to compute time spent on this ResearchProject.
@@ -184,7 +188,7 @@ YAML::Node ResearchProject::save() const
 */
 std::string ResearchProject::getResearchProgress() const
 {
-	if (_assigned == 0)
+/*	if (_assigned == 0)
 		return "STR_NONE";
 
 	const float progress = static_cast<float>(_spent) / static_cast<float>(_cost);
@@ -201,28 +205,29 @@ std::string ResearchProject::getResearchProgress() const
 	if (progress < PROGRESS_LIMIT_GOOD)		// < 0.8
 		return "STR_GOOD";
 
+	return "STR_EXCELLENT"; */
+
+	if (_assigned == 0)
+		return "na.";
+//		return "STR_NONE";
+
+	if (static_cast<float>(_spent) / static_cast<float>(_cost) < PROGRESS_LIMIT_UNKNOWN)
+		return "STR_UNKNOWN";
+
+	float rating = static_cast<float>(_assigned);
+	rating /= getRules()->getCost();
+
+	if (rating < PROGRESS_LIMIT_POOR)
+		return "STR_POOR";
+
+	if (rating < PROGRESS_LIMIT_AVERAGE)
+		return "STR_AVERAGE";
+
+	if (rating < PROGRESS_LIMIT_GOOD)
+		return "STR_GOOD";
+
 	return "STR_EXCELLENT";
 }
-/*	float progress = (float)getSpent() / getRules()->getCost();
-
-	if (getAssigned() == 0)
-		return "STR_NONE";
-	else if (progress < PROGRESS_LIMIT_UNKNOWN) // 0.2f
-		return "STR_UNKNOWN";
-	else
-	{
-		float rating = (float)getAssigned();
-		rating /= getRules()->getCost();
-
-		if (rating < PROGRESS_LIMIT_POOR) // 0.1f
-			return "STR_POOR";
-		else if (rating < PROGRESS_LIMIT_AVERAGE) // 0.25f
-			return "STR_AVERAGE";
-		else if (rating < PROGRESS_LIMIT_GOOD) // 0.5f
-			return "STR_GOOD";
-
-		return "STR_EXCELLENT";
-	} */
 
 /**
  * Returns research time completed as a wide string.
