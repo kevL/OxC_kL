@@ -140,8 +140,7 @@ InventoryState::InventoryState(
 	_selAmmo	= new Surface(
 						RuleInventory::HAND_W * RuleInventory::SLOT_W,
 						RuleInventory::HAND_H * RuleInventory::SLOT_H,
-						288, // 272,
-						88);
+						288,88);
 	_inv		= new Inventory(
 							_game,
 							320,200,
@@ -245,27 +244,33 @@ InventoryState::InventoryState(
 
 	_btnOk->onMouseClick((ActionHandler)& InventoryState::btnOkClick);
 	_btnOk->onKeyboardPress(
-						(ActionHandler)& InventoryState::btnOkClick,
-						Options::keyCancel);
+					(ActionHandler)& InventoryState::btnOkClick,
+					Options::keyOk);
 	_btnOk->onKeyboardPress(
-						(ActionHandler)& InventoryState::btnOkClick,
-						Options::keyBattleInventory);
+					(ActionHandler)& InventoryState::btnOkClick,
+					Options::keyOkKeypad);
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& InventoryState::btnOkClick,
+					Options::keyCancel);
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& InventoryState::btnOkClick,
+					Options::keyBattleInventory);
 //	_btnOk->setTooltip("STR_OK");
 //	_btnOk->onMouseIn((ActionHandler)& InventoryState::txtTooltipIn);
 //	_btnOk->onMouseOut((ActionHandler)& InventoryState::txtTooltipOut);
 
 	_btnPrev->onMouseClick((ActionHandler)& InventoryState::btnPrevClick);
 	_btnPrev->onKeyboardPress(
-						(ActionHandler)& InventoryState::btnPrevClick,
-						Options::keyBattlePrevUnit);
+					(ActionHandler)& InventoryState::btnPrevClick,
+					Options::keyBattlePrevUnit);
 //	_btnPrev->setTooltip("STR_PREVIOUS_UNIT");
 //	_btnPrev->onMouseIn((ActionHandler)& InventoryState::txtTooltipIn);
 //	_btnPrev->onMouseOut((ActionHandler)& InventoryState::txtTooltipOut);
 
 	_btnNext->onMouseClick((ActionHandler)& InventoryState::btnNextClick);
 	_btnNext->onKeyboardPress(
-						(ActionHandler)& InventoryState::btnNextClick,
-						Options::keyBattleNextUnit);
+					(ActionHandler)& InventoryState::btnNextClick,
+					Options::keyBattleNextUnit);
 //	_btnNext->setTooltip("STR_NEXT_UNIT");
 //	_btnNext->onMouseIn((ActionHandler)& InventoryState::txtTooltipIn);
 //	_btnNext->onMouseOut((ActionHandler)& InventoryState::txtTooltipOut);
@@ -299,16 +304,16 @@ InventoryState::InventoryState(
 
 /*	_btnCreateTemplate->onMouseClick((ActionHandler)& InventoryState::btnCreateTemplateClick);
 	_btnCreateTemplate->onKeyboardPress(
-						(ActionHandler)& InventoryState::btnCreateTemplateClick,
-						Options::keyInvCreateTemplate); */
+					(ActionHandler)& InventoryState::btnCreateTemplateClick,
+					Options::keyInvCreateTemplate); */
 //	_btnCreateTemplate->setTooltip("STR_CREATE_INVENTORY_TEMPLATE");
 //	_btnCreateTemplate->onMouseIn((ActionHandler)& InventoryState::txtTooltipIn);
 //	_btnCreateTemplate->onMouseOut((ActionHandler)& InventoryState::txtTooltipOut);
 
 /*	_btnApplyTemplate->onMouseClick((ActionHandler)& InventoryState::btnApplyTemplateClick);
 	_btnApplyTemplate->onKeyboardPress(
-						(ActionHandler)& InventoryState::btnApplyTemplateClick,
-						Options::keyInvApplyTemplate); */
+					(ActionHandler)& InventoryState::btnApplyTemplateClick,
+					Options::keyInvApplyTemplate); */
 //	_btnApplyTemplate->setTooltip("STR_APPLY_INVENTORY_TEMPLATE");
 //	_btnApplyTemplate->onMouseIn((ActionHandler)& InventoryState::txtTooltipIn);
 //	_btnApplyTemplate->onMouseOut((ActionHandler)& InventoryState::txtTooltipOut);
@@ -351,20 +356,19 @@ InventoryState::InventoryState(
 	_txtMelee->setVisible(vis);
 	_txtPStr->setVisible(vis);
 	_txtPSkill->setVisible(vis);
+
+	_timer = new Timer(132);
+	_timer->onTimer((StateHandler)& InventoryState::repeat);
+	_timer->start();
 }
 
-/**
+/*
  * Helper for the dTor.
- */
-/* static void _clearInventoryTemplate(std::vector<EquipmentLayoutItem*>& inventoryTemplate)
+ *
+static void _clearInventoryTemplate(std::vector<EquipmentLayoutItem*>& inventoryTemplate)
 {
-	for (std::vector<EquipmentLayoutItem*>::iterator
-			i = inventoryTemplate.begin();
-			i != inventoryTemplate.end();
-			)
-	{
+	for (std::vector<EquipmentLayoutItem*>::iterator i = inventoryTemplate.begin(); i != inventoryTemplate.end();)
 		delete *i;
-	}
 } */
 
 /**
@@ -432,6 +436,33 @@ InventoryState::~InventoryState()
 //	}
 
 /**
+ * Hits the think timer.
+ */
+void InventoryState::think()
+{
+	State::think();
+	_timer->think(this, NULL);
+}
+
+/**
+ * Advances to the next/previous Unit when right/left key is depressed.
+ */
+void InventoryState::repeat()
+{
+	Uint8* keystate = SDL_GetKeyState(NULL);
+	if (keystate[Options::keyBattleNextUnit] == 1
+		|| keystate[SDLK_KP6] == 1)
+	{
+		btnNextClick(NULL);
+	}
+	else if (keystate[Options::keyBattlePrevUnit] == 1
+		|| keystate[SDLK_KP4] == 1)
+	{
+		btnPrevClick(NULL);
+	}
+}
+
+/**
  * Updates all soldier stats when the soldier changes.
  @note parent BattlescapeState is invalid @ BaseEquip screen
  */
@@ -468,8 +499,7 @@ void InventoryState::init()
 			unit = _battleSave->getSelectedUnit();
 	}
 
-//	if (_parent)
-//		_parent->getMap()->getCamera()->centerOnPosition(unit->getPosition(), false);
+//	if (_parent) _parent->getMap()->getCamera()->centerOnPosition(unit->getPosition(), false);
 
 	unit->setCache(NULL);
 
@@ -535,7 +565,8 @@ void InventoryState::init()
 		}
 
 		_game->getResourcePack()->getSurface(look)->blit(_soldier);
-		if (gender != NULL) gender->blit(_gender);
+		if (gender != NULL)
+			gender->blit(_gender);
 
 	}
 	else
@@ -968,7 +999,7 @@ void InventoryState::btnUnequipUnitClick(Action*)
 	{
 		BattleUnit* const unit = _battleSave->getSelectedUnit();
 		std::vector<BattleItem*>* const unitInvent = unit->getInventory();
-		Tile* const unitTile = unit->getTile();
+		Tile* const tile = unit->getTile();
 		RuleInventory* const slot = _game->getRuleset()->getInventory("STR_GROUND");
 
 		for (std::vector<BattleItem*>::const_iterator
@@ -977,14 +1008,11 @@ void InventoryState::btnUnequipUnitClick(Action*)
 				)
 		{
 			(*i)->setOwner(NULL);
-			unitTile->addItem(
-							*i,
-							slot);
-
+			tile->addItem(*i, slot);
 			i = unitInvent->erase(i);
 		}
 
-		_inv->arrangeGround(false); // refresh ui
+		_inv->arrangeGround(false);
 		updateStats();
 		refreshMouse();
 
@@ -1041,8 +1069,7 @@ void InventoryState::btnRankClick(Action*)
 		_game->pushState(new UnitInfoState(
 										_battleSave->getSelectedUnit(),
 										_parent,
-										true,
-										false,
+										true, false,
 										_tuMode == false));
 }
 
@@ -1066,9 +1093,9 @@ void InventoryState::invClick(Action*)
 		const BattleItem* const ammo = item->getAmmoItem();
 
 		setExtraInfo(
-					item,
-					itRule,
-					ammo);
+				item,
+				itRule,
+				ammo);
 
 		std::wstring wst;
 

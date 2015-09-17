@@ -94,7 +94,12 @@ private:
 		* _txtUseTU,
 		* _txtThrowTU,
 		* _txtPsiTU;
+	Timer* _timer;
+
 /*	std::vector<EquipmentLayoutItem*> _curInventoryTemplate; */
+
+	/// Advances to the next/previous Unit when right/left key is depressed.
+	void repeat();
 
 	/// Updates the selected unit's info - weight, TU, etc.
 	void updateStats();
@@ -131,6 +136,8 @@ private:
 
 		/// Updates all soldier info.
 		void init();
+		/// Runs the timer.
+		void think();
 
 		/// Handler for clicking the OK button.
 		void btnOkClick(Action* action);

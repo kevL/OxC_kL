@@ -289,6 +289,12 @@ UnitInfoState::UnitInfoState(
 					Options::keyCancel);
 	_exit->onKeyboardPress(
 					(ActionHandler)& UnitInfoState::exitClick,
+					Options::keyOk);
+	_exit->onKeyboardPress(
+					(ActionHandler)& UnitInfoState::exitClick,
+					Options::keyOkKeypad);
+	_exit->onKeyboardPress(
+					(ActionHandler)& UnitInfoState::exitClick,
 					Options::keyBattleStats);
 
 	Uint8
@@ -500,6 +506,10 @@ UnitInfoState::UnitInfoState(
 		_btnNext->onKeyboardPress(
 						(ActionHandler)& UnitInfoState::btnNextClick,
 						Options::keyBattleNextUnit);
+
+		_timer = new Timer(132);
+		_timer->onTimer((StateHandler)& UnitInfoState::repeat);
+		_timer->start();
 	}
 }
 
@@ -508,6 +518,36 @@ UnitInfoState::UnitInfoState(
  */
 UnitInfoState::~UnitInfoState()
 {}
+
+/**
+ * Hits the think timer.
+ */
+void UnitInfoState::think()
+{
+	if (_mindProbe == false)
+	{
+		State::think();
+		_timer->think(this, NULL);
+	}
+}
+
+/**
+ * Advances to the next/previous Unit when right/left key is depressed.
+ */
+void UnitInfoState::repeat()
+{
+	Uint8* keystate = SDL_GetKeyState(NULL);
+	if (keystate[Options::keyBattleNextUnit] == 1
+		|| keystate[SDLK_KP6] == 1)
+	{
+		btnNextClick(NULL);
+	}
+	else if (keystate[Options::keyBattlePrevUnit] == 1
+		|| keystate[SDLK_KP4] == 1)
+	{
+		btnPrevClick(NULL);
+	}
+}
 
 /**
  * Updates unit info which can change after going into other screens.

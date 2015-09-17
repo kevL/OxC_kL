@@ -124,6 +124,10 @@ private:
 	TextButton
 		* _btnNext,
 		* _btnPrev;
+	Timer* _timer;
+
+	/// Advances to the next/previous Unit when right/left key is depressed.
+	void repeat();
 
 	/// Handler for exiting the state.
 	void exitClick(Action* action);
@@ -142,6 +146,8 @@ private:
 
 		/// Updates the unit info.
 		void init();
+		/// Runs the timer.
+		void think();
 
 		/// Handler for clicking the button.
 		void handle(Action* action);
