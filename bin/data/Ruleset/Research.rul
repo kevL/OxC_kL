@@ -1,11 +1,18 @@
 # 'Research.rul'
-research: #the stock research ruleset does massive re-ordering as of 2015 feb 2 ...
+research:
   - name: STR_MEDI_KIT
     cost: 2100
     points: 20
   - name: STR_MOTION_SCANNER
     cost: 9000
     points: 20
+  - name: STR_PSI_AMP
+    cost: 50000
+    points: 20
+    dependencies:
+      - STR_MIND_PROBE
+      - STR_PSI_LAB
+#---- Laser Weapons -----------------------------------------------------------#
   - name: STR_LASER_WEAPONS
     cost: 500
     points: 10
@@ -47,6 +54,7 @@ research: #the stock research ruleset does massive re-ordering as of 2015 feb 2 
     points: 10
     dependencies:
       - STR_FUSION_TORCH
+#---- Alloys & Elerium --------------------------------------------------------#
   - name: STR_ALIEN_ALLOYS
     cost: 40000
     points: 30
@@ -55,6 +63,7 @@ research: #the stock research ruleset does massive re-ordering as of 2015 feb 2 
     cost: 45000
     points: 60
     needItem: true
+#---- Plasma Weapons ----------------------------------------------------------#
   - name: STR_PLASMA_PISTOL
     cost: 60000
     points: 20
@@ -102,6 +111,7 @@ research: #the stock research ruleset does massive re-ordering as of 2015 feb 2 
     points: 25
     dependencies:
       - STR_PLASMA_CANNON
+#---- Fusion Weapons ----------------------------------------------------------#
   - name: STR_BLASTER_LAUNCHER
     cost: 90000
     points: 10
@@ -125,6 +135,7 @@ research: #the stock research ruleset does massive re-ordering as of 2015 feb 2 
     points: 25
     dependencies:
       - STR_FUSION_MISSILE
+#---- aLien Artefacts ---------------------------------------------------------#
   - name: STR_SMALL_LAUNCHER
     cost: 55000
     points: 30
@@ -144,6 +155,11 @@ research: #the stock research ruleset does massive re-ordering as of 2015 feb 2 
     dependencies:
       - STR_ALIEN_ALLOYS
       - STR_ELERIUM_115
+  - name: STR_MIND_PROBE
+    cost: 60000
+    points: 25
+    needItem: true
+#---- XCom Armors -------------------------------------------------------------#
   - name: STR_PERSONAL_ARMOR
     cost: 9000
     points: 20
@@ -161,12 +177,13 @@ research: #the stock research ruleset does massive re-ordering as of 2015 feb 2 
     dependencies:
       - STR_POWER_SUIT
       - STR_UFO_NAVIGATION
+#---- XCom Facilities ---------------------------------------------------------#
   - name: STR_ALIEN_CONTAINMENT
     cost: 1500
     points: 15
     requires:
       - STR_ALIEN_FOOD
-#      - STR_ALIEN_HABITAT
+      - STR_ALIEN_HABITAT
     dependencies:
       - STR_ZOMBIE_CORPSE
       - STR_CELATID_CORPSE
@@ -182,16 +199,6 @@ research: #the stock research ruleset does massive re-ordering as of 2015 feb 2 
       - STR_CHRYSSALID_CORPSE
       - STR_WASPITE_CORPSE
       - STR_CYBERMITE_CORPSE
-  - name: STR_MIND_PROBE
-    cost: 60000
-    points: 25
-    needItem: true
-  - name: STR_PSI_AMP
-    cost: 50000
-    points: 20
-    dependencies:
-      - STR_MIND_PROBE
-      - STR_PSI_LAB
   - name: STR_PSI_LAB
     cost: 42000
     points: 25
@@ -208,6 +215,7 @@ research: #the stock research ruleset does massive re-ordering as of 2015 feb 2 
     points: 25
     dependencies:
       - STR_PSI_LAB
+#---- aLien Origins -----------------------------------------------------------#
   - name: STR_ALIEN_ORIGINS
     cost: 30000
     points: 60
@@ -266,11 +274,11 @@ research: #the stock research ruleset does massive re-ordering as of 2015 feb 2 
     cost: 50000
     points: 60
     dependencies:
-      - STR_ALIEN_ORIGINS
+#      - STR_ALIEN_ORIGINS # note LeaderPlus already REQUIRES origins
       - STR_LEADER_PLUS
   - name: STR_COMMANDER_PLUS
-    unlocks:
-      - STR_CYDONIA_OR_BUST
+#    unlocks:
+#      - STR_CYDONIA_OR_BUST
     requires:
       - STR_THE_MARTIAN_SOLUTION
     dependencies:
@@ -279,6 +287,7 @@ research: #the stock research ruleset does massive re-ordering as of 2015 feb 2 
       - STR_ETHEREAL_COMMANDER
       - STR_FLOATER_COMMANDER
       - STR_WASPITE_COMMANDER
+#      - STR_MUTON_COMMANDER # not in stock game
   - name: STR_CYDONIA_OR_BUST
     cost: 60000
     points: 60
@@ -301,19 +310,33 @@ research: #the stock research ruleset does massive re-ordering as of 2015 feb 2 
     points: 15
     dependencies:
       - STR_ALIEN_ALLOYS
+#---- aLien UFO Components ----------------------------------------------------#
   - name: STR_UFO_NAVIGATION
     cost: 45000
     points: 30
     needItem: true
-    dependencies:
+    requires:
       - STR_ALIEN_ALLOYS
+    dependencies:
+      - STR_FLOATER_NAVIGATOR
+      - STR_SECTOID_NAVIGATOR
+      - STR_SNAKEMAN_NAVIGATOR
+      - STR_MUTON_NAVIGATOR
+      - STR_ETHEREAL_NAVIGATOR
+      - STR_WASPITE_NAVIGATOR
   - name: STR_UFO_POWER_SOURCE
     cost: 45000
     points: 30
     needItem: true
-    dependencies:
+    requires:
       - STR_ALIEN_ALLOYS
       - STR_ELERIUM_115
+    dependencies:
+      - STR_FLOATER_ENGINEER
+      - STR_SNAKEMAN_ENGINEER
+      - STR_MUTON_ENGINEER
+      - STR_SECTOID_ENGINEER
+      - STR_WASPITE_ENGINEER
   - name: STR_UFO_CONSTRUCTION
     cost: 45000
     points: 30
@@ -323,6 +346,7 @@ research: #the stock research ruleset does massive re-ordering as of 2015 feb 2 
 # give this an Engineer requirement, could get tricky.
       - STR_UFO_POWER_SOURCE
       - STR_UFO_NAVIGATION
+#---- XCom Craft --------------------------------------------------------------#
   - name: STR_THUNDERSTORM_INTERCEPTOR
     cost: 12000
     points: 25
@@ -353,6 +377,7 @@ research: #the stock research ruleset does massive re-ordering as of 2015 feb 2 
     points: 25
     dependencies:
       - STR_ULTIMATE_CRAFT
+#---- aLien UFO Facilities ----------------------------------------------------#
   - name: STR_ALIEN_ENTERTAINMENT
     cost: 15000
     points: 30
@@ -371,174 +396,21 @@ research: #the stock research ruleset does massive re-ordering as of 2015 feb 2 
     needItem: true
   - name: STR_EXAMINATION_ROOM
     cost: 15000
+    points: 30
     needItem: true
-  - name: STR_WASPITE_CORPSE
+  - name: STR_ALIEN_HABITAT
+    cost: 15000
+    points: 30
+    needItem: true
+#---- aLien Autopsies ---------------------------------------------------------#
+  - name: STR_FLOATER_CORPSE
     cost: 1800
     points: 50
-    lookup: STR_WASPITE_AUTOPSY
+    lookup: STR_FLOATER_AUTOPSY
     needItem: true
-    unlocks:
-      - STR_ALIEN_CONTAINMENT
-  - name: STR_CYBERMITE_CORPSE
-    cost: 1800
-    points: 50
-    lookup: STR_CYBERMITE_AUTOPSY
-    needItem: true
-    unlocks:
-      - STR_ALIEN_CONTAINMENT
-  - name: STR_WASPITE_SOLDIER
-    cost: 192
-    points: 50
-    lookup: STR_WASPITE
-    needItem: true
-    unlocks:
-      - STR_ALIEN_ORIGINS
-  - name: STR_WASPITE_NAVIGATOR
-    cost: 192
-    points: 50
-    lookup: STR_WASPITE
-    needItem: true
-    unlocks:
-      - STR_ALIEN_ORIGINS
-      - STR_HYPER_WAVE_DECODER
-    getOneFree:
-      - STR_ALIEN_RESEARCH
-      - STR_ALIEN_HARVEST
-      - STR_ALIEN_ABDUCTION
-      - STR_ALIEN_INFILTRATION
-      - STR_ALIEN_BASE
-      - STR_ALIEN_TERROR
-      - STR_ALIEN_RETALIATION
-      - STR_ALIEN_SUPPLY
-  - name: STR_WASPITE_MEDIC
-    cost: 192
-    points: 50
-    lookup: STR_WASPITE
-    needItem: true
-    unlocks:
-      - STR_ALIEN_ORIGINS
-    getOneFree:
-      - STR_SECTOID
-      - STR_FLOATER
-      - STR_SNAKEMAN
-      - STR_MUTON
-      - STR_ETHEREAL
-      - STR_CHRYSSALID
-      - STR_SECTOPOD
-      - STR_CYBERDISC
-      - STR_SILACOID
-      - STR_CELATID
-      - STR_REAPER
-      - STR_CYBERMITE
-      - STR_SECTOID_CORPSE
-      - STR_SNAKEMAN_CORPSE
-      - STR_MUTON_CORPSE
-      - STR_ETHEREAL_CORPSE
-      - STR_FLOATER_CORPSE
-      - STR_CHRYSSALID_CORPSE
-      - STR_SECTOPOD_CORPSE
-      - STR_CYBERDISC_CORPSE
-      - STR_SILACOID_CORPSE
-      - STR_CELATID_CORPSE
-      - STR_REAPER_CORPSE
-      - STR_WASPITE_CORPSE
-      - STR_CYBERMITE_CORPSE
-  - name: STR_WASPITE_LEADER
-    cost: 192
-    points: 50
-    lookup: STR_WASPITE
-    unlocks:
-      - STR_LEADER_PLUS
-      - STR_ALIEN_ORIGINS
-    needItem: true
-  - name: STR_WASPITE_ENGINEER
-    cost: 192
-    points: 50
-    lookup: STR_WASPITE
-    needItem: true
-    unlocks:
-      - STR_ALIEN_ORIGINS
-    getOneFree:
-      - STR_SMALL_SCOUT
-      - STR_MEDIUM_SCOUT
-      - STR_LARGE_SCOUT
-      - STR_HARVESTER
-      - STR_ABDUCTOR
-      - STR_TERROR_SHIP
-      - STR_BATTLESHIP
-      - STR_SUPPLY_SHIP
-  - name: STR_WASPITE_COMMANDER
-    cost: 192
-    points: 50
-    lookup: STR_WASPITE
-    needItem: true
-    unlocks:
-      - STR_LEADER_PLUS
-      - STR_COMMANDER_PLUS
-      - STR_ALIEN_ORIGINS
-  - name: STR_WASPITE
-    points: 50
-    needItem: true
-  - name: STR_CYBERMITE_TERRORIST
-    cost: 170
-    points: 50
-    lookup: STR_CYBERMITE
-    needItem: true
-    unlocks:
-      - STR_ALIEN_ORIGINS
-  - name: STR_CYBERMITE
-    points: 50
-    needItem: true
-  - name: STR_WASPITE_AUTOPSY
-    points: 50
-    needItem: true
-    unlocks:
-      - STR_ALIEN_CONTAINMENT
-  - name: STR_CYBERMITE_AUTOPSY
-    points: 50
-    needItem: true
-    unlocks:
-      - STR_ALIEN_CONTAINMENT
-  - name: STR_ZOMBIE_CORPSE #note Can't get one of these
-    cost: 1800
-    points: 50
-    lookup: STR_ZOMBIE_AUTOPSY
-    needItem: true
-    unlocks:
-      - STR_ALIEN_CONTAINMENT
-  - name: STR_CELATID_CORPSE
-    cost: 1800
-    points: 50
-    lookup: STR_CELATID_AUTOPSY
-    needItem: true
-    unlocks:
-      - STR_ALIEN_CONTAINMENT
-  - name: STR_ETHEREAL_CORPSE
-    cost: 1800
-    points: 50
-    lookup: STR_ETHEREAL_AUTOPSY
-    needItem: true
-    unlocks:
-      - STR_ALIEN_CONTAINMENT
-  - name: STR_SILACOID_CORPSE
-    cost: 1800
-    points: 50
-    lookup: STR_SILACOID_AUTOPSY
-    needItem: true
-    unlocks:
-      - STR_ALIEN_CONTAINMENT
-  - name: STR_REAPER_CORPSE
-    cost: 1800
-    points: 50
-    lookup: STR_REAPER_AUTOPSY
-    needItem: true
-    unlocks:
-      - STR_ALIEN_CONTAINMENT
-  - name: STR_SNAKEMAN_CORPSE
-    cost: 1800
-    points: 50
-    lookup: STR_SNAKEMAN_AUTOPSY
-    needItem: true
+    requires:
+      - STR_ALIEN_SURGERY
+      - STR_ALIEN_REPRODUCTION
     unlocks:
       - STR_ALIEN_CONTAINMENT
   - name: STR_SECTOID_CORPSE
@@ -546,13 +418,19 @@ research: #the stock research ruleset does massive re-ordering as of 2015 feb 2 
     points: 50
     lookup: STR_SECTOID_AUTOPSY
     needItem: true
+    requires:
+      - STR_ALIEN_SURGERY
+      - STR_ALIEN_REPRODUCTION
     unlocks:
       - STR_ALIEN_CONTAINMENT
-  - name: STR_SECTOPOD_CORPSE
+  - name: STR_SNAKEMAN_CORPSE
     cost: 1800
     points: 50
-    lookup: STR_SECTOPOD_AUTOPSY
+    lookup: STR_SNAKEMAN_AUTOPSY
     needItem: true
+    requires:
+      - STR_ALIEN_SURGERY
+      - STR_ALIEN_REPRODUCTION
     unlocks:
       - STR_ALIEN_CONTAINMENT
   - name: STR_MUTON_CORPSE
@@ -560,13 +438,50 @@ research: #the stock research ruleset does massive re-ordering as of 2015 feb 2 
     points: 50
     lookup: STR_MUTON_AUTOPSY
     needItem: true
+    requires:
+      - STR_ALIEN_SURGERY
+      - STR_ALIEN_REPRODUCTION
     unlocks:
       - STR_ALIEN_CONTAINMENT
-  - name: STR_FLOATER_CORPSE
+  - name: STR_ETHEREAL_CORPSE
     cost: 1800
     points: 50
-    lookup: STR_FLOATER_AUTOPSY
+    lookup: STR_ETHEREAL_AUTOPSY
     needItem: true
+    requires:
+      - STR_ALIEN_SURGERY
+      - STR_ALIEN_REPRODUCTION
+    unlocks:
+      - STR_ALIEN_CONTAINMENT
+  - name: STR_WASPITE_CORPSE
+    cost: 1800
+    points: 50
+    lookup: STR_WASPITE_AUTOPSY
+    needItem: true
+    requires:
+      - STR_ALIEN_SURGERY
+      - STR_ALIEN_REPRODUCTION
+    unlocks:
+      - STR_ALIEN_CONTAINMENT
+  - name: STR_ZOMBIE_CORPSE #note Can't get one of these
+    cost: 1800
+    points: 50
+    lookup: STR_ZOMBIE_AUTOPSY
+    needItem: true
+    requires:
+      - STR_ALIEN_SURGERY
+      - STR_ALIEN_REPRODUCTION
+    unlocks:
+      - STR_ALIEN_CONTAINMENT
+#-------- Terrorist autopsies -------------------------------------------------#
+  - name: STR_REAPER_CORPSE
+    cost: 1800
+    points: 50
+    lookup: STR_REAPER_AUTOPSY
+    needItem: true
+    requires:
+      - STR_ALIEN_SURGERY
+      - STR_ALIEN_REPRODUCTION
     unlocks:
       - STR_ALIEN_CONTAINMENT
   - name: STR_CYBERDISC_CORPSE
@@ -574,6 +489,9 @@ research: #the stock research ruleset does massive re-ordering as of 2015 feb 2 
     points: 50
     lookup: STR_CYBERDISC_AUTOPSY
     needItem: true
+    requires:
+      - STR_ALIEN_SURGERY
+      - STR_ALIEN_REPRODUCTION
     unlocks:
       - STR_ALIEN_CONTAINMENT
   - name: STR_CHRYSSALID_CORPSE
@@ -581,13 +499,61 @@ research: #the stock research ruleset does massive re-ordering as of 2015 feb 2 
     points: 50
     lookup: STR_CHRYSSALID_AUTOPSY
     needItem: true
+    requires:
+      - STR_ALIEN_SURGERY
+      - STR_ALIEN_REPRODUCTION
     unlocks:
       - STR_ALIEN_CONTAINMENT
+  - name: STR_SILACOID_CORPSE
+    cost: 1800
+    points: 50
+    lookup: STR_SILACOID_AUTOPSY
+    needItem: true
+    requires:
+      - STR_ALIEN_SURGERY
+      - STR_ALIEN_REPRODUCTION
+    unlocks:
+      - STR_ALIEN_CONTAINMENT
+  - name: STR_CELATID_CORPSE
+    cost: 1800
+    points: 50
+    lookup: STR_CELATID_AUTOPSY
+    needItem: true
+    requires:
+      - STR_ALIEN_SURGERY
+      - STR_ALIEN_REPRODUCTION
+    unlocks:
+      - STR_ALIEN_CONTAINMENT
+  - name: STR_SECTOPOD_CORPSE
+    cost: 1800
+    points: 50
+    lookup: STR_SECTOPOD_AUTOPSY
+    needItem: true
+    requires:
+      - STR_ALIEN_SURGERY
+      - STR_ALIEN_REPRODUCTION
+    unlocks:
+      - STR_ALIEN_CONTAINMENT
+  - name: STR_CYBERMITE_CORPSE
+    cost: 1800
+    points: 50
+    lookup: STR_CYBERMITE_AUTOPSY
+    needItem: true
+    requires:
+      - STR_ALIEN_SURGERY
+      - STR_ALIEN_REPRODUCTION
+    unlocks:
+      - STR_ALIEN_CONTAINMENT
+#---- aLien Interrogations ----------------------------------------------------#
+#-------- Floaters ------------------------------------------------------------#
   - name: STR_FLOATER_SOLDIER
     cost: 192
     points: 50
     lookup: STR_FLOATER
     needItem: true
+    requires:
+      - STR_EXAMINATION_ROOM
+      - STR_ALIEN_REPRODUCTION
     unlocks:
       - STR_ALIEN_ORIGINS
   - name: STR_FLOATER_NAVIGATOR
@@ -595,9 +561,13 @@ research: #the stock research ruleset does massive re-ordering as of 2015 feb 2 
     points: 50
     lookup: STR_FLOATER
     needItem: true
+    requires:
+      - STR_EXAMINATION_ROOM
+      - STR_ALIEN_REPRODUCTION
     unlocks:
       - STR_ALIEN_ORIGINS
       - STR_HYPER_WAVE_DECODER
+      - STR_UFO_NAVIGATION
     getOneFree:
       - STR_ALIEN_RESEARCH
       - STR_ALIEN_HARVEST
@@ -612,6 +582,9 @@ research: #the stock research ruleset does massive re-ordering as of 2015 feb 2 
     points: 50
     lookup: STR_FLOATER
     needItem: true
+    requires:
+      - STR_EXAMINATION_ROOM
+      - STR_ALIEN_REPRODUCTION
     unlocks:
       - STR_ALIEN_ORIGINS
     getOneFree:
@@ -640,21 +613,17 @@ research: #the stock research ruleset does massive re-ordering as of 2015 feb 2 
       - STR_REAPER_CORPSE
       - STR_WASPITE_CORPSE
       - STR_CYBERMITE_CORPSE
-  - name: STR_FLOATER_LEADER
-    cost: 192
-    points: 50
-    lookup: STR_FLOATER
-    unlocks:
-      - STR_LEADER_PLUS
-      - STR_ALIEN_ORIGINS
-    needItem: true
   - name: STR_FLOATER_ENGINEER
     cost: 192
     points: 50
     lookup: STR_FLOATER
     needItem: true
+    requires:
+      - STR_EXAMINATION_ROOM
+      - STR_ALIEN_REPRODUCTION
     unlocks:
       - STR_ALIEN_ORIGINS
+      - STR_UFO_POWER_SOURCE
     getOneFree:
       - STR_SMALL_SCOUT
       - STR_MEDIUM_SCOUT
@@ -664,20 +633,151 @@ research: #the stock research ruleset does massive re-ordering as of 2015 feb 2 
       - STR_TERROR_SHIP
       - STR_BATTLESHIP
       - STR_SUPPLY_SHIP
+  - name: STR_FLOATER_LEADER
+    cost: 192
+    points: 50
+    lookup: STR_FLOATER
+    needItem: true
+    requires:
+      - STR_EXAMINATION_ROOM
+      - STR_ALIEN_REPRODUCTION
+    unlocks:
+      - STR_LEADER_PLUS
+      - STR_ALIEN_ORIGINS
   - name: STR_FLOATER_COMMANDER
     cost: 192
     points: 50
     lookup: STR_FLOATER
     needItem: true
+    requires:
+      - STR_EXAMINATION_ROOM
+      - STR_ALIEN_REPRODUCTION
     unlocks:
       - STR_LEADER_PLUS
       - STR_COMMANDER_PLUS
       - STR_ALIEN_ORIGINS
+#-------- Sectoids ------------------------------------------------------------#
+  - name: STR_SECTOID_SOLDIER
+    cost: 192
+    points: 50
+    lookup: STR_SECTOID
+    needItem: true
+    requires:
+      - STR_EXAMINATION_ROOM
+      - STR_ALIEN_REPRODUCTION
+    unlocks:
+      - STR_ALIEN_ORIGINS
+  - name: STR_SECTOID_NAVIGATOR
+    cost: 192
+    points: 50
+    lookup: STR_SECTOID
+    needItem: true
+    requires:
+      - STR_EXAMINATION_ROOM
+      - STR_ALIEN_REPRODUCTION
+    unlocks:
+      - STR_ALIEN_ORIGINS
+      - STR_HYPER_WAVE_DECODER
+      - STR_UFO_NAVIGATION
+    getOneFree:
+      - STR_ALIEN_RESEARCH
+      - STR_ALIEN_HARVEST
+      - STR_ALIEN_ABDUCTION
+      - STR_ALIEN_INFILTRATION
+      - STR_ALIEN_BASE
+      - STR_ALIEN_TERROR
+      - STR_ALIEN_RETALIATION
+      - STR_ALIEN_SUPPLY
+  - name: STR_SECTOID_MEDIC
+    cost: 192
+    points: 50
+    needItem: true
+    requires:
+      - STR_EXAMINATION_ROOM
+      - STR_ALIEN_REPRODUCTION
+    unlocks:
+      - STR_ALIEN_ORIGINS
+    lookup: STR_SECTOID
+    getOneFree:
+      - STR_SNAKEMAN
+      - STR_MUTON
+      - STR_ETHEREAL
+      - STR_FLOATER
+      - STR_CHRYSSALID
+      - STR_SECTOPOD
+      - STR_CYBERDISC
+      - STR_SILACOID
+      - STR_CELATID
+      - STR_REAPER
+      - STR_WASPITE
+      - STR_CYBERMITE
+      - STR_SECTOID_CORPSE
+      - STR_SNAKEMAN_CORPSE
+      - STR_MUTON_CORPSE
+      - STR_ETHEREAL_CORPSE
+      - STR_FLOATER_CORPSE
+      - STR_CHRYSSALID_CORPSE
+      - STR_SECTOPOD_CORPSE
+      - STR_CYBERDISC_CORPSE
+      - STR_SILACOID_CORPSE
+      - STR_CELATID_CORPSE
+      - STR_REAPER_CORPSE
+      - STR_WASPITE_CORPSE
+      - STR_CYBERMITE_CORPSE
+  - name: STR_SECTOID_ENGINEER
+    cost: 192
+    points: 50
+    lookup: STR_SECTOID
+    needItem: true
+    requires:
+      - STR_EXAMINATION_ROOM
+      - STR_ALIEN_REPRODUCTION
+    unlocks:
+      - STR_ALIEN_ORIGINS
+      - STR_UFO_POWER_SOURCE
+    getOneFree:
+      - STR_SMALL_SCOUT
+      - STR_MEDIUM_SCOUT
+      - STR_LARGE_SCOUT
+      - STR_HARVESTER
+      - STR_ABDUCTOR
+      - STR_TERROR_SHIP
+      - STR_BATTLESHIP
+      - STR_SUPPLY_SHIP
+  - name: STR_SECTOID_LEADER
+    cost: 192
+    points: 50
+    needItem: true
+    requires:
+      - STR_EXAMINATION_ROOM
+      - STR_ALIEN_REPRODUCTION
+    unlocks:
+      - STR_LEADER_PLUS
+      - STR_PSI_LAB
+      - STR_ALIEN_ORIGINS
+    lookup: STR_SECTOID
+  - name: STR_SECTOID_COMMANDER
+    cost: 192
+    points: 50
+    lookup: STR_SECTOID
+    needItem: true
+    requires:
+      - STR_EXAMINATION_ROOM
+      - STR_ALIEN_REPRODUCTION
+    unlocks:
+      - STR_LEADER_PLUS
+      - STR_COMMANDER_PLUS
+      - STR_ALIEN_ORIGINS
+      - STR_PSI_LAB
+#-------- Snakemen ------------------------------------------------------------#
   - name: STR_SNAKEMAN_SOLDIER
     cost: 192
     points: 50
     lookup: STR_SNAKEMAN
     needItem: true
+    requires:
+      - STR_EXAMINATION_ROOM
+      - STR_ALIEN_REPRODUCTION
     unlocks:
       - STR_ALIEN_ORIGINS
   - name: STR_SNAKEMAN_NAVIGATOR
@@ -685,9 +785,13 @@ research: #the stock research ruleset does massive re-ordering as of 2015 feb 2 
     points: 50
     lookup: STR_SNAKEMAN
     needItem: true
+    requires:
+      - STR_EXAMINATION_ROOM
+      - STR_ALIEN_REPRODUCTION
     unlocks:
       - STR_ALIEN_ORIGINS
       - STR_HYPER_WAVE_DECODER
+      - STR_UFO_NAVIGATION
     getOneFree:
       - STR_ALIEN_RESEARCH
       - STR_ALIEN_HARVEST
@@ -702,6 +806,9 @@ research: #the stock research ruleset does massive re-ordering as of 2015 feb 2 
     points: 50
     lookup: STR_SNAKEMAN
     needItem: true
+    requires:
+      - STR_EXAMINATION_ROOM
+      - STR_ALIEN_REPRODUCTION
     unlocks:
       - STR_ALIEN_ORIGINS
     getOneFree:
@@ -730,21 +837,17 @@ research: #the stock research ruleset does massive re-ordering as of 2015 feb 2 
       - STR_REAPER_CORPSE
       - STR_WASPITE_CORPSE
       - STR_CYBERMITE_CORPSE
-  - name: STR_SNAKEMAN_LEADER
-    cost: 192
-    points: 50
-    lookup: STR_SNAKEMAN
-    needItem: true
-    unlocks:
-      - STR_LEADER_PLUS
-      - STR_ALIEN_ORIGINS
   - name: STR_SNAKEMAN_ENGINEER
     cost: 192
     points: 50
     lookup: STR_SNAKEMAN
     needItem: true
+    requires:
+      - STR_EXAMINATION_ROOM
+      - STR_ALIEN_REPRODUCTION
     unlocks:
       - STR_ALIEN_ORIGINS
+      - STR_UFO_POWER_SOURCE
     getOneFree:
       - STR_SMALL_SCOUT
       - STR_MEDIUM_SCOUT
@@ -754,20 +857,38 @@ research: #the stock research ruleset does massive re-ordering as of 2015 feb 2 
       - STR_TERROR_SHIP
       - STR_BATTLESHIP
       - STR_SUPPLY_SHIP
+  - name: STR_SNAKEMAN_LEADER
+    cost: 192
+    points: 50
+    lookup: STR_SNAKEMAN
+    needItem: true
+    requires:
+      - STR_EXAMINATION_ROOM
+      - STR_ALIEN_REPRODUCTION
+    unlocks:
+      - STR_LEADER_PLUS
+      - STR_ALIEN_ORIGINS
   - name: STR_SNAKEMAN_COMMANDER
     cost: 192
     points: 50
     lookup: STR_SNAKEMAN
     needItem: true
+    requires:
+      - STR_EXAMINATION_ROOM
+      - STR_ALIEN_REPRODUCTION
     unlocks:
       - STR_LEADER_PLUS
       - STR_COMMANDER_PLUS
       - STR_ALIEN_ORIGINS
+#-------- Mutons --------------------------------------------------------------#
   - name: STR_MUTON_SOLDIER
     cost: 192
     points: 50
     lookup: STR_MUTON
     needItem: true
+    requires:
+      - STR_EXAMINATION_ROOM
+      - STR_ALIEN_REPRODUCTION
     unlocks:
       - STR_ALIEN_ORIGINS
   - name: STR_MUTON_NAVIGATOR
@@ -775,9 +896,13 @@ research: #the stock research ruleset does massive re-ordering as of 2015 feb 2 
     points: 50
     lookup: STR_MUTON
     needItem: true
+    requires:
+      - STR_EXAMINATION_ROOM
+      - STR_ALIEN_REPRODUCTION
     unlocks:
       - STR_ALIEN_ORIGINS
       - STR_HYPER_WAVE_DECODER
+      - STR_UFO_NAVIGATION
     getOneFree:
       - STR_ALIEN_RESEARCH
       - STR_ALIEN_HARVEST
@@ -792,8 +917,12 @@ research: #the stock research ruleset does massive re-ordering as of 2015 feb 2 
     points: 50
     lookup: STR_MUTON
     needItem: true
+    requires:
+      - STR_EXAMINATION_ROOM
+      - STR_ALIEN_REPRODUCTION
     unlocks:
       - STR_ALIEN_ORIGINS
+      - STR_UFO_POWER_SOURCE
     getOneFree:
       - STR_SMALL_SCOUT
       - STR_MEDIUM_SCOUT
@@ -803,21 +932,66 @@ research: #the stock research ruleset does massive re-ordering as of 2015 feb 2 
       - STR_TERROR_SHIP
       - STR_BATTLESHIP
       - STR_SUPPLY_SHIP
-  - name: STR_SECTOID_SOLDIER
+#-------- Ethereals -----------------------------------------------------------#
+  - name: STR_ETHEREAL_SOLDIER
     cost: 192
     points: 50
-    lookup: STR_SECTOID
+    lookup: STR_ETHEREAL
+    needItem: true
+    requires:
+      - STR_EXAMINATION_ROOM
+      - STR_ALIEN_REPRODUCTION
     unlocks:
       - STR_ALIEN_ORIGINS
-    needItem: true
-  - name: STR_SECTOID_NAVIGATOR
+      - STR_PSI_LAB
+  - name: STR_ETHEREAL_LEADER
     cost: 192
     points: 50
-    lookup: STR_SECTOID
+    lookup: STR_ETHEREAL
     needItem: true
+    requires:
+      - STR_EXAMINATION_ROOM
+      - STR_ALIEN_REPRODUCTION
+    unlocks:
+      - STR_LEADER_PLUS
+      - STR_ALIEN_ORIGINS
+      - STR_PSI_LAB
+  - name: STR_ETHEREAL_COMMANDER
+    cost: 192
+    points: 50
+    lookup: STR_ETHEREAL
+    needItem: true
+    requires:
+      - STR_EXAMINATION_ROOM
+      - STR_ALIEN_REPRODUCTION
+    unlocks:
+      - STR_LEADER_PLUS
+      - STR_COMMANDER_PLUS
+      - STR_ALIEN_ORIGINS
+      - STR_PSI_LAB
+#-------- Waspites ------------------------------------------------------------#
+  - name: STR_WASPITE_SOLDIER
+    cost: 192
+    points: 50
+    lookup: STR_WASPITE
+    needItem: true
+    requires:
+      - STR_EXAMINATION_ROOM
+      - STR_ALIEN_REPRODUCTION
+    unlocks:
+      - STR_ALIEN_ORIGINS
+  - name: STR_WASPITE_NAVIGATOR
+    cost: 192
+    points: 50
+    lookup: STR_WASPITE
+    needItem: true
+    requires:
+      - STR_EXAMINATION_ROOM
+      - STR_ALIEN_REPRODUCTION
     unlocks:
       - STR_ALIEN_ORIGINS
       - STR_HYPER_WAVE_DECODER
+      - STR_UFO_NAVIGATION
     getOneFree:
       - STR_ALIEN_RESEARCH
       - STR_ALIEN_HARVEST
@@ -827,25 +1001,28 @@ research: #the stock research ruleset does massive re-ordering as of 2015 feb 2 
       - STR_ALIEN_TERROR
       - STR_ALIEN_RETALIATION
       - STR_ALIEN_SUPPLY
-  - name: STR_SECTOID_MEDIC
+  - name: STR_WASPITE_MEDIC
     cost: 192
     points: 50
+    lookup: STR_WASPITE
     needItem: true
+    requires:
+      - STR_EXAMINATION_ROOM
+      - STR_ALIEN_REPRODUCTION
     unlocks:
       - STR_ALIEN_ORIGINS
-    lookup: STR_SECTOID
     getOneFree:
+      - STR_SECTOID
+      - STR_FLOATER
       - STR_SNAKEMAN
       - STR_MUTON
       - STR_ETHEREAL
-      - STR_FLOATER
       - STR_CHRYSSALID
       - STR_SECTOPOD
       - STR_CYBERDISC
       - STR_SILACOID
       - STR_CELATID
       - STR_REAPER
-      - STR_WASPITE
       - STR_CYBERMITE
       - STR_SECTOID_CORPSE
       - STR_SNAKEMAN_CORPSE
@@ -860,22 +1037,17 @@ research: #the stock research ruleset does massive re-ordering as of 2015 feb 2 
       - STR_REAPER_CORPSE
       - STR_WASPITE_CORPSE
       - STR_CYBERMITE_CORPSE
-  - name: STR_SECTOID_LEADER
+  - name: STR_WASPITE_ENGINEER
     cost: 192
     points: 50
+    lookup: STR_WASPITE
     needItem: true
-    unlocks:
-      - STR_LEADER_PLUS
-      - STR_PSI_LAB
-      - STR_ALIEN_ORIGINS
-    lookup: STR_SECTOID
-  - name: STR_SECTOID_ENGINEER
-    cost: 192
-    points: 50
-    needItem: true
+    requires:
+      - STR_EXAMINATION_ROOM
+      - STR_ALIEN_REPRODUCTION
     unlocks:
       - STR_ALIEN_ORIGINS
-    lookup: STR_SECTOID
+      - STR_UFO_POWER_SOURCE
     getOneFree:
       - STR_SMALL_SCOUT
       - STR_MEDIUM_SCOUT
@@ -885,47 +1057,105 @@ research: #the stock research ruleset does massive re-ordering as of 2015 feb 2 
       - STR_TERROR_SHIP
       - STR_BATTLESHIP
       - STR_SUPPLY_SHIP
-  - name: STR_SECTOID_COMMANDER
+  - name: STR_WASPITE_LEADER
     cost: 192
     points: 50
+    lookup: STR_WASPITE
     needItem: true
-    lookup: STR_SECTOID
+    requires:
+      - STR_EXAMINATION_ROOM
+      - STR_ALIEN_REPRODUCTION
+    unlocks:
+      - STR_LEADER_PLUS
+      - STR_ALIEN_ORIGINS
+  - name: STR_WASPITE_COMMANDER
+    cost: 192
+    points: 50
+    lookup: STR_WASPITE
+    needItem: true
+    requires:
+      - STR_EXAMINATION_ROOM
+      - STR_ALIEN_REPRODUCTION
     unlocks:
       - STR_LEADER_PLUS
       - STR_COMMANDER_PLUS
       - STR_ALIEN_ORIGINS
-      - STR_PSI_LAB
-  - name: STR_ETHEREAL_SOLDIER
-    cost: 192
+#---- aLien Interrogations - terrorists ---------------------------------------#
+  - name: STR_REAPER_TERRORIST
+    cost: 170
     points: 50
-    lookup: STR_ETHEREAL
+    lookup: STR_REAPER
     needItem: true
+    requires:
+      - STR_EXAMINATION_ROOM
+      - STR_ALIEN_REPRODUCTION
     unlocks:
       - STR_ALIEN_ORIGINS
-      - STR_PSI_LAB
-  - name: STR_ETHEREAL_LEADER
-    cost: 192
+  - name: STR_CYBERDISC_TERRORIST
+    cost: 170
     points: 50
-    lookup: STR_ETHEREAL
+    lookup: STR_CYBERDISC
     needItem: true
+    requires:
+      - STR_EXAMINATION_ROOM
+      - STR_ALIEN_REPRODUCTION
     unlocks:
-      - STR_LEADER_PLUS
       - STR_ALIEN_ORIGINS
-      - STR_PSI_LAB
-  - name: STR_ETHEREAL_COMMANDER
-    cost: 192
+  - name: STR_CHRYSSALID_TERRORIST
+    cost: 170
     points: 50
-    lookup: STR_ETHEREAL
+    lookup: STR_CHRYSSALID
     needItem: true
+    requires:
+      - STR_EXAMINATION_ROOM
+      - STR_ALIEN_REPRODUCTION
     unlocks:
-      - STR_LEADER_PLUS
-      - STR_COMMANDER_PLUS
       - STR_ALIEN_ORIGINS
-      - STR_PSI_LAB
-  - name: STR_SECTOID
+  - name: STR_SILACOID_TERRORIST
+    cost: 170
     points: 50
+    lookup: STR_SILACOID
     needItem: true
+    requires:
+      - STR_EXAMINATION_ROOM
+      - STR_ALIEN_REPRODUCTION
+    unlocks:
+      - STR_ALIEN_ORIGINS
+  - name: STR_CELATID_TERRORIST
+    cost: 170
+    points: 50
+    lookup: STR_CELATID
+    needItem: true
+    requires:
+      - STR_EXAMINATION_ROOM
+      - STR_ALIEN_REPRODUCTION
+    unlocks:
+      - STR_ALIEN_ORIGINS
+  - name: STR_SECTOPOD_TERRORIST
+    cost: 170
+    points: 50
+    lookup: STR_SECTOPOD
+    needItem: true
+    requires:
+      - STR_EXAMINATION_ROOM
+      - STR_ALIEN_REPRODUCTION
+    unlocks:
+      - STR_ALIEN_ORIGINS
+  - name: STR_CYBERMITE_TERRORIST
+    cost: 170
+    points: 50
+    lookup: STR_CYBERMITE
+    needItem: true
+    requires:
+      - STR_EXAMINATION_ROOM
+      - STR_ALIEN_REPRODUCTION
+    unlocks:
+      - STR_ALIEN_ORIGINS
+#---- aLien Race lookups ------------------------------------------------------#
   - name: STR_FLOATER
+    points: 50
+    needItem: true
+  - name: STR_SECTOID
     points: 50
     needItem: true
   - name: STR_SNAKEMAN
@@ -937,64 +1167,32 @@ research: #the stock research ruleset does massive re-ordering as of 2015 feb 2 
   - name: STR_ETHEREAL
     points: 50
     needItem: true
-  - name: STR_CYBERDISC_TERRORIST
-    cost: 170
-    points: 50
-    lookup: STR_CYBERDISC
-    needItem: true
-    unlocks:
-      - STR_ALIEN_ORIGINS
-  - name: STR_CYBERDISC
+  - name: STR_WASPITE
     points: 50
     needItem: true
-  - name: STR_REAPER_TERRORIST
-    cost: 170
-    points: 50
-    lookup: STR_REAPER
-    needItem: true
-    unlocks:
-      - STR_ALIEN_ORIGINS
   - name: STR_REAPER
     points: 50
     needItem: true
-  - name: STR_CHRYSSALID_TERRORIST
-    cost: 170
+  - name: STR_CYBERDISC
     points: 50
-    lookup: STR_CHRYSSALID
     needItem: true
-    unlocks:
-      - STR_ALIEN_ORIGINS
   - name: STR_CHRYSSALID
     points: 50
     needItem: true
-  - name: STR_SILACOID_TERRORIST
-    cost: 170
-    points: 50
-    lookup: STR_SILACOID
-    needItem: true
-    unlocks:
-      - STR_ALIEN_ORIGINS
   - name: STR_SILACOID
     points: 50
     needItem: true
-  - name: STR_CELATID_TERRORIST
-    cost: 170
-    points: 50
-    lookup: STR_CELATID
-    needItem: true
-    unlocks:
-      - STR_ALIEN_ORIGINS
   - name: STR_CELATID
     points: 50
     needItem: true
-  - name: STR_SECTOPOD_TERRORIST
-    cost: 170
-    points: 50
-    lookup: STR_SECTOPOD
-    needItem: true
-    unlocks:
-      - STR_ALIEN_ORIGINS
   - name: STR_SECTOPOD
+    points: 50
+    needItem: true
+  - name: STR_CYBERMITE
+    points: 50
+    needItem: true
+#---- aLien Autopsy lookups ---------------------------------------------------#
+  - name: STR_FLOATER_AUTOPSY
     points: 50
     needItem: true
   - name: STR_SECTOID_AUTOPSY
@@ -1003,22 +1201,22 @@ research: #the stock research ruleset does massive re-ordering as of 2015 feb 2 
   - name: STR_SNAKEMAN_AUTOPSY
     points: 50
     needItem: true
-  - name: STR_FLOATER_AUTOPSY
-    points: 50
-    needItem: true
   - name: STR_MUTON_AUTOPSY
     points: 50
     needItem: true
   - name: STR_ETHEREAL_AUTOPSY
     points: 50
     needItem: true
+  - name: STR_WASPITE_AUTOPSY
+    points: 50
+    needItem: true
+  - name: STR_REAPER_AUTOPSY
+    points: 50
+    needItem: true
   - name: STR_CYBERDISC_AUTOPSY
     points: 50
     needItem: true
   - name: STR_CHRYSSALID_AUTOPSY
-    points: 50
-    needItem: true
-  - name: STR_REAPER_AUTOPSY
     points: 50
     needItem: true
   - name: STR_CELATID_AUTOPSY
@@ -1030,6 +1228,10 @@ research: #the stock research ruleset does massive re-ordering as of 2015 feb 2 
   - name: STR_SECTOPOD_AUTOPSY
     points: 50
     needItem: true
+  - name: STR_CYBERMITE_AUTOPSY
+    points: 50
+    needItem: true
+#---- aLien Missions ----------------------------------------------------------#
   - name: STR_ALIEN_RESEARCH
     points: 50
     needItem: true
@@ -1054,6 +1256,7 @@ research: #the stock research ruleset does massive re-ordering as of 2015 feb 2 
   - name: STR_ALIEN_SUPPLY
     points: 50
     needItem: true
+#---- aLien UFOs --------------------------------------------------------------#
   - name: STR_SMALL_SCOUT
     points: 50
     needItem: true
