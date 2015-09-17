@@ -452,16 +452,17 @@ void ExplosionBState::explode() // private.
 			if (_unit->getGeoscapeSoldier() != NULL
 				&& _unit->getFaction() == _unit->getOriginalFaction())
 			{
-				_unit->addMeleeExp(); // 1xp for swinging
-
-				if (_hitSuccess == true)
+				const BattleUnit* const targetUnit = save->getTile(_center / Position(16,16,24))->getUnit();
+				if (targetUnit != NULL
+					&& targetUnit->getFaction() != FACTION_PLAYER)
 				{
-					const BattleUnit* const targetUnit = save->getTile(_center / Position(16,16,24))->getUnit();
-					if (targetUnit != NULL
-						&& targetUnit->getFaction() == FACTION_HOSTILE)
-					{
-						_unit->addMeleeExp(); // +1xp for hitting an aLien OR Mc'd xCom agent
-					}
+					int grantXp;
+					if (_hitSuccess == true)
+						grantXp = 2;
+					else
+						grantXp = 1;
+
+					_unit->addMeleeExp(grantXp);
 				}
 			}
 		}

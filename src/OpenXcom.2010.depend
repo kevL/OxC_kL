@@ -5869,7 +5869,7 @@
 1434252297 f:\git\openxcom\src\battlescape\explosion.h
 	"Position.h"
 
-1441147262 source:f:\git\openxcom\src\battlescape\explosionbstate.cpp
+1442456133 source:f:\git\openxcom\src\battlescape\explosionbstate.cpp
 	"ExplosionBState.h"
 	"BattlescapeState.h"
 	"Camera.h"
@@ -5936,7 +5936,7 @@
 	<SDL.h>
 	<yaml-cpp/yaml.h>
 
-1442270582 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
+1442455366 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
 	"InventoryState.h"
 	"BattlescapeState.h"
 	"Inventory.h"
@@ -6261,7 +6261,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1442454742 source:f:\git\openxcom\src\battlescape\unitinfostate.cpp
+1442455313 source:f:\git\openxcom\src\battlescape\unitinfostate.cpp
 	"UnitInfoState.h"
 	"BattlescapeGame.h"
 	"BattlescapeState.h"

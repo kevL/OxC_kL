@@ -500,12 +500,18 @@ UnitInfoState::UnitInfoState(
 		_btnPrev->onKeyboardPress(
 						(ActionHandler)& UnitInfoState::btnPrevClick,
 						Options::keyBattlePrevUnit);
+		_btnPrev->onKeyboardPress(
+						(ActionHandler)& UnitInfoState::btnPrevClick,
+						SDLK_KP4);
 
 		_btnNext->setText(L">");
 		_btnNext->onMouseClick((ActionHandler)& UnitInfoState::btnNextClick);
 		_btnNext->onKeyboardPress(
 						(ActionHandler)& UnitInfoState::btnNextClick,
 						Options::keyBattleNextUnit);
+		_btnNext->onKeyboardPress(
+						(ActionHandler)& UnitInfoState::btnNextClick,
+						SDLK_KP6);
 
 		_timer = new Timer(132);
 		_timer->onTimer((StateHandler)& UnitInfoState::repeat);

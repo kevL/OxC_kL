@@ -263,6 +263,9 @@ InventoryState::InventoryState(
 	_btnPrev->onKeyboardPress(
 					(ActionHandler)& InventoryState::btnPrevClick,
 					Options::keyBattlePrevUnit);
+	_btnPrev->onKeyboardPress(
+					(ActionHandler)& InventoryState::btnPrevClick,
+					SDLK_KP4);
 //	_btnPrev->setTooltip("STR_PREVIOUS_UNIT");
 //	_btnPrev->onMouseIn((ActionHandler)& InventoryState::txtTooltipIn);
 //	_btnPrev->onMouseOut((ActionHandler)& InventoryState::txtTooltipOut);
@@ -271,6 +274,9 @@ InventoryState::InventoryState(
 	_btnNext->onKeyboardPress(
 					(ActionHandler)& InventoryState::btnNextClick,
 					Options::keyBattleNextUnit);
+	_btnNext->onKeyboardPress(
+					(ActionHandler)& InventoryState::btnNextClick,
+					SDLK_KP6);
 //	_btnNext->setTooltip("STR_NEXT_UNIT");
 //	_btnNext->onMouseIn((ActionHandler)& InventoryState::txtTooltipIn);
 //	_btnNext->onMouseOut((ActionHandler)& InventoryState::txtTooltipOut);

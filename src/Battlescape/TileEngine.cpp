@@ -2392,7 +2392,7 @@ BattleUnit* TileEngine::hit(
 
 				if (melee == false
 					&& _battleSave->getBattleGame()->getCurrentAction()->takenXp == false
-					&& targetUnit->getOriginalFaction() == FACTION_HOSTILE
+					&& targetUnit->getFaction() != FACTION_PLAYER
 					&& attacker != NULL
 					&& attacker->getGeoscapeSoldier() != NULL
 					&& attacker->getFaction() == attacker->getOriginalFaction()
@@ -3155,9 +3155,9 @@ void TileEngine::explode(
 							}
 
 							if (takenXp == false
+								&& targetUnit->getFaction() != FACTION_PLAYER
 								&& attacker->getGeoscapeSoldier() != NULL
 								&& attacker->getFaction() == attacker->getOriginalFaction()
-								&& targetUnit->getOriginalFaction() == FACTION_HOSTILE
 								&& dType != DT_SMOKE
 								&& _battleSave->getBattleGame()->getPanicHandled() == true)
 							{
