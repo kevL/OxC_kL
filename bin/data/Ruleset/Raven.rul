@@ -1,0 +1,68 @@
+#Raven XCom fighter craft. by Mick the Mage
+crafts:
+  - type: STR_RAVEN
+    requires:
+      - STR_IMPROVED_INTERCEPTOR
+    listOrder: 204
+    sprite: 23
+    fuelMax: 1200
+    damageMax: 150
+    speedMax: 2900
+    accel: 5
+    weapons: 2
+    costSell: 225000
+    refuelRate: 40
+    transferTime: 90
+    score: 250
+#research:
+#  - name: STR_IMPROVED_INTERCEPTOR
+#    cost: 400
+#    points: 20
+manufacture:
+  - name: STR_RAVEN
+    category: STR_CRAFT
+    requires:
+      - STR_IMPROVED_INTERCEPTOR
+    listOrder: 3249
+    space: 32
+    time: 5000
+    cost: 250000
+ufopaedia:
+  - id: STR_RAVEN
+    type_id: 1
+    section: STR_XCOM_CRAFT_ARMAMENT
+    requires:
+      - STR_IMPROVED_INTERCEPTOR
+    listOrder: 401
+    image_id: Raven
+    text: STR_RAVEN_UFOPEDIA
+    rect_stats:
+      x: 5
+      y: 40
+      width: 140
+      height: 60
+    rect_text:
+      x: 5
+      y: 140
+      width: 310
+      height: 60
+extraSprites:
+  - type: Raven
+    singleImage: true
+    width: 320
+    height: 200
+    files:
+      0: Resources/Raven/raven_ufopedia.png
+  - type: BASEBITS.PCK
+    files:
+      56: Resources/Raven/raven_base.png
+  - type: INTICON.PCK
+    files:
+      23: Resources/Raven/raven_minimised.png
+      34: Resources/Raven/raven_dogfight.png
+extraStrings:
+  - type: en-US
+    strings:
+      STR_IMPROVED_INTERCEPTOR: "Improved Interceptor"
+      STR_RAVEN_UFOPEDIA: "THE RAVEN IS A PULSE-ENGINE HEAVILY MODIFIED AND AUGMENTED FAST ATTACK FIGHTER. THIS NEW INTERCEPTOR IS BASED ON THE LATEST EARTH TECHNOLOGY. AVIONICS, TRACKING, AND ENGINES HAVE ALL RECEIVED SUBSTANTIAL BOOSTS. DESPITE THESE IMPROVEMENTS ARMOR AND FRAME DURABILITY WILL BE A MAJOR ISSUE WHEN ENGAGING ANY BUT THE SMALLEST UFOS."
+      STR_RAVEN: "RAVEN"

@@ -110,12 +110,18 @@ NewManufactureListState::NewManufactureListState(
 	_btnCancel->onKeyboardPress(
 					(ActionHandler)& NewManufactureListState::btnCancelClick,
 					Options::keyCancel);
+	_btnCancel->onKeyboardPress(
+					(ActionHandler)& NewManufactureListState::btnCancelClick,
+					Options::keyOk);
+	_btnCancel->onKeyboardPress(
+					(ActionHandler)& NewManufactureListState::btnCancelClick,
+					Options::keyOkKeypad);
 
 
 	_game->getSavedGame()->getAvailableProductions(
-												_possibleProductions,
-												_game->getRuleset(),
-												_base);
+											_possibleProductions,
+											_game->getRuleset(),
+											_base);
 	_catStrings.push_back("STR_ALL_ITEMS");
 
 	std::string cat;
@@ -135,7 +141,7 @@ NewManufactureListState::NewManufactureListState(
 		}
 	}
 
-	_cbxCategory->setBackgroundFill(Palette::blockOffset(3)+9); // green <- TODO: put this in Interfaces.rul
+	_cbxCategory->setBackgroundFill(57); // green <- TODO: put this in Interfaces.rul
 	_cbxCategory->setOptions(_catStrings);
 	_cbxCategory->onChange((ActionHandler)& NewManufactureListState::cbxCategoryChange);
 }
@@ -208,9 +214,7 @@ void NewManufactureListState::lstProdClick(Action*)
 										"BACK17.SCR",
 										_game->getRuleset()->getInterface("basescape")->getElement("errorPalette")->color));
 	else
-		_game->pushState(new ManufactureStartState(
-												_base,
-												manufRule));
+		_game->pushState(new ManufactureStartState(_base, manufRule));
 }
 
 /**
@@ -231,9 +235,9 @@ void NewManufactureListState::fillProductionList()
 	_displayedStrings.clear();
 
 	_game->getSavedGame()->getAvailableProductions(
-												_possibleProductions,
-												_game->getRuleset(),
-												_base);
+											_possibleProductions,
+											_game->getRuleset(),
+											_base);
 
 	for (std::vector<RuleManufacture*>::const_iterator
 			i = _possibleProductions.begin();

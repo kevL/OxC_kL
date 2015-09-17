@@ -215,6 +215,11 @@ research:
     points: 25
     dependencies:
       - STR_PSI_LAB
+  - name: STR_GRAV_SHIELD
+    cost: 93000
+    points: 25
+    dependencies:
+      - STR_ULTIMATE_CRAFT
 #---- aLien Origins -----------------------------------------------------------#
   - name: STR_ALIEN_ORIGINS
     cost: 30000
@@ -341,13 +346,10 @@ research:
     cost: 45000
     points: 30
     dependencies:
-#      - STR_ALIEN_ALLOYS # see Navigation
-#      - STR_ELERIUM_115 # see Power Source
-# give this an Engineer requirement, could get tricky.
       - STR_UFO_POWER_SOURCE
       - STR_UFO_NAVIGATION
 #---- XCom Craft --------------------------------------------------------------#
-  - name: STR_THUNDERSTORM_INTERCEPTOR
+  - name: STR_IMPROVED_INTERCEPTOR
     cost: 12000
     points: 25
     dependencies:
@@ -372,11 +374,6 @@ research:
     points: 30
     dependencies:
       - STR_NEW_FIGHTER_TRANSPORTER
-  - name: STR_GRAV_SHIELD
-    cost: 93000
-    points: 25
-    dependencies:
-      - STR_ULTIMATE_CRAFT
 #---- aLien UFO Facilities ----------------------------------------------------#
   - name: STR_ALIEN_ENTERTAINMENT
     cost: 15000

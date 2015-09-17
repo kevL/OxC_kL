@@ -2374,12 +2374,9 @@ BattleUnit* TileEngine::hit(
 							// but ExplosionBState::explode() creates a hit() ! -> terrain..
 
 							const Position posUnit = Position(
-//														targetUnit->getPosition().x * 16,
-//														targetUnit->getPosition().y * 16,
-//														targetUnit->getPosition().z * 24);
-														targetUnit->getPosition().x * 16 + 16,	// kL, cyberdisc a big unit.
-														targetUnit->getPosition().y * 16 + 16,	// kL
-														targetUnit->getPosition().z * 24 + 12);	// kL
+														targetUnit->getPosition().x * 16 + 16,	// cyberdisc a big unit.
+														targetUnit->getPosition().y * 16 + 16,
+														targetUnit->getPosition().z * 24 + 12);
 							_battleSave->getBattleGame()->statePushNext(new ExplosionBState(
 																						_battleSave->getBattleGame(),
 																						posUnit,
@@ -2392,7 +2389,7 @@ BattleUnit* TileEngine::hit(
 
 				if (melee == false
 					&& _battleSave->getBattleGame()->getCurrentAction()->takenXp == false
-					&& targetUnit->getFaction() != FACTION_PLAYER
+					&& targetUnit->getFaction() == FACTION_HOSTILE
 					&& attacker != NULL
 					&& attacker->getGeoscapeSoldier() != NULL
 					&& attacker->getFaction() == attacker->getOriginalFaction()
@@ -3155,7 +3152,7 @@ void TileEngine::explode(
 							}
 
 							if (takenXp == false
-								&& targetUnit->getFaction() != FACTION_PLAYER
+								&& targetUnit->getFaction() == FACTION_HOSTILE
 								&& attacker->getGeoscapeSoldier() != NULL
 								&& attacker->getFaction() == attacker->getOriginalFaction()
 								&& dType != DT_SMOKE

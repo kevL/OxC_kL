@@ -157,28 +157,10 @@ extraSprites:
 extraStrings:
   - type: en-US
     strings:
-      STR_UNMANNED_AIRCRAFT: "Remote Aerial tech"
-      STR_HAWKEYE: "SKEYE"
+      STR_UNMANNED_AIRCRAFT: "Aerial Vehicle - remote"
+      STR_HAWKEYE: "HAWK"
       STR_HAWKEYE_UFOPEDIA: "A SPECIAL MODIFICATION FOR XCOM WITH ADDITIONAL FUEL TANK AND INCREASED RADAR RANGE."
-      STR_AWACS: "AWACS"
+      STR_AWACS: "EAGLE"
       STR_AWACS_UFOPEDIA: "THE NEW GENERATION OF AWACS. LATEST TECHNOLOGY ALLOWS DETECTION OF ALL KINDS OF TARGETS AT A SIGNIFICANT DISTANCE."
-      STR_DARKSTAR: "PROBE"
+      STR_DARKSTAR: "DARKSTAR"
       STR_DARKSTAR_UFOPEDIA: "USE OF ALIEN TECHNOLOGY AND ULTRALIGHT ALIEN ALLOYS ALLOWED XCOM TO DEVELOP AN UNMANNED CRAFT WITH PREVIOUSLY UNREACHABLE UPTIME. THE RADAR HAS BEEN CONFIGURED FOR INCREASED DETECTION OF UFOS."
-  - type: en-GB
-    strings:
-      STR_UNMANNED_AIRCRAFT: Unmanned Aircraft
-      STR_HAWKEYE: HAWKEYE
-      STR_HAWKEYE_UFOPEDIA: A SPECIAL MODIFICATION FOR XCOM WITH ADDITIONAL FUEL TANK AND INCREASED RADAR RANGE.
-      STR_AWACS: AWACS
-      STR_AWACS_UFOPEDIA: THE NEW GENERATION OF AWACS. LATEST TECHNOLOGY ALLOWS DETECT ALL KIND OF TARGETS ON SIGNIFICANT DISTANCE.
-      STR_DARKSTAR: DARKSTAR
-      STR_DARKSTAR_UFOPEDIA: USE OF ALIEN TECHNOLOGY AND ULTRALIGHT ALIEN ALLOYS ALLOWED DEVELOP AN UNMANNED AIRCRAFT WITH PREVIOUSLY UNREACHABLE UPTIME.  THE RADAR HAS BEEN CONFIGURED FOR BETTER DETECTION OF UFO.
-  - type: ru
-    strings:
-      STR_UNMANNED_AIRCRAFT: Беспилотный самолет
-      STR_HAWKEYE: ХОКАЙ
-      STR_HAWKEYE_UFOPEDIA: СПЕЦИАЛЬНАЯ МОДИФИКАЦИЯ ДЛЯ ХСОМ, С ДОПОЛНИТЕЛЬНЫМ ТОПЛИВНЫМ БАКОМ И УВЕЛИЧЕННОЙ ДАЛЬНОСТЬЮ РАДАРА.
-      STR_AWACS: АВАКС
-      STR_AWACS_UFOPEDIA: НОВЕЙШЕЕ ПОКОЛЕНИЕ АВАКС. СОВРЕМЕННЫЕ ТЕХНОЛОГИИ ПОЗВОЛЯЮТ ОБНАРУЖИВАТЬ ВСЕ ВИДЫ ЦЕЛЕЙ НА ЗНАЧИТЕЛЬНОМ РАССТОЯНИИ.
-      STR_DARKSTAR: ДАРКСТАР
-      STR_DARKSTAR_UFOPEDIA: ИСПОЛЬЗОВАНИЕ СВЕРХЛЕГКИХ ВНЕЗЕМНЫХ СПЛАВОВ И ТЕХНОЛОГИЙ ПРИШЕЛЬЦЕВ ПОЗВОЛИЛО РАЗРАБОТАТЬ БЕСПИЛОТНЫЙ ЛЕТАТЕЛЬНЫЙ АППАРАТ С РАНЕЕ НЕДОСТИЖИМЫМ ВРЕМЕНЕМ АВТОНОМНОЙ РАБОТЫ.{NEWLINE}РАДАР БЫЛ ПЕРЕНАСТРОЕН ДЛЯ ЛУЧШЕГО ОБНАРУЖЕНИЯ НЛО.

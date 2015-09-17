@@ -4920,7 +4920,7 @@
 	"../Savegame/Base.h"
 	"../Savegame/SavedGame.h"
 
-1440468858 source:f:\git\openxcom\src\basescape\newmanufactureliststate.cpp
+1442470052 source:f:\git\openxcom\src\basescape\newmanufactureliststate.cpp
 	"NewManufactureListState.h"
 	"ManufactureCostsState.h"
 	"ManufactureStartState.h"
@@ -4938,7 +4938,7 @@
 	"../Savegame/Base.h"
 	"../Savegame/SavedGame.h"
 
-1438164227 source:f:\git\openxcom\src\basescape\newresearchliststate.cpp
+1442471055 source:f:\git\openxcom\src\basescape\newresearchliststate.cpp
 	"NewResearchListState.h"
 	"ResearchInfoState.h"
 	"../Engine/Game.h"
@@ -6207,7 +6207,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1442092032 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1442509303 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	"AlienBAIState.h"
 	"BattlescapeState.h"

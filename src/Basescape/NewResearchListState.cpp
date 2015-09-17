@@ -86,6 +86,12 @@ NewResearchListState::NewResearchListState(
 	_btnCancel->onKeyboardPress(
 					(ActionHandler)& NewResearchListState::btnCancelClick,
 					Options::keyCancel);
+	_btnCancel->onKeyboardPress(
+					(ActionHandler)& NewResearchListState::btnCancelClick,
+					Options::keyOk);
+	_btnCancel->onKeyboardPress(
+					(ActionHandler)& NewResearchListState::btnCancelClick,
+					Options::keyOkKeypad);
 }
 
 /**
@@ -135,12 +141,11 @@ void NewResearchListState::fillProjectList() // private.
 {
 	_cutoff = -1;
 	_offlines.clear();
-
 	_projects.clear();
 	_lstResearch->clearList();
 
-	const Uint8 color = _lstResearch->getSecondaryColor();
 	size_t row = 0;
+	const Uint8 color = _lstResearch->getSecondaryColor();
 
 	const std::vector<ResearchProject*>& baseProjects (_base->getResearch()); // init.
 	for (std::vector<ResearchProject*>::const_iterator
@@ -148,23 +153,16 @@ void NewResearchListState::fillProjectList() // private.
 			i != baseProjects.end();
 			++i)
 	{
+		// If cancelled projects are not marked 'offline' they'd lose spent
+		// research time; if they are not marked 'offline' even though no
+		// spent time has accumulated, they still need to be tracked so player
+		// can't exploit the system by forcing a recalculation of totalCost ....
 		if ((*i)->getOffline() == true)
 		{
-			_lstResearch->addRow(
-							1,
-							tr((*i)->getRules()->getName()).c_str());
-
-			// If cancelled projects are not marked 'offline' they'd lose spent
-			// research time; if they are not marked 'offline' even though no
-			// spent time has accumulated, they still need to be tracked so player
-			// can't exploit the system by forcing a recalculation of totalCost ....
-			//
+			_lstResearch->addRow(1, tr((*i)->getRules()->getName()).c_str());
 			// Try to blend these in but doesn't really work due to ordering:
-			if ((*i)->getSpent() > 0)
-				_lstResearch->setRowColor(
-										row++,
-										color,
-										true);
+//			if ((*i)->getSpent() > 0)
+			_lstResearch->setRowColor(row++, color, true);
 
 			_offlines.push_back(*i);
 			++_cutoff;
@@ -182,9 +180,7 @@ void NewResearchListState::fillProjectList() // private.
 	{
 		if ((*i)->getRequirements().empty() == true)
 		{
-			_lstResearch->addRow(
-							1,
-							tr((*i)->getName()).c_str());
+			_lstResearch->addRow(1, tr((*i)->getName()).c_str());
 			++i;
 		}
 		else
