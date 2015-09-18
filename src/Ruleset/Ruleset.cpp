@@ -95,7 +95,7 @@ Ruleset::Ruleset(const Game* const game)
 		_costEngineer(0),
 		_costScientist(0),
 		_timePersonnel(0),
-		_initialFunding(0),
+//		_initialFunding(0), // 6'000(000)
 		_startingTime(6,1,1,1999,12,0,0),
 		_modIndex(0),
 		_facilityListOrder(0),
@@ -915,7 +915,7 @@ void Ruleset::loadFile(const std::string& file) // protected.
 	_costEngineer	= doc["costEngineer"]	.as<int>(_costEngineer);
 	_costScientist	= doc["costScientist"]	.as<int>(_costScientist);
 	_timePersonnel	= doc["timePersonnel"]	.as<int>(_timePersonnel);
-	_initialFunding	= doc["initialFunding"]	.as<int>(_initialFunding);
+//	_initialFunding	= doc["initialFunding"]	.as<int>(_initialFunding);
 	_alienFuel		= doc["alienFuel"]		.as<std::pair<std::string, int> >(_alienFuel);
 	_font			= doc["font"]			.as<std::string>(_font);
 	_radarCutoff	= doc["radarCutoff"]	.as<int>(_radarCutoff);

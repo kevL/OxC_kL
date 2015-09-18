@@ -228,6 +228,18 @@ private:
 				bool goOffline = false);
 		/// Research Help ala XcomUtil.
 		void researchHelp(const std::string& aLien);
+		/// Gets soldier factor for Research Help.
+		double getSoldierHelp(const std::string& rp);
+		/// Gets navigator factor for Research Help.
+		double getNavigatorHelp(const std::string& rp);
+		/// Gets medic factor for Research Help.
+		double getMedicHelp(const std::string& rp);
+		/// Gets engineer factor for Research Help.
+		double getEngineerHelp(const std::string& rp);
+		/// Gets leader factor for Research Help.
+		double getLeaderHelp(const std::string& rp);
+		/// Gets commander factor for Research Help.
+		double getCommanderHelp(const std::string& rp);
 
 		/// Adds a Production to this Base.
 		void addProduction(Production* prod);

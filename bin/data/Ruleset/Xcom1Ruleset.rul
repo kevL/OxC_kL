@@ -177,7 +177,7 @@ crafts: #new order: skyranger,lightning,avenger,interceptor,firestorm
   - type: STR_SKYRANGER
     sprite: 0
     fuelMax: 122500
-    damageMax: 220
+    damageMax: 230
     speedMax: 783
     accel: 2
     soldiers: 14
@@ -202,7 +202,7 @@ crafts: #new order: skyranger,lightning,avenger,interceptor,firestorm
   - type: STR_INTERCEPTOR
     sprite: 3
     fuelMax: 93000
-    damageMax: 141
+    damageMax: 140
     speedMax: 2052
     accel: 3
     weapons: 2
@@ -4535,7 +4535,7 @@ costSoldier: 25000
 costEngineer: 40000
 costScientist: 50000
 timePersonnel: 72
-initialFunding: 6000 # not used
+#initialFunding: 6000 # not used
 alienFuel: [STR_ELERIUM_115,50]
 radarCutoffRange: 1500
 firstGrenade: 0

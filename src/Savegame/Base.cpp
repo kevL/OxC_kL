@@ -1493,12 +1493,12 @@ void Base::removeResearch(
 
 /**
  * Research Help ala XcomUtil.
- * @param aLien - reference the name of the alien that got prodded
+ * @param aLien - reference the name of an alien that got prodded
  */
 void Base::researchHelp(const std::string& aLien)
 {
 	std::string rp;
-	double factor;
+	double coef;
 
 	for (std::vector<ResearchProject*>::const_iterator
 			i = _research.begin();
@@ -1508,287 +1508,29 @@ void Base::researchHelp(const std::string& aLien)
 		if ((*i)->getOffline() == false)
 		{
 			rp = (*i)->getRules()->getName();
-			factor = 0.;
 
 			if (aLien.find("_SOLDIER") != std::string::npos)
-			{
-				if (rp.compare("STR_ALIEN_GRENADE") == 0
-					|| rp.compare("STR_ALIEN_ENTERTAINMENT") == 0
-					|| rp.compare("STR_PERSONAL_ARMOR") == 0)
-				{
-					factor = 0.5;
-				}
-				else if (rp.compare("STR_HEAVY_PLASMA_CLIP") == 0
-					|| rp.compare("STR_PLASMA_RIFLE_CLIP") == 0
-					|| rp.compare("STR_PLASMA_PISTOL_CLIP") == 0)
-				{
-					factor = 0.4;
-				}
-				else if (rp.compare("STR_POWER_SUIT") == 0)
-				{
-					factor = 0.25;
-				}
-				else if (rp.compare("STR_ALIEN_ORIGINS") == 0)
-				{
-					factor = 0.2;
-				}
-				else if (rp.compare("STR_THE_MARTIAN_SOLUTION") == 0
-					|| rp.compare("STR_HEAVY_PLASMA") == 0
-					|| rp.compare("STR_PLASMA_RIFLE") == 0
-					|| rp.compare("STR_PLASMA_PISTOL") == 0)
-				{
-					factor = 0.1;
-				}
-			}
+				coef = getSoldierHelp(rp);
 			else if (aLien.find("_NAVIGATOR") != std::string::npos)
-			{
-				if (rp.compare("STR_HYPER_WAVE_DECODER") == 0
-					|| rp.compare("STR_UFO_NAVIGATION") == 0)
-				{
-					factor = 0.8;
-				}
-				else if (rp.compare("STR_MOTION_SCANNER") == 0
-					|| rp.compare("STR_ALIEN_ENTERTAINMENT") == 0)
-				{
-					factor = 0.5;
-				}
-				else if (rp.compare("STR_GRAV_SHIELD") == 0
-					|| rp.compare("STR_ALIEN_ALLOYS") == 0)
-				{
-					factor = 0.4;
-				}
-				else if (rp.compare("STR_ALIEN_ORIGINS") == 0)
-				{
-					factor = 0.35;
-				}
-				else if (rp.compare("STR_FLYING_SUIT") == 0)
-				{
-					factor = 0.3;
-				}
-				else if (rp.compare("STR_UFO_POWER_SOURCE") == 0
-					|| rp.compare("STR_UFO_CONSTRUCTION") == 0
-					|| rp.compare("STR_THE_MARTIAN_SOLUTION") == 0)
-				{
-					factor = 0.25;
-				}
-				else if (rp == "STR_HEAVY_PLASMA"
-					|| rp == "STR_HEAVY_PLASMA_CLIP"
-					|| rp == "STR_PLASMA_RIFLE"
-					|| rp == "STR_PLASMA_RIFLE_CLIP"
-					|| rp == "STR_PLASMA_PISTOL"
-					|| rp == "STR_PLASMA_PISTOL_CLIP"
-					|| rp == "STR_NEW_FIGHTER_CRAFT" // + "STR_IMPROVED_INTERCEPTOR" <- uses Alien Alloys.
-					|| rp == "STR_NEW_FIGHTER_TRANSPORTER"
-					|| rp == "STR_ULTIMATE_CRAFT"
-					|| rp == "STR_PLASMA_CANNON"
-					|| rp == "STR_FUSION_MISSILE")
-//					|| rp == "hovertank-plasma" // <-
-//					|| rp == "hovertank-fusion" // <-
-				{
-					factor = 0.2;
-				}
-				else if (rp.compare("STR_CYDONIA_OR_BUST") == 0
-					|| rp.compare("STR_POWER_SUIT") == 0)
-				{
-					factor = 0.15;
-				}
-			}
+				coef = getNavigatorHelp(rp);
 			else if (aLien.find("_MEDIC") != std::string::npos)
-			{
-				if (rp.compare("STR_ALIEN_FOOD") == 0
-					|| rp.compare("STR_ALIEN_SURGERY") == 0
-					|| rp.compare("STR_EXAMINATION_ROOM") == 0
-					|| rp.compare("STR_ALIEN_REPRODUCTION") == 0)
-				{
-					factor = 0.8;
-				}
-				else if (rp.compare("STR_PSI_AMP") == 0
-					|| rp.compare("STR_SMALL_LAUNCHER") == 0
-					|| rp.compare("STR_STUN_BOMB") == 0
-					|| rp.compare("STR_MIND_PROBE") == 0
-					|| rp.compare("STR_MIND_SHIELD") == 0
-					|| rp.compare("STR_PSI_LAB") == 0)
-				{
-					factor = 0.6;
-				}
-				else if (rp.compare("STR_ETHEREAL_CORPSE") == 0
-					|| rp.compare("STR_SECTOPOD_CORPSE") == 0
-					|| rp.compare("STR_SECTOID_CORPSE") == 0
-					|| rp.compare("STR_CYBERDISC_CORPSE") == 0
-					|| rp.compare("STR_SNAKEMAN_CORPSE") == 0
-					|| rp.compare("STR_CHRYSSALID_CORPSE") == 0
-					|| rp.compare("STR_MUTON_CORPSE") == 0
-					|| rp.compare("STR_SILACOID_CORPSE") == 0
-					|| rp.compare("STR_CELATID_CORPSE") == 0
-					|| rp.compare("STR_FLOATER_CORPSE") == 0
-					|| rp.compare("STR_REAPER_CORPSE") == 0)
-				{
-					factor = 0.5;
-				}
-				else if (rp == "STR_MEDI_KIT")
-				{
-					factor = 0.4;
-				}
-				else if (rp.compare("STR_ALIEN_ORIGINS") == 0
-					|| rp.compare("STR_ALIEN_ENTERTAINMENT") == 0)
-				{
-					factor = 0.2;
-				}
-				else if (rp.compare("STR_THE_MARTIAN_SOLUTION") == 0)
-				{
-					factor = 0.1;
-				}
-			}
+				coef = getMedicHelp(rp);
 			else if (aLien.find("_ENGINEER") != std::string::npos)
-			{
-				if (rp.compare("STR_BLASTER_LAUNCHER") == 0
-					|| rp.compare("STR_BLASTER_BOMB") == 0)
-				{
-					factor = 0.7;
-				}
-				else if (rp.compare("STR_MOTION_SCANNER") == 0
-					|| rp.compare("STR_HEAVY_PLASMA") == 0
-					|| rp.compare("STR_HEAVY_PLASMA_CLIP") == 0
-					|| rp.compare("STR_PLASMA_RIFLE") == 0
-					|| rp.compare("STR_PLASMA_RIFLE_CLIP") == 0
-					|| rp.compare("STR_PLASMA_PISTOL") == 0
-					|| rp.compare("STR_PLASMA_PISTOL_CLIP") == 0
-					|| rp.compare("STR_ALIEN_GRENADE") == 0
-					|| rp.compare("STR_ELERIUM_115") == 0
-					|| rp.compare("STR_UFO_POWER_SOURCE") == 0
-					|| rp.compare("STR_UFO_CONSTRUCTION") == 0
-					|| rp.compare("STR_ALIEN_ALLOYS") == 0
-					|| rp.compare("STR_PLASMA_CANNON") == 0
-					|| rp.compare("STR_FUSION_MISSILE") == 0
-					|| rp.compare("STR_PLASMA_DEFENSE") == 0
-					|| rp.compare("STR_FUSION_DEFENSE") == 0
-					|| rp.compare("STR_GRAV_SHIELD") == 0
-					|| rp.compare("STR_PERSONAL_ARMOR") == 0
-					|| rp.compare("STR_POWER_SUIT") == 0
-					|| rp.compare("STR_FLYING_SUIT") == 0)
-				{
-					factor = 0.5;
-				}
-				else if (rp.compare("STR_NEW_FIGHTER_CRAFT") == 0 // + "STR_IMPROVED_INTERCEPTOR" <- uses Alien Alloys.
-					|| rp.compare("STR_NEW_FIGHTER_TRANSPORTER") == 0
-					|| rp.compare("STR_ULTIMATE_CRAFT") == 0)
-				{
-					factor = 0.3;
-				}
-				else if (rp.compare("STR_ALIEN_ORIGINS") == 0
-					|| rp.compare("STR_SMALL_LAUNCHER") == 0
-					|| rp.compare("STR_STUN_BOMB") == 0)
-				{
-					factor = 0.2;
-				}
-				else if (rp.compare("STR_THE_MARTIAN_SOLUTION") == 0)
-				{
-					factor = 0.1;
-				}
-			}
+				coef = getEngineerHelp(rp);
 			else if (aLien.find("_LEADER") != std::string::npos)
-			{
-				if (rp.compare("STR_EXAMINATION_ROOM") == 0)
-				{
-					factor = 0.8;
-				}
-				else if (rp.compare("STR_BLASTER_LAUNCHER") == 0)
-				{
-					factor = 0.6;
-				}
-				else if (rp.compare("STR_ALIEN_ORIGINS") == 0)
-				{
-					factor = 0.5;
-				}
-				else if (rp.compare("STR_THE_MARTIAN_SOLUTION") == 0)
-				{
-					factor = 0.3;
-				}
-				else if (rp.compare("STR_PSI_AMP") == 0)
-				{
-					factor = 0.25;
-				}
-				else if (rp.compare("STR_HEAVY_PLASMA") == 0
-					|| rp.compare("STR_HEAVY_PLASMA_CLIP") == 0
-					|| rp.compare("STR_PLASMA_RIFLE") == 0
-					|| rp.compare("STR_PLASMA_RIFLE_CLIP") == 0
-					|| rp.compare("STR_PLASMA_PISTOL") == 0
-					|| rp.compare("STR_PLASMA_PISTOL_CLIP") == 0
-					|| rp.compare("STR_BLASTER_BOMB") == 0
-					|| rp.compare("STR_SMALL_LAUNCHER") == 0
-					|| rp.compare("STR_STUN_BOMB") == 0
-					|| rp.compare("STR_ELERIUM_115") == 0
-					|| rp.compare("STR_ALIEN_ALLOYS") == 0
-					|| rp.compare("STR_PLASMA_CANNON") == 0
-					|| rp.compare("STR_FUSION_MISSILE") == 0
-					|| rp.compare("STR_CYDONIA_OR_BUST") == 0
-					|| rp.compare("STR_PERSONAL_ARMOR") == 0
-					|| rp.compare("STR_POWER_SUIT") == 0
-					|| rp.compare("STR_FLYING_SUIT") == 0)
-				{
-					factor = 0.2;
-				}
-				else if (rp.compare("STR_NEW_FIGHTER_CRAFT") == 0 // + "STR_IMPROVED_INTERCEPTOR" <- uses Alien Alloys.
-					|| rp.compare("STR_NEW_FIGHTER_TRANSPORTER") == 0
-					|| rp.compare("STR_ULTIMATE_CRAFT") == 0)
-				{
-					factor = 0.1;
-				}
-			}
+				coef = getLeaderHelp(rp);
 			else if (aLien.find("_COMMANDER") != std::string::npos)
-			{
-				if (rp.compare("STR_BLASTER_LAUNCHER") == 0
-					|| rp.compare("STR_EXAMINATION_ROOM") == 0)
-				{
-					factor = 0.8;
-				}
-				else if (rp.compare("STR_ALIEN_ORIGINS") == 0)
-				{
-					factor = 0.7;
-				}
-				else if (rp.compare("STR_THE_MARTIAN_SOLUTION") == 0)
-				{
-					factor = 0.6;
-				}
-				else if (rp.compare("STR_PSI_AMP") == 0
-					|| rp.compare("STR_CYDONIA_OR_BUST") == 0)
-				{
-					factor = 0.5;
-				}
-				else if (rp.compare("STR_BLASTER_BOMB") == 0
-					|| rp.compare("STR_ELERIUM_115") == 0
-					|| rp.compare("STR_ALIEN_ALLOYS") == 0
-					|| rp.compare("STR_PERSONAL_ARMOR") == 0
-					|| rp.compare("STR_POWER_SUIT") == 0
-					|| rp.compare("STR_FLYING_SUIT") == 0)
-				{
-					factor = 0.25;
-				}
-				else if (rp.compare("STR_HEAVY_PLASMA") == 0
-					|| rp.compare("STR_HEAVY_PLASMA_CLIP") == 0
-					|| rp.compare("STR_PLASMA_RIFLE") == 0
-					|| rp.compare("STR_PLASMA_RIFLE_CLIP") == 0
-					|| rp.compare("STR_PLASMA_PISTOL") == 0
-					|| rp.compare("STR_PLASMA_PISTOL_CLIP") == 0
-					|| rp.compare("STR_SMALL_LAUNCHER") == 0
-					|| rp.compare("STR_STUN_BOMB") == 0
-					|| rp.compare("STR_NEW_FIGHTER_CRAFT") == 0 // + "STR_IMPROVED_INTERCEPTOR" <- uses Alien Alloys.
-					|| rp.compare("STR_NEW_FIGHTER_TRANSPORTER") == 0
-					|| rp.compare("STR_ULTIMATE_CRAFT") == 0
-					|| rp.compare("STR_PLASMA_CANNON") == 0
-					|| rp.compare("STR_FUSION_MISSILE") == 0)
-				{
-					factor = 0.2;
-				}
-			}
+				coef = getCommanderHelp(rp);
+			else
+				coef = 0.;
 
-			if (AreSame(factor, 0.) == false)
+			if (AreSame(coef, 0.) == false)
 			{
 				const int cost = (*i)->getCost();
 				const double spent = static_cast<double>((*i)->getSpent());
 
 				(*i)->setSpent(static_cast<int>(Round(
-								spent + ((static_cast<double>(cost) - spent) * factor))));
+							spent + ((static_cast<double>(cost) - spent) * coef))));
 
 				if ((*i)->getSpent() > cost - 1)
 					(*i)->setSpent(cost - 1);
@@ -1797,6 +1539,310 @@ void Base::researchHelp(const std::string& aLien)
 			}
 		}
 	}
+}
+
+/**
+ * Gets soldier coefficient for Research Help.
+ * @return, help coef
+ */
+double Base::getSoldierHelp(const std::string& rp)
+{
+	if (rp.compare("STR_ALIEN_GRENADE") == 0
+		|| rp.compare("STR_ALIEN_ENTERTAINMENT") == 0
+		|| rp.compare("STR_PERSONAL_ARMOR") == 0)
+	{
+		return 0.5;
+	}
+
+	if (rp.compare("STR_HEAVY_PLASMA_CLIP") == 0
+		|| rp.compare("STR_PLASMA_RIFLE_CLIP") == 0
+		|| rp.compare("STR_PLASMA_PISTOL_CLIP") == 0)
+	{
+		return 0.4;
+	}
+
+	if (rp.compare("STR_POWER_SUIT") == 0)
+		return 0.25;
+
+	if (rp.compare("STR_ALIEN_ORIGINS") == 0)
+		return 0.2;
+
+	if (rp.compare("STR_THE_MARTIAN_SOLUTION") == 0
+		|| rp.compare("STR_HEAVY_PLASMA") == 0
+		|| rp.compare("STR_PLASMA_RIFLE") == 0
+		|| rp.compare("STR_PLASMA_PISTOL") == 0)
+	{
+		return 0.1;
+	}
+
+	return 0.;
+}
+
+/**
+ * Gets navigator coefficient for Research Help.
+ * @return, help coef
+ */
+double Base::getNavigatorHelp(const std::string& rp)
+{
+	if (rp.compare("STR_HYPER_WAVE_DECODER") == 0
+		|| rp.compare("STR_UFO_NAVIGATION") == 0)
+	{
+		return 0.8;
+	}
+
+	if (rp.compare("STR_MOTION_SCANNER") == 0
+		|| rp.compare("STR_ALIEN_ENTERTAINMENT") == 0)
+	{
+		return 0.5;
+	}
+
+	if (rp.compare("STR_GRAV_SHIELD") == 0
+		|| rp.compare("STR_ALIEN_ALLOYS") == 0)
+	{
+		return 0.4;
+	}
+
+	if (rp.compare("STR_ALIEN_ORIGINS") == 0)
+		return 0.35;
+
+	if (rp.compare("STR_FLYING_SUIT") == 0)
+		return 0.3;
+
+	if (rp.compare("STR_UFO_POWER_SOURCE") == 0
+		|| rp.compare("STR_UFO_CONSTRUCTION") == 0
+		|| rp.compare("STR_THE_MARTIAN_SOLUTION") == 0)
+	{
+		return 0.25;
+	}
+
+	if (rp == "STR_HEAVY_PLASMA"
+		|| rp == "STR_HEAVY_PLASMA_CLIP"
+		|| rp == "STR_PLASMA_RIFLE"
+		|| rp == "STR_PLASMA_RIFLE_CLIP"
+		|| rp == "STR_PLASMA_PISTOL"
+		|| rp == "STR_PLASMA_PISTOL_CLIP"
+		|| rp == "STR_NEW_FIGHTER_CRAFT" // + "STR_IMPROVED_INTERCEPTOR" <- uses Alien Alloys.
+		|| rp == "STR_NEW_FIGHTER_TRANSPORTER"
+		|| rp == "STR_ULTIMATE_CRAFT"
+		|| rp == "STR_PLASMA_CANNON"
+		|| rp == "STR_FUSION_MISSILE") // what about _Defense
+//		|| rp == "hovertank-plasma" // <-
+//		|| rp == "hovertank-fusion" // <-
+	{
+		return 0.2;
+	}
+
+	if (rp.compare("STR_CYDONIA_OR_BUST") == 0
+		|| rp.compare("STR_POWER_SUIT") == 0)
+	{
+		return 0.15;
+	}
+
+	return 0.;
+}
+
+/**
+ * Gets medic coefficient for Research Help.
+ * @return, help coef
+ */
+double Base::getMedicHelp(const std::string& rp)
+{
+	if (rp.compare("STR_ALIEN_FOOD") == 0
+		|| rp.compare("STR_ALIEN_SURGERY") == 0
+		|| rp.compare("STR_EXAMINATION_ROOM") == 0
+		|| rp.compare("STR_ALIEN_REPRODUCTION") == 0)
+	{
+		return 0.8;
+	}
+
+	if (rp.compare("STR_PSI_AMP") == 0
+		|| rp.compare("STR_SMALL_LAUNCHER") == 0
+		|| rp.compare("STR_STUN_BOMB") == 0
+		|| rp.compare("STR_MIND_PROBE") == 0
+		|| rp.compare("STR_MIND_SHIELD") == 0
+		|| rp.compare("STR_PSI_LAB") == 0)
+	{
+		return 0.6;
+	}
+
+	if (rp.compare(rp.length() - 7, 7, "_CORPSE") == 0)
+		return 0.5;
+
+	if (rp == "STR_MEDI_KIT")
+		return 0.4;
+
+	if (rp.compare("STR_ALIEN_ORIGINS") == 0
+		|| rp.compare("STR_ALIEN_ENTERTAINMENT") == 0)
+	{
+		return 0.2;
+	}
+
+	if (rp.compare("STR_THE_MARTIAN_SOLUTION") == 0)
+		return 0.1;
+
+	return 0.;
+}
+
+/**
+ * Gets engineer coefficient for Research Help.
+ * @return, help coef
+ */
+double Base::getEngineerHelp(const std::string& rp)
+{
+	if (rp.compare("STR_BLASTER_LAUNCHER") == 0
+		|| rp.compare("STR_BLASTER_BOMB") == 0)
+	{
+		return 0.7;
+	}
+
+	if (rp.compare("STR_MOTION_SCANNER") == 0
+		|| rp.compare("STR_HEAVY_PLASMA") == 0
+		|| rp.compare("STR_HEAVY_PLASMA_CLIP") == 0
+		|| rp.compare("STR_PLASMA_RIFLE") == 0
+		|| rp.compare("STR_PLASMA_RIFLE_CLIP") == 0
+		|| rp.compare("STR_PLASMA_PISTOL") == 0
+		|| rp.compare("STR_PLASMA_PISTOL_CLIP") == 0
+		|| rp.compare("STR_ALIEN_GRENADE") == 0
+		|| rp.compare("STR_ELERIUM_115") == 0
+		|| rp.compare("STR_UFO_POWER_SOURCE") == 0
+		|| rp.compare("STR_UFO_CONSTRUCTION") == 0
+		|| rp.compare("STR_ALIEN_ALLOYS") == 0
+		|| rp.compare("STR_PLASMA_CANNON") == 0
+		|| rp.compare("STR_FUSION_MISSILE") == 0
+		|| rp.compare("STR_PLASMA_DEFENSE") == 0
+		|| rp.compare("STR_FUSION_DEFENSE") == 0
+		|| rp.compare("STR_GRAV_SHIELD") == 0
+		|| rp.compare("STR_PERSONAL_ARMOR") == 0
+		|| rp.compare("STR_POWER_SUIT") == 0
+		|| rp.compare("STR_FLYING_SUIT") == 0)
+	{
+		return 0.5;
+	}
+
+	if (rp.compare("STR_NEW_FIGHTER_CRAFT") == 0 // + "STR_IMPROVED_INTERCEPTOR" <- uses Alien Alloys.
+		|| rp.compare("STR_NEW_FIGHTER_TRANSPORTER") == 0
+		|| rp.compare("STR_ULTIMATE_CRAFT") == 0)
+	{
+		return 0.3;
+	}
+
+	if (rp.compare("STR_ALIEN_ORIGINS") == 0
+		|| rp.compare("STR_SMALL_LAUNCHER") == 0
+		|| rp.compare("STR_STUN_BOMB") == 0)
+	{
+		return 0.2;
+	}
+
+	if (rp.compare("STR_THE_MARTIAN_SOLUTION") == 0)
+		return 0.1;
+
+	return 0.;
+}
+
+/**
+ * Gets leader coefficient for Research Help.
+ * @return, help coef
+ */
+double Base::getLeaderHelp(const std::string& rp)
+{
+	if (rp.compare("STR_EXAMINATION_ROOM") == 0)
+		return 0.8;
+
+	if (rp.compare("STR_BLASTER_LAUNCHER") == 0)
+		return 0.6;
+
+	if (rp.compare("STR_ALIEN_ORIGINS") == 0)
+		return 0.5;
+
+	if (rp.compare("STR_THE_MARTIAN_SOLUTION") == 0)
+		return 0.3;
+
+	if (rp.compare("STR_PSI_AMP") == 0)
+		return 0.25;
+
+	if (rp.compare("STR_HEAVY_PLASMA") == 0
+		|| rp.compare("STR_HEAVY_PLASMA_CLIP") == 0
+		|| rp.compare("STR_PLASMA_RIFLE") == 0
+		|| rp.compare("STR_PLASMA_RIFLE_CLIP") == 0
+		|| rp.compare("STR_PLASMA_PISTOL") == 0
+		|| rp.compare("STR_PLASMA_PISTOL_CLIP") == 0
+		|| rp.compare("STR_BLASTER_BOMB") == 0
+		|| rp.compare("STR_SMALL_LAUNCHER") == 0
+		|| rp.compare("STR_STUN_BOMB") == 0
+		|| rp.compare("STR_ELERIUM_115") == 0
+		|| rp.compare("STR_ALIEN_ALLOYS") == 0
+		|| rp.compare("STR_PLASMA_CANNON") == 0
+		|| rp.compare("STR_FUSION_MISSILE") == 0
+		|| rp.compare("STR_CYDONIA_OR_BUST") == 0
+		|| rp.compare("STR_PERSONAL_ARMOR") == 0
+		|| rp.compare("STR_POWER_SUIT") == 0
+		|| rp.compare("STR_FLYING_SUIT") == 0)
+	{
+		return 0.2;
+	}
+
+	if (rp.compare("STR_NEW_FIGHTER_CRAFT") == 0 // + "STR_IMPROVED_INTERCEPTOR" <- uses Alien Alloys.
+		|| rp.compare("STR_NEW_FIGHTER_TRANSPORTER") == 0
+		|| rp.compare("STR_ULTIMATE_CRAFT") == 0)
+	{
+		return 0.1;
+	}
+
+	return 0.;
+}
+
+/**
+ * Gets commander coefficient for Research Help.
+ * @return, help coef
+ */
+double Base::getCommanderHelp(const std::string& rp)
+{
+	if (rp.compare("STR_BLASTER_LAUNCHER") == 0
+		|| rp.compare("STR_EXAMINATION_ROOM") == 0)
+	{
+		return 0.8;
+	}
+
+	if (rp.compare("STR_ALIEN_ORIGINS") == 0)
+		return 0.7;
+
+	if (rp.compare("STR_THE_MARTIAN_SOLUTION") == 0)
+		return 0.6;
+
+	if (rp.compare("STR_PSI_AMP") == 0
+		|| rp.compare("STR_CYDONIA_OR_BUST") == 0)
+	{
+		return 0.5;
+	}
+
+	if (rp.compare("STR_BLASTER_BOMB") == 0
+		|| rp.compare("STR_ELERIUM_115") == 0
+		|| rp.compare("STR_ALIEN_ALLOYS") == 0
+		|| rp.compare("STR_PERSONAL_ARMOR") == 0
+		|| rp.compare("STR_POWER_SUIT") == 0
+		|| rp.compare("STR_FLYING_SUIT") == 0)
+	{
+		return 0.25;
+	}
+
+	if (rp.compare("STR_HEAVY_PLASMA") == 0
+		|| rp.compare("STR_HEAVY_PLASMA_CLIP") == 0
+		|| rp.compare("STR_PLASMA_RIFLE") == 0
+		|| rp.compare("STR_PLASMA_RIFLE_CLIP") == 0
+		|| rp.compare("STR_PLASMA_PISTOL") == 0
+		|| rp.compare("STR_PLASMA_PISTOL_CLIP") == 0
+		|| rp.compare("STR_SMALL_LAUNCHER") == 0
+		|| rp.compare("STR_STUN_BOMB") == 0
+		|| rp.compare("STR_NEW_FIGHTER_CRAFT") == 0 // + "STR_IMPROVED_INTERCEPTOR" <- uses Alien Alloys.
+		|| rp.compare("STR_NEW_FIGHTER_TRANSPORTER") == 0
+		|| rp.compare("STR_ULTIMATE_CRAFT") == 0
+		|| rp.compare("STR_PLASMA_CANNON") == 0
+		|| rp.compare("STR_FUSION_MISSILE") == 0)
+	{
+		return 0.2;
+	}
+
+	return 0.;
 }
 
 /**

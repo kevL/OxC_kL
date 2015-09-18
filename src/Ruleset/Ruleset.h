@@ -87,7 +87,7 @@ class Ruleset
 
 protected:
 	int
-		_initialFunding,
+//		_initialFunding,
 		_firstGrenade,
 		_retalChance,
 
