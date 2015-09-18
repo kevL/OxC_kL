@@ -354,7 +354,7 @@ std::vector<std::vector<int> >& RuleCraft::getDeployment()
 }
 
 /**
- * Gets the maximum amount of items this craft can store.
+ * Gets the maximum amount of items this craft can carry/store.
  * @return, quantity of items
  */
 int RuleCraft::getMaxItems() const

@@ -5,15 +5,15 @@ crafts:
       - STR_IMPROVED_INTERCEPTOR
     listOrder: 204
     sprite: 23
-    fuelMax: 1200
-    damageMax: 150
-    speedMax: 2900
-    accel: 5
-    weapons: 2
-    costSell: 225000
-    refuelRate: 40
-    transferTime: 90
-    score: 250
+    fuelMax: 87000
+    damageMax: 378
+    speedMax: 2835
+    accel: 6
+    weapons: 1
+    costRent: 50000
+    costSell: 3800000
+    refuelRate: 5000
+    score: 400
 #research:
 #  - name: STR_IMPROVED_INTERCEPTOR
 #    cost: 400
@@ -25,8 +25,10 @@ manufacture:
       - STR_IMPROVED_INTERCEPTOR
     listOrder: 3249
     space: 32
-    time: 5000
-    cost: 250000
+    time: 25000
+    cost: 2500000
+    requiredItems:
+      STR_ALIEN_ALLOYS: 95
 ufopaedia:
   - id: STR_RAVEN
     type_id: 1

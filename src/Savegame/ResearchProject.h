@@ -89,8 +89,6 @@ private:
 
 		/// Gets a string describing current progress.
 		std::string getResearchProgress() const;
-		/// Gets a string of cost completed as a per cent value.
-		std::wstring getCostCompleted() const;
 };
 
 }

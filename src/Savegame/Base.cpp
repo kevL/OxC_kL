@@ -1460,7 +1460,7 @@ void Base::addResearch(ResearchProject* const project)
  * Removes a ResearchProject from base.
  * @param project	- pointer to a ResearchProject for removal
  * @param grantHelp	- true to apply researchHelp() (default true)
- * @param goOffline	- true to hide project but not remove it from base's active ResearchProjects (default false)
+ * @param goOffline	- true to hide project but not remove it from base's ResearchProjects (default false)
  */
 void Base::removeResearch(
 		ResearchProject* const project,
@@ -1577,7 +1577,7 @@ void Base::researchHelp(const std::string& aLien)
 					|| rp == "STR_PLASMA_RIFLE_CLIP"
 					|| rp == "STR_PLASMA_PISTOL"
 					|| rp == "STR_PLASMA_PISTOL_CLIP"
-					|| rp == "STR_NEW_FIGHTER_CRAFT"
+					|| rp == "STR_NEW_FIGHTER_CRAFT" // + "STR_IMPROVED_INTERCEPTOR" <- uses Alien Alloys.
 					|| rp == "STR_NEW_FIGHTER_TRANSPORTER"
 					|| rp == "STR_ULTIMATE_CRAFT"
 					|| rp == "STR_PLASMA_CANNON"
@@ -1669,7 +1669,7 @@ void Base::researchHelp(const std::string& aLien)
 				{
 					factor = 0.5;
 				}
-				else if (rp.compare("STR_NEW_FIGHTER_CRAFT") == 0
+				else if (rp.compare("STR_NEW_FIGHTER_CRAFT") == 0 // + "STR_IMPROVED_INTERCEPTOR" <- uses Alien Alloys.
 					|| rp.compare("STR_NEW_FIGHTER_TRANSPORTER") == 0
 					|| rp.compare("STR_ULTIMATE_CRAFT") == 0)
 				{
@@ -1728,7 +1728,7 @@ void Base::researchHelp(const std::string& aLien)
 				{
 					factor = 0.2;
 				}
-				else if (rp.compare("STR_NEW_FIGHTER_CRAFT") == 0
+				else if (rp.compare("STR_NEW_FIGHTER_CRAFT") == 0 // + "STR_IMPROVED_INTERCEPTOR" <- uses Alien Alloys.
 					|| rp.compare("STR_NEW_FIGHTER_TRANSPORTER") == 0
 					|| rp.compare("STR_ULTIMATE_CRAFT") == 0)
 				{
@@ -1772,7 +1772,7 @@ void Base::researchHelp(const std::string& aLien)
 					|| rp.compare("STR_PLASMA_PISTOL_CLIP") == 0
 					|| rp.compare("STR_SMALL_LAUNCHER") == 0
 					|| rp.compare("STR_STUN_BOMB") == 0
-					|| rp.compare("STR_NEW_FIGHTER_CRAFT") == 0
+					|| rp.compare("STR_NEW_FIGHTER_CRAFT") == 0 // + "STR_IMPROVED_INTERCEPTOR" <- uses Alien Alloys.
 					|| rp.compare("STR_NEW_FIGHTER_TRANSPORTER") == 0
 					|| rp.compare("STR_ULTIMATE_CRAFT") == 0
 					|| rp.compare("STR_PLASMA_CANNON") == 0
@@ -1800,8 +1800,8 @@ void Base::researchHelp(const std::string& aLien)
 }
 
 /**
- * Returns whether or not a base is equipped with hyper-wave detection facilities.
- * @return, true if this base has hyper-wave detection
+ * Returns whether or not this Base is equipped with hyper-wave detection facilities.
+ * @return, true if hyper-wave detection
  */
 bool Base::getHyperDetection() const
 {
@@ -1821,8 +1821,8 @@ bool Base::getHyperDetection() const
 }
 
 /**
- * Returns whether or not a base is equipped with research facilities.
- * @return, true if this base is capable of research
+ * Returns whether or not this Base is equipped with research facilities.
+ * @return, true if capable of research
  */
 bool Base::hasResearch() const
 {
@@ -1842,8 +1842,8 @@ bool Base::hasResearch() const
 }
 
 /**
- * Returns whether or not a base is equipped with production facilities.
- * @return, true if this base is capable of production
+ * Returns whether or not this Base is equipped with production facilities.
+ * @return, true if capable of production
  */
 bool Base::hasProduction() const
 {

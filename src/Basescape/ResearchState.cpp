@@ -201,8 +201,7 @@ void ResearchState::init()
 		woststr << assigned;
 
 		std::wstring daysLeft;
-
-		if (assigned > 0)
+		if (assigned != 0)
 		{
 			const int days = static_cast<int>(std::ceil(
 							(static_cast<double>((*i)->getCost() - (*i)->getSpent()))
@@ -217,7 +216,6 @@ void ResearchState::init()
 						tr((*i)->getRules()->getName()).c_str(),
 						woststr.str().c_str(),
 						tr((*i)->getResearchProgress()).c_str(),
-//						(*i)->getCostCompleted().c_str());
 						daysLeft.c_str());
 	}
 
@@ -228,7 +226,7 @@ void ResearchState::init()
 	_txtSpace->setText(tr("STR_LABORATORY_SPACE_AVAILABLE_")
 							.arg(_base->getFreeLaboratories()));
 
-	_btnAliens->setVisible(_base->getAvailableContainment() > 0);
+	_btnAliens->setVisible(_base->getAvailableContainment() != 0);
 }
 
 /**

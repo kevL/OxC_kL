@@ -208,8 +208,7 @@ std::string ResearchProject::getResearchProgress() const
 	return "STR_EXCELLENT"; */
 
 	if (_assigned == 0)
-		return "na.";
-//		return "STR_NONE";
+		return "na."; //"STR_NONE"
 
 	if (static_cast<float>(_spent) / static_cast<float>(_cost) < PROGRESS_LIMIT_UNKNOWN)
 		return "STR_UNKNOWN";
@@ -227,15 +226,6 @@ std::string ResearchProject::getResearchProgress() const
 		return "STR_GOOD";
 
 	return "STR_EXCELLENT";
-}
-
-/**
- * Returns research time completed as a wide string.
- * @return, time completed
- */
-std::wstring ResearchProject::getCostCompleted() const
-{
-	return Text::formatNumber(_spent);
 }
 
 }

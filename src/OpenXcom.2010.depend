@@ -4802,7 +4802,7 @@
 
 1440461462 f:\git\openxcom\src\ruleset\ruleresearch.h
 
-1442515990 f:\git\openxcom\src\savegame\researchproject.h
+1442519809 f:\git\openxcom\src\savegame\researchproject.h
 
 1440097586 source:f:\git\openxcom\src\basescape\manufactureinfostate.cpp
 	"ManufactureInfoState.h"
@@ -5060,7 +5060,7 @@
 	<algorithm>
 	<cstdint>
 
-1442517835 source:f:\git\openxcom\src\basescape\researchstate.cpp
+1442519922 source:f:\git\openxcom\src\basescape\researchstate.cpp
 	"ResearchState.h"
 	"AlienContainmentState.h"
 	"BasescapeState.h"
@@ -7370,7 +7370,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Target.h"
 
-1441337918 source:f:\git\openxcom\src\geoscape\ufodetectedstate.cpp
+1442519094 source:f:\git\openxcom\src\geoscape\ufodetectedstate.cpp
 	"UfoDetectedState.h"
 	"GeoscapeState.h"
 	"Globe.h"
@@ -8536,7 +8536,7 @@
 	"Region.h"
 	"../Ruleset/RuleRegion.h"
 
-1442516024 source:f:\git\openxcom\src\savegame\researchproject.cpp
+1442519835 source:f:\git\openxcom\src\savegame\researchproject.cpp
 	"ResearchProject.h"
 	"../Interface/Text.h"
 	"../Ruleset/RuleResearch.h"

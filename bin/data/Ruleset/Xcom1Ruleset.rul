@@ -177,7 +177,7 @@ crafts: #new order: skyranger,lightning,avenger,interceptor,firestorm
   - type: STR_SKYRANGER
     sprite: 0
     fuelMax: 122500
-    damageMax: 175
+    damageMax: 220
     speedMax: 783
     accel: 2
     soldiers: 14
@@ -202,15 +202,15 @@ crafts: #new order: skyranger,lightning,avenger,interceptor,firestorm
   - type: STR_INTERCEPTOR
     sprite: 3
     fuelMax: 93000
-    damageMax: 138
+    damageMax: 141
     speedMax: 2052
     accel: 3
     weapons: 2
     costBuy: 750000
     costRent: 520000
     refuelRate: 5000
-    radarRange: 600
-    reconRange: 900
+#    radarRange: 600 #default
+#    reconRange: 900 #default
     transferTime: 96
     score: 300
   - type: STR_FIRESTORM
@@ -218,9 +218,9 @@ crafts: #new order: skyranger,lightning,avenger,interceptor,firestorm
       - STR_NEW_FIGHTER_CRAFT
     sprite: 4
     fuelMax: 32
-    damageMax: 565
+    damageMax: 559
     speedMax: 4225
-    accel: 9
+    accel: 11
     weapons: 2
     costRent: 50000
     costSell: 4200000
@@ -235,7 +235,7 @@ crafts: #new order: skyranger,lightning,avenger,interceptor,firestorm
       - STR_NEW_FIGHTER_TRANSPORTER
     sprite: 1
     fuelMax: 37
-    damageMax: 736
+    damageMax: 735
     speedMax: 3142
     accel: 7
     weapons: 1
@@ -248,7 +248,7 @@ crafts: #new order: skyranger,lightning,avenger,interceptor,firestorm
     repairRate: 3
     radarRange: 800
     reconRange: 1200
-    score: 355
+    score: 375
     battlescapeTerrainData:
       name: LIGHTNIN
       mapDataSets:
@@ -262,15 +262,15 @@ crafts: #new order: skyranger,lightning,avenger,interceptor,firestorm
       - [10, 5, 1, 2]
       - [10, 6, 1, 2]
       - [10, 4, 1, 2]
-      - [9, 7, 1, 2]
-      - [9, 3, 1, 2]
-      - [8, 7, 1, 2]
-      - [8, 3, 1, 2]
-      - [7, 7, 1, 2]
-      - [7, 3, 1, 2]
-      - [6, 6, 1, 2]
-      - [6, 4, 1, 2]
-      - [6, 5, 1, 2]
+      - [ 9, 7, 1, 2]
+      - [ 9, 3, 1, 2]
+      - [ 8, 7, 1, 2]
+      - [ 8, 3, 1, 2]
+      - [ 7, 7, 1, 2]
+      - [ 7, 3, 1, 2]
+      - [ 6, 6, 1, 2]
+      - [ 6, 4, 1, 2]
+      - [ 6, 5, 1, 2]
   - type: STR_AVENGER
     requires:
       - STR_ULTIMATE_CRAFT
@@ -278,7 +278,7 @@ crafts: #new order: skyranger,lightning,avenger,interceptor,firestorm
     fuelMax: 67
     damageMax: 1263
     speedMax: 5275
-    accel: 10
+    accel: 9
     weapons: 2
     costRent: 150000
     costSell: 10200000
