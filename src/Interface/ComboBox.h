@@ -46,11 +46,12 @@ class ComboBox
 
 private:
 	static const int
-		MARGIN_HORIZONTAL,
-		MARGIN_VERTICAL,
-		MAX_ITEMS,
-		BUTTON_WIDTH,
-		TEXT_HEIGHT;
+		MARGIN_HORIZONTAL	=  3, // was 2
+		MARGIN_VERTICAL		=  3,
+		ROWS_DEFAULT		= 10,
+		BUTTON_WIDTH		= 14,
+		TEXT_HEIGHT			=  8;
+
 
 	bool _toggled;
 	size_t _sel;
@@ -68,7 +69,7 @@ private:
 	///
 	void drawArrow();
 	///
-	void setDropdown(int options);
+	void setDropdown(int rows);
 
 
 	public:

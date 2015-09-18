@@ -380,23 +380,23 @@ research:
     points: 30
     needItem: true
   - name: STR_ALIEN_FOOD
-    cost: 15000
+    cost: 1500
     points: 30
     needItem: true
   - name: STR_ALIEN_REPRODUCTION
-    cost: 15000
+    cost: 1500
     points: 30
     needItem: true
   - name: STR_ALIEN_SURGERY
-    cost: 15000
+    cost: 1500
     points: 30
     needItem: true
   - name: STR_EXAMINATION_ROOM
-    cost: 15000
+    cost: 1500
     points: 30
     needItem: true
   - name: STR_ALIEN_HABITAT
-    cost: 15000
+    cost: 1500
     points: 30
     needItem: true
 #---- aLien Autopsies ---------------------------------------------------------#
@@ -407,7 +407,7 @@ research:
     needItem: true
     requires:
       - STR_ALIEN_SURGERY
-      - STR_ALIEN_REPRODUCTION
+#      - STR_ALIEN_REPRODUCTION
     unlocks:
       - STR_ALIEN_CONTAINMENT
   - name: STR_SECTOID_CORPSE
@@ -417,7 +417,7 @@ research:
     needItem: true
     requires:
       - STR_ALIEN_SURGERY
-      - STR_ALIEN_REPRODUCTION
+#      - STR_ALIEN_REPRODUCTION
     unlocks:
       - STR_ALIEN_CONTAINMENT
   - name: STR_SNAKEMAN_CORPSE
@@ -427,7 +427,7 @@ research:
     needItem: true
     requires:
       - STR_ALIEN_SURGERY
-      - STR_ALIEN_REPRODUCTION
+#      - STR_ALIEN_REPRODUCTION
     unlocks:
       - STR_ALIEN_CONTAINMENT
   - name: STR_MUTON_CORPSE
@@ -437,7 +437,7 @@ research:
     needItem: true
     requires:
       - STR_ALIEN_SURGERY
-      - STR_ALIEN_REPRODUCTION
+#      - STR_ALIEN_REPRODUCTION
     unlocks:
       - STR_ALIEN_CONTAINMENT
   - name: STR_ETHEREAL_CORPSE
@@ -447,7 +447,7 @@ research:
     needItem: true
     requires:
       - STR_ALIEN_SURGERY
-      - STR_ALIEN_REPRODUCTION
+#      - STR_ALIEN_REPRODUCTION
     unlocks:
       - STR_ALIEN_CONTAINMENT
   - name: STR_WASPITE_CORPSE
@@ -457,7 +457,7 @@ research:
     needItem: true
     requires:
       - STR_ALIEN_SURGERY
-      - STR_ALIEN_REPRODUCTION
+#      - STR_ALIEN_REPRODUCTION
     unlocks:
       - STR_ALIEN_CONTAINMENT
   - name: STR_ZOMBIE_CORPSE #note Can't get one of these
@@ -467,7 +467,7 @@ research:
     needItem: true
     requires:
       - STR_ALIEN_SURGERY
-      - STR_ALIEN_REPRODUCTION
+#      - STR_ALIEN_REPRODUCTION
     unlocks:
       - STR_ALIEN_CONTAINMENT
 #-------- Terrorist autopsies -------------------------------------------------#
@@ -478,7 +478,7 @@ research:
     needItem: true
     requires:
       - STR_ALIEN_SURGERY
-      - STR_ALIEN_REPRODUCTION
+#      - STR_ALIEN_REPRODUCTION
     unlocks:
       - STR_ALIEN_CONTAINMENT
   - name: STR_CYBERDISC_CORPSE
@@ -488,7 +488,7 @@ research:
     needItem: true
     requires:
       - STR_ALIEN_SURGERY
-      - STR_ALIEN_REPRODUCTION
+#      - STR_ALIEN_REPRODUCTION
     unlocks:
       - STR_ALIEN_CONTAINMENT
   - name: STR_CHRYSSALID_CORPSE
@@ -498,7 +498,7 @@ research:
     needItem: true
     requires:
       - STR_ALIEN_SURGERY
-      - STR_ALIEN_REPRODUCTION
+#      - STR_ALIEN_REPRODUCTION
     unlocks:
       - STR_ALIEN_CONTAINMENT
   - name: STR_SILACOID_CORPSE
@@ -508,7 +508,7 @@ research:
     needItem: true
     requires:
       - STR_ALIEN_SURGERY
-      - STR_ALIEN_REPRODUCTION
+#      - STR_ALIEN_REPRODUCTION
     unlocks:
       - STR_ALIEN_CONTAINMENT
   - name: STR_CELATID_CORPSE
@@ -518,7 +518,7 @@ research:
     needItem: true
     requires:
       - STR_ALIEN_SURGERY
-      - STR_ALIEN_REPRODUCTION
+#      - STR_ALIEN_REPRODUCTION
     unlocks:
       - STR_ALIEN_CONTAINMENT
   - name: STR_SECTOPOD_CORPSE
@@ -528,7 +528,7 @@ research:
     needItem: true
     requires:
       - STR_ALIEN_SURGERY
-      - STR_ALIEN_REPRODUCTION
+#      - STR_ALIEN_REPRODUCTION
     unlocks:
       - STR_ALIEN_CONTAINMENT
   - name: STR_CYBERMITE_CORPSE
@@ -538,7 +538,7 @@ research:
     needItem: true
     requires:
       - STR_ALIEN_SURGERY
-      - STR_ALIEN_REPRODUCTION
+#      - STR_ALIEN_REPRODUCTION
     unlocks:
       - STR_ALIEN_CONTAINMENT
 #---- aLien Interrogations ----------------------------------------------------#
@@ -550,7 +550,7 @@ research:
     needItem: true
     requires:
       - STR_EXAMINATION_ROOM
-      - STR_ALIEN_REPRODUCTION
+      - STR_ALIEN_REPRODUCTION #redundant; to interrogate needs Containment, which needs corpse, which needs Reproduction. Solution, remove Reproduction from autopsy requirement
     unlocks:
       - STR_ALIEN_ORIGINS
   - name: STR_FLOATER_NAVIGATOR

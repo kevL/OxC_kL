@@ -41,12 +41,14 @@
 
 namespace OpenXcom
 {
+
 /**
- * Initializes all the elements in the research list screen.
+ * List that allows player to choose what to research.
+ * @note Initializes all the elements in the research list screen.
  * @param base - pointer to the Base to get info from
  */
 NewResearchListState::NewResearchListState(
-		Base* base)
+		Base* const base)
 	:
 		_base(base),
 		_cutoff(-1),
@@ -54,10 +56,10 @@ NewResearchListState::NewResearchListState(
 {
 	_screen = false;
 
-	_window			= new Window(this, 230, 150, 45, 25, POPUP_BOTH);
+	_window			= new Window(this, 230, 160, 45, 25, POPUP_BOTH);
 	_txtTitle		= new Text(214, 16, 53, 33);
-	_lstResearch	= new TextList(190, 105, 61, 44);
-	_btnCancel		= new TextButton(214, 16, 53, 152);
+	_lstResearch	= new TextList(190, 113, 61, 44);
+	_btnCancel		= new TextButton(214, 16, 53, 162);
 
 	setInterface("selectNewResearch");
 
@@ -93,6 +95,12 @@ NewResearchListState::NewResearchListState(
 					(ActionHandler)& NewResearchListState::btnCancelClick,
 					Options::keyOkKeypad);
 }
+
+/**
+ * dTor.
+ */
+NewResearchListState::~NewResearchListState()
+{}
 
 /**
  * Initializes the screen and fills the list with ResearchProjects.

@@ -48,7 +48,8 @@ namespace OpenXcom
 {
 
 /**
- * Initializes all the elements in the productions list screen.
+ * List that allows player to choose what to manufacture.
+ * @note Initializes all the elements in the productions list screen.
  * @param base - pointer to the Base to get info from
  */
 NewManufactureListState::NewManufactureListState(
@@ -59,7 +60,7 @@ NewManufactureListState::NewManufactureListState(
 {
 	_screen = false;
 
-	_window			= new Window(this, 320, 156, 0, 22, POPUP_BOTH);
+	_window			= new Window(this, 320, 162, 0, 23, POPUP_BOTH);
 
 	_txtTitle		= new Text(320, 16, 16, 30);
 
@@ -68,10 +69,10 @@ NewManufactureListState::NewManufactureListState(
 
 	_cbxCategory	= new ComboBox(this, 134, 16, 179, 30);
 
-	_lstManufacture	= new TextList(285, 97, 16, 55);
+	_lstManufacture	= new TextList(285, 105, 16, 55);
 
-	_btnCostTable	= new TextButton(142, 16,  16, 154);
-	_btnCancel		= new TextButton(142, 16, 162, 154);
+	_btnCostTable	= new TextButton(142, 16,  16, 162);
+	_btnCancel		= new TextButton(142, 16, 162, 162);
 
 	setInterface("selectNewManufacture");
 
@@ -141,10 +142,16 @@ NewManufactureListState::NewManufactureListState(
 		}
 	}
 
-	_cbxCategory->setBackgroundFill(57); // green <- TODO: put this in Interfaces.rul
+	_cbxCategory->setBackgroundFill(58); // green <- TODO: put this in Interfaces.rul
 	_cbxCategory->setOptions(_catStrings);
 	_cbxCategory->onChange((ActionHandler)& NewManufactureListState::cbxCategoryChange);
 }
+
+/**
+ * dTor.
+ */
+NewManufactureListState::~NewManufactureListState()
+{}
 
 /**
  * Initializes state - fills list with possible productions.

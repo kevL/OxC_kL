@@ -4872,7 +4872,7 @@
 	"../Savegame/Production.h"
 	"../Savegame/SavedGame.h"
 
-1440342181 f:\git\openxcom\src\basescape\newmanufactureliststate.h
+1442610506 f:\git\openxcom\src\basescape\newmanufactureliststate.h
 	"../Engine/State.h"
 
 1440459233 f:\git\openxcom\src\engine\screen.h
@@ -4938,7 +4938,7 @@
 	"../Savegame/Base.h"
 	"../Savegame/SavedGame.h"
 
-1442518272 source:f:\git\openxcom\src\basescape\newresearchliststate.cpp
+1442610523 source:f:\git\openxcom\src\basescape\newresearchliststate.cpp
 	"NewResearchListState.h"
 	"ResearchInfoState.h"
 	"../Engine/Game.h"
@@ -4952,7 +4952,7 @@
 	"../Savegame/ResearchProject.h"
 	"../Savegame/SavedGame.h"
 
-1432463737 f:\git\openxcom\src\basescape\newresearchliststate.h
+1442610242 f:\git\openxcom\src\basescape\newresearchliststate.h
 	"../Engine/State.h"
 
 1430149549 f:\git\openxcom\src\basescape\researchinfostate.h
@@ -8399,7 +8399,7 @@
 	"../Ruleset/RuleRegion.h"
 	"../Ruleset/Ruleset.h"
 
-1442546196 source:f:\git\openxcom\src\savegame\base.cpp
+1442549385 source:f:\git\openxcom\src\savegame\base.cpp
 	"Base.h"
 	"BaseFacility.h"
 	"Craft.h"
@@ -10392,10 +10392,10 @@
 1432287660 source:f:\git\openxcom\src\engine\optioninfo.cpp
 	"OptionInfo.h"
 
-1440462930 f:\git\openxcom\src\interface\combobox.h
+1442612274 f:\git\openxcom\src\interface\combobox.h
 	"../Engine/InteractiveSurface.h"
 
-1440356203 source:f:\git\openxcom\src\interface\combobox.cpp
+1442612370 source:f:\git\openxcom\src\interface\combobox.cpp
 	"ComboBox.h"
 	"TextButton.h"
 	"TextList.h"

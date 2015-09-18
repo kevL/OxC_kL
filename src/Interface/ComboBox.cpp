@@ -33,14 +33,6 @@
 namespace OpenXcom
 {
 
-const int
-	ComboBox::MARGIN_HORIZONTAL	= 3, // was 2
-	ComboBox::MARGIN_VERTICAL	= 3,
-	ComboBox::MAX_ITEMS			= 10,
-	ComboBox::BUTTON_WIDTH		= 14,
-	ComboBox::TEXT_HEIGHT		= 8;
-
-
 /**
  * Sets up a combobox with the specified size and position.
  * @param state 	- pointer to state the combobox belongs to
@@ -66,7 +58,7 @@ ComboBox::ComboBox(
 		_lang(0),
 		_toggled(false)
 {
-	_button = new TextButton(width, height, x,y);
+	_button = new TextButton(width,height, x,y);
 	_arrow	= new Surface(
 						11,
 						8,
@@ -75,12 +67,12 @@ ComboBox::ComboBox(
 	_window	= new Window(
 						state,
 						width,
-						(MAX_ITEMS * 8 + MARGIN_VERTICAL * 2) + 1,
+						(ROWS_DEFAULT * 8 + MARGIN_VERTICAL * 2) + 1,
 						x,
 						y + height);
 	_list	= new TextList(
 						width - MARGIN_HORIZONTAL * 2 - BUTTON_WIDTH + 1,
-						(MAX_ITEMS * TEXT_HEIGHT) + 1,
+						(ROWS_DEFAULT * TEXT_HEIGHT) + 1,
 						x + MARGIN_HORIZONTAL,
 						y + height + MARGIN_VERTICAL);
 
@@ -303,23 +295,22 @@ void ComboBox::setSelected(size_t sel)
 }
 
 /**
- * Updates the size of the dropdown list based on the number of options available.
- * @param options - quantity of options
+ * Updates the vertical size of the dropdown list based on the number of options
+ * available.
+ * @param rows - quantity of rows/options
  */
-void ComboBox::setDropdown(int options) // private.
+void ComboBox::setDropdown(int rows) // private.
 {
 	int
-		items = std::min(
-						options,
-						MAX_ITEMS),
+//		rows = std::min(rows, ROWS_DEFAULT),
 		h = _button->getFont()->getHeight() + _button->getFont()->getSpacing(),
 		dy = (Options::baseYResolution - 200) / 2;
 
-	while (_window->getY() + items * h + MARGIN_VERTICAL * 2 > 200 + dy)
-		--items;
+	while (_window->getY() + rows * h + MARGIN_VERTICAL * 2 > 200 + dy)
+		--rows;
 
-	_window->setHeight((items * h + MARGIN_VERTICAL * 2) + 1);
-	_list->setHeight((items * h) + 1);
+	_window->setHeight((rows * h + MARGIN_VERTICAL * 2) + 1);
+	_list->setHeight((rows * h) + 1);
 }
 
 /**
@@ -372,8 +363,7 @@ void ComboBox::blit(Surface* surface)
 	Surface::blit(surface);
 	_list->invalidate();
 
-	if (_visible == true
-		&& _hidden == false)
+	if (_visible == true && _hidden == false)
 	{
 		_button->blit(surface);
 		_arrow->blit(surface);

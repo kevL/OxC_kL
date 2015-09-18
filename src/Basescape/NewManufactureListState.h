@@ -39,7 +39,7 @@ class Window;
 
 
 /**
- * Screen which list possible productions.
+ * Screen that lists possible productions.
  */
 class NewManufactureListState
 	:
@@ -70,8 +70,8 @@ private:
 	public:
 		/// Creates the state.
 		explicit NewManufactureListState(Base* const base);
-		///
-		// kL_note: no dTor ...
+		/// dTor.
+		~NewManufactureListState();
 
 		/// Initializes state.
 		void init();
