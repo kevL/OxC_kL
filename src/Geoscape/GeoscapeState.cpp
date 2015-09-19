@@ -2706,7 +2706,7 @@ void GeoscapeState::time1Day()
 		{
 			dead = false;
 
-			if ((*j)->getRecovery() > 0)
+			if ((*j)->getRecovery() != 0)
 			{
 				int chanceDeath = (*j)->getRecoveryPCT();
 				if (chanceDeath > 10)
@@ -2762,8 +2762,7 @@ void GeoscapeState::time1Day()
 				++j;
 		}
 
-		if ((*i)->getAvailablePsiLabs() != 0 // handle psionic training
-			&& Options::anytimePsiTraining == true)
+		if ((*i)->getAvailablePsiLabs() != 0) // handle psionic training
 		{
 			bool sortSoldiers = false;
 
@@ -2790,7 +2789,7 @@ void GeoscapeState::time1Day()
 				j != (*i)->getFacilities()->end();
 				++j)
 		{
-			if ((*j)->getBuildTime() > 0)
+			if ((*j)->getBuildTime() != 0)
 			{
 				(*j)->build();
 
@@ -3160,9 +3159,7 @@ void GeoscapeState::time1Month()
 		newRetaliation = true;
 	} */
 
-//	bool psi = false;
-
-/*	for (std::vector<Base*>::const_iterator // handle Psi-Training and initiate a new retaliation mission, if applicable
+/*	for (std::vector<Base*>::const_iterator // initiate a new retaliation mission if applicable
 			i = _gameSave->getBases()->begin();
 			i != _gameSave->getBases()->end();
 			++i)
@@ -3225,29 +3222,8 @@ void GeoscapeState::time1Month()
 					break;
 				}
 			}
-		} */
-
-/*		if (Options::anytimePsiTraining == false
-			&& (*i)->getAvailablePsiLabs() > 0)
-		{
-			psi = true;
-
-			for (std::vector<Soldier*>::const_iterator
-					j = (*i)->getSoldiers()->begin();
-					j != (*i)->getSoldiers()->end();
-					++j)
-			{
-				if ((*j)->isInPsiTraining() == true)
-				{
-					(*j)->trainPsi();
-//					(*j)->calcStatString(
-//									_rules->getStatStrings(),
-//									(Options::psiStrengthEval
-//									&& _gameSave->isResearched(_rules->getPsiRequirements())));
-				}
-			}
-		} */
-//	}
+		}
+	} */
 
 	_gameSave->monthlyFunding(); // handle Funding
 	_game->getResourcePack()->fadeMusic(_game, 1232);
@@ -3271,9 +3247,7 @@ void GeoscapeState::time1Month()
 					&& RNG::percent(pct + 5) == true)
 				{
 					(*i)->setDiscovered(true);
-					popup(new AlienBaseState( // NOTE: multiple popups may glitch.
-										*i,
-										this));
+					popup(new AlienBaseState(*i, this)); // NOTE: multiple popups may glitch.
 				}
 			}
 		}

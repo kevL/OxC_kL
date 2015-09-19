@@ -299,10 +299,10 @@ void UnitDieBState::convertToCorpse() // private.
 	if (carried == false)
 		_battleSave->removeCorpse(_unit);
 
-	const int unitSize = _unit->getArmor()->getSize() - 1;
+	const int armorSize = _unit->getArmor()->getSize() - 1;
 
 	// move inventory from unit to the ground for non-large units
-	const bool drop = unitSize == 0
+	const bool drop = armorSize == 0
 				   && carried == false
 				   && (Options::battleWeaponSelfDestruction == false
 						|| _unit->getOriginalFaction() != FACTION_HOSTILE
@@ -359,18 +359,18 @@ void UnitDieBState::convertToCorpse() // private.
 	{
 		Tile
 			* tile,
-			* explTile,
-			* explTile_b;
+			* tileExpl,
+			* tileExplBelow;
 		bool soundPlayed = false;
-		size_t part = static_cast<size_t>((unitSize + 1) * (unitSize + 1));
+		size_t part = static_cast<size_t>((armorSize + 1) * (armorSize + 1));
 
 		for (int // count downward to original position so that dropItem() correctly positions large units @ their NW quadrant.
-				y = unitSize;
+				y = armorSize;
 				y != -1;
 				--y)
 		{
 			for (int
-					x = unitSize;
+					x = armorSize;
 					x != -1;
 					--x)
 			{
@@ -382,28 +382,28 @@ void UnitDieBState::convertToCorpse() // private.
 				{
 					if (RNG::percent(6) == true)
 					{
-						explTile = tile;
-						explTile_b = _battleSave->getTile(explTile->getPosition() + Position(0,0,-1));
+						tileExpl = tile;
+						tileExplBelow = _battleSave->getTile(tileExpl->getPosition() + Position(0,0,-1));
 
-						while (explTile != NULL // safety.
-							&& explTile->getPosition().z > 0
-							&& explTile->getMapData(O_OBJECT) == NULL // only floors & content can catch fire.
-							&& explTile->getMapData(O_FLOOR) == NULL
-							&& explTile->hasNoFloor(explTile_b) == true)
+						while (tileExpl != NULL // safety.
+							&& tileExpl->getPosition().z > 0
+							&& tileExpl->getMapData(O_OBJECT) == NULL // only floors & content can catch fire.
+							&& tileExpl->getMapData(O_FLOOR) == NULL
+							&& tileExpl->hasNoFloor(tileExplBelow) == true)
 						{
-							explTile = explTile_b;
-							explTile_b = _battleSave->getTile(explTile->getPosition() + Position(0,0,-1));
+							tileExpl = tileExplBelow;
+							tileExplBelow = _battleSave->getTile(tileExpl->getPosition() + Position(0,0,-1));
 						}
 
-						if (explTile != NULL // safety.
-							&& explTile->getFire() == 0)
+						if (tileExpl != NULL // safety.
+							&& tileExpl->getFire() == 0)
 						{
-							explTile->addFire(explTile->getFuel() + RNG::generate(1,2)); // Could use a ruleset-factor in here.
-							explTile->addSmoke(std::max(
+							tileExpl->addFire(tileExpl->getFuel() + RNG::generate(1,2)); // Could use a ruleset-factor in here.
+							tileExpl->addSmoke(std::max(
 													1,
 													std::min(
 														6,
-														explTile->getFlammability() / 10)));
+														tileExpl->getFlammability() / 10)));
 
 							if (soundPlayed == false)
 							{
@@ -440,9 +440,7 @@ void UnitDieBState::convertToCorpse() // private.
 		}
 
 		// expose any units that were hiding behind dead unit
-		_parent->getTileEngine()->calculateFOV(
-											pos,
-											true);
+		_parent->getTileEngine()->calculateFOV(pos, true);
 	}
 }
 

@@ -24,6 +24,7 @@
 //#include <climits>
 
 #include "CraftArmorState.h"
+#include "PsiTrainingState.h"
 #include "SoldierInfoState.h"
 
 #include "../Battlescape/BattlescapeGenerator.h"
@@ -34,8 +35,6 @@
 //#include "../Engine/LocalizedText.h"
 //#include "../Engine/Options.h"
 #include "../Engine/Sound.h"
-
-#include "../Geoscape/AllocatePsiTrainingState.h"
 
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
@@ -116,9 +115,7 @@ SoldiersState::SoldiersState(Base* base)
 
 	_btnPsi->setText(tr("STR_PSIONIC_TRAINING"));
 	_btnPsi->onMouseClick((ActionHandler)& SoldiersState::btnPsiTrainingClick);
-	_btnPsi->setVisible(
-					Options::anytimePsiTraining == true
-					&& _base->getAvailablePsiLabs() != 0);
+	_btnPsi->setVisible(_base->getAvailablePsiLabs() != 0);
 
 	_btnArmor->setText(tr("STR_ARMOR"));
 	_btnArmor->onMouseClick((ActionHandler)& SoldiersState::btnArmorClick);
@@ -273,7 +270,7 @@ void SoldiersState::btnPsiTrainingClick(Action*)
 	_base->setRecallRow(
 					REC_SOLDIER,
 					_lstSoldiers->getScroll());
-	_game->pushState(new AllocatePsiTrainingState(_base));
+	_game->pushState(new PsiTrainingState(_base));
 }
 
 /* EG, functor; http://stackoverflow.com/questions/26844983/sort-a-pair-vector-in-c

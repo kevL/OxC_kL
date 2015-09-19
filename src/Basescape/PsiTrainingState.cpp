@@ -17,12 +17,10 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "AllocatePsiTrainingState.h"
+#include "PsiTrainingState.h"
 
 //#include <climits>
 //#include <sstream>
-
-#include "PsiTrainingState.h"
 
 #include "../Basescape/SoldierInfoState.h"
 
@@ -54,7 +52,7 @@ namespace OpenXcom
  * Initializes all the elements in the Psi Training screen.
  * @param base - pointer to the Base to get info from
  */
-AllocatePsiTrainingState::AllocatePsiTrainingState(Base* base)
+PsiTrainingState::PsiTrainingState(Base* base)
 	:
 		_base(base),
 		_sel(0)
@@ -94,15 +92,15 @@ AllocatePsiTrainingState::AllocatePsiTrainingState(Base* base)
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
 	_btnOk->setText(tr("STR_OK"));
-	_btnOk->onMouseClick((ActionHandler)& AllocatePsiTrainingState::btnOkClick);
+	_btnOk->onMouseClick((ActionHandler)& PsiTrainingState::btnOkClick);
 	_btnOk->onKeyboardPress(
-					(ActionHandler)& AllocatePsiTrainingState::btnOkClick,
+					(ActionHandler)& PsiTrainingState::btnOkClick,
 					Options::keyOk);
 	_btnOk->onKeyboardPress(
-					(ActionHandler)& AllocatePsiTrainingState::btnOkClick,
+					(ActionHandler)& PsiTrainingState::btnOkClick,
 					Options::keyOkKeypad);
 	_btnOk->onKeyboardPress(
-					(ActionHandler)& AllocatePsiTrainingState::btnOkClick,
+					(ActionHandler)& PsiTrainingState::btnOkClick,
 					Options::keyCancel);
 
 	_txtTitle->setText(tr("STR_PSIONIC_TRAINING"));
@@ -121,26 +119,26 @@ AllocatePsiTrainingState::AllocatePsiTrainingState(Base* base)
 	_txtPsiSkill->setText(tr("STR_PSIONIC_SKILL_HEADER"));
 	_txtTraining->setText(tr("STR_IN_TRAINING"));
 
-	_lstSoldiers->setColumns(4, 118, 48, 78, 34);
+	_lstSoldiers->setColumns(4, 118,48,78,34);
 	_lstSoldiers->setArrowColumn(193, ARROW_VERTICAL);
 	_lstSoldiers->setBackground(_window);
 	_lstSoldiers->setSelectable();
 	_lstSoldiers->setMargin();
-	_lstSoldiers->onMousePress((ActionHandler)& AllocatePsiTrainingState::lstSoldiersPress);
-	_lstSoldiers->onLeftArrowClick((ActionHandler)& AllocatePsiTrainingState::lstLeftArrowClick);
-	_lstSoldiers->onRightArrowClick((ActionHandler)& AllocatePsiTrainingState::lstRightArrowClick);
+	_lstSoldiers->onMousePress((ActionHandler)& PsiTrainingState::lstSoldiersPress);
+	_lstSoldiers->onLeftArrowClick((ActionHandler)& PsiTrainingState::lstLeftArrowClick);
+	_lstSoldiers->onRightArrowClick((ActionHandler)& PsiTrainingState::lstRightArrowClick);
 }
 
 /**
  * dTor.
  */
-AllocatePsiTrainingState::~AllocatePsiTrainingState()
+PsiTrainingState::~PsiTrainingState()
 {}
 
 /**
  * Resets the palette. uh, not really.
  */
-void AllocatePsiTrainingState::init()
+void PsiTrainingState::init()
 {
 	State::init();
 
@@ -160,25 +158,14 @@ void AllocatePsiTrainingState::init()
 			woststr1, // strength
 			woststr2; // skill
 
-//		const int minPsi = (*i)->getRules()->getMinStats().psiSkill;
-
-/*		if ((*i)->getCurrentStats()->psiSkill > 0) // >= minPsi
-//			|| (Options::psiStrengthEval == true
-//				&& _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements()) == true))
+		if ((*i)->getCurrentStats()->psiSkill != 0)
 		{
 			woststr1 << (*i)->getCurrentStats()->psiStrength;
-		}
-		else
-			woststr1 << tr("STR_UNKNOWN").c_str(); */
-
-		if ((*i)->getCurrentStats()->psiSkill > 0) // >= minPsi)
-		{
-			woststr1 << (*i)->getCurrentStats()->psiStrength;
-			woststr2 << (*i)->getCurrentStats()->psiSkill; // << "/+" << (*i)->getImprovement();
+			woststr2 << (*i)->getCurrentStats()->psiSkill;
 		}
 		else
 		{
-			woststr2 << tr("STR_UNKNOWN").c_str(); // woststr2 << "0/+0";
+			woststr2 << tr("STR_UNKNOWN").c_str();
 			woststr1 << tr("STR_UNKNOWN").c_str();
 		}
 
@@ -201,10 +188,7 @@ void AllocatePsiTrainingState::init()
 						woststr1.str().c_str(),
 						woststr2.str().c_str(),
 						wst.c_str());
-
-		_lstSoldiers->setRowColor(
-								row,
-								color);
+		_lstSoldiers->setRowColor(row, color);
 	}
 
 	_lstSoldiers->scrollTo(_base->getRecallRow(REC_SOLDIER));
@@ -215,7 +199,7 @@ void AllocatePsiTrainingState::init()
  * Returns to the previous screen.
  * @param action - pointer to an Action
  */
-void AllocatePsiTrainingState::btnOkClick(Action*)
+void PsiTrainingState::btnOkClick(Action*)
 {
 	_base->setRecallRow(
 					REC_SOLDIER,
@@ -228,7 +212,7 @@ void AllocatePsiTrainingState::btnOkClick(Action*)
  * RMB shows soldier info.
  * @param action - pointer to an Action
  */
-void AllocatePsiTrainingState::lstSoldiersPress(Action* action)
+void PsiTrainingState::lstSoldiersPress(Action* action)
 {
 	const double mx = action->getAbsoluteXMouse();
 	if (mx >= static_cast<double>(_lstSoldiers->getArrowsLeftEdge())
@@ -287,7 +271,7 @@ void AllocatePsiTrainingState::lstSoldiersPress(Action* action)
  * Reorders a soldier up.
  * @param action - pointer to an Action
  */
-void AllocatePsiTrainingState::lstLeftArrowClick(Action* action)
+void PsiTrainingState::lstLeftArrowClick(Action* action)
 {
 	_base->setRecallRow(
 					REC_SOLDIER,
@@ -338,7 +322,7 @@ void AllocatePsiTrainingState::lstLeftArrowClick(Action* action)
  * Reorders a soldier down.
  * @param action - pointer to an Action
  */
-void AllocatePsiTrainingState::lstRightArrowClick(Action* action)
+void PsiTrainingState::lstRightArrowClick(Action* action)
 {
 	_base->setRecallRow(
 					REC_SOLDIER,

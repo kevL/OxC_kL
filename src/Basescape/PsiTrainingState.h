@@ -29,11 +29,13 @@ namespace OpenXcom
 class Base;
 class Text;
 class TextButton;
+class TextList;
+class Soldier;
 class Window;
 
 
 /**
- * Screen shown monthly when the player has psi labs available.
+ * Screen that allocates soldiers to psionic training.
  */
 class PsiTrainingState
 	:
@@ -41,24 +43,43 @@ class PsiTrainingState
 {
 
 private:
-	std::vector<Base*> _bases;
-	std::vector<TextButton*> _btnBases;
+	int _labSpace;
+	size_t _sel;
 
-	Text* _txtTitle;
+	Base* _base;
+	Text
+		* _txtBaseLabel,
+		* _txtName,
+		* _txtPsiSkill,
+		* _txtPsiStrength,
+		* _txtRemaining,
+		* _txtTitle,
+		* _txtTraining;
 	TextButton* _btnOk;
+	TextList* _lstSoldiers;
 	Window* _window;
 
-	/// Handler for clicking the OK button.
-	void btnOkClick(Action* action);
-	/// Handler for clicking a Base button.
-	void btnBaseBtnClick(Action* action);
+	std::vector<Soldier*> _soldiers;
 
 
 	public:
 		/// Creates the Psi Training state.
-		PsiTrainingState();
+		explicit PsiTrainingState(Base* base);
 		/// Cleans up the Psi Training state.
 		~PsiTrainingState();
+
+		/// Refreshes the soldier-list.
+		void init();
+
+		/// Handler for clicking the OK button.
+		void btnOkClick(Action* action);
+		/// Handler for clicking the Soldiers list.
+		void lstSoldiersPress(Action* action);
+
+		/// Handler for clicking the Soldiers reordering button.
+		void lstLeftArrowClick(Action* action);
+		/// Handler for clicking the Soldiers reordering button.
+		void lstRightArrowClick(Action* action);
 };
 
 }

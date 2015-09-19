@@ -44,9 +44,7 @@ class MonthlyReportState
 {
 
 private:
-	bool
-		_gameOver;
-//		_psi;
+	bool _gameOver;
 	int
 		_deltaFunds,
 		_ratingLast,
@@ -84,7 +82,6 @@ private:
 	public:
 		/// Creates the Monthly Report state.
 		MonthlyReportState();
-//				bool psi);
 		/// Cleans up the Monthly Report state.
 		~MonthlyReportState();
 

@@ -1157,8 +1157,6 @@ en-US:
   STR_AUTOSAVE_FREQUENCY_DESC: "Number of battlescape turns that elapse between automatic saves."
   STR_ALLOWPSIONICCAPTURE: "Allow psi-capture"
   STR_ALLOWPSIONICCAPTURE_DESC: "Mind-controlling all remaining aLiens results in victory, and they count as live captures."
-  STR_ANYTIMEPSITRAINING: "Psionic training at any time"
-  STR_ANYTIMEPSITRAINING_DESC: "Allows assigning soldiers to psionic training at any time of the month. Remember, initial training takes from 30 to 60 days."
   STR_SKIPNEXTTURNSCREEN: "Skip \"Next Turn\" screen"
   STR_SKIPNEXTTURNSCREEN_DESC: "\"Next Turn\" screens during battle are advanced automatically after a short delay."
   STR_NOT_ENOUGH_SPACE: "Not Enough Space!"

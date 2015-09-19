@@ -24,7 +24,6 @@
 //#include <sstream>
 
 #include "DefeatState.h"
-//#include "PsiTrainingState.h"
 
 #include "../Battlescape/CeremonyState.h"
 
@@ -57,12 +56,9 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Monthly Report screen.
-// * @param psi - true to show psi training afterwards
  */
 MonthlyReportState::MonthlyReportState()
-//		bool psi)
 	:
-//		_psi(psi),
 		_gameOver(false),
 		_ratingTotal(0),
 		_deltaFunds(0),
@@ -72,10 +68,10 @@ MonthlyReportState::MonthlyReportState()
 	_window		= new Window(this, 320, 200);
 	_txtTitle	= new Text(300, 17, 10, 8);
 
-	_txtMonth	= new Text(110, 9, 16, 24);
+	_txtMonth	= new Text(110, 9,  16, 24);
 	_txtRating	= new Text(178, 9, 126, 24);
 
-	_txtChange	= new Text(288, 9, 16, 32);
+	_txtChange	= new Text(288,   9, 16, 32);
 	_txtDesc	= new Text(288, 140, 16, 40);
 
 	_btnOk		= new TextButton(288, 16, 16, 177);
@@ -494,9 +490,6 @@ void MonthlyReportState::btnOkClick(Action*)
 
 		if (_soldiersMedalled.empty() == false)
 			_game->pushState(new CeremonyState(_soldiersMedalled));
-
-//		if (_psi == true)
-//			_game->pushState(new PsiTrainingState());
 
 		if (_gameSave->isIronman() == true)
 			_game->pushState(new SaveGameState(

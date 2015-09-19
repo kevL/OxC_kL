@@ -30,6 +30,7 @@
 #include "ManufactureState.h"
 #include "MiniBaseView.h"
 #include "MonthlyCostsState.h"
+#include "PsiTrainingState.h"
 #include "PurchaseState.h"
 #include "ResearchState.h"
 #include "SellState.h"
@@ -46,7 +47,6 @@
 //#include "../Engine/Options.h"
 #include "../Engine/Sound.h"
 
-#include "../Geoscape/AllocatePsiTrainingState.h"
 #include "../Geoscape/BuildNewBaseState.h"
 #include "../Geoscape/GeoscapeState.h"	// kL_geoMusicPlaying
 #include "../Geoscape/Globe.h"			// kL_reCenter
@@ -410,18 +410,15 @@ void BasescapeState::setBase(Base* base)
 	}
 }
 
-/**
+/*
  * Goes to the Build New Base screen.
  * @param action - pointer to an Action
- */
-/* void BasescapeState::btnNewBaseClick(Action*)
+ *
+void BasescapeState::btnNewBaseClick(Action*)
 {
 	Base* base = new Base(_game->getRuleset());
-
 	_game->popState();
-	_game->pushState(new BuildNewBaseState(
-										base,
-										_globe));
+	_game->pushState(new BuildNewBaseState(base, _globe));
 } */
 
 /**
@@ -430,9 +427,7 @@ void BasescapeState::setBase(Base* base)
  */
 void BasescapeState::btnBaseInfoClick(Action*)
 {
-	_game->pushState(new BaseInfoState(
-									_base,
-									this));
+	_game->pushState(new BaseInfoState(_base, this));
 }
 
 /**
@@ -469,9 +464,7 @@ void BasescapeState::btnCraftsClick(Action*)
  */
 void BasescapeState::btnAliens(Action*)
 {
-	_game->pushState(new AlienContainmentState(
-											_base,
-											OPT_GEOSCAPE));
+	_game->pushState(new AlienContainmentState(_base, OPT_GEOSCAPE));
 }
 
 /**
@@ -480,9 +473,7 @@ void BasescapeState::btnAliens(Action*)
  */
 void BasescapeState::btnResearchClick(Action*)
 {
-	_game->pushState(new ResearchState(
-									_base,
-									this));
+	_game->pushState(new ResearchState(_base, this));
 }
 
 /**
@@ -491,9 +482,7 @@ void BasescapeState::btnResearchClick(Action*)
  */
 void BasescapeState::btnManufactureClick(Action*)
 {
-	_game->pushState(new ManufactureState(
-									_base,
-									this));
+	_game->pushState(new ManufactureState(_base, this));
 }
 
 /**
@@ -547,9 +536,7 @@ void BasescapeState::btnIncTransClick(Action*)
  */
 void BasescapeState::btnFacilitiesClick(Action*)
 {
-	_game->pushState(new BuildFacilitiesState(
-										_base,
-										this));
+	_game->pushState(new BuildFacilitiesState(_base, this));
 }
 
 /**
@@ -578,100 +565,81 @@ void BasescapeState::viewLeftClick(Action*)
 		_game->pushState(new MonthlyCostsState(_base));
 		bPop = true;
 	}
-	else if (fac->getBuildTime() > 0)
-		return;
-	else if (fac->getRules()->getCrafts() > 0)
+	else if (fac->getBuildTime() == 0)
 	{
-		for (size_t
-				i = 0;
-				i != _base->getCrafts()->size();
-				++i)
+		if (fac->getRules()->getCrafts() != 0)
 		{
-			if (fac->getCraft() == NULL
-				|| fac->getCraft()->getStatus() == "STR_OUT")
+			for (size_t
+					i = 0;
+					i != _base->getCrafts()->size();
+					++i)
 			{
-				_game->pushState(new CraftsState(_base));
+				if (fac->getCraft() == NULL
+					|| fac->getCraft()->getStatus() == "STR_OUT")
+				{
+					_game->pushState(new CraftsState(_base));
+					bPop = true;
+					break;
+				}
+				else if (fac->getCraft() == _base->getCrafts()->at(i))
+				{
+					_game->pushState(new CraftInfoState(_base, i));
+					return;
+				}
+			}
+		}
+		else if (fac->getRules()->getStorage() != 0)
+		{
+			if (_base->getItems()->getTotalQuantity() != 0)
+			{
+				_game->pushState(new StoresState(_base));
 				bPop = true;
-
-				break;
 			}
-			else if (fac->getCraft() == _base->getCrafts()->at(i))
+		}
+		else if (fac->getRules()->getPersonnel() != 0)
+		{
+			if (_base->getSoldiers()->empty() == false)
 			{
-				_game->pushState(new CraftInfoState(
-												_base,
-												i));
-				return;
+				_game->pushState(new SoldiersState(_base));
+				bPop = true;
 			}
 		}
-	}
-	else if (fac->getRules()->getStorage() > 0)
-	{
-		if (_base->getItems()->getTotalQuantity() != 0)
+		else if (fac->getRules()->getPsiLaboratories() != 0)
 		{
-			_game->pushState(new StoresState(_base));
+			_game->pushState(new PsiTrainingState(_base));
 			bPop = true;
 		}
-		else
-			return;
-	}
-	else if (fac->getRules()->getPersonnel() > 0)
-	{
-		if (_base->getSoldiers()->empty() == false)
+		else if (fac->getRules()->getLaboratories() != 0)
 		{
-			_game->pushState(new SoldiersState(_base));
+			_game->pushState(new ResearchState(_base, this));
 			bPop = true;
 		}
-		else
-			return;
-	}
-	else if (fac->getRules()->getPsiLaboratories() > 0)
-	{
-		if (Options::anytimePsiTraining == true)
+		else if (fac->getRules()->getWorkshops() != 0)
 		{
-			_game->pushState(new AllocatePsiTrainingState(_base));
+			_game->pushState(new ManufactureState(_base, this));
 			bPop = true;
 		}
-		else
+		else if (fac->getRules()->getAliens() != 0)
+		{
+			_game->pushState(new AlienContainmentState(_base, OPT_GEOSCAPE));
+			bPop = true;
+		}
+		else if (fac->getRules()->isLift() == true) // Lift has radar range (cf. next)
+		{
+			_game->pushState(new BaseDetectionState(_base));
 			return;
-	}
-	else if (fac->getRules()->getLaboratories() > 0)
-	{
-		_game->pushState(new ResearchState(
-										_base,
-										this));
-		bPop = true;
-	}
-	else if (fac->getRules()->getWorkshops() > 0)
-	{
-		_game->pushState(new ManufactureState(
-											_base,
-											this));
-		bPop = true;
-	}
-	else if (fac->getRules()->getAliens() > 0)
-	{
-		_game->pushState(new AlienContainmentState(
-												_base,
-												OPT_GEOSCAPE));
-		bPop = true;
-	}
-	else if (fac->getRules()->isLift() == true) // Lift has radar range (cf. next)
-	{
-		_game->pushState(new BaseDetectionState(_base));
-		return;
-	}
-	else if (fac->getRules()->getRadarRange() > 0
-		|| fac->getRules()->isMindShield() == true
-		|| fac->getRules()->isHyperwave() == true)
-	{
-		_game->pushState(new BaseInfoState(
-										_base,
-										this));
-		bPop = true;
-/*		_game->getSavedGame()->setGlobeLongitude(_base->getLongitude());
-		_game->getSavedGame()->setGlobeLatitude(_base->getLatitude());
-		kL_reCenter = true;
-		_game->popState(); */
+		}
+		else if (fac->getRules()->getRadarRange() != 0
+			|| fac->getRules()->isMindShield() == true
+			|| fac->getRules()->isHyperwave() == true)
+		{
+			_game->pushState(new BaseInfoState(_base, this));
+			bPop = true;
+/*			_game->getSavedGame()->setGlobeLongitude(_base->getLongitude());
+			_game->getSavedGame()->setGlobeLatitude(_base->getLatitude());
+			kL_reCenter = true;
+			_game->popState(); */
+		}
 	}
 
 	if (bPop == true)

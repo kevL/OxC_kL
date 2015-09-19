@@ -318,6 +318,7 @@
 #include "./Basescape/MonthlyCostsState.h"
 #include "./Basescape/PlaceStartFacilityState.h"
 #include "./Basescape/BaseDetectionState.h"
+#include "./Basescape/PsiTrainingState.h"
 
 #include "./Geoscape/NewPossibleManufactureState.h"
 #include "./Geoscape/LowFuelState.h"
@@ -350,8 +351,6 @@
 #include "./Geoscape/DefeatState.h"
 #include "./Geoscape/ConfirmCydoniaState.h"
 #include "./Geoscape/DogfightState.h"
-#include "./Geoscape/PsiTrainingState.h"
-#include "./Geoscape/AllocatePsiTrainingState.h"
 #include "./Geoscape/ConfirmLandingState.h"
 #include "./Geoscape/ConfirmDestinationState.h"
 #include "./Geoscape/ItemsArrivingState.h"

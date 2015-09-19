@@ -45,8 +45,8 @@ namespace OpenXcom
  * Initializes a new soldier, either blank or randomly generated.
  * @param solRule	- pointer to RuleSoldier
  * @param armorRule	- pointer to RuleArmor
- * @param names	- pointer to a vector of pointers to SoldierNamePool (default NULL)
- * @param id	- unique soldier ID for soldier generation (default 0)
+ * @param names		- pointer to a vector of pointers to SoldierNamePool (default NULL)
+ * @param id		- unique soldier ID for soldier generation (default 0)
  */
 Soldier::Soldier(
 		const RuleSoldier* const solRule,
@@ -64,8 +64,6 @@ Soldier::Soldier(
 		_missions(0),
 		_kills(0),
 		_recovery(0),
-//		_gainPsiSkl(0),
-//		_gainPsiStr(0),
 		_psiTraining(false),
 		_recentlyPromoted(false)
 {
@@ -168,8 +166,6 @@ void Soldier::load(
 	_kills			= node["kills"]						.as<int>(_kills);
 	_recovery		= node["recovery"]					.as<int>(_recovery);
 	_psiTraining	= node["psiTraining"]				.as<bool>(_psiTraining);
-//	_gainPsiSkl		= node["gainPsiSkl"]				.as<int>(_gainPsiSkl);
-//	_gainPsiStr		= node["gainPsiStr"]				.as<int>(_gainPsiStr);
 
 	const RuleArmor* armorRule = rules->getArmor(node["armor"].as<std::string>());
 	if (armorRule == NULL)
@@ -219,8 +215,6 @@ YAML::Node Soldier::save() const
 	node["missions"]		= _missions;
 	node["kills"]			= _kills;
 	node["armor"]			= _armorRule->getType();
-//	node["gainPsiSkl"]		= _gainPsiSkl;
-//	node["gainPsiStr"]		= _gainPsiStr;
 
 	if (_craft != NULL)
 		node["craft"]		= _craft->saveId();
@@ -532,105 +526,9 @@ std::vector<EquipmentLayoutItem*>* Soldier::getEquipmentLayout()
 	return &_equipmentLayout;
 }
 
-/*
- * Trains this Soldier's psychic abilities after 1 month.
- * @note Called from GeoscapeState per 1month.
- * kL_note: I don't use this.
- *
-void Soldier::trainPsi()
-{
-	const int
-		capPsiSkl = _solRule->getStatCaps().psiSkill,
-		capPsiStr = _solRule->getStatCaps().psiStrength;
-
-	_gainPsiSkl =
-	_gainPsiStr = 0;
-
-	// -10 days - tolerance threshold for switch from anytimePsiTraining option.
-	// If soldier has psiskill -10..-1, he was trained 20..59 days. 81.7% probability, he was trained more that 30 days.
-	if (_currentStats.psiSkill < -10 + _solRule->getMinStats().psiSkill)
-		_currentStats.psiSkill = _solRule->getMinStats().psiSkill;
-	else if (_currentStats.psiSkill <= _solRule->getMaxStats().psiSkill)
-		_gainPsiSkl = RNG::generate(
-								_solRule->getMaxStats().psiSkill,
-								_solRule->getMaxStats().psiSkill + _solRule->getMaxStats().psiSkill / 2);
-	else
-	{
-		if (_currentStats.psiSkill <= (capPsiSkl / 2))
-			_gainPsiSkl = RNG::generate(5,12);
-		else if (_currentStats.psiSkill < capPsiSkl)
-			_gainPsiSkl = RNG::generate(1,3);
-
-		if (Options::allowPsiStrengthImprovement == true)
-		{
-			if (_currentStats.psiStrength <= (capPsiStr / 2))
-				_gainPsiStr = RNG::generate(5,12);
-			else if (_currentStats.psiStrength < capPsiStr)
-				_gainPsiStr = RNG::generate(1,3);
-		}
-	}
-
-	_currentStats.psiSkill += _gainPsiSkl;
-	if (_currentStats.psiSkill > capPsiSkl)
-		_currentStats.psiSkill = capPsiSkl;
-
-	_currentStats.psiStrength += _gainPsiStr;
-	if (_currentStats.psiStrength > capPsiStr)
-		_currentStats.psiStrength = capPsiStr;
-} */
-/* kL_begin:
-// http://www.ufopaedia.org/index.php?title=Psi_Skill
-// -End of Month PsiLab Increase-
-// Skill	Range	Average
-// 0-16		16-24	20.0
-// 17-50	5-12	8.5
-// 51+		1-3		2.0
-
-	_gainPsiSkl = 0;
-	int const psiCap = _solRule->getStatCaps().psiSkill; // kL
-
-	// -10 days : tolerance threshold for switch from anytimePsiTraining option.
-	// If soldier has psiSkill -10..-1, he was trained 20..59 days.
-	// 81.7% probability, he was trained more than 30 days.
-	if (_currentStats.psiSkill < _solRule->getMinStats().psiSkill - 10)
-	{
-		_currentStats.psiSkill = _solRule->getMinStats().psiSkill;
-	}
-//kL	else if (_currentStats.psiSkill <= _solRule->getMaxStats().psiSkill)
-	else if (_currentStats.psiSkill < 17) // kL
-	{
-//kL		int max = _solRule->getMaxStats().psiSkill + _solRule->getMaxStats().psiSkill / 2;
-//kL		_gainPsiSkl = RNG::generate(_solRule->getMaxStats().psiSkill, max);
-		_gainPsiSkl = RNG::generate(16, 24);
-	}
-//kL	else if (_currentStats.psiSkill <= _solRule->getStatCaps().psiSkill / 2)
-//	else if (_currentStats.psiSkill <= _solRule->getStatCaps().psiSkill / 4)		// kL
-	else if (_currentStats.psiSkill < 51)										// kL
-	{
-		_gainPsiSkl = RNG::generate(5, 12);
-	}
-//kL	else if (_currentStats.psiSkill < _solRule->getStatCaps().psiSkill)
-	else if (_currentStats.psiSkill < psiCap)
-	{
-		_gainPsiSkl = RNG::generate(1, 3);
-	}
-
-	_currentStats.psiSkill += _gainPsiSkl;
-
-	if (_currentStats.psiSkill > psiCap)	// kL
-	{
-		_currentStats.psiSkill = psiCap;	// kL
-	}
-
-	// kL_note: This isn't right; in Orig. the only way to increase psiSkill
-	// when it was over 100 is to keep the soldier in training.
-//kL	if (_currentStats.psiSkill > 100)
-//kL		_currentStats.psiSkill = 100;
-*/ // kL_end.
-
 /**
  * Trains this Soldier's psychic abilities once per day.
- * @note Called from GeoscapeState::time1Day() if Options::anytimePsiTraining is enabled.
+ * @note Called from GeoscapeState::time1Day().
  * @return, true if Soldier's psi-stat(s) increased
  */
 bool Soldier::trainPsiDay()
@@ -641,7 +539,6 @@ bool Soldier::trainPsiDay()
 	{
 		static const int PSI_PCT = 5; // % per day per soldier to become psionic-active
 
-//		_gainPsiSkl = 0; // was used in AllocatePsiTrainingState.
 //		if (_currentStats.psiSkill >= _solRule->getStatCaps().psiSkill)	// hard cap. Note this auto-caps psiStrength also
 //			return false;												// REMOVED: Allow psi to train past cap in PsiLabs.
 
@@ -665,7 +562,6 @@ bool Soldier::trainPsiDay()
 			{
 				ret = true;
 				++_currentStats.psiSkill;
-//				++_gainPsiSkl;
 			}
 
 			if (_currentStats.psiStrength < _solRule->getStatCaps().psiStrength
@@ -678,7 +574,6 @@ bool Soldier::trainPsiDay()
 				{
 					ret = true;
 					++_currentStats.psiStrength;
-//					++_gainPsiStr;
 				}
 			}
 		}
@@ -703,33 +598,6 @@ void Soldier::togglePsiTraining()
 {
 	_psiTraining = !_psiTraining;
 }
-
-/*
- * Gets this Soldier's psiSkill improvement during the current month.
- * @return, psi-skill improvement
- *
-int Soldier::getImprovement()
-{
-	return _gainPsiSkl;
-} */
-
-/*
- * Gets this Soldier's psiStrength improvement during the current month.
- * @return, psi-strength improvement
- *
-int Soldier::getPsiStrImprovement()
-{
-	return _gainPsiStr;
-} */
-
-/*
- * Returns this Soldier's death time.
- * @return, pointer to death data - NULL if no death has occurred
- *
-SoldierDeath* Soldier::getDeath() const
-{
-	return _death;
-} */
 
 /**
  * Kills this Soldier in Debriefing or the Geoscape.
