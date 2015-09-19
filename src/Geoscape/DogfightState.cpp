@@ -1221,11 +1221,15 @@ void DogfightState::updateDogfight()
 				if (RNG::percent((_diff + 1) * retalChance) == true)					// Check retaliation trigger.
 				{
 					std::string targetRegion;											// Spawn retaliation mission.
-					if (RNG::percent(62 - (_diff * 6)) == true)
-						targetRegion = _ufo->getAlienMission()->getRegion();			// Retaliation vs UFO's mission region.
-					else																// or Try to find the originating base.
-						targetRegion = _gameSave->locateRegion(*_craft->getBase())->getRules()->getType();
-					// TODO: If the base is removed, the mission is cancelled.
+					if (RNG::percent(_diff * 10 + 10) == true)
+						targetRegion = _gameSave->locateRegion(*_craft->getBase())->getRules()->getType();	// Try to find the originating base.
+						// TODO: If the base is removed, the mission is cancelled. nah.
+					else if (RNG::generate(0,1) == 0)
+						targetRegion = _ufo->getAlienMission()->getRegion();								// Retaliation vs UFO's mission region.
+					else
+						targetRegion = _gameSave->locateRegion(
+														_ufo->getLongitude(),
+														_ufo->getLatitude())->getRules()->getType();		// Retaliation vs UFO's shootdown region.
 
 					// Difference from original: No retaliation until final UFO lands (Original: Is spawned).
 					if (_game->getSavedGame()->findAlienMission(

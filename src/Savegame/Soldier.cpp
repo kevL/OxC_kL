@@ -171,7 +171,7 @@ void Soldier::load(
 //	_gainPsiSkl		= node["gainPsiSkl"]				.as<int>(_gainPsiSkl);
 //	_gainPsiStr		= node["gainPsiStr"]				.as<int>(_gainPsiStr);
 
-	RuleArmor* armorRule = rules->getArmor(node["armor"].as<std::string>());
+	const RuleArmor* armorRule = rules->getArmor(node["armor"].as<std::string>());
 	if (armorRule == NULL)
 		armorRule = rules->getArmor("STR_ARMOR_NONE_UC");
 
@@ -185,7 +185,7 @@ void Soldier::load(
 				++i)
 		{
 			EquipmentLayoutItem* const layoutItem = new EquipmentLayoutItem(*i);
-			if (rules->getInventory(layoutItem->getSlot()))
+			if (rules->getInventory(layoutItem->getSlot()) != NULL)
 				_equipmentLayout.push_back(layoutItem);
 			else
 				delete layoutItem;
@@ -193,15 +193,11 @@ void Soldier::load(
 	}
 
 	if (node["diary"])
-	{
-//		_diary = new SoldierDiary();
 		_diary->load(node["diary"]);
-	}
 
 //	calcStatString(
 //			rules->getStatStrings(),
-//			(Options::psiStrengthEval
-//				&& save->isResearched(rule->getPsiRequirements())));
+//			(Options::psiStrengthEval && save->isResearched(rule->getPsiRequirements())));
 }
 
 /**
