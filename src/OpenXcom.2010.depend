@@ -4356,7 +4356,7 @@
 
 1440012868 f:\git\openxcom\src\engine\localizedtext.h
 
-1442646135 f:\git\openxcom\src\savegame\soldier.h
+1442649827 f:\git\openxcom\src\savegame\soldier.h
 	"../Ruleset/RuleUnit.h"
 
 1432068221 f:\git\openxcom\src\ruleset\unit.h
@@ -4396,7 +4396,7 @@
 	"Soldier.h"
 	"../Ruleset/RuleAlienMission.h"
 
-1442645648 source:f:\git\openxcom\src\basescape\basescapestate.cpp
+1442648413 source:f:\git\openxcom\src\basescape\basescapestate.cpp
 	"BasescapeState.h"
 	"AlienContainmentState.h"
 	"BaseDetectionState.h"
@@ -5214,7 +5214,7 @@
 1431492838 f:\git\openxcom\src\savegame\soldierdeath.h
 	"GameTime.h"
 
-1442643647 source:f:\git\openxcom\src\basescape\soldiersstate.cpp
+1442648424 source:f:\git\openxcom\src\basescape\soldiersstate.cpp
 	"SoldiersState.h"
 	"CraftArmorState.h"
 	"PsiTrainingState.h"
@@ -6230,7 +6230,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1442647840 source:f:\git\openxcom\src\battlescape\unitdiebstate.cpp
+1442649353 source:f:\git\openxcom\src\battlescape\unitdiebstate.cpp
 	"UnitDieBState.h"
 	"BattlescapeState.h"
 	"Camera.h"
@@ -6485,7 +6485,7 @@
 	"OpenGL.h"
 	"Surface.h"
 
-1441863629 source:f:\git\openxcom\src\engine\options.cpp
+1442648386 source:f:\git\openxcom\src\engine\options.cpp
 	"Options.h"
 	"Options.inc.h"
 	"TargetConditionals.h"
@@ -6959,7 +6959,7 @@
 1442441486 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1442619942 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1442648638 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	"AlienBaseState.h"
 	"BaseDefenseState.h"
@@ -8595,7 +8595,7 @@
 1433868731 source:f:\git\openxcom\src\savegame\serializationhelper.cpp
 	"SerializationHelper.h"
 
-1442646171 source:f:\git\openxcom\src\savegame\soldier.cpp
+1442648721 source:f:\git\openxcom\src\savegame\soldier.cpp
 	"Soldier.h"
 	"Craft.h"
 	"EquipmentLayoutItem.h"
@@ -10387,7 +10387,7 @@
 
 1430149550 f:\git\openxcom\src\engine\optioninfo.h
 
-1441863629 f:\git\openxcom\src\engine\options.inc.h
+1442648320 f:\git\openxcom\src\engine\options.inc.h
 
 1432287660 source:f:\git\openxcom\src\engine\optioninfo.cpp
 	"OptionInfo.h"

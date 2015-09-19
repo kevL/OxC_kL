@@ -362,7 +362,7 @@ void UnitDieBState::convertToCorpse() // private.
 			* tileExpl,
 			* tileExplBelow;
 		bool soundPlayed = false;
-		size_t part = static_cast<size_t>((armorSize + 1) * (armorSize + 1));
+		size_t quadrant = static_cast<size_t>((armorSize + 1) * (armorSize + 1));
 
 		for (int // count downward to original position so that dropItem() correctly positions large units @ their NW quadrant.
 				y = armorSize;
@@ -422,7 +422,7 @@ void UnitDieBState::convertToCorpse() // private.
 				}
 
 				BattleItem* const corpse = new BattleItem(
-													_parent->getRuleset()->getItem(_unit->getArmor()->getCorpseBattlescape()[--part]),
+													_parent->getRuleset()->getItem(_unit->getArmor()->getCorpseBattlescape()[--quadrant]),
 													_battleSave->getNextItemId());
 				corpse->setUnit(_unit);
 

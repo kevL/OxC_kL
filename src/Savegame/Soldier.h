@@ -190,7 +190,7 @@ private:
 		/// Trains a soldier's psionic abilities.
 		bool trainPsiDay();
 		/// Returns whether the unit is in psi training or not
-		bool isInPsiTraining() const;
+		bool inPsiTraining() const;
 		/// Sets the psi training status
 		void togglePsiTraining();
 

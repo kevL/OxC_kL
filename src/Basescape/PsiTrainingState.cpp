@@ -171,7 +171,7 @@ void PsiTrainingState::init()
 
 		std::wstring wst;
 		Uint8 color;
-		if ((*i)->isInPsiTraining() == true)
+		if ((*i)->inPsiTraining() == true)
 		{
 			wst = tr("STR_YES");
 			color = _lstSoldiers->getSecondaryColor();
@@ -225,7 +225,7 @@ void PsiTrainingState::lstSoldiersPress(Action* action)
 
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		if (_base->getSoldiers()->at(_sel)->isInPsiTraining() == false)
+		if (_base->getSoldiers()->at(_sel)->inPsiTraining() == false)
 		{
 			if (_base->getUsedPsiLabs() < _base->getAvailablePsiLabs())
 			{

@@ -589,7 +589,7 @@ void SoldierInfoState::init()
 	_txtMissions->setText(tr("STR_MISSIONS").arg(_soldier->getMissions()));
 	_txtKills->setText(tr("STR_KILLS").arg(_soldier->getKills()));
 
-	_txtPsionic->setVisible(_soldier->isInPsiTraining());
+	_txtPsionic->setVisible(_soldier->inPsiTraining());
 
 //	const int minPsi = _soldier->getRules()->getMinStats().psiSkill;
 //		|| (Options::psiStrengthEval == true // for determination to show psiStrength

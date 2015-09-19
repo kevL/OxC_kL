@@ -586,7 +586,7 @@ bool Soldier::trainPsiDay()
  * Gets whether or not this Soldier is in psi training.
  * @return, true if training
  */
-bool Soldier::isInPsiTraining() const
+bool Soldier::inPsiTraining() const
 {
 	return _psiTraining;
 }

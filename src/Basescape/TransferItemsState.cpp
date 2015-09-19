@@ -607,7 +607,7 @@ void TransferItemsState::completeTransfer()
 				{
 					if (*j == _soldiers[i])
 					{
-						if ((*j)->isInPsiTraining() == true)
+						if ((*j)->inPsiTraining() == true)
 							(*j)->togglePsiTraining();
 
 						Transfer* const transfer = new Transfer(eta);
@@ -631,7 +631,7 @@ void TransferItemsState::completeTransfer()
 				{
 					if ((*j)->getCraft() == craft)
 					{
-						if ((*j)->isInPsiTraining() == true)
+						if ((*j)->inPsiTraining() == true)
 							(*j)->togglePsiTraining();
 
 						if (craft->getStatus() == "STR_OUT")

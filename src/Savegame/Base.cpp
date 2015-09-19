@@ -1943,7 +1943,7 @@ int Base::getUsedPsiLabs() const
 			i != _soldiers.end();
 			++i)
 	{
-		if ((*i)->isInPsiTraining() == true)
+		if ((*i)->inPsiTraining() == true)
 			++total;
 	}
 
@@ -2711,7 +2711,7 @@ void Base::destroyFacility(std::vector<BaseFacility*>::const_iterator pFac)
 					&& qty > 0;
 				++i)
 		{
-			if ((*i)->isInPsiTraining() == true)
+			if ((*i)->inPsiTraining() == true)
 			{
 				(*i)->togglePsiTraining();
 				--qty;
