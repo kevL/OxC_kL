@@ -544,7 +544,7 @@ private:
 	std::vector<size_t> _loftSet;
 	std::vector<std::pair<Uint8, Uint8> > _recolor;
 
-	RuleArmor* _armor;
+	const RuleArmor* _armor;
 	Soldier* _geoscapeSoldier;
 	RuleUnit* _unitRule;
 
@@ -803,7 +803,7 @@ private:
 				int armor,
 				UnitSide side);
 		/// Gets this unit's Armor.
-		RuleArmor* getArmor() const;
+		const RuleArmor* getArmor() const;
 		/// Gets this unit's armor value on a particular side.
 		int getArmor(UnitSide side) const;
 		/// Checks if this unit is wearing a PowerSuit.

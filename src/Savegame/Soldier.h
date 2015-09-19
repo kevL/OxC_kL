@@ -90,8 +90,8 @@ private:
 //		_statString;
 
 	Craft* _craft;
-	RuleArmor* _armor;
-	RuleSoldier* _rules;
+	const RuleArmor* _armorRule;
+	const RuleSoldier* _solRule;
 	SoldierDiary* _diary;
 
 	SoldierGender _gender;
@@ -108,9 +108,9 @@ private:
 	public:
 		/// Creates a new soldier.
 		Soldier(
-				RuleSoldier* rules,
-				RuleArmor* armor,
-				const std::vector<SoldierNamePool*>* names = NULL,
+				const RuleSoldier* const solRule,
+				const RuleArmor* const armorRule,
+				const std::vector<SoldierNamePool*>* const names = NULL,
 				int id = 0);
 		/// Cleans up the soldier.
 		~Soldier();
@@ -118,8 +118,7 @@ private:
 		/// Loads the soldier from YAML.
 		void load(
 				const YAML::Node& node,
-				const Ruleset* rule);
-//				SavedGame* save);
+				const Ruleset* const rules);
 		/// Saves the soldier to YAML.
 		YAML::Node save() const;
 
@@ -174,7 +173,7 @@ private:
 		bool isPromoted();
 
 		/// Gets the soldier armor.
-		RuleArmor* getArmor() const;
+		const RuleArmor* getArmor() const;
 		/// Sets the soldier armor.
 		void setArmor(RuleArmor* const armor);
 

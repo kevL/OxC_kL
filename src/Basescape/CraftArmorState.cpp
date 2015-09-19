@@ -195,7 +195,7 @@ void CraftArmorState::init()
 		}
 	}
 
-	_lstSoldiers->scrollTo(_base->getRecallSoldierRow());
+	_lstSoldiers->scrollTo(_base->getRecallRow(REC_SOLDIER));
 	_lstSoldiers->draw();
 }
 
@@ -205,7 +205,9 @@ void CraftArmorState::init()
  */
 void CraftArmorState::btnOkClick(Action*)
 {
-	_base->setRecallSoldierRow(_lstSoldiers->getScroll());
+	_base->setRecallRow(
+					REC_SOLDIER,
+					_lstSoldiers->getScroll());
 	_game->popState();
 }
 
@@ -223,7 +225,9 @@ void CraftArmorState::lstSoldiersPress(Action* action)
 		return;
 	}
 
-	_base->setRecallSoldierRow(_lstSoldiers->getScroll());
+	_base->setRecallRow(
+					REC_SOLDIER,
+					_lstSoldiers->getScroll());
 
 	size_t soldierId = _lstSoldiers->getSelectedRow();
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
@@ -281,7 +285,9 @@ void CraftArmorState::lstSoldiersPress(Action* action)
  */
 void CraftArmorState::lstLeftArrowClick(Action* action)
 {
-	_base->setRecallSoldierRow(_lstSoldiers->getScroll());
+	_base->setRecallRow(
+					REC_SOLDIER,
+					_lstSoldiers->getScroll());
 
 	const size_t row = _lstSoldiers->getSelectedRow();
 	if (row > 0)
@@ -302,13 +308,17 @@ void CraftArmorState::lstLeftArrowClick(Action* action)
 			}
 			else
 			{
-				_base->setRecallSoldierRow(_lstSoldiers->getScroll() - 1);
+				_base->setRecallRow(
+								REC_SOLDIER,
+								_lstSoldiers->getScroll() - 1);
 				_lstSoldiers->scrollUp(false);
 			}
 		}
 		else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 		{
-			_base->setRecallSoldierRow(_lstSoldiers->getScroll() + 1);
+			_base->setRecallRow(
+							REC_SOLDIER,
+							_lstSoldiers->getScroll() + 1);
 
 			_base->getSoldiers()->erase(_base->getSoldiers()->begin() + row);
 			_base->getSoldiers()->insert(
@@ -326,7 +336,9 @@ void CraftArmorState::lstLeftArrowClick(Action* action)
  */
 void CraftArmorState::lstRightArrowClick(Action* action)
 {
-	_base->setRecallSoldierRow(_lstSoldiers->getScroll());
+	_base->setRecallRow(
+					REC_SOLDIER,
+					_lstSoldiers->getScroll());
 
 	const size_t
 		qtySoldiers = _base->getSoldiers()->size(),
@@ -351,7 +363,9 @@ void CraftArmorState::lstRightArrowClick(Action* action)
 			}
 			else
 			{
-				_base->setRecallSoldierRow(_lstSoldiers->getScroll() + 1);
+				_base->setRecallRow(
+								REC_SOLDIER,
+								_lstSoldiers->getScroll() + 1);
 				_lstSoldiers->scrollDown(false);
 			}
 		}

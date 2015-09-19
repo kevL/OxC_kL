@@ -3577,7 +3577,7 @@ bool BattleUnit::getOverDose() const
 
 /**
  * Gets motion points for the motion scanner.
- * More points is a larger blip on the scanner.
+ * @note More points is a larger blip on the scanner.
  * @return, motion points
  */
 int BattleUnit::getMotionPoints() const
@@ -3589,7 +3589,7 @@ int BattleUnit::getMotionPoints() const
  * Gets the unit's armor.
  * @return, pointer to Armor
  */
-RuleArmor* BattleUnit::getArmor() const
+const RuleArmor* BattleUnit::getArmor() const
 {
 	return _armor;
 }

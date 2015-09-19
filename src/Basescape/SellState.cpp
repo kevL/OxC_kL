@@ -390,7 +390,7 @@ SellState::SellState(Base* const base)
 		}
 	}
 
-	_lstItems->scrollTo(_base->getRecallSellRow());
+	_lstItems->scrollTo(_base->getRecallRow(REC_SELL));
 
 	_timerInc = new Timer(250);
 	_timerInc->onTimer((StateHandler)& SellState::increase);
@@ -425,7 +425,9 @@ void SellState::think()
  */
 void SellState::btnOkClick(Action*)
 {
-	_base->setRecallSellRow(_lstItems->getScroll());
+	_base->setRecallRow(
+					REC_SELL,
+					_lstItems->getScroll());
 
 	_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() + _totalCost);
 	_base->setCashIncome(_totalCost);

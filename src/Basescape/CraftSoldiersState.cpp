@@ -229,7 +229,7 @@ void CraftSoldiersState::init()
 
 	calcCost();
 
-	_lstSoldiers->scrollTo(_base->getRecallSoldierRow());
+	_lstSoldiers->scrollTo(_base->getRecallRow(REC_SOLDIER));
 	_lstSoldiers->draw();
 }
 
@@ -239,7 +239,9 @@ void CraftSoldiersState::init()
  */
 void CraftSoldiersState::btnOkClick(Action*)
 {
-	_base->setRecallSoldierRow(_lstSoldiers->getScroll());
+	_base->setRecallRow(
+					REC_SOLDIER,
+					_lstSoldiers->getScroll());
 	_game->popState();
 }
 
@@ -258,7 +260,9 @@ void CraftSoldiersState::btnUnloadClick(Action*)
 			(*i)->setCraft(NULL);
 	}
 
-	_base->setRecallSoldierRow(_lstSoldiers->getScroll());
+	_base->setRecallRow(
+					REC_SOLDIER,
+					_lstSoldiers->getScroll());
 
 	init();
 }
@@ -336,10 +340,10 @@ void CraftSoldiersState::lstSoldiersPress(Action* action)
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
-		_base->setRecallSoldierRow(_lstSoldiers->getScroll());
-		_game->pushState(new SoldierInfoState(
-											_base,
-											row));
+		_base->setRecallRow(
+						REC_SOLDIER,
+						_lstSoldiers->getScroll());
+		_game->pushState(new SoldierInfoState(_base, row));
 		kL_soundPop->play(Mix_GroupAvailable(0));
 	}
 }
@@ -350,7 +354,9 @@ void CraftSoldiersState::lstSoldiersPress(Action* action)
  */
 void CraftSoldiersState::lstLeftArrowClick(Action* action)
 {
-	_base->setRecallSoldierRow(_lstSoldiers->getScroll());
+	_base->setRecallRow(
+					REC_SOLDIER,
+					_lstSoldiers->getScroll());
 
 	const size_t row = _lstSoldiers->getSelectedRow();
 	if (row > 0)
@@ -371,13 +377,17 @@ void CraftSoldiersState::lstLeftArrowClick(Action* action)
 			}
 			else
 			{
-				_base->setRecallSoldierRow(_lstSoldiers->getScroll() - 1);
+				_base->setRecallRow(
+								REC_SOLDIER,
+								_lstSoldiers->getScroll() - 1);
 				_lstSoldiers->scrollUp(false);
 			}
 		}
 		else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 		{
-			_base->setRecallSoldierRow(_lstSoldiers->getScroll() + 1);
+			_base->setRecallRow(
+							REC_SOLDIER,
+							_lstSoldiers->getScroll() + 1);
 
 			_base->getSoldiers()->erase(_base->getSoldiers()->begin() + row);
 			_base->getSoldiers()->insert(
@@ -395,7 +405,9 @@ void CraftSoldiersState::lstLeftArrowClick(Action* action)
  */
 void CraftSoldiersState::lstRightArrowClick(Action* action)
 {
-	_base->setRecallSoldierRow(_lstSoldiers->getScroll());
+	_base->setRecallRow(
+					REC_SOLDIER,
+					_lstSoldiers->getScroll());
 
 	const size_t
 		qtySoldiers = _base->getSoldiers()->size(),
@@ -420,7 +432,9 @@ void CraftSoldiersState::lstRightArrowClick(Action* action)
 			}
 			else
 			{
-				_base->setRecallSoldierRow(_lstSoldiers->getScroll() + 1);
+				_base->setRecallRow(
+								REC_SOLDIER,
+								_lstSoldiers->getScroll() + 1);
 				_lstSoldiers->scrollDown(false);
 			}
 		}
@@ -442,7 +456,9 @@ void CraftSoldiersState::lstRightArrowClick(Action* action)
 */
 void CraftSoldiersState::btnInventoryClick(Action*)
 {
-	_base->setRecallSoldierRow(_lstSoldiers->getScroll());
+	_base->setRecallRow(
+					REC_SOLDIER,
+					_lstSoldiers->getScroll());
 
 	SavedBattleGame* const battle = new SavedBattleGame();
 	_game->getSavedGame()->setBattleSave(battle);

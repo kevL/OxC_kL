@@ -2954,75 +2954,38 @@ int Base::getDefenseResult() const
 }
 
 /**
- * Sets the row to recall for all of this Base's soldier lists.
- * @param row - recall row
+ * Sets various recalls for this Base.
+ * @param recallType	- recall type
+ * @param row			- row
  */
-void Base::setRecallSoldierRow(const size_t row)
+void Base::setRecallRow(
+		RecallType recallType,
+		size_t row)
 {
-	_recallSoldier = row;
+	switch (recallType)
+	{
+		case REC_SOLDIER:	_recallSoldier = row;	break;
+		case REC_TRANSFER:	_recallTransfer = row;	break;
+		case REC_PURCHASE:	_recallPurchase = row;	break;
+		case REC_SELL:		_recallSell = row;
+	}
 }
 
 /**
- * Gets the row to recall for all of this Base's soldier lists.
- * @return, current row
+ * Gets various recalls for this Base.
+ * @return, row
  */
-size_t Base::getRecallSoldierRow() const
+size_t Base::getRecallRow(RecallType recallType) const
 {
-	return _recallSoldier;
-}
+	switch (recallType)
+	{
+		case REC_SOLDIER:	return _recallSoldier;
+		case REC_TRANSFER:	return _recallTransfer;
+		case REC_PURCHASE:	return _recallPurchase;
+		case REC_SELL:		return _recallSell;
+	}
 
-/**
- * Sets the row to recall for this Base's transfer list.
- * @param row - recall row
- */
-void Base::setRecallTransferRow(const size_t row)
-{
-	_recallTransfer = row;
-}
-
-/**
- * Gets the row to recall for this Base's transfer list.
- * @return, recall row
- */
-size_t Base::getRecallTransferRow() const
-{
-	return _recallTransfer;
-}
-
-/**
- * Sets the row to recall for this Base's sell list.
- * @param row - recall row
- */
-void Base::setRecallSellRow(const size_t row)
-{
-	_recallSell = row;
-}
-
-/**
- * Gets the row to recall for this Base's sell list.
- * @return, recall row
- */
-size_t Base::getRecallSellRow() const
-{
-	return _recallSell;
-}
-
-/**
- * Sets the row to recall for this Base's purchase list.
- * @param row - recall row
- */
-void Base::setRecallPurchaseRow(const size_t row)
-{
-	_recallPurchase = row;
-}
-
-/**
- * Gets the row to recall for this Base's purchase list.
- * @return, recall row
- */
-size_t Base::getRecallPurchaseRow() const
-{
-	return _recallPurchase;
+	return 0;
 }
 
 /**
@@ -3121,7 +3084,7 @@ int Base::hwpExpense(
  */
 int Base::craftExpense(const Craft* const craft)
 {
-	int cost = craft->getRules()->getSoldiers() * 1000;
+	const int cost = craft->getRules()->getSoldiers() * 1000;
 	_cashSpent += cost;
 
 	return cost;

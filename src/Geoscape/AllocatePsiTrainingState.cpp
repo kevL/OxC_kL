@@ -207,7 +207,7 @@ void AllocatePsiTrainingState::init()
 								color);
 	}
 
-	_lstSoldiers->scrollTo(_base->getRecallSoldierRow());
+	_lstSoldiers->scrollTo(_base->getRecallRow(REC_SOLDIER));
 	_lstSoldiers->draw();
 }
 
@@ -217,7 +217,9 @@ void AllocatePsiTrainingState::init()
  */
 void AllocatePsiTrainingState::btnOkClick(Action*)
 {
-	_base->setRecallSoldierRow(_lstSoldiers->getScroll());
+	_base->setRecallRow(
+					REC_SOLDIER,
+					_lstSoldiers->getScroll());
 	_game->popState();
 }
 
@@ -273,10 +275,10 @@ void AllocatePsiTrainingState::lstSoldiersPress(Action* action)
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
-		_base->setRecallSoldierRow(_lstSoldiers->getScroll());
-		_game->pushState(new SoldierInfoState(
-											_base,
-											_sel));
+		_base->setRecallRow(
+						REC_SOLDIER,
+						_lstSoldiers->getScroll());
+		_game->pushState(new SoldierInfoState(_base, _sel));
 		kL_soundPop->play(Mix_GroupAvailable(0));
 	}
 }
@@ -287,7 +289,9 @@ void AllocatePsiTrainingState::lstSoldiersPress(Action* action)
  */
 void AllocatePsiTrainingState::lstLeftArrowClick(Action* action)
 {
-	_base->setRecallSoldierRow(_lstSoldiers->getScroll());
+	_base->setRecallRow(
+					REC_SOLDIER,
+					_lstSoldiers->getScroll());
 
 	const size_t row = _lstSoldiers->getSelectedRow();
 	if (row > 0)
@@ -308,13 +312,17 @@ void AllocatePsiTrainingState::lstLeftArrowClick(Action* action)
 			}
 			else
 			{
-				_base->setRecallSoldierRow(_lstSoldiers->getScroll() - 1);
+				_base->setRecallRow(
+								REC_SOLDIER,
+								_lstSoldiers->getScroll() - 1);
 				_lstSoldiers->scrollUp(false);
 			}
 		}
 		else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 		{
-			_base->setRecallSoldierRow(_lstSoldiers->getScroll() + 1);
+			_base->setRecallRow(
+							REC_SOLDIER,
+							_lstSoldiers->getScroll() + 1);
 
 			_base->getSoldiers()->erase(_base->getSoldiers()->begin() + row);
 			_base->getSoldiers()->insert(
@@ -332,7 +340,9 @@ void AllocatePsiTrainingState::lstLeftArrowClick(Action* action)
  */
 void AllocatePsiTrainingState::lstRightArrowClick(Action* action)
 {
-	_base->setRecallSoldierRow(_lstSoldiers->getScroll());
+	_base->setRecallRow(
+					REC_SOLDIER,
+					_lstSoldiers->getScroll());
 
 	const size_t
 		qtySoldiers = _base->getSoldiers()->size(),
@@ -357,7 +367,9 @@ void AllocatePsiTrainingState::lstRightArrowClick(Action* action)
 			}
 			else
 			{
-				_base->setRecallSoldierRow(_lstSoldiers->getScroll() + 1);
+				_base->setRecallRow(
+								REC_SOLDIER,
+								_lstSoldiers->getScroll() + 1);
 				_lstSoldiers->scrollDown(false);
 			}
 		}

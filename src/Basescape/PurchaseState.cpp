@@ -498,7 +498,7 @@ PurchaseState::PurchaseState(Base* const base)
 		}
 	}
 
-	_lstItems->scrollTo(_base->getRecallPurchaseRow());
+	_lstItems->scrollTo(_base->getRecallRow(REC_PURCHASE));
 
 	_timerInc = new Timer(250);
 	_timerInc->onTimer((StateHandler)& PurchaseState::increase);
@@ -552,7 +552,9 @@ bool PurchaseState::isExcluded(const std::string& item)
  */
 void PurchaseState::btnOkClick(Action*)
 {
-	_base->setRecallPurchaseRow(_lstItems->getScroll());
+	_base->setRecallRow(
+					REC_PURCHASE,
+					_lstItems->getScroll());
 
 	_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() - _totalCost);
 	_base->setCashSpent(_totalCost);

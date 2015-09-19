@@ -530,7 +530,7 @@ void TransferItemsState::init()
 		}
 	}
 
-	_lstItems->scrollTo(_baseSource->getRecallTransferRow());
+	_lstItems->scrollTo(_baseSource->getRecallRow(REC_TRANSFER));
 	_lstItems->draw();
 
 
@@ -563,7 +563,9 @@ void TransferItemsState::think()
 void TransferItemsState::btnOkClick(Action*)
 {
 	_resetAll = false;
-	_baseSource->setRecallTransferRow(_lstItems->getScroll()); // note that if TransferConfirmState gets cancelled this still takes effect.
+	_baseSource->setRecallRow(
+						REC_TRANSFER,
+						_lstItems->getScroll()); // note that if TransferConfirmState gets cancelled this still takes effect.
 
 	_game->pushState(new TransferConfirmState(_baseTarget, this));
 }
@@ -880,7 +882,7 @@ int TransferItemsState::getCost() const // private.
 
 	switch (getTransferType(_sel))
 	{
-		case TRANSFER_ITEM: // item cost
+		case TRANSFER_ITEM:
 		{
 			const RuleItem* const itRule = _game->getRuleset()->getItem(_items[_sel - _rowOffset]);
 			if (itRule->getType() == "STR_ALIEN_ALLOYS")
@@ -894,11 +896,11 @@ int TransferItemsState::getCost() const // private.
 		}
 		break;
 
-		case TRANSFER_CRAFT: // craft cost
+		case TRANSFER_CRAFT:
 			cost = 1000.;
 		break;
 
-		default: // personnel cost
+		default:
 			cost = 100.;
 	}
 
@@ -913,9 +915,9 @@ int TransferItemsState::getQuantity() const // private.
 {
 	switch (getTransferType(_sel))
 	{
+		case TRANSFER_ITEM:			return _baseSource->getItems()->getItemQty(_items[getItemIndex(_sel)]);
 		case TRANSFER_SCIENTIST:	return _baseSource->getScientists();
 		case TRANSFER_ENGINEER:		return _baseSource->getEngineers();
-		case TRANSFER_ITEM:			return _baseSource->getItems()->getItemQty(_items[getItemIndex(_sel)]);
 	}
 
 	return 1;
@@ -952,44 +954,6 @@ void TransferItemsState::increaseByValue(int change)
 
 	switch (getTransferType(_sel))
 	{
-		case TRANSFER_SOLDIER: // personnel count
-		case TRANSFER_SCIENTIST:
-		case TRANSFER_ENGINEER:
-			if (_persQty + 1 > _baseTarget->getAvailableQuarters() - _baseTarget->getUsedQuarters())
-				wstError = tr("STR_NO_FREE_ACCOMMODATION");
-			else
-			{
-				change = std::min(
-								change,
-								std::min(
-										_baseTarget->getAvailableQuarters() - _baseTarget->getUsedQuarters() - _persQty,
-										getQuantity() - _transferQty[_sel]));
-				_persQty += change;
-				_baseQty[_sel] -= change;
-				_destQty[_sel] += change;
-				_transferQty[_sel] += change;
-				_totalCost += getCost() * change;
-			}
-		break;
-
-		case TRANSFER_CRAFT: // craft count
-			if (_craftQty + 1 > _baseTarget->getAvailableHangars() - _baseTarget->getUsedHangars())
-				wstError = tr("STR_NO_FREE_HANGARS_FOR_TRANSFER");
-			else
-			{
-				++_craftQty;
-				--_baseQty[_sel];
-				++_destQty[_sel];
-				++_transferQty[_sel];
-
-				if (_crafts[_sel - _soldiers.size()]->getStatus() != "STR_OUT"
-					|| Options::canTransferCraftsWhileAirborne == false)
-				{
-					_totalCost += getCost();
-				}
-			}
-		break;
-
 		case TRANSFER_ITEM:
 			itRule = _game->getRuleset()->getItem(_items[getItemIndex(_sel)]);
 			if (itRule->isAlien() == false
@@ -1004,7 +968,7 @@ void TransferItemsState::increaseByValue(int change)
 			{
 				wstError = tr("STR_NO_ALIEN_CONTAINMENT_FOR_TRANSFER");
 			}
-			else if (itRule->isAlien() == false) // item count
+			else if (itRule->isAlien() == false)
 			{
 				const double
 					storesPerItem = _game->getRuleset()->getItem(_items[getItemIndex(_sel)])->getSize(),
@@ -1026,7 +990,7 @@ void TransferItemsState::increaseByValue(int change)
 				_transferQty[_sel] += change;
 				_totalCost += getCost() * change;
 			}
-			else // live alien count
+			else // aLien
 			{
 				int freeContainment;
 				if (Options::storageLimitsEnforced == true)
@@ -1040,6 +1004,42 @@ void TransferItemsState::increaseByValue(int change)
 										freeContainment,
 										getQuantity() - _transferQty[_sel]));
 				_alienQty += change;
+				_baseQty[_sel] -= change;
+				_destQty[_sel] += change;
+				_transferQty[_sel] += change;
+				_totalCost += getCost() * change;
+			}
+		break;
+
+		case TRANSFER_CRAFT:
+			if (_craftQty + 1 > _baseTarget->getAvailableHangars() - _baseTarget->getUsedHangars())
+				wstError = tr("STR_NO_FREE_HANGARS_FOR_TRANSFER");
+			else
+			{
+				++_craftQty;
+				--_baseQty[_sel];
+				++_destQty[_sel];
+				++_transferQty[_sel];
+
+				if (_crafts[_sel - _soldiers.size()]->getStatus() != "STR_OUT"
+					|| Options::canTransferCraftsWhileAirborne == false)
+				{
+					_totalCost += getCost();
+				}
+			}
+		break;
+
+		default:
+			if (_persQty + 1 > _baseTarget->getAvailableQuarters() - _baseTarget->getUsedQuarters())
+				wstError = tr("STR_NO_FREE_ACCOMMODATION");
+			else
+			{
+				change = std::min(
+								change,
+								std::min(
+										_baseTarget->getAvailableQuarters() - _baseTarget->getUsedQuarters() - _persQty,
+										getQuantity() - _transferQty[_sel]));
+				_persQty += change;
 				_baseQty[_sel] -= change;
 				_destQty[_sel] += change;
 				_transferQty[_sel] += change;
@@ -1096,20 +1096,7 @@ void TransferItemsState::decreaseByValue(int change)
 
 	switch (getTransferType(_sel))
 	{
-		case TRANSFER_SOLDIER: // personnel count
-		case TRANSFER_SCIENTIST:
-		case TRANSFER_ENGINEER:
-			_persQty -= change;
-		break;
-
-		case TRANSFER_CRAFT: // craft count
-			craft = _crafts[_sel - _soldiers.size()];
-			--_craftQty;
-//			_persQty -= craft->getNumSoldiers();
-//			_storeSize -= craft->getItems()->getTotalSize(_game->getRuleset());
-		break;
-
-		case TRANSFER_ITEM: // item count
+		case TRANSFER_ITEM:
 		{
 			const RuleItem* const itRule = _game->getRuleset()->getItem(_items[getItemIndex(_sel)]);
 			if (itRule->isAlien() == false)
@@ -1117,6 +1104,15 @@ void TransferItemsState::decreaseByValue(int change)
 			else
 				_alienQty -= change;
 		}
+		break;
+
+		case TRANSFER_CRAFT:
+			craft = _crafts[_sel - _soldiers.size()];
+			--_craftQty;
+		break;
+
+		default:
+			_persQty -= change;
 	}
 
 	_baseQty[_sel] += change;

@@ -43,19 +43,19 @@ namespace OpenXcom
 
 /**
  * Initializes a new soldier, either blank or randomly generated.
- * @param rules	- pointer to RuleSoldier
- * @param armor	- pointer to RuleArmor
+ * @param solRule	- pointer to RuleSoldier
+ * @param armorRule	- pointer to RuleArmor
  * @param names	- pointer to a vector of pointers to SoldierNamePool (default NULL)
  * @param id	- unique soldier ID for soldier generation (default 0)
  */
 Soldier::Soldier(
-		RuleSoldier* rules,
-		RuleArmor* armor,
-		const std::vector<SoldierNamePool*>* names,
+		const RuleSoldier* const solRule,
+		const RuleArmor* const armorRule,
+		const std::vector<SoldierNamePool*>* const names,
 		int id)
 	:
-		_rules(rules),
-		_armor(armor),
+		_solRule(solRule),
+		_armorRule(armorRule),
 		_id(id),
 		_rank(RANK_ROOKIE),
 		_gender(GENDER_MALE),
@@ -74,8 +74,8 @@ Soldier::Soldier(
 	if (names != NULL)
 	{
 		const UnitStats
-			minStats = _rules->getMinStats(),
-			maxStats = _rules->getMaxStats();
+			minStats = _solRule->getMinStats(),
+			maxStats = _solRule->getMaxStats();
 
 		_initialStats.tu			= RNG::generate(minStats.tu,			maxStats.tu);
 		_initialStats.stamina		= RNG::generate(minStats.stamina,		maxStats.stamina);
@@ -96,7 +96,7 @@ Soldier::Soldier(
 //		_gender = (SoldierGender)RNG::generate(0, 1);
 
 		// kL_begin: gender Ratios
-		const RuleGender* const gRatio = _rules->getGenderRatio();
+		const RuleGender* const gRatio = _solRule->getGenderRatio();
 		const double
 			male = static_cast<double>(gRatio->male),
 			total = static_cast<double>(male + gRatio->female);
@@ -116,7 +116,7 @@ Soldier::Soldier(
 /*		if (names->empty() == false)
 		{
 			size_t nationality = RNG::generate(0, names->size() - 1);
-			_name = names->at(nationality)->genName(&_gender, _rules->getFemaleFrequency());
+			_name = names->at(nationality)->genName(&_gender, _solRule->getFemaleFrequency());
 
 			// Once we add the ability to mod in extra looks, this will
 			// need to reference the ruleset for the maximum amount of looks.
@@ -125,7 +125,7 @@ Soldier::Soldier(
 		else
 		{
 			_name = L"";
-			_gender = (RNG::percent(_rules->getFemaleFrequency()) ? GENDER_FEMALE : GENDER_MALE);
+			_gender = (RNG::percent(_solRule->getFemaleFrequency()) ? GENDER_FEMALE : GENDER_MALE);
 			_look = (SoldierLook)RNG::generate(0, 3);
 		} */
 	}
@@ -149,14 +149,12 @@ Soldier::~Soldier()
 
 /**
  * Loads the soldier from a YAML file.
- * @param node - reference a YAML node
- * @param rule - pointer to the Ruleset
-// * @param save - pointer to SavedGame
+ * @param node	- reference a YAML node
+ * @param rules	- pointer to the Ruleset
  */
 void Soldier::load(
 		const YAML::Node& node,
-		const Ruleset* rule)
-//		SavedGame* save)
+		const Ruleset* const rules)
 {
 	_rank			= static_cast<SoldierRank>(node["rank"]		.as<int>());
 	_gender			= static_cast<SoldierGender>(node["gender"]	.as<int>());
@@ -173,11 +171,11 @@ void Soldier::load(
 //	_gainPsiSkl		= node["gainPsiSkl"]				.as<int>(_gainPsiSkl);
 //	_gainPsiStr		= node["gainPsiStr"]				.as<int>(_gainPsiStr);
 
-	RuleArmor* armor = rule->getArmor(node["armor"].as<std::string>());
-	if (armor == NULL)
-		armor = rule->getArmor("STR_ARMOR_NONE_UC");
+	RuleArmor* armorRule = rules->getArmor(node["armor"].as<std::string>());
+	if (armorRule == NULL)
+		armorRule = rules->getArmor("STR_ARMOR_NONE_UC");
 
-	_armor = armor;
+	_armorRule = armorRule;
 
 	if (const YAML::Node& layout = node["equipmentLayout"])
 	{
@@ -187,7 +185,7 @@ void Soldier::load(
 				++i)
 		{
 			EquipmentLayoutItem* const layoutItem = new EquipmentLayoutItem(*i);
-			if (rule->getInventory(layoutItem->getSlot()))
+			if (rules->getInventory(layoutItem->getSlot()))
 				_equipmentLayout.push_back(layoutItem);
 			else
 				delete layoutItem;
@@ -201,7 +199,7 @@ void Soldier::load(
 	}
 
 //	calcStatString(
-//			rule->getStatStrings(),
+//			rules->getStatStrings(),
 //			(Options::psiStrengthEval
 //				&& save->isResearched(rule->getPsiRequirements())));
 }
@@ -224,7 +222,7 @@ YAML::Node Soldier::save() const
 	node["currentStats"]	= _currentStats;
 	node["missions"]		= _missions;
 	node["kills"]			= _kills;
-	node["armor"]			= _armor->getType();
+	node["armor"]			= _armorRule->getType();
 //	node["gainPsiSkl"]		= _gainPsiSkl;
 //	node["gainPsiStr"]		= _gainPsiStr;
 
@@ -261,7 +259,7 @@ YAML::Node Soldier::save() const
  */
 const RuleSoldier* const Soldier::getRules() const
 {
-	return _rules;
+	return _solRule;
 }
 
 /**
@@ -463,28 +461,28 @@ SoldierLook Soldier::getLook() const
  */
 bool Soldier::isPromoted()
 {
-	const bool promoted = _recentlyPromoted;
+	const bool ret = _recentlyPromoted;
 	_recentlyPromoted = false;
 
-	return promoted;
+	return ret;
 }
 
 /**
  * Gets this Soldier's current armor.
  * @return, pointer to Armor rule
  */
-RuleArmor* Soldier::getArmor() const
+const RuleArmor* Soldier::getArmor() const
 {
-	return _armor;
+	return _armorRule;
 }
 
 /**
  * Sets this Soldier's current armor.
- * @param armor - pointer to Armor rule
+ * @param armorRule - pointer to Armor rule
  */
-void Soldier::setArmor(RuleArmor* const armor)
+void Soldier::setArmor(RuleArmor* const armorRule)
 {
-	_armor = armor;
+	_armorRule = armorRule;
 }
 
 /**
@@ -538,29 +536,28 @@ std::vector<EquipmentLayoutItem*>* Soldier::getEquipmentLayout()
 	return &_equipmentLayout;
 }
 
-/**
+/*
  * Trains this Soldier's psychic abilities after 1 month.
  * @note Called from GeoscapeState per 1month.
  * kL_note: I don't use this.
- */
-/*
+ *
 void Soldier::trainPsi()
 {
 	const int
-		capPsiSkl = _rules->getStatCaps().psiSkill,
-		capPsiStr = _rules->getStatCaps().psiStrength;
+		capPsiSkl = _solRule->getStatCaps().psiSkill,
+		capPsiStr = _solRule->getStatCaps().psiStrength;
 
 	_gainPsiSkl =
 	_gainPsiStr = 0;
 
 	// -10 days - tolerance threshold for switch from anytimePsiTraining option.
 	// If soldier has psiskill -10..-1, he was trained 20..59 days. 81.7% probability, he was trained more that 30 days.
-	if (_currentStats.psiSkill < -10 + _rules->getMinStats().psiSkill)
-		_currentStats.psiSkill = _rules->getMinStats().psiSkill;
-	else if (_currentStats.psiSkill <= _rules->getMaxStats().psiSkill)
+	if (_currentStats.psiSkill < -10 + _solRule->getMinStats().psiSkill)
+		_currentStats.psiSkill = _solRule->getMinStats().psiSkill;
+	else if (_currentStats.psiSkill <= _solRule->getMaxStats().psiSkill)
 		_gainPsiSkl = RNG::generate(
-								_rules->getMaxStats().psiSkill,
-								_rules->getMaxStats().psiSkill + _rules->getMaxStats().psiSkill / 2);
+								_solRule->getMaxStats().psiSkill,
+								_solRule->getMaxStats().psiSkill + _solRule->getMaxStats().psiSkill / 2);
 	else
 	{
 		if (_currentStats.psiSkill <= (capPsiSkl / 2))
@@ -594,29 +591,29 @@ void Soldier::trainPsi()
 // 51+		1-3		2.0
 
 	_gainPsiSkl = 0;
-	int const psiCap = _rules->getStatCaps().psiSkill; // kL
+	int const psiCap = _solRule->getStatCaps().psiSkill; // kL
 
 	// -10 days : tolerance threshold for switch from anytimePsiTraining option.
 	// If soldier has psiSkill -10..-1, he was trained 20..59 days.
 	// 81.7% probability, he was trained more than 30 days.
-	if (_currentStats.psiSkill < _rules->getMinStats().psiSkill - 10)
+	if (_currentStats.psiSkill < _solRule->getMinStats().psiSkill - 10)
 	{
-		_currentStats.psiSkill = _rules->getMinStats().psiSkill;
+		_currentStats.psiSkill = _solRule->getMinStats().psiSkill;
 	}
-//kL	else if (_currentStats.psiSkill <= _rules->getMaxStats().psiSkill)
+//kL	else if (_currentStats.psiSkill <= _solRule->getMaxStats().psiSkill)
 	else if (_currentStats.psiSkill < 17) // kL
 	{
-//kL		int max = _rules->getMaxStats().psiSkill + _rules->getMaxStats().psiSkill / 2;
-//kL		_gainPsiSkl = RNG::generate(_rules->getMaxStats().psiSkill, max);
+//kL		int max = _solRule->getMaxStats().psiSkill + _solRule->getMaxStats().psiSkill / 2;
+//kL		_gainPsiSkl = RNG::generate(_solRule->getMaxStats().psiSkill, max);
 		_gainPsiSkl = RNG::generate(16, 24);
 	}
-//kL	else if (_currentStats.psiSkill <= _rules->getStatCaps().psiSkill / 2)
-//	else if (_currentStats.psiSkill <= _rules->getStatCaps().psiSkill / 4)		// kL
+//kL	else if (_currentStats.psiSkill <= _solRule->getStatCaps().psiSkill / 2)
+//	else if (_currentStats.psiSkill <= _solRule->getStatCaps().psiSkill / 4)		// kL
 	else if (_currentStats.psiSkill < 51)										// kL
 	{
 		_gainPsiSkl = RNG::generate(5, 12);
 	}
-//kL	else if (_currentStats.psiSkill < _rules->getStatCaps().psiSkill)
+//kL	else if (_currentStats.psiSkill < _solRule->getStatCaps().psiSkill)
 	else if (_currentStats.psiSkill < psiCap)
 	{
 		_gainPsiSkl = RNG::generate(1, 3);
@@ -649,7 +646,7 @@ bool Soldier::trainPsiDay()
 		static const int PSI_PCT = 5; // % per day per soldier to become psionic-active
 
 //		_gainPsiSkl = 0; // was used in AllocatePsiTrainingState.
-//		if (_currentStats.psiSkill >= _rules->getStatCaps().psiSkill)	// hard cap. Note this auto-caps psiStrength also
+//		if (_currentStats.psiSkill >= _solRule->getStatCaps().psiSkill)	// hard cap. Note this auto-caps psiStrength also
 //			return false;												// REMOVED: Allow psi to train past cap in PsiLabs.
 
 		if (_currentStats.psiSkill == 0)
@@ -659,8 +656,8 @@ bool Soldier::trainPsiDay()
 				ret = true;
 				_currentStats.psiSkill =
 				_initialStats.psiSkill = RNG::generate(
-												_rules->getMinStats().psiSkill,
-												_rules->getMaxStats().psiSkill);
+												_solRule->getMinStats().psiSkill,
+												_solRule->getMaxStats().psiSkill);
 			}
 		}
 		else // Psi unlocked already.
@@ -675,7 +672,7 @@ bool Soldier::trainPsiDay()
 //				++_gainPsiSkl;
 			}
 
-			if (_currentStats.psiStrength < _rules->getStatCaps().psiStrength
+			if (_currentStats.psiStrength < _solRule->getStatCaps().psiStrength
 				&& Options::allowPsiStrengthImprovement == true)
 			{
 				pct = std::max(
@@ -711,29 +708,29 @@ void Soldier::togglePsiTraining()
 	_psiTraining = !_psiTraining;
 }
 
-/**
+/*
  * Gets this Soldier's psiSkill improvement during the current month.
  * @return, psi-skill improvement
- */
-/* int Soldier::getImprovement()
+ *
+int Soldier::getImprovement()
 {
 	return _gainPsiSkl;
 } */
 
-/**
+/*
  * Gets this Soldier's psiStrength improvement during the current month.
  * @return, psi-strength improvement
- */
-/* int Soldier::getPsiStrImprovement()
+ *
+int Soldier::getPsiStrImprovement()
 {
 	return _gainPsiStr;
 } */
 
-/**
+/*
  * Returns this Soldier's death time.
  * @return, pointer to death data - NULL if no death has occurred
- */
-/* SoldierDeath* Soldier::getDeath() const
+ *
+SoldierDeath* Soldier::getDeath() const
 {
 	return _death;
 } */
@@ -772,19 +769,14 @@ SoldierDiary* Soldier::getDiary() const
 	return _diary;
 }
 
-/**
+/*
  * Calculates this Soldier's statString.
  * @param statStrings		- reference to a vector of pointers to statString rules
  * @param psiStrengthEval	- true if psi stats are available
- */
-/* void Soldier::calcStatString(
-		const std::vector<StatString*>& statStrings,
-		bool psiStrengthEval)
+ *
+void Soldier::calcStatString(const std::vector<StatString*>& statStrings, bool psiStrengthEval)
 {
-	_statString = StatString::calcStatString(
-										_currentStats,
-										statStrings,
-										psiStrengthEval);
+	_statString = StatString::calcStatString(_currentStats, statStrings, psiStrengthEval);
 } */
 
 /**
@@ -826,11 +818,11 @@ void Soldier::autoStat()
 		default: stat << "z";
 	}
 
-	if (_currentStats.psiSkill >= _rules->getMinStats().psiSkill)
+	if (_currentStats.psiSkill >= _solRule->getMinStats().psiSkill)
 	{
 		stat << (_currentStats.psiStrength + _currentStats.psiSkill / 5);
 
-		if (_currentStats.psiSkill >= _rules->getStatCaps().psiSkill)
+		if (_currentStats.psiSkill >= _solRule->getStatCaps().psiSkill)
 			stat << ":";
 		else
 			stat << ".";
