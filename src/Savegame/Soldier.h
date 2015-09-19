@@ -145,7 +145,7 @@ private:
 		/// Gets the soldier's craft.
 		Craft* getCraft() const;
 		/// Sets the soldier's craft.
-		void setCraft(Craft* const craft);
+		void setCraft(Craft* const craft = NULL);
 		/// Gets the soldier's craft string.
 		std::wstring getCraftString(Language* lang) const;
 

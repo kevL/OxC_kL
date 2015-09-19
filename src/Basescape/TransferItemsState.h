@@ -105,7 +105,7 @@ private:
 	/// Gets distance between bases.
 	double getDistance() const;
 	/// Gets type of selected item.
-	TransferType getType(const size_t sel) const;
+	TransferType getTransferType(const size_t sel) const;
 	/// Gets item Index.
 	size_t getItemIndex(const size_t sel) const;
 

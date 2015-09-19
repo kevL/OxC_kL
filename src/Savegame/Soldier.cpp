@@ -335,7 +335,7 @@ Craft* Soldier::getCraft() const
 
 /**
  * Assigns this Soldier to a craft.
- * @param craft - pointer to Craft
+ * @param craft - pointer to Craft (default NULL)
  */
 void Soldier::setCraft(Craft* const craft)
 {

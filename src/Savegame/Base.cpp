@@ -220,9 +220,9 @@ void Base::load(
 									_rules->getCraft(type),
 									this);
 			c->load(
-				*i,
-				_rules,
-				save);
+					*i,
+					_rules,
+					save);
 			_crafts.push_back(c);
 		}
 	}
@@ -236,10 +236,9 @@ void Base::load(
 									_rules->getSoldier("XCOM"),
 									_rules->getArmor("STR_ARMOR_NONE_UC"));
 		sol->load(
-			*i,
-			_rules);
-//			save);
-		sol->setCraft(NULL);
+				*i,
+				_rules);
+		sol->setCraft();
 
 		if (const YAML::Node& craft = (*i)["craft"])
 		{
@@ -287,7 +286,7 @@ void Base::load(
 			i != node["transfers"].end();
 			++i)
 	{
-		int hours = (*i)["hours"].as<int>();
+		const int hours = (*i)["hours"].as<int>();
 		Transfer* const t = new Transfer(hours);
 		if (t->load(
 				*i,
@@ -2609,36 +2608,36 @@ std::list<std::vector<BaseFacility*>::const_iterator> Base::getDisconnectedFacil
 }
 
 /**
- * Removes a base module and deals with the ramifications thereof.
- * @param fac - an iterator reference to the facility to destroy
+ * Removes a base module and deals with ramifications.
+ * @param pFac - an iterator reference to the facility that's destoyed
  */
-void Base::destroyFacility(std::vector<BaseFacility*>::const_iterator fac)
+void Base::destroyFacility(std::vector<BaseFacility*>::const_iterator pFac)
 {
-	if ((*fac)->getRules()->getCrafts() > 0) // hangar destruction
+	if ((*pFac)->getRules()->getCrafts() > 0) // hangar destruction
 	{
 		// destroy crafts and any production of crafts
 		// as this will mean there is no hangar to contain it
-		if ((*fac)->getCraft() != NULL)
+		if ((*pFac)->getCraft() != NULL)
 		{
-			if ((*fac)->getCraft()->getNumSoldiers() > 0) // remove all soldiers
+			if ((*pFac)->getCraft()->getNumSoldiers() > 0) // remove all soldiers
 			{
 				for (std::vector<Soldier*>::const_iterator
 						i = _soldiers.begin();
 						i != _soldiers.end();
 						++i)
 				{
-					if ((*i)->getCraft() == (*fac)->getCraft())
-						(*i)->setCraft(NULL);
+					if ((*i)->getCraft() == (*pFac)->getCraft())
+						(*i)->setCraft();
 				}
 			}
 
-			while ((*fac)->getCraft()->getItems()->getContents()->empty() == false) // remove all items
+			while ((*pFac)->getCraft()->getItems()->getContents()->empty() == false) // remove all items
 			{
-				const std::map<std::string, int>::const_iterator i = (*fac)->getCraft()->getItems()->getContents()->begin();
+				const std::map<std::string, int>::const_iterator i = (*pFac)->getCraft()->getItems()->getContents()->begin();
 				_items->addItem(
 							i->first,
 							i->second);
-				(*fac)->getCraft()->getItems()->removeItem(
+				(*pFac)->getCraft()->getItems()->removeItem(
 														i->first,
 														i->second);
 			}
@@ -2648,7 +2647,7 @@ void Base::destroyFacility(std::vector<BaseFacility*>::const_iterator fac)
 					i != _crafts.end();
 					++i)
 			{
-				if (*i == (*fac)->getCraft())
+				if (*i == (*pFac)->getCraft())
 				{
 					delete (*i);
 					_crafts.erase(i);
@@ -2667,7 +2666,7 @@ void Base::destroyFacility(std::vector<BaseFacility*>::const_iterator fac)
 					)
 			{
 				if ((*i)->getRules()->getCategory() == "STR_CRAFT"
-					&& getAvailableHangars() - getUsedHangars() - (*fac)->getRules()->getCrafts() < 0)
+					&& getAvailableHangars() - getUsedHangars() - (*pFac)->getRules()->getCrafts() < 0)
 				{
 					destroyCraft = false;
 					_engineers += (*i)->getAssignedEngineers();
@@ -2701,10 +2700,10 @@ void Base::destroyFacility(std::vector<BaseFacility*>::const_iterator fac)
 			}
 		}
 	}
-	else if ((*fac)->getRules()->getPsiLaboratories() > 0)
+	else if ((*pFac)->getRules()->getPsiLaboratories() > 0)
 	{
-		// psi lab destruction: remove any soldiers over the maximum allowable from psi training.
-		int qty = (*fac)->getRules()->getPsiLaboratories() - getFreePsiLabs();
+		// psilab destruction: remove any soldiers over the maximum allowable from psi training.
+		int qty = (*pFac)->getRules()->getPsiLaboratories() - getFreePsiLabs();
 
 		for (std::vector<Soldier*>::const_iterator
 				i = _soldiers.begin();
@@ -2719,12 +2718,11 @@ void Base::destroyFacility(std::vector<BaseFacility*>::const_iterator fac)
 			}
 		}
 	}
-	else if ((*fac)->getRules()->getLaboratories() > 0)
+	else if ((*pFac)->getRules()->getLaboratories() > 0)
 	{
 		// lab destruction: enforce lab space limits.
-		// take scientists off projects until it all evens out.
-		// research is not cancelled.
-		int qty = (*fac)->getRules()->getLaboratories() - getFreeLaboratories();
+		// take scientists off projects; research is not cancelled.
+		int qty = (*pFac)->getRules()->getLaboratories() - getFreeLaboratories();
 
 		for (std::vector<ResearchProject*>::const_iterator
 				i = _research.begin();
@@ -2752,12 +2750,12 @@ void Base::destroyFacility(std::vector<BaseFacility*>::const_iterator fac)
 			}
 		}
 	}
-	else if ((*fac)->getRules()->getWorkshops() > 0)
+	else if ((*pFac)->getRules()->getWorkshops() > 0)
 	{
-		// workshop destruction: similar to lab destruction, but we'll lay off engineers instead. kL_note: huh!!!!
-		// in this case, however, production IS cancelled, as it takes up space in the workshop.
-		int qty = (*fac)->getRules()->getWorkshops() - getFreeWorkshops();
-//		int qty = getUsedWorkshops() - (getAvailableWorkshops() - (*fac)->getRules()->getWorkshops());
+		// workshop destruction: similar to lab destruction, but lay off engineers instead. kL_note: huh!!!!
+		// in this case production *is* cancelled since it takes up space in the workshop.
+		int qty = (*pFac)->getRules()->getWorkshops() - getFreeWorkshops();
+//		int qty = getUsedWorkshops() - (getAvailableWorkshops() - (*pFac)->getRules()->getWorkshops());
 		for (std::vector<Production*>::const_iterator
 				i = _productions.begin();
 				i != _productions.end()
@@ -2781,12 +2779,12 @@ void Base::destroyFacility(std::vector<BaseFacility*>::const_iterator fac)
 			}
 		}
 	}
-	else if ((*fac)->getRules()->getStorage() > 0)
+	else if ((*pFac)->getRules()->getStorage() > 0)
 	{
 		// we won't destroy the items physically AT the base,
 		// but any items in transit will end up at the dead letter office.
 		if (_transfers.empty() == false
-			&& storesOverfull((*fac)->getRules()->getStorage()) == true)
+			&& storesOverfull((*pFac)->getRules()->getStorage()) == true)
 		{
 			for (std::vector<Transfer*>::const_iterator
 					i = _transfers.begin();
@@ -2803,11 +2801,11 @@ void Base::destroyFacility(std::vector<BaseFacility*>::const_iterator fac)
 			}
 		}
 	}
-	else if ((*fac)->getRules()->getPersonnel() > 0)
+	else if ((*pFac)->getRules()->getPersonnel() > 0)
 	{
-		// as above, we won't actually fire people, but we'll block any new ones coming in.
+		// as above don't actually fire people but block personnel arrivals.
 		if (_transfers.empty() == false
-			&& getAvailableQuarters() - getUsedQuarters() - (*fac)->getRules()->getPersonnel() < 0)
+			&& getAvailableQuarters() - getUsedQuarters() - (*pFac)->getRules()->getPersonnel() < 0)
 		{
 			for (std::vector<Transfer*>::const_iterator
 					i = _transfers.begin();
@@ -2830,9 +2828,7 @@ void Base::destroyFacility(std::vector<BaseFacility*>::const_iterator fac)
 					_scientists -= (*i)->getQuantity();
 				}
 				else if ((*i)->getType() == TRANSFER_SOLDIER)
-				{
 					del = true;
-				}
 
 				if (del) */
 				{
@@ -2845,8 +2841,8 @@ void Base::destroyFacility(std::vector<BaseFacility*>::const_iterator fac)
 		}
 	}
 
-	delete *fac;
-	_facilities.erase(fac);
+	delete *pFac;
+	_facilities.erase(pFac);
 }
 
 /**

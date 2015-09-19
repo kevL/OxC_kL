@@ -4356,7 +4356,7 @@
 
 1440012868 f:\git\openxcom\src\engine\localizedtext.h
 
-1440361744 f:\git\openxcom\src\savegame\soldier.h
+1442628397 f:\git\openxcom\src\savegame\soldier.h
 	"../Ruleset/RuleUnit.h"
 
 1432068221 f:\git\openxcom\src\ruleset\unit.h
@@ -4561,7 +4561,7 @@
 
 1431493222 f:\git\openxcom\src\savegame\gametime.h
 
-1442270347 source:f:\git\openxcom\src\basescape\craftarmorstate.cpp
+1442624986 source:f:\git\openxcom\src\basescape\craftarmorstate.cpp
 	"CraftArmorState.h"
 	"SoldierArmorState.h"
 	"SoldierInfoState.h"
@@ -5214,7 +5214,7 @@
 1431492838 f:\git\openxcom\src\savegame\soldierdeath.h
 	"GameTime.h"
 
-1442270613 source:f:\git\openxcom\src\basescape\soldiersstate.cpp
+1442624949 source:f:\git\openxcom\src\basescape\soldiersstate.cpp
 	"SoldiersState.h"
 	"CraftArmorState.h"
 	"SoldierInfoState.h"
@@ -5265,7 +5265,7 @@
 	"../Savegame/Region.h"
 	"../Savegame/SavedGame.h"
 
-1442624686 f:\git\openxcom\src\basescape\transferitemsstate.h
+1442629595 f:\git\openxcom\src\basescape\transferitemsstate.h
 	"../Engine/State.h"
 	"../Savegame/Transfer.h"
 
@@ -5282,7 +5282,7 @@
 1430149550 f:\git\openxcom\src\basescape\transferconfirmstate.h
 	"../Engine/State.h"
 
-1442623882 source:f:\git\openxcom\src\basescape\transferitemsstate.cpp
+1442630916 source:f:\git\openxcom\src\basescape\transferitemsstate.cpp
 	"TransferItemsState.h"
 	"TransferConfirmState.h"
 	"../Engine/Action.h"
@@ -6657,7 +6657,7 @@
 1432347198 f:\git\openxcom\src\geoscape\interceptstate.h
 	"../Engine/State.h"
 
-1440094175 source:f:\git\openxcom\src\geoscape\allocatepsitrainingstate.cpp
+1442625012 source:f:\git\openxcom\src\geoscape\allocatepsitrainingstate.cpp
 	"AllocatePsiTrainingState.h"
 	"PsiTrainingState.h"
 	"../Basescape/SoldierInfoState.h"
