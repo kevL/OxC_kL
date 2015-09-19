@@ -1960,12 +1960,10 @@ void GeoscapeState::time10Minutes()
 				if ((*j)->getLowFuel() == false
 					&& (*j)->getFuel() <= (*j)->getFuelLimit())
 				{
-					(*j)->setLowFuel(true);
+					(*j)->setLowFuel();
 					(*j)->returnToBase();
 
-					popup(new LowFuelState(
-										*j,
-										this));
+					popup(new LowFuelState(*j, this));
 				}
 
 //				if ((*j)->getDestination() == NULL) // Remove that; patrolling for aBases/10min was getting too bothersome.

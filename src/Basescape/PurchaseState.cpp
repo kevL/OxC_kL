@@ -62,7 +62,7 @@ namespace OpenXcom
  * Initializes all the elements in the Purchase/Hire screen.
  * @param base - pointer to the Base to get info from
  */
-PurchaseState::PurchaseState(Base* base)
+PurchaseState::PurchaseState(Base* const base)
 	:
 		_base(base),
 		_sel(0),
@@ -99,7 +99,7 @@ PurchaseState::PurchaseState(Base* base)
 
 	setInterface("buyMenu");
 
-	_ammoColor = static_cast<Uint8>(_game->getRuleset()->getInterface("buyMenu")->getElement("ammoColor")->color);
+	_colorAmmo = static_cast<Uint8>(_game->getRuleset()->getInterface("buyMenu")->getElement("ammoColor")->color);
 
 	add(_window,		"window",	"buyMenu");
 	add(_txtTitle,		"text",		"buyMenu");
@@ -124,6 +124,9 @@ PurchaseState::PurchaseState(Base* base)
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& PurchaseState::btnOkClick,
 					Options::keyOk);
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& PurchaseState::btnOkClick,
+					Options::keyOkKeypad);
 	_btnOk->setVisible(false);
 
 	_btnCancel->setText(tr("STR_CANCEL"));
@@ -158,7 +161,7 @@ PurchaseState::PurchaseState(Base* base)
 	_txtQuantity->setText(tr("STR_QUANTITY_UC"));
 
 	_lstItems->setArrowColumn(227, ARROW_VERTICAL);
-	_lstItems->setColumns(4, 142, 55, 46, 32);
+	_lstItems->setColumns(4, 142,55,46,32);
 	_lstItems->setSelectable();
 	_lstItems->setBackground(_window);
 	_lstItems->setMargin();
@@ -362,7 +365,7 @@ PurchaseState::PurchaseState(Base* base)
 							L"0");
 			_lstItems->setRowColor(
 								_quantities.size() - 1,
-								_ammoColor);
+								_colorAmmo);
 
 			for (std::vector<std::string>::const_iterator
 					j = itemList.begin();
@@ -495,6 +498,7 @@ PurchaseState::PurchaseState(Base* base)
 		}
 	}
 
+	_lstItems->scrollTo(_base->getRecallPurchaseRow());
 
 	_timerInc = new Timer(250);
 	_timerInc->onTimer((StateHandler)& PurchaseState::increase);
@@ -548,6 +552,8 @@ bool PurchaseState::isExcluded(const std::string& item)
  */
 void PurchaseState::btnOkClick(Action*)
 {
+	_base->setRecallPurchaseRow(_lstItems->getScroll());
+
 	_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() - _totalCost);
 	_base->setCashSpent(_totalCost);
 
@@ -928,11 +934,9 @@ void PurchaseState::updateItemStrings() // private.
 			const RuleItem* const itRule = _game->getRuleset()->getItem(_items[_sel - _rowOffset]);
 			if (itRule->getBattleType() == BT_AMMO
 				|| (itRule->getBattleType() == BT_NONE
-					&& itRule->getClipSize() > 0))
+					&& itRule->getClipSize() != 0))
 			{
-				_lstItems->setRowColor(
-									_sel,
-									_ammoColor);
+				_lstItems->setRowColor(_sel, _colorAmmo);
 			}
 		}
 	}
@@ -946,7 +950,7 @@ void PurchaseState::updateItemStrings() // private.
 	}
 	_txtSpaceUsed->setText(woststr2.str());
 
-	_btnOk->setVisible(_totalCost > 0);
+	_btnOk->setVisible(_totalCost != 0);
 }
 
 /**

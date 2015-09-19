@@ -50,37 +50,36 @@ class TransferItemsState
 {
 
 private:
-	bool _reset;
+	static const Uint8 YELLOW = 213;
+
+	bool _resetAll;
 	int
 		_alienQty,
 		_craftQty,
 		_persQty,
 		_totalCost;
 	size_t
-		_rowDefault,
-		_rowOffset,
 		_hasEng,
 		_hasSci,
+		_rowOffset,
 		_sel;
-	Uint8
-		_ammoColor,
-		_colorArtefact;
+	Uint8 _colorAmmo;
 	double
 		_distance,
 		_storeSize;
 
 	Base
-		* _baseFrom,
-		* _baseTo;
+		* _baseSource,
+		* _baseTarget;
 	Text
-		* _txtAtDestination,
-//		* _txtAmountTransfer,
-		* _txtBaseFrom,
-		* _txtBaseTo,
+		* _txtQtyTarget,
+//		* _txtTransferQty,
+		* _txtBaseSource,
+		* _txtBaseTarget,
 		* _txtItem,
 		* _txtQuantity,
-		* _txtSpaceFrom,
-		* _txtSpaceTo,
+		* _txtSpaceSource,
+		* _txtSpaceTarget,
 		* _txtTitle;
 	TextButton
 		* _btnCancel,
@@ -117,8 +116,8 @@ private:
 	public:
 		/// Creates the Transfer Items state.
 		TransferItemsState(
-				Base* baseFrom,
-				Base* baseTo);
+				Base* const baseSource,
+				Base* const baseTarget);
 		/// Cleans up the Transfer Items state.
 		~TransferItemsState();
 

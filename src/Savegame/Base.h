@@ -64,7 +64,11 @@ private:
 		_engineers,
 		_scientists,
 		_defenseResult;
-	size_t _curSoldier;
+	size_t
+		_recallPurchase,
+		_recallSell,
+		_recallSoldier,
+		_recallTransfer;
 
 	ItemContainer* _items;
 	const Ruleset* const _rules;
@@ -325,9 +329,21 @@ private:
 		int getDefenseResult() const;
 
 		/// Sets the current row of Soldiers list.
-		void setCurrentSoldierSlot(const size_t row);
+		void setRecallSoldierRow(const size_t row);
 		/// Gets the current row of Soldiers list.
-		size_t getCurrentSoldierSlot() const;
+		size_t getRecallSoldierRow() const;
+		/// Sets the current row of Transfers list.
+		void setRecallTransferRow(const size_t row);
+		/// Gets the current row of Transfers list.
+		size_t getRecallTransferRow() const;
+		/// Sets the current row of Purchase list.
+		void setRecallPurchaseRow(const size_t row);
+		/// Gets the current row of Purchase list.
+		size_t getRecallPurchaseRow() const;
+		/// Sets the current row of Sell list.
+		void setRecallSellRow(const size_t row);
+		/// Gets the current row of Sell list.
+		size_t getRecallSellRow() const;
 
 		/// Calculates the bonus cost for soldiers by rank.
 		int calcSoldierBonuses(const Craft* const craft = NULL) const;

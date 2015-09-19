@@ -131,6 +131,12 @@ SoldiersState::SoldiersState(Base* base)
 	_btnOk->onMouseClick((ActionHandler)& SoldiersState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& SoldiersState::btnOkClick,
+					Options::keyOk);
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& SoldiersState::btnOkClick,
+					Options::keyOkKeypad);
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& SoldiersState::btnOkClick,
 					Options::keyCancel);
 
 	_txtName->setText(tr("STR_NAME_UC"));
@@ -205,16 +211,12 @@ void SoldiersState::init()
 				else
 					color = GREEN;
 
-				_lstSoldiers->setCellColor(
-										row,
-										2,
-										color,
-										true);
+				_lstSoldiers->setCellColor(row, 2, color, true);
 			}
 		}
 	}
 
-	_lstSoldiers->scrollTo(_base->getCurrentSoldierSlot());
+	_lstSoldiers->scrollTo(_base->getRecallSoldierRow());
 	_lstSoldiers->draw();
 }
 
@@ -224,7 +226,7 @@ void SoldiersState::init()
  */
 void SoldiersState::btnOkClick(Action*)
 {
-	_base->setCurrentSoldierSlot(_lstSoldiers->getScroll());
+	_base->setRecallSoldierRow(_lstSoldiers->getScroll());
 	_game->popState();
 }
 
@@ -234,7 +236,7 @@ void SoldiersState::btnOkClick(Action*)
  */
 void SoldiersState::btnArmorClick(Action*)
 {
-	_base->setCurrentSoldierSlot(_lstSoldiers->getScroll());
+	_base->setRecallSoldierRow(_lstSoldiers->getScroll());
 	_game->pushState(new CraftArmorState(_base));
 }
 
@@ -244,7 +246,7 @@ void SoldiersState::btnArmorClick(Action*)
  */
 void SoldiersState::btnEquipClick(Action*)
 {
-	_base->setCurrentSoldierSlot(_lstSoldiers->getScroll());
+	_base->setRecallSoldierRow(_lstSoldiers->getScroll());
 
 	SavedBattleGame* battle = new SavedBattleGame();
 	_game->getSavedGame()->setBattleSave(battle);
@@ -262,7 +264,7 @@ void SoldiersState::btnEquipClick(Action*)
  */
 void SoldiersState::btnPsiTrainingClick(Action*)
 {
-	_base->setCurrentSoldierSlot(_lstSoldiers->getScroll());
+	_base->setRecallSoldierRow(_lstSoldiers->getScroll());
 	_game->pushState(new AllocatePsiTrainingState(_base));
 }
 
@@ -283,7 +285,7 @@ std::sort(vPair.begin(), vPair.end(), sort_second()); */
  */
 void SoldiersState::btnSortClick(Action*)
 {
-	_base->setCurrentSoldierSlot(_lstSoldiers->getScroll());
+	_base->setRecallSoldierRow(_lstSoldiers->getScroll());
 	_base->sortSoldiers();
 
 	init();
@@ -305,7 +307,7 @@ void SoldiersState::lstSoldiersPress(Action* action)
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT
 		|| action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
-		_base->setCurrentSoldierSlot(_lstSoldiers->getScroll());
+		_base->setRecallSoldierRow(_lstSoldiers->getScroll());
 		_game->pushState(new SoldierInfoState(
 											_base,
 											_lstSoldiers->getSelectedRow()));
@@ -319,7 +321,7 @@ void SoldiersState::lstSoldiersPress(Action* action)
  */
 void SoldiersState::lstLeftArrowClick(Action* action)
 {
-	_base->setCurrentSoldierSlot(_lstSoldiers->getScroll());
+	_base->setRecallSoldierRow(_lstSoldiers->getScroll());
 
 	const size_t row = _lstSoldiers->getSelectedRow();
 	if (row > 0)
@@ -340,13 +342,13 @@ void SoldiersState::lstLeftArrowClick(Action* action)
 			}
 			else
 			{
-				_base->setCurrentSoldierSlot(_lstSoldiers->getScroll() - 1);
+				_base->setRecallSoldierRow(_lstSoldiers->getScroll() - 1);
 				_lstSoldiers->scrollUp(false);
 			}
 		}
 		else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 		{
-			_base->setCurrentSoldierSlot(_lstSoldiers->getScroll() + 1);
+			_base->setRecallSoldierRow(_lstSoldiers->getScroll() + 1);
 
 			_base->getSoldiers()->erase(_base->getSoldiers()->begin() + row);
 			_base->getSoldiers()->insert(
@@ -364,7 +366,7 @@ void SoldiersState::lstLeftArrowClick(Action* action)
  */
 void SoldiersState::lstRightArrowClick(Action* action)
 {
-	_base->setCurrentSoldierSlot(_lstSoldiers->getScroll());
+	_base->setRecallSoldierRow(_lstSoldiers->getScroll());
 
 	const size_t
 		qtySoldiers = _base->getSoldiers()->size(),
@@ -389,7 +391,7 @@ void SoldiersState::lstRightArrowClick(Action* action)
 			}
 			else
 			{
-				_base->setCurrentSoldierSlot(_lstSoldiers->getScroll() + 1);
+				_base->setRecallSoldierRow(_lstSoldiers->getScroll() + 1);
 				_lstSoldiers->scrollDown(false);
 			}
 		}

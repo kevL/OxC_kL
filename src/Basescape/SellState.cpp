@@ -70,7 +70,7 @@ SellState::SellState(Base* const base)
 //		_origin(origin),
 		_sel(0),
 		_rowOffset(0),
-		_total(0),
+		_totalCost(0),
 		_hasSci(0),
 		_hasEng(0),
 		_spaceChange(0.)
@@ -80,27 +80,26 @@ SellState::SellState(Base* const base)
 
 	_window			= new Window(this, 320, 200);
 
-	_txtTitle		= new Text(310, 17, 5, 9);
-	_txtBaseLabel	= new Text(80, 9, 16, 9);
-	_txtSpaceUsed	= new Text(85, 9, 219, 9);
+	_txtTitle		= new Text(310, 17,  5, 9);
+	_txtBaseLabel	= new Text( 80, 9,  16, 9);
+	_txtSpaceUsed	= new Text( 85, 9, 219, 9);
 
-	_txtFunds		= new Text(140, 9, 16, 24);
+	_txtFunds		= new Text(140, 9,  16, 24);
 	_txtSales		= new Text(140, 9, 160, 24);
 
-	_txtItem		= new Text(30, 9, 16, 33);
+	_txtItem		= new Text(30, 9,  16, 33);
 	_txtQuantity	= new Text(54, 9, 166, 33);
 	_txtSell		= new Text(20, 9, 226, 33);
 	_txtValue		= new Text(40, 9, 248, 33);
 
 	_lstItems		= new TextList(285, 129, 16, 44);
 
-	_btnCancel		= new TextButton(134, 16, 16, 177);
+	_btnCancel		= new TextButton(134, 16,  16, 177);
 	_btnOk			= new TextButton(134, 16, 170, 177);
 
 	setInterface("sellMenu");
 
-	_ammoColor = static_cast<Uint8>(_game->getRuleset()->getInterface("sellMenu")->getElement("ammoColor")->color);
-	_colorArtefact = Palette::blockOffset(13)+5;
+	_colorAmmo = static_cast<Uint8>(_game->getRuleset()->getInterface("sellMenu")->getElement("ammoColor")->color);
 
 	add(_window,		"window",	"sellMenu");
 	add(_txtTitle,		"text",		"sellMenu");
@@ -126,6 +125,9 @@ SellState::SellState(Base* const base)
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& SellState::btnOkClick,
 					Options::keyOk);
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& SellState::btnOkClick,
+					Options::keyOkKeypad);
 	_btnOk->setVisible(false);
 
 	_btnCancel->setText(tr("STR_CANCEL"));
@@ -143,7 +145,7 @@ SellState::SellState(Base* const base)
 	_txtBaseLabel->setText(_base->getName(_game->getLanguage()));
 
 	_txtSales->setText(tr("STR_VALUE_OF_SALES")
-						.arg(Text::formatFunding(_total)));
+						.arg(Text::formatFunding(_totalCost)));
 
 	_txtFunds->setText(tr("STR_FUNDS")
 						.arg(Text::formatFunding(_game->getSavedGame()->getFunds())));
@@ -164,7 +166,7 @@ SellState::SellState(Base* const base)
 
 	_lstItems->setBackground(_window);
 	_lstItems->setArrowColumn(182, ARROW_VERTICAL);
-	_lstItems->setColumns(4, 142, 60, 22, 53);
+	_lstItems->setColumns(4, 142,60,22,53);
 	_lstItems->setSelectable();
 	_lstItems->setMargin();
 //	_lstItems->setAllowScrollOnArrowButtons(!_allowChangeListValuesByMouseWheel);
@@ -346,7 +348,7 @@ SellState::SellState(Base* const base)
 				}
 				item.insert(0, L"  ");
 
-				color = _ammoColor;
+				color = _colorAmmo;
 			}
 			else
 			{
@@ -370,7 +372,7 @@ SellState::SellState(Base* const base)
 				&& craftOrdnance == false)										// and is not craft ordnance
 			{
 				// well, that was !NOT! easy.
-				color = _colorArtefact;
+				color = YELLOW;
 			}
 
 			std::wostringstream woststr;
@@ -388,6 +390,7 @@ SellState::SellState(Base* const base)
 		}
 	}
 
+	_lstItems->scrollTo(_base->getRecallSellRow());
 
 	_timerInc = new Timer(250);
 	_timerInc->onTimer((StateHandler)& SellState::increase);
@@ -422,8 +425,10 @@ void SellState::think()
  */
 void SellState::btnOkClick(Action*)
 {
-	_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() + _total);
-	_base->setCashIncome(_total);
+	_base->setRecallSellRow(_lstItems->getScroll());
+
+	_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() + _totalCost);
+	_base->setCashIncome(_totalCost);
 
 	for (size_t
 			i = 0;
@@ -432,7 +437,7 @@ void SellState::btnOkClick(Action*)
 	{
 		if (_sellQty[i] > 0)
 		{
-			switch (getType(i))
+			switch (getSellType(i))
 			{
 				case SELL_SOLDIER:
 					for (std::vector<Soldier*>::const_iterator
@@ -716,7 +721,7 @@ void SellState::lstItemsRightArrowClick(Action* action)
  */
 int SellState::getPrice() // private.
 {
-	switch (getType(_sel))
+	switch (getSellType(_sel))
 	{
 		case SELL_ITEM:
 			return _game->getRuleset()->getItem(_items[getItemIndex(_sel)])->getSellCost();
@@ -736,7 +741,7 @@ int SellState::getQuantity() // private.
 {
 	int qty = 0;
 
-	switch (getType(_sel))
+	switch (getSellType(_sel))
 	{
 		case SELL_SOLDIER: // soldiers/crafts are sacked/sold singly.
 		case SELL_CRAFT:
@@ -836,13 +841,11 @@ void SellState::changeByValue(
 	}
 
 	_sellQty[_sel] += change * dir;
-	_total += getPrice() * change * dir;
+	_totalCost += getPrice() * change * dir;
 
 	const RuleItem* itRule;
-	Craft* craft;
-	double space = 0.;
 
-	switch (getType(_sel)) // Calculate the change in storage space.
+	switch (getSellType(_sel)) // Calculate the change in storage space.
 	{
 		case SELL_SOLDIER:
 			if (_soldiers[_sel]->getArmor()->getStoreItem() != "STR_NONE")
@@ -853,7 +856,9 @@ void SellState::changeByValue(
 		break;
 
 		case SELL_CRAFT:
-			craft = _crafts[getCraftIndex(_sel)];
+		{
+			double space = 0.;
+			Craft* const craft = _crafts[getCraftIndex(_sel)];
 			for (std::vector<CraftWeapon*>::const_iterator
 					i = craft->getWeapons()->begin();
 					i != craft->getWeapons()->end();
@@ -870,17 +875,12 @@ void SellState::changeByValue(
 				}
 			}
 			_spaceChange += static_cast<double>(dir) * space;
+		}
 		break;
 
 		case SELL_ITEM:
 			itRule = _game->getRuleset()->getItem(_items[getItemIndex(_sel)]);
 			_spaceChange -= static_cast<double>(dir * change) * itRule->getSize();
-//		break;
-
-//		case SELL_ENGINEER:
-//		case SELL_SCIENTIST:
-//		default:
-//		break;
 	}
 
 	updateItemStrings();
@@ -902,7 +902,7 @@ void SellState::updateItemStrings() // private.
 	woststr2 << _sellQty[_sel];
 	_lstItems->setCellText(_sel, 2, woststr2.str());
 
-	_txtSales->setText(tr("STR_VALUE_OF_SALES").arg(Text::formatFunding(_total)));
+	_txtSales->setText(tr("STR_VALUE_OF_SALES").arg(Text::formatFunding(_totalCost)));
 
 
 	Uint8 color = _lstItems->getColor();
@@ -941,43 +941,40 @@ void SellState::updateItemStrings() // private.
 				&& craftOrdnance == false)										// and is not craft ordnance
 			{
 				// well, that was !NOT! easy.
-				color = _colorArtefact;
+				color = YELLOW;
 			}
 			else if (itRule->getBattleType() == BT_AMMO
 				|| (itRule->getBattleType() == BT_NONE
 					&& itRule->getClipSize() > 0))
 			{
-				color = _ammoColor;
+				color = _colorAmmo;
 			}
 		}
 	}
-
-	_lstItems->setRowColor(
-						_sel,
-						color);
+	_lstItems->setRowColor(_sel, color);
 
 
-	bool ok = false;
+	bool showOk = false;
 
-	if (_total > 0)
-		ok = true;
+	if (_totalCost != 0)
+		showOk = true;
 	else // or craft, soldier, scientist, engineer.
 	{
 		for (size_t
 				i = 0;
 				i != _sellQty.size()
-					&& ok == false;
+					&& showOk == false;
 				++i)
 		{
-			if (_sellQty[i] > 0)
+			if (_sellQty[i] != 0)
 			{
-				switch (getType(i))
+				switch (getSellType(i))
 				{
 					case SELL_CRAFT:
 					case SELL_SOLDIER:
 					case SELL_SCIENTIST:
 					case SELL_ENGINEER:
-						ok = true;
+						showOk = true;
 				}
 			}
 		}
@@ -993,17 +990,16 @@ void SellState::updateItemStrings() // private.
 	_txtSpaceUsed->setText(woststr3.str());
 
 //	if (Options::storageLimitsEnforced == true)
-//		ok = ok
-//			&& _base->storesOverfull(_spaceChange) == false;
-	_btnOk->setVisible(ok);
+//		showOk = showOk && _base->storesOverfull(_spaceChange) == false;
+	_btnOk->setVisible(showOk);
 }
 
 /**
- * Gets the Type of the selected item.
- * @param sel - currently selected item
- * @return, the type of the selected item
+ * Gets the SellType of the selected item.
+ * @param sel - index of currently selected item
+ * @return, the sell type (SellState.h)
  */
-SellType SellState::getType(const size_t sel) const // private.
+SellType SellState::getSellType(const size_t sel) const // private.
 {
 	size_t cutoff = _soldiers.size();
 

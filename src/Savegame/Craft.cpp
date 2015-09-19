@@ -715,7 +715,7 @@ bool Craft::getLowFuel() const
 /**
  * Sets whether this craft is currently low on fuel - only has enough to get
  * back to its Base.
- * @param low - true if fuel is low
+ * @param low - true if fuel is low (default true)
  */
 void Craft::setLowFuel(bool low)
 {

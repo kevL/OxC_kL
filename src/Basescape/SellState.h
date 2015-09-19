@@ -60,15 +60,15 @@ class SellState
 {
 
 private:
-	int _total;
+	static const Uint8 YELLOW = 213;
+
+	int _totalCost;
 	size_t
 		_hasSci,
 		_hasEng,
 		_rowOffset,
 		_sel;
-	Uint8
-		_ammoColor,
-		_colorArtefact;
+	Uint8 _colorAmmo;
 	double _spaceChange;
 
 //	OptionsOrigin _origin;
@@ -103,7 +103,7 @@ private:
 	/// Gets selected quantity.
 	int getQuantity();
 	/// Gets the Type of the selected item.
-	SellType getType(const size_t sel) const;
+	SellType getSellType(const size_t sel) const;
 	/// Gets the index of selected item.
 	size_t getItemIndex(const size_t sel) const;
 	/// Gets the index of the selected craft.

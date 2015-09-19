@@ -78,7 +78,10 @@ Base::Base(const Ruleset* const rules)
 		_cashIncome(0),
 		_cashSpent(0),
 		_defenseResult(0),
-		_curSoldier(0),
+		_recallPurchase(0),
+		_recallSell(0),
+		_recallSoldier(0),
+		_recallTransfer(0),
 		_placed(false)
 {
 	_items = new ItemContainer();
@@ -2955,21 +2958,75 @@ int Base::getDefenseResult() const
 }
 
 /**
- * Sets the current row for all of this Base's soldier lists.
- * @param row - current row
+ * Sets the row to recall for all of this Base's soldier lists.
+ * @param row - recall row
  */
-void Base::setCurrentSoldierSlot(const size_t row)
+void Base::setRecallSoldierRow(const size_t row)
 {
-	_curSoldier = row;
+	_recallSoldier = row;
 }
 
 /**
- * Gets the current row for any of this Base's soldier lists.
+ * Gets the row to recall for all of this Base's soldier lists.
  * @return, current row
  */
-size_t Base::getCurrentSoldierSlot() const
+size_t Base::getRecallSoldierRow() const
 {
-	return _curSoldier;
+	return _recallSoldier;
+}
+
+/**
+ * Sets the row to recall for this Base's transfer list.
+ * @param row - recall row
+ */
+void Base::setRecallTransferRow(const size_t row)
+{
+	_recallTransfer = row;
+}
+
+/**
+ * Gets the row to recall for this Base's transfer list.
+ * @return, recall row
+ */
+size_t Base::getRecallTransferRow() const
+{
+	return _recallTransfer;
+}
+
+/**
+ * Sets the row to recall for this Base's sell list.
+ * @param row - recall row
+ */
+void Base::setRecallSellRow(const size_t row)
+{
+	_recallSell = row;
+}
+
+/**
+ * Gets the row to recall for this Base's sell list.
+ * @return, recall row
+ */
+size_t Base::getRecallSellRow() const
+{
+	return _recallSell;
+}
+
+/**
+ * Sets the row to recall for this Base's purchase list.
+ * @param row - recall row
+ */
+void Base::setRecallPurchaseRow(const size_t row)
+{
+	_recallPurchase = row;
+}
+
+/**
+ * Gets the row to recall for this Base's purchase list.
+ * @return, recall row
+ */
+size_t Base::getRecallPurchaseRow() const
+{
+	return _recallPurchase;
 }
 
 /**

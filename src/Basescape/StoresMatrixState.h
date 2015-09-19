@@ -43,8 +43,12 @@ class StoresMatrixState
 
 private:
 	static const size_t MTX_BASES = 8;
+	static const Uint8
+		WHITE	= 208,
+		YELLOW	= 213,
+		BLUE	= 218,
+		PURPLE	= 246;
 
-	Base* _base;
 	Text
 		* _txtBaseLabel,
 		* _txtBase_0,
@@ -65,7 +69,7 @@ private:
 
 	public:
 		/// Creates the Stores Matrix state.
-		explicit StoresMatrixState(Base* base);
+		explicit StoresMatrixState(const Base* base);
 		/// Cleans up the Stores Matrix state.
 		~StoresMatrixState();
 

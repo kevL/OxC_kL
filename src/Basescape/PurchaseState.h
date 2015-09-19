@@ -38,8 +38,7 @@ class Window;
 
 
 /**
- * Purchase/Hire screen that lets the player buy
- * new items for a base.
+ * Purchase/Hire screen that lets the player buy new items for a Base.
  */
 class PurchaseState
 	:
@@ -54,7 +53,7 @@ private:
 	size_t
 		_rowOffset,
 		_sel;
-	Uint8 _ammoColor;
+	Uint8 _colorAmmo;
 	double _storeSize;
 
 	Base* _base;
@@ -92,7 +91,7 @@ private:
 
 	public:
 		/// Creates the Purchase state.
-		explicit PurchaseState(Base* base);
+		explicit PurchaseState(Base* const base);
 		/// Cleans up the Purchase state.
 		~PurchaseState();
 

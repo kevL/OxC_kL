@@ -88,6 +88,9 @@ TransferConfirmState::TransferConfirmState(
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& TransferConfirmState::btnOkClick,
 					Options::keyOk);
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& TransferConfirmState::btnOkClick,
+					Options::keyOkKeypad);
 
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);

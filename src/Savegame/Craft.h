@@ -177,7 +177,7 @@ private:
 		/// Gets whether the craft is running out of fuel.
 		bool getLowFuel() const;
 		/// Sets whether the craft is running out of fuel.
-		void setLowFuel(bool low);
+		void setLowFuel(bool low = true);
 
 		/// Gets whether the craft has just finished a mission.
 		bool getMissionReturn() const;

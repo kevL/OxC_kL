@@ -52,9 +52,7 @@ namespace OpenXcom
  * Initializes all the elements in the Matrix window.
  * @param base - pointer to the accessing Base
  */
-StoresMatrixState::StoresMatrixState(Base* base)
-	:
-		_base(base)
+StoresMatrixState::StoresMatrixState(const Base* base)
 {
 	_window			= new Window(this, 320, 200);
 
@@ -98,14 +96,11 @@ StoresMatrixState::StoresMatrixState(Base* base)
 	centerAllSurfaces();
 
 
-	Uint8 color = 218;			//Palette::blockOffset(13)+10; // blue -> Interface "allocateManufacture" eg.
-	const Uint8 color2 = 208;	//Palette::blockOffset(13)
-
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
-	_window->setColor(color);
+	_window->setColor(BLUE);
 
 	_btnOk->setText(tr("STR_OK"));
-	_btnOk->setColor(color);
+	_btnOk->setColor(BLUE);
 	_btnOk->onMouseClick((ActionHandler)& StoresMatrixState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& StoresMatrixState::btnOkClick,
@@ -118,28 +113,30 @@ StoresMatrixState::StoresMatrixState(Base* base)
 					Options::keyCancel);
 
 	_txtTitle->setText(tr("STR_MATRIX"));
-	_txtTitle->setColor(color);
+	_txtTitle->setColor(BLUE);
 	_txtTitle->setBig();
 
-	_txtBaseLabel->setText(_base->getName(_game->getLanguage()));
-	_txtBaseLabel->setColor(color);
+	_txtBaseLabel->setText(base->getName(_game->getLanguage()));
+	_txtBaseLabel->setColor(BLUE);
 	_txtBaseLabel->setAlign(ALIGN_RIGHT);
 
 	_txtItem->setText(tr("STR_ITEM"));
-	_txtItem->setColor(color2);
+	_txtItem->setColor(WHITE);
 
 	_txtFreeStore->setText(tr("STR_FREESTORE"));
-	_txtFreeStore->setColor(color2);
+	_txtFreeStore->setColor(WHITE);
 
-	_lstMatrix->setColumns(9, 100, 23, 23, 23, 23, 23, 23, 23, 23);
-	_lstMatrix->setColor(color);
+	_lstMatrix->setColumns(9, 100,23,23,23,23,23,23,23,23);
+	_lstMatrix->setColor(BLUE);
 	_lstMatrix->setBackground(_window);
 	_lstMatrix->setSelectable();
 
 
 	const SavedGame* const gameSave = _game->getSavedGame();
 	std::wstring wst;
-	int qty[MTX_BASES] = {0,0,0,0,0,0,0,0};
+	int
+		qty[MTX_BASES] = {0,0,0,0,0,0,0,0},
+		freeSpace;
 
 	for (size_t
 		i = 0;
@@ -152,7 +149,7 @@ StoresMatrixState::StoresMatrixState(Base* base)
 			qty[i] = base->getTotalSoldiers();
 
 			wst = base->getName().substr(0,4);
-			int freeSpace = static_cast<int>(static_cast<double>(base->getAvailableStores()) - base->getUsedStores() + 0.5);
+			freeSpace = static_cast<int>(static_cast<double>(base->getAvailableStores()) - base->getUsedStores() + 0.5);
 
 			std::wostringstream woststr;
 			woststr	<< wst
@@ -178,14 +175,14 @@ StoresMatrixState::StoresMatrixState(Base* base)
 			break;
 	}
 
-	_txtBase_0->setColor(color2);
-	_txtBase_1->setColor(color2);
-	_txtBase_2->setColor(color2);
-	_txtBase_3->setColor(color2);
-	_txtBase_4->setColor(color2);
-	_txtBase_5->setColor(color2);
-	_txtBase_6->setColor(color2);
-	_txtBase_7->setColor(color2);
+	_txtBase_0->setColor(WHITE);
+	_txtBase_1->setColor(WHITE);
+	_txtBase_2->setColor(WHITE);
+	_txtBase_3->setColor(WHITE);
+	_txtBase_4->setColor(WHITE);
+	_txtBase_5->setColor(WHITE);
+	_txtBase_6->setColor(WHITE);
+	_txtBase_7->setColor(WHITE);
 
 	std::wostringstream
 		woststr0,
@@ -221,9 +218,7 @@ StoresMatrixState::StoresMatrixState(Base* base)
 						woststr6.str().c_str(),
 						woststr7.str().c_str());
 
-		_lstMatrix->setRowColor(
-							row++,
-							color);
+		_lstMatrix->setRowColor(row++, BLUE);
 	}
 
 	const Ruleset* const rules = _game->getRuleset();
@@ -233,7 +228,7 @@ StoresMatrixState::StoresMatrixState(Base* base)
 	const RuleCraftWeapon* cwRule;
 	size_t baseId = 0;
 	std::string stTest;
-
+	Uint8 color;
 
 	const std::vector<std::string>& itemList = rules->getItemsList();
 	for (std::vector<std::string>::const_iterator
@@ -376,7 +371,7 @@ StoresMatrixState::StoresMatrixState(Base* base)
 			} */
 
 			std::wstring item = tr(*i);
-			color = Palette::blockOffset(13)+10; // blue
+			color = BLUE;
 
 			if ((itRule->getBattleType() == BT_AMMO
 					|| (itRule->getBattleType() == BT_NONE
@@ -384,7 +379,7 @@ StoresMatrixState::StoresMatrixState(Base* base)
 				&& itRule->getType() != "STR_ELERIUM_115")
 			{
 				item.insert(0, L"  ");
-				color = Palette::blockOffset(15)+6; // purple
+				color = PURPLE;
 			}
 
 			if (gameSave->isResearched(itRule->getType()) == false				// not researched or is research exempt
@@ -395,7 +390,7 @@ StoresMatrixState::StoresMatrixState(Base* base)
 				&& craftOrdnance == false)										// and is not craft ordnance
 			{
 				// well, that was !NOT! easy.
-				color = Palette::blockOffset(13)+5; // yellow
+				color = YELLOW;
 			}
 
 			_lstMatrix->addRow(
@@ -410,9 +405,7 @@ StoresMatrixState::StoresMatrixState(Base* base)
 							woststr6.str().c_str(),
 							woststr7.str().c_str());
 
-			_lstMatrix->setRowColor(
-								row++,
-								color);
+			_lstMatrix->setRowColor(row++, color);
 		}
 	}
 

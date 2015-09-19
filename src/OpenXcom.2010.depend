@@ -4385,7 +4385,7 @@
 
 1441669975 f:\git\openxcom\src\resource\resourcepack.h
 
-1442548695 f:\git\openxcom\src\savegame\base.h
+1442626820 f:\git\openxcom\src\savegame\base.h
 	"Target.h"
 
 1441247516 f:\git\openxcom\src\savegame\target.h
@@ -4467,13 +4467,13 @@
 1440476320 f:\git\openxcom\src\basescape\manufacturestate.h
 	"../Engine/State.h"
 
-1431469874 f:\git\openxcom\src\basescape\purchasestate.h
+1442626469 f:\git\openxcom\src\basescape\purchasestate.h
 	"../Engine/State.h"
 
 1430210899 f:\git\openxcom\src\basescape\researchstate.h
 	"../Engine/State.h"
 
-1434619555 f:\git\openxcom\src\basescape\sellstate.h
+1442626186 f:\git\openxcom\src\basescape\sellstate.h
 	"../Engine/State.h"
 
 1442268091 f:\git\openxcom\src\basescape\soldiersstate.h
@@ -4503,7 +4503,7 @@
 
 1436388140 f:\git\openxcom\src\savegame\basefacility.h
 
-1442211005 f:\git\openxcom\src\savegame\craft.h
+1442619906 f:\git\openxcom\src\savegame\craft.h
 	"CraftId.h"
 	"MovingTarget.h"
 
@@ -4694,7 +4694,7 @@
 
 1442236036 f:\git\openxcom\src\savegame\craftweapon.h
 
-1442270605 source:f:\git\openxcom\src\basescape\craftsoldiersstate.cpp
+1442624921 source:f:\git\openxcom\src\basescape\craftsoldiersstate.cpp
 	"CraftSoldiersState.h"
 	"SoldierInfoState.h"
 	"../Battlescape/BattlescapeGenerator.h"
@@ -4920,7 +4920,7 @@
 	"../Savegame/Base.h"
 	"../Savegame/SavedGame.h"
 
-1442470052 source:f:\git\openxcom\src\basescape\newmanufactureliststate.cpp
+1442612810 source:f:\git\openxcom\src\basescape\newmanufactureliststate.cpp
 	"NewManufactureListState.h"
 	"ManufactureCostsState.h"
 	"ManufactureStartState.h"
@@ -5011,7 +5011,7 @@
 1436386751 f:\git\openxcom\src\basescape\placestartfacilitystate.h
 	"PlaceFacilityState.h"
 
-1440097659 source:f:\git\openxcom\src\basescape\purchasestate.cpp
+1442627120 source:f:\git\openxcom\src\basescape\purchasestate.cpp
 	"PurchaseState.h"
 	"../Engine/Action.h"
 	"../Engine/Game.h"
@@ -5107,7 +5107,7 @@
 	"../Savegame/Base.h"
 	"../Savegame/BaseFacility.h"
 
-1440186931 source:f:\git\openxcom\src\basescape\sellstate.cpp
+1442627099 source:f:\git\openxcom\src\basescape\sellstate.cpp
 	"SellState.h"
 	"../Engine/Action.h"
 	"../Engine/Game.h"
@@ -5265,11 +5265,11 @@
 	"../Savegame/Region.h"
 	"../Savegame/SavedGame.h"
 
-1430936736 f:\git\openxcom\src\basescape\transferitemsstate.h
+1442624686 f:\git\openxcom\src\basescape\transferitemsstate.h
 	"../Engine/State.h"
 	"../Savegame/Transfer.h"
 
-1438165526 source:f:\git\openxcom\src\basescape\transferconfirmstate.cpp
+1442620944 source:f:\git\openxcom\src\basescape\transferconfirmstate.cpp
 	"TransferConfirmState.h"
 	"TransferItemsState.h"
 	"../Engine/Game.h"
@@ -5282,7 +5282,7 @@
 1430149550 f:\git\openxcom\src\basescape\transferconfirmstate.h
 	"../Engine/State.h"
 
-1440097748 source:f:\git\openxcom\src\basescape\transferitemsstate.cpp
+1442623882 source:f:\git\openxcom\src\basescape\transferitemsstate.cpp
 	"TransferItemsState.h"
 	"TransferConfirmState.h"
 	"../Engine/Action.h"
@@ -6959,7 +6959,7 @@
 1442441486 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1442516522 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1442619942 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	"AlienBaseState.h"
 	"BaseDefenseState.h"
@@ -8399,7 +8399,7 @@
 	"../Ruleset/RuleRegion.h"
 	"../Ruleset/Ruleset.h"
 
-1442549385 source:f:\git\openxcom\src\savegame\base.cpp
+1442626844 source:f:\git\openxcom\src\savegame\base.cpp
 	"Base.h"
 	"BaseFacility.h"
 	"Craft.h"
@@ -8465,7 +8465,7 @@
 	"Country.h"
 	"../Ruleset/RuleCountry.h"
 
-1442210947 source:f:\git\openxcom\src\savegame\craft.cpp
+1442619918 source:f:\git\openxcom\src\savegame\craft.cpp
 	"Craft.h"
 	"AlienBase.h"
 	"Base.h"
@@ -10352,7 +10352,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1441693472 source:f:\git\openxcom\src\basescape\storesmatrixstate.cpp
+1442616928 source:f:\git\openxcom\src\basescape\storesmatrixstate.cpp
 	"StoresMatrixState.h"
 	"../Engine/Game.h"
 	"../Interface/Text.h"
@@ -10371,7 +10371,7 @@
 	"../Savegame/Transfer.h"
 	"../Savegame/Vehicle.h"
 
-1434773329 f:\git\openxcom\src\basescape\storesmatrixstate.h
+1442616928 f:\git\openxcom\src\basescape\storesmatrixstate.h
 	"../Engine/State.h"
 
 1430149550 source:f:\git\openxcom\src\ruleset\extramusic.cpp
