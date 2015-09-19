@@ -120,15 +120,18 @@ void ManufactureInfoState::buildUi() // private.
 	_txtUnitToProduce		= new Text(84, 17, 176, 80);
 	_txtTodo				= new Text(50, 17, 260, 80);
 
-	_txtEngineerUp			= new Text(100, 17, 32, 111);
-	_btnEngineerUp			= new ArrowButton(ARROW_BIG_UP, 14, 14, 145, 111);
-	_txtEngineerDown		= new Text(100, 17, 32, 135);
-	_btnEngineerDown		= new ArrowButton(ARROW_BIG_DOWN, 14, 14, 145, 135);
-
-	_txtUnitUp				= new Text(100, 17, 205, 111);
-	_btnUnitUp				= new ArrowButton(ARROW_BIG_UP, 14, 14, 280, 111);
-	_txtUnitDown			= new Text(100, 17, 205, 135);
-	_btnUnitDown			= new ArrowButton(ARROW_BIG_DOWN, 14, 14, 280, 135);
+//	_txtEngineerUp			= new Text(100, 17, 32, 111);
+//	_btnEngineerUp			= new ArrowButton(ARROW_BIG_UP, 14, 14, 145, 111);
+//	_txtEngineerDown		= new Text(100, 17, 32, 135);
+//	_btnEngineerDown		= new ArrowButton(ARROW_BIG_DOWN, 14, 14, 145, 135);
+//	_txtUnitUp				= new Text(100, 17, 205, 111);
+//	_btnUnitUp				= new ArrowButton(ARROW_BIG_UP, 14, 14, 280, 111);
+//	_txtUnitDown			= new Text(100, 17, 205, 135);
+//	_btnUnitDown			= new ArrowButton(ARROW_BIG_DOWN, 14, 14, 280, 135);
+	_btnEngineerUp			= new ArrowButton(ARROW_BIG_UP,   100, 16,  30, 111);
+	_btnEngineerDown		= new ArrowButton(ARROW_BIG_DOWN, 100, 16,  30, 135);
+	_btnUnitUp				= new ArrowButton(ARROW_BIG_UP,   100, 16, 190, 111);
+	_btnUnitDown			= new ArrowButton(ARROW_BIG_DOWN, 100, 16, 190, 135);
 
 	_btnStop				= new TextButton(135, 16,  10, 159);
 	_btnOk					= new TextButton(135, 16, 175, 159);
@@ -153,13 +156,13 @@ void ManufactureInfoState::buildUi() // private.
 	add(_txtAllocated,			"text",		"manufactureInfo");
 	add(_txtUnitToProduce,		"text",		"manufactureInfo");
 	add(_txtTodo,				"text",		"manufactureInfo");
-	add(_txtEngineerUp,			"text",		"manufactureInfo");
+//	add(_txtEngineerUp,			"text",		"manufactureInfo");
 	add(_btnEngineerUp,			"button1",	"manufactureInfo");
-	add(_txtEngineerDown,		"text",		"manufactureInfo");
+//	add(_txtEngineerDown,		"text",		"manufactureInfo");
 	add(_btnEngineerDown,		"button1",	"manufactureInfo");
-	add(_txtUnitUp,				"text",		"manufactureInfo");
+//	add(_txtUnitUp,				"text",		"manufactureInfo");
 	add(_btnUnitUp,				"button1",	"manufactureInfo");
-	add(_txtUnitDown,			"text",		"manufactureInfo");
+//	add(_txtUnitDown,			"text",		"manufactureInfo");
 	add(_btnUnitDown,			"button1",	"manufactureInfo");
 	add(_btnStop,				"button2",	"manufactureInfo");
 	add(_btnOk,					"button2",	"manufactureInfo");
@@ -192,8 +195,8 @@ void ManufactureInfoState::buildUi() // private.
 	_txtUnitToProduce->setText(tr("STR_UNITS_TO_PRODUCE"));
 	_txtUnitToProduce->setBig();
 
-	_txtEngineerUp->setText(tr("STR_INCREASE_UC"));
-	_txtEngineerDown->setText(tr("STR_DECREASE_UC"));
+//	_txtEngineerUp->setText(tr("STR_INCREASE_UC"));
+//	_txtEngineerDown->setText(tr("STR_DECREASE_UC"));
 
 	_btnEngineerUp->onMousePress((ActionHandler)& ManufactureInfoState::moreEngineerPress);
 	_btnEngineerUp->onMouseRelease((ActionHandler)& ManufactureInfoState::moreEngineerRelease);
@@ -203,8 +206,8 @@ void ManufactureInfoState::buildUi() // private.
 	_btnEngineerDown->onMouseRelease((ActionHandler)& ManufactureInfoState::lessEngineerRelease);
 	_btnEngineerDown->onMouseClick((ActionHandler)& ManufactureInfoState::lessEngineerClick, 0);
 
-	_txtUnitUp->setText(tr("STR_INCREASE_UC"));
-	_txtUnitDown->setText(tr("STR_DECREASE_UC"));
+//	_txtUnitUp->setText(tr("STR_INCREASE_UC"));
+//	_txtUnitDown->setText(tr("STR_DECREASE_UC"));
 
 	_btnUnitUp->onMousePress((ActionHandler)& ManufactureInfoState::moreUnitPress);
 	_btnUnitUp->onMouseRelease((ActionHandler)& ManufactureInfoState::moreUnitRelease);
@@ -224,14 +227,15 @@ void ManufactureInfoState::buildUi() // private.
 					Options::keyOk);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& ManufactureInfoState::btnOkClick,
+					Options::keyOkKeypad);
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& ManufactureInfoState::btnOkClick,
 					Options::keyCancel);
 
 	if (_production == NULL)
 	{
 		_btnOk->setVisible(false);
-		_production = new Production(
-								_manufRule,
-								0);
+		_production = new Production(_manufRule, 0);
 		_base->addProduction(_production);
 	}
 
@@ -338,7 +342,7 @@ int ManufactureInfoState::calcProfit() // private.
  */
 void ManufactureInfoState::btnSellRelease(Action* action) // private.
 {
-	if (   action->getDetails()->button.button == SDL_BUTTON_LEFT
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT
 		|| action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
 		_production->setSellItems(_btnSell->getPressed() == true);

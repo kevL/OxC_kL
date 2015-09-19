@@ -35,8 +35,7 @@ class Window;
 
 
 /**
- * Screen which displays needed elements to start productions;
- * items/ required workshop space/ cost to build a unit, etc.
+ * Screen which displays needed elements to start productions.
  */
 class ManufactureStartState
 	:
@@ -66,7 +65,7 @@ private:
 	public:
 		/// Creates the State.
 		ManufactureStartState(
-				Base* base,
+				Base* const base,
 				const RuleManufacture* const manufRule);
 
 		/// Handler for the Costs button.

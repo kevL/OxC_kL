@@ -57,8 +57,8 @@ private:
 		* _txtAllocatedScientist,
 		* _txtAvailableScientist,
 		* _txtAvailableSpace,
-		* _txtLess,
-		* _txtMore,
+//		* _txtLess,
+//		* _txtMore,
 		* _txtTitle;
 	TextButton
 		* _btnCancel,

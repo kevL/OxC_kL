@@ -39,7 +39,7 @@ class Window;
 
 
 /**
- * Screen that allows changing of Production settings (assigned engineer, units to build).
+ * Screen that allows changing of Production settings.
 */
 class ManufactureInfoState
 	:
@@ -63,16 +63,16 @@ private:
 		* _txtAllocatedEngineer,
 		* _txtAvailableEngineer,
 		* _txtAvailableSpace,
-		* _txtEngineerDown,
-		* _txtEngineerUp,
+//		* _txtEngineerDown,
+//		* _txtEngineerUp,
 		* _txtMonthlyProfit,
 		* _txtTimeDescr,
 		* _txtTimeTotal,
 		* _txtTitle,
 		* _txtTodo,
-		* _txtUnitDown,
-		* _txtUnitToProduce,
-		* _txtUnitUp;
+//		* _txtUnitDown,
+		* _txtUnitToProduce;
+//		* _txtUnitUp;
 	TextButton
 		* _btnOk,
 		* _btnStop;

@@ -51,7 +51,7 @@ namespace OpenXcom
  * @param manufRule	- pointer to RuleManufacture to produce
  */
 ManufactureStartState::ManufactureStartState(
-		Base* base,
+		Base* const base,
 		const RuleManufacture* const manufRule)
 	:
 		_base(base),
@@ -116,8 +116,8 @@ ManufactureStartState::ManufactureStartState(
 
 	const std::map<std::string, int>& requiredItems (_manufRule->getRequiredItems()); // init
 	const int availableWorkSpace = _base->getFreeWorkshops();
-	bool productionPossible (_game->getSavedGame()->getFunds() > _manufRule->getManufactureCost());	// init
-	productionPossible &= (availableWorkSpace > 0);													// nifty.
+	bool showStart (_game->getSavedGame()->getFunds() > _manufRule->getManufactureCost());	// init
+	showStart &= (availableWorkSpace != 0);													// nifty.
 
 	_txtRequiredItems->setText(tr("STR_SPECIAL_MATERIALS_REQUIRED"));
 	_txtItemRequired->setText(tr("STR_ITEM_REQUIRED"));
@@ -138,7 +138,7 @@ ManufactureStartState::ManufactureStartState(
 			woststr2;
 		woststr1 << L'\x01' << i->second;
 		woststr2 << L'\x01' << baseItems->getItemQty(i->first);
-		productionPossible &= (baseItems->getItemQty(i->first) >= i->second);
+		showStart &= (baseItems->getItemQty(i->first) >= i->second);
 		_lstRequiredItems->addRow(
 								3,
 								tr(i->first).c_str(),
@@ -169,7 +169,10 @@ ManufactureStartState::ManufactureStartState(
 	_btnStart->onKeyboardPress(
 					(ActionHandler)& ManufactureStartState::btnStartClick,
 					Options::keyOk);
-	_btnStart->setVisible(productionPossible);
+	_btnStart->onKeyboardPress(
+					(ActionHandler)& ManufactureStartState::btnStartClick,
+					Options::keyOkKeypad);
+	_btnStart->setVisible(showStart);
 }
 
 /**
@@ -196,9 +199,7 @@ void ManufactureStartState::btnCancelClick(Action*)
  */
 void ManufactureStartState::btnStartClick(Action*)
 {
-	_game->pushState(new ManufactureInfoState(
-											_base,
-											_manufRule));
+	_game->pushState(new ManufactureInfoState(_base, _manufRule));
 }
 
 }

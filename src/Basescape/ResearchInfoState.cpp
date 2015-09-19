@@ -96,18 +96,21 @@ void ResearchInfoState::buildUi()
 	_screen = false;
 
 	_window					= new Window(this, 230, 140, 45, 30);
+
 	_txtTitle				= new Text(198, 16, 61, 40);
 
-	_txtAvailableScientist	= new Text(198, 9, 61, 60);
-	_txtAvailableSpace		= new Text(198, 9, 61, 70);
+	_txtAvailableScientist	= new Text(198,  9, 61, 60);
+	_txtAvailableSpace		= new Text(198,  9, 61, 70);
 	_txtAllocatedScientist	= new Text(198, 16, 61, 80);
 
-	_txtMore				= new Text(134, 16, 93, 100);
-	_txtLess				= new Text(134, 16, 93, 120);
-	_btnMore				= new ArrowButton(ARROW_BIG_UP, 13, 14, 205, 100);
-	_btnLess				= new ArrowButton(ARROW_BIG_DOWN, 13, 14, 205, 120);
+//	_txtMore				= new Text(134, 16, 93, 100);
+//	_txtLess				= new Text(134, 16, 93, 120);
+//	_btnMore				= new ArrowButton(ARROW_BIG_UP, 13, 14, 205, 100);
+//	_btnLess				= new ArrowButton(ARROW_BIG_DOWN, 13, 14, 205, 120);
+	_btnMore				= new ArrowButton(ARROW_BIG_UP,   120, 16, 100, 100);
+	_btnLess				= new ArrowButton(ARROW_BIG_DOWN, 120, 16, 100, 120);
 
-	_btnCancel				= new TextButton(95, 16, 61, 144);
+	_btnCancel				= new TextButton(95, 16,  61, 144);
 	_btnOk					= new TextButton(95, 16, 164, 144);
 
 //	_srfScientists			= new InteractiveSurface(230, 140, 45, 30);
@@ -119,8 +122,8 @@ void ResearchInfoState::buildUi()
 	add(_txtAvailableScientist,	"text",		"allocateResearch");
 	add(_txtAvailableSpace,		"text",		"allocateResearch");
 	add(_txtAllocatedScientist,	"text",		"allocateResearch");
-	add(_txtMore,				"text",		"allocateResearch");
-	add(_txtLess,				"text",		"allocateResearch");
+//	add(_txtMore,				"text",		"allocateResearch");
+//	add(_txtLess,				"text",		"allocateResearch");
 	add(_btnMore,				"button1",	"allocateResearch");
 	add(_btnLess,				"button1",	"allocateResearch");
 	add(_btnCancel,				"button2",	"allocateResearch");
@@ -139,11 +142,11 @@ void ResearchInfoState::buildUi()
 
 	_txtAllocatedScientist->setBig();
 
-	_txtMore->setText(tr("STR_INCREASE"));
-	_txtMore->setBig();
+//	_txtMore->setText(tr("STR_INCREASE"));
+//	_txtMore->setBig();
 
-	_txtLess->setText(tr("STR_DECREASE"));
-	_txtLess->setBig();
+//	_txtLess->setText(tr("STR_DECREASE"));
+//	_txtLess->setBig();
 
 	if (_rule != NULL)
 	{
@@ -175,12 +178,12 @@ void ResearchInfoState::buildUi()
 
 	if (_rule != NULL)
 	{
-		_btnOk->setText(tr("STR_START_PROJECT"));
-
 		_btnCancel->setText(tr("STR_CANCEL_UC"));
 		_btnCancel->onKeyboardPress(
 						(ActionHandler)& ResearchInfoState::btnCancelClick,
 						Options::keyCancel);
+
+		_btnOk->setText(tr("STR_START_PROJECT"));
 	}
 	else
 	{
@@ -197,6 +200,10 @@ void ResearchInfoState::buildUi()
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& ResearchInfoState::btnOkClick,
 					Options::keyOk);
+	_btnOk->onMouseClick((ActionHandler)& ResearchInfoState::btnOkClick);
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& ResearchInfoState::btnOkClick,
+					Options::keyOkKeypad);
 }
 
 /**
@@ -349,25 +356,25 @@ void ResearchInfoState::moreSci()
  */
 void ResearchInfoState::moreByValue(int change)
 {
-	if (change < 1)
-		return;
-
-	const int
-		freeScientists = _base->getScientists(),
-		freeSpaceLab = _base->getFreeLaboratories();
-
-	if (freeScientists > 0
-		&& freeSpaceLab > 0)
+	if (change > 0)
 	{
-		change = std::min(
-						change,
-						std::min(
-								freeScientists,
-								freeSpaceLab));
-		_project->setAssigned(_project->getAssigned() + change);
-		_base->setScientists(_base->getScientists() - change);
+		const int
+			freeScientists = _base->getScientists(),
+			freeSpaceLab = _base->getFreeLaboratories();
 
-		setAssignedScientist();
+		if (freeScientists > 0
+			&& freeSpaceLab > 0)
+		{
+			change = std::min(
+							change,
+							std::min(
+									freeScientists,
+									freeSpaceLab));
+			_project->setAssigned(_project->getAssigned() + change);
+			_base->setScientists(_base->getScientists() - change);
+
+			setAssignedScientist();
+		}
 	}
 }
 
@@ -386,19 +393,19 @@ void ResearchInfoState::lessSci()
  */
 void ResearchInfoState::lessByValue(int change)
 {
-	if (change < 1)
-		return;
-
-	const int assigned = _project->getAssigned();
-	if (assigned > 0)
+	if (change > 0)
 	{
-		change = std::min(
-						change,
-						assigned);
-		_project->setAssigned(assigned - change);
-		_base->setScientists(_base->getScientists() + change);
+		const int assigned = _project->getAssigned();
+		if (assigned > 0)
+		{
+			change = std::min(
+							change,
+							assigned);
+			_project->setAssigned(assigned - change);
+			_base->setScientists(_base->getScientists() + change);
 
-		setAssignedScientist();
+			setAssignedScientist();
+		}
 	}
 }
 
