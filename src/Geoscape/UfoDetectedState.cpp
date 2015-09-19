@@ -36,7 +36,9 @@
 #include "../Resource/ResourcePack.h"
 
 #include "../Ruleset/RuleCountry.h"
+#include "../Ruleset/RuleInterface.h"
 #include "../Ruleset/RuleRegion.h"
+#include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleTerrain.h"
 #include "../Ruleset/RuleUfo.h"
 
@@ -136,9 +138,7 @@ UfoDetectedState::UfoDetectedState(
 		}
 	}
 
-	setInterface(
-			"UFOInfo",
-			_hyper);
+	setInterface("UFOInfo", _hyper);
 
 	add(_window,		"window",	"UFOInfo");
 	add(_txtUfo,		"text",		"UFOInfo");
@@ -164,7 +164,9 @@ UfoDetectedState::UfoDetectedState(
 	centerAllSurfaces();
 
 
-	_window->setBackground(_game->getResourcePack()->getSurface("BACK15.SCR"));
+	_window->setBackground(
+						_game->getResourcePack()->getSurface("BACK15.SCR"),
+						1,3); // x&y offsets.
 
 	_txtUfo->setText(_ufo->getName(_game->getLanguage()));
 	_txtUfo->setBig();
@@ -186,9 +188,7 @@ UfoDetectedState::UfoDetectedState(
 			i != _game->getSavedGame()->getRegions()->end();
 			++i)
 	{
-		if ((*i)->getRules()->insideRegion(
-										lon,
-										lat) == true)
+		if ((*i)->getRules()->insideRegion(lon,lat) == true)
 		{
 			woststr << tr((*i)->getRules()->getType());
 			break;
@@ -200,9 +200,7 @@ UfoDetectedState::UfoDetectedState(
 			i != _game->getSavedGame()->getCountries()->end();
 			++i)
 	{
-		if ((*i)->getRules()->insideCountry(
-										lon,
-										lat) == true)
+		if ((*i)->getRules()->insideCountry(lon,lat) == true)
 		{
 			woststr << L"> " << tr((*i)->getRules()->getType());
 			break;
@@ -210,8 +208,10 @@ UfoDetectedState::UfoDetectedState(
 	}
 	_txtRegion->setText(woststr.str());
 
+	// TODO: Something about this ->
+	const Uint8 color2 = static_cast<Uint8>(_game->getRuleset()->getInterface("UFOInfo")->getElement("text")->color2); // yellow
 
-	_lstInfo->setColumns(2, 80, 112);
+	_lstInfo->setColumns(2, 80,112);
 	_lstInfo->setDot();
 	woststr.str(L"");
 	woststr << L'\x01' << tr(_ufo->getRules()->getSize());
@@ -219,7 +219,7 @@ UfoDetectedState::UfoDetectedState(
 					2,
 					tr("STR_SIZE_UC").c_str(),
 					woststr.str().c_str());
-	_lstInfo->setCellColor(0, 1, Palette::blockOffset(8)+10);
+	_lstInfo->setCellColor(0,1, color2);
 
 	woststr.str(L"");
 	woststr << L'\x01' << tr(_ufo->getAltitude());
@@ -227,7 +227,7 @@ UfoDetectedState::UfoDetectedState(
 					2,
 					tr("STR_ALTITUDE").c_str(),
 					woststr.str().c_str());
-	_lstInfo->setCellColor(1, 1, Palette::blockOffset(8)+10);
+	_lstInfo->setCellColor(1,1, color2);
 
 	woststr.str(L"");
 	std::string heading = _ufo->getDirection();
@@ -238,7 +238,7 @@ UfoDetectedState::UfoDetectedState(
 					2,
 					tr("STR_HEADING").c_str(),
 					woststr.str().c_str());
-	_lstInfo->setCellColor(2, 1, Palette::blockOffset(8)+10);
+	_lstInfo->setCellColor(2,1, color2);
 
 	woststr.str(L"");
 	woststr << L'\x01' << Text::formatNumber(_ufo->getSpeed());
@@ -246,7 +246,7 @@ UfoDetectedState::UfoDetectedState(
 					2,
 					tr("STR_SPEED").c_str(),
 					woststr.str().c_str());
-	_lstInfo->setCellColor(3, 1, Palette::blockOffset(8)+10);
+	_lstInfo->setCellColor(3,1, color2);
 
 	_btnIntercept->setText(tr("STR_INTERCEPT"));
 	_btnIntercept->onMouseClick((ActionHandler)& UfoDetectedState::btnInterceptClick);
@@ -290,7 +290,7 @@ UfoDetectedState::UfoDetectedState(
 			case  3:	terrain = "FOREST";	break;
 			case  4:	terrain = "POLAR";	break;
 			case  5:	terrain = "MOUNT";	break;
-			case  6:	terrain = "FOREST";	break; // JUNGLE
+			case  6:	terrain = "FOREST";	break; // substitute f/ JUNGLE
 			case  7:	terrain = "DESERT";	break;
 			case  8:	terrain = "DESERT";	break;
 			case  9:	terrain = "POLAR";	break;
@@ -317,7 +317,7 @@ UfoDetectedState::UfoDetectedState(
 		_txtHyperwave->setAlign(ALIGN_CENTER);
 		_txtHyperwave->setText(tr("STR_HYPER_WAVE_TRANSMISSIONS_ARE_DECODED"));
 
-		_lstInfo2->setColumns(2, 80, 112);
+		_lstInfo2->setColumns(2, 80,112);
 		_lstInfo2->setDot();
 		woststr.str(L"");
 		woststr << L'\x01' << tr(_ufo->getRules()->getType());
@@ -325,28 +325,28 @@ UfoDetectedState::UfoDetectedState(
 						2,
 						tr("STR_CRAFT_TYPE").c_str(),
 						woststr.str().c_str());
-		_lstInfo2->setCellColor(0,1, Palette::blockOffset(8)+10);
+		_lstInfo2->setCellColor(0,1, color2);
 		woststr.str(L"");
 		woststr << L'\x01' << tr(_ufo->getAlienRace());
 		_lstInfo2->addRow(
 						2,
 						tr("STR_RACE").c_str(),
 						woststr.str().c_str());
-		_lstInfo2->setCellColor(1,1, Palette::blockOffset(8)+10);
+		_lstInfo2->setCellColor(1,1, color2);
 		woststr.str(L"");
 		woststr << L'\x01' << tr(_ufo->getUfoMissionType());
 		_lstInfo2->addRow(
 						2,
 						tr("STR_MISSION").c_str(),
 						woststr.str().c_str());
-		_lstInfo2->setCellColor(2,1, Palette::blockOffset(8)+10);
+		_lstInfo2->setCellColor(2,1, color2);
 		woststr.str(L"");
 		woststr << L'\x01' << tr(_ufo->getAlienMission()->getRegion());
 		_lstInfo2->addRow(
 						2,
 						tr("STR_ZONE").c_str(),
 						woststr.str().c_str());
-		_lstInfo2->setCellColor(3,1, Palette::blockOffset(8)+10);
+		_lstInfo2->setCellColor(3,1, color2);
 
 		if (contact == false
 			&& hyperBases != NULL) // safety.

@@ -98,7 +98,7 @@ Window::Window(
 }
 
 /**
- * Deletes timers.
+ * Deletes timer.
  */
 Window::~Window()
 {

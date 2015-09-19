@@ -97,7 +97,7 @@ Craft::Craft(
 }
 
 /**
- * Delete the contents of this Craft from memory.
+ * Deletes this Craft.
  */
 Craft::~Craft()
 {
@@ -385,7 +385,8 @@ void Craft::changeRules(RuleCraft* const crRule)
 }
 
 /**
- * Gets this Craft's unique ID. Each craft can be identified by its type and ID.
+ * Gets this Craft's unique ID.
+ * @note Each craft can be identified by its type and ID.
  * @return, unique ID
  */
 int Craft::getId() const
@@ -487,27 +488,26 @@ void Craft::setStatus(const std::string& status)
  */
 std::string Craft::getAltitude() const
 {
-	const Ufo* const ufo = dynamic_cast<Ufo*>(_dest);
+	if (_dest == NULL)
+		return "STR_HIGH_UC";
 
+	const Ufo* const ufo = dynamic_cast<Ufo*>(_dest);
 	if (ufo != NULL)
 	{
 		if (ufo->getAltitude() != "STR_GROUND")
 			return ufo->getAltitude();
-		else
-			return "STR_VERY_LOW";
-	}
-	else
-	{
-		switch (RNG::generate(0,3))
-		{
-			case 0: //return "STR_VERY_LOW";
-			case 1: return "STR_LOW_UC";
-			case 2: return "STR_HIGH_UC";
-			case 3: return "STR_VERY_HIGH";
-		}
+
+		return "STR_VERY_LOW";
 	}
 
-	return "STR_VERY_LOW";
+	switch (RNG::generate(0,3))
+	{
+		default:
+		case 0:
+		case 1: return "STR_LOW_UC";
+		case 2: return "STR_HIGH_UC";
+		case 3: return "STR_VERY_HIGH";
+	}
 }
 
 /**
@@ -880,16 +880,15 @@ void Craft::checkup()
 bool Craft::detect(const Target* const target) const
 {
 	const int radarRange = _crRule->getRadarRange();
+	if (radarRange != 0)
+	{
+		const double
+			range = static_cast<double>(radarRange) * greatCircleConversionFactor,
+			dist = getDistance(target) * earthRadius;
 
-	if (radarRange == 0)
-		return false;
-
-	const double
-		range = static_cast<double>(radarRange) * greatCircleConversionFactor,
-		dist = getDistance(target) * earthRadius;
-
-	if (range >= dist)
-		return true;
+		if (range >= dist)
+			return true;
+	}
 
 	return false;
 }
@@ -1133,11 +1132,11 @@ int Craft::getLoadCapacity() const
 	return _loadCap;
 }
 
-/**
+/*
  * Sets current load.
  * @param load - current load
- */
-/* void Craft::setLoadCurrent(const int load)
+ *
+void Craft::setLoadCurrent(const int load)
 {
 	_loadCur = load;
 } */
@@ -1202,8 +1201,7 @@ int Craft::getDowntime(bool& delayed)
 	if (_damage > 0)
 	{
 		hours += static_cast<int>(std::ceil(
-				 static_cast<double>(_damage)
-					/ static_cast<double>(_crRule->getRepairRate())
+				 static_cast<double>(_damage) / static_cast<double>(_crRule->getRepairRate())
 				 / 2.));
 	}
 

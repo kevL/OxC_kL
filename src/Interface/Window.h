@@ -44,10 +44,10 @@ enum WindowPopup
 
 
 /**
- * Box with a colored border and custom background.
+ * Box with a colored border and specified background.
  * @note Pretty much used as the background in most of the interface. In fact
  * it's also used in screens so it's not really much of a window - it's just a
- * ... box.
+ * ... a box.
  * But box sounds lame. Think window.
  */
 class Window

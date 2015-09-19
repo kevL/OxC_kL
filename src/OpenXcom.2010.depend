@@ -4552,7 +4552,7 @@
 	"Text.h"
 	"../Engine/InteractiveSurface.h"
 
-1440346956 f:\git\openxcom\src\interface\window.h
+1442671642 f:\git\openxcom\src\interface\window.h
 	"../Engine/Surface.h"
 
 1442546679 f:\git\openxcom\src\ruleset\ruleset.h
@@ -5040,7 +5040,7 @@
 
 1438339645 f:\git\openxcom\src\savegame\transfer.h
 
-1440097670 source:f:\git\openxcom\src\basescape\researchinfostate.cpp
+1442665833 source:f:\git\openxcom\src\basescape\researchinfostate.cpp
 	"ResearchInfoState.h"
 	"../Engine/Action.h"
 	"../Engine/Game.h"
@@ -7076,7 +7076,7 @@
 1431486790 f:\git\openxcom\src\geoscape\researchrequiredstate.h
 	"../Engine/State.h"
 
-1441337817 f:\git\openxcom\src\geoscape\ufodetectedstate.h
+1442673309 f:\git\openxcom\src\geoscape\ufodetectedstate.h
 	"../Engine/State.h"
 
 1431486799 f:\git\openxcom\src\geoscape\ufoloststate.h
@@ -7480,7 +7480,7 @@
 	"NumberText.h"
 	"../Engine/Palette.h"
 
-1440356193 source:f:\git\openxcom\src\interface\window.cpp
+1442671475 source:f:\git\openxcom\src\interface\window.cpp
 	"Window.h"
 	"../Engine/Sound.h"
 	"../Engine/Timer.h"
@@ -8465,7 +8465,7 @@
 	"Country.h"
 	"../Ruleset/RuleCountry.h"
 
-1442619918 source:f:\git\openxcom\src\savegame\craft.cpp
+1442669242 source:f:\git\openxcom\src\savegame\craft.cpp
 	"Craft.h"
 	"AlienBase.h"
 	"Base.h"

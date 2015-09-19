@@ -111,7 +111,7 @@ const std::string& RuleInterface::getPalette() const
 
 /**
  * Gets this Interface's parent state.
- * return, reference to parent state
+ * @return, reference to parent state
  */
 const std::string& RuleInterface::getParent() const
 {
