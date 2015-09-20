@@ -488,10 +488,10 @@ void Language::getList(
 	{
 		*i = CrossPlatform::noExt(*i);
 		std::wstring name;
-		std::map<std::string, std::wstring>::const_iterator lang = _names.find(*i);
+		std::map<std::string, std::wstring>::const_iterator pLang = _names.find(*i);
 
-		if (lang != _names.end())
-			name = lang->second;
+		if (pLang != _names.end())
+			name = pLang->second;
 		else
 			name = Language::fsToWstr(*i);
 
@@ -577,7 +577,7 @@ void Language::load(
 * @param stIn - original UTF-8 string
 * @return, new widechar string
 */
-std::wstring Language::loadString(const std::string& stIn) const
+std::wstring Language::loadString(const std::string& stIn) const // private.
 {
 	std::string stOut = stIn;
 

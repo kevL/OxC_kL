@@ -118,10 +118,10 @@ private:
 		/// Returns whether the game is shutting down.
 		bool isQuitting() const;
 
-		/// Gets the currently loaded language.
+		/// Gets the currently loaded Language.
 		Language* getLanguage() const;
-		/// Loads a new language for the game.
-		void loadLanguage(const std::string& filename);
+		/// Loads a Language for the game.
+		void loadLanguage(const std::string& file);
 
 		/// Gets the currently loaded resource pack.
 		ResourcePack* getResourcePack() const;

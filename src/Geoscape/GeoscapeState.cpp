@@ -681,12 +681,12 @@ GeoscapeState::GeoscapeState()
 	_btnOptions->onKeyboardPress(
 					(ActionHandler)& GeoscapeState::btnOptionsClick,
 					Options::keyGeoOptions); // Escape key.
-	_btnOptions->onKeyboardPress(
-					(ActionHandler)& GeoscapeState::btnOptionsClick,
-					Options::keyOk);
-	_btnOptions->onKeyboardPress(
-					(ActionHandler)& GeoscapeState::btnOptionsClick,
-					Options::keyOkKeypad);
+//	_btnOptions->onKeyboardPress( // note: These interfere w/ opening minimized Dogfights.
+//					(ActionHandler)& GeoscapeState::btnOptionsClick,
+//					Options::keyOk);
+//	_btnOptions->onKeyboardPress(
+//					(ActionHandler)& GeoscapeState::btnOptionsClick,
+//					Options::keyOkKeypad);
 
 	_btnFunding->copy(geobord);
 	_btnFunding->onMouseClick((ActionHandler)& GeoscapeState::btnFundingClick);
@@ -930,23 +930,29 @@ GeoscapeState::~GeoscapeState()
 	delete _dfStartTimer;
 	delete _dfTimer;
 
-	std::list<DogfightState*>::const_iterator i = _dogfights.begin();
+	std::list<DogfightState*>::const_iterator pDf = _dogfights.begin();
 	for (
 			;
-			i != _dogfights.end();
+			pDf != _dogfights.end();
 			)
 	{
-		delete *i;
-		i = _dogfights.erase(i);
+        (*pDf)->clearCraft();	// kL_note->
+        (*pDf)->clearUfo();		// I don't have a clue why this started to CTD.
+
+		delete *pDf;
+		pDf = _dogfights.erase(pDf);
 	}
 
 	for (
-			i = _dogfightsToStart.begin();
-			i != _dogfightsToStart.end();
+			pDf = _dogfightsToStart.begin();
+			pDf != _dogfightsToStart.end();
 			)
 	{
-		delete *i;
-		i = _dogfightsToStart.erase(i);
+        (*pDf)->clearCraft();	// kL_note->
+        (*pDf)->clearUfo();		// Not sure if these need to be here but see above^.
+
+		delete *pDf;
+		pDf = _dogfightsToStart.erase(pDf);
 	}
 }
 

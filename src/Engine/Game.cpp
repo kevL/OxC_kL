@@ -648,7 +648,7 @@ bool Game::isQuitting() const
 }
 
 /**
- * Returns the language currently in use by the game.
+ * Returns the Language currently in use by the game.
  * @return, pointer to the Language
  */
 Language* Game::getLanguage() const
@@ -657,22 +657,22 @@ Language* Game::getLanguage() const
 }
 
 /**
-* Changes the language currently in use by the game.
-* @param filename - reference the filename of the language file
+* Changes the Language currently in use by the game.
+* @param file - reference the name of the language file
 */
-void Game::loadLanguage(const std::string& filename)
+void Game::loadLanguage(const std::string& file)
 {
 	std::ostringstream oststr;
-	oststr << "Language/" << filename << ".yml";
+	oststr << "Language/" << file << ".yml";
 
 	ExtraStrings* strings = NULL;
 
 	std::map<std::string, ExtraStrings*> extraStrings = _rules->getExtraStrings();
 	if (extraStrings.empty() == false)
 	{
-		if (extraStrings.find(filename) != extraStrings.end())
-			strings = extraStrings[filename];
-		else if (extraStrings.find("en-US") != extraStrings.end()) // fallback
+		if (extraStrings.find(file) != extraStrings.end())
+			strings = extraStrings[file];
+		else if (extraStrings.find("en-US") != extraStrings.end()) // fallbacks ->
 			strings = extraStrings["en-US"];
 		else if (extraStrings.find("en-GB") != extraStrings.end())
 			strings = extraStrings["en-GB"];
@@ -684,7 +684,7 @@ void Game::loadLanguage(const std::string& filename)
 			CrossPlatform::getDataFile(oststr.str()),
 			strings);
 
-	Options::language = filename;
+	Options::language = file;
 }
 
 /**

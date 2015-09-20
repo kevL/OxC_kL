@@ -1126,7 +1126,7 @@ void DogfightState::updateDogfight()
 						i != _geo->getDogfights().end();
 						++i)
 				{
-					if (*i != this // targets can be either '_slot' OR 'altIntercept' but not both. (ps. Might want dynamic_cast)
+					if (*i != this // targets can be either '_slot' OR 'altIntercept' but not both.
 						&& (*i)->isMinimized() == false
 						&& (*i)->getDistance() <= ufoWRange
 						&& (*i)->getCraft()->isDestroyed() == false
@@ -1141,7 +1141,7 @@ void DogfightState::updateDogfight()
 					_ufo->setShootingAt(_slot);
 					ufoFireWeapon();
 				}
-				else if (altIntercepts.size() > 0) // [ ==0 should NEVER happen.]
+				else if (altIntercepts.size() > 0)
 				{
 					int noSwitch = static_cast<int>(Round(100. / static_cast<double>(altIntercepts.size() + 1))); // +1 for this->craft.
 
@@ -1156,7 +1156,7 @@ void DogfightState::updateDogfight()
 					else // This is where the magic happens, Lulzor!!
 					{
 						const size_t pick = static_cast<size_t>(RNG::generate(0,
-											static_cast<int>(altIntercepts.size())));
+											static_cast<int>(altIntercepts.size()) - 1));
 						_ufo->setShootingAt(altIntercepts.at(pick));
 					}
 				}
@@ -1493,8 +1493,8 @@ void DogfightState::minimumDistance()
 }
 
 /**
- * Updates the status text and restarts the text timeout counter.
- * @param status - address of status
+ * Updates the status text and restarts the message-timeout counter.
+ * @param status - reference to status
  */
 void DogfightState::resetStatus(const std::string& status) // private.
 {
@@ -1523,7 +1523,7 @@ void DogfightState::resetStatus(const std::string& status) // private.
 // STR_STANDOFF_RANGE_ONLY
 
 /**
- * Puts craft in standoff if engaged.
+ * Puts craft in standoff-stance if engaged.
  * @note If already in standoff it tries to minimize all dogfights.
  */
 void DogfightState::keyEscape(Action*)
@@ -2223,7 +2223,7 @@ void DogfightState::endDogfight() // private.
 		_craft->setInDogfight(false);
 
 	if (_freezeFrame == true) // let only the shootdown Craft freeze the final action.
-		SDL_Delay(1167);
+		SDL_Delay(3167);
 }
 
 /**
@@ -2236,12 +2236,21 @@ bool DogfightState::dogfightEnded() const
 }
 
 /**
- * Gets the UFO associated to this dogfight.
+ * Gets the UFO associated with this dogfight.
  * @return, pointer to UFO object associated with this dogfight
  */
 Ufo* DogfightState::getUfo() const
 {
 	return _ufo;
+}
+
+/**
+ * Sets the UFO associated with this dogfight to NULL.
+ * @note Used when destructing GeoscapeState.
+ */
+void DogfightState::clearUfo()
+{
+	_ufo = NULL;
 }
 
 /**
@@ -2251,6 +2260,15 @@ Ufo* DogfightState::getUfo() const
 Craft* DogfightState::getCraft() const
 {
 	return _craft;
+}
+
+/**
+ * Sets pointer to the xCom Craft in this dogfight to NULL.
+ * @note Used when destructing GeoscapeState.
+ */
+void DogfightState::clearCraft()
+{
+	_craft = NULL;
 }
 
 /**
