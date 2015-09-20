@@ -124,7 +124,7 @@ ArticleStateItem::ArticleStateItem(const ArticleDefinitionItem* const defs)
 			if (itRule->getFlatRate() == true)
 				tu = Text::formatNumber(itRule->getTUAuto());
 			else
-				tu = Text::formatPercentage(itRule->getTUAuto());
+				tu = Text::formatPct(itRule->getTUAuto());
 
 			_lstInfo->addRow(
 							3,
@@ -139,7 +139,7 @@ ArticleStateItem::ArticleStateItem(const ArticleDefinitionItem* const defs)
 			if (itRule->getFlatRate() == true)
 				tu = Text::formatNumber(itRule->getTUSnap());
 			else
-				tu = Text::formatPercentage(itRule->getTUSnap());
+				tu = Text::formatPct(itRule->getTUSnap());
 
 			_lstInfo->addRow(
 							3,
@@ -154,7 +154,7 @@ ArticleStateItem::ArticleStateItem(const ArticleDefinitionItem* const defs)
 			if (itRule->getFlatRate() == true)
 				tu = Text::formatNumber(itRule->getTUAimed());
 			else
-				tu = Text::formatPercentage(itRule->getTUAimed());
+				tu = Text::formatPct(itRule->getTUAimed());
 
 			_lstInfo->addRow(
 							3,
@@ -169,7 +169,7 @@ ArticleStateItem::ArticleStateItem(const ArticleDefinitionItem* const defs)
 			if (itRule->getFlatRate() == true)
 				tu = Text::formatNumber(itRule->getTULaunch());
 			else
-				tu = Text::formatPercentage(itRule->getTULaunch());
+				tu = Text::formatPct(itRule->getTULaunch());
 
 			_lstInfo->addRow(
 							3,

@@ -228,9 +228,7 @@ std::wstring InterceptState::getAltStatus(Craft* const craft)
 
 		bool delayed;
 		const int hours = craft->getDowntime(delayed);
-		const std::wstring wst = formatTime(
-										hours,
-										delayed);
+		const std::wstring wst = formatTime(hours, delayed);
 		return tr(stat).arg(wst);
 	}
 
@@ -240,7 +238,7 @@ std::wstring InterceptState::getAltStatus(Craft* const craft)
 		status = tr("STR_LOW_FUEL_RETURNING_TO_BASE");
 		_cellColor = BROWN;
 	}
-	else if (craft->getMissionReturn() == true)
+	else if (craft->getTacticalReturn() == true)
 	{
 		status = tr("STR_MISSION_COMPLETE_RETURNING_TO_BASE");
 		_cellColor = BROWN;

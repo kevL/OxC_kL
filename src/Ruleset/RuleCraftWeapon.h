@@ -46,7 +46,7 @@ private:
 	int
 		_accuracy,
 		_ammoMax,
-		_damage,
+		_power,
 		_prjSpeed,
 		_range,
 		_rearmRate,
@@ -78,7 +78,7 @@ private:
 		/// Gets the craft weapon's sound.
 		int getSound() const;
 		/// Gets the craft weapon's damage.
-		int getDamage() const;
+		int getPower() const;
 		/// Gets the craft weapon's range.
 		int getRange() const;
 		/// Gets the craft weapon's accuracy.

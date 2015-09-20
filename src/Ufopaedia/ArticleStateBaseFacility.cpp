@@ -176,7 +176,7 @@ ArticleStateBaseFacility::ArticleStateBaseFacility(const ArticleDefinitionBaseFa
 
 		woststr.str(L"");
 		woststr.clear();
-		woststr << Text::formatPercentage(facRule->getHitRatio());
+		woststr << Text::formatPct(facRule->getHitRatio());
 		_lstInfo->addRow(
 					2,
 					tr("STR_HIT_RATIO").c_str(),

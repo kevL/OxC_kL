@@ -73,7 +73,7 @@ private:
 		DST_ENGAGE		= 635,
 		DST_STANDOFF	= 595,
 		DST_CLOSE		= 64,
-		MSG_TIMEOUT		= 45;
+		MSG_TIMEOUT		= 25;
 
 
 	bool
@@ -82,7 +82,6 @@ private:
 		_destroyCraft,
 		_end,
 		_endDogfight,
-		_freezeFrame,
 		_minimized,
 		_ufoBreakingOff,
 		_w1Enabled,
@@ -128,13 +127,13 @@ private:
 		* _craftStance;
 	InteractiveSurface
 		* _btnMinimize,
-		* _preview,
+		* _previewUfo,
 		* _weapon1,
 		* _weapon2;
 	InteractiveSurface* _btnMinimizedIcon;
 	SavedGame* _gameSave;
 	Surface
-		* _battle,
+		* _battleScope,
 		* _damage,
 		* _range1,
 		* _range2,
@@ -231,7 +230,7 @@ private:
 		/// Changes colors of weapon stuffs.
 		void recolor(
 				const int hardPt,
-				const bool enabled);
+				const bool enable);
 
 		/// Gets interception slot.
 		size_t getInterceptSlot() const;

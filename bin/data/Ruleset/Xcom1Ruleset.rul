@@ -305,7 +305,7 @@ craftWeapons: #new order: stingray,avalanche,cannon,fusionball,lasercannon,plasm
   - type: STR_CANNON_UC
     sprite: 2
     sound: 4
-    damage: 9
+    power: 9
     range: 19
     accuracy: 23
     reloadCautious: 10
@@ -320,7 +320,7 @@ craftWeapons: #new order: stingray,avalanche,cannon,fusionball,lasercannon,plasm
   - type: STR_STINGRAY
     sprite: 0
     sound: 5
-    damage: 66
+    power: 66
     range: 32
     accuracy: 68
     reloadCautious: 58
@@ -335,7 +335,7 @@ craftWeapons: #new order: stingray,avalanche,cannon,fusionball,lasercannon,plasm
   - type: STR_AVALANCHE
     sprite: 1
     sound: 5
-    damage: 96
+    power: 96
     range: 57
     accuracy: 79
     reloadCautious: 102
@@ -350,7 +350,7 @@ craftWeapons: #new order: stingray,avalanche,cannon,fusionball,lasercannon,plasm
   - type: STR_LASER_CANNON_UC
     sprite: 4
     sound: 8
-    damage: 175
+    power: 175
     range: 33
     accuracy: 57
     reloadCautious: 22
@@ -364,7 +364,7 @@ craftWeapons: #new order: stingray,avalanche,cannon,fusionball,lasercannon,plasm
   - type: STR_PLASMA_BEAM_UC
     sprite: 5
     sound: 9
-    damage: 65
+    power: 65
     range: 46
     accuracy: 49
     reloadCautious: 40
@@ -378,7 +378,7 @@ craftWeapons: #new order: stingray,avalanche,cannon,fusionball,lasercannon,plasm
   - type: STR_FUSION_BALL_UC
     sprite: 3
     sound: 7
-    damage: 222
+    power: 222
     range: 69
     accuracy: 100
     reloadCautious: 72

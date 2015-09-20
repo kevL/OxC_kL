@@ -333,7 +333,7 @@ YAML::Node Craft::save() const
  * @param node - reference a YAML node
  * @return, unique craft id
  */
-CraftId Craft::loadId(const YAML::Node& node)
+CraftId Craft::loadId(const YAML::Node& node) // static.
 {
 	return std::make_pair(
 						node["type"].as<std::string>(),
@@ -664,7 +664,7 @@ void Craft::setFuel(int fuel)
  * and the total it can carry.
  * @return, fuel remaining as percent
  */
-int Craft::getFuelPercentage() const
+int Craft::getFuelPct() const
 {
 	return static_cast<int>(std::floor(
 		   static_cast<double>(_fuel) / static_cast<double>(_crRule->getMaxFuel()) * 100.));
@@ -674,7 +674,7 @@ int Craft::getFuelPercentage() const
  * Gets the amount of damage this craft has taken.
  * @return, amount of damage
  */
-int Craft::getDamage() const
+int Craft::getCraftDamage() const
 {
 	return _damage;
 }
@@ -683,7 +683,7 @@ int Craft::getDamage() const
  * Sets the amount of damage this craft has taken.
  * @param damage - amount of damage
  */
-void Craft::setDamage(const int damage)
+void Craft::setCraftDamage(const int damage)
 {
 	_damage = damage;
 
@@ -696,7 +696,7 @@ void Craft::setDamage(const int damage)
  * total it can take before it's destroyed.
  * @return, damage taken as percent
  */
-int Craft::getDamagePercent() const
+int Craft::getCraftDamagePct() const
 {
 	return static_cast<int>(std::ceil(
 		   static_cast<double>(_damage) / static_cast<double>(_crRule->getMaxDamage()) * 100.));
@@ -727,28 +727,18 @@ void Craft::setLowFuel(bool low)
  * return to its Base.
  * @return, true if this craft needs to return to base
  */
-bool Craft::getMissionReturn() const
+bool Craft::getTacticalReturn() const
 {
 	return _mission;
 }
 
 /**
- * Sets whether this craft has just done a ground mission and is forced to
- * return to its Base.
- * @param mission - true if this craft needs to return to base (default true)
+ * Sets that this craft has just done a ground mission and is forced to return
+ * to its Base.
  */
-void Craft::setMissionReturn(bool mission)
+void Craft::setTacticalReturn()
 {
-	_mission = mission;
-}
-
-/**
- * Gets the current distance between this craft and the Base it belongs to.
- * @return, distance in radian
- */
-double Craft::getDistanceFromBase() const
-{
-	return getDistance(_base);
+	_mission = true;
 }
 
 /**
@@ -909,7 +899,7 @@ void Craft::repair()
 	_warning = CW_NONE;
 	_warned = false;
 
-	setDamage(_damage - _crRule->getRepairRate());
+	setCraftDamage(_damage - _crRule->getRepairRate());
 
 	if (_damage == 0)
 		checkup();

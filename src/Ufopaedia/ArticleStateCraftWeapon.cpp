@@ -86,7 +86,7 @@ ArticleStateCraftWeapon::ArticleStateCraftWeapon(const ArticleDefinitionCraftWea
 	_lstInfo->addRow(
 				2,
 				tr("STR_DAMAGE").c_str(),
-				Text::formatNumber(cwRule->getDamage()).c_str());
+				Text::formatNumber(cwRule->getPower()).c_str());
 
 	_lstInfo->addRow(
 				2,

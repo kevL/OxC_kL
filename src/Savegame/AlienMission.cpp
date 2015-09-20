@@ -767,7 +767,7 @@ void AlienMission::ufoReachedWaypoint(
 					if (ufo.getDetected() == true
 						&& ufo.getLandId() == 0)
 					{
-						ufo.setLandId(_gameSave.getId("STR_LANDING_SITE"));
+						ufo.setLandId(_gameSave.getCanonicalId("STR_LANDING_SITE"));
 					}
 				}
 				else // there's nothing to land on
@@ -799,7 +799,7 @@ MissionSite* AlienMission::spawnMissionSite( // private.
 												deployRule);
 		site->setLongitude(RNG::generate(area.lonMin, area.lonMax));
 		site->setLatitude(RNG::generate(area.latMin, area.latMax));
-		site->setId(_gameSave.getId(deployRule->getMarkerId()));
+		site->setId(_gameSave.getCanonicalId(deployRule->getMarkerId()));
 		site->setSecondsLeft(RNG::generate(
 										deployRule->getDurationMin(),
 										deployRule->getDurationMax()) * 3600);
@@ -836,7 +836,7 @@ void AlienMission::spawnAlienBase( // private.
 
 	AlienBase* const alienBase = new AlienBase();
 	alienBase->setAlienRace(_race);
-	alienBase->setId(_gameSave.getId("STR_ALIEN_BASE"));
+	alienBase->setId(_gameSave.getCanonicalId("STR_ALIEN_BASE"));
 	alienBase->setLongitude(pos.first);
 	alienBase->setLatitude(pos.second);
 	_gameSave.getAlienBases()->push_back(alienBase);

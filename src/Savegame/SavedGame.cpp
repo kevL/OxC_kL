@@ -52,6 +52,7 @@
 //#include "../Engine/Options.h"
 //#include "../Engine/RNG.h"
 
+#include "../Ruleset/RuleCountry.h"
 #include "../Ruleset/RuleManufacture.h"
 #include "../Ruleset/RuleRegion.h"
 #include "../Ruleset/RuleResearch.h"
@@ -1120,11 +1121,11 @@ void SavedGame::setTime(GameTime gt)
 }
 
 /**
- * Returns the latest ID for the specified object and increases it.
+ * Returns the highest ID for the specified object and increases it.
  * @param objectType - reference an object string
- * @return, latest ID number
+ * @return, highest ID number
  */
-int SavedGame::getId(const std::string& objectType)
+int SavedGame::getCanonicalId(const std::string& objectType)
 {
 	std::map<std::string, int>::iterator i = _ids.find(objectType);
 	if (i != _ids.end())
@@ -1138,7 +1139,7 @@ int SavedGame::getId(const std::string& objectType)
  * Resets the list of unique object IDs.
  * @param ids - new ID list as a reference to a map of strings & ints
  */
-void SavedGame::setIds(const std::map<std::string, int>& ids)
+void SavedGame::setCanonicalIds(const std::map<std::string, int>& ids)
 {
 	_ids = ids;
 }
@@ -2509,26 +2510,71 @@ std::vector<MissionStatistics*>* SavedGame::getMissionStatistics()
 }
 
 /**
- * Returns the craft corresponding to the specified unique id.
- * @param craftId - the unique craft id to look up
- * @return, the craft with the specified id, or NULL
+ * Scores points for XCom or aLiens.
+ * @param lon	- longitude
+ * @param lat	- latitude
+ * @param pts	- points to award
+ * @param aLien	- true if aLienPts; false if XCom points
  */
-/* Craft* SavedGame::findCraftByUniqueId(const CraftId& craftId) const
+void SavedGame::scorePoints(
+		double lon,
+		double lat,
+		int pts,
+		bool aLien) const
 {
-	for (std::vector<Base*>::const_iterator
-			base = _bases.begin();
-			base != _bases.end();
-			++base)
+	for (std::vector<Region*>::const_iterator
+			i = _regions.begin();
+			i != _regions.end();
+			++i)
 	{
-		for (std::vector<Craft*>::const_iterator
-				craft = (*base)->getCrafts()->begin();
-				craft != (*base)->getCrafts()->end();
-				++craft)
+		if ((*i)->getRules()->insideRegion(lon,lat) == true)
 		{
-			if ((*craft)->getUniqueId() == craftId)
-				return *craft;
+			if (aLien == true)
+			{
+				(*i)->addActivityAlien(pts);
+				(*i)->recentActivityAlien();
+			}
+			else // XCom
+			{
+				(*i)->addActivityXCom(pts);
+				(*i)->recentActivityXCom();
+			}
+			break;
 		}
 	}
+
+	for (std::vector<Country*>::const_iterator
+			i = _countries.begin();
+			i != _countries.end();
+			++i)
+	{
+		if ((*i)->getRules()->insideCountry(lon,lat) == true)
+		{
+			if (aLien == true)
+			{
+				(*i)->addActivityAlien(pts);
+				(*i)->recentActivityAlien();
+			}
+			else // XCom
+			{
+				(*i)->addActivityXCom(pts);
+				(*i)->recentActivityXCom();
+			}
+			break;
+		}
+	}
+}
+
+/*
+ * Returns the craft corresponding to the specified ID.
+ * @param craftId - the unique craft id to look up
+ * @return, the craft with the specified id, or NULL
+ *
+Craft* SavedGame::findCraftByUniqueId(const CraftId& craftId) const
+{
+	for (std::vector<Base*>::const_iterator i = _bases.begin(); i != _bases.end(); ++i)
+		for (std::vector<Craft*>::const_iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); ++j)
+			if ((*j)->getUniqueId() == craftId) return *j;
 	return NULL;
 } */
 

@@ -225,7 +225,7 @@ std::wstring CraftsState::getAltStatus(Craft* const craft)
 		status = tr("STR_LOW_FUEL_RETURNING_TO_BASE");
 		_cellColor = BROWN;
 	}
-	else if (craft->getMissionReturn() == true)
+	else if (craft->getTacticalReturn() == true)
 	{
 		status = tr("STR_MISSION_COMPLETE_RETURNING_TO_BASE");
 		_cellColor = BROWN;

@@ -333,7 +333,7 @@ void NewBattleState::load(const std::string& filename)
 					_craft = new Craft(
 									_rules->getCraft(craftType),
 									base,
-									savedGame->getId(craftType));
+									savedGame->getCanonicalId(craftType));
 					base->getCrafts()->push_back(_craft);
 				}
 				else

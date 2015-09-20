@@ -111,7 +111,7 @@ private:
 		/// Formats an integer value as currency.
 		static std::wstring formatFunding(int64_t funds);
 		/// Formats an integer value as percentage.
-		static std::wstring formatPercentage(int value);
+		static std::wstring formatPct(int value);
 
 		/// Sets the text size to big.
 		void setBig();

@@ -88,7 +88,7 @@ private:
 
 	CraftId _shotDownByCraftId;
 
-	enum UfoStatus _status;
+	UfoStatus _status;
 
 	/// Calculates a new speed vector to the destination.
 	void calculateSpeed();
@@ -129,11 +129,11 @@ private:
 		int getMarker() const;
 
 		/// Sets the UFO's amount of damage.
-		void setDamage(int damage);
+		void setUfoDamage(int damage);
 		/// Gets the UFO's amount of damage.
-		int getDamage() const;
+		int getUfoDamage() const;
 		/// Gets the UFO's percentage of damage.
-		int getDamagePercent() const;
+		int getUfoDamagePct() const;
 
 		/// Sets the UFO's detection status.
 		void setDetected(bool detected = true);
@@ -149,7 +149,7 @@ private:
 		/// Gets the UFO's seconds left on the ground.
 		int getSecondsLeft() const;
 
-		/// Sets the UFO's altitude.
+		/// Sets the UFO's altitude and status.
 		void setAltitude(const std::string& altitude);
 		/// Gets the UFO's altitude.
 		std::string getAltitude() const;

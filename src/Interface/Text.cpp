@@ -144,7 +144,7 @@ std::wstring Text::formatFunding(int64_t funds)
  * @param value - the percentage value
  * @return, the formatted string
  */
-std::wstring Text::formatPercentage(int value)
+std::wstring Text::formatPct(int value)
 {
 	std::wostringstream woststr;
 	woststr << value << L"%";

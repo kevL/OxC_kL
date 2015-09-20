@@ -177,7 +177,7 @@ GeoscapeCraftState::GeoscapeCraftState(
 	std::wstring status;
 	const bool
 		lowFuel = _craft->getLowFuel(),
-		missionComplete = _craft->getMissionReturn();
+		missionComplete = _craft->getTacticalReturn();
 	int speed = _craft->getSpeed();
 
 	// note: Could add "DAMAGED - Return to Base" around here.
@@ -243,8 +243,8 @@ GeoscapeCraftState::GeoscapeCraftState(
 
 	_txtAltitude->setText(tr("STR_ALTITUDE_").arg(tr(alt)));
 
-	_txtFuel->setText(tr("STR_FUEL").arg(Text::formatPercentage(_craft->getFuelPercentage())));
-	_txtDamage->setText(tr("STR_HULL_").arg(Text::formatPercentage(100 - _craft->getDamagePercent())));
+	_txtFuel->setText(tr("STR_FUEL").arg(Text::formatPct(_craft->getFuelPct())));
+	_txtDamage->setText(tr("STR_HULL_").arg(Text::formatPct(100 - _craft->getCraftDamagePct())));
 
 
 	if (_craft->getRules()->getSoldiers() > 0)
@@ -455,7 +455,7 @@ void GeoscapeCraftState::btnCancelClick(Action*)
 {
 	if (_waypoint != NULL) // Go to the last known UFO position
 	{
-		_waypoint->setId(_game->getSavedGame()->getId("STR_WAYPOINT"));
+		_waypoint->setId(_game->getSavedGame()->getCanonicalId("STR_WAYPOINT"));
 		_game->getSavedGame()->getWaypoints()->push_back(_waypoint);
 		_craft->setDestination(_waypoint);
 	}

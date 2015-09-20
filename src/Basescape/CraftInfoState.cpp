@@ -256,26 +256,26 @@ void CraftInfoState::init()
 	if (skirmish == true)
 		_craft->setFuel(crRule->getMaxFuel()); // top up Craft for insta-Battle mode.
 
-	woststr1 << tr("STR_FUEL").arg(Text::formatPercentage(_craft->getFuelPercentage()));
+	woststr1 << tr("STR_FUEL").arg(Text::formatPct(_craft->getFuelPct()));
 	if (crRule->getMaxFuel() - _craft->getFuel() > 0)
 	{
 		hours = static_cast<int>(std::ceil(
 				static_cast<double>(crRule->getMaxFuel() - _craft->getFuel()) / static_cast<double>(crRule->getRefuelRate())
 				/ 2.)); // refuel every half-hour.
 		woststr1 << formatTime(
-						hours,
-						_craft->getWarning() == CW_CANTREFUEL);
+							hours,
+							_craft->getWarning() == CW_CANTREFUEL);
 	}
 	_txtFuel->setText(woststr1.str());
 
 	_txtRadar->setText(tr("STR_RADAR_RANGE")
 						.arg(Text::formatNumber(crRule->getRadarRange())));
 
-	woststr2 << tr("STR_HULL_").arg(Text::formatPercentage(100 - _craft->getDamagePercent()));
-	if (_craft->getDamage() > 0)
+	woststr2 << tr("STR_HULL_").arg(Text::formatPct(100 - _craft->getCraftDamagePct()));
+	if (_craft->getCraftDamage() != 0)
 	{
 		hours = static_cast<int>(std::ceil(
-				static_cast<double>(_craft->getDamage()) / static_cast<double>(crRule->getRepairRate())
+				static_cast<double>(_craft->getCraftDamage()) / static_cast<double>(crRule->getRepairRate())
 				/ 2.)); // repair every half-hour.
 		woststr2 << formatTime(
 							hours,

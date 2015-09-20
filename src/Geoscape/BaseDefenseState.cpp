@@ -298,7 +298,7 @@ void BaseDefenseState::nextStep()
 						power = RNG::generate( // kL: vary power between 75% and 133% ( stock is 50..150% )
 											power * 3 / 4,
 											power * 4 / 3);
-						_ufo->setDamage(_ufo->getDamage() + power);
+						_ufo->setUfoDamage(_ufo->getUfoDamage() + power);
 
 						_lstDefenses->setCellText(
 											_row - 1,
@@ -340,10 +340,8 @@ void BaseDefenseState::btnOkClick(Action*)
 	{
 		// need to handle if Defenses reduce UFO-crew to zilch but don't destroy the UFO.
 		// probably handled by GeoscapeState::handleBaseDefense()-> new BriefingState
-		_base->setDefenseResult(_ufo->getDamagePercent());
-		_state->handleBaseDefense(
-								_base,
-								_ufo);
+		_base->setDefenseResult(_ufo->getUfoDamagePct());
+		_state->handleBaseDefense(_base, _ufo);
 	}
 	else
 	{

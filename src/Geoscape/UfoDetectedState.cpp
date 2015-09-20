@@ -78,12 +78,12 @@ UfoDetectedState::UfoDetectedState(
 	_geo->getGlobe()->rotateStop();
 
 	if (_ufo->getId() == 0) // generate UFO-ID
-		_ufo->setId(_game->getSavedGame()->getId("STR_UFO"));
+		_ufo->setId(_game->getSavedGame()->getCanonicalId("STR_UFO"));
 
 	if (_ufo->getAltitude() == "STR_GROUND"
 		&& _ufo->getLandId() == 0)
 	{
-		_ufo->setLandId(_game->getSavedGame()->getId("STR_LANDING_SITE"));
+		_ufo->setLandId(_game->getSavedGame()->getCanonicalId("STR_LANDING_SITE"));
 	}
 
 	_screen = false;

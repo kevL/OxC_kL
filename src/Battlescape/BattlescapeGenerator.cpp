@@ -2445,10 +2445,12 @@ void BattlescapeGenerator::fuelPowerSources() // private.
 }
 
 /**
- * When a UFO crashes, there is a chance for each powersource to explode.
+ * When a UFO crashes there is a chance for each powersource to explode.
  */
 void BattlescapeGenerator::explodePowerSources() // private.
 {
+	Position voxel;
+
 	for (size_t
 			i = 0;
 			i != _battleSave->getMapSizeXYZ();
@@ -2458,12 +2460,11 @@ void BattlescapeGenerator::explodePowerSources() // private.
 			&& _battleSave->getTiles()[i]->getMapData(O_OBJECT)->getSpecialType() == UFO_POWER_SOURCE
 			&& RNG::percent(80) == true)
 		{
-			const Position pos = Position(
-									_battleSave->getTiles()[i]->getPosition().x * 16 + 8,
-									_battleSave->getTiles()[i]->getPosition().y * 16 + 8,
-									_battleSave->getTiles()[i]->getPosition().z * 24 + 12);
+			voxel = Position::toVoxelSpaceCentered(
+												_battleSave->getTiles()[i]->getPosition(),
+												10);
 
-			double power = static_cast<double>(_ufo->getDamagePercent());	// range: ~50+ to ~100-
+			double power = static_cast<double>(_ufo->getUfoDamagePct());	// range: ~50+ to ~100-
 			if (RNG::percent(static_cast<int>(power) / 2) == true)			// chance for full range Explosion (even if crash took low damage)
 				power = RNG::generate(1.,100.);
 
@@ -2472,7 +2473,7 @@ void BattlescapeGenerator::explodePowerSources() // private.
 
 			if (power > 0.5)
 				_battleSave->getTileEngine()->explode(
-													pos,
+													voxel,
 													static_cast<int>(std::ceil(power)),
 													DT_HE,
 													21);
@@ -2482,12 +2483,11 @@ void BattlescapeGenerator::explodePowerSources() // private.
 	const Tile* tile = _battleSave->getTileEngine()->checkForTerrainExplosions();
 	while (tile != NULL)
 	{
-		const Position pos = Position(
-									tile->getPosition().x * 16 + 8,
-									tile->getPosition().y * 16 + 8,
-									tile->getPosition().z * 24 + 10);
+		voxel = Position::toVoxelSpaceCentered(
+											tile->getPosition(),
+											10);
 		_battleSave->getTileEngine()->explode(
-											pos,
+											voxel,
 											tile->getExplosive(),
 											DT_HE,
 											tile->getExplosive() / 10);

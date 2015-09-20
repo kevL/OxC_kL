@@ -175,7 +175,7 @@ void Ufo::load(
 	_dest->setLatitude(lat);
 
 	if (const YAML::Node& status = node["status"])
-		_status = (UfoStatus)status.as<int>();
+		_status = static_cast<UfoStatus>(status.as<int>());
 	else
 	{
 		if (_damage >= _ufoRule->getMaxDamage())
@@ -184,8 +184,7 @@ void Ufo::load(
 			_status = CRASHED;
 		else if (_altitude == "STR_GROUND")
 			_status = LANDED;
-		else
-			_status = FLYING;
+//		else _status = FLYING; // <- done in cTor init.
 	}
 
 	if (game.getMonthsPassed() != -1)
@@ -354,15 +353,16 @@ int Ufo::getMarker() const
  * Changes the amount of damage this UFO has taken.
  * @param damage - amount of damage
  */
-void Ufo::setDamage(int damage)
+void Ufo::setUfoDamage(int damage)
 {
-	if (damage < 0) _damage = 0;
+	if (damage < 0)
+		_damage = 0;
 	else
 		_damage = damage;
 
-	if (_damage >= _ufoRule->getMaxDamage())
+	if (isDestroyed() == true)
 		_status = DESTROYED;
-	else if (_damage >= _ufoRule->getMaxDamage() / 2)
+	else if (isCrashed() == true)
 		_status = CRASHED;
 }
 
@@ -370,7 +370,7 @@ void Ufo::setDamage(int damage)
  * Returns the amount of damage this UFO has taken.
  * @return, amount of damage
  */
-int Ufo::getDamage() const
+int Ufo::getUfoDamage() const
 {
 	return _damage;
 }
@@ -380,7 +380,7 @@ int Ufo::getDamage() const
  * has taken and the total it can take before it's destroyed.
  * @return, damage percent
  */
-int Ufo::getDamagePercent() const
+int Ufo::getUfoDamagePct() const
 {
 	return static_cast<int>(std::floor(
 		   static_cast<double>(_damage) / static_cast<double>(_ufoRule->getMaxDamage()) * 100.));
@@ -445,7 +445,7 @@ int Ufo::getSecondsLeft() const
 }
 
 /**
- * Changes the current altitude of the UFO.
+ * Changes the current altitude and status of the UFO.
  * @param altitude - altitude
  */
 void Ufo::setAltitude(const std::string& altitude)
@@ -487,7 +487,7 @@ std::string Ufo::getDirection() const
  */
 bool Ufo::isCrashed() const
 {
-	return _damage > _ufoRule->getMaxDamage() / 2;
+	return _damage >= _ufoRule->getMaxDamage() / 2;
 }
 
 /**
@@ -503,7 +503,7 @@ bool Ufo::isDestroyed() const
  * Calculates the direction for this Ufo based on the current raw speed and
  * destination.
  */
-void Ufo::calculateSpeed()
+void Ufo::calculateSpeed() // private.
 {
 	MovingTarget::calculateSpeed();
 
@@ -572,7 +572,7 @@ void Ufo::think()
 		break;
 
 		case LANDED:
-			assert(_secondsLeft >= 5 && "Wrong time management.");
+//			assert(_secondsLeft >= 5 && "Wrong time management.");
 			_secondsLeft -= 5;
 		break;
 

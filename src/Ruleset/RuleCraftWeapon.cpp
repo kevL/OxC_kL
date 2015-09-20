@@ -32,7 +32,7 @@ RuleCraftWeapon::RuleCraftWeapon(const std::string& type)
 		_type(type),
 		_sprite(-1),
 		_sound(-1),
-		_damage(0),
+		_power(0),
 		_range(0),
 		_accuracy(0),
 		_reloadCautious(0),
@@ -75,7 +75,7 @@ void RuleCraftWeapon::load(
 			_sound += modIndex;
 	}
 
-	_damage				= node["damage"]			.as<int>(_damage);
+	_power				= node["power"]				.as<int>(_power);
 	_range				= node["range"]				.as<int>(_range);
 	_accuracy			= node["accuracy"]			.as<int>(_accuracy);
 	_reloadCautious		= node["reloadCautious"]	.as<int>(_reloadCautious);
@@ -92,7 +92,7 @@ void RuleCraftWeapon::load(
 
 /**
  * Gets the language string that names the CraftWeapon.
- * Each craft weapon type has a unique name.
+ * @note Each craft weapon type has a unique name.
  * @return, the CraftWeapon's name
  */
 std::string RuleCraftWeapon::getType() const
@@ -123,9 +123,9 @@ int RuleCraftWeapon::getSound() const
  * Gets the amount of damage this craft weapon inflicts on enemy crafts.
  * @return, the damage amount
  */
-int RuleCraftWeapon::getDamage() const
+int RuleCraftWeapon::getPower() const
 {
-	return _damage;
+	return _power;
 }
 
 /**

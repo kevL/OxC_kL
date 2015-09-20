@@ -69,7 +69,7 @@ private:
 				// kL_note: also, something screws with when a missile is launched
 				// but UFO is downed, by other weapon, before it hits; the missile
 				// is then not removed from the craft's ordnance.
-		_damage,
+		_power,
 		_dist,
 		_posHori,
 		_range,
@@ -120,9 +120,9 @@ private:
 		int getBeamPhase() const;
 
 		/// Sets power of the projectile.
-		void setDamage(int damage);
+		void setPower(int power);
 		/// Gets power of the projectile.
-		int getDamage() const;
+		int getPower() const;
 
 		/// Sets accuracy of the projectile.
 		void setAccuracy(int accuracy);

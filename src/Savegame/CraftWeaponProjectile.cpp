@@ -36,7 +36,7 @@ CraftWeaponProjectile::CraftWeaponProjectile()
 		_posHori(PH_CENTER),
 		_beamPhase(0),
 		_accuracy(0),
-		_damage(0),
+		_power(0),
 		_range(0),
 		_done(false),
 		_missed(false),
@@ -206,20 +206,20 @@ int CraftWeaponProjectile::getBeamPhase() const
 
 /**
  * Sets the amount of damage the projectile can do when hitting its target.
- * @param damage - damage value
+ * @param power - damage value
  */
-void CraftWeaponProjectile::setDamage(int damage)
+void CraftWeaponProjectile::setPower(int power)
 {
-	_damage = damage;
+	_power = power;
 }
 
 /**
  * Gets the amount of damage the projectile can do when hitting its target.
  * @return, the damage to deliver
  */
-int CraftWeaponProjectile::getDamage() const
+int CraftWeaponProjectile::getPower() const
 {
-	return _damage;
+	return _power;
 }
 
 /**

@@ -33,7 +33,7 @@ class RuleTerrain;
 
 /**
  * Represents a specific type of UFO.
- * Contains constant info about a UFO like speed, weapons, scores, etc.
+ * @note Contains constant info about a UFO like speed, weapons, scores, etc.
  * @sa Ufo
  */
 class RuleUfo

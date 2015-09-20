@@ -895,7 +895,7 @@ void DebriefingState::prepareDebriefing() // private.
 				ptrCraft = j;
 
 				_craft->returnToBase();
-				_craft->setMissionReturn();
+				_craft->setTacticalReturn();
 				_craft->setInBattlescape(false);
 			}
 			else if ((*j)->getDestination() != NULL)

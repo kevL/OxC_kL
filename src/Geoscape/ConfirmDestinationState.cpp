@@ -114,7 +114,7 @@ void ConfirmDestinationState::btnOkClick(Action*)
 	Waypoint* const wp = dynamic_cast<Waypoint*>(_target);
 	if (wp != NULL && wp->getId() == 0)
 	{
-		wp->setId(_game->getSavedGame()->getId("STR_WAYPOINT"));
+		wp->setId(_game->getSavedGame()->getCanonicalId("STR_WAYPOINT"));
 		_game->getSavedGame()->getWaypoints()->push_back(wp);
 	}
 

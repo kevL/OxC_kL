@@ -604,9 +604,9 @@ void PurchaseState::btnOkClick(Action*)
 					RuleCraft* const crftRule = _game->getRuleset()->getCraft(_crafts[i - 3]);
 					Transfer* const transfer = new Transfer(crftRule->getTransferTime());
 					Craft* const craft = new Craft(
-											crftRule,
-											_base,
-											_game->getSavedGame()->getId(_crafts[i - 3]));
+												crftRule,
+												_base,
+												_game->getSavedGame()->getCanonicalId(_crafts[i - 3]));
 					craft->setCraftStatus("STR_REFUELLING");
 					transfer->setCraft(craft);
 

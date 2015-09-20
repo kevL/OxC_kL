@@ -1377,7 +1377,7 @@ SavedGame* Ruleset::newSave() const
 			i != base->getCrafts()->end();
 			++i)
 	{
-		gameSave->getId((*i)->getRules()->getType());
+		gameSave->getCanonicalId((*i)->getRules()->getType());
 	}
 
 	// Generate soldiers
@@ -2306,7 +2306,7 @@ Soldier* Ruleset::genSoldier(SavedGame* const gameSave) const
 					getSoldier("XCOM"),
 					getArmor("STR_ARMOR_NONE_UC"),
 					&_names,
-					gameSave->getId("STR_SOLDIER"));
+					gameSave->getCanonicalId("STR_SOLDIER"));
 }
 /*	Soldier* soldier = NULL;
 	int newId = save->getId("STR_SOLDIER");

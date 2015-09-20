@@ -463,11 +463,13 @@ GeoscapeState::GeoscapeState()
 	_txtScore	= new Text(63, 8, screenWidth - 64, halfHeight + 102);
 
 	_timeComp = _btn5Secs;
-	_geoTimer = new Timer(static_cast<Uint32>(Options::geoClockSpeed));
 
-	const Uint32 dfSpeed = static_cast<Uint32>(Options::dogfightSpeed);
-	_dfZoomInTimer	= new Timer(dfSpeed);
-	_dfZoomOutTimer	= new Timer(dfSpeed);
+	const Uint32
+		geoSpeed = static_cast<Uint32>(Options::geoClockSpeed),
+		dfSpeed = static_cast<Uint32>(Options::dogfightSpeed);
+	_geoTimer		= new Timer(geoSpeed);
+	_dfZoomInTimer	= new Timer(geoSpeed);
+	_dfZoomOutTimer	= new Timer(geoSpeed);
 	_dfStartTimer	= new Timer(dfSpeed);
 	_dfTimer		= new Timer(dfSpeed);
 
@@ -2642,21 +2644,21 @@ class GenerateSupplyMission
 {
 
 private:
-	const Ruleset& _ruleset;
-	SavedGame& _save;
+	const Ruleset& _rules;
+	SavedGame& _gameSave;
 
 	public:
 		/// Store rules and game data references for later use.
 		GenerateSupplyMission(
-				const Ruleset& ruleset,
-				SavedGame& save)
+				const Ruleset& rules,
+				SavedGame& gameSave)
 			:
-				_ruleset(ruleset),
-				_save(save)
+				_rules(rules),
+				_gameSave(gameSave)
 		{}
 
 		/// Check and spawn mission.
-		void operator() (const AlienBase* base) const;
+		void operator() (const AlienBase* const base) const;
 };
 
 /**
@@ -2664,24 +2666,24 @@ private:
  * @note There is a 4% chance of the mission spawning.
  * @param base A pointer to the alien base.
  */
-void GenerateSupplyMission::operator() (const AlienBase* base) const
+void GenerateSupplyMission::operator() (const AlienBase* const base) const
 {
 	if (RNG::percent(4) == true)
 	{
 		// Spawn supply mission for this base.
-		const RuleAlienMission& rule = *_ruleset.getAlienMission("STR_ALIEN_SUPPLY");
+		const RuleAlienMission& rule = *_rules.getAlienMission("STR_ALIEN_SUPPLY");
 		AlienMission* const mission = new AlienMission(
 													rule,
-													_save);
+													_gameSave);
 		mission->setRegion(
-					_save.locateRegion(*base)->getRules()->getType(),
-					_ruleset);
-		mission->setId(_save.getId("ALIEN_MISSIONS"));
+					_gameSave.locateRegion(*base)->getRules()->getType(),
+					_rules);
+		mission->setId(_gameSave.getCanonicalId("ALIEN_MISSIONS"));
 		mission->setRace(base->getAlienRace());
 		mission->setAlienBase(base);
 		mission->start();
 
-		_save.getAlienMissions().push_back(mission);
+		_gameSave.getAlienMissions().push_back(mission);
 	}
 }
 
@@ -3431,8 +3433,14 @@ void GeoscapeState::btnUfopaediaClick(Action*)
  */
 void GeoscapeState::btnOptionsClick(Action*)
 {
-	resetTimer();
-	_game->pushState(new PauseState(OPT_GEOSCAPE));
+//	_dfStartTimer,
+//	_dfTimer;
+	if (_dfZoomInTimer->isRunning() == false
+		&& _dfZoomOutTimer->isRunning() == false)
+	{
+		resetTimer();
+		_game->pushState(new PauseState(OPT_GEOSCAPE));
+	}
 }
 
 /**
@@ -3823,9 +3831,7 @@ void GeoscapeState::resetInterceptPorts()
 		if ((*i)->isMinimized() == false)
 			++dfOpen;
 
-		(*i)->resetInterceptPort( // set window position for dogfight
-							dfOpen,
-							dfOpenTotal);
+		(*i)->resetInterceptPort(dfOpen, dfOpenTotal); // set window position for dogfight
 	}
 }
 
@@ -3836,7 +3842,6 @@ void GeoscapeState::resetInterceptPorts()
 size_t GeoscapeState::getOpenDfSlot() const
 {
 	size_t slot = 1;
-
 	for (std::list<DogfightState*>::const_iterator
 			i = _dogfights.begin();
 			i != _dogfights.end();
@@ -3845,7 +3850,6 @@ size_t GeoscapeState::getOpenDfSlot() const
 		if ((*i)->getInterceptSlot() == slot)
 			++slot;
 	}
-
 	return slot;
 }
 
@@ -3869,7 +3873,7 @@ void GeoscapeState::handleBaseDefense(
 {
 	ufo->setUfoStatus(Ufo::DESTROYED);
 
-	if (base->getAvailableSoldiers(true) > 0)
+	if (base->getAvailableSoldiers(true) != 0)
 	{
 		SavedBattleGame* const battle = new SavedBattleGame(&_rules->getOperations());
 		_gameSave->setBattleSave(battle);
@@ -4292,7 +4296,7 @@ bool GeoscapeState::processCommand(RuleMissionScript* const missionCommand)
 												*missionRule,
 												*_gameSave);
 	mission->setRace(raceType);
-	mission->setId(_gameSave->getId("ALIEN_MISSIONS"));
+	mission->setId(_gameSave->getCanonicalId("ALIEN_MISSIONS"));
 	mission->setRegion(
 					targetRegion,
 					*_game->getRuleset());

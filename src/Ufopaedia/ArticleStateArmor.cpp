@@ -115,7 +115,7 @@ ArticleStateArmor::ArticleStateArmor(const ArticleDefinitionArmor* const defs)
 		if (st != "STR_UNKNOWN")
 		{
 			const int vulnr = static_cast<int>(Round(static_cast<double>(armorRule->getDamageModifier(dType)) * 100.));
-			addStat(st, Text::formatPercentage(vulnr));
+			addStat(st, Text::formatPct(vulnr));
 		}
 	}
 

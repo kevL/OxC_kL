@@ -165,14 +165,14 @@ private:
 		/// Sets the craft's amount of fuel.
 		void setFuel(int fuel);
 		/// Gets the craft's percentage of fuel.
-		int getFuelPercentage() const;
+		int getFuelPct() const;
 
 		/// Gets the craft's amount of damage.
-		int getDamage() const;
+		int getCraftDamage() const;
 		/// Sets the craft's amount of damage.
-		void setDamage(const int damage);
+		void setCraftDamage(const int damage);
 		/// Gets the craft's percentage of damage.
-		int getDamagePercent() const;
+		int getCraftDamagePct() const;
 
 		/// Gets whether the craft is running out of fuel.
 		bool getLowFuel() const;
@@ -180,12 +180,9 @@ private:
 		void setLowFuel(bool low = true);
 
 		/// Gets whether the craft has just finished a mission.
-		bool getMissionReturn() const;
-		/// Sets whether the craft has just finished a mission.
-		void setMissionReturn(bool mission = true);
-
-		/// Gets the craft's distance from its base.
-		double getDistanceFromBase() const;
+		bool getTacticalReturn() const;
+		/// Sets that the craft has just finished a mission.
+		void setTacticalReturn();
 
 		/// Gets the craft's fuel consumption.
 		int getFuelConsumption() const;

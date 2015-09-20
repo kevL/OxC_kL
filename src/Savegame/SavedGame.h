@@ -26,7 +26,7 @@
 //#include <time.h>
 //#include <stdint.h>
 
-#include "CraftId.h"
+//#include "CraftId.h"
 #include "GameTime.h"
 #include "Soldier.h"
 
@@ -406,10 +406,10 @@ private:
 		/// Sets the current game time.
 		void setTime(GameTime gt);
 
-		/// Gets the current ID for an object.
-		int getId(const std::string& objectType);
+		/// Gets an ID to assign for an object.
+		int getCanonicalId(const std::string& objectType);
 		/// Resets the list of object IDs.
-		void setIds(const std::map<std::string, int>& ids);
+		void setCanonicalIds(const std::map<std::string, int>& ids);
 
 		/// Gets the list of countries.
 		std::vector<Country*>* getCountries();
@@ -601,6 +601,13 @@ private:
 
 		/// Gets the list of missions statistics
 		std::vector<MissionStatistics*>* getMissionStatistics();
+
+		/// Scores points for XCom or aLiens.
+		void scorePoints(
+				double lon,
+				double lat,
+				int pts,
+				bool aLien) const;
 
 		/// Returns the craft corresponding to the specified unique id.
 //		Craft* findCraftByUniqueId(const CraftId& craftId) const;

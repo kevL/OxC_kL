@@ -124,7 +124,7 @@ ExtraAlienInfoState::ExtraAlienInfoState(const ArticleDefinitionTextImage* const
 				_lstInfo->addRow(
 								2,
 								tr(st).c_str(),
-								Text::formatPercentage(vulnr).c_str());
+								Text::formatPct(vulnr).c_str());
 				_lstInfo->setCellColor(row++, 1, uPed_GREEN_SLATE);
 			}
 		}
