@@ -409,7 +409,7 @@ private:
 		/// Gets an ID to assign for an object.
 		int getCanonicalId(const std::string& objectType);
 		/// Resets the list of object IDs.
-		void setCanonicalIds(const std::map<std::string, int>& ids);
+//		void setCanonicalIds(const std::map<std::string, int>& ids);
 
 		/// Gets the list of countries.
 		std::vector<Country*>* getCountries();

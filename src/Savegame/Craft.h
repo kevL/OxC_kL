@@ -64,7 +64,7 @@ private:
 		_tactical,
 		_inDogfight,
 		_lowFuel,
-		_mission,
+		_tacticalDone,
 		_warned;
 	int
 		_loadCap,

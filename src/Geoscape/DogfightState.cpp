@@ -1179,14 +1179,11 @@ void DogfightState::updateDogfight()
 		if (_craft->isDestroyed() == true) // End dogfight if craft is destroyed.
 		{
 			resetStatus("STR_INTERCEPTOR_DESTROYED");
-
-//			_timeout += 30;
 			_timeout *= 2;
 			_game->getResourcePack()->playSoundFX(ResourcePack::INTERCEPTOR_EXPLODE);
 
-			finalRun = true;
+			finalRun =
 			_destroyCraft = true;
-
 			_ufo->setShootingAt(0);
 		}
 
@@ -1277,21 +1274,15 @@ void DogfightState::updateDogfight()
 			if (xPts != 0)
 				_gameSave->scorePoints(lon,lat, xPts, false);
 
-//			_timeout += 30;
 			if (_ufo->getShotDownByCraftId() != _craft->getUniqueId())
-			{
-//				_timeout += 50;
 				_ufo->setHitFrame(3);
-			}
 			else
 				_timeout *= 2;
 
 			finalRun = true;
 		}
-
-		if (_ufo->getUfoStatus() == Ufo::LANDED)
+		else if (_ufo->getUfoStatus() == Ufo::LANDED)
 		{
-//			_timeout += 30;
 			_timeout *= 2;
 			finalRun = true;
 			_ufo->setShootingAt(0);

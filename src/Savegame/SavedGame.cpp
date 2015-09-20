@@ -1135,14 +1135,14 @@ int SavedGame::getCanonicalId(const std::string& objectType)
 	return _ids[objectType]++;
 }
 
-/**
+/*
  * Resets the list of unique object IDs.
  * @param ids - new ID list as a reference to a map of strings & ints
- */
+ *
 void SavedGame::setCanonicalIds(const std::map<std::string, int>& ids)
 {
 	_ids = ids;
-}
+} */
 
 /**
  * Returns the list of countries in the game world.

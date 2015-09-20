@@ -187,6 +187,9 @@ void Ufo::load(
 //		else _status = FLYING; // <- done in cTor init.
 	}
 
+	if (_status < FLYING || _status > DESTROYED) // safety.	Although this should never show up as Destroyed ....
+		_status = FLYING;
+
 	if (game.getMonthsPassed() != -1)
 	{
 		const int missionId = node["mission"].as<int>();

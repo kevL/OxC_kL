@@ -4390,7 +4390,7 @@
 
 1441247516 f:\git\openxcom\src\savegame\target.h
 
-1442780559 f:\git\openxcom\src\savegame\savedgame.h
+1442792357 f:\git\openxcom\src\savegame\savedgame.h
 	"GameTime.h"
 	"Soldier.h"
 	"../Ruleset/RuleAlienMission.h"
@@ -4502,7 +4502,7 @@
 
 1436388140 f:\git\openxcom\src\savegame\basefacility.h
 
-1442788559 f:\git\openxcom\src\savegame\craft.h
+1442792041 f:\git\openxcom\src\savegame\craft.h
 	"CraftId.h"
 	"MovingTarget.h"
 
@@ -5614,7 +5614,7 @@
 
 1439979352 f:\git\openxcom\src\ruleset\ruleterrain.h
 
-1437994515 f:\git\openxcom\src\ruleset\ruleufo.h
+1442791192 f:\git\openxcom\src\ruleset\ruleufo.h
 
 1441251317 f:\git\openxcom\src\savegame\alienbase.h
 	"Target.h"
@@ -6880,7 +6880,7 @@
 	"../Resource/XcomResourcePack.h"
 	"../Savegame/SavedGame.h"
 
-1442791012 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
+1442791325 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
 	"DogfightState.h"
 	"GeoscapeCraftState.h"
 	"GeoscapeState.h"
@@ -6912,7 +6912,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Ufo.h"
 
-1442789694 f:\git\openxcom\src\geoscape\dogfightstate.h
+1442791297 f:\git\openxcom\src\geoscape\dogfightstate.h
 	"../Engine/State.h"
 
 1440532567 f:\git\openxcom\src\savegame\alienstrategy.h
@@ -8466,7 +8466,7 @@
 	"Country.h"
 	"../Ruleset/RuleCountry.h"
 
-1442789522 source:f:\git\openxcom\src\savegame\craft.cpp
+1442792194 source:f:\git\openxcom\src\savegame\craft.cpp
 	"Craft.h"
 	"AlienBase.h"
 	"Base.h"
@@ -8490,14 +8490,14 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Transfer.h"
 
-1442236046 source:f:\git\openxcom\src\savegame\craftweapon.cpp
+1442791107 source:f:\git\openxcom\src\savegame\craftweapon.cpp
 	"CraftWeapon.h"
 	"CraftWeaponProjectile.h"
 	"../Ruleset/RuleCraftWeapon.h"
 	"../Ruleset/RuleItem.h"
 	"../Ruleset/Ruleset.h"
 
-1441308665 source:f:\git\openxcom\src\savegame\craftweaponprojectile.cpp
+1442791026 source:f:\git\openxcom\src\savegame\craftweaponprojectile.cpp
 	"CraftWeaponProjectile.h"
 
 1440359453 source:f:\git\openxcom\src\savegame\equipmentlayoutitem.cpp
@@ -8567,7 +8567,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/Ruleset.h"
 
-1442780693 source:f:\git\openxcom\src\savegame\savedgame.cpp
+1442792345 source:f:\git\openxcom\src\savegame\savedgame.cpp
 	"SavedGame.h"
 	"AlienBase.h"
 	"AlienMission.h"
@@ -8648,7 +8648,7 @@
 	"../Engine/Language.h"
 	"../Ruleset/Ruleset.h"
 
-1442789566 source:f:\git\openxcom\src\savegame\ufo.cpp
+1442792574 source:f:\git\openxcom\src\savegame\ufo.cpp
 	"Ufo.h"
 	"AlienMission.h"
 	"Craft.h"
@@ -8715,7 +8715,7 @@
 	"../Ruleset/RuleCraft.h"
 	"../Ruleset/Ruleset.h"
 
-1442357210 source:f:\git\openxcom\src\ufopaedia\articlestatecraftweapon.cpp
+1442790893 source:f:\git\openxcom\src\ufopaedia\articlestatecraftweapon.cpp
 	"ArticleStateCraftWeapon.h"
 	"../Engine/Game.h"
 	"../Engine/Surface.h"

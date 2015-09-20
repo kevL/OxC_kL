@@ -72,7 +72,7 @@ Craft::Craft(
 		_takeOff(0),
 		_status("STR_READY"),
 		_lowFuel(false),
-		_mission(false),
+		_tacticalDone(false),
 		_tactical(false),
 		_inDogfight(false),
 		_loadCur(0),
@@ -196,10 +196,10 @@ void Craft::load(
 		}
 	}
 
-	_status		= node["status"]	.as<std::string>(_status);
-	_lowFuel	= node["lowFuel"]	.as<bool>(_lowFuel);
-	_mission	= node["mission"]	.as<bool>(_mission);
-	_kills		= node["kills"]		.as<int>(_kills);
+	_status			= node["status"]		.as<std::string>(_status);
+	_lowFuel		= node["lowFuel"]		.as<bool>(_lowFuel);
+	_tacticalDone	= node["tacticalDone"]	.as<bool>(_tacticalDone);
+	_kills			= node["kills"]			.as<int>(_kills);
 
 	if (const YAML::Node name = node["name"])
 		_name = Language::utf8ToWstr(name.as<std::string>());
@@ -315,15 +315,15 @@ YAML::Node Craft::save() const
 
 	node["status"] = _status;
 
-	if (_fuel != 0)				node["fuel"]		= _fuel;
-	if (_damage != 0)			node["damage"]		= _damage;
-	if (_lowFuel == true)		node["lowFuel"]		= _lowFuel;
-	if (_mission == true)		node["mission"]		= _mission;
-	if (_tactical == true)		node["tactical"]	= _tactical;
-	if (_kills != 0)			node["kills"]		= _kills;
-	if (_takeOff != 0)			node["takeOff"]		= _takeOff;
-	if (_name.empty() == false)	node["name"]		= Language::wstrToUtf8(_name);
-	if (_warning != CW_NONE)	node["warning"]		= static_cast<int>(_warning);
+	if (_fuel != 0)				node["fuel"]			= _fuel;
+	if (_damage != 0)			node["damage"]			= _damage;
+	if (_lowFuel == true)		node["lowFuel"]			= _lowFuel;
+	if (_tacticalDone == true)	node["tacticalDone"]	= _tacticalDone;
+	if (_tactical == true)		node["tactical"]		= _tactical;
+	if (_kills != 0)			node["kills"]			= _kills;
+	if (_takeOff != 0)			node["takeOff"]			= _takeOff;
+	if (_name.empty() == false)	node["name"]			= Language::wstrToUtf8(_name);
+	if (_warning != CW_NONE)	node["warning"]			= static_cast<int>(_warning);
 
 	return node;
 }
@@ -729,7 +729,7 @@ void Craft::setLowFuel(bool low)
  */
 bool Craft::getTacticalReturn() const
 {
-	return _mission;
+	return _tacticalDone;
 }
 
 /**
@@ -738,7 +738,7 @@ bool Craft::getTacticalReturn() const
  */
 void Craft::setTacticalReturn()
 {
-	_mission = true;
+	_tacticalDone = true;
 }
 
 /**
@@ -815,7 +815,7 @@ void Craft::think()
 			setSpeed(0);
 
 			_lowFuel =
-			_mission = false;
+			_tacticalDone = false;
 			_warning = CW_NONE;
 			_takeOff = 0;
 
