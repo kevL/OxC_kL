@@ -60,7 +60,7 @@ void UnitPanicBState::think()
 //		if (_unit->isOut() == false)
 		if (_unit->isOut_t(OUT_STAT) == false)
 		{
-			_unit->setStatus(STATUS_STANDING);
+			_unit->setUnitStatus(STATUS_STANDING);
 			_unit->moraleChange(10 + RNG::generate(0,10));
 		}
 

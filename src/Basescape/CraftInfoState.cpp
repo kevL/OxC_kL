@@ -218,7 +218,7 @@ void CraftInfoState::init()
 		_txtStatus->setText(L"");
 	else
 	{
-		const std::string status = _craft->getStatus();
+		const std::string status = _craft->getCraftStatus();
 
 		Uint8 color;
 		if (status == "STR_READY")

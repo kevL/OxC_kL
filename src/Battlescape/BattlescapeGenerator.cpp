@@ -386,7 +386,7 @@ void BattlescapeGenerator::run()
 	if (_generateFuel == true)
 		fuelPowerSources();
 
-	if (_ufo != NULL && _ufo->getStatus() == Ufo::CRASHED)
+	if (_ufo != NULL && _ufo->getUfoStatus() == Ufo::CRASHED)
 		explodePowerSources();
 
 /*	if (_missionType == "STR_BASE_DEFENSE")
@@ -465,7 +465,7 @@ void BattlescapeGenerator::nextStage()
 			i != _battleSave->getUnits()->end();
 			++i)
 	{
-		if ((*i)->getStatus() != STATUS_DEAD
+		if ((*i)->getUnitStatus() != STATUS_DEAD
 			&& ((*i)->getOriginalFaction() != FACTION_PLAYER
 				|| (_battleSave->isAborted() == true
 					&& (*i)->isInExitArea(END_POINT) == false)))
@@ -476,7 +476,7 @@ void BattlescapeGenerator::nextStage()
 				++aliensAlive;
 			}
 
-			(*i)->setStatus(STATUS_LIMBO);
+			(*i)->setUnitStatus(STATUS_LIMBO);
 		}
 
 		if ((*i)->getTile() != NULL) // break old Tile's link to unit.
@@ -677,7 +677,7 @@ void BattlescapeGenerator::nextStage()
 			}
 			else
 			{
-				(*i)->setStatus(STATUS_LIMBO);
+				(*i)->setUnitStatus(STATUS_LIMBO);
 				Log(LOG_WARNING) << "BattlescapeGenerator::nextStage() - Could not place xCom unit ["
 								 << (*i)->getId() << "] Send to Limbo.";
 			}
@@ -858,7 +858,7 @@ void BattlescapeGenerator::deployXCOM() // private.
 			|| (_craft == NULL
 				&& (*i)->getRecovery() == 0
 				&& ((*i)->getCraft() == NULL
-					|| (*i)->getCraft()->getStatus() != "STR_OUT")))
+					|| (*i)->getCraft()->getCraftStatus() != "STR_OUT")))
 		{
 			//Log(LOG_INFO) << ". . addXCOMUnit " << (*i)->getId();
 			BattleUnit* const unit = addXCOMUnit(new BattleUnit(
@@ -973,7 +973,7 @@ void BattlescapeGenerator::deployXCOM() // private.
 				i != _base->getCrafts()->end();
 				++i)
 		{
-			if ((*i)->getStatus() != "STR_OUT")
+			if ((*i)->getCraftStatus() != "STR_OUT")
 			{
 				for (std::map<std::string, int>::const_iterator
 						j = (*i)->getItems()->getContents()->begin();

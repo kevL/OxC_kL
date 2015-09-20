@@ -540,7 +540,7 @@ bool ProjectileFlyBState::createNewProjectile() // private.
 
 			_action.result = "STR_UNABLE_TO_THROW_HERE";
 			_action.TU = 0;
-			_unit->setStatus(STATUS_STANDING);
+			_unit->setUnitStatus(STATUS_STANDING);
 
 			_parent->popState();
 			return false;
@@ -590,7 +590,7 @@ bool ProjectileFlyBState::createNewProjectile() // private.
 
 			_action.result = "STR_NO_LINE_OF_FIRE";
 			_action.TU = 0;
-			_unit->setStatus(STATUS_STANDING);
+			_unit->setUnitStatus(STATUS_STANDING);
 
 			_parent->popState();
 			return false;
@@ -656,7 +656,7 @@ bool ProjectileFlyBState::createNewProjectile() // private.
 
 			_action.result = "STR_NO_LINE_OF_FIRE";
 			_action.TU = 0;
-			_unit->setStatus(STATUS_STANDING);
+			_unit->setUnitStatus(STATUS_STANDING);
 
 			_parent->popState();
 			return false;
@@ -686,7 +686,7 @@ bool ProjectileFlyBState::createNewProjectile() // private.
 void ProjectileFlyBState::think()
 {
 	//Log(LOG_INFO) << "ProjectileFlyBState::think() " << _unit->getId();
-	if (_unit->getStatus() == STATUS_AIMING
+	if (_unit->getUnitStatus() == STATUS_AIMING
 		&& _unit->getArmor()->getShootFrames() != 0)
 	{
 		if (_initUnitAnim == 0)
@@ -804,14 +804,14 @@ void ProjectileFlyBState::think()
 														_action.type != BA_HIT);
 			}
 
-			//Log(LOG_INFO) << "ProjectileFlyBState::think() current Status = " << (int)_unit->getStatus();
+			//Log(LOG_INFO) << "ProjectileFlyBState::think() current Status = " << (int)_unit->getUnitStatus();
 			if (_unit->isOut_t() == false
 //				_unit->isOut() == false
 				&& _action.type != BA_HIT)
 			{
-				_unit->setStatus(STATUS_STANDING);
+				_unit->setUnitStatus(STATUS_STANDING);
 			}
-			//Log(LOG_INFO) << "ProjectileFlyBState::think() current Status = " << (int)_unit->getStatus();
+			//Log(LOG_INFO) << "ProjectileFlyBState::think() current Status = " << (int)_unit->getUnitStatus();
 
 //			if (_battleSave->getSide() == FACTION_PLAYER || _battleSave->getDebugMode() == true)
 //				_parent->setupCursor(); // <- not yet! Do it in popState() when everything is finished.

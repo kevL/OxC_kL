@@ -105,7 +105,7 @@ void UnitTurnBState::init()
 
 
 	if (_chargeTUs == true
-		&& _unit->getStatus() != STATUS_TURNING) // try to open a door
+		&& _unit->getUnitStatus() != STATUS_TURNING) // try to open a door
 	{
 		if (_action.type == BA_NONE)
 		{
@@ -162,7 +162,7 @@ void UnitTurnBState::think()
 								_unit,
 								tu) == false)
 	{
-		_unit->setStatus(STATUS_STANDING);
+		_unit->setUnitStatus(STATUS_STANDING);
 		_unit->setTurnDirection(0);
 		_parent->popState();
 	}
@@ -180,7 +180,7 @@ void UnitTurnBState::think()
 			if (_chargeTUs == true
 				&& vis == true)
 			{
-				_unit->setStatus(STATUS_STANDING);
+				_unit->setUnitStatus(STATUS_STANDING);
 
 				// keep this for Faction_Player only till I figure out the AI better:
 				if (_action.targeting == true)
@@ -191,10 +191,10 @@ void UnitTurnBState::think()
 			&& _action.type == BA_NONE
 			&& _unit->getHostileUnitsThisTurn().size() > preSpots)
 		{
-			_unit->setStatus(STATUS_STANDING);
+			_unit->setUnitStatus(STATUS_STANDING);
 		}
 
-		if (_unit->getStatus() == STATUS_STANDING)
+		if (_unit->getUnitStatus() == STATUS_STANDING)
 		{
 			_unit->setTurnDirection(0);
 			_parent->popState();
@@ -206,7 +206,7 @@ void UnitTurnBState::think()
 	{
 		_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
 
-		_unit->setStatus(STATUS_STANDING);
+		_unit->setUnitStatus(STATUS_STANDING);
 		_unit->setTurnDirection(0);
 		_parent->popState();
 	}

@@ -1192,7 +1192,7 @@ void GeoscapeState::drawUfoBlobs()
 				colorBasic = 133; // red (8), all red. TODO: blink
 			else
 			{
-				switch ((*i)->getStatus())
+				switch ((*i)->getUfoStatus())
 				{
 					case Ufo::CRASHED:
 						colorBasic = 53; // brownish (3)
@@ -1386,7 +1386,7 @@ void GeoscapeState::time5Seconds()
 			i != _gameSave->getUfos()->end();
 			++i)
 	{
-		switch ((*i)->getStatus())
+		switch ((*i)->getUfoStatus())
 		{
 			case Ufo::FLYING:
 				if (_dfZoomInTimer->isRunning() == false
@@ -1428,7 +1428,7 @@ void GeoscapeState::time5Seconds()
 						{
 							if (!
 								((*i)->getTrajectory().getId() == UfoTrajectory::RETALIATION_ASSAULT_RUN
-									&& (*i)->getStatus() == Ufo::LANDED))
+									&& (*i)->getUfoStatus() == Ufo::LANDED))
 							{
 								resetTimer();
 								popup(new UfoLostState((*i)->getName(_game->getLanguage())));
@@ -1445,7 +1445,7 @@ void GeoscapeState::time5Seconds()
 														this));
 						}
 
-						if ((*i)->getStatus() == Ufo::DESTROYED) // if UFO was destroyed don't spawn missions
+						if ((*i)->getUfoStatus() == Ufo::DESTROYED) // if UFO was destroyed don't spawn missions
 							return;
 
 						if (Base* const base = dynamic_cast<Base*>((*i)->getDestination()))
@@ -1499,7 +1499,7 @@ void GeoscapeState::time5Seconds()
 				{
 					ufoExpired = *i; // shot down while trying to outrun interceptor
 					(*i)->setDetected(false);
-					(*i)->setStatus(Ufo::DESTROYED);
+					(*i)->setUfoStatus(Ufo::DESTROYED);
 				}
 		}
 	}
@@ -1579,15 +1579,15 @@ void GeoscapeState::time5Seconds()
 				const Ufo* const ufo = dynamic_cast<Ufo*>((*j)->getDestination());
 				if (ufo != NULL)
 				{
-					if (ufo->getStatus() != Ufo::FLYING)
+					if (ufo->getUfoStatus() != Ufo::FLYING)
 						(*j)->setInDogfight(false);
 
 					if (ufo->getDetected() == false	// lost radar contact
 						&& ufo != ufoExpired)		// <- ie. not recently shot down while trying to outrun interceptor but it crashed into the sea instead Lol
 					{
 						if (ufo->getTrajectory().getId() == UfoTrajectory::RETALIATION_ASSAULT_RUN
-							&& (ufo->getStatus() == Ufo::LANDED // base defense
-								|| ufo->getStatus() == Ufo::DESTROYED))
+							&& (ufo->getUfoStatus() == Ufo::LANDED // base defense
+								|| ufo->getUfoStatus() == Ufo::DESTROYED))
 						{
 							(*j)->returnToBase();
 						}
@@ -1607,8 +1607,8 @@ void GeoscapeState::time5Seconds()
 													wp));
 						}
 					}
-					else if (ufo->getStatus() == Ufo::DESTROYED
-						|| (ufo->getStatus() == Ufo::CRASHED	// http://openxcom.org/forum/index.php?topic=2406.0
+					else if (ufo->getUfoStatus() == Ufo::DESTROYED
+						|| (ufo->getUfoStatus() == Ufo::CRASHED	// http://openxcom.org/forum/index.php?topic=2406.0
 							&& (*j)->getNumSoldiers() == 0))	// Actually should set this on the UFO-crash event
 //							&& (*j)->getNumVehicles() == 0))	// so that crashed-ufos can still be targeted for Patrols.
 					{
@@ -1634,7 +1634,7 @@ void GeoscapeState::time5Seconds()
 
 				if (ufo != NULL)
 				{
-					switch (ufo->getStatus())
+					switch (ufo->getUfoStatus())
 					{
 						case Ufo::FLYING:
 							if (_dogfights.size() + _dogfightsToStart.size() < 4) // Not more than 4 interceptions at a time. _note: I thought orig could do up to 6.
@@ -1696,7 +1696,7 @@ void GeoscapeState::time5Seconds()
 															shade));
 								}
 							}
-							else if (ufo->getStatus() != Ufo::LANDED)
+							else if (ufo->getUfoStatus() != Ufo::LANDED)
 							{
 								popup(new CraftPatrolState(*j, this));
 								(*j)->setDestination(NULL);
@@ -1755,7 +1755,7 @@ void GeoscapeState::time5Seconds()
 			i != _gameSave->getUfos()->end();
 			)
 	{
-		if ((*i)->getStatus() == Ufo::DESTROYED)
+		if ((*i)->getUfoStatus() == Ufo::DESTROYED)
 		{
 			if ((*i)->getFollowers()->empty() == false)
 			{
@@ -1952,7 +1952,7 @@ void GeoscapeState::time10Minutes()
 				j != (*i)->getCrafts()->end();
 				++j)
 		{
-			if ((*j)->getStatus() == "STR_OUT"
+			if ((*j)->getCraftStatus() == "STR_OUT"
 				&& (*j)->getTakeoff() == true)
 			{
 				(*j)->consumeFuel();
@@ -2050,8 +2050,8 @@ void GeoscapeState::time10Minutes()
 			i != _gameSave->getUfos()->end();
 			++i)
 	{
-		if ((*i)->getStatus() == Ufo::FLYING
-			|| (*i)->getStatus() == Ufo::LANDED)
+		if ((*i)->getUfoStatus() == Ufo::FLYING
+			|| (*i)->getUfoStatus() == Ufo::LANDED)
 		{
 			std::vector<Base*> hyperBases; // = std::vector<Base*>();
 
@@ -2088,7 +2088,7 @@ void GeoscapeState::time10Minutes()
 								&& contact == false;
 							++k)
 					{
-						if ((*k)->getStatus() == "STR_OUT"
+						if ((*k)->getCraftStatus() == "STR_OUT"
 							&& (*k)->getTakeoff() == true
 							&& (*k)->detect(*i) == true)
 						{
@@ -2147,7 +2147,7 @@ void GeoscapeState::time10Minutes()
 								&& contact == false;
 							++k)
 					{
-						if ((*k)->getStatus() == "STR_OUT"
+						if ((*k)->getCraftStatus() == "STR_OUT"
 							&& (*k)->getTakeoff() == true
 							&& (*k)->detect(*i) == true)
 						{
@@ -2310,7 +2310,7 @@ struct expireCrashedUfo: public std::unary_function<Ufo*, void>
 	/// Decrease UFO expiration timer.
 	void operator() (Ufo* ufo) const
 	{
-		if (ufo->getStatus() == Ufo::CRASHED)
+		if (ufo->getUfoStatus() == Ufo::CRASHED)
 		{
 			const int sec = ufo->getSecondsLeft();
 			if (sec >= 30 * 60)
@@ -2319,7 +2319,7 @@ struct expireCrashedUfo: public std::unary_function<Ufo*, void>
 				return;
 			}
 
-			ufo->setStatus(Ufo::DESTROYED); // mark expired UFOs for removal.
+			ufo->setUfoStatus(Ufo::DESTROYED); // mark expired UFOs for removal.
 		}
 	}
 };
@@ -2366,12 +2366,12 @@ void GeoscapeState::time30Minutes()
 				j != (*i)->getCrafts()->end();
 				++j)
 		{
-			if ((*j)->getStatus() == "STR_OUT")
+			if ((*j)->getCraftStatus() == "STR_OUT")
 				continue;
 
-			if ((*j)->getStatus() == "STR_REPAIRS")
+			if ((*j)->getCraftStatus() == "STR_REPAIRS")
 				(*j)->repair();
-			else if ((*j)->getStatus() == "STR_REARMING")
+			else if ((*j)->getCraftStatus() == "STR_REARMING")
 			{
 				const std::string rearmClip = (*j)->rearm(_rules);
 
@@ -2389,7 +2389,7 @@ void GeoscapeState::time30Minutes()
 											msg));
 				}
 			}
-			else if ((*j)->getStatus() == "STR_REFUELLING")
+			else if ((*j)->getCraftStatus() == "STR_REFUELLING")
 			{
 				const std::string refuelItem = (*j)->getRules()->getRefuelItem();
 
@@ -3706,39 +3706,39 @@ size_t GeoscapeState::getMinimizedDfCount() const
  */
 void GeoscapeState::thinkDogfights()
 {
-	std::list<DogfightState*>::const_iterator i = _dogfights.begin();
+	std::list<DogfightState*>::const_iterator pDf = _dogfights.begin();
 	for (
 			;
-			i != _dogfights.end();
-			++i)
+			pDf != _dogfights.end();
+			++pDf)
 	{
-		(*i)->getUfo()->setTimerTicked(false);
+		(*pDf)->getUfo()->setTimerTicked(false);
 	}
 
 
 	_dfMinimized = 0;
 	bool resetPorts = false;
 
-	i = _dogfights.begin();
-	while (i != _dogfights.end())
+	pDf = _dogfights.begin();
+	while (pDf != _dogfights.end())
 	{
-		if ((*i)->isMinimized() == true)
+		if ((*pDf)->isMinimized() == true)
 			++_dfMinimized;
 //		else _globe->rotateStop();
 
-		(*i)->think();
+		(*pDf)->think();
 
-		if ((*i)->dogfightEnded() == true)
+		if ((*pDf)->dogfightEnded() == true)
 		{
-			if ((*i)->isMinimized() == true)
+			if ((*pDf)->isMinimized() == true)
 				--_dfMinimized;
 
-			delete *i;
-			i = _dogfights.erase(i);
+			delete *pDf;
+			pDf = _dogfights.erase(pDf);
 			resetPorts = true;
 		}
 		else
-			++i;
+			++pDf;
 	}
 
 	if (_dogfights.empty() == true)
@@ -3861,7 +3861,7 @@ void GeoscapeState::handleBaseDefense(
 		Base* const base,
 		Ufo* const ufo)
 {
-	ufo->setStatus(Ufo::DESTROYED);
+	ufo->setUfoStatus(Ufo::DESTROYED);
 
 	if (base->getAvailableSoldiers(true) > 0)
 	{

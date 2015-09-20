@@ -576,7 +576,7 @@ void AlienBAIState::setupPatrol() // private.
 		{
 			_unit->lookAt(dir);
 
-			while (_unit->getStatus() == STATUS_TURNING)
+			while (_unit->getUnitStatus() == STATUS_TURNING)
 				_unit->turn();
 		}
 	}
@@ -2166,7 +2166,7 @@ void AlienBAIState::meleeAttack() // private.
 												_unit->getArmor()->getSize() - 1,
 												0));
 
-	while (_unit->getStatus() == STATUS_TURNING)
+	while (_unit->getUnitStatus() == STATUS_TURNING)
 		_unit->turn();
 
 	//if (_traceAI) Log(LOG_INFO) << "Attack unit: " << _aggroTarget->getId();

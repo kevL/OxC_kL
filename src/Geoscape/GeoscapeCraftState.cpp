@@ -173,7 +173,7 @@ GeoscapeCraftState::GeoscapeCraftState(
 	}
 
 
-	const std::string stat = _craft->getStatus();
+	const std::string stat = _craft->getCraftStatus();
 	std::wstring status;
 	const bool
 		lowFuel = _craft->getLowFuel(),
@@ -202,7 +202,7 @@ GeoscapeCraftState::GeoscapeCraftState(
 											// for Fuel usage. (ie. it should)
 				status = tr("STR_TAILING_UFO").arg(ufo->getId());
 			}
-			else if (ufo->getStatus() == Ufo::FLYING)
+			else if (ufo->getUfoStatus() == Ufo::FLYING)
 				status = tr("STR_INTERCEPTING_UFO").arg(ufo->getId());
 			else
 				status = tr("STR_DESTINATION_UC_")

@@ -387,7 +387,7 @@ void State::resetAll()
  * Gets the LocalizedText for dictionary key @a id.
  * @note This function forwards the call to Language::getString(const std::string&).
  * @param id - reference the dictionary key to search for
- * @return, a reference to the LocalizedText
+ * @return, reference to the LocalizedText
  */
 const LocalizedText& State::tr(const std::string& id) const
 {
@@ -398,14 +398,14 @@ const LocalizedText& State::tr(const std::string& id) const
  * Gets a modifiable copy of the LocalizedText for dictionary key @a id.
  * @note This function forwards the call to Language::getString(const std::string&, unsigned).
  * @param id	- reference the dictionary key to search for
- * @param n		- the number to use for the proper version
- * @return, a copy of the LocalizedLext
+ * @param qty	- the number to use for the proper version
+ * @return, copy of the LocalizedLext
  */
 LocalizedText State::tr(
 		const std::string& id,
-		unsigned n) const
+		unsigned qty) const
 {
-	return _game->getLanguage()->getString(id, n);
+	return _game->getLanguage()->getString(id, qty);
 }
 
 /**

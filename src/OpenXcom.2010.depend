@@ -23,7 +23,7 @@
 1434623915 f:\git\openxcom\src\basescape\baseinfostate.h
 	"../Engine/State.h"
 
-1442286646 f:\git\openxcom\src\engine\state.h
+1442703752 f:\git\openxcom\src\engine\state.h
 
 1325723722 f:\git\openxcom\deps\include\sdl\sdl.h
 	"SDL_main.h"
@@ -269,7 +269,7 @@
 
 1440093295 f:\git\openxcom\src\engine\game.h
 
-1440093314 f:\git\openxcom\src\engine\language.h
+1442703807 f:\git\openxcom\src\engine\language.h
 	"LocalizedText.h"
 	"../Savegame/Soldier.h"
 
@@ -4354,7 +4354,7 @@
 	<string>
 	<iosfwd>
 
-1440012868 f:\git\openxcom\src\engine\localizedtext.h
+1442702343 f:\git\openxcom\src\engine\localizedtext.h
 
 1442649827 f:\git\openxcom\src\savegame\soldier.h
 	"../Ruleset/RuleUnit.h"
@@ -4503,7 +4503,7 @@
 
 1436388140 f:\git\openxcom\src\savegame\basefacility.h
 
-1442619906 f:\git\openxcom\src\savegame\craft.h
+1442709354 f:\git\openxcom\src\savegame\craft.h
 	"CraftId.h"
 	"MovingTarget.h"
 
@@ -4641,7 +4641,7 @@
 1442180055 f:\git\openxcom\src\savegame\savedbattlegame.h
 	"BattleUnit.h"
 
-1442633275 f:\git\openxcom\src\savegame\battleunit.h
+1442709431 f:\git\openxcom\src\savegame\battleunit.h
 	"SavedGame.h"
 	"Soldier.h"
 	"../Battlescape/BattlescapeGame.h"
@@ -4745,7 +4745,7 @@
 
 1430149550 f:\git\openxcom\src\engine\fastlineclip.h
 
-1441920603 f:\git\openxcom\src\savegame\ufo.h
+1442708721 f:\git\openxcom\src\savegame\ufo.h
 	"CraftId.h"
 	"MovingTarget.h"
 
@@ -4804,7 +4804,7 @@
 
 1442519809 f:\git\openxcom\src\savegame\researchproject.h
 
-1442665512 source:f:\git\openxcom\src\basescape\manufactureinfostate.cpp
+1442704255 source:f:\git\openxcom\src\basescape\manufactureinfostate.cpp
 	"ManufactureInfoState.h"
 	"../Interface/ArrowButton.h"
 	"../Interface/Text.h"
@@ -4835,7 +4835,7 @@
 
 1432766016 f:\git\openxcom\src\ruleset\rulemanufacture.h
 
-1442516469 f:\git\openxcom\src\savegame\production.h
+1442707380 f:\git\openxcom\src\savegame\production.h
 
 1442664635 source:f:\git\openxcom\src\basescape\manufacturestartstate.cpp
 	"ManufactureStartState.h"
@@ -4895,7 +4895,7 @@
 	<windows.h>
 	<stddef.h>
 
-1442296410 source:f:\git\openxcom\src\basescape\minibaseview.cpp
+1442709399 source:f:\git\openxcom\src\basescape\minibaseview.cpp
 	"MiniBaseView.h"
 	"../Engine/Action.h"
 	"../Engine/SurfaceSet.h"
@@ -6458,7 +6458,7 @@
 	"InteractiveSurface.h"
 	"Action.h"
 
-1440174993 source:f:\git\openxcom\src\engine\language.cpp
+1442703889 source:f:\git\openxcom\src\engine\language.cpp
 	"Language.h"
 	"../Interface/TextList.h"
 	"../Ruleset/ExtraStrings.h"
@@ -6474,7 +6474,7 @@
 1433863298 source:f:\git\openxcom\src\engine\languageplurality.cpp
 	"LanguagePlurality.h"
 
-1438135511 source:f:\git\openxcom\src\engine\localizedtext.cpp
+1442702400 source:f:\git\openxcom\src\engine\localizedtext.cpp
 	"LocalizedText.h"
 	"Language.h"
 
@@ -6570,7 +6570,7 @@
 
 1433206982 f:\git\openxcom\src\engine\soundset.h
 
-1442286675 source:f:\git\openxcom\src\engine\state.cpp
+1442705130 source:f:\git\openxcom\src\engine\state.cpp
 	"State.h"
 	"Game.h"
 	"InteractiveSurface.h"
@@ -6881,7 +6881,7 @@
 	"../Resource/XcomResourcePack.h"
 	"../Savegame/SavedGame.h"
 
-1442637090 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
+1442707109 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
 	"DogfightState.h"
 	"GeoscapeCraftState.h"
 	"GeoscapeState.h"
@@ -6913,7 +6913,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Ufo.h"
 
-1441323314 f:\git\openxcom\src\geoscape\dogfightstate.h
+1442707162 f:\git\openxcom\src\geoscape\dogfightstate.h
 	"../Engine/State.h"
 
 1440532567 f:\git\openxcom\src\savegame\alienstrategy.h
@@ -6959,7 +6959,7 @@
 1442441486 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1442648638 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1442705504 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	"AlienBaseState.h"
 	"BaseDefenseState.h"
@@ -7370,7 +7370,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Target.h"
 
-1442519094 source:f:\git\openxcom\src\geoscape\ufodetectedstate.cpp
+1442673524 source:f:\git\openxcom\src\geoscape\ufodetectedstate.cpp
 	"UfoDetectedState.h"
 	"GeoscapeState.h"
 	"Globe.h"
@@ -7382,7 +7382,9 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 	"../Ruleset/RuleCountry.h"
+	"../Ruleset/RuleInterface.h"
 	"../Ruleset/RuleRegion.h"
+	"../Ruleset/Ruleset.h"
 	"../Ruleset/RuleTerrain.h"
 	"../Ruleset/RuleUfo.h"
 	"../Savegame/AlienMission.h"
@@ -8465,7 +8467,7 @@
 	"Country.h"
 	"../Ruleset/RuleCountry.h"
 
-1442669242 source:f:\git\openxcom\src\savegame\craft.cpp
+1442674357 source:f:\git\openxcom\src\savegame\craft.cpp
 	"Craft.h"
 	"AlienBase.h"
 	"Base.h"
@@ -8519,7 +8521,7 @@
 1439866399 source:f:\git\openxcom\src\savegame\node.cpp
 	"Node.h"
 
-1442516469 source:f:\git\openxcom\src\savegame\production.cpp
+1442707380 source:f:\git\openxcom\src\savegame\production.cpp
 	"Production.h"
 	"Base.h"
 	"Craft.h"
@@ -10787,7 +10789,7 @@
 
 1440114498 f:\git\openxcom\src\ruleset\ruleinterface.h
 
-1440114518 source:f:\git\openxcom\src\ruleset\ruleinterface.cpp
+1442672923 source:f:\git\openxcom\src\ruleset\ruleinterface.cpp
 	"RuleInterface.h"
 
 1439842031 f:\git\openxcom\src\interface\battlescapebutton.h

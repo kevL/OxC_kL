@@ -154,7 +154,7 @@ void MediTargetState::init()
 			if (actorFound == true
 				&& *i != _action->actor)
 			{
-				if (((*i)->getStatus() == STATUS_UNCONSCIOUS
+				if (((*i)->getUnitStatus() == STATUS_UNCONSCIOUS
 						&& (*i)->getPosition() == _action->actor->getPosition())
 					|| ((*i)->getFaction() != FACTION_HOSTILE
 						&& battleSave->getTileEngine()->validMeleeRange(

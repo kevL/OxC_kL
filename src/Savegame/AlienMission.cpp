@@ -708,7 +708,7 @@ void AlienMission::ufoReachedWaypoint(
 					ufo.getLongitude(),
 					ufo.getLatitude());
 
-				ufo.setStatus(Ufo::DESTROYED);
+				ufo.setUfoStatus(Ufo::DESTROYED);
 
 				const MissionArea area = regionRule.getMissionPoint(
 															trajectory.getZone(pt),
@@ -750,7 +750,7 @@ void AlienMission::ufoReachedWaypoint(
 																							ufo.getLatitude()));
 				if (xcomBase == _gameSave.getBases()->end())
 				{
-					ufo.setStatus(Ufo::DESTROYED);
+					ufo.setUfoStatus(Ufo::DESTROYED);
 					return; // Only spawn mission if the base is still there.
 				}
 
@@ -778,7 +778,7 @@ void AlienMission::ufoReachedWaypoint(
 	else // UFO leaving atmosphere.
 	{
 		ufo.setDetected(false);
-		ufo.setStatus(Ufo::DESTROYED);
+		ufo.setUfoStatus(Ufo::DESTROYED);
 	}
 }
 
@@ -882,7 +882,7 @@ void AlienMission::ufoLifting(
 		const Globe& globe)
 {
 	//Log(LOG_INFO) << "AlienMission::ufoLifting()";
-	switch (ufo.getStatus())
+	switch (ufo.getUfoStatus())
 	{
 		case Ufo::FLYING:
 			ufo.setUfoTerrainType(""); // safety i guess.
@@ -962,7 +962,7 @@ void AlienMission::ufoLifting(
 
 		case Ufo::CRASHED: // Mission expired
 			ufo.setDetected(false);
-			ufo.setStatus(Ufo::DESTROYED);
+			ufo.setUfoStatus(Ufo::DESTROYED);
 		break;
 
 		case Ufo::DESTROYED:
@@ -979,7 +979,7 @@ void AlienMission::ufoLifting(
  */
 void AlienMission::ufoShotDown(const Ufo& ufo)
 {
-	switch (ufo.getStatus())
+	switch (ufo.getUfoStatus())
 	{
 		case Ufo::FLYING:
 		case Ufo::LANDED:

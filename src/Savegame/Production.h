@@ -58,9 +58,9 @@ private:
 		_timeSpent;
 
 	///
-	bool enoughMoney(SavedGame* gameSave);
+	bool enoughMoney(const SavedGame* const gameSave) const;
 	///
-	bool enoughMaterials(Base* base);
+	bool enoughMaterials(Base* const base) const;
 
 
 	public:
@@ -89,7 +89,7 @@ private:
 		///
 		int getTimeSpent() const;
 		///
-		void setTimeSpent(int done);
+		void setTimeSpent(int spent);
 
 		///
 		int getAmountProduced() const;
@@ -106,17 +106,17 @@ private:
 
 		///
 		ProductionProgress step(
-				Base* base,
-				SavedGame* gameSave,
-				const Ruleset* rules);
+				Base* const base,
+				SavedGame* const gameSave,
+				const Ruleset* const rules);
 
 		///
 		const RuleManufacture* getRules() const;
 
 		///
-		void startItem(
-				Base* base,
-				SavedGame* gameSave);
+		void startProduction(
+				Base* const base,
+				SavedGame* const gameSave) const;
 };
 
 }

@@ -1647,7 +1647,7 @@ void BattlescapeGame::checkForCasualties(
 	if (attackUnit != NULL
 		&& execution == false)
 	{
-		if (attackUnit->getStatus() == STATUS_DEAD
+		if (attackUnit->getUnitStatus() == STATUS_DEAD
 			&& attackUnit->getMurdererId() != 0
 			&& attackUnit->getUnitRules() != NULL
 			&& attackUnit->getUnitRules()->getSpecialAbility() == SPECAB_EXPLODE)
@@ -1760,7 +1760,7 @@ void BattlescapeGame::checkForCasualties(
 			i != _battleSave->getUnits()->end();
 			++i)
 	{
-		if ((*i)->getStatus() != STATUS_LIMBO) // kL_tentative.
+		if ((*i)->getUnitStatus() != STATUS_LIMBO) // kL_tentative.
 		{
 //			dead = ((*i)->getHealth() == 0);
 //			stunned = ((*i)->getHealth() <= (*i)->getStun());
@@ -1821,16 +1821,16 @@ void BattlescapeGame::checkForCasualties(
 
 
 				if ((dead == true
-						&& defendUnit->getStatus() != STATUS_DEAD
-						&& defendUnit->getStatus() != STATUS_COLLAPSING	// kL_note: is this really needed ....
-						&& defendUnit->getStatus() != STATUS_TURNING	// kL: may be set by UnitDieBState cTor
-						&& defendUnit->getStatus() != STATUS_DISABLED)	// kL
+						&& defendUnit->getUnitStatus() != STATUS_DEAD
+						&& defendUnit->getUnitStatus() != STATUS_COLLAPSING	// kL_note: is this really needed ....
+						&& defendUnit->getUnitStatus() != STATUS_TURNING	// kL: may be set by UnitDieBState cTor
+						&& defendUnit->getUnitStatus() != STATUS_DISABLED)	// kL
 					|| converted == true)
 				{
 					if (execution == true)
-						defendUnit->setStatus(STATUS_DEAD);
+						defendUnit->setUnitStatus(STATUS_DEAD);
 					else if (dead == true)
-						defendUnit->setStatus(STATUS_DISABLED);
+						defendUnit->setUnitStatus(STATUS_DISABLED);
 
 					// attacker's Morale Bonus & diary ->
 					if (attackUnit != NULL)
@@ -2024,13 +2024,13 @@ void BattlescapeGame::checkForCasualties(
 					}
 				}
 				else if (stunned == true
-					&& defendUnit->getStatus() != STATUS_DEAD
-					&& defendUnit->getStatus() != STATUS_UNCONSCIOUS
-					&& defendUnit->getStatus() != STATUS_COLLAPSING	// kL_note: is this really needed ....
-					&& defendUnit->getStatus() != STATUS_TURNING	// kL_note: may be set by UnitDieBState cTor
-					&& defendUnit->getStatus() != STATUS_DISABLED)	// kL
+					&& defendUnit->getUnitStatus() != STATUS_DEAD
+					&& defendUnit->getUnitStatus() != STATUS_UNCONSCIOUS
+					&& defendUnit->getUnitStatus() != STATUS_COLLAPSING	// kL_note: is this really needed ....
+					&& defendUnit->getUnitStatus() != STATUS_TURNING	// kL_note: may be set by UnitDieBState cTor
+					&& defendUnit->getUnitStatus() != STATUS_DISABLED)	// kL
 				{
-					(*i)->setStatus(STATUS_DISABLED); // kL
+					(*i)->setUnitStatus(STATUS_DISABLED); // kL
 
 					if (attackUnit != NULL
 						&& attackUnit->getGeoscapeSoldier() != NULL)
@@ -2315,7 +2315,7 @@ bool BattlescapeGame::handlePanickingPlayer() // private.
 bool BattlescapeGame::handlePanickingUnit(BattleUnit* const unit) // private.
 {
 	//Log(LOG_INFO) << "bg::handlePanickingUnit() - " << unit->getId();
-	const UnitStatus status = unit->getStatus();
+	const UnitStatus status = unit->getUnitStatus();
 
 	if (status == STATUS_PANICKING
 		|| status == STATUS_BERSERK)
@@ -2342,7 +2342,7 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* const unit) // private.
 																.arg(unit->getName(game->getLanguage()))));
 		}
 
-		unit->setStatus(STATUS_STANDING);
+		unit->setUnitStatus(STATUS_STANDING);
 		BattleAction ba;
 		ba.actor = unit;
 		int tu = unit->getTimeUnits();

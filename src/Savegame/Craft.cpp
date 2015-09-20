@@ -468,7 +468,7 @@ void Craft::setBase(
  *		STR_OUT
  * @return, status string
  */
-std::string Craft::getStatus() const
+std::string Craft::getCraftStatus() const
 {
 	return _status;
 }
@@ -477,7 +477,7 @@ std::string Craft::getStatus() const
  * Sets the current status of this Craft.
  * @param status - reference a status string
  */
-void Craft::setStatus(const std::string& status)
+void Craft::setCraftStatus(const std::string& status)
 {
 	_status = status;
 }

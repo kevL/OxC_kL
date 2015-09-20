@@ -133,9 +133,9 @@ private:
 				bool transfer = true);
 
 		/// Gets the craft's status.
-		std::string getStatus() const;
+		std::string getCraftStatus() const;
 		/// Sets the craft's status.
-		void setStatus(const std::string& status);
+		void setCraftStatus(const std::string& status);
 
 		/// Gets the craft's altitude.
 		std::string getAltitude() const;

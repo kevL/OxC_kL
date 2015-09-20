@@ -254,7 +254,7 @@ void MiniBaseView::draw()
 										color);
 						}
 
-						if ((*j)->getStatus() == "STR_READY")
+						if ((*j)->getCraftStatus() == "STR_READY")
 							setPixelColor(
 										x + 14,
 										y,
@@ -382,11 +382,11 @@ void MiniBaseView::blink()
 			y = 17;
 
 			for (std::vector<Craft*>::const_iterator
-					craft = base->getCrafts()->begin();
-					craft != base->getCrafts()->end();
-					++craft)
+					j = base->getCrafts()->begin();
+					j != base->getCrafts()->end();
+					++j)
 			{
-				stat = (*craft)->getStatus();
+				stat = (*j)->getCraftStatus();
 				if (stat != "STR_READY")
 				{
 					if (_blink == true)
@@ -409,9 +409,9 @@ void MiniBaseView::blink()
 								color);
 				}
 
-				craftRule = (*craft)->getRules();
+				craftRule = (*j)->getRules();
 				if (craftRule->getWeapons() > 0 // craft needs Weapons mounted.
-					&& craftRule->getWeapons() != (*craft)->getNumWeapons())
+					&& craftRule->getWeapons() != (*j)->getNumWeapons())
 				{
 					if (_blink == true)
 						color = BLUE;

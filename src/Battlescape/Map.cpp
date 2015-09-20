@@ -791,8 +791,8 @@ void Map::drawTerrain(Surface* const surface) // private.
 						const BattleUnit* const unitNorth = tileNorth->getUnit();
 						if (unitNorth != NULL
 							&& unitNorth->getUnitVisible() == true // don't bother checking DebugMode.
-							&& (unitNorth->getStatus() == STATUS_WALKING
-								|| unitNorth->getStatus() == STATUS_FLYING)
+							&& (unitNorth->getUnitStatus() == STATUS_WALKING
+								|| unitNorth->getUnitStatus() == STATUS_FLYING)
 							&& (unitNorth->getDirection() == 1
 								|| unitNorth->getDirection() == 5))
 						{
@@ -1686,8 +1686,8 @@ void Map::drawTerrain(Surface* const surface) // private.
 	{
 		_unit = _battleSave->getSelectedUnit();
 		if (_unit != NULL
-			&& (_unit->getStatus() == STATUS_STANDING
-				|| _unit->getStatus() == STATUS_TURNING)
+			&& (_unit->getUnitStatus() == STATUS_STANDING
+				|| _unit->getUnitStatus() == STATUS_TURNING)
 			&& _unit->getPosition().z <= _camera->getViewLevel())
 		{
 			_camera->convertMapToScreen(
@@ -2108,7 +2108,7 @@ int Map::getQuadrant(
 	STATUS_LIMBO,		// 10
 	STATUS_DISABLED		// 11 */
 
-	if (trueLoc == true //unit->getStatus() == STATUS_STANDING ||
+	if (trueLoc == true //unit->getUnitStatus() == STATUS_STANDING ||
 		|| unit->getVerticalDirection() != 0)
 	{
 		return tile->getPosition().x - unit->getPosition().x
@@ -2142,9 +2142,9 @@ void Map::calculateWalkingOffset(
 {
 	*offset = Position(0,0,0);
 
-	//Log(LOG_INFO) << ". . Status = " << (int)unit->getStatus();
-	if (unit->getStatus() == STATUS_WALKING
-		|| unit->getStatus() == STATUS_FLYING) // or STATUS_PANICKING
+	//Log(LOG_INFO) << ". . Status = " << (int)unit->getUnitStatus();
+	if (unit->getUnitStatus() == STATUS_WALKING
+		|| unit->getUnitStatus() == STATUS_FLYING) // or STATUS_PANICKING
 	{
 		static const int
 			offsetX[8] = {1, 1, 1, 0,-1,-1,-1, 0},
@@ -2261,7 +2261,7 @@ void Map::calculateWalkingOffset(
 								unit->getPosition(),
 								unit->getArmor()->getSize());
 
-		if (unit->getStatus() == STATUS_AIMING
+		if (unit->getUnitStatus() == STATUS_AIMING
 			&& unit->getArmor()->getCanHoldWeapon() == true)
 		{
 			offset->x = -16; // it's maaaaaagic.
@@ -2350,7 +2350,7 @@ void Map::cacheUnit(BattleUnit* const unit)
 {
 	//Log(LOG_INFO) << "cacheUnit() : " << unit->getId();
 	int width;
-	if (unit->getStatus() == STATUS_AIMING)
+	if (unit->getUnitStatus() == STATUS_AIMING)
 		width = _spriteWidth * 2;
 	else
 		width = _spriteWidth;

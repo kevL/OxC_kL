@@ -288,7 +288,7 @@ void CraftSoldiersState::lstSoldiersPress(Action* action)
 
 		if (soldier->getRecovery() > 0
 			|| (soldier->getCraft() != NULL
-				&& soldier->getCraft()->getStatus() == "STR_OUT"))
+				&& soldier->getCraft()->getCraftStatus() == "STR_OUT"))
 		{
 			return;
 		}
@@ -310,7 +310,7 @@ void CraftSoldiersState::lstSoldiersPress(Action* action)
 			color = _lstSoldiers->getColor();
 
 			if (soldier->getCraft() != NULL
-				&& soldier->getCraft()->getStatus() != "STR_OUT")
+				&& soldier->getCraft()->getCraftStatus() != "STR_OUT")
 			{
 				soldier->setCraft(NULL);
 				_lstSoldiers->setCellText(

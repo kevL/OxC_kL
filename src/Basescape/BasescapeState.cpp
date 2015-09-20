@@ -575,7 +575,7 @@ void BasescapeState::viewLeftClick(Action*)
 					++i)
 			{
 				if (fac->getCraft() == NULL
-					|| fac->getCraft()->getStatus() == "STR_OUT")
+					|| fac->getCraft()->getCraftStatus() == "STR_OUT")
 				{
 					_game->pushState(new CraftsState(_base));
 					bPop = true;

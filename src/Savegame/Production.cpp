@@ -135,9 +135,9 @@ int Production::getTimeSpent() const
 /**
  *
  */
-void Production::setTimeSpent(int done)
+void Production::setTimeSpent(int spent)
 {
-	_timeSpent = done;
+	_timeSpent = spent;
 }
 
 /**
@@ -175,7 +175,7 @@ void Production::setSellItems(bool sell)
 /**
  *
  */
-bool Production::enoughMoney(SavedGame* gameSave) // private.
+bool Production::enoughMoney(const SavedGame* const gameSave) const // private.
 {
 	return (gameSave->getFunds() >= _manufRule->getManufactureCost());
 }
@@ -183,7 +183,7 @@ bool Production::enoughMoney(SavedGame* gameSave) // private.
 /**
  *
  */
-bool Production::enoughMaterials(Base* base) // private.
+bool Production::enoughMaterials(Base* const base) const // private.
 {
 	for (std::map<std::string,int>::const_iterator
 			i = _manufRule->getRequiredItems().begin();
@@ -201,35 +201,35 @@ bool Production::enoughMaterials(Base* base) // private.
  *
  */
 ProductionProgress Production::step(
-		Base* base,
-		SavedGame* gameSave,
-		const Ruleset* rules)
+		Base* const base,
+		SavedGame* const gameSave,
+		const Ruleset* const rules)
 {
-	const int done = getAmountProduced();
+	const int qtyDone = getAmountProduced();
 	_timeSpent += _engineers;
 
 	if (Options::canManufactureMoreItemsPerHour == false
-		&& done < getAmountProduced())
+		&& qtyDone < getAmountProduced())
 	{
 		// enforce pre-TFTD manufacturing rules: extra hours are wasted
-		_timeSpent = (done + 1) * _manufRule->getManufactureTime();
+		_timeSpent = (qtyDone + 1) * _manufRule->getManufactureTime();
 	}
 
-	if (done < getAmountProduced())
+	if (qtyDone < getAmountProduced())
 	{
 
 		int produced;
 		if (_infinite == false)
 			produced = std::min( // required to not overproduce
 							getAmountProduced(),
-							_amount) - done;
+							_amount) - qtyDone;
 		else
-			produced = getAmountProduced() - done;
+			produced = getAmountProduced() - qtyDone;
 
 		int qty = 0;
 		do
 		{
-			for (std::map<std::string,int>::const_iterator
+			for (std::map<std::string, int>::const_iterator
 					i = _manufRule->getProducedItems().begin();
 					i != _manufRule->getProducedItems().end();
 					++i)
@@ -240,7 +240,7 @@ ProductionProgress Production::step(
 												rules->getCraft(i->first),
 												base,
 												gameSave->getId(i->first));
-					craft->setStatus("STR_REFUELLING");
+					craft->setCraftStatus("STR_REFUELLING");
 					base->getCrafts()->push_back(craft);
 
 					break;
@@ -251,34 +251,34 @@ ProductionProgress Production::step(
 					if (rules->getItem(i->first)->getBattleType() == BT_NONE)
 					{
 						for (std::vector<Craft*>::const_iterator
-								craft = base->getCrafts()->begin();
-								craft != base->getCrafts()->end();
-								++craft)
+								j = base->getCrafts()->begin();
+								j != base->getCrafts()->end();
+								++j)
 						{
-							if ((*craft)->getWarned() == true)
+							if ((*j)->getWarned() == true)
 							{
-								if ((*craft)->getStatus() == "STR_REFUELING")
+								if ((*j)->getCraftStatus() == "STR_REFUELING")
 								{
-									if ((*craft)->getRules()->getRefuelItem() == i->first)
+									if ((*j)->getRules()->getRefuelItem() == i->first)
 									{
-										(*craft)->setWarned(false);
-										(*craft)->setWarning(CW_NONE);
+										(*j)->setWarned(false);
+										(*j)->setWarning(CW_NONE);
 									}
 								}
-								else if ((*craft)->getStatus() == "STR_REARMING")
+								else if ((*j)->getCraftStatus() == "STR_REARMING")
 								{
 									for (std::vector<CraftWeapon*>::const_iterator
-											craftWeapon = (*craft)->getWeapons()->begin();
-											craftWeapon != (*craft)->getWeapons()->end();
-											++craftWeapon)
+											k = (*j)->getWeapons()->begin();
+											k != (*j)->getWeapons()->end();
+											++k)
 									{
-										if (*craftWeapon != NULL
-											&& (*craftWeapon)->getRules()->getClipItem() == i->first)
+										if (*k != NULL
+											&& (*k)->getRules()->getClipItem() == i->first)
 										{
-											(*craftWeapon)->setCantLoad(false);
+											(*k)->setCantLoad(false);
 
-											(*craft)->setWarned(false);
-											(*craft)->setWarning(CW_NONE);
+											(*j)->setWarned(false);
+											(*j)->setWarning(CW_NONE);
 										}
 									}
 								}
@@ -345,7 +345,7 @@ ProductionProgress Production::step(
 				if (enoughMaterials(base) == false)
 					return PROGRESS_NOT_ENOUGH_MATERIALS;
 
-				startItem(base, gameSave);
+				startProduction(base, gameSave);
 			}
 		}
 		while (qty < produced);
@@ -357,7 +357,7 @@ ProductionProgress Production::step(
 		return PROGRESS_COMPLETE;
 	}
 
-	if (done < getAmountProduced())
+	if (qtyDone < getAmountProduced())
 	{
 		if (enoughMoney(gameSave) == false)
 			return PROGRESS_NOT_ENOUGH_MONEY;
@@ -365,9 +365,7 @@ ProductionProgress Production::step(
 		if (enoughMaterials(base) == false)
 			return PROGRESS_NOT_ENOUGH_MATERIALS;
 
-		startItem(
-				base,
-				gameSave);
+		startProduction(base, gameSave);
 	}
 
 	return PROGRESS_NOT_COMPLETE;
@@ -392,9 +390,9 @@ const RuleManufacture* Production::getRules() const
 /**
  *
  */
-void Production::startItem(
-		Base* base,
-		SavedGame* gameSave)
+void Production::startProduction(
+		Base* const base,
+		SavedGame* const gameSave) const
 {
 	const int cost = _manufRule->getManufactureCost();
 	gameSave->setFunds(gameSave->getFunds() - cost);

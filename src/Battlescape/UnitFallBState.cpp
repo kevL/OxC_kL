@@ -99,10 +99,10 @@ void UnitFallBState::think()
 			continue;
 		}
 
-		if ((*i)->getStatus() == STATUS_TURNING)
+		if ((*i)->getUnitStatus() == STATUS_TURNING)
 		{
 			//Log(LOG_INFO) << ". STATUS_TURNING, abortTurn()";
-			(*i)->setStatus(STATUS_STANDING);
+			(*i)->setUnitStatus(STATUS_STANDING);
 		}
 
 		bool
@@ -179,8 +179,8 @@ void UnitFallBState::think()
 			}
 		}
 
-		if ((*i)->getStatus() == STATUS_WALKING
-			|| (*i)->getStatus() == STATUS_FLYING)
+		if ((*i)->getUnitStatus() == STATUS_WALKING
+			|| (*i)->getUnitStatus() == STATUS_FLYING)
 		{
 			//Log(LOG_INFO) << ". . call keepWalking()";
 			(*i)->keepWalking(tileBelow, true);	// advances the phase
@@ -378,7 +378,7 @@ void UnitFallBState::think()
 			}
 		}
 
-		if ((*i)->getStatus() == STATUS_STANDING) // done falling, just standing around.
+		if ((*i)->getUnitStatus() == STATUS_STANDING) // done falling, just standing around.
 		{
 			//Log(LOG_INFO) << ". STATUS_STANDING";
 			if (falling == true)

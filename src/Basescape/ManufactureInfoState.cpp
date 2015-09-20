@@ -368,9 +368,9 @@ void ManufactureInfoState::btnStopClick(Action*) // private.
 void ManufactureInfoState::btnOkClick(Action*) // private.
 {
 	if (_manufRule != NULL)
-		_production->startItem(
-							_base,
-							_game->getSavedGame());
+		_production->startProduction(
+								_base,
+								_game->getSavedGame());
 
 	exitState();
 }

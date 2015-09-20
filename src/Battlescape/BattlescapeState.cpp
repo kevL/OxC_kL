@@ -1236,7 +1236,7 @@ void BattlescapeState::printTileInventory() // private.
 						wst1 += tr("STR_FLOATER");
 						wst1 += L" (status doubtful)";
 					}
-					else if (item->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
+					else if (item->getUnit()->getUnitStatus() == STATUS_UNCONSCIOUS)
 					{
 						wst1 += item->getUnit()->getName(_game->getLanguage());
 

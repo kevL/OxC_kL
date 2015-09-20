@@ -85,10 +85,10 @@ private:
 		LocalizedText& arg(const std::wstring&) OX_REQUIRED_RESULT;
 
 		/// Replaces next argument.
-		template <typename T>
+		template<typename T>
 		LocalizedText arg(T) const OX_REQUIRED_RESULT;
 		/// Replaces next argument.
-		template <typename T>
+		template<typename T>
 		LocalizedText& arg(T) OX_REQUIRED_RESULT;
 };
 
@@ -156,9 +156,7 @@ LocalizedText LocalizedText::arg(T val) const
 					tval);
 	}
 
-	return LocalizedText(
-						ntext,
-						_nextArg);
+	return LocalizedText(ntext, _nextArg);
 }
 
 

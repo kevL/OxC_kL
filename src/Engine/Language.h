@@ -53,7 +53,7 @@ class TextList;
 
 /**
  * Contains strings used throughout the game for localization.
- * Languages are just a set of strings identified by an ID string.
+ * @note Languages are just a set of strings identified by an ID string.
  */
 class Language
 {
@@ -73,7 +73,7 @@ private:
 		_cjk;
 
 	/// Parses a text string loaded from an external file.
-	std::wstring loadString(const std::string& ist) const;
+	std::wstring loadString(const std::string& stIn) const;
 
 
 	public:
@@ -109,12 +109,12 @@ private:
 		/// Gets list of languages in the data directory.
 		static void getList(
 				std::vector<std::string>& files,
-				std::vector<std::wstring> &names);
+				std::vector<std::wstring>& names);
 
 		/// Loads the language from a YAML file.
 		void load(
-				const std::string& filename,
-				ExtraStrings* extras);
+				const std::string& file,
+				ExtraStrings* const extras);
 
 		/// Gets the language's ID.
 		std::string getId() const;
@@ -122,18 +122,18 @@ private:
 		std::wstring getName() const;
 
 		/// Outputs the language to a HTML file.
-		void toHtml(const std::string& filename) const;
+		void toHtml(const std::string& file) const;
 
-		/// Get a gender-depended localized text.
+		/// Gets a localized text.
+		const LocalizedText& getString(const std::string& id) const;
+		/// Gets a quantity-dependent localized text.
+		LocalizedText getString(
+				const std::string& id,
+				unsigned qty) const;
+		/// Gets a gender-dependent localized text.
 		const LocalizedText& getString(
 				const std::string& id,
 				SoldierGender gender) const;
-		/// Get a localized text.
-		const LocalizedText& getString(const std::string& id) const;
-		/// Get a quantity-depended localized text.
-		LocalizedText getString(
-				const std::string& id,
-				unsigned n) const;
 
 		/// Gets the direction of text in this language.
 		TextDirection getTextDirection() const;

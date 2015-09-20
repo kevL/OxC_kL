@@ -387,7 +387,7 @@ void SavedBattleGame::load(
 		}
 
 		if (faction != FACTION_PLAYER
-			&& unit->getStatus() != STATUS_DEAD)
+			&& unit->getUnitStatus() != STATUS_DEAD)
 		{
 			if (const YAML::Node& ai = (*i)["AI"])
 			{
@@ -1381,7 +1381,7 @@ bool SavedBattleGame::endBattlePhase()
 			++i)
 	{
 		if ((*i)->isOut_t(OUT_HLTH) == false
-			&& (*i)->getStatus() != STATUS_LIMBO)
+			&& (*i)->getUnitStatus() != STATUS_LIMBO)
 		{
 			(*i)->setDashing(false);	// Safety. no longer dashing; dash is effective
 										// vs. Reaction Fire only and is/ought be
@@ -2138,7 +2138,7 @@ void SavedBattleGame::tileVolatiles()
 			++i)
 	{
 		if ((*i)->getOriginalFaction() == faction
-			&& (*i)->getStatus() != STATUS_DEAD) // etc. See below_
+			&& (*i)->getUnitStatus() != STATUS_DEAD) // etc. See below_
 		{
 			reviveUnit(*i, true);
 		}
@@ -2156,7 +2156,7 @@ void SavedBattleGame::reviveUnit(
 		BattleUnit* const unit,
 		bool atTurnOver)
 {
-	if (unit->getStatus() == STATUS_UNCONSCIOUS
+	if (unit->getUnitStatus() == STATUS_UNCONSCIOUS
 		&& unit->getStun() < unit->getHealth() + static_cast<int>(atTurnOver) // do health=stun if unit is about to get healed in Prep Turn.
 		&& (unit->getGeoscapeSoldier() != NULL
 			|| (unit->getUnitRules()->isMechanical() == false
@@ -2198,7 +2198,7 @@ void SavedBattleGame::reviveUnit(
 								posCorpse,
 								largeUnit) == true)
 		{
-			unit->setStatus(STATUS_STANDING);
+			unit->setUnitStatus(STATUS_STANDING);
 
 			if (unit->getGeoscapeSoldier() != NULL)
 				unit->kneel(true);

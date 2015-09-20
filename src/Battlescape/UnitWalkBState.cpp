@@ -155,8 +155,8 @@ void UnitWalkBState::think()
 
 /* _oO **** STATUS WALKING **** Oo_ */// #2
 
-	if (_unit->getStatus() == STATUS_WALKING
-		|| _unit->getStatus() == STATUS_FLYING)
+	if (_unit->getUnitStatus() == STATUS_WALKING
+		|| _unit->getUnitStatus() == STATUS_FLYING)
 	{
 		//Log(LOG_INFO) << "STATUS_WALKING or FLYING : " << _unit->getId();
 //		if (_unit->getVisible())
@@ -182,7 +182,7 @@ void UnitWalkBState::think()
 /* _oO **** STATUS STANDING end **** Oo_ */// #3
 
 		// kL_note: walkPhase reset as the unit completes its transition to the next tile
-		if (_unit->getStatus() == STATUS_STANDING)
+		if (_unit->getUnitStatus() == STATUS_STANDING)
 		{
 			//Log(LOG_INFO) << "STATUS_STANDING_end in UnitWalkBState _WALKING or _FLYING !!!" ;
 			clearTilesLink(true);
@@ -252,8 +252,8 @@ void UnitWalkBState::think()
 
 /* _oO **** STATUS STANDING **** Oo_ */// #1 & #4
 
-	if (_unit->getStatus() == STATUS_STANDING
-		|| _unit->getStatus() == STATUS_PANICKING)
+	if (_unit->getUnitStatus() == STATUS_STANDING
+		|| _unit->getUnitStatus() == STATUS_PANICKING)
 	{
 		//Log(LOG_INFO) << "STATUS_STANDING or PANICKING : " << _unit->getId();
 		if (doStatusStand() == false)
@@ -292,7 +292,7 @@ void UnitWalkBState::think()
 
 /* _oO **** STATUS TURNING **** Oo_ */
 
-	if (_unit->getStatus() == STATUS_TURNING) // turning during walking costs no tu
+	if (_unit->getUnitStatus() == STATUS_TURNING) // turning during walking costs no tu
 	{
 		//Log(LOG_INFO) << "STATUS_TURNING : " << _unit->getId();
 		doStatusTurn();
@@ -724,7 +724,7 @@ bool UnitWalkBState::doStatusWalk() // private.
 				_unit->getTurretType() != -1);
 
 		_pf->abortPath();
-		_unit->setStatus(STATUS_STANDING);
+		_unit->setUnitStatus(STATUS_STANDING);
 	}
 
 	//Log(LOG_INFO) << ". . unitPos " << _unit->getPosition();
@@ -958,7 +958,7 @@ void UnitWalkBState::doStatusTurn() // private.
 			_unit->setHiding(false);
 
 		_pf->abortPath();
-		_unit->setStatus(STATUS_STANDING);
+		_unit->setUnitStatus(STATUS_STANDING);
 
 //		_unit->setCache(NULL);
 //		_parent->getMap()->cacheUnit(_unit);
@@ -1091,7 +1091,7 @@ void UnitWalkBState::postPathProcedures() // private.
 		{
 			_unit->lookAt(dir % 8);
 
-			while (_unit->getStatus() == STATUS_TURNING)
+			while (_unit->getUnitStatus() == STATUS_TURNING)
 			{
 				_unit->turn();
 				_parent->getTileEngine()->calculateFOV(_unit);
@@ -1232,7 +1232,7 @@ void UnitWalkBState::playMovementSound() // private.
 		{
 			if (phase == 0)
 			{
-				if (_unit->getStatus() == STATUS_FLYING
+				if (_unit->getUnitStatus() == STATUS_FLYING
 					&& _unit->isFloating() == false
 					&& _falling == false)
 				{
@@ -1244,7 +1244,7 @@ void UnitWalkBState::playMovementSound() // private.
 		}
 		else
 		{
-			if (_unit->getStatus() == STATUS_WALKING)
+			if (_unit->getUnitStatus() == STATUS_WALKING)
 			{
 				_playFly = true;
 				if (phase == 3 || phase == 7)
@@ -1263,7 +1263,7 @@ void UnitWalkBState::playMovementSound() // private.
 					}
 				}
 			}
-			else if (_unit->getStatus() == STATUS_FLYING)
+			else if (_unit->getUnitStatus() == STATUS_FLYING)
 			{
 				if (phase == 0 || _playFly == true)
 				{

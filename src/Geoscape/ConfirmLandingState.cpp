@@ -368,7 +368,7 @@ void ConfirmLandingState::btnYesClick(Action*)
 
 	if (ufo != NULL)
 	{
-		if (ufo->getStatus() == Ufo::CRASHED)
+		if (ufo->getUfoStatus() == Ufo::CRASHED)
 			battleSave->setTacticalType("STR_UFO_CRASH_RECOVERY");
 		else
 			battleSave->setTacticalType("STR_UFO_GROUND_ASSAULT");

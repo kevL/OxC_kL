@@ -234,7 +234,7 @@ void CraftArmorState::lstSoldiersPress(Action* action)
 	{
 		const Soldier* const soldier = _base->getSoldiers()->at(soldierId);
 		if (soldier->getCraft() == NULL
-			|| soldier->getCraft()->getStatus() != "STR_OUT")
+			|| soldier->getCraft()->getCraftStatus() != "STR_OUT")
 		{
 			_game->pushState(new SoldierArmorState(
 												_base,

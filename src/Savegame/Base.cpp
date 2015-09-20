@@ -648,7 +648,7 @@ int Base::getAvailableSoldiers(const bool combatReady) const
 		}
 		else if (combatReady == true
 			&& (((*i)->getCraft() != NULL
-					&& (*i)->getCraft()->getStatus() != "STR_OUT")
+					&& (*i)->getCraft()->getCraftStatus() != "STR_OUT")
 				|| ((*i)->getCraft() == NULL
 					&& (*i)->getRecovery() == 0)))
 		{
@@ -919,7 +919,7 @@ int Base::getAvailableStores() const
 			c != getCrafts()->end();
 			++c)
 	{
-		if ((*c)->getStatus() == "STR_REARMING")
+		if ((*c)->getCraftStatus() == "STR_REARMING")
 		{
 			for (std::vector<CraftWeapon*>::const_iterator
 					w = (*c)->getWeapons()->begin();
@@ -2279,7 +2279,7 @@ void Base::setupDefenses()
 			i = getCrafts()->begin();
 			i != getCrafts()->end();
 			++i)
-		if ((*i)->getStatus() != "STR_OUT")
+		if ((*i)->getCraftStatus() != "STR_OUT")
 			for (std::vector<Vehicle*>::const_iterator
 					j = (*i)->getVehicles()->begin();
 					j != (*i)->getVehicles()->end();

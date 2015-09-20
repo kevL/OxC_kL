@@ -445,7 +445,7 @@ void Inventory::moveItem( // private.
 											item->getSlot());
 
 				if (item->getUnit() != NULL
-					&& item->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
+					&& item->getUnit()->getUnitStatus() == STATUS_UNCONSCIOUS)
 				{
 					item->getUnit()->setPosition(_selUnit->getPosition());
 				}
@@ -465,7 +465,7 @@ void Inventory::moveItem( // private.
 				_selUnit->getTile()->removeItem(item);
 
 				if (item->getUnit() != NULL
-					&& item->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
+					&& item->getUnit()->getUnitStatus() == STATUS_UNCONSCIOUS)
 				{
 					item->getUnit()->setPosition(Position(-1,-1,-1));
 				}

@@ -632,9 +632,9 @@ private:
 		int getVerticalDirection() const;
 
 		/// Gets this unit's status.
-		UnitStatus getStatus() const;
+		UnitStatus getUnitStatus() const;
 		/// Sets this unit's status.
-		void setStatus(const UnitStatus status);
+		void setUnitStatus(const UnitStatus status);
 
 		/// Starts the walkingPhase.
 		void startWalking(

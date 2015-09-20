@@ -77,15 +77,16 @@ private:
 
 
 	bool
-		_end,
+		_animatingHit,
 		_destroyUfo,
 		_destroyCraft,
+		_end,
+		_endDogfight,
+		_freezeFrame,
+		_minimized,
 		_ufoBreakingOff,
 		_w1Enabled,
-		_w2Enabled,
-		_minimized,
-		_endDogfight,
-		_animatingHit;
+		_w2Enabled;
 	int
 		_cautionLevel,
 		_diff,
@@ -149,11 +150,12 @@ private:
 	Timer* _craftDamageAnimTimer;
 	Ufo* _ufo;
 
+	/// Changes the status text.
+	void resetStatus(const std::string& status);
 	/// Moves window to new position.
 	void placePort();
 	/// Ends the dogfight.
 	void endDogfight();
-
 	/// Gets the globe texture icon to display for the interception.
 	const std::string getTextureIcon();
 
@@ -185,9 +187,6 @@ private:
 		void maximumDistance();
 		/// Sets the Craft to minimum distance.
 		void minimumDistance();
-
-		/// Changes the status text.
-		void setStatus(const std::string& status);
 
 		/// Handler for the escape/cancel keyboard button.
 		void keyEscape(Action* action);

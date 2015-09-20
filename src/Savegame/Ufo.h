@@ -157,10 +157,10 @@ private:
 		std::string getDirection() const;
 
 		/// Gets the UFO status.
-		UfoStatus getStatus() const
+		UfoStatus getUfoStatus() const
 		{ return _status; }
 		/// Set the UFO's status.
-		void setStatus(UfoStatus status)
+		void setUfoStatus(UfoStatus status)
 		{ _status = status; }
 
 		/// Gets if the UFO has crashed.

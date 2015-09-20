@@ -53,9 +53,7 @@ LocalizedText LocalizedText::arg(const std::wstring& val) const
 					val);
 	}
 
-	return LocalizedText(
-						ntext,
-						_nextArg);
+	return LocalizedText(ntext, _nextArg);
 }
 
 /**

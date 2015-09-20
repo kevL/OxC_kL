@@ -159,12 +159,12 @@ ItemsArrivingState::ItemsArrivingState(GeoscapeState* state)
 							k != (*i)->getCrafts()->end();
 							++k)
 					{
-						if ((*k)->getStatus() == "STR_OUT")
+						if ((*k)->getCraftStatus() == "STR_OUT")
 							continue;
 
 						if ((*k)->getWarned() == true)
 						{
-							if ((*k)->getStatus() == "STR_REFUELING")
+							if ((*k)->getCraftStatus() == "STR_REFUELING")
 							{
 								if ((*k)->getRules()->getRefuelItem() == itRule->getType())
 								{
@@ -172,7 +172,7 @@ ItemsArrivingState::ItemsArrivingState(GeoscapeState* state)
 									(*k)->setWarning(CW_NONE);
 								}
 							}
-							else if ((*k)->getStatus() == "STR_REARMING")
+							else if ((*k)->getCraftStatus() == "STR_REARMING")
 							{
 								for (std::vector<CraftWeapon*>::const_iterator
 										l = (*k)->getWeapons()->begin();

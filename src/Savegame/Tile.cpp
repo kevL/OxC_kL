@@ -1074,7 +1074,7 @@ void Tile::hitStuff(SavedBattleGame* const battleSave)
 				unit = (*i)->getUnit();
 
 				if (unit != NULL
-					&& unit->getStatus() == STATUS_UNCONSCIOUS
+					&& unit->getUnitStatus() == STATUS_UNCONSCIOUS
 					&& unit->getTakenExpl() == false)
 				{
 					//Log(LOG_INFO) << ". . unConsc unit (smoke) " << unit->getId();
@@ -1108,7 +1108,7 @@ void Tile::hitStuff(SavedBattleGame* const battleSave)
 					unit = (*i)->getUnit();
 
 					if (unit != NULL
-						&& unit->getStatus() == STATUS_UNCONSCIOUS
+						&& unit->getUnitStatus() == STATUS_UNCONSCIOUS
 						&& unit->getTakenFire() == false)
 					{
 						//Log(LOG_INFO) << ". . unConsc unit (fire) " << unit->getId();
@@ -1137,7 +1137,7 @@ void Tile::hitStuff(SavedBattleGame* const battleSave)
 					}
 					else if (pFire > (*i)->getRules()->getArmor() // no modifier when destroying items, not even corpse in bodyarmor.
 						&& (unit == NULL
-							|| unit->getStatus() == STATUS_DEAD))
+							|| unit->getUnitStatus() == STATUS_DEAD))
 					{
 						//Log(LOG_INFO) << ". . destroy item";
 						battleSave->removeItem(*i);	// This should not kill *and* remove a unit's corpse on the same
@@ -1456,7 +1456,7 @@ int Tile::hasUnconsciousUnit(bool playerOnly) const
 		const BattleUnit* const bu = (*i)->getUnit();
 
 		if (bu != NULL
-			&& bu->getStatus() == STATUS_UNCONSCIOUS
+			&& bu->getUnitStatus() == STATUS_UNCONSCIOUS
 			&& (bu->getOriginalFaction() == FACTION_PLAYER
 				|| playerOnly == false))
 		{

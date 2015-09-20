@@ -877,7 +877,7 @@ int BattleUnit::getVerticalDirection() const
  * Gets this BattleUnit's status.
  * @return, UnitStatus enum (BattleUnit.h)
  */
-UnitStatus BattleUnit::getStatus() const
+UnitStatus BattleUnit::getUnitStatus() const
 {
 	return _status;
 }
@@ -886,7 +886,7 @@ UnitStatus BattleUnit::getStatus() const
  * Sets a unit's status.
  * @param status - UnitStatus enum (BattleUnit.h)
  */
-void BattleUnit::setStatus(const UnitStatus status)
+void BattleUnit::setUnitStatus(const UnitStatus status)
 {
 	_status = status;
 }

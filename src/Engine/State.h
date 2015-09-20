@@ -111,7 +111,7 @@ protected:
 		/// Get the localized text.
 		LocalizedText tr(
 				const std::string& id,
-				unsigned n) const;
+				unsigned qty) const;
 
 		/// redraw all the text-type surfaces.
 		void redrawText();

@@ -292,7 +292,7 @@ void TransferItemsState::init()
 			i != _baseSource->getCrafts()->end();
 			++i)
 	{
-		if ((*i)->getStatus() != "STR_OUT"
+		if ((*i)->getCraftStatus() != "STR_OUT"
 			|| (Options::canTransferCraftsWhileAirborne == true
 				&& (*i)->getFuel() >= (*i)->getFuelLimit(_baseTarget)))
 		{
@@ -634,7 +634,7 @@ void TransferItemsState::completeTransfer()
 						if ((*j)->inPsiTraining() == true)
 							(*j)->togglePsiTraining();
 
-						if (craft->getStatus() == "STR_OUT")
+						if (craft->getCraftStatus() == "STR_OUT")
 							_baseTarget->getSoldiers()->push_back(*j);
 						else
 						{
@@ -703,7 +703,7 @@ void TransferItemsState::completeTransfer()
 						}
 
 
-						if (craft->getStatus() == "STR_OUT")
+						if (craft->getCraftStatus() == "STR_OUT")
 						{
 							_baseTarget->getCrafts()->push_back(craft);
 							craft->setBase(_baseTarget, false);
@@ -1021,7 +1021,7 @@ void TransferItemsState::increaseByValue(int change)
 				++_destQty[_sel];
 				++_transferQty[_sel];
 
-				if (_crafts[_sel - _soldiers.size()]->getStatus() != "STR_OUT"
+				if (_crafts[_sel - _soldiers.size()]->getCraftStatus() != "STR_OUT"
 					|| Options::canTransferCraftsWhileAirborne == false)
 				{
 					_totalCost += getCost();
@@ -1120,7 +1120,7 @@ void TransferItemsState::decreaseByValue(int change)
 	_transferQty[_sel] -= change;
 
 	if (craft == NULL
-		|| craft->getStatus() != "STR_OUT"
+		|| craft->getCraftStatus() != "STR_OUT"
 		|| Options::canTransferCraftsWhileAirborne == false)
 	{
 		_totalCost -= getCost() * change;

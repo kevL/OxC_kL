@@ -340,7 +340,7 @@ void MedikitState::onHealClick(Action*)
 			_mediView->autoSelectPart();
 			_mediView->invalidate();
 
-			if (_action->targetUnit->getStatus() == STATUS_UNCONSCIOUS // if the unit has revived quit this screen automatically
+			if (_action->targetUnit->getUnitStatus() == STATUS_UNCONSCIOUS // if the unit has revived quit this screen automatically
 				&& _action->targetUnit->getStun() < _action->targetUnit->getHealth())
 			{
 				_action->actor->getStatistics()->revivedSoldier += 2;

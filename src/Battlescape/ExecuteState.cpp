@@ -133,7 +133,7 @@ void ExecuteState::init()
 					++i)
 			{
 				if ((targetUnit = (*i)->getUnit()) != NULL
-					&& targetUnit->getStatus() == STATUS_UNCONSCIOUS)
+					&& targetUnit->getUnitStatus() == STATUS_UNCONSCIOUS)
 				{
 					_targetUnits.push_back(targetUnit);
 					_lstTarget->addRow(
@@ -152,7 +152,7 @@ void ExecuteState::init()
 				++i)
 		{
 			if ((targetUnit = (*i)->getUnit()) != NULL
-				&& targetUnit->getStatus() == STATUS_UNCONSCIOUS)
+				&& targetUnit->getUnitStatus() == STATUS_UNCONSCIOUS)
 			{
 				_targetUnits.push_back(targetUnit);
 				_lstTarget->addRow(

@@ -417,7 +417,7 @@ DebriefingState::DebriefingState()
 			}
 
 
-			if ((*i)->getStatus() == STATUS_DEAD)
+			if ((*i)->getUnitStatus() == STATUS_DEAD)
 			{
 				//Log(LOG_INFO) << ". . . dead";
 				sol = NULL;	// Zero out the BattleUnit from the geoscape Soldiers list
@@ -795,9 +795,9 @@ void DebriefingState::prepareDebriefing() // private.
 	{
 		if ((*i)->getOriginalFaction() == FACTION_PLAYER)
 		{
-			if ((*i)->getStatus() != STATUS_DEAD)
+			if ((*i)->getUnitStatus() != STATUS_DEAD)
 			{
-				if ((*i)->getStatus() == STATUS_UNCONSCIOUS
+				if ((*i)->getUnitStatus() == STATUS_UNCONSCIOUS
 					|| (*i)->getFaction() == FACTION_HOSTILE)
 				{
 					++soldierOut;
@@ -826,7 +826,7 @@ void DebriefingState::prepareDebriefing() // private.
 				++i)
 		{
 			if ((*i)->getOriginalFaction() == FACTION_PLAYER
-				&& (*i)->getStatus() != STATUS_DEAD)
+				&& (*i)->getUnitStatus() != STATUS_DEAD)
 			{
 				(*i)->instaKill();
 
@@ -844,7 +844,7 @@ void DebriefingState::prepareDebriefing() // private.
 				++i)
 		{
 			if ((*i)->getGeoscapeSoldier() != NULL
-				&& (*i)->getStatus() != STATUS_DEAD)
+				&& (*i)->getUnitStatus() != STATUS_DEAD)
 			{
 				// if only one soldier survived AND none have died, only one soldier went on the mission
 				if (soldierDead == 0
@@ -1007,7 +1007,7 @@ void DebriefingState::prepareDebriefing() // private.
 			{
 				(*i)->setInBattlescape(false);
 
-				if ((*i)->getStatus() == Ufo::LANDED)
+				if ((*i)->getUfoStatus() == Ufo::LANDED)
 					(*i)->setSecondsLeft(15);
 			}
 
@@ -1126,7 +1126,7 @@ void DebriefingState::prepareDebriefing() // private.
 
 		const int value = (*i)->getValue();
 		const UnitFaction orgFaction = (*i)->getOriginalFaction();
-		const UnitStatus status = (*i)->getStatus();
+		const UnitStatus status = (*i)->getUnitStatus();
 
 		if (status == STATUS_DEAD) // so this is a dead unit
 		{
@@ -1212,7 +1212,7 @@ void DebriefingState::prepareDebriefing() // private.
 
 				if (aborted == false					// so game is not aborted
 					|| (((*i)->isInExitArea() == true	// or aborted and unit is on exit area
-							|| (*i)->getStatus() == STATUS_LIMBO)
+							|| (*i)->getUnitStatus() == STATUS_LIMBO)
 						&& (tacType != TCT_BASEDEFENSE
 							|| missionAccomplished == true)))
 				{
@@ -1604,7 +1604,7 @@ void DebriefingState::prepareDebriefing() // private.
 					i != _base->getCrafts()->end();
 					++i)
 			{
-				if ((*i)->getStatus() != "STR_OUT")
+				if ((*i)->getCraftStatus() != "STR_OUT")
 					reequipCraft(*i);
 			}
 
@@ -1950,8 +1950,8 @@ void DebriefingState::recoverItems(std::vector<BattleItem*>* const battleItems) 
 						if (unit != NULL)
 						{
 							if (itRule->isRecoverable() == true
-								&& (unit->getStatus() == STATUS_DEAD
-									|| (unit->getStatus() == STATUS_LIMBO // kL_tentative.
+								&& (unit->getUnitStatus() == STATUS_DEAD
+									|| (unit->getUnitStatus() == STATUS_LIMBO // kL_tentative.
 										&& unit->isOut_t(OUT_HLTH) == true)))
 							{
 								//Log(LOG_INFO) << ". . corpse = " << itRule->getType();
@@ -1962,8 +1962,8 @@ void DebriefingState::recoverItems(std::vector<BattleItem*>* const battleItems) 
 								if (unit->getArmor()->getCorpseGeoscape().empty() == false) // safety.
 									_base->getItems()->addItem(unit->getArmor()->getCorpseGeoscape());
 							}
-							else if (unit->getStatus() == STATUS_UNCONSCIOUS
-								|| (unit->getStatus() == STATUS_LIMBO
+							else if (unit->getUnitStatus() == STATUS_UNCONSCIOUS
+								|| (unit->getUnitStatus() == STATUS_LIMBO
 									&& unit->isOut_t(OUT_STUN) == true)) // kL_tentative.
 							{
 								if (itRule->isRecoverable() == true

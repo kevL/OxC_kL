@@ -231,7 +231,7 @@ UfoDetectedState::UfoDetectedState(
 
 	woststr.str(L"");
 	std::string heading = _ufo->getDirection();
-	if (_ufo->getStatus() != Ufo::FLYING)
+	if (_ufo->getUfoStatus() != Ufo::FLYING)
 		heading = "STR_NONE";
 	woststr << L'\x01' << tr(heading);
 	_lstInfo->addRow(
@@ -267,8 +267,8 @@ UfoDetectedState::UfoDetectedState(
 					(ActionHandler)& UfoDetectedState::btnCancelClick,
 					Options::keyCancel);
 
-	if (ufo->getStatus() == Ufo::CRASHED
-		|| ufo->getStatus() == Ufo::LANDED)
+	if (ufo->getUfoStatus() == Ufo::CRASHED
+		|| ufo->getUfoStatus() == Ufo::LANDED)
 	{
 		// IMPORTANT: This does not return the actual battleField terrain; that is done
 		// in ConfirmLandingState. This is merely an indicator .... cf. DogfightState

@@ -207,7 +207,7 @@ InterceptState::~InterceptState()
  */
 std::wstring InterceptState::getAltStatus(Craft* const craft)
 {
-	std::string stat = craft->getStatus();
+	std::string stat = craft->getCraftStatus();
 	if (stat != "STR_OUT")
 	{
 		if (stat == "STR_READY")
@@ -262,7 +262,7 @@ std::wstring InterceptState::getAltStatus(Craft* const craft)
 		{
 			if (craft->isInDogfight() == true)
 				status = tr("STR_TAILING_UFO").arg(ufo->getId());
-			else if (ufo->getStatus() == Ufo::FLYING)
+			else if (ufo->getUfoStatus() == Ufo::FLYING)
 				status = tr("STR_INTERCEPTING_UFO").arg(ufo->getId());
 			else
 				status = tr("STR_DESTINATION_UC_")

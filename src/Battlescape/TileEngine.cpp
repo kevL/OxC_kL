@@ -2642,7 +2642,7 @@ void TileEngine::explode(
 								bu = (*i)->getUnit();
 
 								if (bu != NULL
-									&& bu->getStatus() == STATUS_UNCONSCIOUS
+									&& bu->getUnitStatus() == STATUS_UNCONSCIOUS
 									&& bu->getTakenExpl() == false)
 								{
 									bu->setTakenExpl();
@@ -2739,7 +2739,7 @@ void TileEngine::explode(
 									bu = (*i)->getUnit();
 
 									if (bu != NULL
-										&& bu->getStatus() == STATUS_UNCONSCIOUS
+										&& bu->getUnitStatus() == STATUS_UNCONSCIOUS
 										&& bu->getTakenExpl() == false)
 									{
 										//Log(LOG_INFO) << ". . . vs Unit unconscious";
@@ -2785,7 +2785,7 @@ void TileEngine::explode(
 									}
 									else if (_powerE > (*i)->getRules()->getArmor()
 										&& (bu == NULL
-											|| (bu->getStatus() == STATUS_DEAD
+											|| (bu->getUnitStatus() == STATUS_DEAD
 												&& bu->getTakenExpl() == false)))
 									{
 										//Log(LOG_INFO) << ". . . vs Item armor";
@@ -2851,7 +2851,7 @@ void TileEngine::explode(
 								bu = (*i)->getUnit();
 
 								if (bu != NULL
-									&& bu->getStatus() == STATUS_UNCONSCIOUS
+									&& bu->getUnitStatus() == STATUS_UNCONSCIOUS
 									&& bu->getTakenExpl() == false)
 								{
 									bu->setTakenExpl();
@@ -2969,7 +2969,7 @@ void TileEngine::explode(
 									bu = (*i)->getUnit();
 
 									if (bu != NULL
-										&& bu->getStatus() == STATUS_UNCONSCIOUS
+										&& bu->getUnitStatus() == STATUS_UNCONSCIOUS
 										&& bu->getTakenExpl() == false)
 									{
 										bu->setTakenExpl();
@@ -3007,7 +3007,7 @@ void TileEngine::explode(
 									}
 									else if (_powerE > (*i)->getRules()->getArmor()
 										&& (bu == NULL
-											|| (bu->getStatus() == STATUS_DEAD
+											|| (bu->getUnitStatus() == STATUS_DEAD
 												&& bu->getTakenExpl() == false)))
 									{
 										if ((*i)->getFuse() > -1)
@@ -5855,7 +5855,7 @@ bool TileEngine::psiAttack(BattleAction* const action)
 				victim->setFaction(action->actor->getFaction());
 				victim->initTu();
 				victim->allowReselect();
-				victim->setStatus(STATUS_STANDING);
+				victim->setUnitStatus(STATUS_STANDING);
 
 				calculateUnitLighting();
 				calculateFOV(
@@ -6016,7 +6016,7 @@ Tile* TileEngine::applyGravity(Tile* const tile) const
 									_battleSave->getTile(unit->getPosition() + Position(0,0,-1)));
 //									true);
 					// and set our status to standing (rather than walking or flying) to avoid weirdness.
-					unit->setStatus(STATUS_STANDING);
+					unit->setUnitStatus(STATUS_STANDING);
 				}
 				else
 				{

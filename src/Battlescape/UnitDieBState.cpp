@@ -160,7 +160,7 @@ void UnitDieBState::think()
 	}
 
 // #1
-	if (_unit->getStatus() == STATUS_TURNING)
+	if (_unit->getUnitStatus() == STATUS_TURNING)
 	{
 		if (_unit->getSpinPhase() != -1)
 		{
@@ -171,7 +171,7 @@ void UnitDieBState::think()
 			_unit->turn(); // -> STATUS_STANDING
 	}
 // #3
-	else if (_unit->getStatus() == STATUS_COLLAPSING)
+	else if (_unit->getUnitStatus() == STATUS_COLLAPSING)
 	{
 		_unit->keepFalling(); // -> STATUS_DEAD or STATUS_UNCONSCIOUS ( ie. isOut() )
 	}
@@ -184,7 +184,7 @@ void UnitDieBState::think()
 
 		if (_unit->getSpawnUnit().empty() == false)
 		{
-			while (_unit->getStatus() == STATUS_COLLAPSING)
+			while (_unit->getUnitStatus() == STATUS_COLLAPSING)
 				_unit->keepFalling(); // -> STATUS_DEAD or STATUS_UNCONSCIOUS ( ie. isOut() ) -> goto #4
 		}
 	}
@@ -217,7 +217,7 @@ void UnitDieBState::think()
 			&& _unit->getOriginalFaction() == FACTION_PLAYER)
 		{
 			std::string stInfo;
-			if (_unit->getStatus() == STATUS_DEAD)
+			if (_unit->getUnitStatus() == STATUS_DEAD)
 			{
 				if (_dType == DT_NONE
 					&& _unit->getSpawnUnit().empty() == true)
@@ -263,7 +263,7 @@ void UnitDieBState::think()
 	{
 		_extraTicks = 1;
 
-		if (_unit->getStatus() == STATUS_UNCONSCIOUS
+		if (_unit->getUnitStatus() == STATUS_UNCONSCIOUS
 			&& _unit->getSpecialAbility() == SPECAB_EXPLODE)
 		{
 			_unit->instaKill();
@@ -306,7 +306,7 @@ void UnitDieBState::convertToCorpse() // private.
 				   && carried == false
 				   && (Options::battleWeaponSelfDestruction == false
 						|| _unit->getOriginalFaction() != FACTION_HOSTILE
-						|| _unit->getStatus() == STATUS_UNCONSCIOUS);
+						|| _unit->getUnitStatus() == STATUS_UNCONSCIOUS);
 	if (drop == true)
 	{
 		std::vector<BattleItem*> itemsToKeep;

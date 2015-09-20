@@ -191,7 +191,7 @@ void CraftsState::init()
  */
 std::wstring CraftsState::getAltStatus(Craft* const craft)
 {
-	std::string stat = craft->getStatus();
+	std::string stat = craft->getCraftStatus();
 	if (stat != "STR_OUT")
 	{
 		if (stat == "STR_READY")
@@ -247,7 +247,7 @@ std::wstring CraftsState::getAltStatus(Craft* const craft)
 		{
 			if (craft->isInDogfight() == true)
 				status = tr("STR_TAILING_UFO").arg(ufo->getId());
-			else if (ufo->getStatus() == Ufo::FLYING)
+			else if (ufo->getUfoStatus() == Ufo::FLYING)
 				status = tr("STR_INTERCEPTING_UFO").arg(ufo->getId());
 			else
 				status = tr("STR_DESTINATION_UC_")
@@ -324,7 +324,7 @@ void CraftsState::lstCraftsPress(Action* action)
 
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		if (_base->getCrafts()->at(_lstCrafts->getSelectedRow())->getStatus() != "STR_OUT")
+		if (_base->getCrafts()->at(_lstCrafts->getSelectedRow())->getCraftStatus() != "STR_OUT")
 			_game->pushState(new CraftInfoState(
 											_base,
 											_lstCrafts->getSelectedRow()));

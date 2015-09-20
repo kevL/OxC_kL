@@ -1289,7 +1289,7 @@ void InventoryState::setExtraInfo( // private.
 			label << tr("STR_FLOATER") // STR_FLOATER_CORPSE
 				  << L" (status doubtful)";
 		}
-		else if (item->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
+		else if (item->getUnit()->getUnitStatus() == STATUS_UNCONSCIOUS)
 			label << item->getUnit()->getName(_game->getLanguage());
 		else
 		{

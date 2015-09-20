@@ -315,7 +315,7 @@ void UnitSprite::drawRoutine0()
 		unitDir		= _unit->getDirection(),
 		walkPhase	= _unit->getWalkPhase();
 
-	if (_unit->getStatus() == STATUS_COLLAPSING)
+	if (_unit->getUnitStatus() == STATUS_COLLAPSING)
 	{
 		torso = _unitSurface->getFrame(die + _unit->getFallingPhase());
 		drawRecolored(torso);
@@ -343,7 +343,7 @@ void UnitSprite::drawRoutine0()
 	}
 
 	const bool
-		isWalking = _unit->getStatus() == STATUS_WALKING,
+		isWalking = _unit->getUnitStatus() == STATUS_WALKING,
 		isKneeled = _unit->isKneeled();
 
 	if (isWalking == true) // when walking torso (fixed sprite) has to be animated up/down
@@ -379,7 +379,7 @@ void UnitSprite::drawRoutine0()
 
 	if (_itemA) // holding an item
 	{
-		if (_unit->getStatus() == STATUS_AIMING // draw handob item
+		if (_unit->getUnitStatus() == STATUS_AIMING // draw handob item
 			&& (_itemA->getRules()->isTwoHanded()
 				|| _itemA->getRules()->getBattleType() == BT_MELEE)) // could look weird.
 		{
@@ -416,7 +416,7 @@ void UnitSprite::drawRoutine0()
 		{
 			leftArm = _unitSurface->getFrame(larm2H + unitDir);
 
-			if (_unit->getStatus() == STATUS_AIMING)
+			if (_unit->getUnitStatus() == STATUS_AIMING)
 			{
 				rightArm = _unitSurface->getFrame(rarmShoot + unitDir);
 			}
@@ -476,7 +476,7 @@ void UnitSprite::drawRoutine0()
 			rightArm = _unitSurface->getFrame(rarm2H + unitDir);
 		}
 
-		if (_unit->getStatus() == STATUS_AIMING
+		if (_unit->getUnitStatus() == STATUS_AIMING
 			&& (_itemB->getRules()->isTwoHanded()
 				|| _itemB->getRules()->getBattleType() == BT_MELEE)) // could look weird.
 		{
@@ -535,7 +535,7 @@ void UnitSprite::drawRoutine0()
 		itemB->setY(itemB->getY() + (22 - _unit->getStandHeight()));
 	}
 
-	if (_unit->getStatus() == STATUS_AIMING)
+	if (_unit->getUnitStatus() == STATUS_AIMING)
 	{
 		if (_itemA == NULL // kL: using Universal Fist. so PUNCH!! ( this is so funny )
 			&& _itemB == NULL)
@@ -583,7 +583,7 @@ void UnitSprite::drawRoutine0()
 			drawRecolored(rightArm);
 		break;
 		case 3:
-			if (_unit->getStatus() != STATUS_AIMING
+			if (_unit->getUnitStatus() != STATUS_AIMING
 				&& ((_itemA && _itemA->getRules()->isTwoHanded())
 					|| (_itemB && _itemB->getRules()->isTwoHanded())))
 			{
@@ -613,7 +613,7 @@ void UnitSprite::drawRoutine0()
 			itemB ? itemB->blit(this) : void();
 		break;
 		case 5:
-			if (_unit->getStatus() != STATUS_AIMING
+			if (_unit->getUnitStatus() != STATUS_AIMING
 				&& ((_itemA && _itemA->getRules()->isTwoHanded())
 					|| (_itemB && _itemB->getRules()->isTwoHanded())))
 			{
@@ -643,7 +643,7 @@ void UnitSprite::drawRoutine0()
 			drawRecolored(leftArm);
 		break;
 		case 7:
-			if (_unit->getStatus() != STATUS_AIMING
+			if (_unit->getUnitStatus() != STATUS_AIMING
 				&& ((_itemA && _itemA->getRules()->isTwoHanded())
 					|| (_itemB && _itemB->getRules()->isTwoHanded())))
 			{
@@ -716,7 +716,7 @@ void UnitSprite::drawRoutine1()
 		offXAiming = 16;
 
 
-	if (_unit->getStatus() == STATUS_COLLAPSING)
+	if (_unit->getUnitStatus() == STATUS_COLLAPSING)
 	{
 		torso = _unitSurface->getFrame(die + _unit->getFallingPhase());
 		drawRecolored(torso);
@@ -732,7 +732,7 @@ void UnitSprite::drawRoutine1()
 	rightArm = _unitSurface->getFrame(rarm + unitDir);
 
 	// when walking torso (fixed sprite) has to be animated up/down
-	if (_unit->getStatus() == STATUS_WALKING)
+	if (_unit->getUnitStatus() == STATUS_WALKING)
 	{
 		// floater only has 5 walk animations instead of 8
 		torso = _unitSurface->getFrame(
@@ -751,7 +751,7 @@ void UnitSprite::drawRoutine1()
 	if (_itemA)
 	{
 		// draw handob item
-		if (_unit->getStatus() == STATUS_AIMING && _itemA->getRules()->isTwoHanded())
+		if (_unit->getUnitStatus() == STATUS_AIMING && _itemA->getRules()->isTwoHanded())
 		{
 			const int dir = (unitDir + 2) % 8;
 			itemA = _itemSurfaceA->getFrame(_itemA->getRules()->getHandSprite() + dir);
@@ -770,7 +770,7 @@ void UnitSprite::drawRoutine1()
 		{
 			leftArm = _unitSurface->getFrame(larm2H + unitDir);
 
-			if (_unit->getStatus() == STATUS_AIMING)
+			if (_unit->getUnitStatus() == STATUS_AIMING)
 			{
 				rightArm = _unitSurface->getFrame(rarmShoot + unitDir);
 			}
@@ -803,7 +803,7 @@ void UnitSprite::drawRoutine1()
 			rightArm = _unitSurface->getFrame(rarm2H + unitDir);
 		}
 
-		if (_unit->getStatus() == STATUS_AIMING && _itemB->getRules()->isTwoHanded())
+		if (_unit->getUnitStatus() == STATUS_AIMING && _itemB->getRules()->isTwoHanded())
 		{
 			const int dir = (unitDir + 2) % 8;
 			itemB = _itemSurfaceB->getFrame(_itemB->getRules()->getHandSprite() + dir);
@@ -812,7 +812,7 @@ void UnitSprite::drawRoutine1()
 			rightArm = _unitSurface->getFrame(rarmShoot + unitDir);
 		}
 
-		if (_unit->getStatus() == STATUS_WALKING)
+		if (_unit->getUnitStatus() == STATUS_WALKING)
 		{
 			leftArm->setY(yoffWalk[walkPhase]);
 			itemB->setY(itemB->getY() + yoffWalk[walkPhase]);
@@ -822,14 +822,14 @@ void UnitSprite::drawRoutine1()
 		}
 	}
 
-	if (_unit->getStatus() != STATUS_WALKING)
+	if (_unit->getUnitStatus() != STATUS_WALKING)
 	{
 		leftArm->setY(0);
 		rightArm->setY(0);
 		torso->setY(0);
 	}
 
-	if (_unit->getStatus() == STATUS_AIMING)
+	if (_unit->getUnitStatus() == STATUS_AIMING)
 	{
 		torso->setX(offXAiming);
 		leftArm->setX(offXAiming);
@@ -1030,14 +1030,14 @@ void UnitSprite::drawRoutine4()
 
 		offXAiming = 16;
 
-	if (_unit->getStatus() == STATUS_COLLAPSING)
+	if (_unit->getUnitStatus() == STATUS_COLLAPSING)
 	{
 		srf = _unitSurface->getFrame(die + _unit->getFallingPhase());
 		drawRecolored(srf);
 
 		return;
 	}
-	else if (_unit->getStatus() == STATUS_WALKING
+	else if (_unit->getUnitStatus() == STATUS_WALKING
 		&& _unit->getRaceString() != "STR_ETHEREAL")
 	{
 		srf = _unitSurface->getFrame(walk + (8 * _unit->getDirection()) + _unit->getWalkPhase());
@@ -1052,7 +1052,7 @@ void UnitSprite::drawRoutine4()
 	if (_itemA
 		&& !_itemA->getRules()->isFixed())
 	{
-		if (_unit->getStatus() == STATUS_AIMING // draw handob item
+		if (_unit->getUnitStatus() == STATUS_AIMING // draw handob item
 			&& _itemA->getRules()->isTwoHanded())
 		{
 			int dir = (_unit->getDirection() + 2) % 8;
@@ -1092,7 +1092,7 @@ void UnitSprite::drawRoutine4()
 			itemB->setY(0);
 		}
 
-		if (_unit->getStatus() == STATUS_AIMING
+		if (_unit->getUnitStatus() == STATUS_AIMING
 			&& _itemB->getRules()->isTwoHanded())
 		{
 			int dir = (_unit->getDirection() + 2) % 8;
@@ -1102,7 +1102,7 @@ void UnitSprite::drawRoutine4()
 		}
 	}
 
-	if (_unit->getStatus() == STATUS_AIMING)
+	if (_unit->getUnitStatus() == STATUS_AIMING)
 	{
 		srf->setX(offXAiming);
 		if (itemA)
@@ -1165,7 +1165,7 @@ void UnitSprite::drawRoutine5()
 
 	Surface* srf;
 
-	if (_unit->getStatus() == STATUS_WALKING)
+	if (_unit->getUnitStatus() == STATUS_WALKING)
 		srf = _unitSurface->getFrame(32 + (_unit->getDirection() * 16) + (_part * 4) + ((_unit->getWalkPhase() / 2) %4));
 	else
 		srf = _unitSurface->getFrame((_part * 8) + _unit->getDirection());
@@ -1220,7 +1220,7 @@ void UnitSprite::drawRoutine6()
 	const int offXAiming = 16;
 
 
-	if (_unit->getStatus() == STATUS_COLLAPSING)
+	if (_unit->getUnitStatus() == STATUS_COLLAPSING)
 	{
 		torso = _unitSurface->getFrame(die + _unit->getFallingPhase());
 		drawRecolored(torso);
@@ -1237,7 +1237,7 @@ void UnitSprite::drawRoutine6()
 	rightArm = _unitSurface->getFrame(rarmStand + _unit->getDirection());
 
 	// when walking torso (fixed sprite) has to be animated up/down
-	if (_unit->getStatus() == STATUS_WALKING)
+	if (_unit->getUnitStatus() == STATUS_WALKING)
 	{
 		int xoffWalk = 0;
 		if (_unit->getDirection() < 3)
@@ -1262,7 +1262,7 @@ void UnitSprite::drawRoutine6()
 	if (_itemA)
 	{
 		// draw handob item
-		if (_unit->getStatus() == STATUS_AIMING && _itemA->getRules()->isTwoHanded())
+		if (_unit->getUnitStatus() == STATUS_AIMING && _itemA->getRules()->isTwoHanded())
 		{
 			int dir = (_unit->getDirection() + 2) % 8;
 			itemA = _itemSurfaceA->getFrame(_itemA->getRules()->getHandSprite() + dir);
@@ -1283,7 +1283,7 @@ void UnitSprite::drawRoutine6()
 		if (_itemA->getRules()->isTwoHanded())
 		{
 			leftArm = _unitSurface->getFrame(larm2H + _unit->getDirection());
-			if (_unit->getStatus() == STATUS_AIMING)
+			if (_unit->getUnitStatus() == STATUS_AIMING)
 				rightArm = _unitSurface->getFrame(rarmShoot + _unit->getDirection());
 			else
 				rightArm = _unitSurface->getFrame(rarm2H + _unit->getDirection());
@@ -1292,7 +1292,7 @@ void UnitSprite::drawRoutine6()
 			rightArm = _unitSurface->getFrame(rarm1H + _unit->getDirection());
 
 		// the fixed arm(s) have to be animated up/down when walking
-		if (_unit->getStatus() == STATUS_WALKING)
+		if (_unit->getUnitStatus() == STATUS_WALKING)
 		{
 			itemA->setY(yoffWalk[walkPhase]);
 			rightArm->setY(yoffWalk[walkPhase]);
@@ -1321,7 +1321,7 @@ void UnitSprite::drawRoutine6()
 			rightArm = _unitSurface->getFrame(rarm2H + unitDir);
 		}
 
-		if (_unit->getStatus() == STATUS_AIMING && _itemB->getRules()->isTwoHanded())
+		if (_unit->getUnitStatus() == STATUS_AIMING && _itemB->getRules()->isTwoHanded())
 		{
 			int dir = (_unit->getDirection() + 2) % 8;
 			itemB = _itemSurfaceB->getFrame(_itemB->getRules()->getHandSprite() + dir);
@@ -1330,7 +1330,7 @@ void UnitSprite::drawRoutine6()
 			rightArm = _unitSurface->getFrame(rarmShoot + _unit->getDirection());
 		}
 
-		if (_unit->getStatus() == STATUS_WALKING)
+		if (_unit->getUnitStatus() == STATUS_WALKING)
 		{
 			leftArm->setY(yoffWalk[walkPhase]);
 			itemB->setY(offY2[_unit->getDirection()] + yoffWalk[walkPhase]);
@@ -1340,14 +1340,14 @@ void UnitSprite::drawRoutine6()
 	}
 
 	// offset everything but legs when kneeled
-	if (_unit->getStatus() != STATUS_WALKING)
+	if (_unit->getUnitStatus() != STATUS_WALKING)
 	{
 		leftArm->setY(0);
 		rightArm->setY(0);
 		torso->setY(0);
 	}
 
-	if (_unit->getStatus() == STATUS_AIMING)
+	if (_unit->getUnitStatus() == STATUS_AIMING)
 	{
 		if (_itemA == NULL // kL: using Universal Fist. so PUNCH!! ( this is so funny )
 			&& _itemB == NULL)
@@ -1467,7 +1467,7 @@ void UnitSprite::drawRoutine7()
 		yoffWalk[8] = {  1,     0,      -1,       0,       1,       0,      -1,       0 }; // bobbing up and down
 
 
-	if (_unit->getStatus() == STATUS_COLLAPSING)
+	if (_unit->getUnitStatus() == STATUS_COLLAPSING)
 	{
 		torso = _unitSurface->getFrame(die + _unit->getFallingPhase());
 		drawRecolored(torso);
@@ -1482,7 +1482,7 @@ void UnitSprite::drawRoutine7()
 	torso = _unitSurface->getFrame(Torso + unitDir);
 
 	// when walking torso (fixed sprite) has to be animated up/down
-	if (_unit->getStatus() == STATUS_WALKING)
+	if (_unit->getUnitStatus() == STATUS_WALKING)
 	{
 		torso->setY(yoffWalk[walkPhase]);
 		legs = _unitSurface->getFrame(legsWalk[unitDir] + walkPhase);
@@ -1556,10 +1556,10 @@ void UnitSprite::drawRoutine8()
 	legs = _unitSurface->getFrame(body + pulsate[_animationFrame]);
 	_redraw = true;
 
-	if (_unit->getStatus() == STATUS_COLLAPSING)
+	if (_unit->getUnitStatus() == STATUS_COLLAPSING)
 		legs = _unitSurface->getFrame(die + _unit->getFallingPhase());
 
-	if (_unit->getStatus() == STATUS_AIMING)
+	if (_unit->getUnitStatus() == STATUS_AIMING)
 		legs = _unitSurface->getFrame(aim);
 
 	drawRecolored(legs);
@@ -1582,9 +1582,9 @@ void UnitSprite::drawRoutine9()
 		shoot = 8;  // frames 8..23 or ..24 (24 is merely a green ball sprite)
 
 	Surface* torso = NULL;
-	if (_unit->getStatus() == STATUS_COLLAPSING)
+	if (_unit->getUnitStatus() == STATUS_COLLAPSING)
 		torso = _unitSurface->getFrame(die + _unit->getFallingPhase());
-	else if (_unit->getStatus() == STATUS_AIMING)
+	else if (_unit->getUnitStatus() == STATUS_AIMING)
 	{
 		const int framesTotal = _unit->getArmor()->getShootFrames();
 		int
@@ -1628,12 +1628,12 @@ void UnitSprite::sortRifles()
 
 			_itemB = NULL;
 		}
-		else if (_unit->getStatus() != STATUS_AIMING)
+		else if (_unit->getUnitStatus() != STATUS_AIMING)
 			_itemB = NULL;
 	}
 	else if (_itemB != NULL)
 	{
-		if (_unit->getStatus() != STATUS_AIMING)
+		if (_unit->getUnitStatus() != STATUS_AIMING)
 			_itemA = NULL;
 	}
 }
@@ -1649,13 +1649,13 @@ void UnitSprite::sortRifles()
 
 			_itemB = NULL;
 		}
-		else if (_unit->getStatus() != STATUS_AIMING)
+		else if (_unit->getUnitStatus() != STATUS_AIMING)
 			_itemB = NULL;
 	}
 	else if (_itemB != NULL
 		&& _itemB->getRules()->isTwoHanded())
 	{
-		if (_unit->getStatus() != STATUS_AIMING)
+		if (_unit->getUnitStatus() != STATUS_AIMING)
 			_itemA = NULL;
 	} */
 

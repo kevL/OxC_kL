@@ -541,7 +541,7 @@ void SoldierInfoState::init()
 
 	_btnArmor->setText(tr(_soldier->getArmor()->getType()));
 	if (_soldier->getCraft() == NULL
-		|| _soldier->getCraft()->getStatus() != "STR_OUT")
+		|| _soldier->getCraft()->getCraftStatus() != "STR_OUT")
 	{
 		_btnArmor->setColor(PURPLE);
 	}
@@ -651,7 +651,7 @@ void SoldierInfoState::init()
 
 	_btnSack->setVisible(!
 						(_soldier->getCraft() != NULL
-							&& _soldier->getCraft()->getStatus() == "STR_OUT")
+							&& _soldier->getCraft()->getCraftStatus() == "STR_OUT")
 					&& _game->getSavedGame()->getMonthsPassed() != -1);
 }
 
@@ -809,7 +809,7 @@ void SoldierInfoState::btnNextClick(Action*)
 void SoldierInfoState::btnArmorClick(Action*)
 {
 	if (_soldier->getCraft() == NULL
-		|| _soldier->getCraft()->getStatus() != "STR_OUT")
+		|| _soldier->getCraft()->getCraftStatus() != "STR_OUT")
 	{
 		_game->pushState(new SoldierArmorState(
 											_base,
