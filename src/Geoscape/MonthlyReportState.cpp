@@ -306,8 +306,7 @@ MonthlyReportState::MonthlyReportState()
 
 	_game->getResourcePack()->playMusic(
 									music,
-									"",
-									1);
+									"",1);
 }
 
 /**

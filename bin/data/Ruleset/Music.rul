@@ -20,6 +20,8 @@ music:
     files: [ 12GEO2 ]
   - type: GEO_MONTHLYREPORT_BAD
     files: [ 12TACTIC ]
+  - type: GEO_TERROR_SPLASH
+    files: [ 12GEO3 ]
   - type: GEO_BRIEFING
     files: [ GMDEFEND, PSDEFEND, LCDEFEND ]
   - type: GEO_BRIEF_MARS1

@@ -158,7 +158,7 @@ void BaseDestroyedState::finish()
 	_game->getSavedGame()->scorePoints(
 									_base->getLongitude(),
 									_base->getLatitude(),
-									200 + (_game->getSavedGame()->getDifficulty() * 200),
+									(static_cast<int>(_game->getSavedGame()->getDifficulty()) + 1) * 200,
 									true);
 
 	for (std::vector<Base*>::iterator
@@ -170,13 +170,11 @@ void BaseDestroyedState::finish()
 		{
 			delete *i;
 			_game->getSavedGame()->getBases()->erase(i);
-
+			break;
 			// SHOULD PUT IN A SECTION FOR TRANSFERRING AIRBORNE CRAFT TO ANOTHER BASE/S
 			// if Option:: transfer airborne craft == true
 			// & stores available (else sell)
 			// & living quarters available (if soldiers true) else Sack.
-
-			break;
 		}
 	}
 }

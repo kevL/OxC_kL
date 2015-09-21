@@ -3677,8 +3677,11 @@ void GeoscapeState::thinkDogfights()
 			_dfZoomOutTimer->start();
 		else // STOP INTERCEPTION MUSIC. Start Geo music ...
 		{
-			_game->getResourcePack()->fadeMusic(_game, 425);
-			_game->getResourcePack()->playMusic(res_MUSIC_GEO_GLOBE);
+			if (_game->getResourcePack()->isMusicPlaying(res_MUSIC_GEO_TERROR_SPLASH) == false) // unless a Mission/TerrorSite just popped
+			{
+				_game->getResourcePack()->fadeMusic(_game, 425);
+				_game->getResourcePack()->playMusic(res_MUSIC_GEO_GLOBE);
+			}
 		}
 	}
 	else if (resetPorts == true)

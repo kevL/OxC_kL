@@ -196,7 +196,7 @@ SurfaceSet* ResourcePack::getSurfaceSet(const std::string& name) const
 
 /**
  * Returns a specific music from the resource set.
- * kL_NOTE: This has become redundant w/ getRandomMusic() below.
+ * @note This has become redundant w/ getRandomMusic() below.
  * @param trackType - reference the track of a Music
  * @return, pointer to the Music
  */
@@ -205,7 +205,7 @@ Music* ResourcePack::getMusic(const std::string& trackType) const
 	if (Options::mute == true)
 		return _muteMusic;
 
-	return getRandomMusic(trackType, ""); // sza_MusicRules
+	return getRandomMusic(trackType, "");
 }
 
 /**
@@ -227,7 +227,7 @@ bool ResourcePack::isMusicPlaying(const std::string& trackType) const
  */
 void ResourcePack::playMusic(
 		const std::string& trackType,
-		const std::string& terrainType, // kL: sza_MusicRules
+		const std::string& terrainType,
 		int loops)
 {
 	if (_playingMusic != trackType

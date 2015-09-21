@@ -662,8 +662,8 @@ regions:
         lon: 23.75
         lat: -70.625
       - name: STR_KAUJUITOQ
-        lon: 273.78
-        lat: -70.37
+        lon: 273.713
+        lat: -70.694
       - name: STR_TIKSI
         lon: 128.75
         lat: -71.75

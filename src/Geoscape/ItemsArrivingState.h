@@ -64,7 +64,7 @@ private:
 
 	public:
 		/// Creates the ItemsArriving state.
-		explicit ItemsArrivingState(GeoscapeState* state);
+		explicit ItemsArrivingState(GeoscapeState* const state);
 		/// Cleans up the ItemsArriving state.
 		~ItemsArrivingState();
 
@@ -77,7 +77,7 @@ private:
 		void btnOk5SecsClick(Action* action);
 		/// Handler for clicking the Go To Base button.
 //		void btnGotoBaseClick(Action* action);
-		/// kL. Handler for pressing the ItemsArriving list.
+		/// Handler for pressing the ItemsArriving list.
 		void lstGoToBasePress(Action* action);
 };
 

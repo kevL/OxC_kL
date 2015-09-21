@@ -49,19 +49,19 @@ items:
     liveAlien: true
     costSell: 40000
     listOrder: 14401
-  - type: STR_WASPITE_ENGINEER
-    size: 0.0
-    recover: true
-    liveAlien: true
-    costSell: 60000
-    listOrder: 14402
   - type: STR_WASPITE_MEDIC
     size: 0.0
     recover: true
     liveAlien: true
     costSell: 60000
-    listOrder: 14403
+    listOrder: 14402
   - type: STR_WASPITE_NAVIGATOR
+    size: 0.0
+    recover: true
+    liveAlien: true
+    costSell: 60000
+    listOrder: 14403
+  - type: STR_WASPITE_ENGINEER
     size: 0.0
     recover: true
     liveAlien: true

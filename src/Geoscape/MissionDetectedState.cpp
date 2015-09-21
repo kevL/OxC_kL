@@ -55,7 +55,7 @@ MissionDetectedState::MissionDetectedState(
 {
 	_screen = false;
 
-	_window			= new Window(this, 256, 200, 0,0, POPUP_BOTH);
+	_window			= new Window(this, 256, 200, 0, 0, POPUP_BOTH);
 	_txtTitle		= new Text(246, 32, 5, 48);
 
 	_txtCity		= new Text(246, 17, 5, 80);
@@ -86,6 +86,9 @@ MissionDetectedState::MissionDetectedState(
 	_btnCenter->onKeyboardPress(
 					(ActionHandler)& MissionDetectedState::btnCenterClick,
 					Options::keyOk);
+	_btnCenter->onKeyboardPress(
+					(ActionHandler)& MissionDetectedState::btnCenterClick,
+					Options::keyOkKeypad);
 
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)& MissionDetectedState::btnCancelClick);
@@ -101,6 +104,14 @@ MissionDetectedState::MissionDetectedState(
 	_txtCity->setBig();
 	_txtCity->setAlign(ALIGN_CENTER);
 	_txtCity->setText(tr(mission->getCity()));
+
+	_state->resetTimer();
+
+	_game->getResourcePack()->fadeMusic(_game, 325);
+	_game->getResourcePack()->playMusic(res_MUSIC_GEO_TERROR_SPLASH);
+
+//	kL_geoMusicPlaying = false;
+//	kL_geoMusicReturnState = true;
 }
 
 /**
@@ -115,12 +126,8 @@ MissionDetectedState::~MissionDetectedState()
  */
 void MissionDetectedState::btnInterceptClick(Action*)
 {
-	_state->resetTimer();
-
 	_game->popState();
-	_game->pushState(new InterceptState(
-									NULL,
-									_state));
+	_game->pushState(new InterceptState(NULL, _state));
 }
 
 /**
@@ -129,11 +136,9 @@ void MissionDetectedState::btnInterceptClick(Action*)
  */
 void MissionDetectedState::btnCenterClick(Action*)
 {
-	_state->resetTimer();
 	_state->getGlobe()->center(
 							_mission->getLongitude(),
 							_mission->getLatitude());
-
 	_game->popState();
 }
 
