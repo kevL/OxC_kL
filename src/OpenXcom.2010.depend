@@ -6695,10 +6695,10 @@
 1430149550 f:\git\openxcom\src\geoscape\basedefensestate.h
 	"../Engine/State.h"
 
-1430149550 f:\git\openxcom\src\geoscape\basedestroyedstate.h
+1442793862 f:\git\openxcom\src\geoscape\basedestroyedstate.h
 	"../Engine/State.h"
 
-1441140745 source:f:\git\openxcom\src\geoscape\basedestroyedstate.cpp
+1442794267 source:f:\git\openxcom\src\geoscape\basedestroyedstate.cpp
 	"BaseDestroyedState.h"
 	"Globe.h"
 	"../Engine/Game.h"
@@ -6880,7 +6880,7 @@
 	"../Resource/XcomResourcePack.h"
 	"../Savegame/SavedGame.h"
 
-1442791325 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
+1442793417 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
 	"DogfightState.h"
 	"GeoscapeCraftState.h"
 	"GeoscapeState.h"
@@ -6958,7 +6958,7 @@
 1442441486 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1442782984 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1442796937 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	"AlienBaseState.h"
 	"BaseDefenseState.h"
@@ -8370,7 +8370,7 @@
 	"../Engine/Language.h"
 	"../Geoscape/Globe.h"
 
-1442781185 source:f:\git\openxcom\src\savegame\alienmission.cpp
+1442797148 source:f:\git\openxcom\src\savegame\alienmission.cpp
 	"AlienMission.h"
 	"AlienBase.h"
 	"Base.h"

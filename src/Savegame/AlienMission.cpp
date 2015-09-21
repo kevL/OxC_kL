@@ -1077,8 +1077,8 @@ std::pair<double, double> AlienMission::getLandPoint(
 
 /**
  * Adds alien points to the country and region at the coordinates given.
- * @param lon - longitudinal coordinates to check
- * @param lat - latitudinal coordinates to check
+ * @param lon - longitudinal coordinate to check
+ * @param lat - latitudinal coordinate to check
  */
 void AlienMission::addScore( // private.
 		const double lon,
@@ -1093,53 +1093,31 @@ void AlienMission::addScore( // private.
 //	alm_SUPPLY	// 5
 
 	int aLienPts = _missionRule.getPoints();
-	switch (_missionRule.getObjective())
+	if (aLienPts != 0)
 	{
-		case alm_INFILT:
-		case alm_BASE:
-			aLienPts += static_cast<int>(_gameSave.getDifficulty()) * 20
-					 + _gameSave.getMonthsPassed() * 2;
-		break;
-
-		case alm_SUPPLY:
-			aLienPts += static_cast<int>(_gameSave.getDifficulty()) * 10
-					 + _gameSave.getMonthsPassed() / 2;
-		break;
-
-		case alm_SCORE:
-			aLienPts += static_cast<int>(_gameSave.getDifficulty()) * 2
-					 + _gameSave.getMonthsPassed();
-	}
-
-	for (std::vector<Region*>::const_iterator
-			i = _gameSave.getRegions()->begin();
-			i != _gameSave.getRegions()->end();
-			++i)
-	{
-		if ((*i)->getRules()->insideRegion(lon,lat) == true)
+		switch (_missionRule.getObjective())
 		{
-			(*i)->addActivityAlien(aLienPts);
-			(*i)->recentActivityAlien();
+			case alm_INFILT:
+			case alm_BASE:
+				aLienPts += static_cast<int>(_gameSave.getDifficulty()) * 20
+						 + _gameSave.getMonthsPassed() * 2;
 			break;
-		}
-	}
 
-	for (std::vector<Country*>::const_iterator
-			i = _gameSave.getCountries()->begin();
-			i != _gameSave.getCountries()->end();
-			++i)
-	{
-		if ((*i)->getRules()->insideCountry(lon,lat) == true)
-		{
-			(*i)->addActivityAlien(aLienPts);
-			(*i)->recentActivityAlien();
+			case alm_SUPPLY:
+				aLienPts += static_cast<int>(_gameSave.getDifficulty()) * 10
+						 + _gameSave.getMonthsPassed() / 2;
 			break;
+
+			case alm_SCORE:
+				aLienPts += static_cast<int>(_gameSave.getDifficulty()) * 2
+						 + _gameSave.getMonthsPassed();
 		}
+		_gameSave.scorePoints(lon,lat, aLienPts, true);
 	}
 }
 
 /**
- * Tells the mission which entry in the zone array is getting targetted for
+ * Tells the mission which entry in the zone array is getting targeted for
  * missionSite payload.
  * @param zone - number of the zone to target; always a City-type zone (probably)
  */

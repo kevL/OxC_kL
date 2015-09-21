@@ -1527,37 +1527,13 @@ void GeoscapeState::time5Seconds()
 		{
 			if ((*j)->isDestroyed() == true)
 			{
-				const double
-					lon = (*j)->getLongitude(),
-					lat = (*j)->getLatitude();
+				_gameSave->scorePoints(
+									(*j)->getLongitude(),
+									(*j)->getLatitude(),
+									(*j)->getRules()->getScore(),
+									true);
 
-				for (std::vector<Country*>::const_iterator
-						k = _gameSave->getCountries()->begin();
-						k != _gameSave->getCountries()->end();
-						++k)
-				{
-					if ((*k)->getRules()->insideCountry(lon,lat) == true)
-					{
-						(*k)->addActivityAlien((*j)->getRules()->getScore());
-						(*k)->recentActivityAlien();
-						break;
-					}
-				}
-
-				for (std::vector<Region*>::const_iterator
-						k = _gameSave->getRegions()->begin();
-						k != _gameSave->getRegions()->end();
-						++k)
-				{
-					if ((*k)->getRules()->insideRegion(lon,lat) == true)
-					{
-						(*k)->addActivityAlien((*j)->getRules()->getScore());
-						(*k)->recentActivityAlien();
-						break;
-					}
-				}
-
-				if ((*j)->getRules()->getSoldiers() > 0) // if a transport craft has been shot down all soldiers aboard are dead.
+				if ((*j)->getRules()->getSoldiers() != 0) // if a transport craft has been shot down all soldiers aboard are dead.
 				{
 					for (std::vector<Soldier*>::const_iterator
 							k = (*i)->getSoldiers()->begin();
@@ -1636,9 +1612,9 @@ void GeoscapeState::time5Seconds()
 			if ((*j)->reachedDestination() == true)
 			{
 				Ufo* const ufo = dynamic_cast<Ufo*>((*j)->getDestination());
-				const Waypoint* const wayPoint = dynamic_cast<Waypoint*>((*j)->getDestination());
-				const MissionSite* const missionSite = dynamic_cast<MissionSite*>((*j)->getDestination());
-				const AlienBase* const alienBase = dynamic_cast<AlienBase*>((*j)->getDestination());
+				const Waypoint* const wp = dynamic_cast<Waypoint*>((*j)->getDestination());
+				const MissionSite* const site = dynamic_cast<MissionSite*>((*j)->getDestination());
+//				const AlienBase* const aBase = dynamic_cast<AlienBase*>((*j)->getDestination());
 
 				if (ufo != NULL)
 				{
@@ -1711,42 +1687,29 @@ void GeoscapeState::time5Seconds()
 							}
 					}
 				}
-				else if (wayPoint != NULL)
+				else // wp, site, OR aBase
 				{
-					popup(new CraftPatrolState(*j, this));
-					(*j)->setDestination(NULL);
-				}
-				else if (missionSite != NULL)
-				{
-					if ((*j)->getNumSoldiers() > 0)
+					if (wp == NULL && (*j)->getNumSoldiers() != 0)
 					{
 						resetTimer();
 
-						const int texId = missionSite->getSiteTextureId();
-						int shade;
-						_globe->getPolygonShade(
-											missionSite->getLongitude(),
-											missionSite->getLatitude(),
-											&shade);
-						popup(new ConfirmLandingState(
-												*j, // preset missionSite Texture; choice of Terrain made via texture-deployment, in ConfirmLandingState
-												_rules->getGlobe()->getTextureRule(texId),
-												shade));
+						if (site != NULL)
+						{
+							const int texId = site->getSiteTextureId();
+							int shade;
+							_globe->getPolygonShade(
+												site->getLongitude(),
+												site->getLatitude(),
+												&shade);
+							popup(new ConfirmLandingState( // preset missionSite Texture; choice of Terrain made via texture-deployment, in ConfirmLandingState
+													*j,
+													_rules->getGlobe()->getTextureRule(texId),
+													shade));
+						}
+						else // aLien Base.
+							popup(new ConfirmLandingState(*j)); // choice of Terrain made in BattlescapeGenerator.
 					}
-					else
-					{
-						popup(new CraftPatrolState(*j, this));
-						(*j)->setDestination(NULL);
-					}
-				}
-				else if (alienBase != NULL) //&& alienBase->isDiscovered() == true)
-				{
-					if ((*j)->getNumSoldiers() > 0)
-					{
-						resetTimer(); // was countryside Texture & shade; utterly worthless & unused. Choice of Terrain made in BattlescapeGenerator.
-						popup(new ConfirmLandingState(*j));
-					}
-					else
+					else // do Patrol.
 					{
 						popup(new CraftPatrolState(*j, this));
 						(*j)->setDestination(NULL);
@@ -2275,30 +2238,11 @@ bool GeoscapeState::processMissionSite(MissionSite* const site) const
 	}
 
 	if (aLienPts != 0)
-	{
-		Region* const region = _gameSave->locateRegion(*site);
-		if (region != NULL)
-		{
-			region->addActivityAlien(aLienPts);
-			region->recentActivityAlien();
-		}
-
-		for (std::vector<Country*>::const_iterator
-				i = _gameSave->getCountries()->begin();
-				i != _gameSave->getCountries()->end();
-				++i)
-		{
-			if ((*i)->getRules()->insideCountry(
-											site->getLongitude(),
-											site->getLatitude()) == true)
-			{
-				(*i)->addActivityAlien(aLienPts);
-				(*i)->recentActivityAlien();
-
-				break;
-			}
-		}
-	}
+		_gameSave->scorePoints(
+							site->getLongitude(),
+							site->getLatitude(),
+							aLienPts,
+							true);
 
 	if (expired == true)
 	{
@@ -3075,41 +3019,11 @@ void GeoscapeState::time1Day()
 				i != _gameSave->getAlienBases()->end();
 				++i)
 		{
-			const double
-				lon = (*i)->getLongitude(),
-				lat = (*i)->getLatitude();
-
-			for (std::vector<Region*>::const_iterator
-					j = _gameSave->getRegions()->begin();
-					j != _gameSave->getRegions()->end();
-					++j)
-			{
-				if ((*j)->getRules()->insideRegion(
-												lon,
-												lat) == true)
-				{
-					(*j)->addActivityAlien(aLienPts);
-					(*j)->recentActivityAlien();
-
-					break;
-				}
-			}
-
-			for (std::vector<Country*>::const_iterator
-					j = _gameSave->getCountries()->begin();
-					j != _gameSave->getCountries()->end();
-					++j)
-			{
-				if ((*j)->getRules()->insideCountry(
-												lon,
-												lat) == true)
-				{
-					(*j)->addActivityAlien(aLienPts);
-					(*j)->recentActivityAlien();
-
-					break;
-				}
-			}
+			_gameSave->scorePoints(
+								(*i)->getLongitude(),
+								(*i)->getLatitude(),
+								aLienPts,
+								true);
 		}
 	}
 

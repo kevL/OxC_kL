@@ -52,11 +52,11 @@ private:
 
 
 	public:
-		/// Creates the Select Destination state.
+		/// Creates the Base Destroyed state.
 		BaseDestroyedState(
-						Base* base,
-						Globe* globe);
-		/// Cleans up the Select Destination state.
+						Base* const base,
+						Globe* const globe);
+		/// Cleans up the Base Destroyed state.
 		~BaseDestroyedState();
 
 		///

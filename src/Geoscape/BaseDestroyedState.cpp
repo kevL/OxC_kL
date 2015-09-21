@@ -46,8 +46,8 @@ namespace OpenXcom
 {
 
 BaseDestroyedState::BaseDestroyedState(
-		Base* base,
-		Globe* globe)
+		Base* const base,
+		Globe* const globe)
 	:
 		_base(base),
 		_globe(globe)
@@ -85,6 +85,9 @@ BaseDestroyedState::BaseDestroyedState(
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& BaseDestroyedState::btnCenterClick,
 					Options::keyOk);
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& BaseDestroyedState::btnCenterClick,
+					Options::keyOkKeypad);
 
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& BaseDestroyedState::btnOkClick);
@@ -151,60 +154,27 @@ void BaseDestroyedState::finish()
 {
 	_game->popState();
 
+//	pts = (_game->getRuleset()->getAlienMission("STR_ALIEN_TERROR")->getPoints() * 50) + (diff * 200);
+	_game->getSavedGame()->scorePoints(
+									_base->getLongitude(),
+									_base->getLatitude(),
+									200 + (_game->getSavedGame()->getDifficulty() * 200),
+									true);
+
 	for (std::vector<Base*>::iterator
-			base = _game->getSavedGame()->getBases()->begin();
-			base != _game->getSavedGame()->getBases()->end();
-			++base)
+			i = _game->getSavedGame()->getBases()->begin();
+			i != _game->getSavedGame()->getBases()->end();
+			++i)
 	{
-		if (*base == _base)
+		if (*i == _base)
 		{
-			delete *base;
-			_game->getSavedGame()->getBases()->erase(base);
+			delete *i;
+			_game->getSavedGame()->getBases()->erase(i);
 
 			// SHOULD PUT IN A SECTION FOR TRANSFERRING AIRBORNE CRAFT TO ANOTHER BASE/S
 			// if Option:: transfer airborne craft == true
 			// & stores available (else sell)
 			// & living quarters available (if soldiers true) else Sack.
-
-			break;
-		}
-	}
-
-
-//	pts = (_game->getRuleset()->getAlienMission("STR_ALIEN_TERROR")->getPoints() * 50) + (diff * 200);
-	const int aLienPts = 200 + (_game->getSavedGame()->getDifficulty() * 200);
-
-	const double
-		lon = _base->getLongitude(),
-		lat = _base->getLatitude();
-
-	for (std::vector<Region*>::iterator
-			i = _game->getSavedGame()->getRegions()->begin();
-			i != _game->getSavedGame()->getRegions()->end();
-			++i)
-	{
-		if ((*i)->getRules()->insideRegion(
-										lon,
-										lat))
-		{
-			(*i)->addActivityAlien(aLienPts);
-			(*i)->recentActivityAlien();
-
-			break;
-		}
-	}
-
-	for (std::vector<Country*>::iterator
-			i = _game->getSavedGame()->getCountries()->begin();
-			i != _game->getSavedGame()->getCountries()->end();
-			++i)
-	{
-		if ((*i)->getRules()->insideCountry(
-										lon,
-										lat))
-		{
-			(*i)->addActivityAlien(aLienPts);
-			(*i)->recentActivityAlien();
 
 			break;
 		}
