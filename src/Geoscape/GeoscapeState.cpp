@@ -2318,53 +2318,50 @@ void GeoscapeState::time30Minutes()
 				j != (*i)->getCrafts()->end();
 				++j)
 		{
-			if ((*j)->getCraftStatus() == "STR_OUT")
-				continue;
-
-			if ((*j)->getCraftStatus() == "STR_REPAIRS")
-				(*j)->repair();
-			else if ((*j)->getCraftStatus() == "STR_REARMING")
+			if ((*j)->getCraftStatus() != "STR_OUT")
 			{
-				const std::string rearmClip = (*j)->rearm(_rules);
-
-				if (rearmClip.empty() == false
-					&& (*j)->getWarned() == false)
+				if ((*j)->getCraftStatus() == "STR_REPAIRS")
+					(*j)->repair();
+				else if ((*j)->getCraftStatus() == "STR_REARMING")
 				{
-					(*j)->setWarned();
+					const std::string rearmClip = (*j)->rearm(_rules);
 
-					const std::wstring msg = tr("STR_NOT_ENOUGH_ITEM_TO_REARM_CRAFT_AT_BASE")
-											.arg(tr(rearmClip))
-											.arg((*j)->getName(_game->getLanguage()))
-											.arg((*i)->getName());
-					popup(new CraftErrorState(
-											this,
-											msg));
-				}
-			}
-			else if ((*j)->getCraftStatus() == "STR_REFUELLING")
-			{
-				const std::string refuelItem = (*j)->getRules()->getRefuelItem();
-
-				if (refuelItem.empty() == true)
-					(*j)->refuel();
-				else
-				{
-					if ((*i)->getItems()->getItemQty(refuelItem) > 0)
-					{
-						(*j)->refuel();
-						(*i)->getItems()->removeItem(refuelItem);
-					}
-					else if ((*j)->getWarned() == false)
+					if (rearmClip.empty() == false
+						&& (*j)->getWarned() == false)
 					{
 						(*j)->setWarned();
-
-						const std::wstring msg = tr("STR_NOT_ENOUGH_ITEM_TO_REFUEL_CRAFT_AT_BASE")
-												.arg(tr(refuelItem))
+						const std::wstring msg = tr("STR_NOT_ENOUGH_ITEM_TO_REARM_CRAFT_AT_BASE")
+												.arg(tr(rearmClip))
 												.arg((*j)->getName(_game->getLanguage()))
 												.arg((*i)->getName());
-						popup(new CraftErrorState(
-												this,
-												msg));
+						popup(new CraftErrorState(this, msg));
+					}
+				}
+				else if ((*j)->getCraftStatus() == "STR_REFUELLING")
+				{
+					const std::string refuelItem = (*j)->getRules()->getRefuelItem();
+
+					if (refuelItem.empty() == true)
+						(*j)->refuel();
+					else
+					{
+						if ((*j)->getRules()->getRefuelRate() <= (*i)->getItems()->getItemQty(refuelItem))
+						{
+							(*j)->refuel();
+							(*i)->getItems()->removeItem(
+													refuelItem,
+													(*j)->getRules()->getRefuelRate());
+						}
+						else if ((*j)->getWarned() == false)
+						{
+							(*j)->setWarned();
+							(*j)->setWarning(CW_CANTREFUEL);
+							const std::wstring msg = tr("STR_NOT_ENOUGH_ITEM_TO_REFUEL_CRAFT_AT_BASE")
+													.arg(tr(refuelItem))
+													.arg((*j)->getName(_game->getLanguage()))
+													.arg((*i)->getName());
+							popup(new CraftErrorState(this, msg));
+						}
 					}
 				}
 			}

@@ -433,7 +433,7 @@ int Tile::getFootstepSound(const Tile* const tileBelow) const
  * Open a door on this Tile.
  * @param part		- a tile part type
  * @param unit		- pointer to a BattleUnit (default NULL)
- * @param reserved	- see BA_* enum for TU reserves (default BA_NONE)
+// * @param reserved	- BattleActionType (BattlescapeGame.h) (default BA_NONE)
  * @return, -1 no door opened
  *			 0 normal door
  *			 1 ufo door
@@ -442,8 +442,8 @@ int Tile::getFootstepSound(const Tile* const tileBelow) const
  */
 int Tile::openDoor(
 		const MapDataType part,
-		const BattleUnit* const unit,
-		const BattleActionType reserved)
+		const BattleUnit* const unit)
+//		const BattleActionType reserved)
 {
 	if (_objects[part] != NULL)
 	{
@@ -457,10 +457,8 @@ int Tile::openDoor(
 			}
 
 			if (unit != NULL
-				&& unit->getTimeUnits() < _objects[part]->getTuCostPart(unit->getMoveTypeUnit())
-											+ unit->getActionTUs(
-															reserved,
-															unit->getMainHandWeapon(false)))
+				&& unit->getTimeUnits() < _objects[part]->getTuCostPart(unit->getMoveTypeUnit()))
+//											+ unit->getActionTu(reserved, unit->getMainHandWeapon(false)))
 			{
 				return DR_ERR_TU;
 			}
@@ -481,10 +479,8 @@ int Tile::openDoor(
 			if (_curFrame[part] == 0) // ufo door part 0 - door is closed
 			{
 				if (unit != NULL
-					&& unit->getTimeUnits() < _objects[part]->getTuCostPart(unit->getMoveTypeUnit())
-												+ unit->getActionTUs(
-																reserved,
-																unit->getMainHandWeapon(false)))
+					&& unit->getTimeUnits() < _objects[part]->getTuCostPart(unit->getMoveTypeUnit()))
+//												+ unit->getActionTu(reserved, unit->getMainHandWeapon(false)))
 				{
 					return DR_ERR_TU;
 				}
@@ -1522,7 +1518,7 @@ int Tile::getPreviewDir() const
  * Sets a number to be displayed by pathfinding preview.
  * @param tu - # of TUs left if/when this tile is reached
  */
-void Tile::setPreviewTU(int tu)
+void Tile::setPreviewTu(int tu)
 {
 	_tuMarker = tu;
 }
@@ -1531,7 +1527,7 @@ void Tile::setPreviewTU(int tu)
  * Gets the number to be displayed for pathfinding preview.
  * @return, # of TUs left if/when this tile is reached
  */
-int Tile::getPreviewTU() const
+int Tile::getPreviewTu() const
 {
 	return _tuMarker;
 }

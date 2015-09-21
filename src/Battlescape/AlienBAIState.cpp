@@ -251,7 +251,7 @@ void AlienBAIState::think(BattleAction* action)
 			{
 				//Log(LOG_INFO) << ". . . blaster TRUE";
 				_blaster = true;
-				const int tuPreshot = _unit->getTimeUnits() - _unit->getActionTUs(
+				const int tuPreshot = _unit->getTimeUnits() - _unit->getActionTu(
 																			BA_LAUNCH,
 																			action->weapon);
 				_reachableAttack = pf->findReachable(
@@ -262,7 +262,7 @@ void AlienBAIState::think(BattleAction* action)
 			{
 				//Log(LOG_INFO) << ". . . rifle TRUE";
 				_rifle = true;
-				const int tuPreshot = _unit->getTimeUnits() - _unit->getActionTUs( // kL_note: this needs selectFireMethod() ...
+				const int tuPreshot = _unit->getTimeUnits() - _unit->getActionTu( // kL_note: this needs selectFireMethod() ...
 																			itRule->getDefaultAction(), // BA_SNAPSHOT
 																			action->weapon);
 				_reachableAttack = pf->findReachable(
@@ -274,7 +274,7 @@ void AlienBAIState::think(BattleAction* action)
 		{
 			//Log(LOG_INFO) << ". . weapon is Melee";
 			_melee = true;
-			const int tuPreshot = _unit->getTimeUnits() - _unit->getActionTUs(
+			const int tuPreshot = _unit->getTimeUnits() - _unit->getActionTu(
 																		BA_HIT,
 																		action->weapon);
 			_reachableAttack = pf->findReachable(
@@ -476,7 +476,7 @@ void AlienBAIState::think(BattleAction* action)
 
 				if (action->weapon->getFuse() == -1)
 				{
-					costTU += _unit->getActionTUs(
+					costTU += _unit->getActionTu(
 												BA_PRIME,
 												action->weapon);
 				}
@@ -486,7 +486,7 @@ void AlienBAIState::think(BattleAction* action)
 			}
 
 			action->finalFacing = _attackAction->finalFacing;					// if this is a firepoint action, set our facing.
-			action->TU = _unit->getActionTUs(
+			action->TU = _unit->getActionTu(
 										_attackAction->type,
 										_attackAction->weapon);
 
@@ -494,7 +494,7 @@ void AlienBAIState::think(BattleAction* action)
 
 			if (action->type == BA_MOVE											// if this is a "find fire point" action, don't increment the AI counter.
 				&& _rifle == true
-				&& _unit->getTimeUnits() > _unit->getActionTUs(
+				&& _unit->getTimeUnits() > _unit->getActionTu(
 															BA_SNAPSHOT,
 															action->weapon))	// so long as we can take a shot afterwards.
 			{
@@ -662,7 +662,7 @@ void AlienBAIState::setupPatrol() // private.
 							_patrolAction->target = Position(i,j,1);
 							_patrolAction->weapon = _patrolAction->actor->getMainHandWeapon();
 							_patrolAction->type = BA_SNAPSHOT;
-							_patrolAction->TU = _patrolAction->actor->getActionTUs(
+							_patrolAction->TU = _patrolAction->actor->getActionTu(
 																				_patrolAction->type,
 																				_patrolAction->weapon);
 							return;
@@ -824,7 +824,7 @@ void AlienBAIState::setupAmbush() // private.
 
 				if (pf->getStartDirection() != -1)
 //					&& tuAmbush <= _unit->getTimeUnits()
-//					- _unit->getActionTUs(BA_SNAPSHOT, _attackAction->weapon)) // make sure Unit can still shoot
+//					- _unit->getActionTu(BA_SNAPSHOT, _attackAction->weapon)) // make sure Unit can still shoot
 				{
 					int score = BASE_SUCCESS_SYSTEMATIC;
 					score -= tuAmbush;
@@ -1170,7 +1170,7 @@ void AlienBAIState::setupEscape() // private.
 			{
 				tile->setPreviewColor(tileScore < 0? 3: (tileScore < FAST_PASS_THRESHOLD / 2? 8: (tileScore < FAST_PASS_THRESHOLD? 9: 5)));
 				tile->setPreviewDir(10);
-				tile->setPreviewTU(tileScore);
+				tile->setPreviewTu(tileScore);
 			} */
 		}
 
@@ -1198,7 +1198,7 @@ void AlienBAIState::setupEscape() // private.
 				{
 					tile->setPreviewColor(tileScore < 0? 7:(tileScore < FAST_PASS_THRESHOLD / 2? 10:(tileScore < FAST_PASS_THRESHOLD? 4:5)));
 					tile->setPreviewDir(10);
-					tile->setPreviewTU(tileScore);
+					tile->setPreviewTu(tileScore);
 				} */
 			}
 
@@ -2095,7 +2095,7 @@ void AlienBAIState::meleeAction() // private.
 	}
 
 	const int tuPreMelee = _unit->getTimeUnits()
-						 - _unit->getActionTUs(
+						 - _unit->getActionTu(
 											BA_HIT,
 											_attackAction->weapon);
 //											_unit->getMainHandWeapon());
@@ -2180,7 +2180,7 @@ void AlienBAIState::meleeAttack() // private.
 void AlienBAIState::wayPointAction() // private.
 {
 	//Log(LOG_INFO) << "AlienBAIState::wayPointAction() w/ " << _attackAction->weapon->getRules()->getType();
-	_attackAction->TU = _unit->getActionTUs(
+	_attackAction->TU = _unit->getActionTu(
 										BA_LAUNCH,
 										_attackAction->weapon);
 	//Log(LOG_INFO) << ". actionTU = " << _attackAction->TU;
@@ -2415,21 +2415,21 @@ void AlienBAIState::selectFireMethod() // private.
 	if (dist <= _attackAction->weapon->getRules()->getAutoRange())
 	{
 		if (_attackAction->weapon->getRules()->getTUAuto() != 0
-			&& usableTU >= _unit->getActionTUs(
+			&& usableTU >= _unit->getActionTu(
 											BA_AUTOSHOT,
 											_attackAction->weapon))
 		{
 			_attackAction->type = BA_AUTOSHOT;
 		}
 		else if (_attackAction->weapon->getRules()->getTUSnap() != 0
-			&& usableTU >= _unit->getActionTUs(
+			&& usableTU >= _unit->getActionTu(
 											BA_SNAPSHOT,
 											_attackAction->weapon))
 		{
 			_attackAction->type = BA_SNAPSHOT;
 		}
 		else if (_attackAction->weapon->getRules()->getTUAimed() != 0
-			&& usableTU >= _unit->getActionTUs(
+			&& usableTU >= _unit->getActionTu(
 											BA_AIMEDSHOT,
 											_attackAction->weapon))
 		{
@@ -2439,21 +2439,21 @@ void AlienBAIState::selectFireMethod() // private.
 	else if (dist <= _attackAction->weapon->getRules()->getSnapRange())
 	{
 		if (_attackAction->weapon->getRules()->getTUSnap() != 0
-			&& usableTU >= _unit->getActionTUs(
+			&& usableTU >= _unit->getActionTu(
 											BA_SNAPSHOT,
 											_attackAction->weapon))
 		{
 			_attackAction->type = BA_SNAPSHOT;
 		}
 		else if (_attackAction->weapon->getRules()->getTUAimed() != 0
-			&& usableTU >= _unit->getActionTUs(
+			&& usableTU >= _unit->getActionTu(
 											BA_AIMEDSHOT,
 											_attackAction->weapon))
 		{
 			_attackAction->type = BA_AIMEDSHOT;
 		}
 		else if (_attackAction->weapon->getRules()->getTUAuto() != 0
-			&& usableTU >= _unit->getActionTUs(
+			&& usableTU >= _unit->getActionTu(
 											BA_AUTOSHOT,
 											_attackAction->weapon))
 		{
@@ -2463,21 +2463,21 @@ void AlienBAIState::selectFireMethod() // private.
 	else if (dist <= _attackAction->weapon->getRules()->getAimRange())
 	{
 		if (_attackAction->weapon->getRules()->getTUAimed() != 0
-			&& usableTU >= _unit->getActionTUs(
+			&& usableTU >= _unit->getActionTu(
 											BA_AIMEDSHOT,
 											_attackAction->weapon))
 		{
 			_attackAction->type = BA_AIMEDSHOT;
 		}
 		else if (_attackAction->weapon->getRules()->getTUSnap() != 0
-			&& usableTU >= _unit->getActionTUs(
+			&& usableTU >= _unit->getActionTu(
 											BA_SNAPSHOT,
 											_attackAction->weapon))
 		{
 			_attackAction->type = BA_SNAPSHOT;
 		}
 		else if (_attackAction->weapon->getRules()->getTUAuto() != 0
-			&& usableTU >= _unit->getActionTUs(
+			&& usableTU >= _unit->getActionTu(
 											BA_AUTOSHOT,
 											_attackAction->weapon))
 		{
@@ -2511,11 +2511,11 @@ void AlienBAIState::grenadeAction() // private.
 			int tuCost = invRule->getCost(_battleSave->getBattleGame()->getRuleset()->getInventory("STR_RIGHT_HAND"));
 
 			if (grenade->getFuse() == -1)
-				tuCost += _unit->getActionTUs(
+				tuCost += _unit->getActionTu(
 											BA_PRIME,
 											grenade);
 			// Prime is done in ProjectileFlyBState.
-			tuCost += _unit->getActionTUs(
+			tuCost += _unit->getActionTu(
 										BA_THROW,
 										grenade);
 
@@ -2554,8 +2554,8 @@ void AlienBAIState::grenadeAction() // private.
 /*	// do we have a grenade on our belt?
 	BattleItem *grenade = _unit->getGrenadeFromBelt();
 	int tu = 4; // 4TUs for picking up the grenade
-	tu += _unit->getActionTUs(BA_PRIME, grenade);
-	tu += _unit->getActionTUs(BA_THROW, grenade);
+	tu += _unit->getActionTu(BA_PRIME, grenade);
+	tu += _unit->getActionTu(BA_THROW, grenade);
 	// do we have enough TUs to prime and throw the grenade?
 	if (tu <= _unit->getTimeUnits())
 	{
@@ -2859,7 +2859,7 @@ void AlienBAIState::selectMeleeOrRanged() // private.
 		if (RNG::percent(meleeOdds) == true)
 		{
 			_rifle = false;
-			const int tuPreshot = _unit->getTimeUnits() - _unit->getActionTUs(
+			const int tuPreshot = _unit->getTimeUnits() - _unit->getActionTu(
 																		BA_HIT,
 																		meleeWeapon);
 			Pathfinding* const pf = _battleSave->getPathfinding();

@@ -497,15 +497,15 @@ private:
 		/// Gets debug mode.
 		bool getDebugMode() const;
 
-		/// sets the research score for the month
+		/// Sets the research score for the month.
 		void addResearchScore(int score);
-		/// gets the list of research scores
+		/// Gets the list of research scores.
 		std::vector<int>& getResearchScores();
 
-		/// gets whether or not the player has been warned
+		/// Gets whether or not the player has been warned.
 		bool getWarned() const;
-		/// sets whether or not the player has been warned
-		void setWarned(bool warned);
+		/// Sets whether or not the player has been warned.
+		void setWarned(bool warned = true);
 
 		/// Full access to the alien strategy data.
 		AlienStrategy& getAlienStrategy()

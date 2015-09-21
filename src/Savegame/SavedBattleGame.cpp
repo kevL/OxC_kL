@@ -81,8 +81,8 @@ SavedBattleGame::SavedBattleGame(const std::vector<OperationPool*>* titles)
 		_objectivesNeeded(0),
 		_unitsFalling(false),
 		_cheatAI(false),
-		_batReserved(BA_NONE),
-		_kneelReserved(false),
+//		_batReserved(BA_NONE),
+//		_kneelReserved(false),
 		_invBattle(NULL),
 		_groundLevel(-1),
 		_tacType(TCT_DEFAULT),
@@ -539,13 +539,15 @@ void SavedBattleGame::load(
 	}
 
 	Log(LOG_INFO) << ". set some vars";
-	_objectiveType			= node["objectiveType"]							.as<int>(_objectiveType);
-	_objectivesDestroyed	= node["objectivesDestroyed"]					.as<int>(_objectivesDestroyed);
-	_objectivesNeeded		= node["objectivesNeeded"]						.as<int>(_objectivesNeeded);
-	_batReserved			= (BattleActionType)node["batReserved"]			.as<int>(_batReserved);
-	_kneelReserved			= node["kneelReserved"]							.as<bool>(_kneelReserved);
-	_alienRace				= node["alienRace"]								.as<std::string>(_alienRace);
-	_operationTitle			= Language::utf8ToWstr(node["operationTitle"]	.as<std::string>());
+	_objectiveType			= node["objectiveType"]			.as<int>(_objectiveType);
+	_objectivesDestroyed	= node["objectivesDestroyed"]	.as<int>(_objectivesDestroyed);
+	_objectivesNeeded		= node["objectivesNeeded"]		.as<int>(_objectivesNeeded);
+	_alienRace				= node["alienRace"]				.as<std::string>(_alienRace);
+//	_kneelReserved			= node["kneelReserved"]			.as<bool>(_kneelReserved);
+
+//	_batReserved = static_cast<BattleActionType>(node["batReserved"].as<int>(_batReserved));
+	_operationTitle = Language::utf8ToWstr(node["operationTitle"].as<std::string>());
+
 
 	if (node["controlDestroyed"])
 		_controlDestroyed = node["controlDestroyed"].as<bool>();
@@ -558,13 +560,8 @@ void SavedBattleGame::load(
 	//Log(LOG_INFO) << "SavedBattleGame::load() EXIT";
 
 	// TEST, reveal all tiles
-//	for (size_t
-//			i = 0;
-//			i != _mapSize;
-//			++i)
-//	{
+//	for (size_t i = 0; i != _mapSize; ++i)
 //		_tiles[i]->setDiscovered(true, 2);
-//	}
 }
 
 /**
@@ -706,9 +703,7 @@ YAML::Node SavedBattleGame::save() const
 	}
 
 	node["totalTiles"]	= tilesDataSize / static_cast<size_t>(Tile::serializationKey.totalBytes); // not strictly necessary, just convenient
-	node["binTiles"]	= YAML::Binary(
-									tilesData,
-									tilesDataSize);
+	node["binTiles"]	= YAML::Binary(tilesData, tilesDataSize);
 
 	std::free(tilesData);
 #endif
@@ -740,8 +735,8 @@ YAML::Node SavedBattleGame::save() const
 		node["items"].push_back((*i)->save());
 	}
 
-	node["batReserved"]		= static_cast<int>(_batReserved);
-	node["kneelReserved"]	= _kneelReserved;
+//	node["batReserved"]		= static_cast<int>(_batReserved);
+//	node["kneelReserved"]	= _kneelReserved;
 	node["alienRace"]		= _alienRace;
 	node["operationTitle"]	= Language::wstrToUtf8(_operationTitle);
 
@@ -2744,41 +2739,41 @@ bool SavedBattleGame::isCheating()
 	return _cheatAI;
 }
 
-/**
+/*
  * Gets the TU reserved type.
  * @return, a BattleActionType
- */
+ *
 BattleActionType SavedBattleGame::getBatReserved() const
 {
 	return _batReserved;
-}
+} */
 
-/**
+/*
  * Sets the TU reserved type.
  * @param reserved - a BattleActionType
- */
+ *
 void SavedBattleGame::setBatReserved(BattleActionType reserved)
 {
 	_batReserved = reserved;
-}
+} */
 
-/**
+/*
  * Gets the kneel reservation setting.
  * @return, true if an extra 4 TUs should be reserved to kneel
- */
+ *
 bool SavedBattleGame::getKneelReserved() const
 {
 	return _kneelReserved;
-}
+} */
 
-/**
+/*
  * Sets the kneel reservation setting.
  * @param reserved - true if an extra 4 TUs should be reserved to kneel
- */
+ *
 void SavedBattleGame::setKneelReserved(bool reserved)
 {
 	_kneelReserved = reserved;
-}
+} */
 
 /**
  * Gets a reference to the base module destruction map.

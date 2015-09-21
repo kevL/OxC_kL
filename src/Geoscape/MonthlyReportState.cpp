@@ -245,7 +245,7 @@ MonthlyReportState::MonthlyReportState()
 			{
 				woststr << "\n\n" << tr("STR_COUNCIL_REDUCE_DEBTS");
 
-				_gameSave->setWarned(true);
+				_gameSave->setWarned();
 				resetWarning = false;
 
 				music = OpenXcom::res_MUSIC_GEO_MONTHLYREPORT_BAD;

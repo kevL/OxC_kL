@@ -1964,7 +1964,7 @@ const bool BattleUnit::isOut_t(const OutCheck test) const
  * @param item	- pointer to BattleItem for TU-cost
  * @return, TUs to perform action
  */
-int BattleUnit::getActionTUs(
+int BattleUnit::getActionTu(
 		const BattleActionType bat,
 		const BattleItem* const item) const
 {
@@ -1974,7 +1974,7 @@ int BattleUnit::getActionTUs(
 		return 0;
 	}
 
-	return getActionTUs(
+	return getActionTu(
 					bat,
 					item->getRules());
 }
@@ -1985,7 +1985,7 @@ int BattleUnit::getActionTUs(
  * @param itRule	- pointer to RuleItem for TU-cost (default NULL)
  * @return, TUs to perform action
  */
-int BattleUnit::getActionTUs(
+int BattleUnit::getActionTu(
 		const BattleActionType bat,
 		const RuleItem* const itRule) const
 {

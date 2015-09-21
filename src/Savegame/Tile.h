@@ -176,8 +176,8 @@ protected:
 		/// Opens a door.
 		int openDoor(
 				const MapDataType part,
-				const BattleUnit* const unit = NULL,
-				const BattleActionType reserved = BA_NONE);
+				const BattleUnit* const unit = NULL);
+//				const BattleActionType reserved = BA_NONE);
 		/**
 		 * Checks if the ufo door is open or opening.
 		 * @note Used for visibility/light blocking checks. This function
@@ -307,9 +307,9 @@ protected:
 		/// Gets the direction of path preview arrows.
 		int getPreviewDir() const;
 		/// Sets the number to be displayed for path preview.
-		void setPreviewTU(int tu);
+		void setPreviewTu(int tu);
 		/// Gets the number to be displayed for path preview.
-		int getPreviewTU() const;
+		int getPreviewTu() const;
 		/// Sets the preview tile marker color.
 		void setPreviewColor(Uint8 color);
 		/// Gets the preview tile marker color.

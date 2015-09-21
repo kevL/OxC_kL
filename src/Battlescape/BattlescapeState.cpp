@@ -296,12 +296,12 @@ BattlescapeState::BattlescapeState()
 
 	setPalette("PAL_BATTLESCAPE");
 
-	if (_rules->getInterface("battlescape")->getElement("pathfinding"))
+	if (_rules->getInterface("battlescape")->getElement("pathfinding") != NULL)
 	{
-		const Element* const pathing = _rules->getInterface("battlescape")->getElement("pathfinding");
-		Pathfinding::green = static_cast<Uint8>(pathing->color);
-		Pathfinding::yellow = static_cast<Uint8>(pathing->color2);
-		Pathfinding::red = static_cast<Uint8>(pathing->border);
+		const Element* const path = _rules->getInterface("battlescape")->getElement("pathfinding");
+		Pathfinding::green = static_cast<Uint8>(path->color);
+		Pathfinding::yellow = static_cast<Uint8>(path->color2);
+		Pathfinding::red = static_cast<Uint8>(path->border);
 	}
 
 	add(_map);
@@ -2740,16 +2740,16 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 				if (itRule->getBattleType() == BT_FIREARM
 					|| itRule->getBattleType() == BT_MELEE)
 				{
-					tuLaunch = selUnit->getActionTUs(BA_LAUNCH, rtItem);
-					tuAim = selUnit->getActionTUs(BA_AIMEDSHOT, rtItem);
-					tuAuto = selUnit->getActionTUs(BA_AUTOSHOT, rtItem);
-					tuSnap = selUnit->getActionTUs(BA_SNAPSHOT, rtItem);
+					tuLaunch = selUnit->getActionTu(BA_LAUNCH, rtItem);
+					tuAim = selUnit->getActionTu(BA_AIMEDSHOT, rtItem);
+					tuAuto = selUnit->getActionTu(BA_AUTOSHOT, rtItem);
+					tuSnap = selUnit->getActionTu(BA_SNAPSHOT, rtItem);
 					if (tuLaunch == 0
 						&& tuAim == 0
 						&& tuAuto == 0
 						&& tuSnap == 0)
 					{
-						tuSnap = selUnit->getActionTUs(BA_HIT, rtItem);
+						tuSnap = selUnit->getActionTu(BA_HIT, rtItem);
 					}
 				}
 			}
@@ -2759,16 +2759,16 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 				if (itRule->getBattleType() == BT_FIREARM
 					|| itRule->getBattleType() == BT_MELEE)
 				{
-					tuLaunch = selUnit->getActionTUs(BA_LAUNCH, ltItem);
-					tuAim = selUnit->getActionTUs(BA_AIMEDSHOT, ltItem);
-					tuAuto = selUnit->getActionTUs(BA_AUTOSHOT, ltItem);
-					tuSnap = selUnit->getActionTUs(BA_SNAPSHOT, ltItem);
+					tuLaunch = selUnit->getActionTu(BA_LAUNCH, ltItem);
+					tuAim = selUnit->getActionTu(BA_AIMEDSHOT, ltItem);
+					tuAuto = selUnit->getActionTu(BA_AUTOSHOT, ltItem);
+					tuSnap = selUnit->getActionTu(BA_SNAPSHOT, ltItem);
 					if (tuLaunch == 0
 						&& tuAim == 0
 						&& tuAuto == 0
 						&& tuSnap == 0)
 					{
-						tuSnap = selUnit->getActionTUs(BA_HIT, ltItem);
+						tuSnap = selUnit->getActionTu(BA_HIT, ltItem);
 					}
 				}
 			}

@@ -755,10 +755,10 @@ private:
 		const bool isOut_t(const OutCheck test = OUT_ALL) const;
 
 		/// Gets the number of time units a certain action takes.
-		int getActionTUs(
+		int getActionTu(
 				const BattleActionType bat,
 				const BattleItem* item) const;
-		int getActionTUs(
+		int getActionTu(
 				const BattleActionType bat,
 				const RuleItem* itRule = NULL) const;
 

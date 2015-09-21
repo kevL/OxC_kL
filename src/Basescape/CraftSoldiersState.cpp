@@ -225,7 +225,7 @@ void CraftSoldiersState::init()
 					.arg(_craft->getSpaceAvailable()));
 	_txtLoad->setText(tr("STR_LOAD_CAPACITY_FREE_")
 					.arg(_craft->getLoadCapacity())
-					.arg(_craft->getLoadCapacity() - _craft->getLoadCurrent()));
+					.arg(_craft->getLoadCapacity() - _craft->calcLoadCurrent()));
 
 	calcCost();
 
@@ -296,7 +296,7 @@ void CraftSoldiersState::lstSoldiersPress(Action* action)
 		Uint8 color;
 		if (soldier->getCraft() == NULL
 			&& _craft->getSpaceAvailable() > 0
-			&& _craft->getLoadCapacity() - _craft->getLoadCurrent() > 9)
+			&& _craft->getLoadCapacity() - _craft->calcLoadCurrent() > 9)
 		{
 			soldier->setCraft(_craft);
 			color = _lstSoldiers->getSecondaryColor();
@@ -334,7 +334,7 @@ void CraftSoldiersState::lstSoldiersPress(Action* action)
 						.arg(_craft->getSpaceAvailable()));
 		_txtLoad->setText(tr("STR_LOAD_CAPACITY_FREE_")
 						.arg(_craft->getLoadCapacity())
-						.arg(_craft->getLoadCapacity() - _craft->getLoadCurrent()));
+						.arg(_craft->getLoadCapacity() - _craft->calcLoadCurrent()));
 
 		calcCost();
 	}

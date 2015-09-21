@@ -243,7 +243,7 @@ private:
 		/// Sets the Craft's current load.
 //		void setLoadCurrent(const int load);
 		/// Gets the Craft's current load.
-		int getLoadCurrent();
+		int calcLoadCurrent();
 
 		/// Gets this craft's current CraftWarning status.
 		CraftWarning getWarning() const;
@@ -252,7 +252,7 @@ private:
 		/// Gets whether a warning has been issued for this Craft.
 		bool getWarned() const;
 		/// Sets whether a warning has been issued for this Craft.
-		void setWarned(const bool warn = true);
+		void setWarned(const bool warned = true);
 
 		/// Gets the amount of time this Craft will be repairing/rearming/refueling.
 		int getDowntime(bool& delayed);

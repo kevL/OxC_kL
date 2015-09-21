@@ -1791,10 +1791,10 @@ void Map::drawTerrain(Surface* const surface) // private.
 							}
 
 							if ((_previewSetting & PATH_TU_COST)
-								&& _tile->getPreviewTU() > -1)
+								&& _tile->getPreviewTu() > -1)
 							{
 								int offset_x = 2;
-								if (_tile->getPreviewTU() > 9)
+								if (_tile->getPreviewTu() > 9)
 									offset_x += 2;
 
 								if (_battleSave->getSelectedUnit() != NULL
@@ -1805,7 +1805,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 										offset_y += 7;
 								}
 
-								numWp->setValue(static_cast<unsigned>(_tile->getPreviewTU()));
+								numWp->setValue(static_cast<unsigned>(_tile->getPreviewTu()));
 								numWp->draw();
 
 								if (!(_previewSetting & PATH_ARROWS))

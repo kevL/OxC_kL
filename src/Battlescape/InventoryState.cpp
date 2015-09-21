@@ -628,7 +628,7 @@ void InventoryState::updateStats() // private.
 		if (_tuMode == true)
 		{
 			if (unit->getBaseStats()->throwing != 0)
-				_txtThrowTU->setText(tr("STR_THROW_").arg(unit->getActionTUs(BA_THROW)));
+				_txtThrowTU->setText(tr("STR_THROW_").arg(unit->getActionTu(BA_THROW)));
 			else
 				_txtThrowTU->setVisible(false);
 
@@ -636,7 +636,7 @@ void InventoryState::updateStats() // private.
 				&& psiSkill > 0)
 			{
 				_txtPsiTU->setVisible();
-				_txtPsiTU->setText(tr("STR_PSI_").arg(unit->getActionTUs(
+				_txtPsiTU->setText(tr("STR_PSI_").arg(unit->getActionTu(
 																	BA_PSIPANIC,
 																	_parent->getBattleGame()->getAlienPsi())));
 			}
@@ -1349,7 +1349,7 @@ void InventoryState::setExtraInfo( // private.
 				case BA_HIT:		actionType = "STR_ATTACK_";
 			}
 
-			tu = unit->getActionTUs(bat, item);
+			tu = unit->getActionTu(bat, item);
 		}
 
 		_txtUseTU->setText(tr(actionType).arg(tu));

@@ -1207,7 +1207,7 @@ void DogfightState::updateDogfight()
 					else if (RNG::generate(0,1) == 0)
 						targetRegion = _ufo->getAlienMission()->getRegion();								// Retaliation vs UFO's mission region.
 					else
-						targetRegion = _gameSave->locateRegion(lon,lat)->getRules()->getType();		// Retaliation vs UFO's shootdown region.
+						targetRegion = _gameSave->locateRegion(lon,lat)->getRules()->getType();				// Retaliation vs UFO's shootdown region.
 
 					// Difference from original: No retaliation until final UFO lands (Original: Is spawned).
 					if (_game->getSavedGame()->findAlienMission(targetRegion, alm_RETAL) == false)
@@ -1228,7 +1228,7 @@ void DogfightState::updateDogfight()
 				}
 			}
 
-			int xPts = 0;
+			int pts = 0;
 
 			if (_ufo->isDestroyed() == true)
 			{
@@ -1239,43 +1239,71 @@ void DogfightState::updateDogfight()
 					resetStatus("STR_UFO_DESTROYED");
 					_game->getResourcePack()->playSoundFX(ResourcePack::UFO_EXPLODE);
 
-					xPts = _ufo->getRules()->getScore() * 2;
+					pts = _ufo->getRules()->getScore() * 2;
 				}
 			}
-			else // crashed.
+			else if (_ufo->getShotDownByCraftId() == _craft->getUniqueId()) // crashed.
 			{
-				const bool overLand = _globe->insideLand(lon,lat);
+				resetStatus("STR_UFO_CRASH_LANDS");
+				_game->getResourcePack()->playSoundFX(ResourcePack::UFO_CRASH);
 
-				if (_ufo->getShotDownByCraftId() == _craft->getUniqueId())
-				{
-					resetStatus("STR_UFO_CRASH_LANDS");
-					_game->getResourcePack()->playSoundFX(ResourcePack::UFO_CRASH);
+				pts = _ufo->getRules()->getScore();
 
-					xPts = _ufo->getRules()->getScore();
-				}
-
-				if (overLand == false)
+				if (_globe->insideLand(lon,lat) == false)
 				{
 					_destroyUfo = true;
 					_ufo->setUfoStatus(Ufo::DESTROYED);
 
-					xPts *= 2;
+					pts *= 2;
+				}
+				else if (_ufo->getCrashId() == 0) // Set up Crash site.
+				{
+					_ufo->setCrashId(_gameSave->getCanonicalId("STR_CRASH_SITE"));
+
+					_ufo->setSecondsLeft(RNG::generate(24,96) * 3600);
+					_ufo->setAltitude("STR_GROUND");
+				}
+			}
+/*			else // crashed.
+			{
+				if (_ufo->getShotDownByCraftId() == _craft->getUniqueId())
+				{
+					resetStatus("STR_UFO_CRASH_LANDS");
+					_game->getResourcePack()->playSoundFX(ResourcePack::UFO_CRASH);
+					pts = _ufo->getRules()->getScore();
+				}
+				if (_globe->insideLand(lon,lat) == false)
+				{
+					_destroyUfo = true;
+					_ufo->setUfoStatus(Ufo::DESTROYED);
+					pts *= 2;
 				}
 				else // Set up Crash site.
 				{
 					_ufo->setSecondsLeft(RNG::generate(24,96) * 3600);
 					_ufo->setAltitude("STR_GROUND");
-
 					if (_ufo->getCrashId() == 0)
 						_ufo->setCrashId(_gameSave->getCanonicalId("STR_CRASH_SITE"));
 				}
-			}
+			} */
 
-			if (xPts != 0)
-				_gameSave->scorePoints(lon,lat, xPts, false);
+			if (pts != 0)
+				_gameSave->scorePoints(lon, lat, pts, false);
 
 			if (_ufo->getShotDownByCraftId() != _craft->getUniqueId())
+			{
 				_ufo->setHitFrame(3);
+				switch (_ufo->getUfoStatus())
+				{
+					case Ufo::DESTROYED:
+						_timeout = MSG_TIMEOUT; // persist port.
+//						resetStatus("STR_UFO_DESTROYED");
+					break;
+					case Ufo::CRASHED:
+						_timeout = MSG_TIMEOUT; // persist port.
+//						resetStatus("STR_UFO_CRASH_LANDS");
+				}
+			}
 			else
 				_timeout *= 2;
 

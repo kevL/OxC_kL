@@ -532,11 +532,12 @@ bool UnitWalkBState::doStatusStand() // private.
 
 			return false;
 		}
-		else if (_parent->getPanicHandled() == true	// note this operates differently for player-units and non-player units;
-			&& _parent->checkReservedTu(			// Only player's units will *bypass* abortPath() due to panicking ....
-									_unit,			// Tbh, other code should have rendered the getPanicHandled() redundant.
-									tuCost) == false)	// That is to say this should kick in *only* when player has actively
-		{												// clicked to move but tries to go further than TUs allow; because
+		else if (_parent->getPanicHandled() == true					// note this operates differently for player-units and non-player units;
+			&& _unit->getFaction() != FACTION_PLAYER				// <- no Reserve tolerance.
+			&& _parent->checkReservedTu(_unit, tuCost) == false)	// Only player's units will *bypass* abortPath() due to panicking ....
+																	// Tbh, other code should have rendered the getPanicHandled() redundant.
+																	// That is to say this should kick in *only* when player has actively
+		{															// clicked to move but tries to go further than TUs allow; because
 			//Log(LOG_INFO) << ". . checkReservedTu(_unit, tuCost) == false";	// either the AI or the panic-code should not try to
 			_unit->setCache(NULL);												// move a unit farther than its [reserved] TUs allow
 			_parent->getMap()->cacheUnit(_unit);
@@ -561,11 +562,8 @@ bool UnitWalkBState::doStatusStand() // private.
 		{
 			//Log(LOG_INFO) << ". . check for doors";
 			int sound = -1;
-			const int door = _terrain->unitOpensDoor(
-												_unit,
-												false,
-												dir);
 
+			const int door = _terrain->unitOpensDoor(_unit, false, dir);
 			if (door == 0) // normal door
 			{
 				//Log(LOG_INFO) << ". . . door #0";
@@ -1061,9 +1059,9 @@ void UnitWalkBState::postPathProcedures() // private.
 
 				_unit->setChargeTarget(NULL);
 
-				if (action.weapon != NULL) // also checked in getActionTUs() & ProjectileFlyBState::init()
+				if (action.weapon != NULL) // also checked in getActionTu() & ProjectileFlyBState::init()
 				{
-					action.TU = _unit->getActionTUs(
+					action.TU = _unit->getActionTu(
 												action.type,
 												action.weapon);
 

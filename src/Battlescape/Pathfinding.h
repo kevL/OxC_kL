@@ -114,15 +114,15 @@ private:
 	/// Sets the movement type for the path.
 	void setMoveType();
 
-	/// Determines the additional TU cost of going one step from
-	/// start to destination if going through a closed UFO door.
+	/// Determines the additional TU cost of going one step from start to
+	/// destination if going through a closed UFO door.
 //	int getOpeningUfoDoorCost(int direction, Position start, Position destination);
 
 
 	public:
 		static const int
-			DIR_UP		=  8,
-			DIR_DOWN	=  9;
+			DIR_UP		= 8,
+			DIR_DOWN	= 9;
 
 		static Uint8
 			red,

@@ -147,7 +147,7 @@ CraftEquipmentState::CraftEquipmentState(
 
 	_txtLoad->setText(tr("STR_LOAD_CAPACITY_FREE_")
 					.arg(_craft->getLoadCapacity())
-					.arg(_craft->getLoadCapacity() - _craft->getLoadCurrent()));
+					.arg(_craft->getLoadCapacity() - _craft->calcLoadCurrent()));
 
 	_lstEquipment->setArrowColumn(189, ARROW_HORIZONTAL);
 	_lstEquipment->setColumns(3, 147, 85, 41);
@@ -433,7 +433,7 @@ void CraftEquipmentState::updateQuantity()
 					.arg(_craft->getSpaceAvailable()));
 	_txtLoad->setText(tr("STR_LOAD_CAPACITY_FREE_")
 					.arg(_craft->getLoadCapacity())
-					.arg(_craft->getLoadCapacity() - _craft->getLoadCurrent()));
+					.arg(_craft->getLoadCapacity() - _craft->calcLoadCurrent()));
 
 	calcCost();
 }
@@ -599,14 +599,14 @@ void CraftEquipmentState::moveRightByValue(int change)
 											/ unitSize;
 
 				if (spaceAvailable > 0
-					&& _craft->getLoadCapacity() - _craft->getLoadCurrent() >= unitSize * 10) // note: 10 is the 'load' that a single 'space' uses.
+					&& _craft->getLoadCapacity() - _craft->calcLoadCurrent() >= unitSize * 10) // note: 10 is the 'load' that a single 'space' uses.
 				{
 					change = std::min(
 									change,
 									spaceAvailable);
 					change = std::min(
 									change,
-									(_craft->getLoadCapacity() - _craft->getLoadCurrent()) / (unitSize * 10));
+									(_craft->getLoadCapacity() - _craft->calcLoadCurrent()) / (unitSize * 10));
 
 					if (itRule->getCompatibleAmmo()->empty() == false)
 					{
@@ -682,7 +682,7 @@ void CraftEquipmentState::moveRightByValue(int change)
 			else // load item
 			{
 				if (_craft->getRules()->getMaxItems() > 0
-					&& _craft->getLoadCurrent() + change > _craft->getLoadCapacity())
+					&& _craft->calcLoadCurrent() + change > _craft->getLoadCapacity())
 				{
 					_timerRight->stop();
 
@@ -698,7 +698,7 @@ void CraftEquipmentState::moveRightByValue(int change)
 														"BACK04.SCR",
 														2));
 
-					change = _craft->getLoadCapacity() - _craft->getLoadCurrent();
+					change = _craft->getLoadCapacity() - _craft->calcLoadCurrent();
 				}
 
 				if (change > 0)

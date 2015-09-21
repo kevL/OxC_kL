@@ -74,7 +74,7 @@ private:
 		_controlDestroyed,
 		_debugMode,
 		_cheatAI,
-		_kneelReserved,
+//		_kneelReserved,
 		_pacified,
 		_unitsFalling;
 	int
@@ -90,7 +90,7 @@ private:
 		_turn;
 	size_t _mapSize;
 
-	BattleActionType _batReserved;
+//	BattleActionType _batReserved;
 	Position _rfTriggerPosition;
 	TacticalType _tacType;
 	UnitFaction _side;
@@ -385,13 +385,13 @@ private:
 		bool isCheating();
 
 		/// Gets the reserved fire mode.
-		BattleActionType getBatReserved() const;
+//		BattleActionType getBatReserved() const;
 		/// Sets the reserved fire mode.
-		void setBatReserved(BattleActionType reserved);
+//		void setBatReserved(BattleActionType reserved);
 		/// Gets whether we are reserving TUs to kneel.
-		bool getKneelReserved() const;
+//		bool getKneelReserved() const;
 		/// Sets whether we are reserving TUs to kneel.
-		void setKneelReserved(bool reserved);
+//		void setKneelReserved(bool reserved);
 
 		/// Gives me access to the storage tiles vector.
 		std::vector<Position>& getStorageSpace();

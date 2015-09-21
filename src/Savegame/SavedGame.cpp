@@ -2174,7 +2174,7 @@ bool SavedGame::getWarned() const
 
 /**
  * Sets the player's warned status.
- * @param warned - true if warned
+ * @param warned - true if warned (default true)
  */
 void SavedGame::setWarned(bool warned)
 {

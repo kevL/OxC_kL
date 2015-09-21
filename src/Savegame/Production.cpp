@@ -260,10 +260,7 @@ ProductionProgress Production::step(
 								if ((*j)->getCraftStatus() == "STR_REFUELING")
 								{
 									if ((*j)->getRules()->getRefuelItem() == i->first)
-									{
 										(*j)->setWarned(false);
-										(*j)->setWarning(CW_NONE);
-									}
 								}
 								else if ((*j)->getCraftStatus() == "STR_REARMING")
 								{
@@ -276,9 +273,7 @@ ProductionProgress Production::step(
 											&& (*k)->getRules()->getClipItem() == i->first)
 										{
 											(*k)->setCantLoad(false);
-
 											(*j)->setWarned(false);
-											(*j)->setWarning(CW_NONE);
 										}
 									}
 								}

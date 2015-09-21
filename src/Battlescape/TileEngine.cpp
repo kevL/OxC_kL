@@ -1889,7 +1889,7 @@ bool TileEngine::reactionShot(
 	if (_rfAction->weapon->getRules()->getBattleType() == BT_MELEE)
 	{
 		_rfAction->type = BA_HIT;
-		_rfAction->TU = _rfAction->actor->getActionTUs(
+		_rfAction->TU = _rfAction->actor->getActionTu(
 											BA_HIT,
 											_rfAction->weapon);
 		if (_rfAction->TU == 0
@@ -1989,64 +1989,64 @@ void TileEngine::selectFireMethod(BattleAction& action) // <- TODO: this action 
 	if (dist <= itRule->getAutoRange())
 	{
 		if (itRule->getTUAuto() != 0
-			&& tu >= action.actor->getActionTUs(BA_AUTOSHOT, action.weapon))
+			&& tu >= action.actor->getActionTu(BA_AUTOSHOT, action.weapon))
 		{
 			action.type = BA_AUTOSHOT;
-			action.TU = action.actor->getActionTUs(BA_AUTOSHOT, action.weapon);
+			action.TU = action.actor->getActionTu(BA_AUTOSHOT, action.weapon);
 		}
 		else if (itRule->getTUSnap() != 0
-			&& tu >= action.actor->getActionTUs(BA_SNAPSHOT, action.weapon))
+			&& tu >= action.actor->getActionTu(BA_SNAPSHOT, action.weapon))
 		{
 			action.type = BA_SNAPSHOT;
-			action.TU = action.actor->getActionTUs(BA_SNAPSHOT, action.weapon);
+			action.TU = action.actor->getActionTu(BA_SNAPSHOT, action.weapon);
 		}
 		else if (itRule->getTUAimed() != 0
-			&& tu >= action.actor->getActionTUs(BA_AIMEDSHOT, action.weapon))
+			&& tu >= action.actor->getActionTu(BA_AIMEDSHOT, action.weapon))
 		{
 			action.type = BA_AIMEDSHOT;
-			action.TU = action.actor->getActionTUs(BA_AIMEDSHOT, action.weapon);
+			action.TU = action.actor->getActionTu(BA_AIMEDSHOT, action.weapon);
 		}
 	}
 	else if (dist <= itRule->getSnapRange())
 	{
 		if (itRule->getTUSnap() != 0
-			&& tu >= action.actor->getActionTUs(BA_SNAPSHOT, action.weapon))
+			&& tu >= action.actor->getActionTu(BA_SNAPSHOT, action.weapon))
 		{
 			action.type = BA_SNAPSHOT;
-			action.TU = action.actor->getActionTUs(BA_SNAPSHOT, action.weapon);
+			action.TU = action.actor->getActionTu(BA_SNAPSHOT, action.weapon);
 		}
 		else if (itRule->getTUAimed() != 0
-			&& tu >= action.actor->getActionTUs(BA_AIMEDSHOT, action.weapon))
+			&& tu >= action.actor->getActionTu(BA_AIMEDSHOT, action.weapon))
 		{
 			action.type = BA_AIMEDSHOT;
-			action.TU = action.actor->getActionTUs(BA_AIMEDSHOT, action.weapon);
+			action.TU = action.actor->getActionTu(BA_AIMEDSHOT, action.weapon);
 		}
 		else if (itRule->getTUAuto() != 0
-			&& tu >= action.actor->getActionTUs(BA_AUTOSHOT, action.weapon))
+			&& tu >= action.actor->getActionTu(BA_AUTOSHOT, action.weapon))
 		{
 			action.type = BA_AUTOSHOT;
-			action.TU = action.actor->getActionTUs(BA_AUTOSHOT, action.weapon);
+			action.TU = action.actor->getActionTu(BA_AUTOSHOT, action.weapon);
 		}
 	}
 	else // if (dist <= itRule->getAimRange())
 	{
 		if (itRule->getTUAimed() != 0
-			&& tu >= action.actor->getActionTUs(BA_AIMEDSHOT, action.weapon))
+			&& tu >= action.actor->getActionTu(BA_AIMEDSHOT, action.weapon))
 		{
 			action.type = BA_AIMEDSHOT;
-			action.TU = action.actor->getActionTUs(BA_AIMEDSHOT, action.weapon);
+			action.TU = action.actor->getActionTu(BA_AIMEDSHOT, action.weapon);
 		}
 		else if (itRule->getTUSnap() != 0
-			&& tu >= action.actor->getActionTUs(BA_SNAPSHOT, action.weapon))
+			&& tu >= action.actor->getActionTu(BA_SNAPSHOT, action.weapon))
 		{
 			action.type = BA_SNAPSHOT;
-			action.TU = action.actor->getActionTUs(BA_SNAPSHOT, action.weapon);
+			action.TU = action.actor->getActionTu(BA_SNAPSHOT, action.weapon);
 		}
 		else if (itRule->getTUAuto() != 0
-			&& tu >= action.actor->getActionTUs(BA_AUTOSHOT, action.weapon))
+			&& tu >= action.actor->getActionTu(BA_AUTOSHOT, action.weapon))
 		{
 			action.type = BA_AUTOSHOT;
-			action.TU = action.actor->getActionTUs(BA_AUTOSHOT, action.weapon);
+			action.TU = action.actor->getActionTu(BA_AUTOSHOT, action.weapon);
 		}
 	}
 
@@ -4556,10 +4556,7 @@ int TileEngine::unitOpensDoor(
 					if (tileDoor != NULL)
 					{
 						part = i->second;
-						ret = tileDoor->openDoor(
-												part,
-												unit,
-												_battleSave->getBattleGame()->getReservedAction());
+						ret = tileDoor->openDoor(part, unit); //_battleSave->getBatReserved());
 						//Log(LOG_INFO) << ". . . openDoor = " << ret;
 
 						if (ret != Tile::DR_NONE)
@@ -4600,9 +4597,8 @@ int TileEngine::unitOpensDoor(
 										unit->getMoveTypeUnit());
 		//Log(LOG_INFO) << ". . ret = " << ret << ", part = " << part << ", tuCost = " << tuCost;
 
-		if (_battleSave->getBattleGame()->checkReservedTu(
-														unit,
-														tuCost) == true)
+		if (unit->getFaction() == FACTION_PLAYER // <- no Reserve tolerance.
+			|| _battleSave->getBattleGame()->checkReservedTu(unit, tuCost) == true)
 		{
 			//Log(LOG_INFO) << "check reserved tu";
 			if (unit->spendTimeUnits(tuCost) == true)

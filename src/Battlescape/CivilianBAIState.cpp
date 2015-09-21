@@ -457,7 +457,7 @@ void CivilianBAIState::setupEscape()
 //			{
 //				tile->setPreviewColor(score < 0? 3: (score < FAST_PASS_THRESHOLD/2? 8: (score < FAST_PASS_THRESHOLD ?9: 5)));
 //				tile->setPreviewDir(10);
-//				tile->setPreviewTU(score);
+//				tile->setPreviewTu(score);
 //			}
 		}
 
@@ -486,7 +486,7 @@ void CivilianBAIState::setupEscape()
 //				{
 //					tile->setPreviewColor(score < 0? 7: (score < FAST_PASS_THRESHOLD / 2? 10: (score < FAST_PASS_THRESHOLD ?4: 5)));
 //					tile->setPreviewDir(10);
-//					tile->setPreviewTU(score);
+//					tile->setPreviewTu(score);
 //				}
 			}
 

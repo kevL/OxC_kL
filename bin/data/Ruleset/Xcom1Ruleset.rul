@@ -5072,7 +5072,7 @@ extraStrings:
       FEMALE_CIVILIAN2: "Civilian"
       FEMALE_CIVILIAN3: "Civilian"
       STR_PORT_ATTACK: "Port Attack"
-      STR_PORT_ATTACK_BRIEFING: "Aliens have launched an attack against a coastal site. The port and its civilian population have been put in danger. Your squad must eliminate all aliens and protect all innocent bystanders from the alien incursion. To abort move xCom operatives onto the transport vehicule and click the 'Abort Mission' icon."
+      STR_PORT_ATTACK_BRIEFING: "Aliens have launched an attack against a coastal site. The port and its civilian population have been put in danger. Your squad must eliminate all aliens and protect all innocent bystanders from the alien incursion. To abort move xCom operatives onto the transport vehicle and click the 'Abort Mission' icon."
       STR_MEDITARGET: "recipient"
       STR_ALIENS_PACIFIED: "The aLien Incursion{NEWLINE}{NEWLINE}Pacified"
       STR_SQUAD_: "base> {0}"

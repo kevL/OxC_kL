@@ -285,7 +285,7 @@ void ActionMenuState::addItem( // private.
 		wst1 = tr("STR_ACCURACY_SHORT_KL").arg(var);
 	}
 
-	var = _action->actor->getActionTUs(
+	var = _action->actor->getActionTu(
 									bat,
 									_action->weapon);
 

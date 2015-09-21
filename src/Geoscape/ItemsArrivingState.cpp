@@ -168,10 +168,7 @@ ItemsArrivingState::ItemsArrivingState(GeoscapeState* const state)
 								if ((*k)->getCraftStatus() == "STR_REFUELING")
 								{
 									if ((*k)->getRules()->getRefuelItem() == itRule->getType())
-									{
 										(*k)->setWarned(false);
-										(*k)->setWarning(CW_NONE);
-									}
 								}
 								else if ((*k)->getCraftStatus() == "STR_REARMING")
 								{
@@ -184,9 +181,7 @@ ItemsArrivingState::ItemsArrivingState(GeoscapeState* const state)
 											&& (*l)->getRules()->getClipItem() == itRule->getType())
 										{
 											(*l)->setCantLoad(false);
-
 											(*k)->setWarned(false);
-											(*k)->setWarning(CW_NONE);
 										}
 									}
 								}

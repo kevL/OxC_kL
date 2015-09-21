@@ -37,9 +37,9 @@ namespace OpenXcom
 {
 
 Uint8 // static not const.
-	Pathfinding::red	= 3,
-	Pathfinding::green	= 4,
-	Pathfinding::yellow	= 10;
+	Pathfinding::red	=  3, // defaults ->
+	Pathfinding::green	=  4, // overridden by Interfaces.rul
+	Pathfinding::yellow	= 10; // when BattlescapeState loads.
 
 
 /**
@@ -1836,8 +1836,7 @@ int Pathfinding::validateUpDown(
 bool Pathfinding::previewPath(bool discard)
 {
 	if (_path.empty() == true
-		|| (discard == false
-			&& _previewed == true))
+		|| (discard == false && _previewed == true))
 	{
 		return false;
 	}
@@ -1847,27 +1846,26 @@ bool Pathfinding::previewPath(bool discard)
 	Tile* tile;
 	if (discard == true)
 	{
-		const size_t mapSize = _battleSave->getMapSizeXYZ();
 		for (size_t
 				i = 0;
-				i != mapSize;
+				i != _battleSave->getMapSizeXYZ();
 				++i)
 		{
 			tile = _battleSave->getTiles()[i];
 			tile->setPreviewDir(-1);
-			tile->setPreviewTU(-1);
+			tile->setPreviewTu(-1);
 			tile->setPreviewColor(0);
 		}
 	}
 	else
 	{
 		const int
-			unitSize = _unit->getArmor()->getSize() - 1,
+			armorSize = _unit->getArmor()->getSize() - 1,
 			agility = _unit->getArmor()->getAgility();
 		int
-			unitTU = _unit->getTimeUnits(),
+			unitTu = _unit->getTimeUnits(),
 			unitEnergy = _unit->getEnergy(),
-			tileTU,			// cost per tile
+			tileTu,			// cost per tile
 			tuSpent = 0,	// only for soldiers reserving TUs
 			energyLimit,
 			dir;
@@ -1882,14 +1880,14 @@ bool Pathfinding::previewPath(bool discard)
 			start = _unit->getPosition(),
 			dest;
 
-		bool switchBack;
+/*		bool switchBack;
 		if (_battleSave->getBattleGame()->getReservedAction() == BA_NONE)
 		{
 			switchBack = true;
 			_battleSave->getBattleGame()->setReservedAction(BA_SNAPSHOT);
 		}
 		else
-			switchBack = false;
+			switchBack = false; */
 
 		for (std::vector<int>::reverse_iterator
 				i = _path.rbegin();
@@ -1897,7 +1895,7 @@ bool Pathfinding::previewPath(bool discard)
 				++i)
 		{
 			dir = *i;
-			tileTU = getTuCostPf( // gets tu cost but also gets the destination position.
+			tileTu = getTuCostPf( // gets tu cost but also gets the destination position.
 							start,
 							dir,
 							&dest);
@@ -1907,7 +1905,7 @@ bool Pathfinding::previewPath(bool discard)
 			falling = _mType != MT_FLY
 				   && canFallDown(
 							_battleSave->getTile(start),
-							unitSize + 1);
+							armorSize + 1);
 			if (falling == false)
 			{
 				gravLift = dir >= DIR_UP
@@ -1921,19 +1919,19 @@ bool Pathfinding::previewPath(bool discard)
 						hathStood = true;
 
 						tuSpent += 10;
-						unitTU -= 10; // 10 tu + 3 energy to stand up.
+						unitTu -= 10; // 10 tu + 3 energy to stand up.
 						unitEnergy -= 3;
 					}
 
 					if (_battleAction->dash == true)
 					{
-						tileTU -= _openDoor;
-						unitEnergy -= tileTU * 3 / 2;
+						tileTu -= _openDoor;
+						unitEnergy -= tileTu * 3 / 2;
 
-						tileTU = (tileTU * 3 / 4) + _openDoor;
+						tileTu = (tileTu * 3 / 4) + _openDoor;
 					}
 					else
-						unitEnergy += _openDoor - tileTU;
+						unitEnergy += _openDoor - tileTu;
 
 					unitEnergy += agility;
 
@@ -1941,23 +1939,23 @@ bool Pathfinding::previewPath(bool discard)
 						unitEnergy = energyLimit;
 				}
 
-				unitTU -= tileTU;
+				unitTu -= tileTu;
 			}
 
-			tuSpent += tileTU;
+			tuSpent += tileTu;
 			reserveOk = _battleSave->getBattleGame()->checkReservedTu(
 																_unit,
-																tuSpent,
-																true);
+																tuSpent);
+//																true);
 			start = dest;
 
 			for (int
-					x = unitSize;
+					x = armorSize;
 					x != -1;
 					--x)
 			{
 				for (int
-						y = unitSize;
+						y = armorSize;
 						y != -1;
 						--y)
 				{
@@ -1970,20 +1968,20 @@ bool Pathfinding::previewPath(bool discard)
 						tile->setPreviewDir(*(i + 1)); // next dir
 
 					if ((x && y)
-						|| unitSize == 0)
+						|| armorSize == 0)
 					{
-						tile->setPreviewTU(unitTU);
+						tile->setPreviewTu(unitTu);
 					}
 
 					if (tileAbove != NULL
 						&& tileAbove->getPreviewDir() == 0
-						&& tileTU == 0
+						&& tileTu == 0
 						&& _mType != MT_FLY)				// unit fell down
 					{
 						tileAbove->setPreviewDir(DIR_DOWN);	// retroactively set tileAbove's direction
 					}
 
-					if (unitTU > -1
+					if (unitTu > -1
 						&& unitEnergy > -1)
 					{
 						if (reserveOk == true)
@@ -1999,8 +1997,8 @@ bool Pathfinding::previewPath(bool discard)
 			}
 		}
 
-		if (switchBack == true)
-			_battleSave->getBattleGame()->setReservedAction(BA_NONE);
+//		if (switchBack == true)
+//			_battleSave->getBattleGame()->setReservedAction(BA_NONE);
 	}
 
 	return true;

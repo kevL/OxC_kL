@@ -136,6 +136,7 @@ void Craft::load(
 	_id			= node["id"]	.as<int>(_id);
 	_fuel		= node["fuel"]	.as<int>(_fuel);
 	_damage		= node["damage"].as<int>(_damage);
+
 	_warning	= static_cast<CraftWarning>(node["warning"].as<int>(_warning));
 
 	size_t j = 0;
@@ -900,6 +901,7 @@ void Craft::repair()
 	_warned = false;
 
 	setCraftDamage(_damage - _crRule->getRepairRate());
+	// TODO: prepare to set CW_CANTREPAIR ...
 
 	if (_damage == 0)
 		checkup();
@@ -1136,14 +1138,14 @@ void Craft::setLoadCurrent(const int load)
  * @note Also recalculates '_loadCur' value.
  * @return, current load
  */
-int Craft::getLoadCurrent()
+int Craft::calcLoadCurrent()
 {
 	return (_loadCur = (getNumEquipment() + getSpaceUsed() * 10));
 }
 
 /**
  * Gets this craft's current CraftWarning status.
- * @return, CraftWarning enum
+ * @return, CraftWarning (Craft.h)
  */
 CraftWarning Craft::getWarning() const
 {
@@ -1152,7 +1154,7 @@ CraftWarning Craft::getWarning() const
 
 /**
  * Sets this craft's CraftWarning status.
- * @param warning - a CraftWarning enum
+ * @param warning - a CraftWarning  (Craft.h)
  */
 void Craft::setWarning(const CraftWarning warning)
 {
@@ -1170,11 +1172,12 @@ bool Craft::getWarned() const
 
 /**
  * Sets whether a warning has been issued for this Craft.
- * @param warn - true if player has been warned about low resources
+ * @param warned - true if player has been warned about low resources (default true)
  */
-void Craft::setWarned(const bool warn)
+void Craft::setWarned(const bool warned)
 {
-	_warned = warn;
+	if ((_warned = warned) == false)
+		_warning = CW_NONE;
 }
 
 /**

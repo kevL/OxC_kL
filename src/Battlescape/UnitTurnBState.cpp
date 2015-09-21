@@ -41,19 +41,18 @@ namespace OpenXcom
  * Sets up an UnitTurnBState.
  * @param parent	- pointer to BattlescapeGame
  * @param action	- the current BattleAction
- * @param chargeTUs	- true if there is TU cost, false for reaction fire and panic (default true)
+ * @param chargeTu	- true if there is TU cost, false for reaction fire and panic (default true)
  */
 UnitTurnBState::UnitTurnBState(
 		BattlescapeGame* parent,
 		BattleAction action,
-		bool chargeTUs)
+		bool chargeTu)
 	:
 		BattleState(
 			parent,
 			action),
-		_chargeTUs(chargeTUs),
+		_chargeTu(chargeTu),
 		_unit(action.actor),
-//		_unit(NULL),
 		_turret(false)
 {}
 
@@ -70,7 +69,6 @@ UnitTurnBState::~UnitTurnBState()
  */
 void UnitTurnBState::init()
 {
-//	_unit = _action.actor;
 //	if (_unit->isOut(true, true))
 	if (_unit->isOut_t(OUT_STAT) == true)
 	{
@@ -104,7 +102,7 @@ void UnitTurnBState::init()
 	}
 
 
-	if (_chargeTUs == true
+	if (_chargeTu == true
 		&& _unit->getUnitStatus() != STATUS_TURNING) // try to open a door
 	{
 		if (_action.type == BA_NONE)
@@ -142,7 +140,7 @@ void UnitTurnBState::init()
 void UnitTurnBState::think()
 {
 	int tu;
-	if (_chargeTUs == false)				// reaction fire & panic permit free turning
+	if (_chargeTu == false)					// reaction fire & panic permit free turning
 		tu = 0;
 	else if (_unit->getTurretType() > -1	// if turreted vehicle
 		&& _action.strafe == false			// but not swivelling turret
@@ -156,11 +154,10 @@ void UnitTurnBState::think()
 	else
 		tu = 1;								// one tu per facing change
 
-	if (_chargeTUs == true
+	if (_chargeTu == true
 		&& _action.targeting == false
-		&& _parent->checkReservedTu(
-								_unit,
-								tu) == false)
+		&& _unit->getFaction() != FACTION_PLAYER // <- no Reserve tolerance.
+		&& _parent->checkReservedTu(_unit, tu) == false)
 	{
 		_unit->setUnitStatus(STATUS_STANDING);
 		_unit->setTurnDirection(0);
@@ -177,7 +174,7 @@ void UnitTurnBState::think()
 
 		if (_unit->getFaction() == FACTION_PLAYER)
 		{
-			if (_chargeTUs == true
+			if (_chargeTu == true
 				&& vis == true)
 			{
 				_unit->setUnitStatus(STATUS_STANDING);
@@ -187,7 +184,7 @@ void UnitTurnBState::think()
 					_unit->setStopShot();
 			}
 		}
-		else if (_chargeTUs == true
+		else if (_chargeTu == true
 			&& _action.type == BA_NONE
 			&& _unit->getHostileUnitsThisTurn().size() > preSpots)
 		{
@@ -199,7 +196,7 @@ void UnitTurnBState::think()
 			_unit->setTurnDirection(0);
 			_parent->popState();
 		}
-		else if (_chargeTUs == true)
+		else if (_chargeTu == true)
 			_parent->getBattlescapeState()->updateHostileHotcons();
 	}
 	else

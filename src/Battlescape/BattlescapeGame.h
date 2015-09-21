@@ -254,8 +254,8 @@ private:
 		/// Checks reserved tu.
 		bool checkReservedTu(
 				const BattleUnit* const unit,
-				int tu,
-				bool test = false);
+				int tu);
+//				bool test = false);
 
 		/// Cancels the current action.
 		bool cancelCurrentAction(bool force = false);
@@ -328,20 +328,19 @@ private:
 				BattleItem* const item,
 				BattleUnit* const unit) const;
 
-		/// Sets the TU reserved type.
-		void setReservedAction(BattleActionType bat);
-		/// Returns the type of action that is reserved.
-		BattleActionType getReservedAction() const;
-
 		/// Tallies the living units.
 		bool tallyUnits(
 				int& liveAliens,
 				int& liveSoldiers) const;
 
+		/// Sets the TU reserved type.
+//		void setReservedAction(BattleActionType bat);
+		/// Returns the type of action that is reserved.
+//		BattleActionType getReservedAction() const;
 		/// Sets the kneel reservation setting.
-		void setKneelReserved(bool reserved);
+//		void setKneelReserved(bool reserved) const;
 		/// Checks the kneel reservation setting.
-		bool getKneelReserved();
+//		bool getKneelReserved() const;
 
 		/// Checks for and triggers proximity grenades.
 		bool checkProxyGrenades(BattleUnit* const unit);
