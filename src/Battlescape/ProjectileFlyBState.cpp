@@ -826,7 +826,7 @@ void ProjectileFlyBState::think()
 			_parent->getMap()->getProjectile()->skipTrajectory();
 		}
 
-		if (_parent->getMap()->getProjectile()->traceProjectile() == false) // projectile pathing *not* finished
+		if (_parent->getMap()->getProjectile()->traceProjectile() == false) // projectile pathing cycle -> Finished
 		{
 			if (_action.type == BA_THROW)
 			{
@@ -907,16 +907,8 @@ void ProjectileFlyBState::think()
 					++shotAt->getStatistics()->shotAtCounter;
 				}
 
-/*				if (_action.type == BA_LAUNCH
-					&& _ammo != NULL
-					&& _ammo->spendBullet() == false)
-				{
-					_battleSave->removeItem(_ammo);
-					_action.weapon->setAmmoItem(NULL);
-				} */
 				if (_action.type == BA_LAUNCH
-					&& _ammo != NULL)
-//					_battleSave->getDebugMode() == false)
+					&& _ammo != NULL) //_battleSave->getDebugMode() == false
 				{
 					_ammo->spendBullet(
 									*_battleSave,
@@ -983,8 +975,9 @@ void ProjectileFlyBState::think()
 																	_posOrigin,
 																	_targetVoxel);
 
+								const double spread = static_cast<double>(i * _ammo->getRules()->getShotgunPattern()) * 0.003;
 								const double accuracy = std::max(0.,
-															_unit->getAccuracy(_action) - i * 0.023); // TODO: Create RuleItem variable '_pattern' for this.
+															_unit->getAccuracy(_action) - spread);
 								_prjImpact = prj->calculateShot(accuracy); // pellet spread.
 								if (_prjImpact != VOXEL_EMPTY)
 								{

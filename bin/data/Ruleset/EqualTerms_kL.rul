@@ -388,6 +388,7 @@ items:
     clipSize: 8
     battleType: 2
     shotgunPellets: 8
+    shotgunPattern: 8
 #------------------------------------------------------------------------------
   - type: STR_ALLOY_SHOTGUN_SHELLS
     listOrder: 2273
@@ -404,6 +405,7 @@ items:
     clipSize: 8
     battleType: 2
     shotgunPellets: 6
+    shotgunPattern: 6
     requires:
       - STR_ALLOY_SHOTGUN_SHELLS
 #------------------------------------------------------------------------------
@@ -422,6 +424,7 @@ items:
     clipSize: 8
     battleType: 2
     shotgunPellets: 5
+    shotgunPattern: 4
     requires:
       - STR_ELERIUM_SHOTGUN_SHELLS
 #------------------------------------------------------------------------------

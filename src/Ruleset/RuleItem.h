@@ -123,6 +123,7 @@ private:
 		_meleeHitSound,
 		_power,
 		_shotgunPellets,
+		_shotgunPattern,
 		_specialType,
 
 		_accuracyAimed,
@@ -354,8 +355,10 @@ private:
 		/// Gets the accuracy dropoff of this weapon.
 		int getDropoff() const;
 
-		/// Gets the number of projectiles to trace.
+		/// Gets the number of shotgun projectiles to trace.
 		int getShotgunPellets() const;
+		/// Gets the breadth of cone for shotgun projectiles.
+		int getShotgunPattern() const;
 
 		/// Gets a weapon's zombie unit, if any.
 		const std::string& getZombieUnit() const;

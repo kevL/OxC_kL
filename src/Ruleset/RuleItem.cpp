@@ -98,6 +98,7 @@ RuleItem::RuleItem(const std::string& type)
 		_autoShots(3),
 		_autoKick(12),
 		_shotgunPellets(0),
+		_shotgunPattern(5),
 		_strengthApplied(false),
 		_skillApplied(true),
 		_LOSRequired(false),
@@ -260,6 +261,7 @@ void RuleItem::load(
 	_autoShots			= node["autoShots"]			.as<int>(_autoShots);
 	_autoKick			= node["autoKick"]			.as<int>(_autoKick);
 	_shotgunPellets		= node["shotgunPellets"]	.as<int>(_shotgunPellets);
+	_shotgunPattern		= node["shotgunPattern"]	.as<int>(_shotgunPattern);
 	_zombieUnit			= node["zombieUnit"]		.as<std::string>(_zombieUnit);
 	_strengthApplied	= node["strengthApplied"]	.as<bool>(_strengthApplied);
 	_skillApplied		= node["skillApplied"]		.as<bool>(_skillApplied);
@@ -947,12 +949,21 @@ bool RuleItem::isGrenade() const
 }
 
 /**
- * Gets the number of projectiles this ammo shoots at once.
+ * Gets the number of projectiles this ammo shoots at once - a shotgun effect.
  * @return, the number of projectiles
  */
 int RuleItem::getShotgunPellets() const
 {
 	return _shotgunPellets;
+}
+
+/**
+ * Gets the breadth of cone for shotgun projectiles.
+ * @return, the breadth of cone
+ */
+int RuleItem::getShotgunPattern() const
+{
+	return _shotgunPattern;
 }
 
 /**
