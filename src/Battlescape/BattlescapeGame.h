@@ -255,7 +255,6 @@ private:
 		bool checkReservedTu(
 				const BattleUnit* const unit,
 				int tu);
-//				bool test = false);
 
 		/// Cancels the current action.
 		bool cancelCurrentAction(bool force = false);

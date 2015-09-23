@@ -508,7 +508,7 @@ void Projectile::applyAccuracy( // private.
 			if (_action.actor->getGeoscapeSoldier() != NULL)
 				perfect = static_cast<double>(_battleSave->getBattleGame()->getRuleset()->getSoldier("XCOM")->getStatCaps().throwing);
 			else
-				perfect = 200.; // higher value makes aLien less accurate at throwing.
+				perfect = 150.; // higher value makes aLien less accurate at throwing.
 		}
 
 		accuracy = accuracy * 50. + 69.3; // arbitrary adjustment.

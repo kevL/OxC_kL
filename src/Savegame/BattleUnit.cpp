@@ -1959,15 +1959,10 @@ int BattleUnit::getActionTu(
 		const BattleActionType bat,
 		const BattleItem* const item) const
 {
-	if (bat == BA_NONE
-		|| item == NULL)
-	{
+	if (bat == BA_NONE || item == NULL)
 		return 0;
-	}
 
-	return getActionTu(
-					bat,
-					item->getRules());
+	return getActionTu(bat, item->getRules());
 }
 
 /**

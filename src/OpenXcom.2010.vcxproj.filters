@@ -862,9 +862,6 @@
     <ClCompile Include="Basescape\SoldierInfoDeadState.cpp">
       <Filter>Basescape</Filter>
     </ClCompile>
-    <ClCompile Include="Ruleset\SoundDefinition.cpp">
-      <Filter>Ruleset</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Scalers\xbrz.cpp">
       <Filter>Engine\Scalers</Filter>
     </ClCompile>
@@ -1794,9 +1791,6 @@
     </ClInclude>
     <ClInclude Include="Basescape\SoldierInfoDeadState.h">
       <Filter>Basescape</Filter>
-    </ClInclude>
-    <ClInclude Include="Ruleset\SoundDefinition.h">
-      <Filter>Ruleset</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Scalers\xbrz.h">
       <Filter>Engine\Scalers</Filter>

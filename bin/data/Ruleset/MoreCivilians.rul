@@ -520,3 +520,22 @@ extraSprites:
       205: Resources/MoreCivilians/FLOOROB_FEMALE_CIVILIAN2_CORPSE.png
       206: Resources/MoreCivilians/FLOOROB_FEMALE_CIVILIAN3_CORPSE.png
       207: Resources/MoreCivilians/FLOOROB_MALE_CIVILIAN7_CORPSE.png
+extraStrings:
+  - type: en-US
+    strings:
+      MALE_CIVILIAN2: "Civilian"
+      MALE_CIVILIAN3: "Civilian"
+      MALE_CIVILIAN4: "Civilian"
+      MALE_CIVILIAN5: "Civilian"
+      MALE_CIVILIAN6: "Civilian"
+      MALE_CIVILIAN7: "Civilian"
+      FEMALE_CIVILIAN2: "Civilian"
+      FEMALE_CIVILIAN3: "Civilian"
+      MALE_CIVILIAN2_CORPSE: "Corpse civilian"
+      MALE_CIVILIAN3_CORPSE: "Corpse civilian"
+      MALE_CIVILIAN4_CORPSE: "Corpse civilian"
+      MALE_CIVILIAN5_CORPSE: "Corpse civilian"
+      MALE_CIVILIAN6_CORPSE: "Corpse civilian"
+      MALE_CIVILIAN7_CORPSE: "Corpse civilian"
+      FEMALE_CIVILIAN2_CORPSE: "Corpse civilian"
+      FEMALE_CIVILIAN3_CORPSE: "Corpse civilian"

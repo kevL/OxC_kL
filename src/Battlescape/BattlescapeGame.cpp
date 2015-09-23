@@ -2080,14 +2080,12 @@ void BattlescapeGame::showInfoBoxQueue() // private.
 /**
  * Checks against reserved time units.
  * @param unit	- pointer to a unit
- * @param tu	- # of time units to check against
-// * @param test	- true to suppress error messages (default false)
+ * @param tu	- TU to check against
  * @return, true if unit has enough time units - go!
  */
 bool BattlescapeGame::checkReservedTu(
 		const BattleUnit* const unit,
 		int tu)
-//		bool test)
 {
 	if (unit->getFaction() != _battleSave->getSide()	// is RF.
 		|| _battleSave->getSide() == FACTION_NEUTRAL)	// or Civies
@@ -2129,25 +2127,32 @@ bool BattlescapeGame::checkReservedTu(
 	// ** Below here is for xCom soldiers exclusively ***
 	// (which i don't care about - except that this is also used for pathPreviews in Pathfinding object)
 //	batReserved = _battleSave->getBatReserved();
-
-	// check TUs against slowest weapon if unit has two weapons
-//	const BattleItem* const weapon = unit->getMainHandWeapon(false);
-	// kL: Use getActiveHand() instead, if xCom wants to reserve TU & for pathPreview.
-	const BattleItem* const weapon = unit->getItem(unit->getActiveHand());
-
 	batReserved = BA_NONE;	// <- default for player's units
 							// <- for use when called by Pathfinding::previewPath() only.
-	if (weapon->getRules()->getBattleType() == BT_MELEE)
+	// check TUs against slowest weapon if unit has two weapons
+//	const BattleItem* const weapon = unit->getMainHandWeapon(false);
+	// Use getActiveHand() instead, if xCom wants to reserve TU & for pathPreview.
+	const BattleItem* const weapon = unit->getItem(unit->getActiveHand());
+	if (weapon != NULL)
 	{
-		if (unit->getActionTu(batReserved = BA_HIT, weapon) == 0)
-			return true;
+		if (weapon->getRules()->getBattleType() == BT_MELEE)
+		{
+			batReserved = BA_HIT;
+		}
+		else if (weapon->getRules()->getBattleType() == BT_FIREARM)
+		{
+			if (unit->getActionTu(batReserved = BA_SNAPSHOT, weapon) == 0)
+				if (unit->getActionTu((batReserved = BA_AUTOSHOT), weapon) == 0)
+					batReserved = BA_AIMEDSHOT;
+		}
 	}
-	else if (weapon->getRules()->getBattleType() == BT_FIREARM)
-	{
-		if (unit->getActionTu(batReserved = BA_SNAPSHOT, weapon) == 0)
-			if (unit->getActionTu((batReserved = BA_AUTOSHOT), weapon) == 0)
-				if (unit->getActionTu((batReserved = BA_AIMEDSHOT), weapon) == 0)
-					return true;
+
+	if (tu + unit->getActionTu(batReserved, weapon) > unit->getTimeUnits()) // safeties in place @ getActionTu()
+		return false;
+
+	return true;
+}
+// * @param test - true to suppress error messages (default false)
 /*		// if reserved for Aimed shot drop to Auto shot
 		if (batReserved == BA_AIMEDSHOT
 			&& unit->getActionTu(BA_AIMEDSHOT, weapon) == 0)
@@ -2172,8 +2177,6 @@ bool BattlescapeGame::checkReservedTu(
 		{
 			batReserved = BA_AIMEDSHOT;
 		} */
-	}
-
 /*	int tuKneel;
 	if (_battleSave->getKneelReserved() == true
 		&& unit->getGeoscapeSoldier() != NULL
@@ -2181,29 +2184,19 @@ bool BattlescapeGame::checkReservedTu(
 	{
 		tuKneel = 3;
 	}
-	else
-		tuKneel = 0;
+	else tuKneel = 0;
 
 	// if no Aimed shot is available revert to bat_NONE
 	if (batReserved == BA_AIMEDSHOT
-		&& unit->getActionTu(
-						BA_AIMEDSHOT,
-						weapon) == 0)
+		&& unit->getActionTu(BA_AIMEDSHOT, weapon) == 0)
 	{
-		if (tuKneel != 0)
-			batReserved = BA_NONE;
-		else
-			return true;
+		if (tuKneel != 0) batReserved = BA_NONE;
+		else return true;
 	}
 
 	if (batReserved != BA_NONE //|| _battleSave->getKneelReserved() == true)
-		&& tu + tuKneel + unit->getActionTu(
-										batReserved,
-										weapon) > unit->getTimeUnits()
-		&& (test == true
-			|| tuKneel + unit->getActionTu(
-									batReserved,
-									weapon) <= unit->getTimeUnits()))
+		&& tu + tuKneel + unit->getActionTu(batReserved, weapon) > unit->getTimeUnits()
+		&& (test == true || tuKneel + unit->getActionTu(batReserved, weapon) <= unit->getTimeUnits()))
 	{
 		if (test == false)
 		{
@@ -2211,38 +2204,25 @@ bool BattlescapeGame::checkReservedTu(
 			{
 				switch (batReserved)
 				{
-					case BA_NONE:
-						_parentState->warning("STR_TIME_UNITS_RESERVED_FOR_KNEELING");
+					case BA_NONE: _parentState->warning("STR_TIME_UNITS_RESERVED_FOR_KNEELING");
 					break;
-					default:
-						_parentState->warning("STR_TIME_UNITS_RESERVED_FOR_KNEELING_AND_FIRING");
+					default: _parentState->warning("STR_TIME_UNITS_RESERVED_FOR_KNEELING_AND_FIRING");
 				}
 			}
 			else
 			{
 				switch (_battleSave->getBatReserved())
 				{
-					case BA_SNAPSHOT:
-						_parentState->warning("STR_TIME_UNITS_RESERVED_FOR_SNAP_SHOT");
+					case BA_SNAPSHOT: _parentState->warning("STR_TIME_UNITS_RESERVED_FOR_SNAP_SHOT");
 					break;
-					case BA_AUTOSHOT:
-						_parentState->warning("STR_TIME_UNITS_RESERVED_FOR_AUTO_SHOT");
+					case BA_AUTOSHOT: _parentState->warning("STR_TIME_UNITS_RESERVED_FOR_AUTO_SHOT");
 					break;
-					case BA_AIMEDSHOT:
-						_parentState->warning("STR_TIME_UNITS_RESERVED_FOR_AIMED_SHOT");
+					case BA_AIMEDSHOT: _parentState->warning("STR_TIME_UNITS_RESERVED_FOR_AIMED_SHOT");
 				}
 			}
 		}
 		return false;
 	} */
-	if (batReserved != BA_NONE
-		&& tu + unit->getActionTu(batReserved, weapon) > unit->getTimeUnits())
-	{
-		return false;
-	}
-
-	return true;
-}
 
 /**
  * Picks the first soldier that is panicking.
