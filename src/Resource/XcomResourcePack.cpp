@@ -54,7 +54,7 @@
 #include "../Ruleset/MapDataSet.h"
 #include "../Ruleset/RuleMusic.h" // sza_MusicRules
 #include "../Ruleset/Ruleset.h"
-#include "../Ruleset/SoundDefinition.h"
+//#include "../Ruleset/SoundDefinition.h"
 
 
 namespace OpenXcom
@@ -428,7 +428,7 @@ XcomResourcePack::XcomResourcePack(const Ruleset* const rules)
 			type,
 			mode;
 
-		const std::vector<std::pair<std::string, RuleMusic*> > musicRules = rules->getMusic();
+		const std::vector<std::pair<std::string, RuleMusic*> > musicRules = rules->getMusicTracks();
 		for (std::vector<std::pair<std::string, RuleMusic*> >::const_iterator
 				i = musicRules.begin();
 				i != musicRules.end();
@@ -532,81 +532,81 @@ XcomResourcePack::XcomResourcePack(const Ruleset* const rules)
 		/* SOUNDS fx */
 		Log(LOG_INFO) << "Loading sound FX ...";
 
-		if (rules->getSoundDefinitions()->empty() == true) // Load sounds.
+//		if (rules->getSoundDefinitions()->empty() == true) // Load sounds.
+//		{
+		const std::string
+			catsId[] =
+			{
+				"GEO.CAT",
+				"BATTLE.CAT"
+			},
+			catsWin[] =
+			{
+				"SAMPLE.CAT",
+				"SAMPLE2.CAT"
+			},
+			catsDos[] =
+			{
+				"SOUND2.CAT",
+				"SOUND1.CAT"
+			},
+			* cats[] = // Try the preferred format first, otherwise use the default priority.
+			{
+				NULL,
+				catsWin,
+				catsDos
+			};
+
+		if (Options::preferredSound == SOUND_14)
+			cats[0] = catsWin;
+		else if (Options::preferredSound == SOUND_10)
+			cats[1] = catsDos;
+
+		Options::currentSound = SOUND_AUTO;
+
+		for (size_t
+				i = 0;
+				i != sizeof(catsId) / sizeof(catsId[0]);
+				++i)
 		{
-			const std::string
-				catsId[] =
-				{
-					"GEO.CAT",
-					"BATTLE.CAT"
-				},
-				catsWin[] =
-				{
-					"SAMPLE.CAT",
-					"SAMPLE2.CAT"
-				},
-				catsDos[] =
-				{
-					"SOUND2.CAT",
-					"SOUND1.CAT"
-				},
-				* cats[] = // Try the preferred format first, otherwise use the default priority.
-				{
-					NULL,
-					catsWin,
-					catsDos
-				};
-
-			if (Options::preferredSound == SOUND_14)
-				cats[0] = catsWin;
-			else if (Options::preferredSound == SOUND_10)
-				cats[1] = catsDos;
-
-			Options::currentSound = SOUND_AUTO;
+			SoundSet* sound = NULL;
 
 			for (size_t
-					i = 0;
-					i != sizeof(catsId) / sizeof(catsId[0]);
-					++i)
+					j = 0;
+					j != sizeof(cats) / sizeof(cats[0])
+						&& sound == NULL;
+					++j)
 			{
-				SoundSet* sound = NULL;
-
-				for (size_t
-						j = 0;
-						j != sizeof(cats) / sizeof(cats[0])
-							&& sound == NULL;
-						++j)
+				if (cats[j] != NULL)
 				{
-					if (cats[j] != NULL)
+					bool wav;
+					if (cats[j] == catsDos)
+						wav = false;
+					else
+						wav = true;
+
+					oststr.str("");
+					oststr << "SOUND/" << cats[j][i];
+					st = CrossPlatform::getDataFile(oststr.str());
+
+					if (CrossPlatform::fileExists(st) == true)
 					{
-						bool wav;
-						if (cats[j] == catsDos)
-							wav = false;
-						else
-							wav = true;
+						sound = new SoundSet();
+						sound->loadCat(st, wav);
 
-						oststr.str("");
-						oststr << "SOUND/" << cats[j][i];
-						st = CrossPlatform::getDataFile(oststr.str());
-
-						if (CrossPlatform::fileExists(st) == true)
-						{
-							sound = new SoundSet();
-							sound->loadCat(st, wav);
-
-							Options::currentSound = (wav) ? SOUND_14 : SOUND_10;
-						}
+						Options::currentSound = (wav) ? SOUND_14 : SOUND_10;
 					}
 				}
-
-				if (sound == 0)
-				{
-					throw Exception(catsWin[i] + " not found");
-				}
-				else
-					_sounds[catsId[i]] = sound;
 			}
+
+			if (sound == NULL)
+			{
+				throw Exception(catsWin[i] + " not found");
+			}
+			else
+				_sounds[catsId[i]] = sound;
 		}
+/*		}
 		else
 		{
 			for (std::map<std::string, SoundDefinition*>::const_iterator
@@ -615,7 +615,7 @@ XcomResourcePack::XcomResourcePack(const Ruleset* const rules)
 					++i)
 			{
 				oststr.str("");
-				oststr << "SOUND/" << (*i).second->getCATFile();
+				oststr << "SOUND/" << (*i).second->getCatFile();
 				st = CrossPlatform::getDataFile(oststr.str());
 
 				if (CrossPlatform::fileExists(st) == true)
@@ -628,7 +628,7 @@ XcomResourcePack::XcomResourcePack(const Ruleset* const rules)
 							j != (*i).second->getSoundList().end();
 							++j)
 					{
-						_sounds[(*i).first]->loadCatbyIndex(st, *j);
+						_sounds[(*i).first]->loadCatByIndex(st, *j);
 					}
 				}
 				else
@@ -637,7 +637,7 @@ XcomResourcePack::XcomResourcePack(const Ruleset* const rules)
 					throw Exception(oststr.str());
 				}
 			}
-		}
+		} */
 
 		if (CrossPlatform::fileExists(CrossPlatform::getDataFile("SOUND/INTRO.CAT")) == true)
 		{

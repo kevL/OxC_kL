@@ -20,7 +20,7 @@
 #ifndef OPENXCOM_EXTRASOUNDS_H
 #define OPENXCOM_EXTRASOUNDS_H
 
-#include <yaml-cpp/yaml.h>
+//#include <yaml-cpp/yaml.h>
 
 
 namespace OpenXcom
@@ -52,7 +52,7 @@ private:
 		/// Gets the list of sounds defined by this mod
 		std::map<int, std::string>* getSounds();
 
-		/// get the mod index for this external sound set.
+		/// Gets the mod index for this external sound set.
 		int getModIndex();
 };
 

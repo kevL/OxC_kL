@@ -34,7 +34,7 @@ ufopaedia:
 extraSprites:
   - type: BIGOBS.PCK
     files:
-      61: Resources/CombatKnife/CombatKnife_alt.png # BigCombatKnife.png
+      61: Resources/CombatKnife/BigCombatKnife.png #CombatKnife_alt.png
   - type: FLOOROB.PCK
     files:
       76: Resources/CombatKnife/FloorCombatKnife.png

@@ -76,7 +76,7 @@ private:
 
 
 		public:
-			static int // TODO: relabel these identifiers w/ appropriate prefixes, eg. sfx_GRAVLIFT, gfx_SMOKE ... See ResourcePack.cpp
+			static size_t // TODO: relabel these identifiers w/ appropriate prefixes, eg. sfx_GRAVLIFT, gfx_SMOKE ... See ResourcePack.cpp
 				BUTTON_PRESS,
 				WINDOW_POPUP[3],
 
@@ -153,7 +153,7 @@ private:
 			/// Gets a particular sound.
 			Sound* getSound(
 					const std::string& soundSet,
-					unsigned int sound) const;
+					size_t soundId) const;
 			/// Plays a sound effect in stereo.
 			void playSoundFX(
 					const int sound,

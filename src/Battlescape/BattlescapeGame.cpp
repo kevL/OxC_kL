@@ -694,9 +694,7 @@ void BattlescapeGame::handleAI(BattleUnit* const unit)
 	if (_AIActionCounter > 1
 		|| unit->reselectAllowed() == false)
 	{
-		if (_battleSave->selectNextFactionUnit(
-											true,
-											_AISecondMove) == NULL)
+		if (_battleSave->selectNextFactionUnit(true, _AISecondMove) == NULL)
 		{
 			if (_battleSave->getDebugMode() == false)
 			{
@@ -748,15 +746,9 @@ void BattlescapeGame::handleAI(BattleUnit* const unit)
 		// for some reason the unit had no AI routine assigned..
 		//Log(LOG_INFO) << "BattlescapeGame::handleAI() !ai, assign AI";
 		if (unit->getFaction() == FACTION_HOSTILE)
-			unit->setAIState(new AlienBAIState(
-											_battleSave,
-											unit,
-											NULL));
+			unit->setAIState(new AlienBAIState(_battleSave, unit, NULL));
 		else
-			unit->setAIState(new CivilianBAIState(
-											_battleSave,
-											unit,
-											NULL));
+			unit->setAIState(new CivilianBAIState(_battleSave, unit, NULL));
 	}
 //	_battleSave->getPathfinding()->setPathingUnit(unit);	// decided to do this in AI states;
 															// things might be changing the pathing
@@ -811,14 +803,10 @@ void BattlescapeGame::handleAI(BattleUnit* const unit)
 	{
 		_playedAggroSound = true;
 
-		const int sound = unit->getAggroSound();
-		if (sound != -1)
-			getResourcePack()->getSound(
-									"BATTLE.CAT",
-									sound)
-								->play(
-									-1,
-									getMap()->getSoundAngle(unit->getPosition()));
+		const int soundId = unit->getAggroSound();
+		if (soundId != -1)
+			getResourcePack()->getSound("BATTLE.CAT", soundId)
+								->play(-1, getMap()->getSoundAngle(unit->getPosition()));
 	}
 	//Log(LOG_INFO) << ". getChargeTarget DONE";
 
@@ -834,14 +822,10 @@ void BattlescapeGame::handleAI(BattleUnit* const unit)
 		pf->setPathingUnit(action.actor);
 
 		if (_battleSave->getTile(action.target) != NULL)
-			pf->calculate(
-						action.actor,
-						action.target);
+			pf->calculate(action.actor, action.target);
 
 		if (pf->getStartDirection() != -1)
-			statePushBack(new UnitWalkBState(
-											this,
-											action));
+			statePushBack(new UnitWalkBState(this, action));
 	}
 	//Log(LOG_INFO) << ". BA_MOVE DONE";
 
@@ -868,15 +852,11 @@ void BattlescapeGame::handleAI(BattleUnit* const unit)
 //			statePushBack(new PsiAttackBState(this, action)); // post-cosmetic
 			//Log(LOG_INFO) << ". . do Psi";
 			action.weapon = _alienPsi; // kL
-			action.TU = unit->getActionTu(
-										action.type,
-										action.weapon);
+			action.TU = unit->getActionTu(action.type, action.weapon);
 		}
 		else
 		{
-			statePushBack(new UnitTurnBState(
-											this,
-											action));
+			statePushBack(new UnitTurnBState(this, action));
 
 			if (action.type == BA_HIT)
 			{
@@ -923,13 +903,9 @@ void BattlescapeGame::handleAI(BattleUnit* const unit)
 
 				if (action.weapon != NULL) // also checked in getActionTu() & ProjectileFlyBState::init()
 				{
-					action.TU = unit->getActionTu(
-												action.type,
-												action.weapon);
+					action.TU = unit->getActionTu(action.type, action.weapon);
 
-					statePushBack(new ProjectileFlyBState(
-														this,
-														action));
+					statePushBack(new ProjectileFlyBState(this, action));
 
 					if (instaWeapon == true)
 						_battleSave->removeItem(action.weapon);
@@ -945,9 +921,7 @@ void BattlescapeGame::handleAI(BattleUnit* const unit)
 
 
 		//Log(LOG_INFO) << ". . call ProjectileFlyBState()";
-		statePushBack(new ProjectileFlyBState(
-											this,
-											action));
+		statePushBack(new ProjectileFlyBState(this, action));
 		//Log(LOG_INFO) << ". . ProjectileFlyBState DONE";
 
 		if (action.type == BA_PSIPANIC
@@ -984,9 +958,7 @@ void BattlescapeGame::handleAI(BattleUnit* const unit)
 //		_parentState->debug(L"Idle");
 		_AIActionCounter = 0;
 
-		if (_battleSave->selectNextFactionUnit(
-											true,
-											_AISecondMove) == NULL)
+		if (_battleSave->selectNextFactionUnit(true, _AISecondMove) == NULL)
 		{
 			if (_battleSave->getDebugMode() == false)
 			{
@@ -1085,9 +1057,7 @@ void BattlescapeGame::handleNonTargetAction()
 				}
 				else
 				{
-					statePushBack(new ProjectileFlyBState(
-														this,
-														_currentAction));
+					statePushBack(new ProjectileFlyBState(this, _currentAction));
 					return;
 				}
 			break;
@@ -1098,12 +1068,8 @@ void BattlescapeGame::handleNonTargetAction()
 				else
 				{
 					_battleSave->getTileEngine()->applyGravity(_currentAction.actor->getTile());
-					getResourcePack()->getSound(
-											"BATTLE.CAT",
-											ResourcePack::ITEM_DROP)
-										->play(
-											-1,
-											getMap()->getSoundAngle(_currentAction.actor->getPosition()));
+					getResourcePack()->getSound("BATTLE.CAT", ResourcePack::ITEM_DROP)
+										->play(-1, getMap()->getSoundAngle(_currentAction.actor->getPosition()));
 				}
 			break;
 
@@ -1151,7 +1117,7 @@ void BattlescapeGame::executeUnit() // private.
 	const RuleItem* const itRule = _currentAction.weapon->getRules();
 	BattleItem* const ammo = _currentAction.weapon->getAmmoItem();
 	int
-		sound = -1,
+		soundId = -1,
 		start = 0,		// void vc++ linker warning.
 		isMelee = 0;	// void vc++ linker warning.
 
@@ -1160,30 +1126,26 @@ void BattlescapeGame::executeUnit() // private.
 		start = itRule->getMeleeAnimation();
 		isMelee = 1;
 
-		sound = ammo->getRules()->getMeleeHitSound();
-		if (sound == -1)
+		soundId = ammo->getRules()->getMeleeHitSound();
+		if (soundId == -1)
 		{
-			sound = itRule->getMeleeHitSound();
-			if (sound == -1)
-				sound = ResourcePack::ITEM_DROP;
+			soundId = itRule->getMeleeHitSound();
+			if (soundId == -1)
+				soundId = ResourcePack::ITEM_DROP;
 		}
 	}
 	else if (itRule->getBattleType() == BT_FIREARM)
 	{
 		start = ammo->getRules()->getHitAnimation();
 
-		sound = ammo->getRules()->getHitSound();
-		if (sound == -1)
-			sound = itRule->getHitSound();
+		soundId = ammo->getRules()->getHitSound();
+		if (soundId == -1)
+			soundId = itRule->getHitSound();
 	}
 
-	if (sound != -1)
-		getResourcePack()->getSound(
-								"BATTLE.CAT",
-								sound)
-							->play(
-								-1,
-								getMap()->getSoundAngle(_currentAction.actor->getPosition()));
+	if (soundId != -1)
+		getResourcePack()->getSound("BATTLE.CAT", soundId)
+							->play(-1, getMap()->getSoundAngle(_currentAction.actor->getPosition()));
 
 /*	if (ammo->spendBullet() == false)
 	{
@@ -1218,8 +1180,7 @@ void BattlescapeGame::executeUnit() // private.
 	checkForCasualties(
 					_currentAction.weapon,
 					_currentAction.actor,
-					false,false,
-					true);
+					false,false,true);
 }
 
 /**
@@ -1429,10 +1390,7 @@ void BattlescapeGame::endTurnPhase() // private.
 	if (_battleSave->getTileEngine()->closeUfoDoors() != 0 // close doors between grenade & terrain explosions
 		&& ResourcePack::SLIDING_DOOR_CLOSE != -1)
 	{
-		getResourcePack()->getSound(
-								"BATTLE.CAT",
-								ResourcePack::SLIDING_DOOR_CLOSE)
-							->play();
+		getResourcePack()->getSound("BATTLE.CAT", ResourcePack::SLIDING_DOOR_CLOSE)->play();
 	}
 //	}
 
@@ -2647,18 +2605,15 @@ void BattlescapeGame::primaryAction(const Position& pos)
 					{
 						if (_currentAction.actor->spendTimeUnits(_currentAction.TU) == true)
 						{
-							getResourcePack()->getSound(
-													"BATTLE.CAT",
-													_currentAction.weapon->getRules()->getHitSound())
-												->play(
-													-1,
-													getMap()->getSoundAngle(pos));
+							const int soundId = _currentAction.weapon->getRules()->getHitSound();
+							if (soundId != -1)
+								getResourcePack()->getSound("BATTLE.CAT", soundId)
+													->play(-1, getMap()->getSoundAngle(pos));
 
 							_parentState->getGame()->pushState(new UnitInfoState(
 																			targetUnit,
 																			_parentState,
-																			false,
-																			true));
+																			false,true));
 						}
 						else
 						{
@@ -2714,9 +2669,7 @@ void BattlescapeGame::primaryAction(const Position& pos)
 
 //						statePushBack(new PsiAttackBState(this, _currentAction));
 						//Log(LOG_INFO) << ". . . . . . new ProjectileFlyBState";
-						statePushBack(new ProjectileFlyBState(
-															this,
-															_currentAction));
+						statePushBack(new ProjectileFlyBState(this, _currentAction));
 
 						if (_currentAction.actor->getTimeUnits() >= _currentAction.TU) // WAIT, check this *before* all the stuff above!!!
 						{
@@ -2816,12 +2769,10 @@ void BattlescapeGame::primaryAction(const Position& pos)
 			_currentAction.target = pos;
 			_currentAction.cameraPosition = getMap()->getCamera()->getMapOffset();
 
-			_states.push_back(new ProjectileFlyBState(		// TODO: should check for valid LoF/LoT *before* invoking this
-													this,	// instead of the (flakey) checks in that state. Then conform w/ AI ...
-													_currentAction));
-			statePushFront(new UnitTurnBState(
-											this,
-											_currentAction));
+			_states.push_back(new ProjectileFlyBState(this, _currentAction));	// TODO: should check for valid LoF/LoT *before* invoking this
+																				// instead of the (flakey) checks in that state. Then conform w/ AI ...
+
+			statePushFront(new UnitTurnBState(this, _currentAction));
 			//Log(LOG_INFO) << ". . . . FIRING or THROWING done";
 		}
 	}
@@ -2867,9 +2818,7 @@ void BattlescapeGame::primaryAction(const Position& pos)
 					pf->removePreview();
 
 				Position screenPixel;
-				getMap()->getCamera()->convertMapToScreen(
-														pos,
-														&screenPixel);
+				getMap()->getCamera()->convertMapToScreen(pos, &screenPixel);
 				screenPixel += getMap()->getCamera()->getMapOffset();
 
 				Position mousePixel;
@@ -2885,9 +2834,7 @@ void BattlescapeGame::primaryAction(const Position& pos)
 											&_currentAction.target);
 				_currentAction.target += pos;
 
-				statePushBack(new UnitTurnBState(
-											this,
-											_currentAction));
+				statePushBack(new UnitTurnBState(this, _currentAction));
 			}
 			else // handle pathPreview and MOVE
 			{
@@ -2918,9 +2865,7 @@ void BattlescapeGame::primaryAction(const Position& pos)
 						getMap()->setCursorType(CT_NONE);
 						_parentState->getGame()->getCursor()->setHidden();
 
-						statePushBack(new UnitWalkBState(
-														this,
-														_currentAction));
+						statePushBack(new UnitWalkBState(this, _currentAction));
 					}
 				}
 			}
@@ -2943,9 +2888,7 @@ void BattlescapeGame::secondaryAction(const Position& pos)
 							 && (SDL_GetModState() & KMOD_CTRL) != 0
 							 && Options::battleStrafe == true;
 
-		statePushBack(new UnitTurnBState( // open door or rotate turret.
-										this,
-										_currentAction));
+		statePushBack(new UnitTurnBState(this, _currentAction)); // open door or rotate turret.
 	}
 	else
 		_parentState->btnKneelClick(NULL); // could put just about anything here Orelly.
@@ -2966,12 +2909,8 @@ void BattlescapeGame::launchAction()
 
 //	_currentAction.cameraPosition = getMap()->getCamera()->getMapOffset();
 
-	_states.push_back(new ProjectileFlyBState(
-											this,
-											_currentAction));
-	statePushFront(new UnitTurnBState(
-									this,
-									_currentAction));
+	_states.push_back(new ProjectileFlyBState(this, _currentAction));
+	statePushFront(new UnitTurnBState(this, _currentAction));
 }
 
 /**
@@ -3012,9 +2951,7 @@ void BattlescapeGame::moveUpDown(
 				_currentAction.actor,
 				_currentAction.target);
 
-	statePushBack(new UnitWalkBState(
-								this,
-								_currentAction));
+	statePushBack(new UnitWalkBState(this, _currentAction));
 }
 
 /**
@@ -3094,9 +3031,7 @@ BattleUnit* BattlescapeGame::convertUnit(BattleUnit* const unit)
 			i != unit->getInventory()->end();
 			++i)
 	{
-		dropItem(
-				unit->getPosition(),
-				*i);
+		dropItem(unit->getPosition(), *i);
 		(*i)->setOwner(NULL);
 	}
 
@@ -3135,10 +3070,7 @@ BattleUnit* BattlescapeGame::convertUnit(BattleUnit* const unit)
 
 	_battleSave->getUnits()->push_back(conUnit);
 
-	conUnit->setAIState(new AlienBAIState(
-										_battleSave,
-										conUnit,
-										NULL));
+	conUnit->setAIState(new AlienBAIState(_battleSave, conUnit, NULL));
 
 	st = unitRule->getRace().substr(4) + "_WEAPON";
 	BattleItem* const item = new BattleItem(
@@ -3154,9 +3086,7 @@ BattleUnit* BattlescapeGame::convertUnit(BattleUnit* const unit)
 
 	getTileEngine()->applyGravity(conUnit->getTile());
 //	getTileEngine()->calculateUnitLighting(); // <- done in UnitDieBState. But does pre-Spawned unit always go through UnitDieBState, and if not does it matter ...
-	getTileEngine()->calculateFOV(
-							conUnit->getPosition(),
-							true);
+	getTileEngine()->calculateFOV(conUnit->getPosition(), true);
 
 	return conUnit;
 }

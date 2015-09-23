@@ -45,19 +45,19 @@ Sound::~Sound()
 }
 
 /**
- * Loads a sound file from a specified filename.
- * @param filename - reference to filename of the sound file
+ * Loads a sound file from a specified file.
+ * @param file - reference to name of the sound file
  */
-void Sound::load(const std::string& filename)
+void Sound::load(const std::string& file)
 {
 	// SDL only takes UTF-8 filenames
 	// so here's an ugly hack to match this ugly reasoning
-	const std::string utf8 = Language::wstrToUtf8(Language::fsToWstr(filename));
+	const std::string utf8 = Language::wstrToUtf8(Language::fsToWstr(file));
 	_sound = Mix_LoadWAV(utf8.c_str());
 
 	if (_sound == NULL)
 	{
-		const std::string err = filename + ":" + Mix_GetError();
+		const std::string err = file + ":" + Mix_GetError();
 		throw Exception(err);
 	}
 }

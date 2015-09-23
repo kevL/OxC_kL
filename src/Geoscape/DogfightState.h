@@ -257,6 +257,10 @@ private:
 
 		/// Gets the current distance between UFO and Craft.
 		int getDistance() const;
+
+		/// Sets this Dogfight's '_timeout' value.
+		void setTimeout(int val)
+		{ _timeout = val; }
 };
 
 }

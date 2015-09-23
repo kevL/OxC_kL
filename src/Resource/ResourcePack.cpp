@@ -19,19 +19,15 @@
 
 #include "ResourcePack.h"
 
-//#include "../Engine/Adlib/adlplayer.h" // kL: func_fade()
+//#include "../Engine/Adlib/adlplayer.h" // func_fade()
 //#include "../Engine/Font.h"
-#include "../Engine/Game.h" // fadeMusic()
-//#include "../Engine/Logger.h"
+#include "../Engine/Game.h"
 //#include "../Engine/Music.h"
 //#include "../Engine/Options.h"
 //#include "../Engine/Palette.h"
-//#include "../Engine/RNG.h"
 #include "../Engine/Sound.h"
 #include "../Engine/SoundSet.h"
 #include "../Engine/SurfaceSet.h"
-
-//#include "../Interface/Cursor.h"
 
 #include "../Resource/XcomResourcePack.h"
 
@@ -39,7 +35,7 @@
 namespace OpenXcom
 {
 
-int // TODO: relabel these identifiers w/ appropriate prefixes, eg. sfx_GRAVLIFT, gfx_SMOKE ... See ResourcePack.h
+size_t // TODO: relabel these identifiers w/ appropriate prefixes, eg. sfx_GRAVLIFT, gfx_SMOKE ... See ResourcePack.h
 	ResourcePack::BUTTON_PRESS			= 0,
 	ResourcePack::WINDOW_POPUP[3]		= {1,2,3},
 
@@ -233,9 +229,7 @@ void ResourcePack::playMusic(
 	if (_playingMusic != trackType
 		&& Options::mute == false)
 	{
-		const Music* const music = getRandomMusic(
-												trackType,
-												terrainType);
+		const Music* const music = getRandomMusic(trackType, terrainType);
 		if (music != _muteMusic) // note: '_muteMusic'= NULL
 		{
 			if (Options::musicAlwaysLoop == false
@@ -270,18 +264,13 @@ void ResourcePack::fadeMusic(
 
 	if (Mix_GetMusicType(NULL) != MUS_MID)
 	{
-//		game->getCursor()->setVisible(false);
-
 		game->setInputActive(false);
 
 		Mix_FadeOutMusic(fadeDur); // fade out!
-//kL	func_fade();
+//		func_fade();
 
-//		game->setFadeMusic();
 		while (Mix_PlayingMusic() == 1)
 		{}
-
-//		game->getCursor()->setVisible();
 	}
 	else // SDL_Mixer has trouble with native midi and volume on windows, which is the most likely use case, so f@%# it.
 		Mix_HaltMusic();
@@ -296,14 +285,14 @@ void ResourcePack::fadeMusic(
  */
 Music* ResourcePack::getRandomMusic( // private.
 		const std::string& trackType,
-		const std::string& terrainType) const // sza_MusicRules
+		const std::string& terrainType) const
 {
 	if (Options::mute == false)
 	{
-		std::string info = "MUSIC: Request " + trackType;
-		if (terrainType.empty() == false)
-			info += " for terrainType " + terrainType;
-		Log(LOG_DEBUG) << info;
+		//std::string info = "MUSIC: Request " + trackType;
+		//if (terrainType.empty() == false)
+		//	info += " for terrainType " + terrainType;
+		//Log(LOG_INFO) << info;
 
 		if (_musicAssignment.find(trackType) != _musicAssignment.end())
 		{
@@ -311,22 +300,18 @@ Music* ResourcePack::getRandomMusic( // private.
 			if (assignment.find(terrainType) != assignment.end())
 			{
 				const std::vector<std::pair<std::string, int> > terrainMusic = assignment.at(terrainType);
-				const size_t pick = static_cast<size_t>(RNG::seedless(
-																0,
-																terrainMusic.size() - 1));
-//				const size_t pick = static_cast<size_t>(SDL_GetTicks() % terrainMusic.size());
+				const size_t pick = static_cast<size_t>(RNG::seedless(0,
+									static_cast<int>(terrainMusic.size() - 1)));
 				const std::pair<std::string, int> musicId = terrainMusic[pick];
 
 				//Log(LOG_DEBUG) << "MUSIC: " << musicId.first;
-				Log(LOG_INFO) << "MUSIC: " << musicId.first;
+				//Log(LOG_INFO) << "MUSIC: " << musicId.first;
 
 				return _musicFile.at(musicId.first);
 			}
-			else
-				Log(LOG_INFO) << "ResourcePack::getRandomMusic() No music for terrain - MUTE";
+			//else Log(LOG_INFO) << "ResourcePack::getRandomMusic() No music for terrain - MUTE";
 		}
-		else
-			Log(LOG_INFO) << "ResourcePack::getRandomMusic() No music assignment - MUTE";
+		//else Log(LOG_INFO) << "ResourcePack::getRandomMusic() No music assignment - MUTE";
 	}
 
 	return _muteMusic;
@@ -337,7 +322,7 @@ Music* ResourcePack::getRandomMusic( // private.
  * @param trackType		- reference the track of a Music
  * @param terrainType	- reference the RuleTerrain type
  */
-void ResourcePack::ClearMusicAssignment( // sza_MusicRules
+void ResourcePack::ClearMusicAssignment(
 		const std::string& trackType,
 		const std::string& terrainType)
 {
@@ -357,7 +342,7 @@ void ResourcePack::ClearMusicAssignment( // sza_MusicRules
  * @param files			- reference a vector of filenames
  * @param midiIdc		- reference a vector of indices
  */
-void ResourcePack::MakeMusicAssignment( // sza_MusicRules
+void ResourcePack::MakeMusicAssignment(
 		const std::string& trackType,
 		const std::string& terrainType,
 		const std::vector<std::string>& files,
@@ -375,9 +360,7 @@ void ResourcePack::MakeMusicAssignment( // sza_MusicRules
 			i != files.size();
 			++i)
 	{
-		const std::pair<std::string, int> toAdd = std::make_pair<std::string, int>(
-																				files.at(i),
-																				midiIdc.at(i));
+		const std::pair<std::string, int> toAdd = std::make_pair<std::string, int>(files.at(i), midiIdc.at(i));
 		_musicAssignment[trackType]
 						[terrainType].push_back(toAdd);
 	}
@@ -385,13 +368,13 @@ void ResourcePack::MakeMusicAssignment( // sza_MusicRules
 
 /**
  * Returns a specific sound from the resource set.
- * @param set	- reference the name of a Sound set
- * @param sound	- ID of the Sound
+ * @param set		- reference the name of a Sound set
+ * @param soundId	- ID of the Sound
  * @return, pointer to the Sound
  */
 Sound* ResourcePack::getSound(
 		const std::string& soundSet,
-		unsigned int sound) const
+		size_t soundId) const
 {
 	if (Options::mute == true)
 		return _muteSound;
@@ -399,7 +382,7 @@ Sound* ResourcePack::getSound(
 	{
 		const std::map<std::string, SoundSet*>::const_iterator i = _sounds.find(soundSet);
 		if (i != _sounds.end())
-			return i->second->getSound(sound);
+			return i->second->getSound(soundId);
 	}
 
 	return NULL;
@@ -407,11 +390,11 @@ Sound* ResourcePack::getSound(
 
 /**
  * Plays a sound effect in stereo.
- * @param sound		- sound to play
+ * @param soundId		- sound to play
  * @param randAngle	- true to randomize the sound angle (default false to center it)
  */
 void ResourcePack::playSoundFX(
-		const int sound,
+		const int soundId,
 		const bool randAngle) const
 {
 	int dir = 360; // stereo center
@@ -424,10 +407,7 @@ void ResourcePack::playSoundFX(
 			/ 2;
 	}
 
-	getSound(
-			"GEO.CAT",
-			sound)
-		->play(-1, dir);
+	getSound("GEO.CAT", soundId)->play(-1, dir);
 }
 
 /**

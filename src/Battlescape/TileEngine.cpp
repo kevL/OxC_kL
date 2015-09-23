@@ -504,16 +504,12 @@ bool TileEngine::calculateFOV(BattleUnit* const unit) const
 													spottedUnits.end(),
 													spottedUnit) == spottedUnits.end())
 										{
-											const int sound = unit->getAggroSound();
-											if (sound != -1)
+											const int soundId = unit->getAggroSound();
+											if (soundId != -1)
 											{
 												const BattlescapeGame* const battle = _battleSave->getBattleGame();
-												battle->getResourcePack()->getSound(
-																				"BATTLE.CAT",
-																				sound)
-																			->play(
-																				-1,
-																				battle->getMap()->getSoundAngle(unit->getPosition()));
+												battle->getResourcePack()->getSound("BATTLE.CAT", soundId)
+																			->play(-1, battle->getMap()->getSoundAngle(unit->getPosition()));
 											}
 										}
 									}
@@ -1889,9 +1885,7 @@ bool TileEngine::reactionShot(
 	if (_rfAction->weapon->getRules()->getBattleType() == BT_MELEE)
 	{
 		_rfAction->type = BA_HIT;
-		_rfAction->TU = _rfAction->actor->getActionTu(
-											BA_HIT,
-											_rfAction->weapon);
+		_rfAction->TU = _rfAction->actor->getActionTu(BA_HIT, _rfAction->weapon);
 		if (_rfAction->TU == 0
 			|| _rfAction->TU > _rfAction->actor->getTimeUnits())
 		{
@@ -1905,10 +1899,10 @@ bool TileEngine::reactionShot(
 					&& canMelee == false;
 				++i)
 		{
-			canMelee = validMeleeRange(				// hopefully this is blocked by walls & bigWalls ...
-									unit,			// see also, AI do_grenade_action .....
-									i,				// darn Sectoid tried to hurl a grenade through a northwall .. with *no LoS*
-									targetUnit);	// cf. ActionMenuState::btnActionMenuItemClick()
+			canMelee = validMeleeRange(unit, i, targetUnit);	// hopefully this is blocked by walls & bigWalls ...
+																// see also, AI do_grenade_action .....
+																// darn Sectoid tried to hurl a grenade through a northwall .. with *no LoS*
+																// cf. ActionMenuState::btnActionMenuItemClick()
 		}
 
 		if (canMelee == false)
@@ -1930,10 +1924,7 @@ bool TileEngine::reactionShot(
 		AlienBAIState* aggro_AI = dynamic_cast<AlienBAIState*>(unit->getCurrentAIState());
 		if (aggro_AI == NULL)
 		{
-			aggro_AI = new AlienBAIState(
-									_battleSave,
-									unit,
-									NULL);
+			aggro_AI = new AlienBAIState(_battleSave, unit, NULL);
 			unit->setAIState(aggro_AI);
 		}
 
@@ -6064,9 +6055,7 @@ Tile* TileEngine::applyGravity(Tile* const tile) const
 				}
 
 //				if (dt != tile)
-				dt->addItem(
-						*i,
-						(*i)->getSlot());
+				dt->addItem(*i, (*i)->getSlot());
 			}
 
 //			if (tile != dt) // clear tile
@@ -6123,22 +6112,20 @@ bool TileEngine::validMeleeRange(
 		posOrigin,
 		posTarget,
 		posVector,
-		posOrigin_vox,
-		posTarget_vox; // not used.
+		voxelOrigin,
+		voxelTarget; // not used.
 
-	Pathfinding::directionToVector(
-								dir,
-								&posVector);
+	Pathfinding::directionToVector(dir, &posVector);
 
-	const int actorSize = actor->getArmor()->getSize();
+	const int armorSize = actor->getArmor()->getSize();
 	for (int
 			x = 0;
-			x != actorSize;
+			x != armorSize;
 			++x)
 	{
 		for (int
 				y = 0;
-				y != actorSize;
+				y != armorSize;
 				++y)
 		{
 			posOrigin = pos + Position(x,y,0);
@@ -6150,25 +6137,22 @@ bool TileEngine::validMeleeRange(
 			if (tileOrigin != NULL && tileTarget != NULL)
 			{
 				if (tileTarget->getUnit() == NULL)
-					tileTarget = getVerticalTile(
-											posOrigin,
-											posTarget);
+					tileTarget = getVerticalTile(posOrigin, posTarget);
 
 				if (tileTarget != NULL
 					&& tileTarget->getUnit() != NULL
 					&& (targetUnit == NULL
 						|| targetUnit == tileTarget->getUnit()))
 				{
-					posOrigin_vox = Position(posOrigin * Position(16,16,24))
-								  + Position(
-											8,8,
-											actor->getHeight(true)
-												- tileOrigin->getTerrainLevel()
-												- 4);
+					voxelOrigin = Position::toVoxelSpaceCentered( // note this is not center of large unit, rather the center of each quadrant.
+															posOrigin,
+															actor->getHeight(true)
+																	- tileOrigin->getTerrainLevel()
+																	- 4);
 					if (canTargetUnit(
-								&posOrigin_vox,
+								&voxelOrigin,
 								tileTarget,
-								&posTarget_vox,
+								&voxelTarget,
 								actor) == true)
 					{
 						return true;
@@ -6195,16 +6179,14 @@ Position TileEngine::getMeleePosition(const BattleUnit* const actor) const
 		posOrigin,
 		posTarget,
 		posVector,
-		posOrigin_vox,
-		posTarget_vox; // not used.
+		voxelOrigin,
+		voxelTarget; // not used.
 
 	const int
 		armorSize = actor->getArmor()->getSize(),
 		dir = actor->getDirection();
 
-	Pathfinding::directionToVector(
-								dir,
-								&posVector);
+	Pathfinding::directionToVector(dir, &posVector);
 
 	for (int
 			x = 0;
@@ -6227,28 +6209,26 @@ Position TileEngine::getMeleePosition(const BattleUnit* const actor) const
 				if (tileTarget->getUnit() == NULL
 					|| tileTarget->getUnit() == actor)
 				{
-					tileTarget = getVerticalTile(
-											posOrigin,
-											posTarget);
+					tileTarget = getVerticalTile(posOrigin, posTarget);
 				}
 
 				if (tileTarget != NULL
 					&& tileTarget->getUnit() != NULL
 					&& tileTarget->getUnit() != actor)
 				{
-					posOrigin_vox = Position(posOrigin * Position(16,16,24))
-								  + Position(
-											8,8,
-											actor->getHeight(true)
-												- tileOrigin->getTerrainLevel()
-												- 4);
+					voxelOrigin = Position::toVoxelSpaceCentered( // note this is not center of large unit, rather the center of each quadrant.
+															posOrigin,
+															actor->getHeight(true)
+																	- tileOrigin->getTerrainLevel()
+																	- 4);
 					if (canTargetUnit(
-									&posOrigin_vox,
+									&voxelOrigin,
 									tileTarget,
-									&posTarget_vox,
+									&voxelTarget,
 									actor) == true)
 					{
-						return posTarget;	// TODO: conform this to the fact Reapers can melee vs. 2 tiles
+						return tileTarget->getPosition();
+//						return posTarget;	// TODO: conform this to the fact Reapers can melee vs. 2 tiles
 					}						// or three tiles if their direction is diagonal.
 				}
 			}
@@ -6272,16 +6252,14 @@ Tile* TileEngine::getExecutionTile(const BattleUnit* const actor) const
 		posOrigin,
 		posTarget,
 		posVector,
-		posOrigin_vox,
-		posTarget_vox; // not used.
+		voxelOrigin,
+		voxelTarget; // not used.
 
 	const int
 		armorSize = actor->getArmor()->getSize(),
 		dir = actor->getDirection();
 
-	Pathfinding::directionToVector(
-								dir,
-								&posVector);
+	Pathfinding::directionToVector(dir, &posVector);
 
 	for (int
 			x = 0;
@@ -6302,24 +6280,21 @@ Tile* TileEngine::getExecutionTile(const BattleUnit* const actor) const
 			if (tileOrigin != NULL && tileTarget != NULL)
 			{
 				if (tileTarget->hasUnconsciousUnit(false) == 0)
-					tileTarget = getVerticalTile(
-											posOrigin,
-											posTarget);
+					tileTarget = getVerticalTile(posOrigin, posTarget);
 
 				if (tileTarget != NULL
 					&& tileTarget->hasUnconsciousUnit(false) != 0)
 				{
-					posOrigin_vox = Position(posOrigin * Position(16,16,24))
-								  + Position(
-											8,8,
-											actor->getHeight(true)
-												- tileOrigin->getTerrainLevel()
-												- 4);
+					voxelOrigin = Position::toVoxelSpaceCentered( // note this is not center of large unit, rather the center of each quadrant.
+															posOrigin,
+															actor->getHeight(true)
+																	- tileOrigin->getTerrainLevel()
+																	- 4);
 					if (canTargetTile(
-									&posOrigin_vox,
+									&voxelOrigin,
 									tileOrigin,
 									O_FLOOR,
-									&posTarget_vox,
+									&voxelTarget,
 									actor) == true)
 					{
 						return tileTarget;
@@ -6345,7 +6320,7 @@ Tile* TileEngine::getVerticalTile( // private.
 	Tile
 		* tileOrigin = _battleSave->getTile(posOrigin),
 
-		* tileTargetAbove = _battleSave->getTile(posTarget + Position(0,0,1)),
+		* tileTargetAbove = _battleSave->getTile(posTarget + Position(0,0, 1)),
 		* tileTargetBelow = _battleSave->getTile(posTarget + Position(0,0,-1));
 
 	if (tileTargetAbove != NULL

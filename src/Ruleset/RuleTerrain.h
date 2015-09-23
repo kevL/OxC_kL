@@ -96,7 +96,7 @@ private:
 		const std::string& getScript() const;
 
 		/// Gets the list of music to pick from.
-		const std::vector<std::string>& getMusic() const;
+		const std::vector<std::string>& getTerrainMusics() const;
 
 		/// Gets the pyjama type.
 		const std::string& getPyjamaType() const;

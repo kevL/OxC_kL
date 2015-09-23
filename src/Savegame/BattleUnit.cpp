@@ -1672,38 +1672,29 @@ int BattleUnit::damage(
  */
 void BattleUnit::playHitSound()
 {
-	int sound;
+	int soundId;
 
 	if (_type == "MALE_CIVILIAN")
-		sound = RNG::generate(41, 43);
+		soundId = RNG::generate(41,43);
 	else if (_type == "FEMALE_CIVILIAN")
-		sound = RNG::generate(44, 46);
-	else if (_originalFaction == FACTION_PLAYER) // _type == "SOLDIER"
+		soundId = RNG::generate(44,46);
+	else if (_originalFaction == FACTION_PLAYER)
 	{
 		if (_unitRule != NULL
 			&& _unitRule->isDog() == true)
 		{
-			sound = _deathSound;
+			soundId = _deathSound;
 		}
 		else if (_gender == GENDER_MALE)
-			sound = RNG::generate(141, 151);
+			soundId = RNG::generate(141,151);
 		else
-			sound = RNG::generate(121, 135);
+			soundId = RNG::generate(121,135);
 	}
 	else
-	{
-		if (_deathSound != -1)
-			_battleGame->getResourcePack()->getSound(
-												"BATTLE.CAT",
-												_deathSound)
-											->play();
-		return;
-	}
+		soundId = _deathSound;
 
-	_battleGame->getResourcePack()->getSound(
-										"BATTLE.CAT",
-										sound)
-									->play();
+	if (soundId != -1)
+		_battleGame->getResourcePack()->getSound("BATTLE.CAT", soundId)->play();
 }
 
 /**

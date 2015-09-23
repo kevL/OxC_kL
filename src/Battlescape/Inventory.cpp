@@ -716,7 +716,7 @@ void Inventory::mouseOver(Action* action, State* state)
  */
 void Inventory::mouseClick(Action* action, State* state)
 {
-	int sound = -1;
+	int soundId = -1;
 
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
@@ -784,7 +784,7 @@ void Inventory::mouseClick(Action* action, State* state)
 											toSlot);
 									arrangeGround(false);
 
-									sound = ResourcePack::ITEM_DROP;
+									soundId = ResourcePack::ITEM_DROP;
 								}
 								else
 									_warning->showMessage(_game->getLanguage()->getString("STR_NOT_ENOUGH_TIME_UNITS"));
@@ -891,7 +891,7 @@ void Inventory::mouseClick(Action* action, State* state)
 										   [static_cast<size_t>(y)] += 1;
 							setSelectedItem(NULL);
 
-							sound = ResourcePack::ITEM_DROP;
+							soundId = ResourcePack::ITEM_DROP;
 						}
 						else
 							_warning->showMessage(_game->getLanguage()->getString("STR_NOT_ENOUGH_TIME_UNITS"));
@@ -912,7 +912,7 @@ void Inventory::mouseClick(Action* action, State* state)
 									   [static_cast<size_t>(item->getSlotY())] += 1;
 							setSelectedItem(NULL);
 
-							sound = ResourcePack::ITEM_DROP;
+							soundId = ResourcePack::ITEM_DROP;
 						}
 						else
 							_warning->showMessage(_game->getLanguage()->getString("STR_NOT_ENOUGH_TIME_UNITS"));
@@ -952,7 +952,7 @@ void Inventory::mouseClick(Action* action, State* state)
 							_selItem->moveToOwner(NULL);
 							setSelectedItem(NULL);
 
-							sound = ResourcePack::ITEM_RELOAD;
+							soundId = ResourcePack::ITEM_RELOAD;
 
 							if (item->getSlot()->getType() == INV_GROUND)
 								arrangeGround(false);
@@ -992,7 +992,7 @@ void Inventory::mouseClick(Action* action, State* state)
 									   [static_cast<size_t>(item->getSlotY())] += 1;
 							setSelectedItem(NULL);
 
-							sound = ResourcePack::ITEM_DROP;
+							soundId = ResourcePack::ITEM_DROP;
 						}
 						else
 							_warning->showMessage(_game->getLanguage()->getString("STR_NOT_ENOUGH_TIME_UNITS"));
@@ -1063,7 +1063,7 @@ void Inventory::mouseClick(Action* action, State* state)
 											_game->getRuleset()->getInventory("STR_GROUND"));
 
 									arrangeGround(false);
-									sound = ResourcePack::ITEM_DROP;
+									soundId = ResourcePack::ITEM_DROP;
 
 									_mouseOverItem = NULL; // remove cursor info 'cause item is no longer under the cursor
 									mouseOver(action, state);
@@ -1107,15 +1107,12 @@ void Inventory::mouseClick(Action* action, State* state)
 						   [static_cast<size_t>(_selItem->getSlotY())] += 1;
 
 			setSelectedItem(NULL); // Return item to original position.
-			sound = ResourcePack::ITEM_DROP;
+			soundId = ResourcePack::ITEM_DROP;
 		}
 	}
 
-	if (sound != -1)
-		_game->getResourcePack()->getSound(
-										"BATTLE.CAT",
-										sound)
-									->play();
+	if (soundId != -1)
+		_game->getResourcePack()->getSound("BATTLE.CAT", soundId)->play();
 
 	InteractiveSurface::mouseClick(action, state);
 
@@ -1373,10 +1370,7 @@ bool Inventory::fitItem(
 							slot,
 							x2,y2);
 
-						_game->getResourcePack()->getSound(
-														"BATTLE.CAT",
-														ResourcePack::ITEM_DROP)
-													->play();
+						_game->getResourcePack()->getSound("BATTLE.CAT", ResourcePack::ITEM_DROP)->play();
 						drawItems();
 					}
 					else if (test == false)

@@ -201,7 +201,7 @@ private:
 		int getDurationMax() const;
 
 		/// Gets the list of music to pick from.
-		const std::vector<std::string>& getMusic();
+		const std::vector<std::string>& getDeploymentMusics();
 
 		/// Gets the objective type for this mission.
 		int getObjectiveType() const;

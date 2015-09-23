@@ -83,7 +83,7 @@ const std::vector<int>& SoundDefinition::getSoundList() const
  *
  * @return, string
  */
-std::string SoundDefinition::getCATFile() const
+std::string SoundDefinition::getCatFile() const
 {
 	return _catFile;
 }

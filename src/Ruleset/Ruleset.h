@@ -139,9 +139,8 @@ protected:
 		_researchIndex,
 		_terrainIndex,
 		_ufopaediaIndex,
-		_ufosIndex,
-
-		_psiRequirements; // it's a cache for psiStrengthEval
+		_ufosIndex;
+//		_psiRequirements; // it's a cache for psiStrengthEval
 
 	std::vector<std::vector<int> > _alienItemLevels;
 
@@ -339,7 +338,7 @@ protected:
 		MCDPatch* getMCDPatch(const std::string& name) const;
 
 		/// Gets the music rules
-		std::vector<std::pair<std::string, RuleMusic*> > getMusic() const;
+		std::vector<std::pair<std::string, RuleMusic*> > getMusicTracks() const;
 
 		/// Gets the list of external Sprites.
 		std::vector<std::pair<std::string, ExtraSprites*> > getExtraSprites() const;
@@ -355,7 +354,7 @@ protected:
 		void sortLists();
 
 		/// Gets the research-requirements for Psi-Lab (it's a cache for psiStrengthEval)
-		std::vector<std::string> getPsiRequirements() const;
+//		std::vector<std::string> getPsiRequirements() const;
 
 		/// Returns the sorted list of inventories.
 		const std::vector<std::string>& getInvsList() const;

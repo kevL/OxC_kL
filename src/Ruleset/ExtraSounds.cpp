@@ -29,32 +29,30 @@ namespace OpenXcom
 ExtraSounds::ExtraSounds()
 	:
 		_modIndex(0)
-{
-}
+{}
 
 /**
  * Cleans up the extra sound set.
  */
 ExtraSounds::~ExtraSounds()
-{
-}
+{}
 
 /**
  * Loads the extra sound set from YAML.
- * @param node YAML node.
- * @param modIndex The internal index of the associated mod.
+ * @param node		- reference a YAML node
+ * @param modIndex	- the internal index of the associated mod
  */
 void ExtraSounds::load(
 		const YAML::Node& node,
 		int modIndex)
 {
-	_sounds = node["files"].as< std::map<int, std::string> >(_sounds);
+	_sounds = node["files"].as<std::map<int, std::string> >(_sounds);
 	_modIndex = modIndex;
 }
 
 /**
  * Gets the list of sounds defined by this mod.
- * @return The list of sounds defined my this mod.
+ * @return, the list of sounds defined by this mod
  */
 std::map<int, std::string>* ExtraSounds::getSounds()
 {
@@ -63,7 +61,7 @@ std::map<int, std::string>* ExtraSounds::getSounds()
 
 /**
  * Gets the mod index for this external sounds set.
- * @return The mod index for this external sounds set.
+ * @return, the mod index for this external sounds set
  */
 int ExtraSounds::getModIndex()
 {

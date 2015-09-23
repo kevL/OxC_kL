@@ -163,16 +163,12 @@ void ExplosionBState::init()
 	}
 
 
-	const Position targetPos = Position(
-									_center.x / 16,
-									_center.y / 16,
-									_center.z / 24);
+	const Position posTarget = Position::toTileSpace(_center);
 
 	if (_areaOfEffect == true)
 	{
 		if (_power > 0)
 		{
-			Position pos = _center; // voxelspace
 			int
 				start,
 				delay = 0,
@@ -213,6 +209,7 @@ void ExplosionBState::init()
 //			if (_parent->getDepth() > 0)
 //				start -= Explosion::FRAMES_EXPLODE;
 
+			Position voxelExpl = _center;
 			for (int
 					i = 0;
 					i != qty;
@@ -220,17 +217,17 @@ void ExplosionBState::init()
 			{
 				if (i > 0) // bypass 1st explosion: it's always centered w/out any delay.
 				{
-//					pos.x += RNG::generate(-offset, offset); // these cause anims to sweep across the battlefield.
-//					pos.y += RNG::generate(-offset, offset);
-					pos.x = _center.x + RNG::generate(-offset, offset);
-					pos.y = _center.y + RNG::generate(-offset, offset);
+//					voxelExpl.x += RNG::generate(-offset, offset); // these cause anims to sweep across the battlefield.
+//					voxelExpl.y += RNG::generate(-offset, offset);
+					voxelExpl.x = _center.x + RNG::generate(-offset, offset);
+					voxelExpl.y = _center.y + RNG::generate(-offset, offset);
 
 					if (RNG::percent(50) == true)
 						++delay;
 				}
 
 				Explosion* const explosion = new Explosion( // animation
-														pos + Position(11,11,0), // jogg the anim down a few pixels. Tks.
+														voxelExpl + Position(11,11,0), // jogg the anim down a few pixels. Tks.
 														start,
 														delay,
 														true);
@@ -242,32 +239,26 @@ void ExplosionBState::init()
 //			_parent->getMap()->setBlastFlash(true);
 
 
-			int sound = -1; // set item's hitSound to -1 for silent.
+			int soundId = -1; // set item's hitSound to -1 for silent.
 			if (_item != NULL)
-				sound = _item->getRules()->getHitSound();
+				soundId = _item->getRules()->getHitSound();
 			else if (_power < 73)
-				sound = ResourcePack::SMALL_EXPLOSION;
+				soundId = ResourcePack::SMALL_EXPLOSION;
 			else
-				sound = ResourcePack::LARGE_EXPLOSION;
+				soundId = ResourcePack::LARGE_EXPLOSION;
 
-			if (sound != -1)
-				_parent->getResourcePack()->getSound(
-												"BATTLE.CAT",
-												sound)
-											->play(
-												-1,
-												_parent->getMap()->getSoundAngle(targetPos));
+			if (soundId != -1)
+				_parent->getResourcePack()->getSound("BATTLE.CAT", soundId)
+											->play(-1, _parent->getMap()->getSoundAngle(posTarget));
 
 			Camera* const exploCam = _parent->getMap()->getCamera();
 			if (_forceCamera == true
-				|| exploCam->isOnScreen(targetPos) == false)
+				|| exploCam->isOnScreen(posTarget) == false)
 			{
-				exploCam->centerOnPosition(
-										targetPos,
-										false);
+				exploCam->centerOnPosition(posTarget, false);
 			}
-			else if (exploCam->getViewLevel() != targetPos.z)
-				exploCam->setViewLevel(targetPos.z);
+			else if (exploCam->getViewLevel() != posTarget.z)
+				exploCam->setViewLevel(posTarget.z);
 		}
 		else
 			_parent->popState();
@@ -281,7 +272,7 @@ void ExplosionBState::init()
 		int
 			result,
 			start,
-			sound = _item->getRules()->getHitSound();
+			soundId = _item->getRules()->getHitSound();
 
 		if (_hit == true)
 		{
@@ -296,7 +287,7 @@ void ExplosionBState::init()
 			start = _item->getRules()->getMeleeAnimation();
 
 			if (_item->getRules()->getBattleType() != BT_PSIAMP)
-				sound = -1;
+				soundId = -1;
 		}
 		else
 		{
@@ -304,13 +295,9 @@ void ExplosionBState::init()
 			start = _item->getRules()->getHitAnimation();
 		}
 
-		if (sound != -1)
-			_parent->getResourcePack()->getSound(
-											"BATTLE.CAT",
-											sound)
-										->play(
-											-1,
-											_parent->getMap()->getSoundAngle(targetPos));
+		if (soundId != -1)
+			_parent->getResourcePack()->getSound("BATTLE.CAT", soundId)
+										->play(-1, _parent->getMap()->getSoundAngle(posTarget));
 
 		if (start != -1)
 		{
@@ -330,18 +317,16 @@ void ExplosionBState::init()
 
 		Camera* const exploCam = _parent->getMap()->getCamera();
 		if (_forceCamera == true
-			|| (exploCam->isOnScreen(targetPos) == false
+			|| (exploCam->isOnScreen(posTarget) == false
 				&& (_battleSave->getSide() != FACTION_PLAYER
 					|| _item->getRules()->getBattleType() != BT_PSIAMP))
 			|| (_battleSave->getSide() != FACTION_PLAYER
 				&& _item->getRules()->getBattleType() == BT_PSIAMP))
 		{
-			exploCam->centerOnPosition(
-									targetPos,
-									false);
+			exploCam->centerOnPosition(posTarget, false);
 		}
-		else if (exploCam->getViewLevel() != targetPos.z)
-			exploCam->setViewLevel(targetPos.z);
+		else if (exploCam->getViewLevel() != posTarget.z)
+			exploCam->setViewLevel(posTarget.z);
 	}
 }
 

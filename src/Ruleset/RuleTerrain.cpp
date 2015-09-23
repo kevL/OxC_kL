@@ -177,9 +177,8 @@ MapBlock* RuleTerrain::getRandomMapBlock(
 	if (eligibleBlocks.empty() == true)
 		return NULL;
 
-	const size_t block = static_cast<size_t>(RNG::generate(
-													0,
-													static_cast<int>(eligibleBlocks.size()) - 1));
+	const size_t block = static_cast<size_t>(RNG::generate(0,
+						 static_cast<int>(eligibleBlocks.size()) - 1));
 	return eligibleBlocks[block];
 }
 
@@ -263,7 +262,7 @@ const std::string& RuleTerrain::getScript() const
  * Gets the list of musics this terrain has to choose from.
  * @return, list of track names
  */
-const std::vector<std::string>& RuleTerrain::getMusic() const
+const std::vector<std::string>& RuleTerrain::getTerrainMusics() const
 {
 	return _musics;
 }

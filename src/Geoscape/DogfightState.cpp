@@ -28,6 +28,7 @@
 
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
+#include "../Engine/Language.h" // for logging CraftId tuple
 //#include "../Engine/LocalizedText.h"
 //#include "../Engine/RNG.h"
 //#include "../Engine/Screen.h"
@@ -567,11 +568,16 @@ void DogfightState::think()
 		updateDogfight();
 		_craftDamageAnimTimer->think(this, NULL);
 
-		if (_endDogfight == false
+		if (_endDogfight == false //_timeout == 0 && // appears to be a safety.
 			&& (_craft->getDestination() != _ufo
 				|| _ufo->getUfoStatus() == Ufo::LANDED
 				|| _craft->isInDogfight() == false))
 		{
+			//std::string st1 = _craft->getRules()->getType();
+			//std::ostringstream oststr;
+			//oststr << st1 << "-" << (_craft->getId()) << " to= " << _timeout;
+			//Log(LOG_INFO) << "df Think END " << oststr.str().c_str();
+
 			endDogfight();
 		}
 	}
@@ -743,12 +749,17 @@ void DogfightState::updateDogfight()
 {
 	bool finalRun = false;
 
-	if (_endDogfight == false
+	if (_endDogfight == false										// This runs for Craft that *do not* get the KILL. uhhh
 		&& (_ufo != dynamic_cast<Ufo*>(_craft->getDestination())	// check if Craft's destination has changed
 			|| _craft->getLowFuel() == true							// check if Craft is low on fuel
 			|| (_timeout == 0 && _ufo->isCrashed() == true)			// check if UFO has been shot down
 			|| _craft->isInDogfight() == false))
 	{
+		//std::string st1 = _craft->getRules()->getType();
+		//std::ostringstream oststr;
+		//oststr << st1 << "-" << (_craft->getId()) << " to= " << _timeout;
+		//Log(LOG_INFO) << "df Update END [1] " << oststr.str().c_str();
+
 		endDogfight();
 		return;
 	}
@@ -861,9 +872,7 @@ void DogfightState::updateDogfight()
 		}
 		else // _ufoBreakingOff== true
 		{
-			delta = std::max(
-						6,
-						12 + accel);
+			delta = std::max(6, 12 + accel);
 			// UFOs can try to outrun the missiles; don't adjust projectile positions here.
 			// If UFOs ever fire anything but beams those positions need to be adjusted here though.
 		}
@@ -1146,10 +1155,11 @@ void DogfightState::updateDogfight()
 		}
 	}
 
-	if (_end == true // dogfight is over.
+
+	if (_end == true // dogfight is over. This runs for Craft that gets the KILL. uhhh
 		&& ((_timeout == 0 && _ufo->isCrashed() == true)
-			|| ((_dist > DST_ENGAGE || _minimized == true)
-				&& (_craftStance == _btnDisengage || _ufoBreakingOff == true))))
+			|| ((_minimized == true || _dist > DST_ENGAGE)
+				&& (_ufoBreakingOff == true || _craftStance == _btnDisengage))))
 	{
 		if (_ufoBreakingOff == true)
 		{
@@ -1158,21 +1168,25 @@ void DogfightState::updateDogfight()
 		}
 
 		if (_destroyCraft == false
-			&& (_destroyUfo == true
-				|| _craftStance == _btnDisengage))
+			&& (_destroyUfo == true || _craftStance == _btnDisengage))
 		{
 			_craft->returnToBase();
 		}
 
 		if (_endDogfight == false)
+		{
+			//std::string st1 = _craft->getRules()->getType();
+			//std::ostringstream oststr;
+			//oststr << st1 << "-" << (_craft->getId()) << " to= " << _timeout;
+			//Log(LOG_INFO) << "df Update END [2] " << oststr.str().c_str();
+
 			endDogfight();
+		}
 	}
 
-	if (_dist > DST_ENGAGE
-		&& _ufoBreakingOff == true)
-	{
+	if (_ufoBreakingOff == true && _dist > DST_ENGAGE)
 		finalRun = true;
-	}
+
 
 	if (_end == false)
 	{
@@ -1186,8 +1200,7 @@ void DogfightState::updateDogfight()
 			_destroyCraft = true;
 			_ufo->setShootingAt(0);
 		}
-
-		if (_ufo->isCrashed() == true) // End dogfight if UFO is crashed or destroyed.
+		else if (_ufo->isCrashed() == true) // End dogfight if UFO is crashed or destroyed.
 		{
 			_ufo->getAlienMission()->ufoShotDown(*_ufo);
 
@@ -1198,9 +1211,9 @@ void DogfightState::updateDogfight()
 			if (_ufo->getTrajectory().getId() != UfoTrajectory::RETALIATION_ASSAULT_RUN) // shooting down an assault-battleship does *not* generate a Retal-Mission.
 			{
 				const int retalChance = _game->getRuleset()->getRetaliationChance();
-				if (RNG::percent((_diff + 1) * retalChance) == true)					// Check retaliation trigger.
+				if (RNG::percent((_diff + 1) * retalChance) == true) // Check retaliation trigger. -> Spawn retaliation mission.
 				{
-					std::string targetRegion;											// Spawn retaliation mission.
+					std::string targetRegion;
 					if (RNG::percent(_diff * 10 + 10) == true)
 						targetRegion = _gameSave->locateRegion(*_craft->getBase())->getRules()->getType();	// Try to find the originating base.
 						// TODO: If the base is removed, the mission is cancelled. nah.
@@ -1264,48 +1277,29 @@ void DogfightState::updateDogfight()
 					_ufo->setAltitude("STR_GROUND");
 				}
 			}
-/*			else // crashed.
-			{
-				if (_ufo->getShotDownByCraftId() == _craft->getUniqueId())
-				{
-					resetStatus("STR_UFO_CRASH_LANDS");
-					_game->getResourcePack()->playSoundFX(ResourcePack::UFO_CRASH);
-					pts = _ufo->getRules()->getScore();
-				}
-				if (_globe->insideLand(lon,lat) == false)
-				{
-					_destroyUfo = true;
-					_ufo->setUfoStatus(Ufo::DESTROYED);
-					pts *= 2;
-				}
-				else // Set up Crash site.
-				{
-					_ufo->setSecondsLeft(RNG::generate(24,96) * 3600);
-					_ufo->setAltitude("STR_GROUND");
-					if (_ufo->getCrashId() == 0)
-						_ufo->setCrashId(_gameSave->getCanonicalId("STR_CRASH_SITE"));
-				}
-			} */
 
 			if (pts != 0)
 				_gameSave->scorePoints(lon, lat, pts, false);
 
 			if (_ufo->getShotDownByCraftId() != _craft->getUniqueId())
-			{
 				_ufo->setHitFrame(3);
-				switch (_ufo->getUfoStatus())
-				{
-					case Ufo::DESTROYED:
-						_timeout = MSG_TIMEOUT; // persist port.
-//						resetStatus("STR_UFO_DESTROYED");
-					break;
-					case Ufo::CRASHED:
-						_timeout = MSG_TIMEOUT; // persist port.
-//						resetStatus("STR_UFO_CRASH_LANDS");
-				}
-			}
 			else
-				_timeout *= 2;
+			{
+				for (std::list<DogfightState*>::const_iterator
+					i = _geo->getDogfights().begin();
+					i != _geo->getDogfights().end();
+					++i)
+				{
+					if (*i != this
+						&& (*i)->getUfo() == _ufo
+						&& (*i)->isMinimized() == false)
+					{
+						(*i)->setTimeout(MSG_TIMEOUT); // persist other port(s).
+					}
+				}
+
+				_timeout *= 2; // persist this port twice normal duration.
+			}
 
 			finalRun = true;
 		}
@@ -1317,11 +1311,9 @@ void DogfightState::updateDogfight()
 		}
 	}
 
-	if (prjInFlight == false
-		&& finalRun == true)
-	{
+
+	if (prjInFlight == false && finalRun == true)
 		_end = true; // prevent further Craft/UFO destruction; send existing Craft/UFO on their way and flag dogfight for deletion.
-	}
 }
 
 /**

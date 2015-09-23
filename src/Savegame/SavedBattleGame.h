@@ -33,11 +33,11 @@ namespace OpenXcom
 
 enum TacticalType
 {
-	TCT_DEFAULT = -1,	// -1
+	TCT_DEFAULT = -1,	// -1 init.
 	TCT_UFOCRASHED,		//  0
 	TCT_UFOLANDED,		//  1
-	TCT_BASEDEFENSE,	//  2
-	TCT_BASEASSAULT,	//  3
+	TCT_BASEASSAULT,	//  2
+	TCT_BASEDEFENSE,	//  3
 	TCT_MISSIONSITE,	//  4
 	TCT_MARS1,			//  5
 	TCT_MARS2			//  6
@@ -71,9 +71,9 @@ private:
 
 	bool
 		_aborted,
+		_cheatAI,
 		_controlDestroyed,
 		_debugMode,
-		_cheatAI,
 //		_kneelReserved,
 		_pacified,
 		_unitsFalling;
@@ -107,8 +107,8 @@ private:
 
 	std::string
 		_alienRace,
-		_tacticalType,
 		_music,
+		_tacticalType,
 		_terrain;
 	std::wstring _operationTitle;
 
@@ -117,14 +117,14 @@ private:
 	std::vector<BattleItem*>
 		_deleted,
 		_items,
-		_recoverGuaranteed,
-		_recoverConditional;
+		_recoverConditional,
+		_recoverGuaranteed;
 	std::vector<BattleUnit*> _units;
 	std::vector<MapDataSet*> _mapDataSets;
 	std::vector<Node*> _nodes;
 	std::vector<Position>
-		_tileSearch,
-		_storageSpace;
+		_storageSpace,
+		_tileSearch;
 	std::vector<std::vector<std::pair<int, int> > > _baseModules;
 
 //	Uint8 _dragButton;			// this is a cache for Options::getString("battleScrollDragButton")

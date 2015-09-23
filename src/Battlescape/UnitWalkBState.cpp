@@ -560,42 +560,21 @@ bool UnitWalkBState::doStatusStand() // private.
 		}
 		else if (dir < _pf->DIR_UP) // now open doors (if any)
 		{
-			//Log(LOG_INFO) << ". . check for doors";
-			int sound = -1;
+			int soundId;
 
 			const int door = _terrain->unitOpensDoor(_unit, false, dir);
 			if (door == 0) // normal door
-			{
-				//Log(LOG_INFO) << ". . . door #0";
-				sound = ResourcePack::DOOR_OPEN;
-			}
+				soundId = ResourcePack::DOOR_OPEN;
 			else if (door == 1) // ufo door
-			{
-				//Log(LOG_INFO) << ". . . door #1";
-				sound = ResourcePack::SLIDING_DOOR_OPEN;
-			}
-			else if (door == 3) // ufo door still opening ...
-			{
-				//Log(LOG_INFO) << ". . . door #3 ret FALSE";
+				soundId = ResourcePack::SLIDING_DOOR_OPEN;
+			else soundId = -1;
+
+			if (soundId != -1)
+				_parent->getResourcePack()->getSound("BATTLE.CAT", soundId)
+											->play(-1, _parent->getMap()->getSoundAngle(_unit->getPosition()));
+
+			if (door == 1 || door == 3) // ufo door still opening ...
 				return false; // don't start walking yet, wait for the ufo door to open
-			}
-
-			if (sound != -1)
-			{
-				_parent->getResourcePack()->getSound(
-												"BATTLE.CAT",
-												sound)
-											->play(
-												-1,
-												_parent->getMap()->getSoundAngle(_unit->getPosition()));
-
-				if (sound == ResourcePack::SLIDING_DOOR_OPEN)
-				{
-					//Log(LOG_INFO) << ". . . door #1 ret FALSE";
-					return false; // don't start walking yet, wait for the ufo door to open
-				}
-			}
-			//Log(LOG_INFO) << ". door DONE";
 		}
 
 		// proxy blows up in face after door opens - copied doStatusStand_end()
@@ -989,10 +968,8 @@ void UnitWalkBState::postPathProcedures() // private.
 		if (_unit->getChargeTarget() != NULL)
 		{
 			//Log(LOG_INFO) << ". . charging = TRUE";
-			const Position targetPos = _unit->getChargeTarget()->getPosition();
-			dir = _parent->getTileEngine()->getDirectionTo(
-														_unit->getPosition(),
-														targetPos);
+			const Position posTarget = _unit->getChargeTarget()->getPosition();
+			dir = _parent->getTileEngine()->getDirectionTo(_unit->getPosition(), posTarget);
 			// kL_notes (pre-above):
 			// put an appropriate facing direction here
 			// don't stare at a wall. Get if aggro, face closest xCom op <- might be done somewhere already.
@@ -1001,13 +978,12 @@ void UnitWalkBState::postPathProcedures() // private.
 			// and bool TileEngine::calculateFOV(BattleUnit *unit)
 
 			if (_parent->getTileEngine()->validMeleeRange(
-													_unit,
-													dir,
-													_action.actor->getChargeTarget()))
+													_unit, dir,
+													_action.actor->getChargeTarget()) == true)
 			{
 				BattleAction action;
 				action.actor = _unit;
-				action.target = targetPos;
+				action.target = posTarget;
 				action.targeting = true;
 				action.type = BA_HIT;
 				action.weapon = _unit->getMainHandWeapon();
@@ -1061,14 +1037,10 @@ void UnitWalkBState::postPathProcedures() // private.
 
 				if (action.weapon != NULL) // also checked in getActionTu() & ProjectileFlyBState::init()
 				{
-					action.TU = _unit->getActionTu(
-												action.type,
-												action.weapon);
+					action.TU = _unit->getActionTu(action.type, action.weapon);
 
 //					_parent->statePushBack(new MeleeAttackBState(_parent, action));
-					_parent->statePushBack(new ProjectileFlyBState(
-																_parent,
-																action));
+					_parent->statePushBack(new ProjectileFlyBState(_parent, action));
 
 					if (instaWeapon == true)
 						_battleSave->removeItem(action.weapon);
@@ -1104,9 +1076,7 @@ void UnitWalkBState::postPathProcedures() // private.
 	_terrain->calculateUnitLighting();
 
 //	_terrain->calculateFOV(_unit);
-	_terrain->calculateFOV( // in case unit opened a door and stopped without doing Status_WALKING
-						_unit->getPosition(),
-						true);
+	_terrain->calculateFOV(_unit->getPosition(), true); // in case unit opened a door and stopped without doing Status_WALKING
 
 
 	_unit->setCache(NULL);
@@ -1224,7 +1194,7 @@ void UnitWalkBState::playMovementSound() // private.
 	if (_unit->getUnitVisible() == true
 		|| _battleSave->getDebugMode() == true)
 	{
-		int sound = -1;
+		int soundId = -1;
 
 		if (_unit->getMoveSound() != -1)
 		{
@@ -1234,10 +1204,10 @@ void UnitWalkBState::playMovementSound() // private.
 					&& _unit->isFloating() == false
 					&& _falling == false)
 				{
-					sound = ResourcePack::GRAVLIFT_SOUND; // GravLift note: isFloating() might be redundant w/ (_falling=false). See below_
+					soundId = ResourcePack::GRAVLIFT_SOUND; // GravLift note: isFloating() might be redundant w/ (_falling=false). See below_
 				}
 				else
-					sound = _unit->getMoveSound();
+					soundId = _unit->getMoveSound();
 			}
 		}
 		else
@@ -1255,9 +1225,9 @@ void UnitWalkBState::playMovementSound() // private.
 					if (stepSound > -1)
 					{
 						if (phase == 3)
-							sound = stepSound * 2 + ResourcePack::WALK_OFFSET + 1;
+							soundId = stepSound * 2 + ResourcePack::WALK_OFFSET + 1;
 						else //if (phase == 7)
-							sound = stepSound * 2 + ResourcePack::WALK_OFFSET;
+							soundId = stepSound * 2 + ResourcePack::WALK_OFFSET;
 					}
 				}
 			}
@@ -1269,16 +1239,16 @@ void UnitWalkBState::playMovementSound() // private.
 					if (_falling == false)
 					{
 						if (_unit->isFloating() == false) // GravLift note: isFloating() might be redundant w/ (_falling=false). See above^
-							sound = ResourcePack::GRAVLIFT_SOUND;
+							soundId = ResourcePack::GRAVLIFT_SOUND;
 						else
 						{
 							if (_unit->getUnitRules() != NULL
 								&& _unit->getUnitRules()->isMechanical() == true)
 							{
-								sound = ResourcePack::FLYING_SOUND;		// hoverSound flutter
+								soundId = ResourcePack::FLYING_SOUND;		// hoverSound flutter
 							}
 							else
-								sound = ResourcePack::FLYING_SOUND_HQ;	// HQ hoverSound
+								soundId = ResourcePack::FLYING_SOUND_HQ;	// HQ hoverSound
 						}
 					}
 				}
@@ -1288,18 +1258,14 @@ void UnitWalkBState::playMovementSound() // private.
 						|| (_unit->isFloating() == true
 							&& _pf->getMoveTypePf() == MT_WALK)))
 				{
-					sound = ResourcePack::ITEM_DROP; // *thunk*
+					soundId = ResourcePack::ITEM_DROP; // *thunk*
 				}
 			}
 		}
 
-		if (sound != -1)
-			_parent->getResourcePack()->getSound(
-											"BATTLE.CAT",
-											sound)
-										->play(
-											-1,
-											_parent->getMap()->getSoundAngle(_unit->getPosition()));
+		if (soundId != -1)
+			_parent->getResourcePack()->getSound("BATTLE.CAT", soundId)
+										->play(-1, _parent->getMap()->getSoundAngle(_unit->getPosition()));
 	}
 }
 

@@ -279,15 +279,11 @@ void ActionMenuState::addItem( // private.
 		|| bat == BA_AUTOSHOT
 		|| bat == BA_HIT)
 	{
-		var = static_cast<int>(Round(_action->actor->getAccuracy(
-															*_action,
-															bat) * 100.));
+		var = static_cast<int>(Round(_action->actor->getAccuracy(*_action, bat) * 100.));
 		wst1 = tr("STR_ACCURACY_SHORT_KL").arg(var);
 	}
 
-	var = _action->actor->getActionTu(
-									bat,
-									_action->weapon);
+	var = _action->actor->getActionTu(bat, _action->weapon);
 
 	if (bat != BA_NONE) // ie. everything but doggie bark
 		wst2 = tr("STR_TIME_UNITS_SHORT").arg(var);
@@ -354,14 +350,14 @@ void ActionMenuState::btnActionMenuClick(Action* action)
 		switch (_action->type)
 		{
 			case BA_NONE: // doggie bark
+			{
 				_game->popState();
-				_game->getResourcePack()->getSound(
-												"BATTLE.CAT",
-												itRule->getMeleeSound())
-											->play(
-												-1,
-												_game->getSavedGame()->getBattleSave()->getBattleGame()->getMap()
-													->getSoundAngle(_action->actor->getPosition()));
+				const int soundId = itRule->getMeleeSound();
+				if (soundId != -1)
+					_game->getResourcePack()->getSound("BATTLE.CAT", soundId)
+												->play(-1, _game->getSavedGame()->getBattleSave()->getBattleGame()->getMap()
+																->getSoundAngle(_action->actor->getPosition()));
+			}
 			break;
 
 			case BA_PRIME:
@@ -371,10 +367,7 @@ void ActionMenuState::btnActionMenuClick(Action* action)
 					_game->popState();
 				}
 				else
-					_game->pushState(new PrimeGrenadeState(
-														_action,
-														false,
-														NULL));
+					_game->pushState(new PrimeGrenadeState(_action, false, NULL));
 			break;
 
 			case BA_DEFUSE:

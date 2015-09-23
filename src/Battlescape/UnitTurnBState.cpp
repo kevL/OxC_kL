@@ -107,26 +107,22 @@ void UnitTurnBState::init()
 	{
 		if (_action.type == BA_NONE)
 		{
-			int sound = -1;
+			int soundId = -1;
 			const int door = _parent->getTileEngine()->unitOpensDoor(
 																_unit,
 																true);
 			if (door == 0)
-				sound = ResourcePack::DOOR_OPEN;
+				soundId = ResourcePack::DOOR_OPEN;
 			else if (door == 1)
-				sound = ResourcePack::SLIDING_DOOR_OPEN;
+				soundId = ResourcePack::SLIDING_DOOR_OPEN;
 			else if (door == 4)
 				_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
 			else if (door == 5)
 				_action.result = "STR_TUS_RESERVED";
 
-			if (sound != -1)
-				_parent->getResourcePack()->getSound(
-												"BATTLE.CAT",
-												sound)
-											->play(
-												-1,
-												_parent->getMap()->getSoundAngle(_unit->getPosition()));
+			if (soundId != -1)
+				_parent->getResourcePack()->getSound("BATTLE.CAT", soundId)
+											->play(-1, _parent->getMap()->getSoundAngle(_unit->getPosition()));
 		}
 
 		_unit->setTurnDirection(0);

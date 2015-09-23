@@ -832,15 +832,10 @@ void InventoryState::btnPrevClick(Action*)
 	if (_inv->getSelectedItem() == NULL)
 	{
 		if (_parent != NULL)
-			_parent->selectPreviousFactionUnit(
-											false,
-											false,
-											true);
+			_parent->selectPreviousFactionUnit(false,false,true);
 		else
-			_battleSave->selectPreviousFactionUnit(
-												false,
-												false,
-												true);
+			_battleSave->selectPreviousFactionUnit(false,false,true);
+
 		init();
 	}
 }
@@ -854,15 +849,10 @@ void InventoryState::btnNextClick(Action*)
 	if (_inv->getSelectedItem() == NULL)
 	{
 		if (_parent != NULL)
-			_parent->selectNextFactionUnit(
-										false,
-										false,
-										true);
+			_parent->selectNextFactionUnit(false,false,true);
 		else
-			_battleSave->selectNextFactionUnit(
-											false,
-											false,
-											true);
+			_battleSave->selectNextFactionUnit(false,false,true);
+
 		init();
 	}
 }
@@ -882,10 +872,7 @@ void InventoryState::btnUnloadClick(Action*)
 		_selAmmo->clear();
 
 		updateStats();
-		_game->getResourcePack()->getSound(
-										"BATTLE.CAT",
-										ResourcePack::ITEM_UNLOAD_HQ)
-									->play();
+		_game->getResourcePack()->getSound("BATTLE.CAT", ResourcePack::ITEM_UNLOAD_HQ)->play();
 	}
 	else if (_tuMode == false
 		&& _inv->getSelectedItem() == NULL)

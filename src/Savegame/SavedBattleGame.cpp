@@ -3005,7 +3005,7 @@ bool SavedBattleGame::getControlDestroyed() const
 /**
  * Sets the music track for this battle.
  * @note The track-string is const but I don't want to deal with it.
- * @param track - reference to the track's name
+ * @param track - reference the track's name
  */
 void SavedBattleGame::setMusic(std::string& track)
 {
@@ -3016,8 +3016,8 @@ void SavedBattleGame::setMusic(std::string& track)
  * Sets variables for what music to play in a particular terrain or lack thereof.
  * @note The music-string and terrain-string are both const but I don't want to
  * deal with it.
- * @param music		- address of the music category to play
- * @param terrain	- address of the terrain to choose music for
+ * @param music		- reference the music category to play
+ * @param terrain	- reference the terrain to choose music for
  */
 void SavedBattleGame::calibrateMusic(
 		std::string& music,
@@ -3025,28 +3025,46 @@ void SavedBattleGame::calibrateMusic(
 {
 	if (_music.empty() == false)
 		music = _music;
-	else if (_tacticalType == "STR_UFO_CRASH_RECOVERY")
-	{
-		music = OpenXcom::res_MUSIC_TAC_BATTLE_UFOCRASHED;
-		terrain = _terrain;
-	}
-	else if (_tacticalType == "STR_UFO_GROUND_ASSAULT")
-	{
-		music = OpenXcom::res_MUSIC_TAC_BATTLE_UFOLANDED;
-		terrain = _terrain;
-	}
-	else if (_tacticalType == "STR_ALIEN_BASE_ASSAULT")
-		music = OpenXcom::res_MUSIC_TAC_BATTLE_BASEASSAULT;
-	else if (_tacticalType == "STR_BASE_DEFENSE")
-		music = OpenXcom::res_MUSIC_TAC_BATTLE_BASEDEFENSE;
-	else if (_tacticalType == "STR_TERROR_MISSION")
-		music = OpenXcom::res_MUSIC_TAC_BATTLE_TERRORSITE;
-	else if (_tacticalType == "STR_MARS_CYDONIA_LANDING")
-		music = OpenXcom::res_MUSIC_TAC_BATTLE_MARS1;
-	else if (_tacticalType == "STR_MARS_THE_FINAL_ASSAULT")
-		music = OpenXcom::res_MUSIC_TAC_BATTLE_MARS2;
 	else
-		music = OpenXcom::res_MUSIC_TAC_BATTLE; // default/ safety.
+	{
+		switch (_tacType)
+		{
+			case TCT_UFOCRASHED:	// 0 - STR_UFO_CRASH_RECOVERY
+				music = OpenXcom::res_MUSIC_TAC_BATTLE_UFOCRASHED;
+				terrain = _terrain;
+			break;
+
+			case TCT_UFOLANDED:		// 1 - STR_UFO_GROUND_ASSAULT
+				music = OpenXcom::res_MUSIC_TAC_BATTLE_UFOLANDED;
+				terrain = _terrain;
+			break;
+
+			case TCT_BASEASSAULT:	// 2 - STR_ALIEN_BASE_ASSAULT
+				music = OpenXcom::res_MUSIC_TAC_BATTLE_BASEASSAULT;
+			break;
+
+			case TCT_BASEDEFENSE:	// 3 - STR_BASE_DEFENSE
+				music = OpenXcom::res_MUSIC_TAC_BATTLE_BASEDEFENSE;
+			break;
+
+			case TCT_MISSIONSITE:	// 4 - STR_TERROR_MISSION and STR_PORT_ATTACK, see setTacType()
+				music = OpenXcom::res_MUSIC_TAC_BATTLE_TERRORSITE;
+			break;
+
+			case TCT_MARS1:			// 5 - STR_MARS_CYDONIA_LANDING
+				music = OpenXcom::res_MUSIC_TAC_BATTLE_MARS1;
+			break;
+
+			case TCT_MARS2:			// 6 - STR_MARS_THE_FINAL_ASSAULT
+				music = OpenXcom::res_MUSIC_TAC_BATTLE_MARS2;
+			break;
+
+			default:
+				music = OpenXcom::res_MUSIC_TAC_BATTLE; // safety.
+//				terrain = "CULTA"; // remarked in Music.rul
+		}
+	}
+	//Log(LOG_INFO) << "SBG:calibrateMusic music= " << music << " terrain= " << terrain;
 }
 
 /**

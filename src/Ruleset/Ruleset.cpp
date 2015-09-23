@@ -54,7 +54,7 @@
 #include "RuleUfo.h"
 #include "RuleVideo.h"
 #include "SoldierNamePool.h"
-#include "SoundDefinition.h"
+//#include "SoundDefinition.h"
 //#include "StatString.h"
 #include "UfoTrajectory.h"
 #include "RuleUnit.h"
@@ -418,13 +418,13 @@ Ruleset::~Ruleset()
 		delete i->second;
 	}
 
-	for (std::map<std::string, SoundDefinition*>::const_iterator
+/*	for (std::map<std::string, SoundDefinition*>::const_iterator
 			i = _soundDefs.begin();
 			i != _soundDefs.end();
 			++i)
 	{
 		delete i->second;
-	}
+	} */
 
 /*	for (std::vector<StatString*>::const_iterator
 			i = _statStrings.begin();
@@ -714,7 +714,7 @@ void Ruleset::loadFile(const std::string& file) // protected.
 					this);
 	}
 
-	for (YAML::const_iterator // sza_MusicRules
+	for (YAML::const_iterator
 			i = doc["music"].begin();
 			i != doc["music"].end();
 			++i)
@@ -1074,7 +1074,7 @@ void Ruleset::loadFile(const std::string& file) // protected.
 			rule->load(*i);
 	}
 
-	for (YAML::const_iterator
+/*	for (YAML::const_iterator
 			i = doc["soundDefs"].begin();
 			i != doc["soundDefs"].end();
 			++i)
@@ -1084,7 +1084,7 @@ void Ruleset::loadFile(const std::string& file) // protected.
 											&_soundDefs);
 		if (rule != NULL)
 			rule->load(*i);
-	}
+	} */
 
 	if (doc["globe"])
 		_globe->load(doc["globe"]);
@@ -1094,18 +1094,18 @@ void Ruleset::loadFile(const std::string& file) // protected.
 			i != doc["constants"].end();
 			++i)
 	{
-		ResourcePack::EXPLOSION_OFFSET			= (*i)["explosionOffset"]		.as<int>(ResourcePack::EXPLOSION_OFFSET);
-		ResourcePack::SMALL_EXPLOSION			= (*i)["smallExplosion"]		.as<int>(ResourcePack::SMALL_EXPLOSION);
-		ResourcePack::DOOR_OPEN					= (*i)["doorSound"]				.as<int>(ResourcePack::DOOR_OPEN);
-		ResourcePack::LARGE_EXPLOSION			= (*i)["largeExplosion"]		.as<int>(ResourcePack::LARGE_EXPLOSION);
-		ResourcePack::FLYING_SOUND				= (*i)["flyingSound"]			.as<int>(ResourcePack::FLYING_SOUND);
-		ResourcePack::ITEM_RELOAD				= (*i)["itemReload"]			.as<int>(ResourcePack::ITEM_RELOAD);
-		ResourcePack::SLIDING_DOOR_OPEN			= (*i)["slidingDoorSound"]		.as<int>(ResourcePack::SLIDING_DOOR_OPEN);
-		ResourcePack::SLIDING_DOOR_CLOSE		= (*i)["slidingDoorClose"]		.as<int>(ResourcePack::SLIDING_DOOR_CLOSE);
-		ResourcePack::WALK_OFFSET				= (*i)["walkOffset"]			.as<int>(ResourcePack::WALK_OFFSET);
-		ResourcePack::ITEM_DROP					= (*i)["itemDrop"]				.as<int>(ResourcePack::ITEM_DROP);
-		ResourcePack::ITEM_THROW				= (*i)["itemThrow"]				.as<int>(ResourcePack::ITEM_THROW);
-		ResourcePack::SMOKE_OFFSET				= (*i)["smokeOffset"]			.as<int>(ResourcePack::SMOKE_OFFSET);
+		ResourcePack::EXPLOSION_OFFSET		= (*i)["explosionOffset"]	.as<int>(ResourcePack::EXPLOSION_OFFSET);
+		ResourcePack::SMALL_EXPLOSION		= (*i)["smallExplosion"]	.as<int>(ResourcePack::SMALL_EXPLOSION);
+		ResourcePack::DOOR_OPEN				= (*i)["doorSound"]			.as<int>(ResourcePack::DOOR_OPEN);
+		ResourcePack::LARGE_EXPLOSION		= (*i)["largeExplosion"]	.as<int>(ResourcePack::LARGE_EXPLOSION);
+		ResourcePack::FLYING_SOUND			= (*i)["flyingSound"]		.as<int>(ResourcePack::FLYING_SOUND);
+		ResourcePack::ITEM_RELOAD			= (*i)["itemReload"]		.as<int>(ResourcePack::ITEM_RELOAD);
+		ResourcePack::SLIDING_DOOR_OPEN		= (*i)["slidingDoorSound"]	.as<int>(ResourcePack::SLIDING_DOOR_OPEN);
+		ResourcePack::SLIDING_DOOR_CLOSE	= (*i)["slidingDoorClose"]	.as<int>(ResourcePack::SLIDING_DOOR_CLOSE);
+		ResourcePack::WALK_OFFSET			= (*i)["walkOffset"]		.as<int>(ResourcePack::WALK_OFFSET);
+		ResourcePack::ITEM_DROP				= (*i)["itemDrop"]			.as<int>(ResourcePack::ITEM_DROP);
+		ResourcePack::ITEM_THROW			= (*i)["itemThrow"]			.as<int>(ResourcePack::ITEM_THROW);
+		ResourcePack::SMOKE_OFFSET			= (*i)["smokeOffset"]		.as<int>(ResourcePack::SMOKE_OFFSET);
 
 		if ((*i)["maleScream"])
 		{
@@ -1231,18 +1231,18 @@ void Ruleset::loadFile(const std::string& file) // protected.
 			rule->load(*i);
 	}
 
-	for (std::vector<std::string>::const_iterator // refresh _psiRequirements for psiStrengthEval
+/*	for (std::vector<std::string>::const_iterator // refresh _psiRequirements for psiStrengthEval
 			i = _facilitiesIndex.begin();
 			i != _facilitiesIndex.end();
 			++i)
 	{
 		const RuleBaseFacility* const rule = getBaseFacility(*i);
-		if (rule->getPsiLaboratories() > 0)
+		if (rule->getPsiLaboratories() != 0)
 		{
 			_psiRequirements = rule->getRequirements();
 			break;
 		}
-	}
+	} */
 
 	for (YAML::const_iterator
 			i = doc["cutscenes"].begin();
@@ -2015,7 +2015,7 @@ MCDPatch* Ruleset::getMCDPatch(const std::string& id) const
  * Gets the list of external music rules.
  * @return, vector of pairs of strings & pointers to RuleMusic
  */
-std::vector<std::pair<std::string, RuleMusic*> > Ruleset::getMusic() const // sza_MusicRules
+std::vector<std::pair<std::string, RuleMusic*> > Ruleset::getMusicTracks() const
 {
 	return _music;
 }
@@ -2286,14 +2286,14 @@ void Ruleset::sortLists()
 										false)); */
 }
 
-/**
+/*
  * Gets the research-requirements for Psi-Lab (it's a cache for psiStrengthEval)
  * @return, vector of strings that are psi requirements
- */
+ *
 std::vector<std::string> Ruleset::getPsiRequirements() const
 {
 	return _psiRequirements;
-}
+} */
 
 /**
  * Creates a new randomly-generated soldier.
@@ -2507,15 +2507,6 @@ const std::map<std::string, SoundDefinition*>* Ruleset::getSoundDefinitions() co
 {
 	return &_soundDefs;
 }
-
-/**
- * Gets the transparency look-up table.
- * @return, vector of pointers to SDL_Color
- */
-/* const std::vector<SDL_Color>* Ruleset::getTransparencies() const
-{
-	return &_transparencies;
-} */
 
 /**
  * Gets the list of videos.

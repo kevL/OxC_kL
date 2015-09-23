@@ -499,7 +499,7 @@ bool ProjectileFlyBState::createNewProjectile() // private.
 
 
 	_parent->setStateInterval(16); // set the speed of the state think cycle to 16 ms (roughly one think-cycle per frame)
-	int sound = -1;
+	int soundId = -1;
 
 	_prjImpact = VOXEL_EMPTY; // let it calculate a trajectory
 
@@ -523,7 +523,7 @@ bool ProjectileFlyBState::createNewProjectile() // private.
 			_unit->setCache(NULL);
 			_parent->getMap()->cacheUnit(_unit);
 
-			sound = ResourcePack::ITEM_THROW;
+			soundId = ResourcePack::ITEM_THROW;
 
 			if (_unit->getGeoscapeSoldier() != NULL
 				&& _unit->getFaction() == _unit->getOriginalFaction()
@@ -572,9 +572,9 @@ bool ProjectileFlyBState::createNewProjectile() // private.
 			_parent->getMap()->cacheUnit(_unit);
 
 			// lift-off
-			sound = _ammo->getRules()->getFireSound();
-			if (sound == -1)
-				sound = _action.weapon->getRules()->getFireSound();
+			soundId = _ammo->getRules()->getFireSound();
+			if (soundId == -1)
+				soundId = _action.weapon->getRules()->getFireSound();
 
 			if (_action.type != BA_LAUNCH)
 				_ammo->spendBullet(
@@ -638,9 +638,9 @@ bool ProjectileFlyBState::createNewProjectile() // private.
 			_parent->getMap()->cacheUnit(_unit);
 
 			// lift-off
-			sound = _ammo->getRules()->getFireSound();
-			if (sound == -1)
-				sound = _action.weapon->getRules()->getFireSound();
+			soundId = _ammo->getRules()->getFireSound();
+			if (soundId == -1)
+				soundId = _action.weapon->getRules()->getFireSound();
 
 			if (_action.type != BA_LAUNCH)
 				_ammo->spendBullet(
@@ -663,13 +663,9 @@ bool ProjectileFlyBState::createNewProjectile() // private.
 		}
 	}
 
-	if (sound != -1)
-		_parent->getResourcePack()->getSound(
-										"BATTLE.CAT",
-										sound)
-									->play(
-										-1,
-										_parent->getMap()->getSoundAngle(_unit->getPosition()));
+	if (soundId != -1)
+		_parent->getResourcePack()->getSound("BATTLE.CAT", soundId)
+									->play(-1, _parent->getMap()->getSoundAngle(_unit->getPosition()));
 
 	if (_unit->getArmor()->getShootFrames() != 0)
 		_parent->getMap()->setShowProjectile(false); // postpone showing the Celatid spit-blob till later
@@ -873,12 +869,8 @@ void ProjectileFlyBState::think()
 					}
 				}
 
-				_parent->getResourcePack()->getSound(
-												"BATTLE.CAT",
-												ResourcePack::ITEM_DROP)
-											->play(
-												-1,
-												_parent->getMap()->getSoundAngle(pos));
+				_parent->getResourcePack()->getSound("BATTLE.CAT", ResourcePack::ITEM_DROP)
+											->play(-1, _parent->getMap()->getSoundAngle(pos));
 			}
 			else if (_action.type == BA_LAUNCH
 				&& _prjImpact == VOXEL_EMPTY
@@ -1306,12 +1298,8 @@ void ProjectileFlyBState::performMeleeAttack() // private.
 	}
 
 	if (sound != -1)
-		_parent->getResourcePack()->getSound(
-										"BATTLE.CAT",
-										sound)
-									->play(
-										-1,
-										_parent->getMap()->getSoundAngle(_action.target));
+		_parent->getResourcePack()->getSound("BATTLE.CAT", sound)
+									->play(-1, _parent->getMap()->getSoundAngle(_action.target));
 
 	if (_action.weapon->getRules()->getBattleType() == BT_MELEE
 		&& _ammo != NULL)

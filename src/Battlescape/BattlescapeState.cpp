@@ -2393,12 +2393,8 @@ void BattlescapeState::btnReloadClick(Action*)
 	if (playableUnitSelected() == true
 		&& _battleSave->getSelectedUnit()->checkAmmo() == true)
 	{
-		_game->getResourcePack()->getSound(
-										"BATTLE.CAT",
-										ResourcePack::ITEM_RELOAD)
-									->play(
-										-1,
-										_map->getSoundAngle(_battleSave->getSelectedUnit()->getPosition()));
+		_game->getResourcePack()->getSound("BATTLE.CAT", ResourcePack::ITEM_RELOAD)
+									->play(-1, _map->getSoundAngle(_battleSave->getSelectedUnit()->getPosition()));
 		updateSoldierInfo();
 	}
 }

@@ -3658,6 +3658,11 @@ void GeoscapeState::thinkDogfights()
 			if ((*pDf)->isMinimized() == true)
 				--_dfMinimized;
 
+			//std::string st1 = (*pDf)->getCraft()->getRules()->getType();
+			//std::ostringstream oststr;
+			//oststr << st1 << "-" << ((*pDf)->getCraft()->getId());
+			//Log(LOG_INFO) << "geo thinkDf DELETE " << oststr.str().c_str();
+
 			delete *pDf;
 			pDf = _dogfights.erase(pDf);
 			resetPorts = true;

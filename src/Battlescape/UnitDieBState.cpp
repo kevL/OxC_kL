@@ -408,12 +408,8 @@ void UnitDieBState::convertToCorpse() // private.
 							if (soundPlayed == false)
 							{
 								soundPlayed = true;
-								_parent->getResourcePack()->getSound(
-																"BATTLE.CAT",
-																ResourcePack::SMALL_EXPLOSION)
-															->play(
-																-1,
-																_parent->getMap()->getSoundAngle(_unit->getPosition()));
+								_parent->getResourcePack()->getSound("BATTLE.CAT", ResourcePack::SMALL_EXPLOSION)
+															->play(-1, _parent->getMap()->getSoundAngle(_unit->getPosition()));
 							}
 						}
 					}

@@ -182,34 +182,30 @@ void ExecuteState::lstTargetPress(Action* action)
 			const RuleItem
 				* const itRule = _action->weapon->getRules(),
 				* const amRule = _action->weapon->getAmmoItem()->getRules();
-			int sound = -1;
+			int soundId = -1;
 
 			if (itRule->getBattleType() == BT_MELEE)
 			{
-				sound = amRule->getMeleeSound();
-				if (sound == -1)
+				soundId = amRule->getMeleeSound();
+				if (soundId == -1)
 				{
-					sound = itRule->getMeleeSound();
-					if (sound == -1)
-						sound = ResourcePack::ITEM_THROW;
+					soundId = itRule->getMeleeSound();
+					if (soundId == -1)
+						soundId = ResourcePack::ITEM_THROW;
 				}
 			}
 			else
 			{
-				sound = amRule->getFireSound();
-				if (sound == -1)
-					sound = itRule->getFireSound();
+				soundId = amRule->getFireSound();
+				if (soundId == -1)
+					soundId = itRule->getFireSound();
 			}
 
-			if (sound != -1)
+			if (soundId != -1)
 			{
 				const Map* const battleMap = _game->getSavedGame()->getBattleSave()->getBattleGame()->getMap();
-				_game->getResourcePack()->getSound(
-												"BATTLE.CAT",
-												sound)
-											->play(
-												-1,
-												battleMap->getSoundAngle(_action->actor->getPosition()));
+				_game->getResourcePack()->getSound("BATTLE.CAT", soundId)
+											->play(-1, battleMap->getSoundAngle(_action->actor->getPosition()));
 			}
 		}
 

@@ -93,7 +93,7 @@ private:
 	MissionSite* _mission;
 	ResourcePack* _res;
 	Ruleset* _rules;
-	RuleTerrain* _terraRule;
+	RuleTerrain* _terrainRule;
 	SavedBattleGame* _battleSave;
 	SavedGame* _gameSave;
 	Tile* _tileEquipt;
@@ -112,7 +112,7 @@ private:
 	/// Adds a soldier to the game.
 	BattleUnit* addXCOMUnit(BattleUnit* const unit);
 	/// Runs necessary checks before physically setting the position.
-	bool canPlaceXCOMUnit(Tile* const tile);
+	bool canPlaceXComUnit(Tile* const tile);
 	/// Loads a weapon on the inventoryTile.
 	void loadGroundWeapon(BattleItem* const item);
 	/// Places an item on a soldier based on equipment layout.
@@ -211,7 +211,7 @@ private:
 
 	public:
 		/// Creates a new BattlescapeGenerator class
-		explicit BattlescapeGenerator(Game* game);
+		explicit BattlescapeGenerator(Game* const game);
 		/// Cleans up the BattlescapeGenerator.
 		~BattlescapeGenerator();
 

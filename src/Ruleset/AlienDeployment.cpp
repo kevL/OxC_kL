@@ -395,7 +395,7 @@ int AlienDeployment::getDurationMax() const
  * Gets the list of musics this deployment has to choose from.
  * @return, list of track names
  */
-const std::vector<std::string>& AlienDeployment::getMusic()
+const std::vector<std::string>& AlienDeployment::getDeploymentMusics()
 {
 	return _musics;
 }

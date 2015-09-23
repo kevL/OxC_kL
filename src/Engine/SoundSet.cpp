@@ -51,7 +51,8 @@ SoundSet::~SoundSet()
 
 /**
  * Loads the contents of an X-Com CAT file which usually contains a set of sound
- * files. The CAT starts with an index of the offset and size of every file
+ * files.
+ * @note The CAT starts with an index of the offset and size of every file
  * contained within. Each file consists of a filename followed by its contents.
  * @param file	- reference filename of the CAT set
  * @param wav	- true if sounds are in WAV format (default true)
@@ -230,13 +231,13 @@ void SoundSet::loadCat(
 
 /**
  * Returns a particular wave from the sound set.
- * @param i - sound number in the set
+ * @param id - sound number in the set
  * @return, pointer to the respective sound
  */
-Sound* SoundSet::getSound(unsigned int i)
+Sound* SoundSet::getSound(size_t id)
 {
-	if (_sounds.find(i) != _sounds.end())
-		return _sounds[i];
+	if (_sounds.find(id) != _sounds.end())
+		return _sounds[id];
 
 	return NULL;
 }
@@ -244,26 +245,26 @@ Sound* SoundSet::getSound(unsigned int i)
 
 /**
  * Creates and returns a particular wave in the sound set.
- * @param i - sound number in the set
+ * @param id - sound number in the set
  * @return, pointer to the respective sound
  */
-Sound* SoundSet::addSound(unsigned int i)
+Sound* SoundSet::addSound(size_t id)
 {
-	_sounds[i] = new Sound();
+	_sounds[id] = new Sound();
 
-	return _sounds[i];
+	return _sounds[id];
 }
 
-/**
+/*
  * Returns the total amount of sounds currently stored in the set.
  * @return, number of sounds
- */
-size_t SoundSet::getTotalSounds() const
+ *
+size_t SoundSet::getTotalSounds() const // private.
 {
 	return _sounds.size();
-}
+} */
 
-/**
+/*
  * Loads individual contents of a TFTD CAT file by index.
  * @note A set of sound files. The CAT starts with an index of the offset and
  * size of every file contained within. Each file consists of a filename
@@ -271,8 +272,8 @@ size_t SoundSet::getTotalSounds() const
  * @param file	- reference filename of the CAT set
  * @param index	- which index in the cat file to load
  * @sa http://www.ufopaedia.org/index.php?title=SOUND
- */
-void SoundSet::loadCatbyIndex(
+ *
+void SoundSet::loadCatByIndex(
 		const std::string& file,
 		int index)
 {
@@ -377,6 +378,6 @@ void SoundSet::loadCatbyIndex(
 
 	delete[] sound;
 	delete[] newsound;
-}
+} */
 
 }
