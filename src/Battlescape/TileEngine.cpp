@@ -2069,7 +2069,8 @@ std::map<int, Position>* TileEngine::getRfShotList()
  * @param power			- power of the hit/explosion
  * @param dType			- damage type of the hit (RuleItem.h)
  * @param attacker		- pointer to BattleUnit that caused the hit
- * @param melee			- true if no projectile, trajectory, etc. is needed
+ * @param melee			- true if no projectile, trajectory, etc. is needed (default false)
+ * @param shotgun		- true if hit by shotgun pellet(s) (default false)
  * @return, pointer to the BattleUnit that got hit else NULL
  */
 BattleUnit* TileEngine::hit(
@@ -2077,7 +2078,8 @@ BattleUnit* TileEngine::hit(
 		int power,
 		ItemDamageType dType,
 		BattleUnit* const attacker,
-		bool melee)
+		bool melee,
+		bool shotgun)
 {
 	if (dType != DT_NONE) // bypass Psi-attacks. Psi-attacks don't get this far anymore .... But leave it in for safety.
 	{
@@ -2197,15 +2199,12 @@ BattleUnit* TileEngine::hit(
 							fire = RNG::generate( // 25% - 75% / 2
 											power / 8,
 											power * 3 / 8),
-							burn = RNG::generate(
-											0,
+							burn = RNG::generate(0,
 											static_cast<int>(Round(vulnerable * 5.f)));
 
 						targetUnit->damage(
 										Position(0,0,0),
-										fire,
-										DT_IN,
-										true);
+										fire, DT_IN, true);
 
 						if (targetUnit->getFireOnUnit() < burn)
 							targetUnit->setFireOnUnit(burn); // catch fire and burn
@@ -2220,13 +2219,9 @@ BattleUnit* TileEngine::hit(
 					relationalVoxel = targetVoxel - centerUnitVoxel;
 
 				double delta;
-				if (dType == DT_HE
-					|| Options::battleTFTDDamage == true)
-				{
+				if (dType == DT_HE || Options::battleTFTDDamage == true)
 					delta = 50.;
-				}
-				else
-					delta = 100.;
+				else delta = 100.;
 
 				const int
 					power1 = static_cast<int>(std::floor(static_cast<double>(power) * (100. - delta) / 100.)) + 1,
@@ -2255,11 +2250,12 @@ BattleUnit* TileEngine::hit(
 
 				power = targetUnit->damage(
 										relationalVoxel,
-										power,
-										dType,
+										power, dType,
 										dType == DT_STUN || dType == DT_SMOKE);	// stun ignores armor... does now! UHM.... note it still gets Vuln.modifier, but not armorReduction.
 
-				if (power > 0)
+				if (shotgun == true) targetUnit->hasCried(true);
+
+				if (power != 0)
 				{
 					if (attacker != NULL
 						&& (antecedentWounds < targetUnit->getFatalWounds()
@@ -2272,19 +2268,18 @@ BattleUnit* TileEngine::hit(
 					// And, probly don't have to state if killed by aLiens: probly assumed in DebriefingState.
 
 					if (targetUnit->getSpecialAbility() == SPECAB_EXPLODE // cyberdiscs, usually.
-						&& targetUnit->isOut_t(OUT_HLTH_STUN) == true)
+						&& targetUnit->isOut_t(OUT_HLTH_STUN) == true
+						&& (targetUnit->isZombie() == true
+							|| (dType != DT_STUN		// don't explode if stunned. Maybe... see above.
+								&& dType != DT_SMOKE
+								&& dType != DT_HE		// don't explode if taken down w/ explosives -> wait a sec, this is hit() not explode() ...
+								&& dType != DT_IN)))	//&& dType != DT_MELEE
 					{
-						if (dType != DT_STUN	// don't explode if stunned. Maybe... see above.
-							&& dType != DT_SMOKE
-							&& dType != DT_HE	// don't explode if taken down w/ explosives -> wait a sec, this is hit() not explode() ...
-							&& dType != DT_IN)	//&& dType != DT_MELEE
-						{
-							_battleSave->getBattleGame()->statePushNext(new ExplosionBState(
-																						_battleSave->getBattleGame(),
-																						centerUnitVoxel,
-																						NULL,
-																						targetUnit));
-						}
+						_battleSave->getBattleGame()->statePushNext(new ExplosionBState(
+																					_battleSave->getBattleGame(),
+																					centerUnitVoxel,
+																					NULL,
+																					targetUnit));
 					}
 				}
 
@@ -2307,9 +2302,7 @@ BattleUnit* TileEngine::hit(
 		calculateSunShading();		// roofs could have been destroyed
 		calculateTerrainLighting();	// fires could have been started
 //		calculateUnitLighting();	// units could have collapsed <- done in UnitDieBState
-		calculateFOV(
-				posTarget,
-				true);
+		calculateFOV(posTarget, true);
 
 		return targetUnit;
 	}
@@ -3090,9 +3083,7 @@ void TileEngine::explode(
 	{
 		if (_trueTile != NULL)	// special case for when a diagonal bigwall is directly targetted.
 		{						// The explosion is moved out a tile so give a full-power hit to the true target-tile.
-			_trueTile->setExplosive(
-								power,
-								0);
+			_trueTile->setExplosive(power, 0);
 			detonate(_trueTile);	// I doubt this needs any *further* consideration ...
 		}							// although it would be nice to have the explosion 'kick in' a bit.
 

@@ -769,7 +769,7 @@ void ProjectileFlyBState::think()
 						if (_prjImpact != VOXEL_OUTOFBOUNDS)
 						{
 							//Log(LOG_INFO) << ". . delay - inBounds";
-							SDL_Delay(336); // screen-pause when shot hits target before reverting camera to shooter.
+							SDL_Delay(331); // screen-pause when shot hits target before reverting camera to shooter.
 						}
 						//else Log(LOG_INFO) << ". . final vox OutofBounds - do NOT pause";
 					}
@@ -826,15 +826,13 @@ void ProjectileFlyBState::think()
 			_parent->getMap()->getProjectile()->skipTrajectory();
 		}
 
-		if (_parent->getMap()->getProjectile()->traceProjectile() == false) // projectile pathing finished
+		if (_parent->getMap()->getProjectile()->traceProjectile() == false) // projectile pathing *not* finished
 		{
 			if (_action.type == BA_THROW)
 			{
 //				_parent->getMap()->resetCameraSmoothing();
 				Position pos = _parent->getMap()->getProjectile()->getPosition(-1);
-				pos.x /= 16;
-				pos.y /= 16;
-				pos.z /= 24;
+				pos = Position::toTileSpace(pos);
 
 				if (pos.x > _battleSave->getMapSizeX())
 					--pos.x;
@@ -844,8 +842,7 @@ void ProjectileFlyBState::think()
 
 				BattleItem* const item = _parent->getMap()->getProjectile()->getItem();
 				if (item->getRules()->getBattleType() == BT_GRENADE
-					&& item->getFuse() == 0)
-					// && Options::battleInstantGrenade == true // -> moved to PrimeGrenadeState (0 cannot be set w/out InstantGrenades)
+					&& item->getFuse() == 0) //&& Options::battleInstantGrenade == true // -> moved to PrimeGrenadeState (0 cannot be set w/out InstantGrenades)
 				{
 					_parent->statePushFront(new ExplosionBState( // it's a hot potato set to explode on contact
 															_parent,
@@ -855,9 +852,7 @@ void ProjectileFlyBState::think()
 				}
 				else
 				{
-					_parent->dropItem(
-									pos,
-									item);
+					_parent->dropItem(pos, item);
 
 					if (_unit->getFaction() == FACTION_HOSTILE
 						&& _prjItem->getRules()->getBattleType() == BT_GRENADE)
@@ -941,33 +936,29 @@ void ProjectileFlyBState::think()
 						offset = -2; // step back a bit so tileExpl isn't behind a close wall.
 					}
 
-					Position explCenter = _parent->getMap()->getProjectile()->getPosition(offset);
+					Position voxelExpl = _parent->getMap()->getProjectile()->getPosition(offset);
 
-					Tile* trueTile;
+					Tile* tileTrue;
 					if (_prjVector.z != -1)
 					{
-						Position pos = Position(
-											explCenter.x / 16,
-											explCenter.y / 16,
-											explCenter.z / 24);
-						trueTile = _parent->getBattlescapeState()->getSavedBattleGame()->getTile(pos);
-						_parent->getTileEngine()->setTrueTile(trueTile);
+						const Position pos = Position::toTileSpace(voxelExpl);
+						tileTrue = _parent->getBattlescapeState()->getSavedBattleGame()->getTile(pos);
+						_parent->getTileEngine()->setTrueTile(tileTrue);
 
-						explCenter.x -= _prjVector.x * 16; // note there is no safety on these.
-						explCenter.y -= _prjVector.y * 16;
+						voxelExpl.x -= _prjVector.x * 16; // note there is no safety on these.
+						voxelExpl.y -= _prjVector.y * 16;
 					}
-					else
-						trueTile = NULL;
+					else tileTrue = NULL; // probly not needed.
 
-					//Log(LOG_INFO) << "projFlyB think() new ExplosionBState() explCenter " << _parent->getMap()->getProjectile()->getPosition(offset);
+					//Log(LOG_INFO) << "projFlyB think() new ExplosionBState() voxelExpl " << _parent->getMap()->getProjectile()->getPosition(offset);
 					//Log(LOG_INFO) << "projFlyB think() offset " << offset;
 					//Log(LOG_INFO) << "projFlyB think() projImpact voxelType " << (int)_prjImpact;
-					//Log(LOG_INFO) << "projFlyB think() explCenter.x = " << static_cast<float>(_parent->getMap()->getProjectile()->getPosition(offset).x) / 16.f;
-					//Log(LOG_INFO) << "projFlyB think() explCenter.y = " << static_cast<float>(_parent->getMap()->getProjectile()->getPosition(offset).y) / 16.f;
-					//Log(LOG_INFO) << "projFlyB think() explCenter.z = " << static_cast<float>(_parent->getMap()->getProjectile()->getPosition(offset).z) / 24.f;
+					//Log(LOG_INFO) << "projFlyB think() voxelExpl.x = " << static_cast<float>(_parent->getMap()->getProjectile()->getPosition(offset).x) / 16.f;
+					//Log(LOG_INFO) << "projFlyB think() voxelExpl.y = " << static_cast<float>(_parent->getMap()->getProjectile()->getPosition(offset).y) / 16.f;
+					//Log(LOG_INFO) << "projFlyB think() voxelExpl.z = " << static_cast<float>(_parent->getMap()->getProjectile()->getPosition(offset).z) / 24.f;
 					_parent->statePushFront(new ExplosionBState(
 															_parent,
-															explCenter,
+															voxelExpl,
 															_ammo,
 															_unit,
 															NULL,
@@ -979,11 +970,11 @@ void ProjectileFlyBState::think()
 					// and add bullet hits at their termination points.
 					if (_ammo != NULL)
 					{
-						const int shot = _ammo->getRules()->getShotgunPellets();
-						if (shot > 1) // first pellet is done above.
+						const int pellets = _ammo->getRules()->getShotgunPellets();
+						if (pellets > 1) // first pellet is done above.
 						{
-							int i = 0;
-							while (i != shot - 1)
+							int i = 1; // one pellet has already been fired above^
+							while (i < pellets)
 							{
 								Projectile* const prj = new Projectile(
 																	_parent->getResourcePack(),
@@ -992,13 +983,12 @@ void ProjectileFlyBState::think()
 																	_posOrigin,
 																	_targetVoxel);
 
-								const double accuracy = std::max(
-															0.,
-															_unit->getAccuracy(_action) - i * 0.023);
+								const double accuracy = std::max(0.,
+															_unit->getAccuracy(_action) - i * 0.023); // TODO: Create RuleItem variable '_pattern' for this.
 								_prjImpact = prj->calculateShot(accuracy); // pellet spread.
 								if (_prjImpact != VOXEL_EMPTY)
 								{
-									prj->skipTrajectory(); // as above: skip the shot to the end of its path
+									prj->skipTrajectory(); // as above: skip the pellet to the end of its path
 
 									if (_prjImpact != VOXEL_OUTOFBOUNDS) // insert an explosion and hit
 									{
@@ -1012,7 +1002,8 @@ void ProjectileFlyBState::think()
 																		prj->getPosition(1),
 																		_ammo->getRules()->getPower(),
 																		_ammo->getRules()->getDamageType(),
-																		_unit);
+																		_unit,
+																		false,true);
 									}
 								}
 
@@ -1030,8 +1021,7 @@ void ProjectileFlyBState::think()
 						BattleUnit* const victim = _battleSave->getTile(
 															_parent->getMap()->getProjectile()->getPosition(offset) / Position(16,16,24))
 														->getUnit();
-						if (victim != NULL)
-//							&& victim->isOut() == false)
+						if (victim != NULL) //&& victim->isOut() == false)
 						{
 							BattleUnitStatistics
 								* statsVictim = NULL,
@@ -1066,7 +1056,6 @@ void ProjectileFlyBState::think()
 									const int dist = _parent->getTileEngine()->distance(
 																					victim->getPosition(),
 																					_unit->getPosition());
-
 									if (dist > 30)
 										++statsUnit->longDistanceHitCounter;
 
@@ -1074,6 +1063,7 @@ void ProjectileFlyBState::think()
 										++statsUnit->lowAccuracyHitCounter;
 								}
 							}
+							// TODO: Lucky Shot counter should go here. For hitting an *unintended* target.
 						}
 					}
 

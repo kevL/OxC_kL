@@ -276,11 +276,8 @@ void ExplosionBState::init()
 
 		if (_hit == true)
 		{
-			if (_hitSuccess == true
-				|| _item->getRules()->getBattleType() == BT_PSIAMP)
-			{
+			if (_hitSuccess == true || _item->getRules()->getBattleType() == BT_PSIAMP)
 				result = 1;
-			}
 			else
 				result = -1;
 
@@ -304,8 +301,7 @@ void ExplosionBState::init()
 			Explosion* const explosion = new Explosion(
 													_center,
 													start,
-													0,
-													false,
+													0,false,
 													result);
 			_parent->getMap()->getExplosions()->push_back(explosion);
 
@@ -461,7 +457,7 @@ void ExplosionBState::explode() // private.
 		}
 	}
 
-	if (_item != NULL)
+	if (itRule != NULL)
 	{
 		if (_unit == NULL
 			&& _item->getPreviousOwner() != NULL)
@@ -494,7 +490,8 @@ void ExplosionBState::explode() // private.
 													_power,
 													dType,
 													_unit,
-													_hit);
+													_hit,
+													itRule->getShotgunPellets() != 0);
 
 			if (itRule->getZombieUnit().empty() == false
 				&& victim != NULL
@@ -535,7 +532,7 @@ void ExplosionBState::explode() // private.
 						_power / 10);
 		terrain = true;
 	}
-	else if (_item == NULL) // explosion not caused by terrain or an item - must be a cyberdisc
+	else if (itRule == NULL) // explosion not caused by terrain or an item - must be a cyberdisc
 	{
 		int radius;
 		if (_unit != NULL
@@ -562,6 +559,18 @@ void ExplosionBState::explode() // private.
 							false,
 							terrain);
 
+	if (itRule != NULL && itRule->getShotgunPellets() != 0)
+	{
+		for (std::vector<BattleUnit*>::const_iterator
+				i = _battleSave->getUnits()->begin();
+				i != _battleSave->getUnits()->end();
+				++i)
+		{
+			if ((*i)->hasCried() == true)
+				(*i)->hasCried(false);
+		}
+	}
+
 
 	if (_unit != NULL // if this hit/explosion was caused by a unit put the weapon down
 //		&& _unit->isOut() == false
@@ -576,8 +585,7 @@ void ExplosionBState::explode() // private.
 	_parent->popState();
 
 
-	if (_item != NULL
-		&& (itRule->isGrenade() == true))
+	if (itRule != NULL && itRule->isGrenade() == true)
 	{
 		for (std::vector<BattleItem*>::const_iterator
 				i = _battleSave->getItems()->begin();
@@ -596,13 +604,10 @@ void ExplosionBState::explode() // private.
 	Tile* const tile = tileEngine->checkForTerrainExplosions(); // check for more exploding tiles
 	if (tile != NULL)
 	{
-		const Position pVoxel = Position(
-									tile->getPosition().x * 16 + 8,
-									tile->getPosition().y * 16 + 8,
-									tile->getPosition().z * 24 + 10);
+		const Position voxelExpl = Position::toVoxelSpaceCentered(tile->getPosition(), 10);
 		_parent->statePushFront(new ExplosionBState(
 												_parent,
-												pVoxel,
+												voxelExpl,
 												NULL,
 												_unit,
 												tile,

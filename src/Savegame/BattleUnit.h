@@ -440,6 +440,7 @@ private:
 		_diedByFire,
 		_dontReselect,
 		_floating,
+		_hasCried,
 		_hidingForTurn,
 		_kneeled,
 		_revived,
@@ -564,6 +565,9 @@ private:
 			int basicLook,
 			int utileLook,
 			int rankLook);
+
+	/// Plays a grunt sFx when hit/damaged.
+	void playHitSound() const;
 
 	/// Gets if a grenade is suitable for an AI or panic situation.
 	bool isGrenadeSuitable(const BattleItem* const grenade) const;
@@ -711,13 +715,15 @@ private:
 
 		/// Do damage to this unit.
 		int damage(
-				const Position& relPos,
+				const Position& voxelRel,
 				int power,
 				ItemDamageType dType,
 				const bool ignoreArmor = false);
 
-		/// Plays a grunt sFx when hit/damaged.
-		void playHitSound();
+		/// Sets this unit as having cried out from a shotgun blast to the face.
+		void hasCried(bool cried);
+		/// Gets if this unit has cried already.
+		bool hasCried();
 
 		/// Sets this unit's health level.
 		void setHealth(int health);

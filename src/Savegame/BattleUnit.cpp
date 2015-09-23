@@ -120,6 +120,7 @@ BattleUnit::BattleUnit(
 		_mcSkill(0),
 		_drugDose(0),
 		_isZombie(false),
+		_hasCried(false),
 
 		_deathSound(-1),
 		_aggroSound(-1),
@@ -282,6 +283,7 @@ BattleUnit::BattleUnit(
 		_takenFire(false),
 		_battleOrder(0),
 		_revived(false),
+		_hasCried(false),
 
 		_morale(100),
 		_stunLevel(0),
@@ -1431,7 +1433,7 @@ int BattleUnit::getStrength() const
 /**
  * Does an amount of damage.
  * TODO: This should be in Battlegame instead of each unit having its own damage routine.
- * @param relPos		- reference a position in voxelspace that defines which
+ * @param voxelRel		- reference a position in voxel-space that defines which
  *						  part of armor and/or body gets hit
  * @param power			- the amount of damage to inflict
  * @param dType			- the ItemDamageType being inflicted (RuleItem.h)
@@ -1440,7 +1442,7 @@ int BattleUnit::getStrength() const
  * @return, damage done to this BattleUnit after adjustments
  */
 int BattleUnit::damage(
-		const Position& relPos,
+		const Position& voxelRel,
 		int power,
 		ItemDamageType dType,
 		const bool ignoreArmor)
@@ -1448,7 +1450,7 @@ int BattleUnit::damage(
 	//Log(LOG_INFO) << "BattleUnit::damage() " << getId() << " power[0] = " << power;
 	power = static_cast<int>(Round(
 			static_cast<float>(power) * _armor->getDamageModifier(dType)));
-	//Log(LOG_INFO) << ". dType = " << (int)dType << "; power[1] = " << power;
+	//Log(LOG_INFO) << ". dType = " << (int)dType << " power[1] = " << power;
 
 //	if (power < 1) // kL_note: this early-out messes with got-hit sFx below_
 //		return 0;
@@ -1456,76 +1458,75 @@ int BattleUnit::damage(
 	if (dType == DT_SMOKE) // smoke is really stun damage.
 		dType = DT_STUN;
 
-	if (dType == DT_STUN)
-	{
-		if (power < 1)
-			return 0;
-	}
+	if (dType == DT_STUN && power < 1)
+		return 0;
 
 	UnitBodyPart bodyPart = BODYPART_TORSO;
 	const bool woundable = isWoundable();
 
-	if (power > 0
-		&& ignoreArmor == false)
+	if (power > 0 && ignoreArmor == false)
 	{
 		UnitSide side = SIDE_FRONT;
 
-		if (relPos == Position(0,0,0))
+		if (voxelRel == Position(0,0,0))
 			side = SIDE_UNDER;
 		else
 		{
-			int relDir;
+			int dirRel;
 			const int
-				abs_x = std::abs(relPos.x),
-				abs_y = std::abs(relPos.y);
+				abs_x = std::abs(voxelRel.x),
+				abs_y = std::abs(voxelRel.y);
 
 			if (abs_y > abs_x * 2)
-				relDir = 8 + 4 * static_cast<int>(relPos.y > 0);	// hit from South (y-pos) or North (y-neg)
+				dirRel = 8 + 4 * static_cast<int>(voxelRel.y > 0);	// hit from South (y-pos) or North (y-neg)
 			else if (abs_x > abs_y * 2)
-				relDir = 10 + 4 * static_cast<int>(relPos.x < 0);	// hit from East (x-pos) or West (x-neg)
+				dirRel = 10 + 4 * static_cast<int>(voxelRel.x < 0);	// hit from East (x-pos) or West (x-neg)
 			else
 			{
-				if (relPos.x < 0)	// hit from West (x-neg)
+				if (voxelRel.x < 0)	// hit from West (x-neg)
 				{
-					if (relPos.y > 0)
-						relDir = 13;	// hit from SouthWest (y-pos)
+					if (voxelRel.y > 0)
+						dirRel = 13;	// hit from SouthWest (y-pos)
 					else
-						relDir = 15;	// hit from NorthWest (y-neg)
+						dirRel = 15;	// hit from NorthWest (y-neg)
 				}
 				else				// hit from East (x-pos)
 				{
-					if (relPos.y > 0)
-						relDir = 11;	// hit from SouthEast (y-pos)
+					if (voxelRel.y > 0)
+						dirRel = 11;	// hit from SouthEast (y-pos)
 					else
-						relDir = 9;		// hit from NorthEast (y-neg)
+						dirRel = 9;		// hit from NorthEast (y-neg)
 				}
 			}
 
-			//Log(LOG_INFO) << "BattleUnit::damage() Target was hit from DIR = " << ((relDir - _dir) %8);
-			switch ((relDir - _dir) % 8)
+			//Log(LOG_INFO) << "BattleUnit::damage() Target was hit from DIR = " << ((dirRel - _dir) % 8);
+			switch ((dirRel - _dir) % 8)
 			{
-				case 0:	side = SIDE_FRONT;									break;
-				case 1:	side = RNG::percent(50) ? SIDE_FRONT : SIDE_RIGHT;	break;
-				case 2:	side = SIDE_RIGHT;									break;
-				case 3:	side = RNG::percent(50) ? SIDE_REAR : SIDE_RIGHT;	break;
-				case 4:	side = SIDE_REAR;									break;
-				case 5:	side = RNG::percent(50) ? SIDE_REAR : SIDE_LEFT; 	break;
-				case 6:	side = SIDE_LEFT;									break;
-				case 7:	side = RNG::percent(50) ? SIDE_FRONT : SIDE_LEFT;
+				case 0:	side = SIDE_FRONT;						break;
+				case 1:	side = RNG::percent(50)	? SIDE_FRONT
+												: SIDE_RIGHT;	break;
+				case 2:	side = SIDE_RIGHT;						break;
+				case 3:	side = RNG::percent(50)	? SIDE_REAR
+												: SIDE_RIGHT;	break;
+				case 4:	side = SIDE_REAR;						break;
+				case 5:	side = RNG::percent(50)	? SIDE_REAR
+												: SIDE_LEFT; 	break;
+				case 6:	side = SIDE_LEFT;						break;
+				case 7:	side = RNG::percent(50)	? SIDE_FRONT
+												: SIDE_LEFT;
 			}
 			//Log(LOG_INFO) << ". side = " << (int)side;
 
 			if (woundable == true)
 			{
-				if (relPos.z > getHeight() - 4)
+				if (voxelRel.z > getHeight() - 4)
 					bodyPart = BODYPART_HEAD;
-				else if (relPos.z > 5)
+				else if (voxelRel.z > 5)
 				{
 					switch (side)
 					{
 						case SIDE_LEFT:		bodyPart = BODYPART_LEFTARM;	break;
 						case SIDE_RIGHT:	bodyPart = BODYPART_RIGHTARM;	break;
-
 						default:			bodyPart = BODYPART_TORSO;
 					}
 				}
@@ -1535,7 +1536,6 @@ int BattleUnit::damage(
 					{
 						case SIDE_LEFT: 	bodyPart = BODYPART_LEFTLEG; 	break;
 						case SIDE_RIGHT:	bodyPart = BODYPART_RIGHTLEG; 	break;
-
 						default:
 							bodyPart = static_cast<UnitBodyPart>(RNG::generate(
 																			BODYPART_RIGHTLEG,
@@ -1546,10 +1546,9 @@ int BattleUnit::damage(
 			//Log(LOG_INFO) << ". bodyPart = " << (int)bodyPart;
 		}
 
-		const int armor = getArmor(side);
-		setArmor( // armor damage
-				std::max(
-						0,
+		const int armor = getArmor(side); // armor damage
+		setArmor(
+				std::max(0,
 						armor - (power + 9) / 10), // round up.
 				side);
 
@@ -1566,11 +1565,7 @@ int BattleUnit::damage(
 
 		if (dType == DT_STUN)
 		{
-			if (selfAware == true)
-			{
-				//Log(LOG_INFO) << ". . stun = " << power;
-				_stunLevel += power;
-			}
+			if (selfAware == true) _stunLevel += power;
 		}
 		else
 		{
@@ -1597,28 +1592,17 @@ int BattleUnit::damage(
 
 				wounds = RNG::generate(1,3);
 
-				if (ignoreArmor == false)// Only wearers of armors-that-are-resistant-to-damage-type can take fatal wounds.
+				if (ignoreArmor == false // Only wearers of armors-that-are-resistant-to-damage-type can take fatal wounds.
+					&& woundable == true // fatal wounds
+					&& RNG::generate(0,10) < power) // kL: refactor this.
 				{
-					if (woundable == true) // fatal wounds
-					{
-						if (RNG::generate(0,10) < power) // kL: refactor this.
-						{
-							_fatalWounds[bodyPart] += wounds;
-//							moraleChange(-wounds * 3);
-						}
-					}
-//					setArmor(getArmor(side) - (power / 10) - 1, side); // armor damage
+					_fatalWounds[bodyPart] += wounds;
 				}
 
-				if (dType == DT_IN)
-					wounds = power;
-
-				//Log(LOG_INFO) << ". moraleChange = " << (-wounds * 3);
-//				moraleChange(-wounds * 3);
+				if (dType == DT_IN) wounds = power; // for Morale loss.
 			}
 		}
 
-//		if (isOut(true, true) == true)
 		if (isOut_t(OUT_HLTH_STUN) == true)
 			_aboutToDie = true;
 
@@ -1640,7 +1624,6 @@ int BattleUnit::damage(
 				}
 
 				moraleLoss = moraleLoss * power * 10 / leadership;
-				//Log(LOG_INFO) << ". . . . moraleLoss = " << moraleLoss;
 				moraleChange(-moraleLoss);
 			}
 		}
@@ -1650,6 +1633,7 @@ int BattleUnit::damage(
 	// a longer "uuuhghghgh" if hit causes damage ... and let DieBState handle deathscreams.
 	if (_visible == true
 		&& _aboutToDie == false
+		&& _hasCried == false
 //		&& _health > 0
 //		&& _health > _stunLevel
 		&& _status != STATUS_UNCONSCIOUS
@@ -1670,7 +1654,7 @@ int BattleUnit::damage(
 /**
  * Plays a grunt sFx when this BattleUnit gets damaged or hit.
  */
-void BattleUnit::playHitSound()
+void BattleUnit::playHitSound() const // private.
 {
 	int soundId;
 
@@ -1680,11 +1664,8 @@ void BattleUnit::playHitSound()
 		soundId = RNG::generate(44,46);
 	else if (_originalFaction == FACTION_PLAYER)
 	{
-		if (_unitRule != NULL
-			&& _unitRule->isDog() == true)
-		{
+		if (_unitRule != NULL && _unitRule->isDog() == true)
 			soundId = _deathSound;
-		}
 		else if (_gender == GENDER_MALE)
 			soundId = RNG::generate(141,151);
 		else
@@ -1695,6 +1676,25 @@ void BattleUnit::playHitSound()
 
 	if (soundId != -1)
 		_battleGame->getResourcePack()->getSound("BATTLE.CAT", soundId)->play();
+}
+
+/**
+ * Sets this unit as having cried out from a shotgun blast to the face.
+ * @note So that it doesn't scream for each pellet.
+ * @param cried - true if hit
+ */
+void BattleUnit::hasCried(bool cried)
+{
+	_hasCried = cried;
+}
+
+/**
+ * Gets if this unit has cried already.
+ * @return, true if cried
+ */
+bool BattleUnit::hasCried()
+{
+	return _hasCried;
 }
 
 /**

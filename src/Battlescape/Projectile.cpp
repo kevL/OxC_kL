@@ -529,7 +529,7 @@ void Projectile::applyAccuracy( // private.
 
 		if (_action.type == BA_THROW)
 		{
-			const Tile* const tile = _battleSave->getTile(*targetVoxel / Position(16,16,24));
+			const Tile* const tile = _battleSave->getTile(Position::toTileSpace(*targetVoxel));
 			//const int terrainZ = tile->getTerrainLevel();
 			//Log(LOG_INFO) << "terrainZ = " << terrainZ;
 
@@ -682,19 +682,13 @@ bool Projectile::verifyTarget(const Position& originVoxel) // private.
 	if (voxelType != VOXEL_EMPTY
 		&& _trj.empty() == false)
 	{
-		Position posTest = Position(
-								_trj.at(0).x / 16,
-								_trj.at(0).y / 16,
-								_trj.at(0).z / 24);
+		Position posTest = Position::toTileSpace(_trj.at(0));
 
 		if (voxelType == VOXEL_UNIT)
 		{
 			const Tile* const tileTest = _battleSave->getTile(posTest);
 			if (tileTest != NULL && tileTest->getUnit() == NULL) // must be poking head up from tileBelow
-				posTest = Position(
-								posTest.x,
-								posTest.y,
-								posTest.z - 1);
+				posTest -= Position(0,0,-1);
 		}
 
 		if (posTest != _action.target
@@ -826,7 +820,7 @@ BattleAction* Projectile::getActionPrj()
  */
 Position Projectile::getFinalPosition() const
 {
-	return _trj.back() / Position(16,16,24); // returning this by const& might be okay due to 'extended temporaries' in C++
+	return Position::toTileSpace(_trj.back()); // returning this by const& might be okay due to 'extended temporaries' in C++
 }
 
 /**
