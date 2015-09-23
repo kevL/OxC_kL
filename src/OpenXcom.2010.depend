@@ -4637,7 +4637,7 @@
 
 1432464769 f:\git\openxcom\src\savegame\itemcontainer.h
 
-1442974708 f:\git\openxcom\src\savegame\savedbattlegame.h
+1442993789 f:\git\openxcom\src\savegame\savedbattlegame.h
 	"BattleUnit.h"
 
 1442876303 f:\git\openxcom\src\savegame\battleunit.h
@@ -6563,7 +6563,7 @@
 	"Sound.h"
 	"Language.h"
 
-1442990310 source:f:\git\openxcom\src\engine\soundset.cpp
+1442992821 source:f:\git\openxcom\src\engine\soundset.cpp
 	"SoundSet.h"
 	"Sound.h"
 
@@ -8438,7 +8438,7 @@
 	"../Ruleset/RuleItem.h"
 	"../Savegame/SavedBattleGame.h"
 
-1442988475 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1442992691 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	"BattleItem.h"
 	"SavedGame.h"

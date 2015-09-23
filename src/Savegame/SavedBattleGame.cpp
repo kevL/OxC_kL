@@ -2354,15 +2354,15 @@ bool SavedBattleGame::setUnitPosition(
 
 /**
  * Places a unit on or near a position.
- * @param unit			- pointer to a BattleUnit to place
- * @param pos			- reference the position around which to attempt to place @a unit
- * @param largeFriend	- true if @a unit is large
- * @return, true if unit was successfully placed
+ * @param unit		- pointer to a BattleUnit to place
+ * @param pos		- reference the position around which to attempt to place @a unit
+ * @param isLarge	- true if @a unit is large
+ * @return, true if unit is placed
  */
 bool SavedBattleGame::placeUnitNearPosition(
 		BattleUnit* const unit,
 		const Position& pos,
-		bool largeFriend) const
+		bool isLarge) const
 {
 	if (unit == NULL)
 		return false;
@@ -2373,7 +2373,7 @@ bool SavedBattleGame::placeUnitNearPosition(
 
 	int
 		size1 = 0 - unit->getArmor()->getSize(),
-		size2 = largeFriend ? 2 : 1,
+		size2 = isLarge ? 2 : 1,
 		xArray[8] = {    0, size2, size2, size2,     0, size1, size1, size1},
 		yArray[8] = {size1, size1,     0, size2, size2, size2,     0, size1};
 
@@ -2395,30 +2395,20 @@ bool SavedBattleGame::placeUnitNearPosition(
 		tile = getTile(pos + (posOffset / 2));
 //		tile = getTile(pos + posOffset);
 		if (tile != NULL
-			&& getPathfinding()->isBlockedPath(
-											tile,
-											dir,
-											NULL) == false
-//			&& getPathfinding()->isBlockedPath(
-//											getTile(pos),
-//											i) == false
-			&& setUnitPosition(
-							unit,
-							pos + posOffset) == true)
+			&& getPathfinding()->isBlockedPath(tile, dir, NULL) == false
+//			&& getPathfinding()->isBlockedPath(getTile(pos), i) == false
+			&& setUnitPosition(unit, pos + posOffset) == true)
 		{
 			return true;
 		}
 	}
 
-/* uhh no.
-	if (unit->getMovementType() == MT_FLY)
+/*	if (unit->getMovementType() == MT_FLY) // uhh no.
 	{
 		Tile* tile = getTile(pos + Position(0,0,1));
 		if (tile
 			&& tile->hasNoFloor(getTile(pos))
-			&& setUnitPosition(
-							unit,
-							pos + Position(0,0,1)))
+			&& setUnitPosition(unit, pos + Position(0,0,1)))
 		{
 			return true;
 		}

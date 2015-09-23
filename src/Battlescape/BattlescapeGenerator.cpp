@@ -1928,17 +1928,17 @@ BattleUnit* BattlescapeGenerator::addAlien( // private.
 /**
  * Places a unit near a friendly unit.
  * @param unit - pointer to the BattleUnit in question
- * @return, true if the unit was successfully placed
+ * @return, true if @a unit was successfully placed
  */
 bool BattlescapeGenerator::placeUnitNearFriend(BattleUnit* const unit) // private.
 {
 	if (unit != NULL
 		&& _battleSave->getUnits()->empty() == false)
 	{
-		const BattleUnit* bu;
+		const BattleUnit* friendUnit;
 		Position posEntry;
 		int tries;
-		bool largeUnit;
+		bool isLarge;
 		size_t pick;
 
 		for (int
@@ -1948,30 +1948,27 @@ bool BattlescapeGenerator::placeUnitNearFriend(BattleUnit* const unit) // privat
 		{
 			posEntry = Position(-1,-1,-1);
 			tries = 100;
-			largeUnit = false;
+			isLarge = false;
 
 			while (posEntry == Position(-1,-1,-1)
-				&& tries > 0)
+				&& tries != 0)
 			{
 				pick = static_cast<size_t>(RNG::generate(0,
 					   static_cast<int>(_battleSave->getUnits()->size()) - 1));
-				bu = _battleSave->getUnits()->at(pick);
-				if (bu->getFaction() == unit->getFaction()
-					&& bu->getPosition() != Position(-1,-1,-1)
-					&& bu->getArmor()->getSize() >= unit->getArmor()->getSize())
+				friendUnit = _battleSave->getUnits()->at(pick);
+				if (friendUnit->getFaction() == unit->getFaction()
+					&& friendUnit->getPosition() != Position(-1,-1,-1)
+					&& friendUnit->getArmor()->getSize() >= unit->getArmor()->getSize())
 				{
-					posEntry = bu->getPosition();
-					largeUnit = (bu->getArmor()->getSize() == 2);
+					posEntry = friendUnit->getPosition();
+					isLarge = (friendUnit->getArmor()->getSize() == 2);
 				}
 
 				--tries;
 			}
 
-			if (tries > 0
-				&& _battleSave->placeUnitNearPosition(
-													unit,
-													posEntry,
-													largeUnit) == true)
+			if (tries != 0
+				&& _battleSave->placeUnitNearPosition(unit, posEntry, isLarge) == true)
 			{
 				return true;
 			}
@@ -1990,10 +1987,10 @@ void BattlescapeGenerator::deployCivilians(int civilians) // private.
 	if (civilians > 0)
 	{
 		const int qty = std::max(
-								1,
-								RNG::generate(
-											civilians / 2,
-											civilians));
+							1,
+							RNG::generate(
+										civilians / 2,
+										civilians));
 		size_t pick;
 		for (int
 				i = 0;
@@ -2020,20 +2017,12 @@ void BattlescapeGenerator::addCivilian(RuleUnit* const unitRule) // private.
 										_rules->getArmor(unitRule->getArmor()),
 										DIFF_BEGINNER); // <- do not upgrade civilians
 
-	Node* const node = _battleSave->getSpawnNode(
-												NR_SCOUT,
-												unit);
+	Node* const node = _battleSave->getSpawnNode(NR_SCOUT, unit);
 	if ((node != NULL
-			&& _battleSave->setUnitPosition(
-										unit,
-										node->getPosition()) == true)
+			&& _battleSave->setUnitPosition(unit, node->getPosition()) == true)
 		|| placeUnitNearFriend(unit) == true)
 	{
-		unit->setAIState(new CivilianBAIState(
-										_battleSave,
-										unit,
-										node));
-
+		unit->setAIState(new CivilianBAIState(_battleSave, unit, node));
 		unit->setDirection(RNG::generate(0,7));
 
 		_battleSave->getUnits()->push_back(unit);
