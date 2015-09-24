@@ -443,7 +443,8 @@ bool UnitWalkBState::doStatusStand() // private.
 		if (destTile != NULL // would hate to see what happens if destTile=NULL, nuclear war no doubt.
 			&& destTile->getFire() > 0
 			&& _unit->getFaction() != FACTION_PLAYER
-			&& _unit->getArmor()->getDamageModifier(DT_IN) > 0.f)
+			&& (_unit->getArmor()->getDamageModifier(DT_IN) > 0.f
+				|| _unit->isZombie() == false))
 		{
 			//Log(LOG_INFO) << ". . subtract tu inflation for a fireTile";
 			// The TU cost was artificially inflated by 32 points in getTuCostPf

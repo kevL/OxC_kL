@@ -1125,12 +1125,13 @@ int Pathfinding::getTuCostPf(
 
 			if (tileDest->getFire() != 0)
 			{
-				// TFTD thing: tiles on fire are cost 2 TUs more for whatever reason.
+				// TFTD thing: tiles on fire are cost 2 TU more for whatever reason.
 				// kL_note: Let's make it a UFO thing, too.
 				cost += 2;
 
 				if (_unit->getFaction() != FACTION_PLAYER
-					&& _unit->getArmor()->getDamageModifier(DT_IN) > 0.f)
+					&& (_unit->getArmor()->getDamageModifier(DT_IN) > 0.f
+						|| _unit->isZombie() == false))
 				{
 					cost += 32;	// try to find a better path, but don't exclude this path entirely.
 								// See UnitWalkBState::doStatusStand(), where this is subtracted again.
