@@ -693,9 +693,9 @@ void SoldierInfoState::btnAutoStatAll(Action*)
 			init();
 	}
 
-/*	// TEST: for updating Soldier Awards
+	// TEST: for updating Soldier Awards ***
 	// note that decorationLevels need to also be zero'd in the savedgame file.
-	for (std::vector<Base*>::const_iterator // Award medals for service time
+/*	for (std::vector<Base*>::const_iterator
 			i = _game->getSavedGame()->getBases()->begin();
 			i != _game->getSavedGame()->getBases()->end();
 			++i)

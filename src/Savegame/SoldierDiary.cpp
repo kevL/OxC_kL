@@ -677,7 +677,7 @@ bool SoldierDiary::manageAwards(const Ruleset* const rules)
 		doCeremony = false,	// this value is returned TRUE if at least one award is given
 		doAward;			// this value determines if an award will be given
 
-	std::map<std::string, size_t> reqdLevel;	// <noun, qtyLevels>
+	std::map<std::string, size_t> reqLevel;	// <noun, qtyLevels>
 	std::vector<std::string> modularAwards;		// <types>
 
 	// loop over all possible RuleAward
@@ -690,8 +690,8 @@ bool SoldierDiary::manageAwards(const Ruleset* const rules)
 		//Log(LOG_INFO) << ". iter awardList";
 		const std::string& type = (*i).first;
 
-		reqdLevel.clear();
-		reqdLevel["noNoun"] = 0;
+		reqLevel.clear();
+		reqLevel["noNoun"] = 0;
 
 		// loop over all of soldier's Awards, see if he/she
 		// already has the award; get the level and noun if so
@@ -701,7 +701,7 @@ bool SoldierDiary::manageAwards(const Ruleset* const rules)
 				++j)
 		{
 			if ((*j)->getType() == type)
-				reqdLevel[(*j)->getNoun()] = (*j)->getDecorLevelInt() + 1;
+				reqLevel[(*j)->getNoun()] = (*j)->getDecorLevelInt() + 1;
 		}
 
 		// go through each possible criteria. Assume the award is awarded, set to FALSE if not;
@@ -711,10 +711,10 @@ bool SoldierDiary::manageAwards(const Ruleset* const rules)
 		doAward = true;
 		int val;
 
-		const std::map<std::string, std::vector<int> >* critList = (*i).second->getCriteria();
+		const std::map<std::string, std::vector<int> >* criteriaList = (*i).second->getCriteria();
 		for (std::map<std::string, std::vector<int> >::const_iterator
-				j = critList->begin();
-				j != critList->end();
+				j = criteriaList->begin();
+				j != criteriaList->end();
 				++j)
 		{
 			//Log(LOG_INFO) << ". . iter Criteria";
@@ -723,18 +723,18 @@ bool SoldierDiary::manageAwards(const Ruleset* const rules)
 			// skip this 'noNoun' award if its max award level has been reached
 			// or if it has a noun skip it if it has 0 total levels (which ain't gonna happen);
 			// you see, Rules can't be positively examined for nouns - only awards already given to soldiers can.
-			if ((*j).second.size() <= reqdLevel["noNoun"])
+			if ((*j).second.size() <= reqLevel["noNoun"])
 			{
 				doAward = false;
 				break;
 			}
 
-			// these criteria have no nouns, so only the reqdLevel["noNoun"] will ever be compared
-			val = (*j).second.at(reqdLevel["noNoun"]);
-			if (//reqdLevel.count("noNoun") == 1 && // <- this is relevant only if entry "noNoun" were removed from the map in the sections following this one.
-//				reqdLevel["noNoun"] != 0 && // kL_add
-//				reqdLevel["noNoun"] == 0 || // kL_add
-				(   (criterion == "totalKills"					&& static_cast<int>(_killList.size()) < val)
+			// these criteria have no nouns, so only the reqLevel["noNoun"] will ever be compared
+			val = (*j).second.at(reqLevel["noNoun"]);
+			if (//reqLevel.count("noNoun") == 1 && // <- this is relevant only if entry "noNoun" were removed from the map in the sections following this one.
+//				reqLevel["noNoun"] != 0 && // kL_add
+//				reqLevel["noNoun"] == 0 || // kL_add
+				((criterion == "totalKills"						&& static_cast<int>(_killList.size()) < val)
 					|| (criterion == "totalMissions"			&& static_cast<int>(_missionIdList.size()) < val)
 					|| (criterion == "totalWins"				&& _winTotal < val)
 					|| (criterion == "totalScore"				&& _scoreTotal < val)
@@ -797,11 +797,11 @@ bool SoldierDiary::manageAwards(const Ruleset* const rules)
 					const std::string noun = (*k).first;
 
 					// if there is no matching noun get the first award criteria
-					if (reqdLevel.count(noun) == 0)
+					if (reqLevel.count(noun) == 0)
 						threshold = (*j).second.front();
 					// otherwise get the criteria per the SoldierAward level
-					else if (reqdLevel[noun] != (*j).second.size())
-						threshold = (*j).second.at(reqdLevel[noun]);
+					else if (reqLevel[noun] != (*j).second.size())
+						threshold = (*j).second.at(reqLevel[noun]);
 
 					// if a criteria was set AND the stat's count exceeds the criteria
 					if (threshold != -1
@@ -976,7 +976,7 @@ bool SoldierDiary::manageAwards(const Ruleset* const rules)
 						// if one of the AND criteria fail, stop looking
 						const int multiCriteria = (*andCriteria).first;
 						if (multiCriteria == 0
-							|| qty / multiCriteria < (*j).second.at(reqdLevel["noNoun"]))
+							|| qty / multiCriteria < (*j).second.at(reqLevel["noNoun"]))
 						{
 							doAward = false;
 							break;
@@ -1345,7 +1345,7 @@ void SoldierAward::load(const YAML::Node& node)
 {
 	_type		= node["type"]		.as<std::string>(_type);
 	_noun		= node["noun"]		.as<std::string>("noNoun");
-	_new		= node["isNew"]		.as<bool>(false);
+	_new		= node["isNew"]		.as<bool>(false); // note: '_new' never gets saved; also the initialization value in the cTor is different than the default load-value.
 	_decorLevel	= node["decorLevel"].as<size_t>(_decorLevel);
 }
 
@@ -1359,8 +1359,11 @@ YAML::Node SoldierAward::save() const
 
 	node["type"] = _type;
 
-	if (_decorLevel != 0)	node["decorLevel"]	= static_cast<int>(_decorLevel);
-	if (_noun != "noNoun")	node["noun"]		= _noun;
+//	if (_decorLevel != 0)								// note: For whatever reason '_decorLevel' won't load its default init value;
+	node["decorLevel"] = static_cast<int>(_decorLevel);	// a "0" must be saved regardless of the cTor initialization list ....
+
+	if (_noun != "noNoun")
+		node["noun"] = _noun;
 
 	return node;
 }
