@@ -4594,7 +4594,7 @@
 1440429890 f:\git\openxcom\src\ruleset\mapdata.h
 	"RuleItem.h"
 
-1443039975 f:\git\openxcom\src\ruleset\ruleitem.h
+1443057247 f:\git\openxcom\src\ruleset\ruleitem.h
 	"../Battlescape/BattlescapeGame.h"
 
 1442825569 source:f:\git\openxcom\src\basescape\craftequipmentstate.cpp
@@ -4628,7 +4628,7 @@
 1442971521 f:\git\openxcom\src\battlescape\battlescapegenerator.h
 	"../Ruleset/MapScript.h"
 
-1442454283 f:\git\openxcom\src\battlescape\inventorystate.h
+1443056243 f:\git\openxcom\src\battlescape\inventorystate.h
 	"../Engine/State.h"
 
 1442265022 f:\git\openxcom\src\engine\logger.h
@@ -4640,7 +4640,7 @@
 1442993789 f:\git\openxcom\src\savegame\savedbattlegame.h
 	"BattleUnit.h"
 
-1443038183 f:\git\openxcom\src\savegame\battleunit.h
+1443055831 f:\git\openxcom\src\savegame\battleunit.h
 	"SavedGame.h"
 	"Soldier.h"
 	"../Battlescape/BattlescapeGame.h"
@@ -5531,7 +5531,7 @@
 1440380682 f:\git\openxcom\src\battlescape\unitfallbstate.h
 	"BattleState.h"
 
-1442454270 f:\git\openxcom\src\battlescape\unitinfostate.h
+1443056307 f:\git\openxcom\src\battlescape\unitinfostate.h
 	"../Engine/State.h"
 
 1440469589 f:\git\openxcom\src\battlescape\unitpanicbstate.h
@@ -8142,7 +8142,7 @@
 1442351907 f:\git\openxcom\src\ufopaedia\articlestatebasefacility.h
 	"ArticleState.h"
 
-1442379879 f:\git\openxcom\src\ufopaedia\articlestate.h
+1443056364 f:\git\openxcom\src\ufopaedia\articlestate.h
 	"../Engine/State.h"
 	"../Ruleset/RuleItem.h"
 
@@ -8594,7 +8594,7 @@
 1433868731 source:f:\git\openxcom\src\savegame\serializationhelper.cpp
 	"SerializationHelper.h"
 
-1442649833 source:f:\git\openxcom\src\savegame\soldier.cpp
+1443056669 source:f:\git\openxcom\src\savegame\soldier.cpp
 	"Soldier.h"
 	"Craft.h"
 	"EquipmentLayoutItem.h"

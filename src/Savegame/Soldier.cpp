@@ -547,10 +547,13 @@ bool Soldier::trainPsiDay()
 			if (RNG::percent(PSI_PCT) == true)
 			{
 				ret = true;
+				int psiSkill = RNG::generate(
+										_solRule->getMinStats().psiSkill,
+										_solRule->getMaxStats().psiSkill);
+				if (psiSkill < 1) psiSkill = 1;
+
 				_currentStats.psiSkill =
-				_initialStats.psiSkill = RNG::generate(
-												_solRule->getMinStats().psiSkill,
-												_solRule->getMaxStats().psiSkill);
+				_initialStats.psiSkill = psiSkill;
 			}
 		}
 		else // Psi unlocked already.

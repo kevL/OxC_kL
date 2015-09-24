@@ -251,13 +251,13 @@ private:
 		/// Gets the item's melee TU cost.
 		int getTUMelee() const;
 		/// Gets the item's use TU.
-		int getTUUse() const;
+		int getUseTu() const;
 		/// Gets the item's reload TU.
-		int getTUReload() const;
+		int getReloadTu() const;
 		/// Gets the item's unload TU.
-		int getTUUnload() const;
+		int getUnloadTu() const;
 		/// Gets the item's prime TU.
-		int getTUPrime() const;
+		int getPrimeTu() const;
 
 		/// Gets list of compatible ammo.
 		const std::vector<std::string>* getCompatibleAmmo() const;

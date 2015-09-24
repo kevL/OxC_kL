@@ -137,10 +137,10 @@ BattleActionType ActionMenuItem::getAction() const
 }
 
 /**
- * Gets the action tus that were linked to this menu item.
+ * Gets the action TUs that were linked to this menu item.
  * @return, the timeunits that are linked to this menu item
  */
-int ActionMenuItem::getTUs() const
+int ActionMenuItem::getActionMenuTu() const
 {
 	return _tu;
 }

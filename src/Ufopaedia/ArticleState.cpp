@@ -46,7 +46,7 @@ ArticleState::ArticleState(const std::string& article_id) // protected.
 	_btnNext	= new TextButton(30, 14, 75, 5);
 
 	_timer = new Timer(132);
-	_timer->onTimer((StateHandler)& ArticleState::repeat);
+	_timer->onTimer((StateHandler)& ArticleState::keyRepeat);
 	_timer->start();
 }
 
@@ -70,7 +70,7 @@ void ArticleState::think()
 /**
  * Advances to the next/previous Article when right/left key is depressed.
  */
-void ArticleState::repeat()
+void ArticleState::keyRepeat() // private.
 {
 	Uint8* keystate = SDL_GetKeyState(NULL);
 	if (keystate[Options::keyGeoRight] == 1

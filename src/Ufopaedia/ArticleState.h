@@ -76,7 +76,7 @@ protected:
 	virtual ~ArticleState();
 
 	/// Advances to the next/previous Article when right/left key is depressed.
-	void repeat();
+	void keyRepeat();
 
 	/// screen layout helpers
 	void initLayout(bool contrast = true);

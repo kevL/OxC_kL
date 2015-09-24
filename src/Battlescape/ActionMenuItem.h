@@ -78,7 +78,7 @@ private:
 		BattleActionType getAction() const;
 
 		/// Gets the assigned action TUs.
-		int getTUs() const;
+		int getActionMenuTu() const;
 
 		/// Sets the palettes.
 		void setPalette(

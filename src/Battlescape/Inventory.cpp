@@ -900,7 +900,7 @@ void Inventory::mouseClick(Action* action, State* state)
 						if (item->getAmmoItem() != NULL)
 							_warning->showMessage(_game->getLanguage()->getString("STR_WEAPON_IS_ALREADY_LOADED"));
 						else if (_tuMode == false
-							|| _selUnit->spendTimeUnits(item->getRules()->getTUReload()) == true)
+							|| _selUnit->spendTimeUnits(item->getRules()->getReloadTu()) == true)
 						{
 							_tuCost = -1;
 
@@ -1110,20 +1110,20 @@ bool Inventory::unload()
 
 
 	if (_tuMode == false
-		|| _selUnit->spendTimeUnits(_selItem->getRules()->getTUUnload()) == true)
+		|| _selUnit->spendTimeUnits(_selItem->getRules()->getUnloadTu()) == true)
 	{
-		RuleInventory* slotRule;
-		BattleUnit* toOwner;
+		RuleInventory* slot;
+		BattleUnit* owner;
 
 		if (_tuMode == false)
 		{
-			slotRule = _game->getRuleset()->getInventory("STR_GROUND");
-			toOwner = NULL;
+			slot = _game->getRuleset()->getInventory("STR_GROUND");
+			owner = NULL;
 		}
 		else
 		{
-			slotRule = _game->getRuleset()->getInventory("STR_LEFT_HAND");
-			toOwner = _selUnit;;
+			slot = _game->getRuleset()->getInventory("STR_LEFT_HAND");
+			owner = _selUnit;;
 		}
 
 		moveItem(
@@ -1134,10 +1134,10 @@ bool Inventory::unload()
 		_selItem->setAmmoItem(NULL);
 		setSelectedItem(NULL);
 
-		moveItem(ammo, slotRule);
-		ammo->moveToOwner(toOwner);
+		moveItem(ammo, slot);
+		ammo->moveToOwner(owner);
 
-		if (toOwner == NULL)
+		if (owner == NULL)
 			arrangeGround(false);
 		else
 			drawItems();

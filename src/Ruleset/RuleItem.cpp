@@ -546,7 +546,7 @@ int RuleItem::getTUMelee() const
  * Gets the number of Time Units needed to use this item.
  * @return, the number of TU needed to use this item
  */
-int RuleItem::getTUUse() const
+int RuleItem::getUseTu() const
 {
 	return _tuUse;
 }
@@ -555,7 +555,7 @@ int RuleItem::getTUUse() const
  * Gets the number of Time Units needed to reload this item.
  * @return, the number of TU needed to reload this item
  */
-int RuleItem::getTUReload() const
+int RuleItem::getReloadTu() const
 {
 	return _tuReload;
 }
@@ -564,7 +564,7 @@ int RuleItem::getTUReload() const
  * Gets the number of Time Units needed to unload this item.
  * @return, the number of TU needed to unload this item
  */
-int RuleItem::getTUUnload() const
+int RuleItem::getUnloadTu() const
 {
 	return _tuUnload;
 }
@@ -573,7 +573,7 @@ int RuleItem::getTUUnload() const
  * Gets the number of Time Units needed to prime this item.
  * @return, the number of TU needed to prime this item
  */
-int RuleItem::getTUPrime() const
+int RuleItem::getPrimeTu() const
 {
 	return _tuPrime;
 }

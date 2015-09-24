@@ -2601,7 +2601,7 @@ bool AlienBAIState::psiAction() // private.
 	{
 		const RuleItem* const itRule = _battleSave->getBattleGame()->getRuleset()->getItem("ALIEN_PSI_WEAPON");
 
-		int tuCost = itRule->getTUUse();
+		int tuCost = itRule->getUseTu();
 		if (itRule->getFlatRate() == false)
 			tuCost = static_cast<int>(std::floor(
 					 static_cast<float>(_unit->getBaseStats()->tu * tuCost) / 100.f));

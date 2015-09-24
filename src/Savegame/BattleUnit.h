@@ -145,13 +145,14 @@ struct BattleUnitKills
 	///
 	void load(const YAML::Node &node)
 	{
-		_rank		= node["rank"]					.as<std::string>(_rank);
-		_race		= node["race"]					.as<std::string>(_race);
-		_weapon		= node["weapon"]				.as<std::string>(_weapon);
-		_weaponAmmo	= node["weaponAmmo"]			.as<std::string>(_weaponAmmo);
-		_mission	= node["mission"]				.as<int>(_mission);
-		_turn		= node["turn"]					.as<int>(_turn);
-		_points		= node["points"]				.as<int>(_points);
+		_rank		= node["rank"]		.as<std::string>(_rank);
+		_race		= node["race"]		.as<std::string>(_race);
+		_weapon		= node["weapon"]	.as<std::string>(_weapon);
+		_weaponAmmo	= node["weaponAmmo"].as<std::string>(_weaponAmmo);
+		_mission	= node["mission"]	.as<int>(_mission);
+		_turn		= node["turn"]		.as<int>(_turn);
+		_points		= node["points"]	.as<int>(_points);
+
 		_status		= static_cast<UnitStatus>(node["status"]	.as<int>());
 		_faction	= static_cast<UnitFaction>(node["faction"]	.as<int>());
 	}

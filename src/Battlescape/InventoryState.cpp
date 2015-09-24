@@ -364,7 +364,7 @@ InventoryState::InventoryState(
 	_txtPSkill->setVisible(vis);
 
 	_timer = new Timer(132);
-	_timer->onTimer((StateHandler)& InventoryState::repeat);
+	_timer->onTimer((StateHandler)& InventoryState::keyRepeat);
 	_timer->start();
 }
 
@@ -453,7 +453,7 @@ void InventoryState::think()
 /**
  * Advances to the next/previous Unit when right/left key is depressed.
  */
-void InventoryState::repeat()
+void InventoryState::keyRepeat() // private.
 {
 	Uint8* keystate = SDL_GetKeyState(NULL);
 	if (keystate[Options::keyBattleNextUnit] == 1

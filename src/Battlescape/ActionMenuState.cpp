@@ -344,7 +344,7 @@ void ActionMenuState::btnActionMenuClick(Action* action)
 	{
 		const RuleItem* const itRule = _action->weapon->getRules();
 
-		_action->TU = _menuSelect[btnId]->getTUs();
+		_action->TU = _menuSelect[btnId]->getActionMenuTu();
 		_action->type = _menuSelect[btnId]->getAction();
 
 		switch (_action->type)

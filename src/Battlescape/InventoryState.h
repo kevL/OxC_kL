@@ -99,7 +99,7 @@ private:
 /*	std::vector<EquipmentLayoutItem*> _curInventoryTemplate; */
 
 	/// Advances to the next/previous Unit when right/left key is depressed.
-	void repeat();
+	void keyRepeat();
 
 	/// Updates the selected unit's info - weight, TU, etc.
 	void updateStats();

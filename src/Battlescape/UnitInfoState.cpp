@@ -514,7 +514,7 @@ UnitInfoState::UnitInfoState(
 						SDLK_KP6);
 
 		_timer = new Timer(132);
-		_timer->onTimer((StateHandler)& UnitInfoState::repeat);
+		_timer->onTimer((StateHandler)& UnitInfoState::keyRepeat);
 		_timer->start();
 	}
 }
@@ -540,7 +540,7 @@ void UnitInfoState::think()
 /**
  * Advances to the next/previous Unit when right/left key is depressed.
  */
-void UnitInfoState::repeat()
+void UnitInfoState::keyRepeat() // private.
 {
 	Uint8* keystate = SDL_GetKeyState(NULL);
 	if (keystate[Options::keyBattleNextUnit] == 1

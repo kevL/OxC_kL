@@ -127,7 +127,7 @@ private:
 	Timer* _timer;
 
 	/// Advances to the next/previous Unit when right/left key is depressed.
-	void repeat();
+	void keyRepeat();
 
 	/// Handler for exiting the state.
 	void exitClick(Action* action);

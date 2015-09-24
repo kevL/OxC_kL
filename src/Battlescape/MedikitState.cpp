@@ -328,7 +328,7 @@ void MedikitState::onHealClick(Action*)
 	if (healQty != 0)
 	{
 		const RuleItem* const itRule = _action->weapon->getRules();
-		if (_action->actor->spendTimeUnits(itRule->getTUUse()) == true)
+		if (_action->actor->spendTimeUnits(itRule->getUseTu()) == true)
 		{
 			++_action->actor->getStatistics()->medikitApplications;
 
@@ -368,7 +368,7 @@ void MedikitState::onStimClick(Action*)
 	if (stimQty != 0)
 	{
 		const RuleItem* const itRule = _action->weapon->getRules();
-		if (_action->actor->spendTimeUnits(itRule->getTUUse()) == true)
+		if (_action->actor->spendTimeUnits(itRule->getUseTu()) == true)
 		{
 			++_action->actor->getStatistics()->medikitApplications;
 
@@ -404,7 +404,7 @@ void MedikitState::onPainClick(Action*)
 	const int painQty = _action->weapon->getPainKillerQuantity();
 	if (painQty != 0)
 	{
-		if (_action->actor->spendTimeUnits(_action->weapon->getRules()->getTUUse()) == true)
+		if (_action->actor->spendTimeUnits(_action->weapon->getRules()->getUseTu()) == true)
 		{
 			++_action->actor->getStatistics()->medikitApplications;
 

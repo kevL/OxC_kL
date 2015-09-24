@@ -1999,7 +1999,7 @@ int BattleUnit::getActionTu(
 		case BA_PRIME:
 			if (itRule == NULL)
 				return 0;
-			cost = itRule->getTUPrime();
+			cost = itRule->getPrimeTu();
 		break;
 
 		case BA_THROW:
@@ -2047,7 +2047,7 @@ int BattleUnit::getActionTu(
 		case BA_PSICOURAGE:
 			if (itRule == NULL)
 				return 0;
-			cost = itRule->getTUUse();
+			cost = itRule->getUseTu();
 		break;
 
 		default:
@@ -3086,7 +3086,7 @@ bool BattleUnit::checkAmmo()
 		}
 	}
 
-	const int reloadTu = weapon->getRules()->getTUReload();
+	const int reloadTu = weapon->getRules()->getReloadTu();
 	if (_tu >= reloadTu)
 	{
 		// if it's a non-melee weapon with no ammo and 15 or more TUs might need to look for ammo ...
