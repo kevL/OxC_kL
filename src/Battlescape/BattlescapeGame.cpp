@@ -1455,8 +1455,7 @@ void BattlescapeGame::endTurnPhase() // private.
 		{
 			tile = (*i)->getTile();
 			if (tile != NULL
-				&& (tile->getSmoke() != 0
-					|| tile->getFire() != 0))
+				&& (tile->getSmoke() != 0 || tile->getFire() != 0))
 			{
 				tile->hitStuff(); // Damage tile's unit w/ Smoke & Fire at end of unit's faction's Turn-phase.
 			}
@@ -1473,8 +1472,7 @@ void BattlescapeGame::endTurnPhase() // private.
 		{
 			tile = _battleSave->getTiles()[i];
 			if (tile->getInventory()->empty() == false
-				&& (tile->getSmoke() != 0
-					|| tile->getFire() != 0))
+				&& (tile->getSmoke() != 0 || tile->getFire() != 0))
 			{
 				tile->hitStuff(_battleSave); // Damage tile's items w/ Fire at beginning of each full-turn.
 			}

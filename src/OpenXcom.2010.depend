@@ -4640,7 +4640,7 @@
 1442993789 f:\git\openxcom\src\savegame\savedbattlegame.h
 	"BattleUnit.h"
 
-1443055831 f:\git\openxcom\src\savegame\battleunit.h
+1443088953 f:\git\openxcom\src\savegame\battleunit.h
 	"SavedGame.h"
 	"Soldier.h"
 	"../Battlescape/BattlescapeGame.h"
@@ -5403,7 +5403,7 @@
 
 1440359613 f:\git\openxcom\src\savegame\battleitem.h
 
-1442875576 f:\git\openxcom\src\savegame\tile.h
+1443088953 f:\git\openxcom\src\savegame\tile.h
 	"BattleUnit.h"
 	"../Battlescape/Position.h"
 	"../Ruleset/MapData.h"

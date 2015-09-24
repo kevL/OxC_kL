@@ -264,7 +264,7 @@ void TileEngine::calculateUnitLighting() const
 				layer);
 		}
 
-		if ((*i)->getFireOnUnit() != 0) // add lighting of units on fire
+		if ((*i)->getFireUnit() != 0) // add lighting of units on fire
 			addLight(
 				(*i)->getPosition(),
 				fireLight,
@@ -2206,8 +2206,8 @@ BattleUnit* TileEngine::hit(
 										Position(0,0,0),
 										fire, DT_IN, true);
 
-						if (targetUnit->getFireOnUnit() < burn)
-							targetUnit->setFireOnUnit(burn); // catch fire and burn
+						if (targetUnit->getFireUnit() < burn)
+							targetUnit->setFireUnit(burn); // catch fire and burn
 					}
 				} // kL_end.
 
@@ -2841,8 +2841,8 @@ void TileEngine::explode(
 								{
 									const int burn = RNG::generate(0,
 																static_cast<int>(Round(5.f * vulnr)));
-									if (targetUnit->getFireOnUnit() < burn)
-										targetUnit->setFireOnUnit(burn); // catch fire and burn!!
+									if (targetUnit->getFireUnit() < burn)
+										targetUnit->setFireUnit(burn); // catch fire and burn!!
 								}
 							}
 
@@ -2895,8 +2895,8 @@ void TileEngine::explode(
 								{
 									const int burn = RNG::generate(0,
 																static_cast<int>(Round(5.f * vulnr)));
-									if (targetUnit->getFireOnUnit() < burn)
-										targetUnit->setFireOnUnit(burn); // catch fire and burn!!
+									if (targetUnit->getFireUnit() < burn)
+										targetUnit->setFireUnit(burn); // catch fire and burn!!
 								}
 							}
 

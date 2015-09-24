@@ -2597,7 +2597,7 @@ bool BattleUnit::reselectAllowed() const
  * Sets the amount of turns this unit is on fire.
  * @param fire - amount of turns this unit will be on fire (no fire 0)
  */
-void BattleUnit::setFireOnUnit(int fire)
+void BattleUnit::setFireUnit(int fire)
 {
 	if (_specab != SPECAB_BURN)
 		_fire = fire;
@@ -2607,7 +2607,7 @@ void BattleUnit::setFireOnUnit(int fire)
  * Gets the amount of turns this unit is on fire.
  * @return, amount of turns this unit will be on fire (0 - no fire)
  */
-int BattleUnit::getFireOnUnit() const
+int BattleUnit::getFireUnit() const
 {
 	return _fire;
 }
@@ -2619,23 +2619,19 @@ void BattleUnit::takeFire()
 {
 	if (_fire != 0)
 	{
-		const float
-			powerSmoke = 3.f,
-			powerFire = static_cast<float>(RNG::generate(2.,6.));
-
-		float vuln = _armor->getDamageModifier(DT_SMOKE);
-		if (vuln > 0.f) // try to knock _unit out.
+		float vulnr = _armor->getDamageModifier(DT_SMOKE);
+		if (vulnr > 0.f) // try to knock _unit out.
 			damage(
 				Position(0,0,0),
-				static_cast<int>(powerSmoke * vuln),
+				static_cast<int>(3.f * vulnr),
 				DT_SMOKE, // -> DT_STUN
 				true);
 
-		vuln = _armor->getDamageModifier(DT_IN);
-		if (vuln > 0.f)
+		vulnr = _armor->getDamageModifier(DT_IN);
+		if (vulnr > 0.f)
 			damage(
 				Position(0,0,0),
-				static_cast<int>(powerFire * vuln),
+				static_cast<int>(static_cast<float>(RNG::generate(2.,6.)) * vulnr),
 				DT_IN,
 				true);
 	}

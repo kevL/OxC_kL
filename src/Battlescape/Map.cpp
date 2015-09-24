@@ -813,7 +813,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 										posScreen.y + walkOffset.y - 8,
 										shade);
 
-								if (unitNorth->getFireOnUnit() != 0)
+								if (unitNorth->getFireUnit() != 0)
 								{
 									frame = 4 + (_animFrame / 2);
 									sprite = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
@@ -1180,7 +1180,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 									posScreen.y + walkOffset.y,
 									shade);
 
-							if (_unit->getFireOnUnit() != 0)
+							if (_unit->getFireUnit() != 0)
 							{
 								frame = 4 + (_animFrame / 2);
 								sprite = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
@@ -1337,7 +1337,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 										posScreen.y + walkOffset.y + 24,
 										shade);
 
-								if (unitBelow->getFireOnUnit() != 0)
+								if (unitBelow->getFireUnit() != 0)
 								{
 									frame = 4 + (_animFrame / 2);
 									sprite = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);

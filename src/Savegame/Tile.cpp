@@ -1013,7 +1013,7 @@ void Tile::hitStuff(SavedBattleGame* const battleSave)
 
 	float vulnr;
 
-	if (battleSave == NULL)	// damage standing units (at end of faction's turn-phases). Notice this hits only the primary quadrant!
+	if (battleSave == NULL)	// damage standing units at end of faction's turn-phase. Notice this hits only the primary quadrant!
 //		&& _unit != NULL)	// safety. call from BattlescapeGame::endTurnPhase() checks only Tiles w/ units, but that could change ....
 	{
 		//Log(LOG_INFO) << ". . hit Unit";
@@ -1046,16 +1046,15 @@ void Tile::hitStuff(SavedBattleGame* const battleSave)
 
 				if (RNG::percent(static_cast<int>(Round(40.f * vulnr))) == true) // try to set _unit on fire. Do damage from fire here, too.
 				{
-					const int dur = RNG::generate(
-												1,
+					const int dur = RNG::generate(1,
 												static_cast<int>(Round(5.f * vulnr)));
-					if (dur > _unit->getFireOnUnit())
-						_unit->setFireOnUnit(dur);
+					if (dur > _unit->getFireUnit())
+						_unit->setFireUnit(dur);
 				}
 			}
 		}
 	}
-	else //if (battleSave != NULL) // try to destroy items & kill unconscious units (only for end of full-turns)
+	else //if (battleSave != NULL) // try to destroy items & kill unconscious units at end of full-turns
 	{
 		//Log(LOG_INFO) << ". . hit Inventory's ground-items";
 		BattleUnit* unit;
@@ -1132,8 +1131,7 @@ void Tile::hitStuff(SavedBattleGame* const battleSave)
 						done = (i == _inventory.end());
 					}
 					else if (pFire > (*i)->getRules()->getArmor() // no modifier when destroying items, not even corpse in bodyarmor.
-						&& (unit == NULL
-							|| unit->getUnitStatus() == STATUS_DEAD))
+						&& (unit == NULL || unit->getUnitStatus() == STATUS_DEAD))
 					{
 						//Log(LOG_INFO) << ". . destroy item";
 						battleSave->removeItem(*i);	// This should not kill *and* remove a unit's corpse on the same
@@ -1322,7 +1320,7 @@ int Tile::getCorpseSprite(bool* fired) const
 					weight = weightTest;
 					sprite = (*i)->getRules()->getFloorSprite();
 
-					if ((*i)->getUnit()->getFireOnUnit() != 0)
+					if ((*i)->getUnit()->getFireUnit() != 0)
 						*fired = true;
 				}
 			}
@@ -1343,7 +1341,7 @@ int Tile::getCorpseSprite(bool* fired) const
 						weight = weightTest;
 						sprite = (*i)->getRules()->getFloorSprite();
 
-						if ((*i)->getUnit()->getFireOnUnit() != 0)
+						if ((*i)->getUnit()->getFireUnit() != 0)
 							*fired = true;
 					}
 				}
