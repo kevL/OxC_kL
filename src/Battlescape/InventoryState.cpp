@@ -181,9 +181,6 @@ InventoryState::InventoryState(
 //	add(_btnApplyTemplate,	"buttonApply",	"inventory", _bg);
 //	add(_btnClearInventory);
 
-	add(_selAmmo);
-	add(_inv);
-
 	add(_txtUseTU,		"textTUs",			"inventory", _bg);
 	add(_txtThrowTU,	"textTUs",			"inventory", _bg);
 	add(_txtPsiTU,		"textTUs",			"inventory", _bg);
@@ -194,6 +191,9 @@ InventoryState::InventoryState(
 	add(_wndLeftArm);
 	add(_wndRightLeg);
 	add(_wndLeftLeg);
+
+	add(_selAmmo);
+	add(_inv);
 
 	// move the TU display down to make room for the weight display
 	if (Options::showMoreStatsInInventoryView == true)
@@ -485,15 +485,9 @@ void InventoryState::init()
 	else if (unit->hasInventory() == false) // skip to the first unit with inventory
 	{
 		if (_parent != NULL)
-			_parent->selectNextFactionUnit(
-										false,
-										false,
-										true);
+			_parent->selectNextFactionUnit(false,false,true);
 		else
-			_battleSave->selectNextFactionUnit(
-											false,
-											false,
-											true);
+			_battleSave->selectNextFactionUnit(false,false,true);
 
 		if (_battleSave->getSelectedUnit() == NULL
 			 || _battleSave->getSelectedUnit()->hasInventory() == false)
@@ -633,12 +627,13 @@ void InventoryState::updateStats() // private.
 				_txtThrowTU->setVisible(false);
 
 			if (unit->getOriginalFaction() == FACTION_HOSTILE
-				&& psiSkill > 0)
+				&& psiSkill != 0)
 			{
 				_txtPsiTU->setVisible();
-				_txtPsiTU->setText(tr("STR_PSI_").arg(unit->getActionTu(
-																	BA_PSIPANIC,
-																	_parent->getBattleGame()->getAlienPsi())));
+				_txtPsiTU->setText(tr("STR_PSI_")
+							.arg(unit->getActionTu(
+												BA_PSIPANIC,
+												_parent->getBattleGame()->getAlienPsi())));
 			}
 			else
 				_txtPsiTU->setVisible(false);
@@ -650,7 +645,7 @@ void InventoryState::updateStats() // private.
 			_txtThrow->setText(tr("STR_THROWACC_SHORT").arg(unit->getBaseStats()->throwing));
 			_txtMelee->setText(tr("STR_MELEEACC_SHORT").arg(unit->getBaseStats()->melee));
 
-			if (psiSkill > 0)
+			if (psiSkill != 0)
 			{
 				_txtPStr->setText(tr("STR_PSIONIC_STRENGTH_SHORT").arg(unit->getBaseStats()->psiStrength));
 				_txtPSkill->setText(tr("STR_PSIONIC_SKILL_SHORT").arg(psiSkill));
@@ -875,10 +870,10 @@ void InventoryState::btnUnloadClick(Action*)
 		_game->getResourcePack()->getSound("BATTLE.CAT", ResourcePack::ITEM_UNLOAD_HQ)->play();
 	}
 	else if (_tuMode == false
-		&& _inv->getSelectedItem() == NULL)
+		&& _inv->getSelectedItem() == NULL
+		&& saveLayout(_battleSave->getSelectedUnit()) == true)
 	{
-		if (saveLayout(_battleSave->getSelectedUnit()))
-			_inv->showWarning(tr("STR_EQUIP_LAYOUT_SAVED"));
+		_inv->showWarning(tr("STR_EQUIP_LAYOUT_SAVED"));
 	}
 }
 
@@ -889,10 +884,10 @@ void InventoryState::btnUnloadClick(Action*)
 void InventoryState::btnSaveLayouts(Action*)
 {
 	if (_tuMode == false
-		&& _inv->getSelectedItem() == NULL)
+		&& _inv->getSelectedItem() == NULL
+		&& saveAllLayouts() == true)
 	{
-		if (saveAllLayouts() == true)
-			_inv->showWarning(tr("STR_EQUIP_LAYOUTS_SAVED"));
+		_inv->showWarning(tr("STR_EQUIP_LAYOUTS_SAVED"));
 	}
 }
 
@@ -1009,10 +1004,7 @@ void InventoryState::btnUnequipUnitClick(Action*)
 		updateStats();
 		refreshMouse();
 
-		_game->getResourcePack()->getSound(
-										"BATTLE.CAT",
-										ResourcePack::ITEM_DROP)
-									->play();
+		_game->getResourcePack()->getSound("BATTLE.CAT", ResourcePack::ITEM_DROP)->play();
 	}
 }
 /* void InventoryState::btnUnequipUnitClick(Action*)
@@ -1062,7 +1054,7 @@ void InventoryState::btnRankClick(Action*)
 		_game->pushState(new UnitInfoState(
 										_battleSave->getSelectedUnit(),
 										_parent,
-										true, false,
+										true,false,
 										_tuMode == false));
 }
 
@@ -1122,7 +1114,7 @@ void InventoryState::invClick(Action*)
 											_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"),
 											_selAmmo);
 			}
-			else if (item->getAmmoQuantity() > 0)
+			else if (item->getAmmoQuantity() != 0)
 				wst = tr("STR_AMMO_ROUNDS_LEFT").arg(item->getAmmoQuantity());
 		}
 
@@ -1145,78 +1137,76 @@ void InventoryState::invMouseOver(Action*)
 						 && _inv->getTuCostInventory() > 0);
 
 //		_updateTemplateButtons(false);
-		return;
 	}
-
-	const BattleItem* const item = _inv->getMouseOverItem();
-	if (item != NULL)
+	else // no item on cursor.
 	{
-//		_updateTemplateButtons(false);
-//		_tuCost->setVisible(false);
-
-		const RuleItem* const itRule = item->getRules();
-		const BattleItem* const ammo = item->getAmmoItem();
-
-		setExtraInfo(
-				item,
-				itRule,
-				ammo);
-
-		std::wstring wst;
-
-		if (item->selfPowered() == false
-			&& ammo != NULL)
+		const BattleItem* const item = _inv->getMouseOverItem();
+		if (item != NULL)
 		{
-			wst = tr("STR_AMMO_ROUNDS_LEFT").arg(ammo->getAmmoQuantity());
-
-			SDL_Rect rect;
-			rect.x =
-			rect.y = 0;
-			rect.w = RuleInventory::HAND_W * RuleInventory::SLOT_W;
-			rect.h = RuleInventory::HAND_H * RuleInventory::SLOT_H;
-			_selAmmo->drawRect(&rect, static_cast<Uint8>(_game->getRuleset()->getInterface("inventory")->getElement("grid")->color));
-
-			++rect.x;
-			++rect.y;
-			rect.w -= 2;
-			rect.h -= 2;
-			_selAmmo->drawRect(&rect, 15);
-
-			ammo->getRules()->drawHandSprite(
-										_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"),
-										_selAmmo);
 //			_updateTemplateButtons(false);
+//			_tuCost->setVisible(false);
+
+			const RuleItem* const itRule = item->getRules();
+			const BattleItem* const ammo = item->getAmmoItem();
+
+			setExtraInfo(item, itRule, ammo);
+
+			std::wstring wst;
+
+			if (item->selfPowered() == false
+				&& ammo != NULL)
+			{
+				wst = tr("STR_AMMO_ROUNDS_LEFT").arg(ammo->getAmmoQuantity());
+
+				SDL_Rect rect;
+				rect.x =
+				rect.y = 0;
+				rect.w = RuleInventory::HAND_W * RuleInventory::SLOT_W;
+				rect.h = RuleInventory::HAND_H * RuleInventory::SLOT_H;
+				_selAmmo->drawRect(&rect, static_cast<Uint8>(_game->getRuleset()->getInterface("inventory")->getElement("grid")->color));
+
+				++rect.x;
+				++rect.y;
+				rect.w -= 2;
+				rect.h -= 2;
+				_selAmmo->drawRect(&rect, 15);
+
+				ammo->getRules()->drawHandSprite(
+											_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"),
+											_selAmmo);
+//				_updateTemplateButtons(false);
+			}
+			else
+			{
+				_selAmmo->clear();
+//				_updateTemplateButtons(!_tuMode);
+			}
+
+			if (item->selfPowered() == false
+				&& item->getAmmoQuantity() != 0)
+			{
+				wst = tr("STR_AMMO_ROUNDS_LEFT").arg(item->getAmmoQuantity());
+			}
+			else if (itRule->getBattleType() == BT_MEDIKIT)
+			{
+				wst = tr("STR_MEDI_KIT_QUANTITIES_LEFT")
+						.arg(item->getPainKillerQuantity())
+						.arg(item->getStimulantQuantity())
+						.arg(item->getHealQuantity());
+			}
+
+			_txtAmmo->setText(wst);
 		}
-		else
+		else // no item under cursor.
 		{
+//			if (_currentTooltip.empty())
+			_txtItem->setText(L"");
+			_txtAmmo->setText(L"");
+			_txtUseTU->setText(L"");
+
 			_selAmmo->clear();
 //			_updateTemplateButtons(!_tuMode);
 		}
-
-		if (item->selfPowered() == false
-			&& item->getAmmoQuantity() > 0)
-		{
-			wst = tr("STR_AMMO_ROUNDS_LEFT").arg(item->getAmmoQuantity());
-		}
-		else if (itRule->getBattleType() == BT_MEDIKIT)
-		{
-			wst = tr("STR_MEDI_KIT_QUANTITIES_LEFT")
-					.arg(item->getPainKillerQuantity())
-					.arg(item->getStimulantQuantity())
-					.arg(item->getHealQuantity());
-		}
-
-		_txtAmmo->setText(wst);
-	}
-	else
-	{
-//		if (_currentTooltip.empty())
-		_txtItem->setText(L"");
-		_txtAmmo->setText(L"");
-		_txtUseTU->setText(L"");
-
-		_selAmmo->clear();
-//		_updateTemplateButtons(!_tuMode);
 	}
 }
 
@@ -1319,7 +1309,7 @@ void InventoryState::setExtraInfo( // private.
 		if (itRule->getBattleType() == BT_AMMO)
 		{
 			actionType = "STR_RELOAD_";
-			tu = 15;
+			tu = 15; // TODO: put this in Ruleset.
 		}
 		else
 		{

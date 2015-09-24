@@ -163,9 +163,7 @@ Surface::Surface(
 									width,
 									height,
 									bpp,
-									GetPitch(
-										bpp,
-										width),
+									GetPitch(bpp, width),
 									0,0,0,0);
 
 	if (_surface == NULL)
