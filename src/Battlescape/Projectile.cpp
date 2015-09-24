@@ -523,31 +523,31 @@ void Projectile::applyAccuracy( // private.
 			dy = RNG::boxMuller(0., deviation) / 4.,
 			dz = RNG::boxMuller(0., deviation) / 6.;
 
+		//Log(LOG_INFO) << "Proj: applyAccuracy target[1] " << *targetVoxel;
 		targetVoxel->x += static_cast<int>(Round(dx));
 		targetVoxel->y += static_cast<int>(Round(dy));
 		targetVoxel->z += static_cast<int>(Round(dz));
+		//Log(LOG_INFO) << "Proj: applyAccuracy target[2] " << *targetVoxel;
+
+		targetVoxel->x = std::max(0,
+							std::min(_battleSave->getMapSizeX() * 16 + 15,
+								targetVoxel->x));
+		targetVoxel->y = std::max(0,
+							std::min(_battleSave->getMapSizeY() * 16 + 15,
+								targetVoxel->y));
+		targetVoxel->z = std::max(0,
+							std::min(_battleSave->getMapSizeZ() * 24 + 23,
+								targetVoxel->z));
 
 		if (_action.type == BA_THROW)
 		{
 			const Tile* const tile = _battleSave->getTile(Position::toTileSpace(*targetVoxel));
-			//const int terrainZ = tile->getTerrainLevel();
-			//Log(LOG_INFO) << "terrainZ = " << terrainZ;
-
-			//Log(LOG_INFO) << ". x' = " << targetVoxel->x;
-			//Log(LOG_INFO) << ". y' = " << targetVoxel->y;
-			//Log(LOG_INFO) << ". z' = " << targetVoxel->z;
-			//Log(LOG_INFO) << ". x\" = " << targetVoxel->x / 16 * 16 + 8;
-			//Log(LOG_INFO) << ". y\" = " << targetVoxel->y / 16 * 16 + 8;
-			//Log(LOG_INFO) << ". z\" = " << targetVoxel->z / 24 * 24 - terrainZ;
 			targetVoxel->x = (targetVoxel->x & 0xFFF0) + 8;
 			targetVoxel->y = (targetVoxel->y & 0xFFF0) + 8;
 			targetVoxel->z = (targetVoxel->z / 24 * 24) - tile->getTerrainLevel();
 		}
+		//Log(LOG_INFO) << "Proj: applyAccuracy target[3] " << *targetVoxel;
 	}
-	//Log(LOG_INFO) << ". x = " << targetVoxel->x;
-	//Log(LOG_INFO) << ". y = " << targetVoxel->y;
-	//Log(LOG_INFO) << ". z = " << targetVoxel->z;
-	//Log(LOG_INFO) << "Projectile::applyAccuracy() EXIT";
 }
 /*		if (extendLine == true)
 		{
