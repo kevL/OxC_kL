@@ -263,9 +263,9 @@ InventoryState::InventoryState(
 	_btnPrev->onKeyboardPress(
 					(ActionHandler)& InventoryState::btnPrevClick,
 					Options::keyBattlePrevUnit);
-	_btnPrev->onKeyboardPress(
-					(ActionHandler)& InventoryState::btnPrevClick,
-					SDLK_KP4);
+//	_btnPrev->onKeyboardPress(
+//					(ActionHandler)& InventoryState::btnPrevClick,
+//					SDLK_KP4);
 //	_btnPrev->setTooltip("STR_PREVIOUS_UNIT");
 //	_btnPrev->onMouseIn((ActionHandler)& InventoryState::txtTooltipIn);
 //	_btnPrev->onMouseOut((ActionHandler)& InventoryState::txtTooltipOut);
@@ -274,9 +274,9 @@ InventoryState::InventoryState(
 	_btnNext->onKeyboardPress(
 					(ActionHandler)& InventoryState::btnNextClick,
 					Options::keyBattleNextUnit);
-	_btnNext->onKeyboardPress(
-					(ActionHandler)& InventoryState::btnNextClick,
-					SDLK_KP6);
+//	_btnNext->onKeyboardPress(
+//					(ActionHandler)& InventoryState::btnNextClick,
+//					SDLK_KP6);
 //	_btnNext->setTooltip("STR_NEXT_UNIT");
 //	_btnNext->onMouseIn((ActionHandler)& InventoryState::txtTooltipIn);
 //	_btnNext->onMouseOut((ActionHandler)& InventoryState::txtTooltipOut);
@@ -363,9 +363,9 @@ InventoryState::InventoryState(
 	_txtPStr->setVisible(vis);
 	_txtPSkill->setVisible(vis);
 
-	_timer = new Timer(132);
-	_timer->onTimer((StateHandler)& InventoryState::keyRepeat);
-	_timer->start();
+//	_timer = new Timer(300);
+//	_timer->onTimer((StateHandler)& InventoryState::keyRepeat);
+//	_timer->start();
 }
 
 /*
@@ -383,6 +383,7 @@ static void _clearInventoryTemplate(std::vector<EquipmentLayoutItem*>& inventory
 InventoryState::~InventoryState()
 {
 //	_clearInventoryTemplate(_curInventoryTemplate);
+//	delete _timer;
 
 	if (_parent != NULL)
 	{
@@ -441,18 +442,18 @@ InventoryState::~InventoryState()
 //		_game->getScreen()->resetDisplay(false);
 //	}
 
-/**
+/*
  * Hits the think timer.
- */
+ *
 void InventoryState::think()
 {
 	State::think();
 	_timer->think(this, NULL);
-}
+} */
 
-/**
+/*
  * Advances to the next/previous Unit when right/left key is depressed.
- */
+ *
 void InventoryState::keyRepeat() // private.
 {
 	Uint8* keystate = SDL_GetKeyState(NULL);
@@ -466,7 +467,7 @@ void InventoryState::keyRepeat() // private.
 	{
 		btnPrevClick(NULL);
 	}
-}
+} */
 
 /**
  * Updates all soldier stats when the soldier changes.

@@ -944,8 +944,8 @@ void Map::drawTerrain(Surface* const surface) // private.
 						}
 
 // Draw Corpse + Item on Floor if any
-						bool val;
-						int spriteId = _tile->getCorpseSprite(&val);
+						bool var;
+						int spriteId = _tile->getCorpseSprite(&var);
 						if (spriteId != -1)
 						{
 							sprite = _res->getSurfaceSet("FLOOROB.PCK")->getFrame(spriteId);
@@ -958,7 +958,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 										tileShade);
 							}
 
-							if (val == true // Draw SMOKE & FIRE if itemUnit is on Fire
+							if (var == true
 								&& _tile->isDiscovered(2) == true)
 							{
 								frame = 4 + (_animFrame / 2);
@@ -968,11 +968,10 @@ void Map::drawTerrain(Surface* const surface) // private.
 											surface,
 											posScreen.x,
 											posScreen.y + _tile->getTerrainLevel());
-								break;
 							}
 						}
 
-						spriteId = _tile->getTopSprite(&val);
+						spriteId = _tile->getTopSprite(&var);
 						if (spriteId != -1)
 						{
 							sprite = _res->getSurfaceSet("FLOOROB.PCK")->getFrame(spriteId);
@@ -984,12 +983,12 @@ void Map::drawTerrain(Surface* const surface) // private.
 										posScreen.y + _tile->getTerrainLevel(),
 										tileShade);
 
-								if (val == true
-									&& _tile->isDiscovered(2) == true)	// spriteId== 21, standard proxy grenade
+								if (var == true
+									&& _tile->isDiscovered(2) == true)
 								{
-									sprite->setPixelColor(				// cycles from 31 down to 16 and jumps to 31 again
-														16,28,			// <- the pixel coords
-														_fuseColor);	// 17 is the proxy-pixel's spritesheet color
+									sprite->setPixelColor(
+														16,28,
+														_fuseColor);
 								}
 							}
 						}
@@ -1654,8 +1653,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 
 // Draw Map's border-sprite only on ground tiles
 					if (itZ == _battleSave->getGroundLevel()
-						|| (itZ == 0
-							&& _battleSave->getGroundLevel() == -1))
+						|| (itZ == 0 && _battleSave->getGroundLevel() == -1))
 					{
 						if (itX == 0
 							|| itX == _battleSave->getMapSizeX() - 1

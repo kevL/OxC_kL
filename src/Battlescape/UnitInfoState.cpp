@@ -500,22 +500,22 @@ UnitInfoState::UnitInfoState(
 		_btnPrev->onKeyboardPress(
 						(ActionHandler)& UnitInfoState::btnPrevClick,
 						Options::keyBattlePrevUnit);
-		_btnPrev->onKeyboardPress(
-						(ActionHandler)& UnitInfoState::btnPrevClick,
-						SDLK_KP4);
+//		_btnPrev->onKeyboardPress(
+//						(ActionHandler)& UnitInfoState::btnPrevClick,
+//						SDLK_KP4);
 
 		_btnNext->setText(L">");
 		_btnNext->onMouseClick((ActionHandler)& UnitInfoState::btnNextClick);
 		_btnNext->onKeyboardPress(
 						(ActionHandler)& UnitInfoState::btnNextClick,
 						Options::keyBattleNextUnit);
-		_btnNext->onKeyboardPress(
-						(ActionHandler)& UnitInfoState::btnNextClick,
-						SDLK_KP6);
+//		_btnNext->onKeyboardPress(
+//						(ActionHandler)& UnitInfoState::btnNextClick,
+//						SDLK_KP6);
 
-		_timer = new Timer(132);
-		_timer->onTimer((StateHandler)& UnitInfoState::keyRepeat);
-		_timer->start();
+//		_timer = new Timer(300);
+//		_timer->onTimer((StateHandler)& UnitInfoState::keyRepeat);
+//		_timer->start();
 	}
 }
 
@@ -523,11 +523,13 @@ UnitInfoState::UnitInfoState(
  * dTor.
  */
 UnitInfoState::~UnitInfoState()
-{}
+{
+//	delete _timer;
+}
 
-/**
+/*
  * Hits the think timer.
- */
+ *
 void UnitInfoState::think()
 {
 	if (_mindProbe == false)
@@ -535,11 +537,11 @@ void UnitInfoState::think()
 		State::think();
 		_timer->think(this, NULL);
 	}
-}
+} */
 
-/**
+/*
  * Advances to the next/previous Unit when right/left key is depressed.
- */
+ *
 void UnitInfoState::keyRepeat() // private.
 {
 	Uint8* keystate = SDL_GetKeyState(NULL);
@@ -553,7 +555,7 @@ void UnitInfoState::keyRepeat() // private.
 	{
 		btnPrevClick(NULL);
 	}
-}
+} */
 
 /**
  * Updates unit info which can change after going into other screens.
