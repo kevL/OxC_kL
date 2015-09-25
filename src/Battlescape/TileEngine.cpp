@@ -1979,19 +1979,19 @@ void TileEngine::selectFireMethod(BattleAction& action) // <- TODO: this action 
 
 	if (dist <= itRule->getAutoRange())
 	{
-		if (itRule->getTUAuto() != 0
+		if (itRule->getAutoTu() != 0
 			&& tu >= action.actor->getActionTu(BA_AUTOSHOT, action.weapon))
 		{
 			action.type = BA_AUTOSHOT;
 			action.TU = action.actor->getActionTu(BA_AUTOSHOT, action.weapon);
 		}
-		else if (itRule->getTUSnap() != 0
+		else if (itRule->getSnapTu() != 0
 			&& tu >= action.actor->getActionTu(BA_SNAPSHOT, action.weapon))
 		{
 			action.type = BA_SNAPSHOT;
 			action.TU = action.actor->getActionTu(BA_SNAPSHOT, action.weapon);
 		}
-		else if (itRule->getTUAimed() != 0
+		else if (itRule->getAimedTu() != 0
 			&& tu >= action.actor->getActionTu(BA_AIMEDSHOT, action.weapon))
 		{
 			action.type = BA_AIMEDSHOT;
@@ -2000,19 +2000,19 @@ void TileEngine::selectFireMethod(BattleAction& action) // <- TODO: this action 
 	}
 	else if (dist <= itRule->getSnapRange())
 	{
-		if (itRule->getTUSnap() != 0
+		if (itRule->getSnapTu() != 0
 			&& tu >= action.actor->getActionTu(BA_SNAPSHOT, action.weapon))
 		{
 			action.type = BA_SNAPSHOT;
 			action.TU = action.actor->getActionTu(BA_SNAPSHOT, action.weapon);
 		}
-		else if (itRule->getTUAimed() != 0
+		else if (itRule->getAimedTu() != 0
 			&& tu >= action.actor->getActionTu(BA_AIMEDSHOT, action.weapon))
 		{
 			action.type = BA_AIMEDSHOT;
 			action.TU = action.actor->getActionTu(BA_AIMEDSHOT, action.weapon);
 		}
-		else if (itRule->getTUAuto() != 0
+		else if (itRule->getAutoTu() != 0
 			&& tu >= action.actor->getActionTu(BA_AUTOSHOT, action.weapon))
 		{
 			action.type = BA_AUTOSHOT;
@@ -2021,19 +2021,19 @@ void TileEngine::selectFireMethod(BattleAction& action) // <- TODO: this action 
 	}
 	else // if (dist <= itRule->getAimRange())
 	{
-		if (itRule->getTUAimed() != 0
+		if (itRule->getAimedTu() != 0
 			&& tu >= action.actor->getActionTu(BA_AIMEDSHOT, action.weapon))
 		{
 			action.type = BA_AIMEDSHOT;
 			action.TU = action.actor->getActionTu(BA_AIMEDSHOT, action.weapon);
 		}
-		else if (itRule->getTUSnap() != 0
+		else if (itRule->getSnapTu() != 0
 			&& tu >= action.actor->getActionTu(BA_SNAPSHOT, action.weapon))
 		{
 			action.type = BA_SNAPSHOT;
 			action.TU = action.actor->getActionTu(BA_SNAPSHOT, action.weapon);
 		}
-		else if (itRule->getTUAuto() != 0
+		else if (itRule->getAutoTu() != 0
 			&& tu >= action.actor->getActionTu(BA_AUTOSHOT, action.weapon))
 		{
 			action.type = BA_AUTOSHOT;
@@ -6405,60 +6405,60 @@ void TileEngine::setDangerZone(
 		const BattleUnit* const unit) const
 {
 	Tile* tile = _battleSave->getTile(pos);
-	if (tile == NULL)
-		return;
-
-	tile->setDangerous(); // set the epicenter as dangerous
-
-	const Position originVoxel = Position::toVoxelSpaceCentered(
-															pos,
-															12 - tile->getTerrainLevel()); // what.
-	Position
-		targetVoxel,
-		posTest;
-
-	for (int
-			x = -radius;
-			x != radius;
-			++x)
+	if (tile != NULL)
 	{
-		for (int
-				y = -radius;
-				y != radius;
-				++y)
-		{
-			if (x != 0 || y != 0) // skip the epicenter
-			{
-				if ((x * x) + (y * y) <= radius * radius) // make sure it's within the radius
-				{
-					posTest = pos + Position(x,y,0);
-					tile = _battleSave->getTile(posTest);
-					if (tile != NULL)
-					{
-						targetVoxel = Position::toVoxelSpaceCentered(
-																posTest,
+		tile->setDangerous(); // set the epicenter as dangerous
+
+		const Position originVoxel = Position::toVoxelSpaceCentered(
+																pos,
 																12 - tile->getTerrainLevel()); // what.
-						std::vector<Position> trajectory;
-						// trace a line here ignoring all units to check if the
-						// explosion will reach this point; granted this won't
-						// properly account for explosions tearing through walls,
-						// but then you can't really know that kind of
-						// information before the fact so let the AI assume that
-						// the wall (or tree) is enough of a shield.
-						if (plotLine(
-									originVoxel,
-									targetVoxel,
-									false,
-									&trajectory,
-									unit,
-									true,
-									false,
-									unit) == VOXEL_EMPTY)
+		Position
+			targetVoxel,
+			posTest;
+
+		for (int
+				x = -radius;
+				x != radius;
+				++x)
+		{
+			for (int
+					y = -radius;
+					y != radius;
+					++y)
+			{
+				if (x != 0 || y != 0) // skip the epicenter
+				{
+					if ((x * x) + (y * y) <= radius * radius) // make sure it's within the radius
+					{
+						posTest = pos + Position(x,y,0);
+						tile = _battleSave->getTile(posTest);
+						if (tile != NULL)
 						{
-							if (trajectory.size() != 0
-								&& Position::toTileSpace(trajectory.back()) == posTest)
+							targetVoxel = Position::toVoxelSpaceCentered(
+																	posTest,
+																	12 - tile->getTerrainLevel()); // what.
+							std::vector<Position> trajectory;
+							// trace a line here ignoring all units to check if the
+							// explosion will reach this point; granted this won't
+							// properly account for explosions tearing through walls,
+							// but then you can't really know that kind of
+							// information before the fact so let the AI assume that
+							// the wall (or tree) is enough of a shield.
+							if (plotLine(
+										originVoxel,
+										targetVoxel,
+										false,
+										&trajectory,
+										unit,
+										true,
+										false,
+										unit) == VOXEL_EMPTY)
 							{
-								tile->setDangerous();
+								if (trajectory.size() != 0
+									&& Position::toTileSpace(trajectory.back()) == posTest)
+								{
+									tile->setDangerous();
+								}
 							}
 						}
 					}

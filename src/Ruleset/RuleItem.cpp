@@ -501,7 +501,7 @@ int RuleItem::getAccuracyMelee() const
  * Gets the item's time unit percentage for snapshots.
  * @return, the snapshot TU percentage
  */
-int RuleItem::getTUSnap() const
+int RuleItem::getSnapTu() const
 {
 	return _tuSnap;
 }
@@ -510,7 +510,7 @@ int RuleItem::getTUSnap() const
  * Gets the item's time unit percentage for autoshots.
  * @return, the autoshot TU percentage
  */
-int RuleItem::getTUAuto() const
+int RuleItem::getAutoTu() const
 {
 	return _tuAuto;
 }
@@ -519,7 +519,7 @@ int RuleItem::getTUAuto() const
  * Gets the item's time unit percentage for aimed shots.
  * @return, the aimed shot TU percentage
  */
-int RuleItem::getTUAimed() const
+int RuleItem::getAimedTu() const
 {
 	return _tuAimed;
 }
@@ -528,7 +528,7 @@ int RuleItem::getTUAimed() const
  * Gets the item's time unit percentage for launch shots.
  * @return, the launch shot TU percentage
  */
-int RuleItem::getTULaunch() const
+int RuleItem::getLaunchTu() const
 {
 	return _tuLaunch;
 }
@@ -537,7 +537,7 @@ int RuleItem::getTULaunch() const
  * Gets the item's time unit percentage for melee attacks.
  * @return, the melee TU percentage
  */
-int RuleItem::getTUMelee() const
+int RuleItem::getMeleeTu() const
 {
 	return _tuMelee;
 }

@@ -119,12 +119,12 @@ ArticleStateItem::ArticleStateItem(const ArticleDefinitionItem* const defs)
 		std::wstring tu;
 
 		int current_row = 0;
-		if (itRule->getTUAuto() != 0)
+		if (itRule->getAutoTu() != 0)
 		{
 			if (itRule->getFlatRate() == true)
-				tu = Text::formatNumber(itRule->getTUAuto());
+				tu = Text::formatNumber(itRule->getAutoTu());
 			else
-				tu = Text::formatPct(itRule->getTUAuto());
+				tu = Text::formatPct(itRule->getAutoTu());
 
 			_lstInfo->addRow(
 							3,
@@ -134,12 +134,12 @@ ArticleStateItem::ArticleStateItem(const ArticleDefinitionItem* const defs)
 			_lstInfo->setCellColor(current_row++, 0, uPed_BLUE_SLATE);
 		}
 
-		if (itRule->getTUSnap() != 0)
+		if (itRule->getSnapTu() != 0)
 		{
 			if (itRule->getFlatRate() == true)
-				tu = Text::formatNumber(itRule->getTUSnap());
+				tu = Text::formatNumber(itRule->getSnapTu());
 			else
-				tu = Text::formatPct(itRule->getTUSnap());
+				tu = Text::formatPct(itRule->getSnapTu());
 
 			_lstInfo->addRow(
 							3,
@@ -149,12 +149,12 @@ ArticleStateItem::ArticleStateItem(const ArticleDefinitionItem* const defs)
 			_lstInfo->setCellColor(current_row++, 0, uPed_BLUE_SLATE);
 		}
 
-		if (itRule->getTUAimed() != 0)
+		if (itRule->getAimedTu() != 0)
 		{
 			if (itRule->getFlatRate() == true)
-				tu = Text::formatNumber(itRule->getTUAimed());
+				tu = Text::formatNumber(itRule->getAimedTu());
 			else
-				tu = Text::formatPct(itRule->getTUAimed());
+				tu = Text::formatPct(itRule->getAimedTu());
 
 			_lstInfo->addRow(
 							3,
@@ -164,12 +164,12 @@ ArticleStateItem::ArticleStateItem(const ArticleDefinitionItem* const defs)
 			_lstInfo->setCellColor(current_row++, 0, uPed_BLUE_SLATE);
 		}
 
-		if (itRule->getTULaunch() != 0)
+		if (itRule->getLaunchTu() != 0)
 		{
 			if (itRule->getFlatRate() == true)
-				tu = Text::formatNumber(itRule->getTULaunch());
+				tu = Text::formatNumber(itRule->getLaunchTu());
 			else
-				tu = Text::formatPct(itRule->getTULaunch());
+				tu = Text::formatPct(itRule->getLaunchTu());
 
 			_lstInfo->addRow(
 							3,

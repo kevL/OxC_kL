@@ -2009,31 +2009,31 @@ int BattleUnit::getActionTu(
 		case BA_LAUNCH:
 			if (itRule == NULL)
 				return 0;
-			cost = itRule->getTULaunch();
+			cost = itRule->getLaunchTu();
 		break;
 
 		case BA_AIMEDSHOT:
 			if (itRule == NULL)
 				return 0;
-			cost = itRule->getTUAimed();
+			cost = itRule->getAimedTu();
 		break;
 
 		case BA_AUTOSHOT:
 			if (itRule == NULL)
 				return 0;
-			cost = itRule->getTUAuto();
+			cost = itRule->getAutoTu();
 		break;
 
 		case BA_SNAPSHOT:
 			if (itRule == NULL)
 				return 0;
-			cost = itRule->getTUSnap();
+			cost = itRule->getSnapTu();
 		break;
 
 		case BA_HIT:
 			if (itRule == NULL)
 				return 0;
-			cost = itRule->getTUMelee();
+			cost = itRule->getMeleeTu();
 		break;
 
 		case BA_EXECUTE:
@@ -2861,20 +2861,20 @@ BattleItem* BattleUnit::getMainHandWeapon(bool quickest) const
 	//Log(LOG_INFO) << ". . hasRht & hasLft VALID";
 
 	const RuleItem* itRule = rhtWeapon->getRules();
-	int rhtTU = itRule->getTUSnap();
+	int rhtTU = itRule->getSnapTu();
 	if (rhtTU == 0)
-		if ((rhtTU = itRule->getTUAuto()) == 0)
-			if ((rhtTU = itRule->getTUAimed()) == 0)
-				if ((rhtTU = itRule->getTULaunch()) == 0)
-					rhtTU = itRule->getTUMelee();
+		if ((rhtTU = itRule->getAutoTu()) == 0)
+			if ((rhtTU = itRule->getAimedTu()) == 0)
+				if ((rhtTU = itRule->getLaunchTu()) == 0)
+					rhtTU = itRule->getMeleeTu();
 
 	itRule = lftWeapon->getRules();
-	int lftTU = itRule->getTUSnap();
+	int lftTU = itRule->getSnapTu();
 	if (lftTU == 0)
-		if ((lftTU = itRule->getTUAuto()) == 0)
-			if ((lftTU = itRule->getTUAimed()) == 0)
-				if ((lftTU = itRule->getTULaunch()) == 0)
-					lftTU = itRule->getTUMelee();
+		if ((lftTU = itRule->getAutoTu()) == 0)
+			if ((lftTU = itRule->getAimedTu()) == 0)
+				if ((lftTU = itRule->getLaunchTu()) == 0)
+					lftTU = itRule->getMeleeTu();
 	// note: Should probly account for 'noReaction' weapons ...
 
 	//Log(LOG_INFO) << ". . rhtTU = " << rhtTU;
@@ -2926,8 +2926,8 @@ BattleItem* BattleUnit::getMainHandWeapon(bool quickest) const
 		return 0;
 
 	// otherwise pick the one with the least snapshot TUs
-	int tuRightHand = weaponRightHand->getRules()->getTUSnap();
-	int tuLeftHand = weaponLeftHand->getRules()->getTUSnap();
+	int tuRightHand = weaponRightHand->getRules()->getSnapTu();
+	int tuLeftHand = weaponLeftHand->getRules()->getSnapTu();
 	BattleItem *weaponCurrentHand = getItem(getActiveHand());
 	// if only one weapon has snapshot, pick that one
 	if (tuLeftHand <= 0 && tuRightHand > 0)

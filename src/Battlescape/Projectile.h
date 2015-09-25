@@ -109,7 +109,7 @@ private:
 		bool traceProjectile();
 
 		/// Gets the current position in voxel space.
-		Position getPosition(int offset = 0) const;
+		Position getPosition(int offsetId = 0) const;
 		/// Gets a particle from the particle array.
 		int getParticle(int id) const;
 		/// Gets the item.

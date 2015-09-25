@@ -2414,21 +2414,21 @@ void AlienBAIState::selectFireMethod() // private.
 														_attackAction->target);
 	if (dist <= _attackAction->weapon->getRules()->getAutoRange())
 	{
-		if (_attackAction->weapon->getRules()->getTUAuto() != 0
+		if (_attackAction->weapon->getRules()->getAutoTu() != 0
 			&& usableTU >= _unit->getActionTu(
 											BA_AUTOSHOT,
 											_attackAction->weapon))
 		{
 			_attackAction->type = BA_AUTOSHOT;
 		}
-		else if (_attackAction->weapon->getRules()->getTUSnap() != 0
+		else if (_attackAction->weapon->getRules()->getSnapTu() != 0
 			&& usableTU >= _unit->getActionTu(
 											BA_SNAPSHOT,
 											_attackAction->weapon))
 		{
 			_attackAction->type = BA_SNAPSHOT;
 		}
-		else if (_attackAction->weapon->getRules()->getTUAimed() != 0
+		else if (_attackAction->weapon->getRules()->getAimedTu() != 0
 			&& usableTU >= _unit->getActionTu(
 											BA_AIMEDSHOT,
 											_attackAction->weapon))
@@ -2438,21 +2438,21 @@ void AlienBAIState::selectFireMethod() // private.
 	}
 	else if (dist <= _attackAction->weapon->getRules()->getSnapRange())
 	{
-		if (_attackAction->weapon->getRules()->getTUSnap() != 0
+		if (_attackAction->weapon->getRules()->getSnapTu() != 0
 			&& usableTU >= _unit->getActionTu(
 											BA_SNAPSHOT,
 											_attackAction->weapon))
 		{
 			_attackAction->type = BA_SNAPSHOT;
 		}
-		else if (_attackAction->weapon->getRules()->getTUAimed() != 0
+		else if (_attackAction->weapon->getRules()->getAimedTu() != 0
 			&& usableTU >= _unit->getActionTu(
 											BA_AIMEDSHOT,
 											_attackAction->weapon))
 		{
 			_attackAction->type = BA_AIMEDSHOT;
 		}
-		else if (_attackAction->weapon->getRules()->getTUAuto() != 0
+		else if (_attackAction->weapon->getRules()->getAutoTu() != 0
 			&& usableTU >= _unit->getActionTu(
 											BA_AUTOSHOT,
 											_attackAction->weapon))
@@ -2462,21 +2462,21 @@ void AlienBAIState::selectFireMethod() // private.
 	}
 	else if (dist <= _attackAction->weapon->getRules()->getAimRange())
 	{
-		if (_attackAction->weapon->getRules()->getTUAimed() != 0
+		if (_attackAction->weapon->getRules()->getAimedTu() != 0
 			&& usableTU >= _unit->getActionTu(
 											BA_AIMEDSHOT,
 											_attackAction->weapon))
 		{
 			_attackAction->type = BA_AIMEDSHOT;
 		}
-		else if (_attackAction->weapon->getRules()->getTUSnap() != 0
+		else if (_attackAction->weapon->getRules()->getSnapTu() != 0
 			&& usableTU >= _unit->getActionTu(
 											BA_SNAPSHOT,
 											_attackAction->weapon))
 		{
 			_attackAction->type = BA_SNAPSHOT;
 		}
-		else if (_attackAction->weapon->getRules()->getTUAuto() != 0
+		else if (_attackAction->weapon->getRules()->getAutoTu() != 0
 			&& usableTU >= _unit->getActionTu(
 											BA_AUTOSHOT,
 											_attackAction->weapon))

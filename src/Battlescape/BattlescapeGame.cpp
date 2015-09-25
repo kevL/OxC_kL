@@ -426,7 +426,7 @@ void BattlescapeGame::popState()
 							break;
 
 							case BA_SNAPSHOT:
-								//Log(LOG_INFO) << ". SnapShot, TU percent = " << (float)action.weapon->getRules()->getTUSnap();
+								//Log(LOG_INFO) << ". SnapShot, TU percent = " << (float)action.weapon->getRules()->getSnapTu();
 								if (curTu < action.actor->getActionTu(
 																	BA_SNAPSHOT,
 																	action.weapon)
@@ -440,7 +440,7 @@ void BattlescapeGame::popState()
 							break;
 
 							case BA_AUTOSHOT:
-								//Log(LOG_INFO) << ". AutoShot, TU percent = " << (float)action.weapon->getRules()->getTUAuto();
+								//Log(LOG_INFO) << ". AutoShot, TU percent = " << (float)action.weapon->getRules()->getAutoTu();
 								if (curTu < action.actor->getActionTu(
 																	BA_AUTOSHOT,
 																	action.weapon)
@@ -454,7 +454,7 @@ void BattlescapeGame::popState()
 							break;
 
 							case BA_AIMEDSHOT:
-								//Log(LOG_INFO) << ". AimedShot, TU percent = " << (float)action.weapon->getRules()->getTUAimed();
+								//Log(LOG_INFO) << ". AimedShot, TU percent = " << (float)action.weapon->getRules()->getAimedTu();
 								if (curTu < action.actor->getActionTu(
 																	BA_AIMEDSHOT,
 																	action.weapon)

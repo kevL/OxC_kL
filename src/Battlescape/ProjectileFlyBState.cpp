@@ -998,38 +998,35 @@ void ProjectileFlyBState::think()
 															_posOrigin,
 															_targetVoxel);
 						const double
-							spread = static_cast<double>(pelletsLeft * _ammo->getRules()->getShotgunPattern()) * 0.003,
+							spread = static_cast<double>(pelletsLeft * _ammo->getRules()->getShotgunPattern()) * 0.003, // pellet spread.
 							accuracy = std::max(0.,
-												_unit->getAccuracy(_action) - spread);
-						_prjImpact = prj->calculateShot(accuracy); // pellet spread.
-						if (_prjImpact != VOXEL_EMPTY)
+											_unit->getAccuracy(_action) - spread);
+						_prjImpact = prj->calculateShot(accuracy);
+						if (_prjImpact != VOXEL_EMPTY
+							&& _prjImpact != VOXEL_OUTOFBOUNDS) // insert an explosion and hit
 						{
-							prj->skipTrajectory(); // as above: skip the pellet to the end of its path
+							prj->skipTrajectory();							// skip the pellet to the end of its path
+							const Position voxelExpl = prj->getPosition();	// <- beware of 'offset 1' <- removed.
 
-							if (_prjImpact != VOXEL_OUTOFBOUNDS) // insert an explosion and hit
+							if (_prjImpact == VOXEL_UNIT
+								&& (_action.type == BA_SNAPSHOT
+									|| _action.type == BA_AUTOSHOT
+									|| _action.type == BA_AIMEDSHOT))
 							{
-								const Position voxelExpl = prj->getPosition(1); // <- beware of 'offset 1'
-
-								if (_prjImpact == VOXEL_UNIT
-									&& (_action.type == BA_SNAPSHOT
-										|| _action.type == BA_AUTOSHOT
-										|| _action.type == BA_AIMEDSHOT))
-								{
-									posContacts.push_back(Position::toTileSpace(voxelExpl));
-								}
-
-								Explosion* const expl = new Explosion(
-																	voxelExpl,
-																	_ammo->getRules()->getHitAnimation());
-
-								_parent->getMap()->getExplosions()->push_back(expl);
-								_battleSave->getTileEngine()->hit(
-																voxelExpl,
-																_ammo->getRules()->getPower(),
-																_ammo->getRules()->getDamageType(),
-																_unit,
-																false, true);
+								posContacts.push_back(Position::toTileSpace(voxelExpl));
 							}
+
+							Explosion* const expl = new Explosion(
+																voxelExpl,
+																_ammo->getRules()->getHitAnimation());
+
+							_parent->getMap()->getExplosions()->push_back(expl);
+							_battleSave->getTileEngine()->hit(
+															voxelExpl,
+															_ammo->getRules()->getPower(),
+															_ammo->getRules()->getDamageType(),
+															_unit,
+															false, true);
 						}
 
 						delete prj;

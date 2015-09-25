@@ -111,7 +111,7 @@ ActionMenuState::ActionMenuState(
 
 	if (_game->getSavedGame()->isResearched(itRule->getRequirements()) == true)
 	{
-		if (itRule->getTUMelee() != 0) // TODO: remove 'HIT' action-items if no target in range.
+		if (itRule->getMeleeTu() != 0) // TODO: remove 'HIT' action-items if no target in range.
 		{
 			if (_action->actor->getUnitRules() != NULL
 				&& _action->actor->getUnitRules()->isDog() == true)

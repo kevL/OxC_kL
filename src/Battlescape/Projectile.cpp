@@ -112,7 +112,7 @@ Projectile::Projectile(
 
 //			if (_action.type == BA_AUTOSHOT) _speed *= 3;
 
-			if (_bulletSprite == -1)
+/*			if (_bulletSprite == -1) // shotguns don't have bullet-sprites ...
 			{
 				std::ostringstream oststr;
 				oststr << "Missing bullet sprite";
@@ -124,7 +124,7 @@ Projectile::Projectile(
 					oststr << " w/ " << _action.weapon->getAmmoItem()->getRules()->getType().c_str();
 				}
 				Log(LOG_WARNING) << oststr.str();
-			}
+			} */
 		}
 	}
 
@@ -738,7 +738,7 @@ bool Projectile::traceProjectile()
 	{
 		if (++_trjId == _trj.size())
 		{
-			--_trjId; // ie. don't pass the end of the _trj vector
+			--_trjId; // don't pass the end of the _trj vector
 			return false;
 		}
 	}
@@ -748,14 +748,14 @@ bool Projectile::traceProjectile()
 
 /**
  * Gets the current position in voxel space.
- * @param offset - ID offset (default 0)
+ * @param offsetId - ID offset (default 0)
  * @return, position in voxel space
  */
-Position Projectile::getPosition(int offset) const
+Position Projectile::getPosition(int offsetId) const
 {
-	offset += static_cast<int>(_trjId);
-	if (offset > -1 && offset < static_cast<int>(_trj.size()))
-		return _trj.at(static_cast<size_t>(offset));
+	offsetId += static_cast<int>(_trjId);
+	if (offsetId > -1 && offsetId < static_cast<int>(_trj.size()))
+		return _trj.at(static_cast<size_t>(offsetId));
 
 	return _trj.at(_trjId);
 }
@@ -799,8 +799,8 @@ Surface* Projectile::getSprite() const
  */
 void Projectile::skipTrajectory()
 {
-	while (traceProjectile() == true);	// why.
-//	_trjId = _trj.size() - 1;			// old code
+//	while (traceProjectile() == true);	// why.
+	_trjId = _trj.size() - 1;			// old code
 }
 
 /**
