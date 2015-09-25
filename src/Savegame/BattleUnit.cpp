@@ -1248,7 +1248,7 @@ UnitFaction BattleUnit::getFaction() const
 /**
  * Sets the unit's cache flag.
  * @note Set to true when the unit has to be redrawn from scratch.
- * @param cache		- pointer to cache surface to use, NULL to redraw from scratch
+ * @param cache		- pointer to cache surface to use (default NULL to redraw from scratch)
  * @param quadrant	- unit quadrant to cache (default 0)
  */
 void BattleUnit::setCache(
@@ -3087,33 +3087,28 @@ bool BattleUnit::checkAmmo()
 	{
 		// if it's a non-melee weapon with no ammo and 15 or more TUs might need to look for ammo ...
 		BattleItem* ammo = NULL;
-
-		bool found = false;
 		for (std::vector<BattleItem*>::const_iterator
 				i = getInventory()->begin();
 				i != getInventory()->end()
-					&& found == false;
+					&& ammo == NULL;
 				++i)
 		{
 			for (std::vector<std::string>::const_iterator
 					j = weapon->getRules()->getCompatibleAmmo()->begin();
 					j != weapon->getRules()->getCompatibleAmmo()->end()
-						&& found == false;
+						&& ammo == NULL;
 					++j)
 			{
 				if (*j == (*i)->getRules()->getType())
-				{
-					found = true;
 					ammo = *i;
-				}
 			}
 		}
 
-		if (found == true)
+		if (ammo != NULL)
 		{
 			_tu -= reloadTu;
 			weapon->setAmmoItem(ammo);
-			ammo->moveToOwner(NULL);
+			ammo->moveToOwner();
 
 			return true;
 		}

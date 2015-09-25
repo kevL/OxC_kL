@@ -3134,7 +3134,7 @@ void BattlescapeState::doExecutionExpl() // private.
 
 				BattleUnit* const selUnit = _battleSave->getSelectedUnit();
 				selUnit->aim(false);
-				selUnit->setCache(NULL);
+				selUnit->setCache();
 				_battleGame->getMap()->cacheUnits();
 
 				return;

@@ -185,7 +185,7 @@ void UnitFallBState::think()
 			//Log(LOG_INFO) << ". . call keepWalking()";
 			(*i)->keepWalking(tileBelow, true);	// advances the phase
 
-			(*i)->setCache(NULL);				// kL
+			(*i)->setCache();					// kL
 			_parent->getMap()->cacheUnit(*i);	// make sure the fallUnit sprites are up to date
 		}
 
@@ -393,7 +393,7 @@ void UnitFallBState::think()
 								tileBelow);
 //								onScreen);
 
-				(*i)->setCache(NULL);
+				(*i)->setCache();
 				_parent->getMap()->cacheUnit(*i);
 
 				++i;
@@ -418,13 +418,10 @@ void UnitFallBState::think()
 
 				_terrain->calculateUnitLighting(); // move personal lighting
 
-				(*i)->setCache(NULL);
+				(*i)->setCache();
 				_parent->getMap()->cacheUnit(*i);
 
-//				_terrain->calculateFOV(*i);
-				_terrain->calculateFOV(
-									(*i)->getPosition(),
-									true);
+				_terrain->calculateFOV((*i)->getPosition(), true);
 
 				_parent->checkProxyGrenades(*i);
 				// kL_add: Put checkForSilacoid() here!

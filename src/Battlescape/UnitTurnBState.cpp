@@ -162,7 +162,7 @@ void UnitTurnBState::think()
 	else if (_unit->spendTimeUnits(tu) == true)
 	{
 		_unit->turn(_turret); // -> STATUS_STANDING if done
-		_unit->setCache(NULL);
+		_unit->setCache();
 		_parent->getMap()->cacheUnit(_unit);
 
 		const size_t preSpots = _unit->getHostileUnitsThisTurn().size();

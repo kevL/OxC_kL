@@ -226,7 +226,7 @@ BattleItem* BattleItem::getAmmoItem() const
 
 /**
  * Sets an ammo item for this BattleItem.
- * @param item - the ammo item
+ * @param item - the ammo item (default NULL)
  * @return,	 0 = successful load or unload
  *			-1 = weapon already contains ammo
  *			-2 = item doesn't fit / weapon is self-powered
@@ -287,7 +287,7 @@ void BattleItem::spendBullet(
 	if (_ammoQty != -1 // <- infinite ammo
 		&& --_ammoQty == 0)
 	{
-		weapon.setAmmoItem(NULL);
+		weapon.setAmmoItem();
 		battleSave.removeItem(this); // <- could be dangerous.
 	}
 }
@@ -323,7 +323,7 @@ BattleUnit* BattleItem::getPreviousOwner() const
 
 /**
  * Sets the item's owner.
- * @param owner - pointer to BattleUnit
+ * @param owner - pointer to BattleUnit (default NULL)
  */
 void BattleItem::setOwner(BattleUnit* const owner)
 {
@@ -342,7 +342,7 @@ void BattleItem::setPreviousOwner(BattleUnit* const owner)
 
 /**
  * Removes the item from the previous owner and moves it to the new owner.
- * @param owner - pointer to BattleUnit
+ * @param owner - pointer to BattleUnit (default NULL)
  */
 void BattleItem::moveToOwner(BattleUnit* const owner)
 {

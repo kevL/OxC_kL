@@ -320,7 +320,7 @@ private:
 				const BattleUnit* const unit) const;
 
 		/// Sets a tile with a diagonal bigwall as the true epicenter of an explosion.
-		void setTrueTile(Tile* const tile);
+		void setTrueTile(Tile* const tile = NULL);
 
 		/// Gets a valid target-unit given a Tile.
 		BattleUnit* getTargetUnit(const Tile* const tile) const;

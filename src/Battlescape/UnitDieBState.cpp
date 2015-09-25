@@ -277,7 +277,7 @@ void UnitDieBState::think()
 			_parent->convertUnit(_unit);
 	}
 
-	_unit->setCache(NULL);
+	_unit->setCache();
 	_parent->getMap()->cacheUnit(_unit);
 }
 
@@ -321,7 +321,7 @@ void UnitDieBState::convertToCorpse() // private.
 							*i);
 
 			if ((*i)->getRules()->isFixed() == false)
-				(*i)->setOwner(NULL);
+				(*i)->setOwner();
 			else
 				itemsToKeep.push_back(*i);
 		}

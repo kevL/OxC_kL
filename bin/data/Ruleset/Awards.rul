@@ -73,7 +73,7 @@ extraStrings:
       STR_MEDAL_SNIPER_NAME: "Sharp Shot Citum"
       STR_MEDAL_SNIPER_DESCRIPTION: "Given to a soldier who has landed long distance shots on intended targets."
       STR_MEDAL_LUCKYSHOT_NAME: "Lucky Shot Citum"
-      STR_MEDAL_LUCKYSHOT_DESCRIPTION: "Given to a soldier who has defied the odds by landing an unlikely shot on an intended target."
+      STR_MEDAL_LUCKYSHOT_DESCRIPTION: "Given to a soldier who has defied the odds by landing an unlikely shot on an unintended target."
       STR_MEDAL_DBLKILL_NAME: "Performance Citum"
       STR_MEDAL_DBLKILL_DESCRIPTION: "Given to a soldier who has performed admirably on the field by killing more than one hostile threat in quick succession."
       STR_MEDAL_REACTIONFIRE_NAME: "Swiftness Citum"

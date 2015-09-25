@@ -314,7 +314,7 @@ VoxelType Projectile::calculateThrow(double accuracy)
 			// See also TileEngine::validateThrow()
 			if (_action.type == BA_THROW)
 			{
-				const Tile* const tileTarget = _battleSave->getTile(_trj.back() / Position(16,16,24)); // _trj.at(0) <- see TileEngine::validateThrow()
+				const Tile* const tileTarget = _battleSave->getTile(Position::toTileSpace(_trj.back())); // _trj.at(0) <- see TileEngine::validateThrow()
 				if (tileTarget != NULL
 					&& tileTarget->getMapData(O_OBJECT) != NULL
 					&& (tileTarget->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NESW
@@ -748,7 +748,7 @@ bool Projectile::traceProjectile()
 
 /**
  * Gets the current position in voxel space.
- * @param offset - offset (default 0)
+ * @param offset - ID offset (default 0)
  * @return, position in voxel space
  */
 Position Projectile::getPosition(int offset) const
@@ -799,8 +799,8 @@ Surface* Projectile::getSprite() const
  */
 void Projectile::skipTrajectory()
 {
-	while (traceProjectile() == true);
-//	_trjId = _trj.size() - 1; // old code
+	while (traceProjectile() == true);	// why.
+//	_trjId = _trj.size() - 1;			// old code
 }
 
 /**

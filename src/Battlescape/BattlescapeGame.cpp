@@ -507,7 +507,7 @@ void BattlescapeGame::popState()
 					{
 						if (selUnit != NULL)
 						{
-							selUnit->setCache(NULL);
+							selUnit->setCache();
 							getMap()->cacheUnit(selUnit);
 						}
 
@@ -1111,7 +1111,7 @@ void BattlescapeGame::handleNonTargetAction()
 void BattlescapeGame::executeUnit() // private.
 {
 	_currentAction.actor->aim();
-	_currentAction.actor->setCache(NULL);
+	_currentAction.actor->setCache();
 	getMap()->cacheUnit(_currentAction.actor);
 
 	const RuleItem* const itRule = _currentAction.weapon->getRules();
@@ -1150,7 +1150,7 @@ void BattlescapeGame::executeUnit() // private.
 /*	if (ammo->spendBullet() == false)
 	{
 		_battleSave->removeItem(ammo);
-		_currentAction.weapon->setAmmoItem(NULL);
+		_currentAction.weapon->setAmmoItem();
 	} */
 	ammo->spendBullet(
 				*_battleSave,
@@ -2314,7 +2314,7 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* const unit) // private.
 								true);
 				}
 
-				unit->setCache(NULL);
+				unit->setCache();
 
 				Pathfinding* const pf = _battleSave->getPathfinding();
 				pf->setPathingUnit(unit);
@@ -2974,9 +2974,9 @@ void BattlescapeGame::dropItem(
 			_battleSave->getItems()->push_back(item);
 
 		if (disown == true)
-			item->moveToOwner(NULL);
+			item->moveToOwner();
 		else if (item->getRules()->isGrenade() == false)
-			item->setOwner(NULL);
+			item->setOwner();
 
 		getTileEngine()->applyGravity(_battleSave->getTile(pos));
 
@@ -3010,7 +3010,7 @@ BattleUnit* BattlescapeGame::convertUnit(BattleUnit* const unit)
 			++i)
 	{
 		dropItem(unit->getPosition(), *i);
-		(*i)->setOwner(NULL);
+		(*i)->setOwner();
 	}
 
 	unit->getInventory()->clear();
@@ -3610,7 +3610,7 @@ bool BattlescapeGame::checkProxyGrenades(BattleUnit* const unit)
 																	(*i)->getPreviousOwner()));
 									_battleSave->removeItem(*i); // does/should this even be done (also done at end of ExplosionBState) -> causes a double-explosion if remarked here.
 
-									unit->setCache(NULL);
+									unit->setCache();
 									getMap()->cacheUnit(unit);
 
 									return true;

@@ -680,7 +680,7 @@ private:
 
 		/// Sets this unit's cache and the cached flag.
 		void setCache(
-				Surface* const cache,
+				Surface* const cache = NULL,
 				int quadrant = 0);
 		/// Gets this unit's cache for the battlescape.
 		Surface* getCache(

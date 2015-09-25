@@ -1345,8 +1345,10 @@ void SoldierAward::load(const YAML::Node& node)
 {
 	_type		= node["type"]		.as<std::string>(_type);
 	_noun		= node["noun"]		.as<std::string>("noNoun");
-	_new		= node["isNew"]		.as<bool>(false); // note: '_new' never gets saved; also the initialization value in the cTor is different than the default load-value.
 	_decorLevel	= node["decorLevel"].as<size_t>(_decorLevel);
+	_new		= node["isNew"]		.as<bool>(false); // note: '_new' never gets saved; also the initialization value in the cTor is different than the default load-value.
+	// So that should be:
+//	_new = false; (and changed in the cTor ... no, the constructor is probably used for really new awards, while load() loads old awards.)
 }
 
 /**

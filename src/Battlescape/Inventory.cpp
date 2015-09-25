@@ -412,7 +412,7 @@ void Inventory::moveItem( // private.
 		if (item->getSlot()->getType() == INV_GROUND)
 			_selUnit->getTile()->removeItem(item);
 		else
-			item->moveToOwner(NULL);
+			item->moveToOwner();
 
 		item->setSlot(NULL);
 	}
@@ -422,7 +422,7 @@ void Inventory::moveItem( // private.
 		{
 			if (slot->getType() == INV_GROUND) // set to Ground
 			{
-				item->moveToOwner(NULL);
+				item->moveToOwner();
 				_selUnit->getTile()->addItem(item, item->getSlot());
 
 				if (item->getUnit() != NULL
@@ -536,7 +536,7 @@ BattleItem* Inventory::getSelectedItem() const
 
 /**
  * Changes the item currently grabbed by the player.
- * @param item - pointer to selected BattleItem or NULL if none
+ * @param item - pointer to selected BattleItem (default NULL)
  */
 void Inventory::setSelectedItem(BattleItem* const item)
 {
@@ -849,7 +849,7 @@ void Inventory::mouseClick(Action* action, State* state)
 							if (slot->getType() == INV_GROUND)
 								_stackLevel[static_cast<size_t>(x)]
 										   [static_cast<size_t>(y)] += 1;
-							setSelectedItem(NULL);
+							setSelectedItem();
 
 							soundId = ResourcePack::ITEM_DROP;
 						}
@@ -870,7 +870,7 @@ void Inventory::mouseClick(Action* action, State* state)
 									item->getSlotY());
 							_stackLevel[static_cast<size_t>(item->getSlotX())]
 									   [static_cast<size_t>(item->getSlotY())] += 1;
-							setSelectedItem(NULL);
+							setSelectedItem();
 
 							soundId = ResourcePack::ITEM_DROP;
 						}
@@ -907,8 +907,8 @@ void Inventory::mouseClick(Action* action, State* state)
 							moveItem(_selItem, NULL);
 
 							item->setAmmoItem(_selItem);
-							_selItem->moveToOwner(NULL);
-							setSelectedItem(NULL);
+							_selItem->moveToOwner();
+							setSelectedItem();
 
 							soundId = ResourcePack::ITEM_RELOAD;
 
@@ -946,7 +946,7 @@ void Inventory::mouseClick(Action* action, State* state)
 									item->getSlotY());
 							_stackLevel[static_cast<size_t>(item->getSlotX())]
 									   [static_cast<size_t>(item->getSlotY())] += 1;
-							setSelectedItem(NULL);
+							setSelectedItem();
 
 							soundId = ResourcePack::ITEM_DROP;
 						}
@@ -1056,7 +1056,7 @@ void Inventory::mouseClick(Action* action, State* state)
 				_stackLevel[static_cast<size_t>(_selItem->getSlotX())]
 						   [static_cast<size_t>(_selItem->getSlotY())] += 1;
 
-			setSelectedItem(NULL); // Return item to original position.
+			setSelectedItem(); // Return item to original position.
 			soundId = ResourcePack::ITEM_DROP;
 		}
 	}
@@ -1131,8 +1131,8 @@ bool Inventory::unload()
 				_game->getRuleset()->getInventory("STR_RIGHT_HAND"));
 		_selItem->moveToOwner(_selUnit);
 
-		_selItem->setAmmoItem(NULL);
-		setSelectedItem(NULL);
+		_selItem->setAmmoItem();
+		setSelectedItem();
 
 		moveItem(ammo, slot);
 		ammo->moveToOwner(owner);

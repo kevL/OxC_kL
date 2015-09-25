@@ -6410,11 +6410,12 @@ void TileEngine::setDangerZone(
 
 	tile->setDangerous(); // set the epicenter as dangerous
 
-	const Position originVoxel = pos * Position(16,16,24)
-							   + Position(
-										8,8,
-										12 - tile->getTerrainLevel());
-	Position targetVoxel;
+	const Position originVoxel = Position::toVoxelSpaceCentered(
+															pos,
+															12 - tile->getTerrainLevel()); // what.
+	Position
+		targetVoxel,
+		posTest;
 
 	for (int
 			x = -radius;
@@ -6430,14 +6431,13 @@ void TileEngine::setDangerZone(
 			{
 				if ((x * x) + (y * y) <= radius * radius) // make sure it's within the radius
 				{
-					tile = _battleSave->getTile(pos + Position(x,y,0));
+					posTest = pos + Position(x,y,0);
+					tile = _battleSave->getTile(posTest);
 					if (tile != NULL)
 					{
-						targetVoxel = ((pos + Position(x,y,0)) * Position(16,16,24))
-									+ Position(
-											8,8,
-											12 - tile->getTerrainLevel());
-
+						targetVoxel = Position::toVoxelSpaceCentered(
+																posTest,
+																12 - tile->getTerrainLevel()); // what.
 						std::vector<Position> trajectory;
 						// trace a line here ignoring all units to check if the
 						// explosion will reach this point; granted this won't
@@ -6456,7 +6456,7 @@ void TileEngine::setDangerZone(
 									unit) == VOXEL_EMPTY)
 						{
 							if (trajectory.size() != 0
-								&& (trajectory.back() / Position(16,16,24)) == pos + Position(x,y,0))
+								&& Position::toTileSpace(trajectory.back()) == posTest)
 							{
 								tile->setDangerous();
 							}
@@ -6470,12 +6470,12 @@ void TileEngine::setDangerZone(
 
 /**
  * Sets a tile with a diagonal bigwall as the true epicenter of an explosion.
+ * @param tile - tile to set (default NULL)
  */
 void TileEngine::setTrueTile(Tile* const tile)
 {
 	_trueTile = tile;
 }
-
 
 /**
  * Gets a valid target-unit given a Tile.
@@ -6489,8 +6489,7 @@ BattleUnit* TileEngine::getTargetUnit(const Tile* const tile) const
 		if (tile->getUnit() != NULL) // warning: Careful not to use this when UnitWalkBState has transient units placed.
 			return tile->getUnit();
 
-		if (tile->hasNoFloor() == true
-			&& tile->getPosition().z > 0)
+		if (tile->hasNoFloor() == true && tile->getPosition().z > 0)
 		{
 			const Tile* const tileBelow = _battleSave->getTile(tile->getPosition() - Position(0,0,-1));
 			if (tileBelow->getUnit() != NULL) // no safety.

@@ -217,7 +217,7 @@ private:
 		void cacheUnit(BattleUnit* const unit);
 
 		/// Sets projectile.
-		void setProjectile(Projectile* projectile);
+		void setProjectile(Projectile* const projectile = NULL);
 		/// Gets projectile.
 		Projectile* getProjectile() const;
 

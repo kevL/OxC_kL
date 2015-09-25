@@ -1999,7 +1999,7 @@ void Map::animateMap(bool redraw)
 		if ((*i)->isOut_t(OUT_STAT) == false
 			&& (*i)->getArmor()->getConstantAnimation() == true)
 		{
-			(*i)->setCache(NULL);
+			(*i)->setCache();
 			cacheUnit(*i);
 		}
 	}
@@ -2439,9 +2439,9 @@ void Map::cacheUnit(BattleUnit* const unit)
 
 /**
  * Puts a projectile sprite on the map.
- * @param projectile - projectile to place
+ * @param projectile - projectile to place (default NULL)
  */
-void Map::setProjectile(Projectile* projectile)
+void Map::setProjectile(Projectile* const projectile)
 {
 	_projectile = projectile;
 
@@ -2513,9 +2513,7 @@ void Map::setButtonsPressed(
 		Uint8 btn,
 		bool pressed)
 {
-	setButtonPressed(
-				btn,
-				pressed);
+	setButtonPressed(btn, pressed);
 }
 
 /**

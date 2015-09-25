@@ -502,7 +502,7 @@ void InventoryState::init()
 
 //	if (_parent) _parent->getMap()->getCamera()->centerOnPosition(unit->getPosition(), false);
 
-	unit->setCache(NULL);
+	unit->setCache();
 
 	_soldier->clear();
 	_btnRank->clear();
@@ -996,7 +996,7 @@ void InventoryState::btnUnequipUnitClick(Action*)
 				i != unitInvent->end();
 				)
 		{
-			(*i)->setOwner(NULL);
+			(*i)->setOwner();
 			tile->addItem(*i, slot);
 			i = unitInvent->erase(i);
 		}
@@ -1039,7 +1039,7 @@ void InventoryState::clearInventory( // private.
 	RuleInventory* const groundRule = game->getRuleset()->getInventory("STR_GROUND");
 	for (std::vector<BattleItem*>::const_iterator i = unitInv->begin(); i != unitInv->end();)
 	{
-		(*i)->setOwner(NULL);
+		(*i)->setOwner();
 		groundTile->addItem(*i, groundRule);
 		i = unitInv->erase(i);
 	}
@@ -1555,7 +1555,7 @@ void InventoryState::txtTooltipOut(Action* action)
 				if (loadedAmmo)
 				{
 					groundTile->addItem(loadedAmmo, groundRuleInv);
-					matchedWeapon->setAmmoItem(NULL);
+					matchedWeapon->setAmmoItem();
 				}
 
 				// load the correct ammo into the weapon

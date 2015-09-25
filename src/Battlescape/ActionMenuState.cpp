@@ -378,7 +378,7 @@ void ActionMenuState::btnActionMenuClick(Action* action)
 			case BA_DROP:
 				if (_action->actor->spendTimeUnits(_action->TU) == true)
 				{
-					_action->weapon->moveToOwner(NULL);
+					_action->weapon->moveToOwner();
 					_action->actor->getTile()->addItem(
 													_action->weapon,
 													_game->getRuleset()->getInventory("STR_GROUND"));

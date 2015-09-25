@@ -129,7 +129,7 @@ private:
 		/// Gets the currently selected item.
 		BattleItem* getSelectedItem() const;
 		/// Sets the currently selected item.
-		void setSelectedItem(BattleItem* const item);
+		void setSelectedItem(BattleItem* const item = NULL);
 
 		/// Gets the mouse over item.
 		BattleItem* getMouseOverItem() const;

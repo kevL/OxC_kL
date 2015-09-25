@@ -2204,7 +2204,7 @@ void SavedBattleGame::reviveUnit(
 			if (unit->getGeoscapeSoldier() != NULL)
 				unit->kneel(true);
 
-			unit->setCache(NULL);
+			unit->setCache();
 
 			unit->setDirection(RNG::generate(0,7));
 			unit->setTimeUnits(0);
