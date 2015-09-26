@@ -81,8 +81,8 @@ bool BattlescapeGame::_debugPlay = false;
  * @param parentState	- pointer to the parent BattlescapeState
  */
 BattlescapeGame::BattlescapeGame(
-		SavedBattleGame* battleSave,
-		BattlescapeState* parentState)
+		SavedBattleGame* const battleSave,
+		BattlescapeState* const parentState)
 	:
 		_battleSave(battleSave),
 		_parentState(parentState),

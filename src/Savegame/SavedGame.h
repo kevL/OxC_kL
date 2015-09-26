@@ -104,9 +104,9 @@ struct MissionStatistics
 		valiantCrux;
 
 	int
-		shade,
 		id,
-		score;
+		score,
+		shade;
 
 	std::string
 		alienRace,
@@ -129,6 +129,7 @@ struct MissionStatistics
 		else if (type == "STR_BASE_DEFENSE")		return "STR_BASE_DEFENSE_LC";
 		else if (type == "STR_ALIEN_BASE_ASSAULT")	return "STR_ALIEN_BASE_ASSAULT_LC";
 		else if (type == "STR_TERROR_MISSION")		return "STR_TERROR_MISSION_LC";
+		else if (type == "STR_PORT_ATTACK")			return "STR_PORT_ATTACK_LC";
 		else										return "type error";
 	}
 

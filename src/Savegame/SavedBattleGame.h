@@ -148,7 +148,7 @@ private:
 		static const size_t SEARCH_SIZE = SEARCH_DIST * SEARCH_DIST;
 
 		/// Creates a new battle save based on the current generic save.
-		explicit SavedBattleGame(const std::vector<OperationPool*>* titles = NULL);
+		explicit SavedBattleGame(const std::vector<OperationPool*>* const titles = NULL);
 		/// Cleans up the saved game.
 		~SavedBattleGame();
 

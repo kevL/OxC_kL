@@ -171,6 +171,7 @@ extraStrings:
       STR_BASE_DEFENSE_LC: "Base Defense"
       STR_ALIEN_BASE_ASSAULT_LC: "aLien Base Assault"
       STR_TERROR_MISSION_LC: "Terror Mission"
+      STR_PORT_ATTACK_LC: "Port Attack"
       STR_VEHICLE: "Vehicle"
       STR_SCORE_VALUE: "SCORE> {ALT}{0}"
       STR_POINTS_VALUE: "POINTS> {ALT}{0}"

@@ -206,8 +206,8 @@ private:
 
 		/// Creates the BattlescapeGame state.
 		BattlescapeGame(
-				SavedBattleGame* battleSave,
-				BattlescapeState* parentState);
+				SavedBattleGame* const battleSave,
+				BattlescapeState* const parentState);
 		/// Cleans up the BattlescapeGame state.
 		~BattlescapeGame();
 

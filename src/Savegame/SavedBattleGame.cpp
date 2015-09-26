@@ -59,7 +59,7 @@ namespace OpenXcom
  * Initializes a brand new SavedBattleGame.
  * @param titles - pointer to a vector of pointers to OperationPool (default NULL)
  */
-SavedBattleGame::SavedBattleGame(const std::vector<OperationPool*>* titles)
+SavedBattleGame::SavedBattleGame(const std::vector<OperationPool*>* const titles)
 	:
 		_battleState(NULL),
 		_mapsize_x(0),
