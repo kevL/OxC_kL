@@ -412,28 +412,26 @@ void ExplosionBState::explode() // private.
 	else
 		itRule = NULL; // dang vc++ linker warnings.
 
-	// melee Hit success/failure, and hit/miss sound-FX, are determined in ProjectileFlyBState.
+	// Note: melee Hit success/failure, and hit/miss sound-FX, are determined in ProjectileFlyBState.
 
-	const SavedBattleGame* const save = _battleSave;
-	TileEngine* const tileEngine = save->getTileEngine();
+	TileEngine* const tileEngine = _battleSave->getTileEngine();
 
 	if (_hit == true)
 	{
-		save->getBattleGame()->getCurrentAction()->type = BA_NONE;
+		_battleSave->getBattleGame()->getCurrentAction()->type = BA_NONE;
 
 		if (_unit != NULL)
 		{
-//			if (_unit->isOut() == false)
 			if (_unit->isOut_t() == false)
 			{
 				_unit->aim(false);
-				_unit->setCache();
+				_unit->clearCache();
 			}
 
 			if (_unit->getGeoscapeSoldier() != NULL
 				&& _unit->getFaction() == _unit->getOriginalFaction())
 			{
-				const BattleUnit* const targetUnit = save->getTile(_center / Position(16,16,24))->getUnit();
+				const BattleUnit* const targetUnit = _battleSave->getTile(Position::toTileSpace(_center))->getUnit();
 				if (targetUnit != NULL
 					&& targetUnit->getFaction() != FACTION_PLAYER)
 				{
@@ -578,7 +576,7 @@ void ExplosionBState::explode() // private.
 		&& _lowerWeapon == true)
 	{
 		_unit->aim(false);
-		_unit->setCache();
+		_unit->clearCache();
 	}
 
 	_parent->getMap()->cacheUnits();

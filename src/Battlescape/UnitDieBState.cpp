@@ -277,7 +277,7 @@ void UnitDieBState::think()
 			_parent->convertUnit(_unit);
 	}
 
-	_unit->setCache();
+	_unit->clearCache();
 	_parent->getMap()->cacheUnit(_unit);
 }
 

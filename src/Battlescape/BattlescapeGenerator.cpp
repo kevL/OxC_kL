@@ -2441,9 +2441,7 @@ void BattlescapeGenerator::explodePowerSources() // private.
 	const Tile* tile = _battleSave->getTileEngine()->checkForTerrainExplosions();
 	while (tile != NULL)
 	{
-		voxel = Position::toVoxelSpaceCentered(
-											tile->getPosition(),
-											10);
+		voxel = Position::toVoxelSpaceCentered(tile->getPosition(), 10);
 		_battleSave->getTileEngine()->explode(
 											voxel,
 											tile->getExplosive(),

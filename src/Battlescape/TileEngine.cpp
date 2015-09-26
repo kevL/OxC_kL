@@ -788,7 +788,7 @@ bool TileEngine::visible(
 
 	const Position originVoxel = getSightOriginVoxel(unit);
 	Position scanVoxel;
-	std::vector<Position> _trajectory;
+	std::vector<Position> trj;
 
 	if (canTargetUnit(
 					&originVoxel,
@@ -796,48 +796,33 @@ bool TileEngine::visible(
 					&scanVoxel,
 					unit) == true)
 	{
-		_trajectory.clear();
+		trj.clear();
 
 		plotLine(
 				originVoxel,
 				scanVoxel,
 				true,
-				&_trajectory,
+				&trj,
 				unit);
 
 
-		double distWeighted = static_cast<double>(_trajectory.size());
+		double distObscured = static_cast<double>(trj.size());
 		const Tile* scanTile = _battleSave->getTile(unit->getPosition());
 
 		for (size_t
 				i = 0;
-				i != _trajectory.size();
+				i != trj.size();
 				++i)
 		{
-			scanTile = _battleSave->getTile(Position(
-												_trajectory.at(i).x / 16,
-												_trajectory.at(i).y / 16,
-												_trajectory.at(i).z / 24));
+			scanTile = _battleSave->getTile(Position::toTileSpace(trj.at(i)));
 
-			distWeighted += static_cast<double>(scanTile->getSmoke()) / 3.;
-			distWeighted += static_cast<double>(scanTile->getFire()) / 3.;
-
-			if (static_cast<int>(std::ceil(distWeighted * distWeighted)) > MAX_VOXEL_VIEW_DIST_SQR)
+			distObscured += static_cast<double>(scanTile->getSmoke() + scanTile->getFire()) / 3.;
+			if (static_cast<int>(std::ceil(distObscured * distObscured)) > MAX_VOXEL_VIEW_DIST_SQR)
 				return false;
 		}
 
 		if (scanTile->getUnit() == getTargetUnit(tile))
 			return true;
-
-/*		if (scanTile->getUnit() == targetUnit)
-			return true;
-		const Tile* const tileBelow = _battleSave->getTile(scanTile->getPosition() + Position(0,0,-1));
-		if (tileBelow != NULL
-			&& scanTile->hasNoFloor(tileBelow) == true
-			&& tileBelow->getUnit() == targetUnit)
-		{
-			return true;
-		} */
 	}
 
 	return false;
@@ -850,28 +835,19 @@ bool TileEngine::visible(
  */
 Position TileEngine::getSightOriginVoxel(const BattleUnit* const unit) const
 {
-	Position originVoxel = Position(
-								unit->getPosition().x * 16,
-								unit->getPosition().y * 16,
-								unit->getPosition().z * 24);
-	originVoxel.z += unit->getHeight(true)
-				   - _battleSave->getTile(unit->getPosition())->getTerrainLevel()
-				   - 4; // kL_note: now equal to getOriginVoxel()
+	const Position pos = unit->getPosition();
+	Position originVoxel = Position::toVoxelSpaceCentered(
+													pos,
+													unit->getHeight(true) - 4
+														- _battleSave->getTile(pos)->getTerrainLevel(), // TODO: this is quadrant #1, will not be accurate in all cases.
+													unit->getArmor()->getSize());
 
-	const int offset = unit->getArmor()->getSize() * 8;
-	originVoxel.x += offset;
-	originVoxel.y += offset;
-
-	const int heightLimit = (unit->getPosition().z + 1) * 24 - 1;
-	if (originVoxel.z > heightLimit)
+	const int ceilingZ = pos.z * 24 + 23;
+	if (ceilingZ < originVoxel.z)
 	{
-		const Tile* const tileAbove = _battleSave->getTile(unit->getPosition() + Position(0,0,1));
-		if (tileAbove == NULL
-			|| tileAbove->hasNoFloor() == false)
-		{
-			while (originVoxel.z > heightLimit)
-				--originVoxel.z; // careful with that ceiling, Eugene.
-		}
+		const Tile* const tileAbove = _battleSave->getTile(pos + Position(0,0,1));
+		if (tileAbove == NULL || tileAbove->hasNoFloor() == false)
+			originVoxel.z = ceilingZ; // careful with that ceiling, Eugene.
 	}
 
 	return originVoxel;
@@ -887,87 +863,45 @@ Position TileEngine::getOriginVoxel(
 		const BattleAction& action,
 		const Tile* tile) const
 {
-//	const int dirYshift[8] = {1, 1, 8,15,15,15, 8, 1};
-//	const int dirXshift[8] = {8,14,15,15, 8, 1, 1, 1};
-
 	if (tile == NULL)
 		tile = action.actor->getTile();
 
-	Position
-		posOrigin = tile->getPosition(),
-		originVoxel = Position(
-							posOrigin.x * 16,
-							posOrigin.y * 16,
-							posOrigin.z * 24);
+	const Position pos = tile->getPosition();
 
-	if (action.type != BA_LAUNCH
-		|| action.actor->getPosition() == posOrigin)
+	if (action.type == BA_LAUNCH
+		&& action.actor->getPosition() != pos)
 	{
-		originVoxel.z += action.actor->getHeight(true)
-						   - tile->getTerrainLevel();
-						   - 4; // kL_note: now equal to getSightOriginVoxel()
-		// Ps. don't need luck - need precision.
-
-		// hey, here's an idea: make Autos shoot from hip, Snaps shoot from chest, & Aimed from shoulders or eyes. Throw from ......
-/*		if (action.type == BA_THROW) originVoxel.z -= 3;
-		else originVoxel.z -= 4; */
-
-		const int heightLimit = (posOrigin.z + 1) * 24 - 1;
-		if (originVoxel.z > heightLimit)
-		{
-			const Tile* const tileAbove = _battleSave->getTile(posOrigin + Position(0,0,1));
-			if (tileAbove == NULL
-				|| tileAbove->hasNoFloor() == false)
-			{
-				while (originVoxel.z > heightLimit)
-					--originVoxel.z;
-			}
-		}
-/*		const int heightLimit = ((posOrigin.z + 1) * 24) - 1;
-		if (originVoxel.z > heightLimit)
-		{
-			const Tile* const tileAbove = _battleSave->getTile(posOrigin + Position(0,0,1));
-			if (tileAbove != NULL && tileAbove->hasNoFloor() == true)
-				++posOrigin.z;
-			else
-			{
-				while (originVoxel.z > heightLimit)
-					--originVoxel.z;
-				originVoxel.z -= 4; // keep originVoxel 4 voxels below any ceiling.
-			}
-		} */
-
-		// kL_note: This is the old code that does not use the dirX/Yshift stuff...
-		//
-		// Originally used the dirXShift and dirYShift as detailed above;
-		// this however results in MUCH more predictable results.
-		// center Origin in the posOrigin (or the center of all four tiles for large units):
-		const int offset = action.actor->getArmor()->getSize() * 8;
-		originVoxel.x += offset;
-		originVoxel.y += offset;
-		// screw Warboy's obscurantist glamor-driven elitist campaign!!!! Have fun with that!!
-		// MUCH more predictable results. <- I didn't write that; just iterating it.
-		// ... better now but still waiting on it. Eg, the AI needs to account for it.
-/*		int direction = getDirectionTo(posOrigin, action.target);
-		originVoxel.x += dirXshift[direction]*action.actor->getArmor()->getSize();
-		originVoxel.y += dirYshift[direction]*action.actor->getArmor()->getSize(); */
+		// don't take into account unit height or terrain level if the
+		// projectile is not being launched - ie. is from a waypoint
+		return Position::toVoxelSpaceCentered(pos, 16);
 	}
-	else // action.type == BA_LAUNCH
+
+	Position originVoxel = Position::toVoxelSpaceCentered(
+													pos,
+													action.actor->getHeight(true) - 4
+														- _battleSave->getTile(pos)->getTerrainLevel(), // TODO: this is quadrant #1, will not be accurate in all cases.
+													action.actor->getArmor()->getSize());
+
+	const int ceilingZ = pos.z * 24 + 23;
+	if (ceilingZ < originVoxel.z)
 	{
-		// don't take into account soldier height and terrain level if the
-		// projectile is not launched from a soldier (ie. is from a waypoint)
-		originVoxel.x += 8;
-		originVoxel.y += 8;
-		originVoxel.z += 16;
+		const Tile* const tileAbove = _battleSave->getTile(pos + Position(0,0,1));
+		if (tileAbove == NULL || tileAbove->hasNoFloor() == false)
+			originVoxel.z = ceilingZ; // careful with that ceiling, Eugene.
 	}
 
 	return originVoxel;
 }
+/*	const int dirYshift[8] = {1, 1, 8,15,15,15, 8, 1};
+	const int dirXshift[8] = {8,14,15,15, 8, 1, 1, 1};
+	int dir = getDirectionTo(pos, action.target);
+	originVoxel.x += dirXshift[dir] * action.actor->getArmor()->getSize();
+	originVoxel.y += dirYshift[dir] * action.actor->getArmor()->getSize(); */
 
 /**
  * Checks for another unit available for targeting and what particular voxel.
  * @param originVoxel	- pointer to voxel of trace origin (eg. gun's barrel)
- * @param targetTile	- pointer to Tile to check against
+ * @param tileTarget	- pointer to Tile to check against
  * @param scanVoxel		- pointer to voxel that is returned coordinate of hit
  * @param excludeUnit	- pointer to unitSelf (to not hit self)
  * @param targetUnit	- pointer to a hypothetical unit to draw a virtual LoF for AI;
@@ -976,7 +910,7 @@ Position TileEngine::getOriginVoxel(
  */
 bool TileEngine::canTargetUnit(
 		const Position* const originVoxel,
-		const Tile* const targetTile,
+		const Tile* const tileTarget,
 		Position* const scanVoxel,
 		const BattleUnit* const excludeUnit,
 		const BattleUnit* targetUnit) const
@@ -986,11 +920,11 @@ bool TileEngine::canTargetUnit(
 
 	if (targetUnit == NULL)
 	{
-		targetUnit = targetTile->getUnit();
+		targetUnit = tileTarget->getUnit();
 		if (targetUnit == NULL)
 		{
 			//Log(LOG_INFO) << ". no Unit, ret FALSE";
-			return false; // no unit in this targetTile, even if it's elevated and appearing in it.
+			return false; // no unit in this tileTarget, even if it's elevated and appearing in it.
 		}
 	}
 
@@ -1000,38 +934,35 @@ bool TileEngine::canTargetUnit(
 		return false;
 	}
 
-	const Position targetVoxel = Position(
-										targetTile->getPosition().x * 16 + 8,
-										targetTile->getPosition().y * 16 + 8,
-										targetTile->getPosition().z * 24);
+	const Position targetVoxel = Position::toVoxelSpaceCentered(tileTarget->getPosition());
 	const int
 		targetMinHeight = targetVoxel.z
-						- targetTile->getTerrainLevel()
+						- tileTarget->getTerrainLevel()
 						+ targetUnit->getFloatHeight(),
-		// if there is a unit on targetTile, assume check against that unit's height
-		xOffset = targetUnit->getPosition().x - targetTile->getPosition().x,
-		yOffset = targetUnit->getPosition().y - targetTile->getPosition().y,
-		targetSize = targetUnit->getArmor()->getSize() - 1;
+		// if there is a unit on tileTarget, assume check against that unit's height
+		xOffset = targetUnit->getPosition().x - tileTarget->getPosition().x,
+		yOffset = targetUnit->getPosition().y - tileTarget->getPosition().y,
+		armorSize = targetUnit->getArmor()->getSize() - 1;
 	int
 		targetMaxHeight = targetMinHeight,
 		targetCenterHeight,
 		heightRange;
 
 	size_t unitRadius;
-	if (targetSize > 0)
+	if (armorSize > 0)
 		unitRadius = 3; // width = LoFT in default LoFTemps set
 	else
 		unitRadius = targetUnit->getLoft();
 
 	// origin-to-target vector manipulation to make scan work in voxelspace
-	const Position relPos = targetVoxel - *originVoxel;
+	const Position relVoxel = targetVoxel - *originVoxel;
 	const float unitCenter = static_cast<float>(unitRadius)
-						   / std::sqrt(static_cast<float>((relPos.x * relPos.x) + (relPos.y * relPos.y)));
+						   / std::sqrt(static_cast<float>((relVoxel.x * relVoxel.x) + (relVoxel.y * relVoxel.y)));
 	const int
-//		relX = static_cast<int>(std::floor(static_cast<float>( relPos.y) * unitCenter + 0.5f)),
-//		relY = static_cast<int>(std::floor(static_cast<float>(-relPos.x) * unitCenter + 0.5f)),
-		relX = static_cast<int>(Round(std::floor(static_cast<float>( relPos.y) * unitCenter))),
-		relY = static_cast<int>(Round(std::floor(static_cast<float>(-relPos.x) * unitCenter))),
+//		relX = static_cast<int>(std::floor(static_cast<float>( relVoxel.y) * unitCenter + 0.5f)),
+//		relY = static_cast<int>(std::floor(static_cast<float>(-relVoxel.x) * unitCenter + 0.5f)),
+		relX = static_cast<int>(Round(std::floor(static_cast<float>( relVoxel.y) * unitCenter))),
+		relY = static_cast<int>(Round(std::floor(static_cast<float>(-relVoxel.x) * unitCenter))),
 		targetSlices[10] =
 		{
 			 0,		 0,
@@ -1053,7 +984,7 @@ bool TileEngine::canTargetUnit(
 	if (heightRange > 10) heightRange = 10;
 	if (heightRange < 0) heightRange = 0;
 
-	std::vector<Position> trajectory;
+	std::vector<Position> trj;
 	std::vector<int>
 		targetable_x,
 		targetable_y,
@@ -1085,34 +1016,34 @@ bool TileEngine::canTargetUnit(
 			//Log(LOG_INFO) << ". . scan.X = " << scanVoxel->x;
 			//Log(LOG_INFO) << ". . scan.Y = " << scanVoxel->y;
 
-			trajectory.clear();
+			trj.clear();
 
 			const VoxelType test = plotLine(
 										*originVoxel,
 										*scanVoxel,
 										false,
-										&trajectory,
+										&trj,
 										excludeUnit);
 			//Log(LOG_INFO) << ". . testLine = " << test;
 
 			if (test == VOXEL_UNIT)
 			{
-				for (int // voxel of hit must be inside of scanned targetTile(s)
+				for (int // voxel of hit must be inside of scanned tileTarget(s)
 						x = 0;
-						x <= targetSize;
+						x <= armorSize;
 						++x)
 				{
 					//Log(LOG_INFO) << ". . . iterate x-Size";
 					for (int
 							y = 0;
-							y <= targetSize;
+							y <= armorSize;
 							++y)
 					{
 						//Log(LOG_INFO) << ". . . iterate y-Size";
-						if (   trajectory.at(0).x / 16 == (scanVoxel->x / 16) + x + xOffset
-							&& trajectory.at(0).y / 16 == (scanVoxel->y / 16) + y + yOffset
-							&& trajectory.at(0).z >= targetMinHeight
-							&& trajectory.at(0).z <= targetMaxHeight)
+						if (trj.at(0).x / 16 == (scanVoxel->x / 16) + x + xOffset
+							&& trj.at(0).y / 16 == (scanVoxel->y / 16) + y + yOffset
+							&& trj.at(0).z >= targetMinHeight
+							&& trj.at(0).z <= targetMaxHeight)
 						{
 							//Log(LOG_INFO) << ". . . . Unit found @ voxel, ret TRUE";
 							//Log(LOG_INFO) << ". . . . scanVoxel " << (*scanVoxel);
@@ -1125,7 +1056,7 @@ bool TileEngine::canTargetUnit(
 			}
 			else if (test == VOXEL_EMPTY
 				&& hypothetical == true
-				&& trajectory.empty() == false)
+				&& trj.empty() == false)
 			{
 				//Log(LOG_INFO) << ". . hypothetical Found, ret TRUE";
 				return true;
@@ -1151,9 +1082,9 @@ bool TileEngine::canTargetUnit(
 		target_z = (minVal + maxVal) / 2;
 
 		*scanVoxel = Position(
-						target_x,
-						target_y,
-						target_z);
+							target_x,
+							target_y,
+							target_z);
 
 		//Log(LOG_INFO) << ". scanVoxel RET " << (*scanVoxel);
 		return true;
@@ -1165,7 +1096,7 @@ bool TileEngine::canTargetUnit(
 /*
 bool TileEngine::canTargetUnit(
 		const Position* const originVoxel,
-		const Tile* const targetTile,
+		const Tile* const tileTarget,
 		Position* const scanVoxel,
 		const BattleUnit* const excludeUnit,
 		const BattleUnit* targetUnit)
@@ -1175,11 +1106,11 @@ bool TileEngine::canTargetUnit(
 
 	if (targetUnit == NULL)
 	{
-		targetUnit = targetTile->getUnit();
+		targetUnit = tileTarget->getUnit();
 		if (targetUnit == NULL)
 		{
 			//Log(LOG_INFO) << ". no Unit, ret FALSE";
-			return false; // no unit in this targetTile, even if it's elevated and appearing in it.
+			return false; // no unit in this tileTarget, even if it's elevated and appearing in it.
 		}
 	}
 
@@ -1190,16 +1121,16 @@ bool TileEngine::canTargetUnit(
 	}
 
 	const Position targetVoxel = Position(
-										targetTile->getPosition().x * 16 + 8,
-										targetTile->getPosition().y * 16 + 8,
-										targetTile->getPosition().z * 24);
+										tileTarget->getPosition().x * 16 + 8,
+										tileTarget->getPosition().y * 16 + 8,
+										tileTarget->getPosition().z * 24);
 	const int
 		targetMinHeight = targetVoxel.z
-							- targetTile->getTerrainLevel()
+							- tileTarget->getTerrainLevel()
 							+ targetUnit->getFloatHeight(),
-		// if there is a unit on targetTile, assume check against that unit's height
-		xOffset = targetUnit->getPosition().x - targetTile->getPosition().x,
-		yOffset = targetUnit->getPosition().y - targetTile->getPosition().y,
+		// if there is a unit on tileTarget, assume check against that unit's height
+		xOffset = targetUnit->getPosition().x - tileTarget->getPosition().x,
+		yOffset = targetUnit->getPosition().y - tileTarget->getPosition().y,
 		targetSize = targetUnit->getArmor()->getSize() - 1;
 	int
 		unitRadius = targetUnit->getLoft(), // width = LoFT in default LoFTemps set
@@ -1279,7 +1210,7 @@ bool TileEngine::canTargetUnit(
 
 			if (test == VOXEL_UNIT)
 			{
-				for (int // voxel of hit must be inside of scanned targetTile(s)
+				for (int // voxel of hit must be inside of scanned tileTarget(s)
 						x = 0;
 						x <= targetSize;
 						++x)
@@ -1319,15 +1250,15 @@ bool TileEngine::canTargetUnit(
 /**
  * Checks for a tile part available for targeting and what particular voxel.
  * @param originVoxel	- pointer to the Position voxel of trace origin (eg. gun's barrel)
- * @param targetTile	- pointer to the Tile to check against
+ * @param tileTarget	- pointer to the Tile to check against
  * @param tilePart		- tile part to check for (MapData.h)
  * @param scanVoxel		- pointer to voxel that is returned coordinate of hit
  * @param excludeUnit	- pointer to unitSelf (to not hit self)
- * @return, true if targetTile can be targeted
+ * @return, true if tile-part can be targeted
  */
 bool TileEngine::canTargetTile(
 		const Position* const originVoxel,
-		const Tile* const targetTile,
+		const Tile* const tileTarget,
 		const MapDataType tilePart,
 		Position* const scanVoxel,
 		const BattleUnit* const excludeUnit) const
@@ -1348,21 +1279,18 @@ bool TileEngine::canTargetTile(
 			0,7, 0,9, 0,6, 0,11, 0,4, 0,13, 0,2
 		};
 
-	Position targetVoxel = Position(
-								targetTile->getPosition().x * 16,
-								targetTile->getPosition().y * 16,
-								targetTile->getPosition().z * 24);
+	Position targetVoxel = Position::toVoxelSpace(tileTarget->getPosition());
 
-	std::vector<Position> _trajectory;
+	std::vector<Position> trj;
 
 	int
 		* spiralArray,
-		minZ = 0,
-		maxZ = 0;
+		zMin = 0,
+		zMax = 0;
 	size_t spiralCount;
 	bool
-		minZfound = false,
-		maxZfound = false;
+		foundMinZ = false,
+		foundMaxZ = false;
 
 
 	if (tilePart == O_OBJECT)
@@ -1384,10 +1312,10 @@ bool TileEngine::canTargetTile(
 	{
 		spiralArray = sliceObjectSpiral;
 		spiralCount = 41;
-		minZfound =
-		maxZfound = true;
-		minZ =
-		maxZ = 0;
+		foundMinZ =
+		foundMaxZ = true;
+		zMin =
+		zMax = 0;
 	}
 	else
 	{
@@ -1395,14 +1323,14 @@ bool TileEngine::canTargetTile(
 		return false;
 	}
 
-	if (minZfound == false) // find out height range
+	if (foundMinZ == false) // find out height range
 	{
 		for (int
 				j = 1;
 				j != 12;
 				++j)
 		{
-			if (minZfound == true)
+			if (foundMinZ == true)
 				break;
 
 			for (size_t
@@ -1422,10 +1350,10 @@ bool TileEngine::canTargetTile(
 							NULL,
 							true) == tilePart) // bingo. Note MapDataType & VoxelType correspond.
 				{
-					if (minZfound == false)
+					if (foundMinZ == false)
 					{
-						minZ = j * 2;
-						minZfound = true;
+						zMin = j * 2;
+						foundMinZ = true;
 
 						break;
 					}
@@ -1434,17 +1362,17 @@ bool TileEngine::canTargetTile(
 		}
 	}
 
-	if (minZfound == false)
+	if (foundMinZ == false)
 		return false; // empty object!!!
 
-	if (maxZfound == false)
+	if (foundMaxZ == false)
 	{
 		for (int
 				j = 10;
 				j != -1;
 				--j)
 		{
-			if (maxZfound == true)
+			if (foundMaxZ == true)
 				break;
 
 			for (size_t
@@ -1464,10 +1392,10 @@ bool TileEngine::canTargetTile(
 							NULL,
 							true) == tilePart) // bingo. Note MapDataType & VoxelType correspond.
 				{
-					if (maxZfound == false)
+					if (foundMaxZ == false)
 					{
-						maxZ = j * 2;
-						maxZfound = true;
+						zMax = j * 2;
+						foundMaxZ = true;
 
 						break;
 					}
@@ -1476,22 +1404,22 @@ bool TileEngine::canTargetTile(
 		}
 	}
 
-	if (maxZfound == false)
+	if (foundMaxZ == false)
 		return false; // it's impossible to get there
 
-	if (minZ > maxZ)
-		minZ = maxZ;
+	if (zMin > zMax)
+		zMin = zMax;
 
 	const int
-		rangeZ = maxZ - minZ,
-		centerZ = (maxZ + minZ) / 2;
+		zRange = zMax - zMin,
+		zCenter = (zMax + zMin) / 2;
 
 	for (int
 			j = 0;
-			j != rangeZ + 1;
+			j != zRange + 1;
 			++j)
 	{
-		scanVoxel->z = targetVoxel.z + centerZ + heightFromCenter[static_cast<size_t>(j)];
+		scanVoxel->z = targetVoxel.z + zCenter + heightFromCenter[static_cast<size_t>(j)];
 
 		for (size_t
 				i = 0;
@@ -1501,22 +1429,18 @@ bool TileEngine::canTargetTile(
 			scanVoxel->x = targetVoxel.x + spiralArray[i * 2];
 			scanVoxel->y = targetVoxel.y + spiralArray[i * 2 + 1];
 
-			_trajectory.clear();
+			trj.clear();
 
-			const VoxelType test = plotLine(
+			const VoxelType voxelTest = plotLine(
 										*originVoxel,
 										*scanVoxel,
 										false,
-										&_trajectory,
+										&trj,
 										excludeUnit);
-			if (test == tilePart) // bingo. Note MapDataType & VoxelType correspond.
+			if (voxelTest == tilePart														// bingo. MapDataType & VoxelType correspond
+				&& Position::toTileSpace(trj.at(0)) == Position::toTileSpace(*scanVoxel))	// so do Tiles.
 			{
-				if (   _trajectory.at(0).x / 16 == scanVoxel->x / 16
-					&& _trajectory.at(0).y / 16 == scanVoxel->y / 16
-					&& _trajectory.at(0).z / 24 == scanVoxel->z / 24)
-				{
-					return true;
-				}
+				return true;
 			}
 		}
 	}
@@ -6089,9 +6013,8 @@ bool TileEngine::validMeleeRange(
 				{
 					voxelOrigin = Position::toVoxelSpaceCentered( // note this is not center of large unit, rather the center of each quadrant.
 															posOrigin,
-															actor->getHeight(true)
-																	- tileOrigin->getTerrainLevel()
-																	- 4);
+															actor->getHeight(true) - 4
+																- tileOrigin->getTerrainLevel());
 					if (canTargetUnit(
 								&voxelOrigin,
 								tileTarget,
@@ -6161,9 +6084,8 @@ Position TileEngine::getMeleePosition(const BattleUnit* const actor) const
 				{
 					voxelOrigin = Position::toVoxelSpaceCentered( // note this is not center of large unit, rather the center of each quadrant.
 															posOrigin,
-															actor->getHeight(true)
-																	- tileOrigin->getTerrainLevel()
-																	- 4);
+															actor->getHeight(true) - 4
+																- tileOrigin->getTerrainLevel());
 					if (canTargetUnit(
 									&voxelOrigin,
 									tileTarget,
@@ -6230,9 +6152,8 @@ Tile* TileEngine::getExecutionTile(const BattleUnit* const actor) const
 				{
 					voxelOrigin = Position::toVoxelSpaceCentered( // note this is not center of large unit, rather the center of each quadrant.
 															posOrigin,
-															actor->getHeight(true)
-																	- tileOrigin->getTerrainLevel()
-																	- 4);
+															actor->getHeight(true) - 4
+																- tileOrigin->getTerrainLevel());
 					if (canTargetTile(
 									&voxelOrigin,
 									tileOrigin,

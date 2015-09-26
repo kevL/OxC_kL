@@ -1246,40 +1246,45 @@ UnitFaction BattleUnit::getFaction() const
 }
 
 /**
+ * Check if the unit is still cached in the Map cache.
+ * @note When the unit needs to animate it needs to be re-cached.
+ * @param quadrant	- quadrant to check (default 0)
+ * @return, pointer to the cache Surface used
+ */
+Surface* BattleUnit::getCache(int quadrant) const
+{
+	return _cache[static_cast<size_t>(quadrant)];
+}
+
+/**
  * Sets the unit's cache flag.
  * @note Set to true when the unit has to be redrawn from scratch.
- * @param cache		- pointer to cache surface to use (default NULL to redraw from scratch)
+ * @param cache		- pointer to cache surface to use
  * @param quadrant	- unit quadrant to cache (default 0)
  */
 void BattleUnit::setCache(
 		Surface* const cache,
 		int quadrant)
 {
-	if (cache == NULL)
-		_cacheInvalid = true;
-	else
-	{
-		_cacheInvalid = false;
-		_cache[static_cast<size_t>(quadrant)] = cache;
-	}
+	_cacheInvalid = false;
+	_cache[static_cast<size_t>(quadrant)] = cache;
 }
 
 /**
- * Check if the unit is still cached in the Map cache.
- * @note When the unit needs to animate it needs to be re-cached.
- * @param invalid	- pointer to true if the cache is invalid
- * @param quadrant	- quadrant to check (default 0)
- * @return, pointer to the cache Surface used
+ * Clears this BattleUnit's sprite-cache flag.
  */
-Surface* BattleUnit::getCache(
-		bool* invalid,
-		int quadrant) const
+void BattleUnit::clearCache()
 {
-	if (quadrant < 0) quadrant = 0;
+	_cacheInvalid = true;
+}
 
-	*invalid = _cacheInvalid;
-
-	return _cache[static_cast<size_t>(quadrant)];
+/**
+ * Gets if this BattleUnit's sprite-cache is invalid.
+ * @return, true if invalid
+ */
+bool BattleUnit::getCacheInvalid() const
+{
+	return _cacheInvalid;
 }
 
 /**

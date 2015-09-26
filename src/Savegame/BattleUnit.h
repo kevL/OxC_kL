@@ -673,20 +673,23 @@ private:
 		/// Turns to the destination direction.
 		void turn(bool turret = false);
 
-		/// Gets the soldier's gender.
+		/// Gets the unit's gender.
 		SoldierGender getGender() const;
 		/// Gets the unit's faction.
 		UnitFaction getFaction() const;
 
-		/// Sets this unit's cache and the cached flag.
+		/// Gets the unit's cache for the battlescape.
+		Surface* getCache(int quadrant = 0) const;
+		/// Sets the unit's cache and cached flag.
 		void setCache(
-				Surface* const cache = NULL,
+				Surface* const cache,
 				int quadrant = 0);
-		/// Gets this unit's cache for the battlescape.
-		Surface* getCache(
-				bool* invalid,
-				int quadrant = 0) const;
-		/// Gets unit sprite recolors values.
+		/// Clears this BattleUnit's sprite-cache flag.
+		void clearCache();
+		/// Gets if this BattleUnit's sprite-cache is invalid.
+		bool getCacheInvalid() const;
+
+		/// Gets unit sprite recolor values.
 		const std::vector<std::pair<Uint8, Uint8> >& getRecolor() const;
 
 		/// Kneels or stands this unit.

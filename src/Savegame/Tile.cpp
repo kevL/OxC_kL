@@ -546,7 +546,7 @@ void Tile::setDiscovered(
 		}
 
 		if (_unit != NULL)
-			_unit->setCache();
+			_unit->clearCache();
 	}
 }
 

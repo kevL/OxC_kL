@@ -507,7 +507,7 @@ void BattlescapeGame::popState()
 					{
 						if (selUnit != NULL)
 						{
-							selUnit->setCache();
+							selUnit->clearCache();
 							getMap()->cacheUnit(selUnit);
 						}
 
@@ -1111,7 +1111,7 @@ void BattlescapeGame::handleNonTargetAction()
 void BattlescapeGame::executeUnit() // private.
 {
 	_currentAction.actor->aim();
-	_currentAction.actor->setCache();
+	_currentAction.actor->clearCache();
 	getMap()->cacheUnit(_currentAction.actor);
 
 	const RuleItem* const itRule = _currentAction.weapon->getRules();
@@ -2314,7 +2314,7 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* const unit) // private.
 								true);
 				}
 
-				unit->setCache();
+				unit->clearCache();
 
 				Pathfinding* const pf = _battleSave->getPathfinding();
 				pf->setPathingUnit(unit);
@@ -2724,7 +2724,7 @@ void BattlescapeGame::primaryAction(const Position& pos)
 		}
 		else if (Options::battleConfirmFireMode == true
 			&& (_currentAction.waypoints.empty() == true
-				|| pos != _currentAction.waypoints.front()))
+				|| _currentAction.waypoints.front() != pos))
 		{
 			_currentAction.waypoints.clear();
 			_currentAction.waypoints.push_back(pos);
@@ -3610,7 +3610,7 @@ bool BattlescapeGame::checkProxyGrenades(BattleUnit* const unit)
 																	(*i)->getPreviousOwner()));
 									_battleSave->removeItem(*i); // does/should this even be done (also done at end of ExplosionBState) -> causes a double-explosion if remarked here.
 
-									unit->setCache();
+									unit->clearCache();
 									getMap()->cacheUnit(unit);
 
 									return true;

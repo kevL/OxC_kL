@@ -142,14 +142,14 @@ private:
 		/// Checks validity for targetting a unit.
 		bool canTargetUnit(
 				const Position* const originVoxel,
-				const Tile* const targetTile,
+				const Tile* const tileTarget,
 				Position* const scanVoxel,
 				const BattleUnit* const excludeUnit,
 				const BattleUnit* targetUnit = NULL) const;
 		/// Check validity for targetting a tile.
 		bool canTargetTile(
 				const Position* const originVoxel,
-				const Tile* const targetTile,
+				const Tile* const tileTarget,
 				const MapDataType tilePart,
 				Position* const scanVoxel,
 				const BattleUnit* const excludeUnit) const;

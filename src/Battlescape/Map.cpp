@@ -649,7 +649,6 @@ void Map::drawTerrain(Surface* const surface) // private.
 		quadrant;	// The quadrant is 0 for small units; large units have quadrants 1,2 & 3 also; describes		0|1
 					// the relative x/y Position of the unit's primary quadrant vs. the current tile's Position.	2|3
 	bool
-		invalid = false,
 		hasUnit,
 		hasFloor, // these denote characteristics of 'tile' as in the current Tile of the loop.
 		hasObject,
@@ -798,7 +797,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 						{
 							trueLoc = isTrueLoc(unitNorth, tileNorth);
 							quadrant = getQuadrant(unitNorth, tileNorth, trueLoc);
-							sprite = unitNorth->getCache(&invalid, quadrant);
+							sprite = unitNorth->getCache(quadrant);
 							if (sprite)
 							{
 								if (unitNorth->isOut_t(OUT_HLTH_STUN) == true)
@@ -1159,7 +1158,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 					{
 						trueLoc = isTrueLoc(_unit, _tile);
 						quadrant = getQuadrant(_unit, _tile, trueLoc);
-						sprite = _unit->getCache(&invalid, quadrant);
+						sprite = _unit->getCache(quadrant);
 						if (sprite)
 						{
 							if (_unit->isOut_t(OUT_HLTH_STUN) == true)
@@ -1322,7 +1321,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 						{
 							trueLoc = isTrueLoc(unitBelow, tileBelow);
 							quadrant = getQuadrant(unitBelow, tileBelow, trueLoc);
-							sprite = unitBelow->getCache(&invalid, quadrant);
+							sprite = unitBelow->getCache(quadrant);
 							if (sprite)
 							{
 								if (tileBelow->isDiscovered(2) == true)
@@ -1472,7 +1471,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 								{
 									trueLoc = isTrueLoc(_unit, _tile);
 									quadrant = getQuadrant(_unit, _tile, trueLoc);
-									sprite = _unit->getCache(&invalid, quadrant);
+									sprite = _unit->getCache(quadrant);
 									if (sprite)
 									{
 										calculateWalkingOffset(_unit, &walkOffset, trueLoc);
@@ -1999,7 +1998,7 @@ void Map::animateMap(bool redraw)
 		if ((*i)->isOut_t(OUT_STAT) == false
 			&& (*i)->getArmor()->getConstantAnimation() == true)
 		{
-			(*i)->setCache();
+			(*i)->clearCache();
 			cacheUnit(*i);
 		}
 	}
@@ -2362,22 +2361,17 @@ void Map::cacheUnit(BattleUnit* const unit)
 //											pf->getMoveTypePf());
 	sprite->setPalette(this->getPalette());
 
-	const int armorSize = unit->getArmor()->getSize() * unit->getArmor()->getSize();
-	bool
-		d = false,
-		invalid = false;
-
-	unit->getCache(&invalid);
-	if (invalid == true)
+	if (unit->getCacheInvalid() == true)
 	{
 		//Log(LOG_INFO) << ". (invalid)";
-		for (int // 1 or 4 iterations, depending on unit size
+		const int armorSize = unit->getArmor()->getSize() * unit->getArmor()->getSize();
+		for (int
 				quadrant = 0;
 				quadrant != armorSize;
 				++quadrant)
 		{
 			//Log(LOG_INFO) << ". . quadrant = " << quadrant;
-			Surface* cache = unit->getCache(&d, quadrant);
+			Surface* cache = unit->getCache(quadrant);
 			if (cache == NULL) // no cache created yet
 			{
 				//Log(LOG_INFO) << ". . . (!cache)";
@@ -2427,7 +2421,7 @@ void Map::cacheUnit(BattleUnit* const unit)
 			sprite->blit(cache);
 			//Log(LOG_INFO) << ". . blit() Ok";
 
-			//Log(LOG_INFO) << ". . setCache()";
+			//Log(LOG_INFO) << ". . clearCache()";
 			unit->setCache(cache, quadrant);
 		}
 		//Log(LOG_INFO) << ". end (invalid)";

@@ -234,14 +234,14 @@ void UnitWalkBState::think()
 								_unit->getFaceDirection(),
 								false);
 
-//				_unit->setCache(); // kL, might play around with Strafe anim's ......
+//				_unit->clearCache(); // kL, might play around with Strafe anim's ......
 				_parent->getMap()->cacheUnit(_unit);
 				_unit->setDirection(dirStrafe, false);
 			}
 			else
 			{
 				//Log(LOG_INFO) << ". WALKING no strafe, cacheUnit()";
-				_unit->setCache(); // might play around with non-Strafe anim's ......
+				_unit->clearCache(); // might play around with non-Strafe anim's ......
 				_parent->getMap()->cacheUnit(_unit);
 			}
 		}
@@ -348,7 +348,7 @@ bool UnitWalkBState::doStatusStand() // private.
 		if (_parent->kneel(_unit) == true)
 		{
 			//Log(LOG_INFO) << ". . Stand up";
-			_unit->setCache();
+			_unit->clearCache();
 			_parent->getMap()->cacheUnit(_unit);
 
 			if (_terrain->checkReactionFire(_unit) == true) // unit got fired upon - stop.
@@ -379,7 +379,7 @@ bool UnitWalkBState::doStatusStand() // private.
 		if (_unit->getFaction() != FACTION_PLAYER)	// kL, Can civies hideForTurn ?
 			_unit->setHiding(false);				// 'cause, clearly we're not hidden now!!1
 
-		_unit->setCache();						// kL. Calls to cacheUnit() are bogus without setCache(NULL) first...!
+		_unit->clearCache();					// kL. Calls to cacheUnit() are bogus without setCache(NULL) first...!
 		_parent->getMap()->cacheUnit(_unit);	// although _cacheInvalid might be set elsewhere but i doubt it.
 
 		postPathProcedures();
@@ -506,7 +506,7 @@ bool UnitWalkBState::doStatusStand() // private.
 				_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
 			}
 
-			_unit->setCache();
+			_unit->clearCache();
 			_parent->getMap()->cacheUnit(_unit);
 
 			_pf->abortPath();
@@ -523,7 +523,7 @@ bool UnitWalkBState::doStatusStand() // private.
 				_action.result = "STR_NOT_ENOUGH_ENERGY";
 			}
 
-			_unit->setCache();
+			_unit->clearCache();
 			_parent->getMap()->cacheUnit(_unit);
 
 			_pf->abortPath();
@@ -538,7 +538,7 @@ bool UnitWalkBState::doStatusStand() // private.
 																	// That is to say this should kick in *only* when player has actively
 		{															// clicked to move but tries to go further than TUs allow; because
 			//Log(LOG_INFO) << ". . checkReservedTu(_unit, tuCost) == false";	// either the AI or the panic-code should not try to
-			_unit->setCache();													// move a unit farther than its [reserved] TUs allow
+			_unit->clearCache();												// move a unit farther than its [reserved] TUs allow
 			_parent->getMap()->cacheUnit(_unit);
 
 			_pf->abortPath();
@@ -552,7 +552,7 @@ bool UnitWalkBState::doStatusStand() // private.
 			//Log(LOG_INFO) << ". . dir != _unit->getDirection() -> turn";
 			_unit->lookAt(dir);
 
-			_unit->setCache();
+			_unit->clearCache();
 			_parent->getMap()->cacheUnit(_unit);
 
 			return false;
@@ -621,7 +621,7 @@ bool UnitWalkBState::doStatusStand() // private.
 					_action.TU = 0;
 					_pf->abortPath();
 
-					_unit->setCache();
+					_unit->clearCache();
 					_parent->getMap()->cacheUnit(_unit);
 
 					_parent->popState();
@@ -868,7 +868,7 @@ bool UnitWalkBState::doStatusStand_end() // private.
 		//if (_unit->getFaction() == FACTION_PLAYER) Log(LOG_INFO) << ". . _newVis = TRUE, Abort path";
 		//else if (_unit->getFaction() != FACTION_PLAYER) Log(LOG_INFO) << ". . _newUnitSpotted = TRUE, Abort path";
 
-		_unit->setCache();
+		_unit->clearCache();
 		_parent->getMap()->cacheUnit(_unit);
 
 		_pf->abortPath();
@@ -883,7 +883,7 @@ bool UnitWalkBState::doStatusStand_end() // private.
 		if (_terrain->checkReactionFire(_unit) == true) // unit got fired upon - stop walking
 		{
 			//Log(LOG_INFO) << ". . . cacheUnit";
-			_unit->setCache();
+			_unit->clearCache();
 			_parent->getMap()->cacheUnit(_unit);
 
 			_pf->abortPath();
@@ -909,7 +909,7 @@ void UnitWalkBState::doStatusTurn() // private.
 
 	_unit->turn();
 
-	_unit->setCache();
+	_unit->clearCache();
 	_parent->getMap()->cacheUnit(_unit);
 
 	// calculateFOV() is unreliable for setting the _newUnitSpotted bool as it
@@ -936,7 +936,7 @@ void UnitWalkBState::doStatusTurn() // private.
 		_pf->abortPath();
 		_unit->setUnitStatus(STATUS_STANDING);
 
-//		_unit->setCache();
+//		_unit->clearCache();
 //		_parent->getMap()->cacheUnit(_unit);
 
 		_parent->popState();
@@ -1078,7 +1078,7 @@ void UnitWalkBState::postPathProcedures() // private.
 	_terrain->calculateFOV(_unit->getPosition(), true); // in case unit opened a door and stopped without doing Status_WALKING
 
 
-	_unit->setCache();
+	_unit->clearCache();
 	_parent->getMap()->cacheUnit(_unit);
 
 	if (_falling == false)

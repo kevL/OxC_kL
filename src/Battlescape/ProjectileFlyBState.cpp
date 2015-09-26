@@ -141,20 +141,15 @@ void ProjectileFlyBState::init()
 	}
 	else
 	{
-		if (_unit->getFaction() == FACTION_PLAYER
-			&& _parent->getPanicHandled() == true
-			&& _action.type != BA_HIT
-			&& _unit->getTimeUnits() < _action.TU)
-		{
-			_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
-			popThis = true;
-		}
-		else
+		if (_unit->getTimeUnits() >= _action.TU // go ->
+			|| _action.type == BA_HIT
+			|| _parent->getPanicHandled() == false
+			|| _unit->getFaction() != FACTION_PLAYER)
 		{
 			_ammo = _action.weapon->getAmmoItem();
-			bool fireValid;
 
-			if (_unit->getFaction() != _battleSave->getSide())
+			bool fireValid;
+			if (_unit->getFaction() != _battleSave->getSide()) // reaction fire
 			{
 				const BattleUnit* const targetUnit = _battleSave->getTile(_action.target)->getUnit();
 				fireValid = targetUnit != NULL
@@ -162,8 +157,7 @@ void ProjectileFlyBState::init()
 						 && targetUnit == _battleSave->getSelectedUnit()
 						 && _ammo != NULL;
 			}
-			else
-				fireValid = true;
+			else fireValid = true;
 
 			if (fireValid == false
 				|| _unit->getStopShot() == true)
@@ -171,6 +165,11 @@ void ProjectileFlyBState::init()
 				_unit->setTimeUnits(_unit->getTimeUnits() + _action.TU);
 				popThis = true;
 			}
+		}
+		else // no TU.
+		{
+			_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
+			popThis = true;
 		}
 	}
 
@@ -184,7 +183,7 @@ void ProjectileFlyBState::init()
 
 
 	// autoshot will default back to snapshot if it's not possible
-	// kL_note: This shouldn't happen w/ selectFireMethod() properly in place.
+	// This shouldn't happen w/ selectFireMethod() properly in place.
 	if (_action.type == BA_AUTOSHOT
 		&& _action.weapon->getRules()->getAccuracyAuto() == 0)
 	{
@@ -240,13 +239,7 @@ void ProjectileFlyBState::init()
 			if (validThrowRange(
 							&_action,
 							_parent->getTileEngine()->getOriginVoxel(_action),
-							tileTarget) == false)
-			{
-				//Log(LOG_INFO) << ". . . not valid throw range, EXIT";
-				_action.result = "STR_OUT_OF_RANGE";
-				popThis = true;
-			}
-			else
+							tileTarget) == true)
 			{
 				_prjItem = _action.weapon;
 				if (tileTarget->getTerrainLevel() == -24
@@ -254,6 +247,12 @@ void ProjectileFlyBState::init()
 				{
 					++_action.target.z;
 				}
+			}
+			else
+			{
+				//Log(LOG_INFO) << ". . . not valid throw range, EXIT";
+				_action.result = "STR_OUT_OF_RANGE";
+				popThis = true;
 			}
 		}
 		break;
@@ -504,7 +503,7 @@ bool ProjectileFlyBState::createNewProjectile() // private.
 			}
 
 			_prjItem->moveToOwner();
-			_unit->setCache();
+			_unit->clearCache();
 			_parent->getMap()->cacheUnit(_unit);
 
 			soundId = ResourcePack::ITEM_THROW;
@@ -552,7 +551,7 @@ bool ProjectileFlyBState::createNewProjectile() // private.
 			}
 
 			_unit->startAiming();
-			_unit->setCache();
+			_unit->clearCache();
 			_parent->getMap()->cacheUnit(_unit);
 
 			// lift-off
@@ -618,7 +617,7 @@ bool ProjectileFlyBState::createNewProjectile() // private.
 				_parent->getMap()->setWaypointAction(); // reveal the Map until waypoint action completes.
 
 			_unit->aim();
-			_unit->setCache();
+			_unit->clearCache();
 			_parent->getMap()->cacheUnit(_unit);
 
 			// lift-off
@@ -881,12 +880,16 @@ void ProjectileFlyBState::think()
 					_parent->getMap()->setWaypointAction(false); // reveal the Map until waypoint action completes.
 				}
 
+//				if (_action.type != BA_LAUNCH) // only counts for guns, not throws or launches
+//					_action.type == BA_SNAPSHOT || _action.type == BA_AUTOSHOT || _action.type == BA_AIMEDSHOT
+//				{
 				BattleUnit* const shotAt = _battleSave->getTile(_action.target)->getUnit();
-				if (shotAt != NULL // only counts for guns, not throws or launches
+				if (shotAt != NULL
 					&& shotAt->getGeoscapeSoldier() != NULL)
 				{
 					++shotAt->getStatistics()->shotAtCounter;
 				}
+//				}
 
 				if (_action.type == BA_LAUNCH && _ammo != NULL) //&& _battleSave->getDebugMode() == false
 					_ammo->spendBullet(
@@ -905,8 +908,7 @@ void ProjectileFlyBState::think()
 					{
 						trjOffset = -2; // step back a bit so tileExpl isn't behind a wall.
 					}
-					else
-						trjOffset = 0;
+					else trjOffset = 0;
 
 					Position voxelExpl = _parent->getMap()->getProjectile()->getPosition(trjOffset);
 
@@ -980,7 +982,7 @@ void ProjectileFlyBState::think()
 					|| _action.weapon->getAmmoItem() == NULL)
 				{
 					_unit->aim(false);
-					_unit->setCache();
+					_unit->clearCache();
 					_parent->getMap()->cacheUnits();
 				}
 
@@ -1224,7 +1226,7 @@ void ProjectileFlyBState::performMeleeAttack() // private.
 {
 	//Log(LOG_INFO) << "flyB:performMeleeAttack() " << _unit->getId();
 	_unit->aim();
-	_unit->setCache();
+	_unit->clearCache();
 	_parent->getMap()->cacheUnit(_unit);
 
 	_action.target = _battleSave->getTileEngine()->getMeleePosition(_unit);

@@ -185,7 +185,7 @@ void UnitFallBState::think()
 			//Log(LOG_INFO) << ". . call keepWalking()";
 			(*i)->keepWalking(tileBelow, true);	// advances the phase
 
-			(*i)->setCache();					// kL
+			(*i)->clearCache();					// kL
 			_parent->getMap()->cacheUnit(*i);	// make sure the fallUnit sprites are up to date
 		}
 
@@ -391,9 +391,8 @@ void UnitFallBState::think()
 								Pathfinding::DIR_DOWN,
 								destination,
 								tileBelow);
-//								onScreen);
 
-				(*i)->setCache();
+				(*i)->clearCache();
 				_parent->getMap()->cacheUnit(*i);
 
 				++i;
@@ -405,10 +404,9 @@ void UnitFallBState::think()
 				{
 					// kL_add: Put burnedBySilacoid() here! etc
 					(*i)->getTile()->ignite(1);
-					const Position pos = ((*i)->getPosition() * Position(16,16,24))
-										+ Position(
-												8,8,
-												-(*i)->getTile()->getTerrainLevel());
+					const Position pos = Position::toVoxelSpaceCentered(
+																	(*i)->getPosition(),
+																	-(*i)->getTile()->getTerrainLevel());
 					_parent->getTileEngine()->hit(
 												pos,
 												(*i)->getBaseStats()->strength, // * (*i)->getAccuracyModifier(),
@@ -418,7 +416,7 @@ void UnitFallBState::think()
 
 				_terrain->calculateUnitLighting(); // move personal lighting
 
-				(*i)->setCache();
+				(*i)->clearCache();
 				_parent->getMap()->cacheUnit(*i);
 
 				_terrain->calculateFOV((*i)->getPosition(), true);
