@@ -47,7 +47,7 @@ class UfoDetectedState
 private:
 	bool
 		_delayPop,
-		_hyper;
+		_hyperDetected;
 
 	GeoscapeState* _geo;
 	Surface* _srfTarget;
@@ -80,8 +80,8 @@ private:
 		UfoDetectedState(
 				Ufo* const ufo,
 				GeoscapeState* const state,
-				bool detected,
-				bool hyper,
+				bool firstDetect,
+				bool hyperDetected,
 				bool contact = true,
 				std::vector<Base*>* hyperBases = NULL);
 		/// Cleans up the Ufo Detected state.

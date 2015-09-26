@@ -158,8 +158,8 @@ private:
 	/// Process each individual mission script command.
 	bool processCommand(RuleMissionScript* const missionCommand);
 
-	/// Handler for clicking the timer button.
-	void btnTimerPress(Action* action);
+	/// Handler for clicking a time-compression button.
+	void btnTimeCompressionPress(Action* action);
 	/// Handler for clicking pause.
 	void btnPauseClick(Action* action);
 	/// Handler for clicking a visible UFO button.

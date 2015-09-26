@@ -516,9 +516,10 @@ GeoscapeState::GeoscapeState()
 	{
 		add(_isfUfoBlobs[i]);
 		_isfUfoBlobs[i]->setVisible(false);
-		_isfUfoBlobs[i]->onMousePress(
-						(ActionHandler)& GeoscapeState::btnUfoBlobPress,
-						SDL_BUTTON_LEFT);
+//		_isfUfoBlobs[i]->onMousePress(
+//						(ActionHandler)& GeoscapeState::btnUfoBlobPress,
+//						SDL_BUTTON_LEFT);
+		_isfUfoBlobs[i]->onMousePress((ActionHandler)& GeoscapeState::btnUfoBlobPress);
 
 		add(_numUfoBlobs[i]);
 		_numUfoBlobs[i]->setVisible(false);
@@ -601,7 +602,7 @@ GeoscapeState::GeoscapeState()
 //	_btn5Secs->setTextColor(Palette::blockOffset(15)+5);
 	_btn5Secs->setText(tr("STR_5_SECONDS"));
 	_btn5Secs->setGroup(&_timeComp);
-	_btn5Secs->onKeyboardPress((ActionHandler)& GeoscapeState::btnTimerPress, Options::keyGeoSpeed1);
+	_btn5Secs->onKeyboardPress((ActionHandler)& GeoscapeState::btnTimeCompressionPress, Options::keyGeoSpeed1);
 	_btn5Secs->setGeoscapeButton(true);
 
 	_btn1Min->initText(_game->getResourcePack()->getFont("FONT_GEO_BIG"), _game->getResourcePack()->getFont("FONT_GEO_SMALL"), _game->getLanguage());
@@ -610,7 +611,7 @@ GeoscapeState::GeoscapeState()
 //	_btn1Min->setTextColor(Palette::blockOffset(15)+5);
 	_btn1Min->setText(tr("STR_1_MINUTE"));
 	_btn1Min->setGroup(&_timeComp);
-	_btn1Min->onKeyboardPress((ActionHandler)& GeoscapeState::btnTimerPress, Options::keyGeoSpeed2);
+	_btn1Min->onKeyboardPress((ActionHandler)& GeoscapeState::btnTimeCompressionPress, Options::keyGeoSpeed2);
 	_btn1Min->setGeoscapeButton(true);
 
 	_btn5Mins->initText(_game->getResourcePack()->getFont("FONT_GEO_BIG"), _game->getResourcePack()->getFont("FONT_GEO_SMALL"), _game->getLanguage());
@@ -619,7 +620,7 @@ GeoscapeState::GeoscapeState()
 //	_btn5Mins->setTextColor(Palette::blockOffset(15)+5);
 	_btn5Mins->setText(tr("STR_5_MINUTES"));
 	_btn5Mins->setGroup(&_timeComp);
-	_btn5Mins->onKeyboardPress((ActionHandler)& GeoscapeState::btnTimerPress, Options::keyGeoSpeed3);
+	_btn5Mins->onKeyboardPress((ActionHandler)& GeoscapeState::btnTimeCompressionPress, Options::keyGeoSpeed3);
 	_btn5Mins->setGeoscapeButton(true);
 
 	_btn30Mins->initText(_game->getResourcePack()->getFont("FONT_GEO_BIG"), _game->getResourcePack()->getFont("FONT_GEO_SMALL"), _game->getLanguage());
@@ -628,7 +629,7 @@ GeoscapeState::GeoscapeState()
 //	_btn30Mins->setTextColor(Palette::blockOffset(15)+5);
 	_btn30Mins->setText(tr("STR_30_MINUTES"));
 	_btn30Mins->setGroup(&_timeComp);
-	_btn30Mins->onKeyboardPress((ActionHandler)& GeoscapeState::btnTimerPress, Options::keyGeoSpeed4);
+	_btn30Mins->onKeyboardPress((ActionHandler)& GeoscapeState::btnTimeCompressionPress, Options::keyGeoSpeed4);
 	_btn30Mins->setGeoscapeButton(true);
 
 	_btn1Hour->initText(_game->getResourcePack()->getFont("FONT_GEO_BIG"), _game->getResourcePack()->getFont("FONT_GEO_SMALL"), _game->getLanguage());
@@ -637,7 +638,7 @@ GeoscapeState::GeoscapeState()
 //	_btn1Hour->setTextColor(Palette::blockOffset(15)+5);
 	_btn1Hour->setText(tr("STR_1_HOUR"));
 	_btn1Hour->setGroup(&_timeComp);
-	_btn1Hour->onKeyboardPress((ActionHandler)& GeoscapeState::btnTimerPress, Options::keyGeoSpeed5);
+	_btn1Hour->onKeyboardPress((ActionHandler)& GeoscapeState::btnTimeCompressionPress, Options::keyGeoSpeed5);
 	_btn1Hour->setGeoscapeButton(true);
 
 	_btn1Day->initText(_game->getResourcePack()->getFont("FONT_GEO_BIG"), _game->getResourcePack()->getFont("FONT_GEO_SMALL"), _game->getLanguage());
@@ -646,7 +647,7 @@ GeoscapeState::GeoscapeState()
 //	_btn1Day->setTextColor(Palette::blockOffset(15)+5);
 	_btn1Day->setText(tr("STR_1_DAY"));
 	_btn1Day->setGroup(&_timeComp);
-	_btn1Day->onKeyboardPress((ActionHandler)& GeoscapeState::btnTimerPress, Options::keyGeoSpeed6);
+	_btn1Day->onKeyboardPress((ActionHandler)& GeoscapeState::btnTimeCompressionPress, Options::keyGeoSpeed6);
 	_btn1Day->setGeoscapeButton(true); */
 
 	// revert to ImageButtons.
@@ -711,37 +712,37 @@ GeoscapeState::GeoscapeState()
 	_btn5Secs->copy(geobord);
 	_btn5Secs->setGroup(&_timeComp);
 	_btn5Secs->onKeyboardPress(
-					(ActionHandler)& GeoscapeState::btnTimerPress,
+					(ActionHandler)& GeoscapeState::btnTimeCompressionPress,
 					Options::keyGeoSpeed1);
 
 	_btn1Min->copy(geobord);
 	_btn1Min->setGroup(&_timeComp);
 	_btn1Min->onKeyboardPress(
-					(ActionHandler)& GeoscapeState::btnTimerPress,
+					(ActionHandler)& GeoscapeState::btnTimeCompressionPress,
 					Options::keyGeoSpeed2);
 
 	_btn5Mins->copy(geobord);
 	_btn5Mins->setGroup(&_timeComp);
 	_btn5Mins->onKeyboardPress(
-					(ActionHandler)& GeoscapeState::btnTimerPress,
+					(ActionHandler)& GeoscapeState::btnTimeCompressionPress,
 					Options::keyGeoSpeed3);
 
 	_btn30Mins->copy(geobord);
 	_btn30Mins->setGroup(&_timeComp);
 	_btn30Mins->onKeyboardPress(
-					(ActionHandler)& GeoscapeState::btnTimerPress,
+					(ActionHandler)& GeoscapeState::btnTimeCompressionPress,
 					Options::keyGeoSpeed4);
 
 	_btn1Hour->copy(geobord);
 	_btn1Hour->setGroup(&_timeComp);
 	_btn1Hour->onKeyboardPress(
-					(ActionHandler)& GeoscapeState::btnTimerPress,
+					(ActionHandler)& GeoscapeState::btnTimeCompressionPress,
 					Options::keyGeoSpeed5);
 
 	_btn1Day->copy(geobord);
 	_btn1Day->setGroup(&_timeComp);
 	_btn1Day->onKeyboardPress(
-					(ActionHandler)& GeoscapeState::btnTimerPress,
+					(ActionHandler)& GeoscapeState::btnTimeCompressionPress,
 					Options::keyGeoSpeed6);
 
 
@@ -3226,20 +3227,14 @@ Globe* GeoscapeState::getGlobe() const
 void GeoscapeState::globeClick(Action* action)
 {
 	const int
-		mouseX = static_cast<int>(std::floor(action->getAbsoluteXMouse())),
-		mouseY = static_cast<int>(std::floor(action->getAbsoluteYMouse()));
+		mX = static_cast<int>(std::floor(action->getAbsoluteXMouse())),
+		mY = static_cast<int>(std::floor(action->getAbsoluteYMouse()));
 
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		const std::vector<Target*> targets = _globe->getTargets(
-															mouseX,
-															mouseY,
-															false);
+		const std::vector<Target*> targets = _globe->getTargets(mX,mY, false);
 		if (targets.empty() == false)
-			_game->pushState(new MultipleTargetsState(
-													targets,
-													NULL,
-													this));
+			_game->pushState(new MultipleTargetsState(targets, NULL, this));
 	}
 
 	if (_gameSave->getDebugMode() == true)
@@ -3251,8 +3246,8 @@ void GeoscapeState::globeClick(Action* action)
 			lonRad,
 			latRad;
 		_globe->cartToPolar(
-						static_cast<Sint16>(mouseX),
-						static_cast<Sint16>(mouseY),
+						static_cast<Sint16>(mX),
+						static_cast<Sint16>(mY),
 						&lonRad,
 						&latRad);
 
@@ -3276,9 +3271,7 @@ void GeoscapeState::globeClick(Action* action)
  */
 void GeoscapeState::btnInterceptClick(Action*)
 {
-	_game->pushState(new InterceptState(
-									NULL,
-									this));
+	_game->pushState(new InterceptState(NULL, this));
 }
 
 /**
@@ -3305,9 +3298,7 @@ void GeoscapeState::btnBasesClick(Action*)
 											_globe));
 	}
 	else
-		_game->pushState(new BasescapeState(
-										NULL,
-										_globe));
+		_game->pushState(new BasescapeState(NULL, _globe));
 }
 
 /**
@@ -4368,7 +4359,7 @@ void GeoscapeState::setupLandMission() // private.
  * Handler for clicking a time-compression button.
  * @param action - pointer to the mouse Action
  */
-void GeoscapeState::btnTimerPress(Action* action) // private.
+void GeoscapeState::btnTimeCompressionPress(Action* action) // private.
 {
 	SDL_Event ev;
 	ev.type = SDL_MOUSEBUTTONDOWN;
@@ -4389,7 +4380,8 @@ void GeoscapeState::btnPauseClick(Action*) // private.
 }
 
 /**
- * Centers on the UFO corresponding to this button.
+ * LMB Centers on the UFO corresponding to this button.
+ * RMB Opens info.
  * @param action - pointer to an Action
  */
 void GeoscapeState::btnUfoBlobPress(Action* action) // private.
@@ -4401,9 +4393,16 @@ void GeoscapeState::btnUfoBlobPress(Action* action) // private.
 	{
 		if (_isfUfoBlobs[i] == action->getSender())
 		{
-			_globe->center(
-						_hostileUfos[i]->getLongitude(),
-						_hostileUfos[i]->getLatitude());
+			if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+				_globe->center(
+							_hostileUfos[i]->getLongitude(),
+							_hostileUfos[i]->getLatitude());
+			else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+				_game->pushState(new UfoDetectedState(
+												_hostileUfos[i],
+												this,
+												false,
+												_hostileUfos[i]->getHyperDetected()));
 			break;
 		}
 	}

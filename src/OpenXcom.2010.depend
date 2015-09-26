@@ -4487,7 +4487,7 @@
 1440212072 f:\git\openxcom\src\geoscape\buildnewbasestate.h
 	"../Engine/State.h"
 
-1441397874 f:\git\openxcom\src\geoscape\geoscapestate.h
+1443242743 f:\git\openxcom\src\geoscape\geoscapestate.h
 	"../Engine/State.h"
 
 1430149550 f:\git\openxcom\src\menu\errormessagestate.h
@@ -5466,7 +5466,7 @@
 1432984133 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1443223616 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1443235532 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	"AlienBAIState.h"
 	"BattlescapeState.h"
@@ -6958,7 +6958,7 @@
 1442441486 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1442892307 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1443243134 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	"AlienBaseState.h"
 	"BaseDefenseState.h"
@@ -7075,7 +7075,7 @@
 1431486790 f:\git\openxcom\src\geoscape\researchrequiredstate.h
 	"../Engine/State.h"
 
-1442673309 f:\git\openxcom\src\geoscape\ufodetectedstate.h
+1443243347 f:\git\openxcom\src\geoscape\ufodetectedstate.h
 	"../Engine/State.h"
 
 1431486799 f:\git\openxcom\src\geoscape\ufoloststate.h

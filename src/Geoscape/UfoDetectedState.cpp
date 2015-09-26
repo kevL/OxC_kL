@@ -57,22 +57,22 @@ namespace OpenXcom
  * Initializes all the elements in the Ufo Detected window.
  * @param ufo			- pointer to a UFO to get info from
  * @param state			- pointer to GeoscapeState
- * @param detected		- true if the UFO has just been detected
- * @param hyper			- true if the UFO has been hyperdetected
- * @param contact		- true if radar contact is established (default true)
+ * @param firstDetect	- true if the UFO has just been detected
+ * @param hyperDetected	- true if the UFO has been hyperdetected
+ * @param contact		- true if radar contact is established (false if hyperDetected only) (default true)
  * @param hyperBases	- pointer to a vector of pointers to Bases that hyperdetected UFO (default NULL)
  */
 UfoDetectedState::UfoDetectedState(
 		Ufo* const ufo,
 		GeoscapeState* const state,
-		bool detected,
-		bool hyper,
+		bool firstDetect,
+		bool hyperDetected,
 		bool contact,
 		std::vector<Base*>* hyperBases)
 	:
 		_ufo(ufo),
 		_geo(state),
-		_hyper(hyper),
+		_hyperDetected(hyperDetected),
 		_delayPop(true)
 {
 	_geo->getGlobe()->rotateStop();
@@ -88,7 +88,7 @@ UfoDetectedState::UfoDetectedState(
 
 	_screen = false;
 
-	if (_hyper == true)
+	if (_hyperDetected == true)
 	{
 		_window			= new Window(this, 236, 190, 10, 10, POPUP_BOTH);
 
@@ -116,7 +116,7 @@ UfoDetectedState::UfoDetectedState(
 
 	_srfTarget		= new Surface(29, 29, 114, 86);
 
-	if (_hyper == true)
+	if (_hyperDetected == true)
 	{
 		_txtUfo->setY(19);
 		_txtDetected->setY(36);
@@ -138,7 +138,7 @@ UfoDetectedState::UfoDetectedState(
 		}
 	}
 
-	setInterface("UFOInfo", _hyper);
+	setInterface("UFOInfo", _hyperDetected);
 
 	add(_window,		"window",	"UFOInfo");
 	add(_txtUfo,		"text",		"UFOInfo");
@@ -154,7 +154,7 @@ UfoDetectedState::UfoDetectedState(
 
 	add(_srfTarget);
 
-	if (_hyper == true)
+	if (_hyperDetected == true)
 	{
 		add(_txtHyperwave,	"text", "UFOInfo");
 		add(_lstInfo2,		"text", "UFOInfo");
@@ -171,7 +171,7 @@ UfoDetectedState::UfoDetectedState(
 	_txtUfo->setText(_ufo->getName(_game->getLanguage()));
 	_txtUfo->setBig();
 
-	if (detected == true)
+	if (firstDetect == true)
 		_txtDetected->setText(tr("STR_DETECTED"));
 	else
 		_txtDetected->setVisible(false);
@@ -312,7 +312,7 @@ UfoDetectedState::UfoDetectedState(
 	else
 		_txtTexture->setVisible(false);
 
-	if (_hyper == true)
+	if (_hyperDetected == true)
 	{
 		_txtHyperwave->setAlign(ALIGN_CENTER);
 		_txtHyperwave->setText(tr("STR_HYPER_WAVE_TRANSMISSIONS_ARE_DECODED"));
@@ -533,7 +533,7 @@ void UfoDetectedState::transposeWindow() // private.
 	else
 		_btnCenter->setVisible(false);
 
-	if (_hyper == true)
+	if (_hyperDetected == true)
 	{
 		_txtHyperwave->setVisible(false);
 		_lstInfo2->setVisible(false);
@@ -541,7 +541,7 @@ void UfoDetectedState::transposeWindow() // private.
 	}
 
 	int dy;
-	if (_hyper == true)
+	if (_hyperDetected == true)
 		dy = 9;
 	else
 		dy = 20;
