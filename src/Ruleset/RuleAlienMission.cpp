@@ -75,7 +75,8 @@ RuleAlienMission::RuleAlienMission(const std::string& type)
 		_type(type),
 		_points(0),
 		_objective(alm_SCORE),
-		_specialZone(std::numeric_limits<size_t>::max())
+		_specialZone(std::numeric_limits<size_t>::max()),
+		_retalCoef(-1)
 {}
 
 /**
@@ -104,6 +105,7 @@ void RuleAlienMission::load(const YAML::Node& node)
 	_specialUfo		= node["specialUfo"]	.as<std::string>(_specialUfo);
 	_specialZone	= node["specialZone"]	.as<size_t>(_specialZone);
 	_weights		= node["missionWeights"].as<std::map<size_t, int> >(_weights);
+	_retalCoef		= node["retalCoef"]		.as<int>(_retalCoef);
 
 	_objective = static_cast<MissionObjective>(node["objective"].as<int>(_objective));
 
@@ -226,6 +228,16 @@ int RuleAlienMission::getWeight(const size_t monthsPassed) const
 	}
 
 	return weight;
+}
+
+/**
+ * Returns the modifier for the chance of shooting down a UFO on this mission
+ * causing a retaliation mission to generate.
+ * @return, retaliation coefficient
+ */
+int RuleAlienMission::getRetaliation() const
+{
+	return _retalCoef;
 }
 
 }

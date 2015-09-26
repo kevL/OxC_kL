@@ -4554,7 +4554,7 @@
 1442671642 f:\git\openxcom\src\interface\window.h
 	"../Engine/Surface.h"
 
-1442991426 f:\git\openxcom\src\ruleset\ruleset.h
+1443225579 f:\git\openxcom\src\ruleset\ruleset.h
 	"../Ruleset/RuleAlienMission.h"
 	"../Savegame/GameTime.h"
 
@@ -6133,7 +6133,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1443222363 source:f:\git\openxcom\src\battlescape\projectile.cpp
+1443223892 source:f:\git\openxcom\src\battlescape\projectile.cpp
 	"Projectile.h"
 	"Map.h"
 	"Camera.h"
@@ -6592,7 +6592,7 @@
 1430149550 f:\git\openxcom\src\interface\slider.h
 	"../Engine/InteractiveSurface.h"
 
-1443049805 source:f:\git\openxcom\src\engine\surface.cpp
+1443224316 source:f:\git\openxcom\src\engine\surface.cpp
 	"Surface.h"
 	"Language.h"
 	<malloc.h>
@@ -7085,7 +7085,7 @@
 1425905399 f:\git\openxcom\src\ruleset\city.h
 	"../Savegame/Target.h"
 
-1441868703 f:\git\openxcom\src\ruleset\rulealienmission.h
+1443225420 f:\git\openxcom\src\ruleset\rulealienmission.h
 
 1440252809 f:\git\openxcom\src\ruleset\ufotrajectory.h
 
@@ -8724,7 +8724,7 @@
 	"../Ruleset/RuleCraftWeapon.h"
 	"../Ruleset/Ruleset.h"
 
-1442788516 source:f:\git\openxcom\src\ufopaedia\articlestateitem.cpp
+1443223654 source:f:\git\openxcom\src\ufopaedia\articlestateitem.cpp
 	"ArticleStateItem.h"
 	"Ufopaedia.h"
 	"../Engine/Game.h"

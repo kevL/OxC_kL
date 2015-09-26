@@ -1210,8 +1210,13 @@ void DogfightState::updateDogfight()
 
 			if (_ufo->getTrajectory().getId() != UfoTrajectory::RETALIATION_ASSAULT_RUN) // shooting down an assault-battleship does *not* generate a Retal-Mission.
 			{
-				const int retalChance = _game->getRuleset()->getRetaliationChance();
-				if (RNG::percent((_diff + 1) * retalChance) == true) // Check retaliation trigger. -> Spawn retaliation mission.
+				int retalCoef;
+				if (_ufo->getAlienMission()->getRetaliation() != -1)
+					retalCoef = _ufo->getAlienMission()->getRules().getRetaliation();
+				else
+					retalCoef = _game->getRuleset()->getRetaliation();
+
+				if (RNG::percent((_diff + 1) * retalCoef) == true) // Check retaliation trigger. -> Spawn retaliation mission.
 				{
 					std::string targetRegion;
 					if (RNG::percent(_diff * 10 + 10) == true)

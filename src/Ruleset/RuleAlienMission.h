@@ -71,7 +71,9 @@ class RuleAlienMission
 {
 
 private:
-	int _points;			// The mission's points.
+	int
+		_points,			// The mission's points.
+		_retalCoef;			// Modifier for chance of retaliation.
 	size_t _specialZone;	// The mission zone to use for spawning.
 	std::string
 		_specialUfo,		// The UFO to use for spawning.
@@ -125,6 +127,9 @@ private:
 
 		/// Gets the chances of this mission based on the game time.
 		int getWeight(const size_t monthsPassed) const;
+
+		/// Gets the inherent odds of this mission spawning a retaliation mission.
+		int getRetaliation() const;
 };
 
 }

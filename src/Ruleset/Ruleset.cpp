@@ -107,7 +107,7 @@ Ruleset::Ruleset(const Game* const game)
 		_invListOrder(0),
 		_radarCutoff(1500),
 		_firstGrenade(-1),
-		_retalChance(0)
+		_retalCoef(0)
 {
 	//Log(LOG_INFO) << "Create Ruleset";
 	_globe = new RuleGlobe();
@@ -920,7 +920,7 @@ void Ruleset::loadFile(const std::string& file) // protected.
 	_font			= doc["font"]			.as<std::string>(_font);
 	_radarCutoff	= doc["radarCutoff"]	.as<int>(_radarCutoff);
 	_firstGrenade	= doc["firstGrenade"]	.as<int>(_firstGrenade);
-	_retalChance	= doc["retalChance"]	.as<int>(_retalChance);
+	_retalCoef		= doc["retalCoef"]		.as<int>(_retalCoef);
 
 	for (YAML::const_iterator
 			i = doc["ufoTrajectories"].begin();
@@ -2471,9 +2471,9 @@ int Ruleset::getFirstGrenade() const
  * Gets the basic retaliation chance.
  * @return, basic retaliation chance
  */
-int Ruleset::getRetaliationChance() const
+int Ruleset::getRetaliation() const
 {
-	return _retalChance;
+	return _retalCoef;
 }
 
 /**

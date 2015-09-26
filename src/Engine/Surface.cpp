@@ -316,6 +316,7 @@ void Surface::loadImage(const std::string& file)
 	// SDL only takes UTF-8 filenames
 	// so here's an ugly hack to match this ugly reasoning
 	const std::string utf8 = Language::wstrToUtf8(Language::fsToWstr(file)); // Load file
+	Log(LOG_VERBOSE) << "Loading image: " << utf8;
 	_surface = IMG_Load(utf8.c_str());
 	if (_surface == NULL)
 	{
