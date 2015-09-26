@@ -34,8 +34,8 @@ class SurfaceSet;
 
 
 /**
- * A class that renders a specific unit, given its render rules combining the
- * right frames from the surfaceset.
+ * A class that renders a specific unit given its render rules combining the
+ * right frames from the SurfaceSet.
  */
 class UnitSprite
 	:
@@ -93,8 +93,8 @@ private:
 		UnitSprite(
 				int width,
 				int height,
-				int x,
-				int y);
+				int x = 0,
+				int y = 0);
 		/// Cleans up the UnitSprite.
 		~UnitSprite();
 

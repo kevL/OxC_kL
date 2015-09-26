@@ -2345,90 +2345,60 @@ void Map::cacheUnits()
  */
 void Map::cacheUnit(BattleUnit* const unit)
 {
-	//Log(LOG_INFO) << "cacheUnit() : " << unit->getId();
 	int width;
 	if (unit->getUnitStatus() == STATUS_AIMING)
 		width = _spriteWidth * 2;
 	else
 		width = _spriteWidth;
 
-//	Pathfinding* const pf = _battleSave->getPathfinding();
-//	pf->setPathingUnit(unit);
-	UnitSprite* const sprite = new UnitSprite(
-											width,
-											_spriteHeight,
-											0,0);
-//											pf->getMoveTypePf());
+	UnitSprite* const sprite = new UnitSprite(width, _spriteHeight);
 	sprite->setPalette(this->getPalette());
 
 	if (unit->getCacheInvalid() == true)
 	{
-		//Log(LOG_INFO) << ". (invalid)";
 		const int armorSize = unit->getArmor()->getSize() * unit->getArmor()->getSize();
 		for (int
 				quadrant = 0;
 				quadrant != armorSize;
 				++quadrant)
 		{
-			//Log(LOG_INFO) << ". . quadrant = " << quadrant;
 			Surface* cache = unit->getCache(quadrant);
-			if (cache == NULL) // no cache created yet
+			if (cache == NULL)
 			{
-				//Log(LOG_INFO) << ". . . (!cache)";
-				cache = new Surface(
-								_spriteWidth,
-								_spriteHeight);
+				cache = new Surface(_spriteWidth, _spriteHeight);
 				cache->setPalette(this->getPalette());
-				//Log(LOG_INFO) << ". . . end (!cache)";
 			}
 
-			//Log(LOG_INFO) << ". . cache Sprite & setBattleUnit()";
 			cache->setWidth(sprite->getWidth());
 			sprite->setBattleUnit(unit, quadrant);
 
-			//Log(LOG_INFO) << ". . getItem()";
 			BattleItem
 				* const rtItem = unit->getItem("STR_RIGHT_HAND"),
 				* const ltItem = unit->getItem("STR_LEFT_HAND");
-			if ((rtItem == NULL
-					|| rtItem->getRules()->isFixed() == true)
-				&& (ltItem == NULL
-					|| ltItem->getRules()->isFixed() == true))
+			if ((rtItem == NULL || rtItem->getRules()->isFixed() == true)
+				&& (ltItem == NULL || ltItem->getRules()->isFixed() == true))
 			{
 				sprite->setBattleItem(NULL);
 			}
 			else
 			{
-				if (rtItem != NULL) //&& rtItem->getRules()->isFixed() == false)
-					sprite->setBattleItem(rtItem);
-
-				if (ltItem != NULL) //&& ltItem->getRules()->isFixed() == false)
-					sprite->setBattleItem(ltItem);
+				if (rtItem != NULL) sprite->setBattleItem(rtItem);
+				if (ltItem != NULL) sprite->setBattleItem(ltItem);
 			}
 
-
-			//Log(LOG_INFO) << ". . setSurfaces()";
 			sprite->setSurfaces(
-								_res->getSurfaceSet(unit->getArmor()->getSpriteSheet()),
-								_res->getSurfaceSet("HANDOB.PCK"),
-								_res->getSurfaceSet("HANDOB2.PCK"));
-			//Log(LOG_INFO) << ". . setAnimationFrame() " << _animFrame;
+							_res->getSurfaceSet(unit->getArmor()->getSpriteSheet()),
+							_res->getSurfaceSet("HANDOB.PCK"),
+							_res->getSurfaceSet("HANDOB2.PCK"));
 			sprite->setAnimationFrame(_animFrame);
-			//Log(LOG_INFO) << ". . clear()";
 			cache->clear();
-
-			//Log(LOG_INFO) << ". . blit() : cache = " << cache;
 			sprite->blit(cache);
-			//Log(LOG_INFO) << ". . blit() Ok";
 
-			//Log(LOG_INFO) << ". . clearCache()";
 			unit->setCache(cache, quadrant);
 		}
-		//Log(LOG_INFO) << ". end (invalid)";
 	}
 
 	delete sprite;
-	//Log(LOG_INFO) << "exit cacheUnit() : " << unit->getId();
 }
 
 /**

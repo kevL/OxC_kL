@@ -310,8 +310,8 @@ private:
 
 		/// Gets direction to a target-point.
 		int getDirectionTo(
-				const Position& origin,
-				const Position& target) const;
+				const Position& posOrigin,
+				const Position& posTarget) const;
 
 		/// Marks a region of the map as "dangerous to aliens" for a turn.
 		void setDangerZone(

@@ -6243,16 +6243,12 @@ int TileEngine::faceWindow(const Position& pos) const
 	}
 
 
-	if ((ret == 0
-			&& pos.y == 0)
-		|| (ret == 2
-			&& pos.x == _battleSave->getMapSizeX() - 1)
-		|| (ret == 4
-			&& pos.y == _battleSave->getMapSizeY() - 1)
-		|| (ret == 6
-			&& pos.x == 0))
+	if ((ret == 0 && pos.y == 0) // do not look into the Void
+		|| (ret == 2 && pos.x == _battleSave->getMapSizeX() - 1)
+		|| (ret == 4 && pos.y == _battleSave->getMapSizeY() - 1)
+		|| (ret == 6 && pos.x == 0))
 	{
-		ret = -1;
+		return -1;
 	}
 
 	return ret;
@@ -6260,37 +6256,32 @@ int TileEngine::faceWindow(const Position& pos) const
 
 /**
  * Returns the direction from origin to target.
- * kL_note: This function is almost identical to BattleUnit::directionTo().
- * @param origin - reference to the origin point of the action
- * @param target - reference to the target point of the action
+ * @note This function is almost identical to BattleUnit::directionTo().
+ * @param posOrigin - reference to the origin point of the action
+ * @param posTarget - reference to the target point of the action
  * @return, direction
  */
 int TileEngine::getDirectionTo(
-		const Position& origin,
-		const Position& target) const
+		const Position& posOrigin,
+		const Position& posTarget) const
 {
-	if (origin == target) // kL. safety
+	if (posOrigin == posTarget) // safety.
 		return 0;
 
 	const double
-		offset_x = target.x - origin.x,
-		offset_y = target.y - origin.y,
-
-		// kL_note: atan2() usually takes the y-value first;
-		// and that's why things may seem so fucked up.
 		theta = std::atan2( // radians: + = y > 0; - = y < 0;
-						-offset_y,
-						offset_x),
+						static_cast<double>(-posTarget.y - posOrigin.y),
+						static_cast<double>( posTarget.x - posOrigin.x)),
 
-		// divide the pie in 4 thetas, each at 1/8th before each quarter
-		m_pi_8 = M_PI / 8.,	// a circle divided into 16 sections (rads) -> 22.5 deg
-		d = 0.1,			// kL, a bias toward cardinal directions. (0.1..0.12)
+		// divide the pie in 4 thetas each at 1/8th before each quarter
+		pi_8 = M_PI / 8.,				// a circle divided into 16 sections (rads) -> 22.5 deg
+		d = 0.1,						// a bias toward cardinal directions. (0.1..0.12)
 		pie[4] =
 		{
-			M_PI - m_pi_8 - d,				// 2.7488935718910690836548129603696	-> 157.5 deg
-			M_PI * 3. / 4. - m_pi_8 + d,	// 1.9634954084936207740391521145497	-> 112.5 deg
-			M_PI_2 - m_pi_8 - d,			// 1.1780972450961724644234912687298	-> 67.5 deg
-			m_pi_8 + d						// 0.39269908169872415480783042290994	-> 22.5 deg
+			M_PI - pi_8 - d,			// 2.7488935718910690836548129603696	-> 157.5 deg
+			M_PI * 3. / 4. - pi_8 + d,	// 1.9634954084936207740391521145497	-> 112.5 deg
+			M_PI_2 - pi_8 - d,			// 1.1780972450961724644234912687298	-> 67.5 deg
+			pi_8 + d					// 0.39269908169872415480783042290994	-> 22.5 deg
 		};
 
 	int dir;

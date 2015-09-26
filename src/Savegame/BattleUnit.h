@@ -704,7 +704,7 @@ private:
 		void aim(bool aim = true);
 
 		/// Gets direction to a certain point.
-		int directionTo(const Position& point) const;
+		int directionTo(const Position& pos) const;
 
 		/// Gets this unit's time units.
 		int getTimeUnits() const;

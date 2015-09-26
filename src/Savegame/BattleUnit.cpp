@@ -1344,29 +1344,28 @@ void BattleUnit::aim(bool aim)
 /**
  * Returns the direction from this unit to a given point.
  * @note This function is almost identical to TileEngine::getDirectionTo().
- * @param point - reference to a given position
+ * @param pos - reference to a given position
  * @return, direction from here to there
  */
-int BattleUnit::directionTo(const Position& point) const
+int BattleUnit::directionTo(const Position& pos) const
 {
-	if (_pos == point) // kL. safety
+	if (pos == _pos) // safety.
 		return 0;
 
-	double
-		offset_x = point.x - _pos.x,
-		offset_y = point.y - _pos.y,
+	const double
+		theta = std::atan2( // radians: + = y > 0; - = y < 0;
+						static_cast<double>(-pos.y - _pos.y),
+						static_cast<double>( pos.x - _pos.x)),
 
-		theta = std::atan2(-offset_y, offset_x), // radians: + = y > 0; - = y < 0;
-
-	// divide the pie in 4 thetas, each at 1/8th before each quarter
-		m_pi_8 = M_PI / 8.,					// a circle divided into 16 sections (rads) -> 22.5 deg
-		d = 0.,								// kL, a bias toward cardinal directions. (0.1..0.12)
+		// divide the pie in 4 thetas each at 1/8th before each quarter
+		pi_8 = M_PI / 8.,				// a circle divided into 16 sections (rads) -> 22.5 deg
+		d = 0.1,						// a bias toward cardinal directions. (0.1..0.12)
 		pie[4] =
 		{
-			M_PI - m_pi_8 - d,				// 2.7488935718910690836548129603696	-> 157.5 deg
-			M_PI * 3. / 4. - m_pi_8 + d,	// 1.9634954084936207740391521145497	-> 112.5 deg
-			M_PI_2 - m_pi_8 - d,			// 1.1780972450961724644234912687298	-> 67.5 deg
-			m_pi_8 + d						// 0.39269908169872415480783042290994	-> 22.5 deg
+			M_PI - pi_8 - d,			// 2.7488935718910690836548129603696	-> 157.5 deg
+			M_PI * 3. / 4. - pi_8 + d,	// 1.9634954084936207740391521145497	-> 112.5 deg
+			M_PI_2 - pi_8 - d,			// 1.1780972450961724644234912687298	-> 67.5 deg
+			pi_8 + d					// 0.39269908169872415480783042290994	-> 22.5 deg
 		};
 
 	int dir;
