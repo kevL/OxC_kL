@@ -88,10 +88,9 @@ void UnitTurnBState::init()
 		interval = static_cast<Uint32>(Options::battleAlienSpeed);
 	_parent->setStateInterval(interval);
 
-	// if the unit has a turret and we are turning during targeting then only the turret turns
+	// if the unit has a turret and it's turning during targeting then only the turret turns
 	_turret = _unit->getTurretType() != -1
-		   && (_action.strafe
-				|| _action.targeting);
+		   && (_action.strafe || _action.targeting);
 
 	if (_unit->getPosition().x != _action.target.x
 		|| _unit->getPosition().y != _action.target.y)
@@ -107,18 +106,23 @@ void UnitTurnBState::init()
 	{
 		if (_action.type == BA_NONE)
 		{
-			int soundId = -1;
-			const int door = _parent->getTileEngine()->unitOpensDoor(
-																_unit,
-																true);
-			if (door == 0)
-				soundId = ResourcePack::DOOR_OPEN;
-			else if (door == 1)
-				soundId = ResourcePack::SLIDING_DOOR_OPEN;
-			else if (door == 4)
-				_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
-			else if (door == 5)
-				_action.result = "STR_TUS_RESERVED";
+			int soundId;
+			switch (_parent->getTileEngine()->unitOpensDoor(_unit, true))
+			{
+				case 0: soundId = ResourcePack::DOOR_OPEN;
+				break;
+				case 1: soundId = ResourcePack::SLIDING_DOOR_OPEN;
+				break;
+				case 4:
+					soundId = -1;
+					_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
+				break;
+				case 5:
+					soundId = -1;
+					_action.result = "STR_TUS_RESERVED";
+				break;
+				default: soundId = -1;
+			}
 
 			if (soundId != -1)
 				_parent->getResourcePack()->getSound("BATTLE.CAT", soundId)

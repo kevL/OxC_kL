@@ -590,7 +590,7 @@ void BasescapeState::viewLeftClick(Action*)
 		}
 		else if (fac->getRules()->getStorage() != 0)
 		{
-			if (_base->getItems()->getTotalQuantity() != 0)
+			if (_base->getStorageItems()->getTotalQuantity() != 0)
 			{
 				_game->pushState(new StoresState(_base));
 				bPop = true;

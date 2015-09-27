@@ -156,7 +156,7 @@ private:
 		std::vector<CraftWeapon*>* getWeapons();
 
 		/// Gets the craft's items.
-		ItemContainer* getItems() const;
+		ItemContainer* getCraftItems() const;
 		/// Gets the craft's vehicles.
 		std::vector<Vehicle*>* getVehicles();
 

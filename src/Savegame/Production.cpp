@@ -190,7 +190,7 @@ bool Production::enoughMaterials(Base* const base) const // private.
 			i != _manufRule->getRequiredItems().end();
 			++i)
 	{
-		if (base->getItems()->getItemQty(i->first) < i->second)
+		if (base->getStorageItems()->getItemQty(i->first) < i->second)
 			return false;
 	}
 
@@ -311,9 +311,7 @@ ProductionProgress Production::step(
 
 									// Note that the items have already been delivered --
 									// so they are removed from the base, not the transfer.
-									base->getItems()->removeItem(
-																item->getType(),
-																used);
+									base->getItems()->removeItem(item->getType(), used);
 								}
 							}
 						}
@@ -325,9 +323,7 @@ ProductionProgress Production::step(
 						base->setCashIncome(rules->getItem(i->first)->getSellCost() * i->second);
 					}
 					else
-						base->getItems()->addItem(
-												i->first,
-												i->second);
+						base->getStorageItems()->addItem(i->first, i->second);
 				}
 			}
 
@@ -398,9 +394,7 @@ void Production::startProduction(
 			i != _manufRule->getRequiredItems().end();
 			++i)
 	{
-		base->getItems()->removeItem(
-								i->first,
-								i->second);
+		base->getStorageItems()->removeItem(i->first, i->second);
 	}
 }
 

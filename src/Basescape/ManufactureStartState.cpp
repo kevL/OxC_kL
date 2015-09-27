@@ -126,7 +126,7 @@ ManufactureStartState::ManufactureStartState(
 
 	_lstRequiredItems->setColumns(3, 140, 60, 40);
 
-	const ItemContainer* const baseItems (base->getItems()); // init.
+	const ItemContainer* const storage (base->getStorageItems()); // init.
 //	int row = 0;
 	for (std::map<std::string, int>::const_iterator
 			i = requiredItems.begin();
@@ -137,8 +137,8 @@ ManufactureStartState::ManufactureStartState(
 			woststr1,
 			woststr2;
 		woststr1 << L'\x01' << i->second;
-		woststr2 << L'\x01' << baseItems->getItemQty(i->first);
-		showStart &= (baseItems->getItemQty(i->first) >= i->second);
+		woststr2 << L'\x01' << storage->getItemQty(i->first);
+		showStart &= (storage->getItemQty(i->first) >= i->second);
 		_lstRequiredItems->addRow(
 								3,
 								tr(i->first).c_str(),

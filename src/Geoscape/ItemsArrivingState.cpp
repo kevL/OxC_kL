@@ -154,7 +154,7 @@ ItemsArrivingState::ItemsArrivingState(GeoscapeState* const state)
 										// will be matched w/ selectedRow on list-clicks for gotoBase.
 				if ((*j)->getType() == TRANSFER_ITEM) // check if there's an automated use for item
 				{
-					const RuleItem* const itRule = _game->getRuleset()->getItem((*j)->getItems());
+					const RuleItem* const itRule = _game->getRuleset()->getItem((*j)->getTransferItems());
 
 					for (std::vector<Craft*>::const_iterator
 							k = (*i)->getCrafts()->begin();
@@ -207,7 +207,7 @@ ItemsArrivingState::ItemsArrivingState(GeoscapeState* const state)
 
 									// Note that the items have already been delivered in Geoscape->Transfer::advance()
 									// so they are removed from the base, not the transfer.
-									(*i)->getItems()->removeItem(itRule->getType(), toTank);
+									(*i)->getStorageItems()->removeItem(itRule->getType(), toTank);
 								}
 							}
 						}

@@ -148,8 +148,8 @@ StoresState::StoresState(Base* base)
 		//Log(LOG_INFO) << *i << " stores listOrder = " << rules->getItem(*i)->getListOrder(); // Prints listOrder to LOG.
 		if (rules->getItem(*i)->isAlien() == false)
 		{
-			qty = _base->getItems()->getItemQty(*i);
-			if (qty > 0)
+			qty = _base->getStorageItems()->getItemQty(*i);
+			if (qty != 0)
 			{
 				color = Palette::blockOffset(13)+10; // blue
 				itRule = rules->getItem(*i);

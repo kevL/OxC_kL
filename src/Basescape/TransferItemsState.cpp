@@ -370,7 +370,7 @@ void TransferItemsState::init()
 			i != itemList.end();
 			++i)
 	{
-		const int baseQty = _baseSource->getItems()->getItemQty(*i);
+		const int baseQty = _baseSource->getStorageItems()->getItemQty(*i);
 		if (baseQty > 0)
 		{
 			_items.push_back(*i);
@@ -380,14 +380,14 @@ void TransferItemsState::init()
 			itRule = rules->getItem(*i);
 			std::string itType = itRule->getType();
 
-			int destQty = _baseTarget->getItems()->getItemQty(*i);
+			int destQty = _baseTarget->getStorageItems()->getItemQty(*i);
 
 			for (std::vector<Transfer*>::const_iterator // add transfers
 					j = _baseTarget->getTransfers()->begin();
 					j != _baseTarget->getTransfers()->end();
 					++j)
 			{
-				if ((*j)->getItems() == itType)
+				if ((*j)->getTransferItems() == itType)
 					destQty += (*j)->getQuantity();
 			}
 
@@ -399,8 +399,8 @@ void TransferItemsState::init()
 				if ((*j)->getRules()->getSoldiers() != 0) // is transport craft
 				{
 					for (std::map<std::string, int>::const_iterator // add items on craft
-							k = (*j)->getItems()->getContents()->begin();
-							k != (*j)->getItems()->getContents()->end();
+							k = (*j)->getCraftItems()->getContents()->begin();
+							k != (*j)->getCraftItems()->getContents()->end();
 							++k)
 					{
 						if (k->first == itType)
@@ -670,16 +670,12 @@ void TransferItemsState::completeTransfer()
 						if (craft->getRules()->getSoldiers() != 0) // is transport craft
 						{
 							for (std::map<std::string, int>::const_iterator // remove items from craft
-									k = craft->getItems()->getContents()->begin();
-									k != craft->getItems()->getContents()->end();
+									k = craft->getCraftItems()->getContents()->begin();
+									k != craft->getCraftItems()->getContents()->end();
 									++k)
 							{
-								craft->getItems()->removeItem(
-															k->first,
-															k->second);
-								_baseSource->getItems()->addItem(
-															k->first,
-															k->second);
+								craft->getCraftItems()->removeItem(k->first, k->second);
+								_baseSource->getStorageItems()->addItem(k->first, k->second);
 							}
 						}
 
@@ -690,12 +686,12 @@ void TransferItemsState::completeTransfer()
 									k != craft->getVehicles()->end();
 									++k)
 							{
-								_baseSource->getItems()->addItem((*k)->getRules()->getType());
+								_baseSource->getStorageItems()->addItem((*k)->getRules()->getType());
 
 								const RuleItem* const ammoRule = _game->getRuleset()->getItem((*k)->getRules()->getCompatibleAmmo()->front());
-								_baseSource->getItems()->addItem(
-															ammoRule->getType(),
-															(*k)->getAmmo());
+								_baseSource->getStorageItems()->addItem(
+																	ammoRule->getType(),
+																	(*k)->getAmmo());
 
 								delete *k;
 								craft->getVehicles()->erase(k);
@@ -765,13 +761,13 @@ void TransferItemsState::completeTransfer()
 			}
 			else // transfer items
 			{
-				_baseSource->getItems()->removeItem(
-												_items[getItemIndex(i)],
-												_transferQty[i]);
+				_baseSource->getStorageItems()->removeItem(
+													_items[getItemIndex(i)],
+													_transferQty[i]);
 				Transfer* const transfer = new Transfer(eta);
-				transfer->setItems(
-								_items[getItemIndex(i)],
-								_transferQty[i]);
+				transfer->setTransferItems(
+										_items[getItemIndex(i)],
+										_transferQty[i]);
 
 				_baseTarget->getTransfers()->push_back(transfer);
 			}
@@ -915,7 +911,7 @@ int TransferItemsState::getQuantity() const // private.
 {
 	switch (getTransferType(_sel))
 	{
-		case TRANSFER_ITEM:			return _baseSource->getItems()->getItemQty(_items[getItemIndex(_sel)]);
+		case TRANSFER_ITEM:			return _baseSource->getStorageItems()->getItemQty(_items[getItemIndex(_sel)]);
 		case TRANSFER_SCIENTIST:	return _baseSource->getScientists();
 		case TRANSFER_ENGINEER:		return _baseSource->getEngineers();
 	}

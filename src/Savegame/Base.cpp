@@ -492,7 +492,7 @@ std::vector<Transfer*>* Base::getTransfers()
  * Returns the list of items in this Base.
  * @return, pointer to ItemContainer
  */
-ItemContainer* Base::getItems()
+ItemContainer* Base::getStorageItems()
 {
 	return _items;
 }
@@ -798,7 +798,7 @@ double Base::getUsedStores() const
 			i != _crafts.end();
 			++i)
 	{
-		total += (*i)->getItems()->getTotalSize(_rules); // craft items
+		total += (*i)->getCraftItems()->getTotalSize(_rules); // craft items
 
 		for (std::vector<Vehicle*>::const_iterator // craft vehicles (vehicles are items if not on a craft)
 				j = (*i)->getVehicles()->begin();
@@ -825,7 +825,7 @@ double Base::getUsedStores() const
 	{
 		if ((*i)->getType() == TRANSFER_ITEM)
 		{
-			total += _rules->getItem((*i)->getItems())->getSize()
+			total += _rules->getItem((*i)->getTransferItems())->getSize()
 				   * static_cast<double>((*i)->getQuantity());
 		}
 	}
@@ -1993,7 +1993,7 @@ int Base::getUsedContainment() const
 			++i)
 	{
 		if ((*i)->getType() == TRANSFER_ITEM
-			&& _rules->getItem((*i)->getItems())->isAlien() == true)
+			&& _rules->getItem((*i)->getTransferItems())->isAlien() == true)
 		{
 			total += (*i)->getQuantity();
 		}
@@ -2243,7 +2243,7 @@ void Base::setupDefenses()
 			i != _facilities.end();
 			++i)
 		if ((*i)->getBuildTime() == 0
-			&& (*i)->getRules()->getDefenseValue() > 0)
+			&& (*i)->getRules()->getDefenseValue() != 0)
 		{
 			_defenses.push_back(*i);
 		}
@@ -2275,7 +2275,7 @@ void Base::setupDefenses()
 		i = _vehicles.erase(i);
 	}
 
-	for (std::vector<Craft*>::const_iterator // add vehicles that are in the crafts of the base, if it's not out
+	for (std::vector<Craft*>::const_iterator // add vehicles that are in the crafts of the base if it's not out
 			i = getCrafts()->begin();
 			i != getCrafts()->end();
 			++i)
@@ -2297,11 +2297,11 @@ void Base::setupDefenses()
 		RuleItem* const itRule = _rules->getItem(itemId);
 		if (itRule->isFixed() == true)
 		{
-			int unitSize;
+			int tankSize;
 			if (_rules->getUnit(itemId) != NULL)
-				unitSize = _rules->getArmor(_rules->getUnit(itemId)->getArmor())->getSize();
+				tankSize = _rules->getArmor(_rules->getUnit(itemId)->getArmor())->getSize();
 			else
-				unitSize = 4;
+				tankSize = 4;
 
 			if (itRule->getCompatibleAmmo()->empty() == true) // this vehicle does not need ammo
 			{
@@ -2313,41 +2313,33 @@ void Base::setupDefenses()
 					_vehicles.push_back(new Vehicle(
 												itRule,
 												itRule->getClipSize(),
-												unitSize));
+												tankSize));
 				}
-
-				_items->removeItem(
-								itemId,
-								itemQty);
+				_items->removeItem(itemId, itemQty);
 			}
 			else // this vehicle needs ammo
 			{
 				const RuleItem* const ammoRule = _rules->getItem(itRule->getCompatibleAmmo()->front());
-				const int ammoPerVehicle = ammoRule->getClipSize();
+				const int perVehicle = ammoRule->getClipSize();
 
-				const int baseQty = _items->getItemQty(ammoRule->getType()) / ammoPerVehicle;
+				const int baseQty = _items->getItemQty(ammoRule->getType()) / perVehicle;
 				if (baseQty != 0)
 				{
-					const int canBeAdded = std::min(
-												itemQty,
-												baseQty);
+					const int qty = std::min(itemQty, baseQty);
 					for (int
 							j = 0;
-							j != canBeAdded;
+							j != qty;
 							++j)
 					{
 						_vehicles.push_back(new Vehicle(
 													itRule,
-													ammoPerVehicle,
-													unitSize));
+													perVehicle,
+													tankSize));
 						_items->removeItem(
 										ammoRule->getType(),
-										ammoPerVehicle);
+										perVehicle);
 					}
-
-					_items->removeItem(
-									itemId,
-									canBeAdded);
+					_items->removeItem(itemId, qty);
 				}
 				else
 				{
@@ -2358,8 +2350,7 @@ void Base::setupDefenses()
 
 			i = _items->getContents()->begin(); // start over because iterator is broken due to removeItem()
 		}
-		else
-			++i;
+		else ++i;
 	}
 }
 
@@ -2460,9 +2451,7 @@ std::list<std::vector<BaseFacility*>::const_iterator> Base::getDisconnectedFacil
 						++y)
 				{
 					std::pair<std::vector<BaseFacility*>::const_iterator, bool>* pairsOfFacBool =
-									new std::pair<std::vector<BaseFacility*>::const_iterator, bool>(
-																								i,
-																								false);
+									new std::pair<std::vector<BaseFacility*>::const_iterator, bool>(i, false);
 					facConnections.push_back(pairsOfFacBool);
 					facBool_coord[static_cast<size_t>((*i)->getX()) + x]
 								 [static_cast<size_t>((*i)->getY()) + y] = pairsOfFacBool; // loli
@@ -2613,13 +2602,13 @@ std::list<std::vector<BaseFacility*>::const_iterator> Base::getDisconnectedFacil
  */
 void Base::destroyFacility(std::vector<BaseFacility*>::const_iterator pFac)
 {
-	if ((*pFac)->getRules()->getCrafts() > 0) // hangar destruction
+	if ((*pFac)->getRules()->getCrafts() != 0) // hangar destruction
 	{
 		// destroy crafts and any production of crafts
 		// as this will mean there is no hangar to contain it
 		if ((*pFac)->getCraft() != NULL)
 		{
-			if ((*pFac)->getCraft()->getNumSoldiers() > 0) // remove all soldiers
+			if ((*pFac)->getCraft()->getNumSoldiers() != 0) // remove all soldiers
 			{
 				for (std::vector<Soldier*>::const_iterator
 						i = _soldiers.begin();
@@ -2631,15 +2620,11 @@ void Base::destroyFacility(std::vector<BaseFacility*>::const_iterator pFac)
 				}
 			}
 
-			while ((*pFac)->getCraft()->getItems()->getContents()->empty() == false) // remove all items
+			while ((*pFac)->getCraft()->getCraftItems()->getContents()->empty() == false) // remove all items
 			{
-				const std::map<std::string, int>::const_iterator i = (*pFac)->getCraft()->getItems()->getContents()->begin();
-				_items->addItem(
-							i->first,
-							i->second);
-				(*pFac)->getCraft()->getItems()->removeItem(
-														i->first,
-														i->second);
+				const std::map<std::string, int>::const_iterator i = (*pFac)->getCraft()->getCraftItems()->getContents()->begin();
+				_items->addItem(i->first, i->second);
+				(*pFac)->getCraft()->getCraftItems()->removeItem(i->first, i->second);
 			}
 
 			for (std::vector<Craft*>::const_iterator
@@ -2651,7 +2636,6 @@ void Base::destroyFacility(std::vector<BaseFacility*>::const_iterator pFac)
 				{
 					delete (*i);
 					_crafts.erase(i);
-
 					break;
 				}
 			}
@@ -2673,15 +2657,12 @@ void Base::destroyFacility(std::vector<BaseFacility*>::const_iterator pFac)
 
 					delete *i;
 					_productions.erase(i);
-
 					break;
 				}
-				else
-					++i;
+				else ++i;
 			}
 
-			if (destroyCraft == true
-				&& _transfers.empty() == false) // check transfers
+			if (destroyCraft == true && _transfers.empty() == false) // check transfers
 			{
 				for (std::vector<Transfer*>::const_iterator
 						i = _transfers.begin();
@@ -2693,18 +2674,16 @@ void Base::destroyFacility(std::vector<BaseFacility*>::const_iterator pFac)
 						delete (*i)->getCraft();
 						delete *i;
 						_transfers.erase(i);
-
 						break;
 					}
 				}
 			}
 		}
 	}
-	else if ((*pFac)->getRules()->getPsiLaboratories() > 0)
+	else if ((*pFac)->getRules()->getPsiLaboratories() != 0)
 	{
 		// psilab destruction: remove any soldiers over the maximum allowable from psi training.
 		int qty = (*pFac)->getRules()->getPsiLaboratories() - getFreePsiLabs();
-
 		for (std::vector<Soldier*>::const_iterator
 				i = _soldiers.begin();
 				i != _soldiers.end()
@@ -2718,12 +2697,11 @@ void Base::destroyFacility(std::vector<BaseFacility*>::const_iterator pFac)
 			}
 		}
 	}
-	else if ((*pFac)->getRules()->getLaboratories() > 0)
+	else if ((*pFac)->getRules()->getLaboratories() != 0)
 	{
 		// lab destruction: enforce lab space limits.
 		// take scientists off projects; research is not cancelled.
 		int qty = (*pFac)->getRules()->getLaboratories() - getFreeLaboratories();
-
 		for (std::vector<ResearchProject*>::const_iterator
 				i = _research.begin();
 				i != _research.end()
@@ -2734,7 +2712,6 @@ void Base::destroyFacility(std::vector<BaseFacility*>::const_iterator pFac)
 			{
 				(*i)->setAssigned((*i)->getAssigned() - qty);
 				_scientists += qty;
-
 				break;
 			}
 			else
@@ -2742,15 +2719,13 @@ void Base::destroyFacility(std::vector<BaseFacility*>::const_iterator pFac)
 				qty -= (*i)->getAssigned();
 				_scientists += (*i)->getAssigned();
 				(*i)->setAssigned(0);
-
 				++i;
-
 //				delete *i;
 //				i = _research.erase(i);
 			}
 		}
 	}
-	else if ((*pFac)->getRules()->getWorkshops() > 0)
+	else if ((*pFac)->getRules()->getWorkshops() != 0)
 	{
 		// workshop destruction: similar to lab destruction, but lay off engineers instead. kL_note: huh!!!!
 		// in this case production *is* cancelled since it takes up space in the workshop.
@@ -2766,22 +2741,20 @@ void Base::destroyFacility(std::vector<BaseFacility*>::const_iterator pFac)
 			{
 				(*i)->setAssignedEngineers((*i)->getAssignedEngineers() - qty);
 				_engineers += qty;
-
 				break;
 			}
 			else
 			{
 				qty -= (*i)->getAssignedEngineers();
 				_engineers += (*i)->getAssignedEngineers();
-
 				delete *i;
 				i = _productions.erase(i);
 			}
 		}
 	}
-	else if ((*pFac)->getRules()->getStorage() > 0)
+	else if ((*pFac)->getRules()->getStorage() != 0)
 	{
-		// we won't destroy the items physically AT the base,
+		// don't destroy the items physically AT the base,
 		// but any items in transit will end up at the dead letter office.
 		if (_transfers.empty() == false
 			&& storesOverfull((*pFac)->getRules()->getStorage()) == true)
@@ -2796,12 +2769,11 @@ void Base::destroyFacility(std::vector<BaseFacility*>::const_iterator pFac)
 					delete *i;
 					i = _transfers.erase(i);
 				}
-				else
-					++i;
+				else ++i;
 			}
 		}
 	}
-	else if ((*pFac)->getRules()->getPersonnel() > 0)
+	else if ((*pFac)->getRules()->getPersonnel() != 0)
 	{
 		// as above don't actually fire people but block personnel arrivals.
 		if (_transfers.empty() == false
@@ -2816,7 +2788,6 @@ void Base::destroyFacility(std::vector<BaseFacility*>::const_iterator pFac)
 				if ((*i)->getType() == TRANSFER_ENGINEER
 					|| (*i)->getType() == TRANSFER_SCIENTIST)
 /*				bool del = false;
-
 				if ((*i)->getType() == TRANSFER_ENGINEER)
 				{
 					del = true;
@@ -2829,14 +2800,12 @@ void Base::destroyFacility(std::vector<BaseFacility*>::const_iterator pFac)
 				}
 				else if ((*i)->getType() == TRANSFER_SOLDIER)
 					del = true;
-
 				if (del) */
 				{
 					delete *i;
 					i = _transfers.erase(i);
 				}
-				else
-					++i;
+				else ++i;
 			}
 		}
 	}
@@ -2848,9 +2817,9 @@ void Base::destroyFacility(std::vector<BaseFacility*>::const_iterator pFac)
 /**
  * Cleans up base defenses vector after a Ufo attack and optionally reclaims
  * the tanks and their ammo.
- * @param reclaimItems - true to return the HWPs to storage
+ * @param hwpToStores - true to return the HWPs to storage (default false)
  */
-void Base::cleanupDefenses(bool reclaimItems)
+void Base::cleanupDefenses(bool hwpToStores)
 {
 	_defenses.clear();
 
@@ -2879,7 +2848,7 @@ void Base::cleanupDefenses(bool reclaimItems)
 			i != _vehicles.end();
 			)
 	{
-		if (reclaimItems == true)
+		if (hwpToStores == true)
 		{
 			const RuleItem* const itRule = (*i)->getRules();
 			_items->addItem(itRule->getType());

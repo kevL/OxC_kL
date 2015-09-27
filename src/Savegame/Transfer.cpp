@@ -195,7 +195,7 @@ Craft* Transfer::getCraft() const
  * Returns the items being transferred.
  * @return, item ID
  */
-std::string Transfer::getItems() const
+std::string Transfer::getTransferItems() const
 {
 	return _itemId;
 }
@@ -205,7 +205,7 @@ std::string Transfer::getItems() const
  * @param id	- reference the item ID
  * @param qty	- item quantity (default 1)
  */
-void Transfer::setItems(
+void Transfer::setTransferItems(
 		const std::string& id,
 		int qty)
 {
@@ -304,9 +304,7 @@ void Transfer::advance(Base* base)
 			_craft->checkup();
 		}
 		else if (_itemQty != 0)
-			base->getItems()->addItem(
-									_itemId,
-									_itemQty);
+			base->getStorageItems()->addItem(_itemId, _itemQty);
 		else if (_scientists != 0)
 			base->setScientists(base->getScientists() + _scientists);
 		else if (_engineers != 0)
@@ -317,8 +315,8 @@ void Transfer::advance(Base* base)
 }
 
 /**
- * Get a pointer to the soldier being transferred.
- * @return, pointer to the Soldier being transferred
+ * Gets the soldier being transferred.
+ * @return, pointer to Soldier
  */
 Soldier* Transfer::getSoldier() const
 {

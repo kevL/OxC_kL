@@ -664,11 +664,11 @@ private:
 
 		/// Looks at a certain point.
 		void lookAt(
-				const Position& point,
+				const Position& pos,
 				bool turret = false);
 		/// Looks in a certain direction.
 		void lookAt(
-				int direction,
+				int dir,
 				bool force = false);
 		/// Turns to the destination direction.
 		void turn(bool turret = false);

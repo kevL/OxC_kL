@@ -900,8 +900,8 @@ void BattlescapeGenerator::deployXCOM() // private.
 	{
 		//Log(LOG_INFO) << ". . addCraftItems";
 		for (std::map<std::string, int>::const_iterator
-				i = _craft->getItems()->getContents()->begin();
-				i != _craft->getItems()->getContents()->end();
+				i = _craft->getCraftItems()->getContents()->begin();
+				i != _craft->getCraftItems()->getContents()->end();
 				++i)
 		{
 			//Log(LOG_INFO) << ". . . *i = _craft->getItems()->getContents()";
@@ -929,8 +929,8 @@ void BattlescapeGenerator::deployXCOM() // private.
 		{
 			//Log(LOG_INFO) << ". . addBaseItems";
 			for (std::map<std::string, int>::const_iterator // add items from stores in base
-					i = _base->getItems()->getContents()->begin();
-					i != _base->getItems()->getContents()->end();
+					i = _base->getStorageItems()->getContents()->begin();
+					i != _base->getStorageItems()->getContents()->end();
 					)
 			{
 				// only add items to the battlescape that make sense;
@@ -956,9 +956,9 @@ void BattlescapeGenerator::deployXCOM() // private.
 
 					const std::map<std::string, int>::const_iterator baseItem = i++;
 					if (_baseEquipScreen == false)
-						_base->getItems()->removeItem(
-													baseItem->first,
-													baseItem->second);
+						_base->getStorageItems()->removeItem(
+														baseItem->first,
+														baseItem->second);
 				}
 				else
 					++i;
@@ -974,8 +974,8 @@ void BattlescapeGenerator::deployXCOM() // private.
 			if ((*i)->getCraftStatus() != "STR_OUT")
 			{
 				for (std::map<std::string, int>::const_iterator
-						j = (*i)->getItems()->getContents()->begin();
-						j != (*i)->getItems()->getContents()->end();
+						j = (*i)->getCraftItems()->getContents()->begin();
+						j != (*i)->getCraftItems()->getContents()->end();
 						++j)
 				{
 					for (int

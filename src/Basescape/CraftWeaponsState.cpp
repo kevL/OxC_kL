@@ -130,13 +130,13 @@ CraftWeaponsState::CraftWeaponsState(
 				woststr1,
 				woststr2;
 
-			if (_base->getItems()->getItemQty(cwRule->getLauncherItem()) != 0)
-				woststr1 << _base->getItems()->getItemQty(cwRule->getLauncherItem());
+			if (_base->getStorageItems()->getItemQty(cwRule->getLauncherItem()) != 0)
+				woststr1 << _base->getStorageItems()->getItemQty(cwRule->getLauncherItem());
 			else
 				woststr1 << L"-";
 
 			if (cwRule->getClipItem().empty() == false)
-				woststr2 << _base->getItems()->getItemQty(cwRule->getClipItem());
+				woststr2 << _base->getStorageItems()->getItemQty(cwRule->getClipItem());
 			else
 				woststr2 << tr("STR_NOT_AVAILABLE");
 
@@ -176,15 +176,16 @@ void CraftWeaponsState::lstWeaponsClick(Action*)
 
 	const RuleCraftWeapon* const cwRule = _weaponRules[_lstWeapons->getSelectedRow()];
 	CraftWeapon* cw = _base->getCrafts()->at(_craftId)->getWeapons()->at(_pod);
+	ItemContainer* storage = _base->getStorageItems();
 
 	if (cwRule == NULL && cw != NULL)
 	{
 		closeState = true;
 
-		_base->getItems()->addItem(cw->getRules()->getLauncherItem());
-		_base->getItems()->addItem(
-								cw->getRules()->getClipItem(),
-								cw->getClipsLoaded(_game->getRuleset()));
+		storage->addItem(cw->getRules()->getLauncherItem());
+		storage->addItem(
+					cw->getRules()->getClipItem(),
+					cw->getClipsLoaded(_game->getRuleset()));
 
 		delete cw;
 		_base->getCrafts()->at(_craftId)->getWeapons()->at(_pod) = NULL;
@@ -192,27 +193,26 @@ void CraftWeaponsState::lstWeaponsClick(Action*)
 
 	if (cwRule != NULL
 		&& (cw == NULL || cw->getRules() != cwRule)
-		&& _base->getItems()->getItemQty(cwRule->getLauncherItem()) != 0)
+		&& storage->getItemQty(cwRule->getLauncherItem()) != 0)
 	{
 		closeState = true;
 
 		if (cw != NULL)
 		{
-			_base->getItems()->addItem(cw->getRules()->getLauncherItem());
-			_base->getItems()->addItem(
-									cw->getRules()->getClipItem(),
-									cw->getClipsLoaded(_game->getRuleset()));
+			storage->addItem(cw->getRules()->getLauncherItem());
+			storage->addItem(
+						cw->getRules()->getClipItem(),
+						cw->getClipsLoaded(_game->getRuleset()));
 
 			delete cw;
 			_base->getCrafts()->at(_craftId)->getWeapons()->at(_pod) = NULL;
 		}
 
-		_base->getItems()->removeItem(cwRule->getLauncherItem());
+		storage->removeItem(cwRule->getLauncherItem());
 
 		cw = new CraftWeapon(cwRule);
 		cw->setRearming();
 		_base->getCrafts()->at(_craftId)->getWeapons()->at(_pod) = cw;
-
 		_base->getCrafts()->at(_craftId)->checkup();
 	}
 

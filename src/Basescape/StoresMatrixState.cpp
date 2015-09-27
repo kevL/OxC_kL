@@ -256,14 +256,14 @@ StoresMatrixState::StoresMatrixState(const Base* base)
 				++j,
 					++baseId)
 		{
-			qty[baseId] = (*j)->getItems()->getItemQty(*i);
+			qty[baseId] = (*j)->getStorageItems()->getItemQty(*i);
 
 			for (std::vector<Transfer*>::const_iterator // Add qty of items in transit to theMatrix.
 					k = (*j)->getTransfers()->begin();
 					k != (*j)->getTransfers()->end();
 					++k)
 			{
-				if ((*k)->getItems() == stTest)
+				if ((*k)->getTransferItems() == stTest)
 					qty[baseId] += (*k)->getQuantity();
 			}
 
@@ -275,8 +275,8 @@ StoresMatrixState::StoresMatrixState(const Base* base)
 				if ((*k)->getRules()->getSoldiers() > 0) // is transport craft
 				{
 					for (std::map<std::string, int>::iterator
-							l = (*k)->getItems()->getContents()->begin();
-							l != (*k)->getItems()->getContents()->end();
+							l = (*k)->getCraftItems()->getContents()->begin();
+							l != (*k)->getCraftItems()->getContents()->end();
 							++l)
 					{
 						if (l->first == stTest)

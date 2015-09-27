@@ -103,11 +103,11 @@ SackSoldierState::~SackSoldierState()
  */
 void SackSoldierState::btnOkClick(Action*)
 {
-	const Soldier* const soldier = _base->getSoldiers()->at(_soldierId);
-	if (soldier->getArmor()->getStoreItem() != "STR_NONE")
-		_base->getItems()->addItem(soldier->getArmor()->getStoreItem());
+	const Soldier* const sol = _base->getSoldiers()->at(_soldierId);
+	if (sol->getArmor()->getStoreItem() != "STR_NONE")
+		_base->getStorageItems()->addItem(sol->getArmor()->getStoreItem());
 
-	delete soldier;
+	delete sol;
 	_base->getSoldiers()->erase(_base->getSoldiers()->begin() + _soldierId);
 
 	_game->popState();

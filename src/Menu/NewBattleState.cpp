@@ -310,7 +310,7 @@ void NewBattleState::load(const std::string& filename)
 				}
 
 				// Generate items
-				base->getItems()->getContents()->clear();
+				base->getStorageItems()->getContents()->clear();
 				const RuleItem* itRule;
 				const std::vector<std::string>& items = _rules->getItemsList();
 				for (std::vector<std::string>::const_iterator
@@ -322,7 +322,7 @@ void NewBattleState::load(const std::string& filename)
 					if (itRule->getBattleType() != BT_CORPSE
 						&& itRule->isRecoverable() == true)
 					{
-						base->getItems()->addItem(*i);
+						base->getStorageItems()->addItem(*i);
 					}
 				}
 
@@ -340,8 +340,8 @@ void NewBattleState::load(const std::string& filename)
 				{
 					_craft = base->getCrafts()->front();
 					for (std::map<std::string, int>::iterator
-							i = _craft->getItems()->getContents()->begin();
-							i != _craft->getItems()->getContents()->end();
+							i = _craft->getCraftItems()->getContents()->begin();
+							i != _craft->getCraftItems()->getContents()->end();
 							++i)
 					{
 						if (_rules->getItem(i->first) == NULL)
@@ -431,12 +431,11 @@ void NewBattleState::initPlay()
 	}
 	base->getCrafts()->clear();
 
-	base->getItems()->getContents()->clear();
+	base->getStorageItems()->getContents()->clear();
 
 	_craft = new Craft(
 					_rules->getCraft(_crafts[_cbxCraft->getSelected()]),
-					base,
-					1);
+					base, 1);
 	base->getCrafts()->push_back(_craft);
 
 	// Generate soldiers
@@ -492,7 +491,7 @@ void NewBattleState::initPlay()
 		if (itRule->getBattleType() != BT_CORPSE
 			&& itRule->isRecoverable() == true)
 		{
-			base->getItems()->addItem(*i);
+			base->getStorageItems()->addItem(*i);
 //			if (itRule->getBattleType() != BT_NONE
 //				&& itRule->isFixed() == false
 //				&& itRule->getBigSprite() > -1)

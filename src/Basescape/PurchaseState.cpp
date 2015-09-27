@@ -286,14 +286,14 @@ PurchaseState::PurchaseState(Base* const base)
 			_quantities.push_back(0);
 			_items.push_back(st);
 
-			int tQty = _base->getItems()->getItemQty(st);
+			int tQty = _base->getStorageItems()->getItemQty(st);
 			for (std::vector<Transfer*>::const_iterator
 					j = _base->getTransfers()->begin();
 					j != _base->getTransfers()->end();
 					++j)
 			{
 				if ((*j)->getType() == TRANSFER_ITEM
-					&& (*j)->getItems() == st)
+					&& (*j)->getTransferItems() == st)
 				{
 					tQty += (*j)->getQuantity();
 				}
@@ -336,14 +336,14 @@ PurchaseState::PurchaseState(Base* const base)
 			_quantities.push_back(0);
 			_items.push_back(st);
 
-			int tQty = _base->getItems()->getItemQty(st);
+			int tQty = _base->getStorageItems()->getItemQty(st);
 			for (std::vector<Transfer*>::const_iterator
 					j = _base->getTransfers()->begin();
 					j != _base->getTransfers()->end();
 					++j)
 			{
 				if ((*j)->getType() == TRANSFER_ITEM
-					&& (*j)->getItems() == st)
+					&& (*j)->getTransferItems() == st)
 				{
 					tQty += (*j)->getQuantity();
 				}
@@ -400,14 +400,14 @@ PurchaseState::PurchaseState(Base* const base)
 			_quantities.push_back(0);
 			_items.push_back(*i);
 
-			int totalQty = _base->getItems()->getItemQty(*i);
+			int totalQty = _base->getStorageItems()->getItemQty(*i);
 
 			for (std::vector<Transfer*>::const_iterator // add transfer items
 					j = _base->getTransfers()->begin();
 					j != _base->getTransfers()->end();
 					++j)
 			{
-				if ((*j)->getItems() == st)
+				if ((*j)->getTransferItems() == st)
 					totalQty += (*j)->getQuantity();
 			}
 
@@ -419,8 +419,8 @@ PurchaseState::PurchaseState(Base* const base)
 				if ((*j)->getRules()->getSoldiers() > 0) // is transport craft
 				{
 					for (std::map<std::string, int>::const_iterator // ha, map is my bitch!!
-							k = (*j)->getItems()->getContents()->begin();
-							k != (*j)->getItems()->getContents()->end();
+							k = (*j)->getCraftItems()->getContents()->begin();
+							k != (*j)->getCraftItems()->getContents()->end();
 							++k)
 					{
 						if (k->first == st)
@@ -617,9 +617,9 @@ void PurchaseState::btnOkClick(Action*)
 			{
 				const RuleItem* const itRule = _game->getRuleset()->getItem(_items[i - 3 - _crafts.size()]);
 				Transfer* const transfer = new Transfer(itRule->getTransferTime());
-				transfer->setItems(
-								_items[i - 3 - _crafts.size()],
-								_quantities[i]);
+				transfer->setTransferItems(
+									_items[i - 3 - _crafts.size()],
+									_quantities[i]);
 
 				_base->getTransfers()->push_back(transfer);
 			}

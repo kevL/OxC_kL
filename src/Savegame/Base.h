@@ -140,7 +140,7 @@ private:
 		std::vector<Transfer*>* getTransfers();
 
 		/// Gets this Base's items.
-		ItemContainer* getItems();
+		ItemContainer* getStorageItems();
 
 		/// Gets this Base's scientists.
 		int getScientists() const;
@@ -321,7 +321,7 @@ private:
 		void destroyFacility(std::vector<BaseFacility*>::const_iterator fac);
 
 		/// Cleans up this Base's defenses vector after a Ufo attack and optionally reclaims the tanks and their ammo.
-		void cleanupDefenses(bool reclaimItems);
+		void cleanupDefenses(bool hwpToStores = false);
 
 		/// Increases (or decreases) this Base's total income amount.
 		void setCashIncome(int cash);

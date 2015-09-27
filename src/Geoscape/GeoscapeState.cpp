@@ -2346,12 +2346,12 @@ void GeoscapeState::time30Minutes()
 						(*j)->refuel();
 					else
 					{
-						if ((*j)->getRules()->getRefuelRate() <= (*i)->getItems()->getItemQty(refuelItem))
+						if ((*j)->getRules()->getRefuelRate() <= (*i)->getStorageItems()->getItemQty(refuelItem))
 						{
 							(*j)->refuel();
-							(*i)->getItems()->removeItem(
-													refuelItem,
-													(*j)->getRules()->getRefuelRate());
+							(*i)->getStorageItems()->removeItem(
+															refuelItem,
+															(*j)->getRules()->getRefuelRate());
 						}
 						else if ((*j)->getWarned() == false)
 						{
@@ -2682,7 +2682,7 @@ void GeoscapeState::time1Day()
 							//Log(LOG_INFO) << "he's dead, Jim!!";
 							resetTimer();
 							if ((*j)->getArmor()->isBasic() == false) // return soldier's armor to Stores
-								(*i)->getItems()->addItem((*j)->getArmor()->getStoreItem());
+								(*i)->getStorageItems()->addItem((*j)->getArmor()->getStoreItem());
 
 							popup(new SoldierDiedState(
 													(*j)->getName(),
@@ -2788,11 +2788,7 @@ void GeoscapeState::time1Day()
 				&& research->needItem() == true
 				&& _rules->getUnit(research->getName()) != NULL)
 			{
-				(*i)->getItems()->addItem(
-									_rules->getArmor(
-												_rules->getUnit(
-															research->getName())->getArmor())
-								->getCorpseGeoscape());
+				(*i)->getStorageItems()->addItem(_rules->getArmor(_rules->getUnit(research->getName())->getArmor())->getCorpseGeoscape());
 				// ;) -> kL_note: heh i noticed that.
 			}
 

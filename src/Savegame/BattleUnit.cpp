@@ -1063,51 +1063,48 @@ int BattleUnit::getDiagonalWalkPhase() const
 
 /**
  * Look at a point.
- * @param point		- reference to the position to look at
+ * @param pos		- reference the position to look at
  * @param turret	- true to turn the turret (default false to turn the unit)
  */
 void BattleUnit::lookAt(
-		const Position& point,
+		const Position& pos,
 		bool turret)
 {
-	int dir = directionTo(point);
-
+	const int dir = directionTo(pos);
 	if (turret == true)
 	{
-		_dirToTurret = dir;
-		if (_dirToTurret != _dirTurret)
+		if (dir != _dirTurret)
+		{
+			_dirTurret = dir;
 			_status = STATUS_TURNING;
+		}
 	}
-	else
+	else if (dir != _dir)
 	{
 		_dirTo = dir;
-		if (_dirTo != _dir)
-			_status = STATUS_TURNING;
+		_status = STATUS_TURNING;
 	}
 }
 
 /**
  * Look a direction.
- * @param direction	- direction to look
- * @param force		- true to instantly set direction (default false to animate)
+ * @param dir	- direction to look
+ * @param force	- true to instantly set direction (default false to animate)
  */
 void BattleUnit::lookAt(
-		int direction,
+		int dir,
 		bool force)
 {
-	if (force == true)
+	if (dir != _dir
+		&& dir > -1 && dir < 8)
 	{
-		_dirTo = direction;
-		_dir = direction;
-	}
-	else
-	{
-		if (direction < 0 || direction > 7)
-			return;
-
-		_dirTo = direction;
-		if (_dirTo != _dir)
+		if (force == true)
+			_dir = _dirTo = dir;
+		else
+		{
+			_dirTo = dir;
 			_status = STATUS_TURNING;
+		}
 	}
 }
 
@@ -1354,8 +1351,8 @@ int BattleUnit::directionTo(const Position& pos) const
 
 	const double
 		theta = std::atan2( // radians: + = y > 0; - = y < 0;
-						static_cast<double>(-pos.y - _pos.y),
-						static_cast<double>( pos.x - _pos.x)),
+						static_cast<double>(_pos.y - pos.y),
+						static_cast<double>(pos.x - _pos.x)),
 
 		// divide the pie in 4 thetas each at 1/8th before each quarter
 		pi_8 = M_PI / 8.,				// a circle divided into 16 sections (rads) -> 22.5 deg
@@ -1368,25 +1365,21 @@ int BattleUnit::directionTo(const Position& pos) const
 			pi_8 + d					// 0.39269908169872415480783042290994	-> 22.5 deg
 		};
 
-	int dir;
 	if (theta > pie[0] || theta < -pie[0])
-		dir = 6;
-	else if (theta > pie[1])
-		dir = 7;
-	else if (theta > pie[2])
-		dir = 0;
-	else if (theta > pie[3])
-		dir = 1;
-	else if (theta < -pie[1])
-		dir = 5;
-	else if (theta < -pie[2])
-		dir = 4;
-	else if (theta < -pie[3])
-		dir = 3;
-	else
-		dir = 2;
-
-	return dir;
+		return 6;
+	if (theta > pie[1])
+		return 7;
+	if (theta > pie[2])
+		return 0;
+	if (theta > pie[3])
+		return 1;
+	if (theta < -pie[1])
+		return 5;
+	if (theta < -pie[2])
+		return 4;
+	if (theta < -pie[3])
+		return 3;
+	return 2;
 }
 
 /**

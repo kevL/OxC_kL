@@ -720,7 +720,7 @@ void BaseView::draw()
 	// draw crafts left to right, top row to bottom.
 	std::vector<Craft*>::const_iterator i = _base->getCrafts()->begin();
 	BaseFacility* fac;
-	bool hasDog = (_base->getItems()->getItemQty("STR_DOGE") != 0);
+	bool hasDog = (_base->getStorageItems()->getItemQty("STR_DOGE") != 0);
 	std::vector<std::pair<int, int> > dogPosition;
 	int
 		posDog_x,

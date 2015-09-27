@@ -932,7 +932,7 @@ void DebriefingState::prepareDebriefing() // private.
 			else
 			{
 				_base->setInBattlescape(false);
-				_base->cleanupDefenses(false);
+				_base->cleanupDefenses();
 
 				bool facDestroyed = false; // not in stockcode
 				for (std::vector<BaseFacility*>::const_iterator
@@ -1233,7 +1233,7 @@ void DebriefingState::prepareDebriefing() // private.
 					}
 					else // not soldier -> tank
 					{
-						_base->getItems()->addItem((*i)->getType());
+						_base->getStorageItems()->addItem((*i)->getType());
 
 						if (_skirmish == false)
 							_missionCost += _base->hwpExpense((*i)->getArmor()->getSize() * (*i)->getArmor()->getSize());
@@ -1254,9 +1254,9 @@ void DebriefingState::prepareDebriefing() // private.
 									if (itRule->getClipSize() != 0) // meaning this tank can store multiple rounds
 										total /= ammoItem->getRules()->getClipSize();
 
-									_base->getItems()->addItem(
-															itRule->getCompatibleAmmo()->front(),
-															total);
+									_base->getStorageItems()->addItem(
+																	itRule->getCompatibleAmmo()->front(),
+																	total);
 								}
 							}
 						}
@@ -1274,9 +1274,9 @@ void DebriefingState::prepareDebriefing() // private.
 									if (itRule->getClipSize() != 0) // meaning this tank can store multiple rounds
 										total /= ammoItem->getRules()->getClipSize();
 
-									_base->getItems()->addItem(
-															itRule->getCompatibleAmmo()->front(),
-															total);
+									_base->getStorageItems()->addItem(
+																	itRule->getCompatibleAmmo()->front(),
+																	total);
 								}
 							}
 						}
@@ -1548,9 +1548,9 @@ void DebriefingState::prepareDebriefing() // private.
 		{
 			const int total_clips = i->second / i->first->getClipSize();
 			if (total_clips > 0)
-				_base->getItems()->addItem(
-										i->first->getType(),
-										total_clips);
+				_base->getStorageItems()->addItem(
+												i->first->getType(),
+												total_clips);
 		}
 	}
 
@@ -1578,9 +1578,7 @@ void DebriefingState::prepareDebriefing() // private.
 			if ((*i)->recover == true
 				&& (*i)->qty > 0)
 			{
-				_base->getItems()->addItem(
-										(*i)->item,
-										(*i)->qty);
+				_base->getStorageItems()->addItem((*i)->item, (*i)->qty);
 			}
 		}
 
@@ -1694,32 +1692,32 @@ void DebriefingState::reequipCraft(Craft* craft) // private.
 		qtyLost;
 //	int used; // kL
 
-	const std::map<std::string, int> craftItems = *craft->getItems()->getContents();
+	const std::map<std::string, int> craftItems = *craft->getCraftItems()->getContents();
 	for (std::map<std::string, int>::const_iterator
 			i = craftItems.begin();
 			i != craftItems.end();
 			++i)
 	{
-		qtyBase = _base->getItems()->getItemQty(i->first);
+		qtyBase = _base->getStorageItems()->getItemQty(i->first);
 
 		if (qtyBase >= i->second)
 		{
-			_base->getItems()->removeItem(
-										i->first,
-										i->second);
+			_base->getStorageItems()->removeItem(
+											i->first,
+											i->second);
 //			used = i->second; // kL
 		}
 		else
 		{
-			_base->getItems()->removeItem(
-										i->first,
-										qtyBase);
+			_base->getStorageItems()->removeItem(
+											i->first,
+											qtyBase);
 
 			qtyLost = i->second - qtyBase;
-			craft->getItems()->removeItem(
-										i->first,
-										qtyLost);
-//										i->second - qtyBase); // kL
+			craft->getCraftItems()->removeItem(
+											i->first,
+											qtyLost);
+//											i->second - qtyBase); // kL
 //			used = qtyLost; // kL
 
 			const ReequipStat stat =
@@ -1790,7 +1788,7 @@ void DebriefingState::reequipCraft(Craft* craft) // private.
 			i != craftVehicles.getContents()->end();
 			++i)
 	{
-		qtyBase = _base->getItems()->getItemQty(i->first);
+		qtyBase = _base->getStorageItems()->getItemQty(i->first);
 		addTanks = std::min(
 						qtyBase,
 						i->second);
@@ -1834,9 +1832,7 @@ void DebriefingState::reequipCraft(Craft* craft) // private.
 														tankSize));
 			}
 
-			_base->getItems()->removeItem(
-									i->first,
-									addTanks);
+			_base->getStorageItems()->removeItem(i->first, addTanks);
 		}
 		else // so this tank requires ammo
 		{
@@ -1849,7 +1845,7 @@ void DebriefingState::reequipCraft(Craft* craft) // private.
 				ammoPerVehicle = tankRule->getClipSize() / ammoRule->getClipSize();
 			}
 
-			const int baseQty = _base->getItems()->getItemQty(ammoRule->getType()); // Ammo Quantity for this vehicle-type on the base
+			const int baseQty = _base->getStorageItems()->getItemQty(ammoRule->getType()); // Ammo Quantity for this vehicle-type on the base
 
 			if (baseQty < i->second * ammoPerVehicle)
 			{
@@ -1880,14 +1876,14 @@ void DebriefingState::reequipCraft(Craft* craft) // private.
 															ammoPerVehicle,
 															tankSize));
 
-					_base->getItems()->removeItem(
-											ammoRule->getType(),
-											ammoPerVehicle);
+					_base->getStorageItems()->removeItem(
+													ammoRule->getType(),
+													ammoPerVehicle);
 				}
 
-				_base->getItems()->removeItem(
-										i->first,
-										addTanks);
+				_base->getStorageItems()->removeItem(
+												i->first,
+												addTanks);
 			}
 		}
 
@@ -1960,7 +1956,7 @@ void DebriefingState::recoverItems(std::vector<BattleItem*>* const battleItems) 
 									unit->getValue() / 3); // This should rather be the 'recoveryPoints' of the corpse item!
 
 								if (unit->getArmor()->getCorpseGeoscape().empty() == false) // safety.
-									_base->getItems()->addItem(unit->getArmor()->getCorpseGeoscape());
+									_base->getStorageItems()->addItem(unit->getArmor()->getCorpseGeoscape());
 							}
 							else if (unit->getUnitStatus() == STATUS_UNCONSCIOUS
 								|| (unit->getUnitStatus() == STATUS_LIMBO
@@ -2006,7 +2002,7 @@ void DebriefingState::recoverItems(std::vector<BattleItem*>* const battleItems) 
 
 					default: // fall-through, recover the weapon/item itself
 						if (itRule->isRecoverable() == true)
-							_base->getItems()->addItem(itRule->getType());
+							_base->getStorageItems()->addItem(itRule->getType());
 				}
 			}
 		}
@@ -2039,7 +2035,7 @@ void DebriefingState::recoverLiveAlien(BattleUnit* const unit) // private.
 			"STR_LIVE_ALIENS_RECOVERED",
 			value);
 
-		_base->getItems()->addItem(type);
+		_base->getStorageItems()->addItem(type);
 
 		_manageContainment = _base->getAvailableContainment()
 						   - (_base->getUsedContainment() * _limitsEnforced) < 0;
@@ -2060,7 +2056,7 @@ void DebriefingState::recoverLiveAlien(BattleUnit* const unit) // private.
 		const std::string corpseItem = unit->getArmor()->getCorpseGeoscape();
 
 		if (corpseItem.empty() == false) // safety.
-			_base->getItems()->addItem(corpseItem);
+			_base->getStorageItems()->addItem(corpseItem);
 	}
 }
 

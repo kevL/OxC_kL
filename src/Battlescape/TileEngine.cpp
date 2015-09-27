@@ -6270,8 +6270,8 @@ int TileEngine::getDirectionTo(
 
 	const double
 		theta = std::atan2( // radians: + = y > 0; - = y < 0;
-						static_cast<double>(-posTarget.y - posOrigin.y),
-						static_cast<double>( posTarget.x - posOrigin.x)),
+						static_cast<double>(posOrigin.y - posTarget.y),
+						static_cast<double>(posTarget.x - posOrigin.x)),
 
 		// divide the pie in 4 thetas each at 1/8th before each quarter
 		pi_8 = M_PI / 8.,				// a circle divided into 16 sections (rads) -> 22.5 deg
@@ -6284,25 +6284,21 @@ int TileEngine::getDirectionTo(
 			pi_8 + d					// 0.39269908169872415480783042290994	-> 22.5 deg
 		};
 
-	int dir;
 	if (theta > pie[0] || theta < -pie[0])
-		dir = 6;
-	else if (theta > pie[1])
-		dir = 7;
-	else if (theta > pie[2])
-		dir = 0;
-	else if (theta > pie[3])
-		dir = 1;
-	else if (theta < -pie[1])
-		dir = 5;
-	else if (theta < -pie[2])
-		dir = 4;
-	else if (theta < -pie[3])
-		dir = 3;
-	else
-		dir = 2;
-
-	return dir;
+		return 6;
+	if (theta > pie[1])
+		return 7;
+	if (theta > pie[2])
+		return 0;
+	if (theta > pie[3])
+		return 1;
+	if (theta < -pie[1])
+		return 5;
+	if (theta < -pie[2])
+		return 4;
+	if (theta < -pie[3])
+		return 3;
+	return 2;
 }
 
 /**

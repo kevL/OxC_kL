@@ -109,13 +109,13 @@ SoldierArmorState::SoldierArmorState(
 			++i)
 	{
 		armorRule = _game->getRuleset()->getArmor(*i);
-		if (_base->getItems()->getItemQty(armorRule->getStoreItem()) != 0)
+		if (_base->getStorageItems()->getItemQty(armorRule->getStoreItem()) != 0)
 		{
 			_armors.push_back(armorRule);
 
 			std::wostringstream woststr;
 			if (_game->getSavedGame()->getMonthsPassed() != -1)
-				woststr << _base->getItems()->getItemQty(armorRule->getStoreItem());
+				woststr << _base->getStorageItems()->getItemQty(armorRule->getStoreItem());
 			else
 				woststr << L"-";
 
@@ -127,9 +127,7 @@ SoldierArmorState::SoldierArmorState(
 		else if (armorRule->getStoreItem() == "STR_NONE")
 		{
 			_armors.push_back(armorRule);
-			_lstArmor->addRow(
-							1,
-							tr(armorRule->getType()).c_str());
+			_lstArmor->addRow(1, tr(armorRule->getType()).c_str());
 		}
 	}
 
@@ -160,10 +158,10 @@ void SoldierArmorState::lstArmorClick(Action*)
 	if (_game->getSavedGame()->getMonthsPassed() != -1)
 	{
 		if (_soldier->getArmor()->getStoreItem() != "STR_NONE")
-			_base->getItems()->addItem(_soldier->getArmor()->getStoreItem());
+			_base->getStorageItems()->addItem(_soldier->getArmor()->getStoreItem());
 
 		if (_armors[_lstArmor->getSelectedRow()]->getStoreItem() != "STR_NONE")
-			_base->getItems()->removeItem(_armors[_lstArmor->getSelectedRow()]->getStoreItem());
+			_base->getStorageItems()->removeItem(_armors[_lstArmor->getSelectedRow()]->getStoreItem());
 	}
 
 	_soldier->setArmor(_armors[_lstArmor->getSelectedRow()]);

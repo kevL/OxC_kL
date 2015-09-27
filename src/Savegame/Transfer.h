@@ -94,9 +94,9 @@ private:
 		Craft* getCraft() const;
 
 		/// Gets the items of the transfer.
-		std::string getItems() const;
+		std::string getTransferItems() const;
 		/// Sets the items of the transfer.
-		void setItems(
+		void setTransferItems(
 				const std::string& id,
 				int qty = 1);
 

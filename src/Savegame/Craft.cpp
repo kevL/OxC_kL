@@ -623,7 +623,7 @@ std::vector<CraftWeapon*>* Craft::getWeapons()
  * Gets the list of items in the craft.
  * @return, pointer to the ItemContainer list
  */
-ItemContainer* Craft::getItems() const
+ItemContainer* Craft::getCraftItems() const
 {
 	return _items;
 }
@@ -932,7 +932,7 @@ std::string Craft::rearm(const Ruleset* const rules)
 			test.clear();
 
 			const std::string clip = (*i)->getRules()->getClipItem();
-			const int baseClips = _base->getItems()->getItemQty(clip);
+			const int baseClips = _base->getStorageItems()->getItemQty(clip);
 
 			if (clip.empty() == true)
 				(*i)->rearm();
@@ -951,9 +951,9 @@ std::string Craft::rearm(const Ruleset* const rules)
 						_warning = CW_CANTREARM;
 					}
 
-					_base->getItems()->removeItem(
-												clip,
-												clipsUsed);
+					_base->getStorageItems()->removeItem(
+														clip,
+														clipsUsed);
 				}
 			}
 			else // no ammo at base
@@ -1218,7 +1218,7 @@ int Craft::getDowntime(bool& delayed)
 				const std::string clip = (*i)->getRules()->getClipItem();
 				if (clip.empty() == false)
 				{
-					int baseQty = _base->getItems()->getItemQty(clip);
+					int baseQty = _base->getStorageItems()->getItemQty(clip);
 					if (baseQty < reqQty)
 					{
 						for (std::vector<Transfer*>::const_iterator // check Transfers
@@ -1227,7 +1227,7 @@ int Craft::getDowntime(bool& delayed)
 								++j)
 						{
 							if ((*j)->getType() == TRANSFER_ITEM
-								&& (*j)->getItems() == clip)
+								&& (*j)->getTransferItems() == clip)
 							{
 								baseQty += (*j)->getQuantity();
 
@@ -1258,7 +1258,7 @@ int Craft::getDowntime(bool& delayed)
 			const std::string fuel = _crRule->getRefuelItem();
 			if (fuel.empty() == false)
 			{
-				int baseQty = _base->getItems()->getItemQty(fuel);
+				int baseQty = _base->getStorageItems()->getItemQty(fuel);
 				if (baseQty < reqQty) // check Transfers
 				{
 					for (std::vector<Transfer*>::const_iterator // check Transfers
@@ -1267,7 +1267,7 @@ int Craft::getDowntime(bool& delayed)
 							++i)
 					{
 						if ((*i)->getType() == TRANSFER_ITEM
-							&& (*i)->getItems() == fuel)
+							&& (*i)->getTransferItems() == fuel)
 						{
 							baseQty += (*i)->getQuantity();
 

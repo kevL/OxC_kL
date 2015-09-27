@@ -534,10 +534,9 @@ bool ProjectileFlyBState::createNewProjectile() // private.
 		_prjImpact = prj->calculateThrow(_unit->getAccuracy(_action)); // this should probly be TE:validateThrow() - cf. else(error) below_
 		//Log(LOG_INFO) << ". acid spit, part = " << (int)_prjImpact;
 
-		if (_prjImpact != VOXEL_EMPTY
-			 && _prjImpact != VOXEL_OUTOFBOUNDS)
+		if (/*_prjImpact != VOXEL_EMPTY &&*/ _prjImpact != VOXEL_OUTOFBOUNDS) // test <-
 		{
-			//Log(LOG_INFO) << ". . spit/ arcing shot";
+			//Log(LOG_INFO) << ". . spit/arcing shot";
 			if (_prjImpact == VOXEL_OBJECT
 				&& _ammo->getRules()->getExplosionRadius() > 0)
 			{
@@ -550,6 +549,10 @@ bool ProjectileFlyBState::createNewProjectile() // private.
 				}
 			}
 
+			_ammo->spendBullet(
+							*_battleSave,
+							*_action.weapon);
+
 			_unit->startAiming();
 			_unit->clearCache();
 			_parent->getMap()->cacheUnit(_unit);
@@ -558,11 +561,6 @@ bool ProjectileFlyBState::createNewProjectile() // private.
 			soundId = _ammo->getRules()->getFireSound();
 			if (soundId == -1)
 				soundId = _action.weapon->getRules()->getFireSound();
-
-			if (_action.type != BA_LAUNCH)
-				_ammo->spendBullet(
-								*_battleSave,
-								*_action.weapon);
 		}
 		else // no line of fire; Note that BattleUnit accuracy^ should *not* be considered before this. Unless this is some sort of failsafe/exploit for the AI ...
 		{
@@ -581,14 +579,14 @@ bool ProjectileFlyBState::createNewProjectile() // private.
 	}
 	else // shoot weapon
 	{
-		if (_originVoxel != Position(-1,-1,-1)) // here, origin is a BL waypoint
+		if (_originVoxel != Position(-1,-1,-1)) // origin is a BL waypoint
 		{
 			_prjImpact = prj->calculateShot( // this should probly be TE:plotLine() - cf. else(error) below_
 										_unit->getAccuracy(_action),
 										_originVoxel);
 			//Log(LOG_INFO) << ". shoot weapon[0], voxelType = " << (int)_prjImpact;
 		}
-		else // this is non-BL weapon shooting
+		else // non-BL weapon
 		{
 			_prjImpact = prj->calculateShot(_unit->getAccuracy(_action)); // this should probly be TE:plotLine() - cf. else(error) below_
 			//Log(LOG_INFO) << ". shoot weapon[1], voxelType = " << (int)_prjImpact;
@@ -615,6 +613,10 @@ bool ProjectileFlyBState::createNewProjectile() // private.
 
 			if (_action.type == BA_LAUNCH)
 				_parent->getMap()->setWaypointAction(); // reveal the Map until waypoint action completes.
+			else
+				_ammo->spendBullet(
+								*_battleSave,
+								*_action.weapon);
 
 			_unit->aim();
 			_unit->clearCache();
@@ -624,11 +626,6 @@ bool ProjectileFlyBState::createNewProjectile() // private.
 			soundId = _ammo->getRules()->getFireSound();
 			if (soundId == -1)
 				soundId = _action.weapon->getRules()->getFireSound();
-
-			if (_action.type != BA_LAUNCH)
-				_ammo->spendBullet(
-								*_battleSave,
-								*_action.weapon);
 		}
 		else // VOXEL_EMPTY, no line of fire; Note that BattleUnit accuracy^ should *not* be considered before this. Unless this is some sort of failsafe/exploit for the AI ...
 		{
@@ -781,13 +778,8 @@ void ProjectileFlyBState::think()
 														_action.type != BA_HIT);
 			}
 
-			//Log(LOG_INFO) << "ProjectileFlyBState::think() current Status = " << (int)_unit->getUnitStatus();
-			if (_unit->isOut_t() == false
-				&& _action.type != BA_HIT)
-			{
+			if (_unit->isOut_t() == false && _action.type != BA_HIT)
 				_unit->setUnitStatus(STATUS_STANDING);
-			}
-			//Log(LOG_INFO) << "ProjectileFlyBState::think() current Status = " << (int)_unit->getUnitStatus();
 
 //			if (_battleSave->getSide() == FACTION_PLAYER || _battleSave->getDebugMode() == true)
 //				_parent->setupCursor(); // <- not yet! Do it in popState() when everything is finished.

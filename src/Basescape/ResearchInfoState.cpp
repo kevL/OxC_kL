@@ -156,7 +156,7 @@ void ResearchInfoState::buildUi()
 			&& (Options::spendResearchedItems == true
 				|| _game->getRuleset()->getUnit(_rule->getName()) != NULL))
 		{
-			_base->getItems()->removeItem(_rule->getName());
+			_base->getStorageItems()->removeItem(_rule->getName());
 		}
 	}
 
@@ -233,7 +233,7 @@ void ResearchInfoState::btnCancelClick(Action*)
 		&& (Options::spendResearchedItems == true
 			|| _game->getRuleset()->getUnit(resRule->getName()) != NULL))
 	{
-		_base->getItems()->addItem(resRule->getName());
+		_base->getStorageItems()->addItem(resRule->getName());
 	}
 
 	_base->removeResearch(

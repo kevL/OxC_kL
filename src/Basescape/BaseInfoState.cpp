@@ -334,7 +334,7 @@ void BaseInfoState::init()
 	}
 
 	_btnTransfers->setVisible(_base->getTransfers()->empty() == false);
-	_btnStores->setVisible(_base->getItems()->getTotalQuantity() != 0);
+	_btnStores->setVisible(_base->getStorageItems()->getTotalQuantity() != 0);
 
 	std::wostringstream
 		woststr1,

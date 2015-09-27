@@ -100,6 +100,9 @@ BaseDefenseState::BaseDefenseState(
 					Options::keyOk);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& BaseDefenseState::btnOkClick,
+					Options::keyOkKeypad);
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& BaseDefenseState::btnOkClick,
 					Options::keyCancel);
 	_btnOk->setVisible(false);
 
@@ -108,7 +111,7 @@ BaseDefenseState::BaseDefenseState(
 
 	_txtInit->setAlign(ALIGN_CENTER);
 
-	_lstDefenses->setColumns(3, 130, 80, 67);
+	_lstDefenses->setColumns(3, 130,80,67);
 
 	_txtDestroyed->setAlign(ALIGN_CENTER);
 
@@ -152,14 +155,11 @@ void BaseDefenseState::nextStep()
 	{
 		if (_stLen_initiate <= _initiate.size())
 		{
-			_txtInit->setText(_initiate.substr(
-											0,
-											_stLen_initiate++));
+			_txtInit->setText(_initiate.substr(0, _stLen_initiate++));
 			return;
 		}
 
 		++_thinkCycles;
-
 		if (_thinkCycles > 3)
 		{
 			switch (_action)
@@ -169,11 +169,8 @@ void BaseDefenseState::nextStep()
 					{
 						if (_stLen_destroyed == 0)
 						{
-							_lstDefenses->addRow(
-											3,
-											L" ",L" ",L" ");
+							_lstDefenses->addRow(3, L" ",L" ",L" ");
 							++_row;
-
 							_timer->setInterval(TI_FAST);
 						}
 
@@ -182,18 +179,14 @@ void BaseDefenseState::nextStep()
 
 						if (_stLen_destroyed <= _destroyed.size())
 						{
-							_txtDestroyed->setText(_destroyed.substr(
-																0,
-																_stLen_destroyed++));
+							_txtDestroyed->setText(_destroyed.substr(0, _stLen_destroyed++));
 							return;
 						}
 
 						_timer->setInterval(TI_MEDIUM);
 					}
 
-					_game->getResourcePack()->playSoundFX(
-													ResourcePack::UFO_EXPLODE,
-													true);
+					_game->getResourcePack()->playSoundFX(ResourcePack::UFO_EXPLODE, true);
 
 					if (++_explosionCount == 3)
 						_action = BD_END;
@@ -216,12 +209,8 @@ void BaseDefenseState::nextStep()
 				{
 					if (_stLen_repulsed == 0)
 					{
-						_lstDefenses->addRow(
-										3,
-										L" ",L" ",L" ");
-						_lstDefenses->addRow(
-										3,
-										L" ",L" ",L" "); // <- gravShield repels UFO
+						_lstDefenses->addRow(3, L" ",L" ",L" ");
+						_lstDefenses->addRow(3, L" ",L" ",L" "); // <- gravShield repels UFO
 
 						_row += 2;
 						if (_row > 14)
@@ -233,26 +222,19 @@ void BaseDefenseState::nextStep()
 					if (_stLen_repulsed <= _repulsed.size())
 					{
 						_lstDefenses->setCellText(
-											_row - 1,
-											0,
-											_repulsed.substr(
-														0,
-														_stLen_repulsed++));
+											_row - 1, 0,
+											_repulsed.substr(0, _stLen_repulsed++));
 
 						if (_stLen_repulsed > _repulsed.size())
 						{
-							_lstDefenses->addRow(
-											3,
-											L" ",L" ",L" ");
+							_lstDefenses->addRow(3, L" ",L" ",L" ");
 							++_row;
 						}
-
 						return;
 					}
 
 					++_passes;
 					_attacks = 0;
-
 					_timer->setInterval(TI_MEDIUM);
 					return;
 				}
@@ -270,21 +252,18 @@ void BaseDefenseState::nextStep()
 									tr(defFac->getRules()->getType()).c_str(),
 									L" ",L" ");
 					++_row;
-					if (_row > 14)
-						_lstDefenses->scrollDown(true);
+					if (_row > 14) _lstDefenses->scrollDown(true);
 				return;
 
 				case BD_FIRE:
 					_lstDefenses->setCellText(
-											_row - 1,
-											1,
+											_row - 1, 1,
 											tr("STR_FIRING").c_str());
 //					_lstDefenses->setCellColor(_row - 1, 1, 160, /* slate */ true);
 
 					_game->getResourcePack()->playSoundFX(
 													defFac->getRules()->getFireSound(),
 													true);
-
 					_action = BD_RESOLVE;
 					_timer->setInterval(TI_SLOW);
 				return;
@@ -301,16 +280,14 @@ void BaseDefenseState::nextStep()
 						_ufo->setUfoDamage(_ufo->getUfoDamage() + power);
 
 						_lstDefenses->setCellText(
-											_row - 1,
-											2,
+											_row - 1, 2,
 											tr("STR_HIT").c_str());
 //						_lstDefenses->setCellColor(_row - 1, 2, 32, /* green */ true);
 					}
 					else
 					{
 						_lstDefenses->setCellText(
-											_row - 1,
-											2,
+											_row - 1, 2,
 											tr("STR_MISSED").c_str());
 //						_lstDefenses->setCellColor(_row - 1, 2, 144, /* brown */ true);
 					}

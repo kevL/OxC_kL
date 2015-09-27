@@ -265,7 +265,7 @@ SellState::SellState(Base* const base)
 			i != itemList.end();
 			++i)
 	{
-		int qty = _base->getItems()->getItemQty(*i);
+		int qty = _base->getStorageItems()->getItemQty(*i);
 
 /*		if (Options::storageLimitsEnforced == true
 			&& origin == OPT_BATTLESCAPE)
@@ -450,7 +450,7 @@ void SellState::btnOkClick(Action*)
 						if (*j == _soldiers[i])
 						{
 							if ((*j)->getArmor()->getStoreItem() != "STR_NONE")
-								_base->getItems()->addItem((*j)->getArmor()->getStoreItem());
+								_base->getStorageItems()->addItem((*j)->getArmor()->getStoreItem());
 
 							_base->getSoldiers()->erase(j);
 							break;
@@ -471,21 +471,19 @@ void SellState::btnOkClick(Action*)
 					{
 						if (*j != NULL)
 						{
-							_base->getItems()->addItem((*j)->getRules()->getLauncherItem());
-							_base->getItems()->addItem(
-													(*j)->getRules()->getClipItem(),
-													(*j)->getClipsLoaded(_game->getRuleset()));
+							_base->getStorageItems()->addItem((*j)->getRules()->getLauncherItem());
+							_base->getStorageItems()->addItem(
+														(*j)->getRules()->getClipItem(),
+														(*j)->getClipsLoaded(_game->getRuleset()));
 						}
 					}
 
 					for (std::map<std::string, int>::const_iterator // remove items from craft
-							j = craft->getItems()->getContents()->begin();
-							j != craft->getItems()->getContents()->end();
+							j = craft->getCraftItems()->getContents()->begin();
+							j != craft->getCraftItems()->getContents()->end();
 							++j)
 					{
-						_base->getItems()->addItem(
-												j->first,
-												j->second);
+						_base->getStorageItems()->addItem(j->first, j->second);
 					}
 
 					for (std::vector<Vehicle*>::const_iterator // remove vehicles and their ammo from craft
@@ -493,12 +491,12 @@ void SellState::btnOkClick(Action*)
 							j != craft->getVehicles()->end();
 							++j)
 					{
-						_base->getItems()->addItem((*j)->getRules()->getType());
+						_base->getStorageItems()->addItem((*j)->getRules()->getType());
 
 						if ((*j)->getRules()->getCompatibleAmmo()->empty() == false)
-							_base->getItems()->addItem(
-													(*j)->getRules()->getCompatibleAmmo()->front(),
-													(*j)->getAmmo());
+							_base->getStorageItems()->addItem(
+														(*j)->getRules()->getCompatibleAmmo()->front(),
+														(*j)->getAmmo());
 					}
 
 					for (std::vector<Soldier*>::const_iterator // remove soldiers from craft
@@ -608,9 +606,9 @@ void SellState::btnOkClick(Action*)
 						}
 					}
 					else */
-					_base->getItems()->removeItem(
-												_items[getItemIndex(i)],
-												_sellQty[i]);
+					_base->getStorageItems()->removeItem(
+													_items[getItemIndex(i)],
+													_sellQty[i]);
 			}
 		}
 	}
@@ -756,7 +754,7 @@ int SellState::getQuantity() // private.
 			return _base->getEngineers();
 
 		case SELL_ITEM:
-			qty = _base->getItems()->getItemQty(_items[getItemIndex(_sel)]);
+			qty = _base->getStorageItems()->getItemQty(_items[getItemIndex(_sel)]);
 /*			if (Options::storageLimitsEnforced == true
 				&& _origin == OPT_BATTLESCAPE)
 			{
