@@ -534,11 +534,13 @@ bool ProjectileFlyBState::createNewProjectile() // private.
 		_prjImpact = prj->calculateThrow(_unit->getAccuracy(_action)); // this should probly be TE:validateThrow() - cf. else(error) below_
 		//Log(LOG_INFO) << ". acid spit, part = " << (int)_prjImpact;
 
-		if (/*_prjImpact != VOXEL_EMPTY &&*/ _prjImpact != VOXEL_OUTOFBOUNDS) // test <-
+		if (_prjImpact != VOXEL_OUTOFBOUNDS
+			&& (_prjImpact != VOXEL_EMPTY
+				|| _ammo->getRules()->getExplosionRadius() != -1)) // <- midair explosion
 		{
 			//Log(LOG_INFO) << ". . spit/arcing shot";
 			if (_prjImpact == VOXEL_OBJECT
-				&& _ammo->getRules()->getExplosionRadius() > 0)
+				&& _ammo->getRules()->getExplosionRadius() != -1)
 			{
 				const Tile* const tile = _battleSave->getTile(_parent->getMap()->getProjectile()->getFinalPosition());
 				if (tile->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NESW
@@ -873,15 +875,15 @@ void ProjectileFlyBState::think()
 				}
 
 //				if (_action.type != BA_LAUNCH) // only counts for guns, not throws or launches
-//					_action.type == BA_SNAPSHOT || _action.type == BA_AUTOSHOT || _action.type == BA_AIMEDSHOT
-//				{
-				BattleUnit* const shotAt = _battleSave->getTile(_action.target)->getUnit();
-				if (shotAt != NULL
-					&& shotAt->getGeoscapeSoldier() != NULL)
+				if (_action.type == BA_SNAPSHOT || _action.type == BA_AUTOSHOT || _action.type == BA_AIMEDSHOT)
 				{
-					++shotAt->getStatistics()->shotAtCounter;
+					BattleUnit* const shotAt = _battleSave->getTile(_action.target)->getUnit();
+					if (shotAt != NULL
+						&& shotAt->getGeoscapeSoldier() != NULL)
+					{
+						++shotAt->getStatistics()->shotAtCounter;
+					}
 				}
-//				}
 
 				if (_action.type == BA_LAUNCH && _ammo != NULL) //&& _battleSave->getDebugMode() == false
 					_ammo->spendBullet(
@@ -895,7 +897,7 @@ void ProjectileFlyBState::think()
 					//Log(LOG_INFO) << "FlyB: *not* OoB";
 					int trjOffset;		// explosions impact not inside the voxel but two steps back;
 					if (_ammo != NULL	// projectiles generally move 2 voxels at a time
-						&& _ammo->getRules()->getExplosionRadius() > -1
+						&& _ammo->getRules()->getExplosionRadius() != -1
 						&& _prjImpact != VOXEL_UNIT)
 					{
 						trjOffset = -2; // step back a bit so tileExpl isn't behind a wall.
@@ -932,9 +934,7 @@ void ProjectileFlyBState::think()
 																|| _action.weapon->getAmmoItem() == NULL));
 
 					if (_prjImpact == VOXEL_UNIT
-						&& (_action.type == BA_SNAPSHOT
-							|| _action.type == BA_AUTOSHOT
-							|| _action.type == BA_AIMEDSHOT))
+						&& (_action.type == BA_SNAPSHOT || _action.type == BA_AUTOSHOT || _action.type == BA_AIMEDSHOT))
 					{
 						posContacts.push_back(Position::toTileSpace(_parent->getMap()->getProjectile()->getPosition(trjOffset)));
 					}

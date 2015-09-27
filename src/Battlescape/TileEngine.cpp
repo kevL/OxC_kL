@@ -4978,6 +4978,7 @@ VoxelType TileEngine::plotLine(
  * @param trj			- pointer to a vector of Positions in which the trajectory will be stored
  * @param excludeUnit	- pointer to a unit to exclude - makes sure the trajectory does not hit the shooter itself
  * @param arc			- how high the parabola goes: 1.0 is almost straight throw, 3.0 is a very high throw, to throw over a fence for example
+ * @param allowCeiling	- true to allow arching shots to hit a ceiling ... (default false)
  * @param deltaVoxel	- reference the deviation of the angles that should be taken into account (0,0,0) is perfection (default Position(0,0,0))
  * @return, VoxelType (MapData.h)
  *			 -1 hit nothing
@@ -4999,10 +5000,9 @@ VoxelType TileEngine::plotParabola(
 		std::vector<Position>* const trj,
 		const BattleUnit* const excludeUnit,
 		const double arc,
+		const bool allowCeiling,
 		const Position& deltaVoxel) const
 {
-	//Log(LOG_INFO) << " ";
-	//Log(LOG_INFO) << "TileEngine::plotParabola()";
 	const double ro = std::sqrt(static_cast<double>(
 					 (targetVoxel.x - originVoxel.x) * (targetVoxel.x - originVoxel.x)
 				   + (targetVoxel.y - originVoxel.y) * (targetVoxel.y - originVoxel.y)
@@ -5027,52 +5027,56 @@ VoxelType TileEngine::plotParabola(
 	int
 		x = originVoxel.x,
 		y = originVoxel.y,
-		z = originVoxel.z,
-		i = 8;
+		z = originVoxel.z;
+	double d = 8.;
 
 	Position
 		startVoxel = Position(x,y,z),
-		destVoxel;
+		destVoxel,
+		posDest = Position::toTileSpace(targetVoxel);
 
-	while (z > 0)
+	while (z > -1) // while airborne ->
 	{
-		x = static_cast<int>(static_cast<double>(originVoxel.x) + static_cast<double>(i) * std::cos(te) * std::sin(fi));
-		y = static_cast<int>(static_cast<double>(originVoxel.y) + static_cast<double>(i) * std::sin(te) * std::sin(fi));
-		z = static_cast<int>(static_cast<double>(originVoxel.z) + static_cast<double>(i) * std::cos(fi)
-				- zK * (static_cast<double>(i) - ro / 2.) * (static_cast<double>(i) - ro / 2.)
+		x = static_cast<int>(static_cast<double>(originVoxel.x) + d * std::cos(te) * std::sin(fi));
+		y = static_cast<int>(static_cast<double>(originVoxel.y) + d * std::sin(te) * std::sin(fi));
+		z = static_cast<int>(static_cast<double>(originVoxel.z) + d * std::cos(fi)
+				- zK * (d - ro / 2.) * (d - ro / 2.)
 				+ zA);
-
-		if (storeTrj == true && trj != NULL)
-			trj->push_back(Position(x,y,z));
-
 		destVoxel = Position(x,y,z);
+
+		if (storeTrj == true)
+			trj->push_back(destVoxel);
+
 		VoxelType voxelType = plotLine(
 									startVoxel,
 									destVoxel,
 									false,
 									NULL,
 									excludeUnit);
-
-		if (voxelType != VOXEL_EMPTY)
+		if (voxelType != VOXEL_EMPTY
+			|| (destVoxel.z < startVoxel.z
+				&& destVoxel.z < posDest.z * 24 + 2
+				&& Position::toTileSpace(destVoxel) == posDest))
 		{
-			if (startVoxel.z < destVoxel.z)
-				voxelType = VOXEL_OUTOFBOUNDS;
+			if (startVoxel.z < destVoxel.z
+				&& allowCeiling == false)
+			{
+				voxelType = VOXEL_OUTOFBOUNDS; // <- do not stick to ceilings ....
+			}
 
-			if (storeTrj == false && trj != NULL)
+			if (storeTrj == false)
 				trj->push_back(destVoxel);
 
-			//Log(LOG_INFO) << "TE::plotParabola() EXIT w/ voxelType = " << voxelType << " " << trj->back() << " " << Position::toTileSpace(trj->back());
 			return voxelType;
 		}
 
 		startVoxel = destVoxel;
-		++i;
+		d += 1.;
 	}
 
-	if (storeTrj == false && trj != NULL)
+	if (storeTrj == false)
 		trj->push_back(Position(x,y,z));
 
-	//Log(LOG_INFO) << "TileEngine::plotParabola() EXIT w/ Empty";
 	return VOXEL_EMPTY;
 }
 
@@ -5142,8 +5146,7 @@ bool TileEngine::validateThrow(
 	// check for voxelTest up from the lowest arc
 	VoxelType voxelTest;
 
-	bool stop = false;
-	while (stop == false && static_cast<int>(parabolicCoefficient_Low) < 6)
+	while (parabolicCoefficient_Low < 6.)
 	{
 		//Log(LOG_INFO) << ". . arc[1] = " << parabolicCoefficient_Low;
 		std::vector<Position> trj;
@@ -5153,25 +5156,26 @@ bool TileEngine::validateThrow(
 							false,
 							&trj,
 							action.actor,
-							parabolicCoefficient_Low);
+							parabolicCoefficient_Low,
+							action.type != BA_THROW);
 		//Log(LOG_INFO) << ". . plotParabola()[1] = " << voxelTest;
 
 		if (voxelTest != VOXEL_OUTOFBOUNDS
 			&& voxelTest != VOXEL_WESTWALL
 			&& voxelTest != VOXEL_NORTHWALL
 			&& Position::toTileSpace(trj.at(0)) == posTarget)
-//			&& (trj.at(0) / Position(16,16,24)) == posTarget)
 		{
 			//Log(LOG_INFO) << ". . . stop[1] TRUE";
-			stop = true;
 			if (voxelType != NULL)
 				*voxelType = voxelTest;
+
+			break;;
 		}
 		else
 			parabolicCoefficient_Low += ARC_DELTA;
 	}
 
-	if (static_cast<int>(parabolicCoefficient_Low) >= 6)
+	if (parabolicCoefficient_Low >= 6.)
 	{
 		//Log(LOG_INFO) << ". vT() ret FALSE, arc > 6";
 		return false;
@@ -5182,8 +5186,7 @@ bool TileEngine::validateThrow(
 		// arc continues rising to find upper limit
 		double parabolicCoefficient_High = parabolicCoefficient_Low;
 
-		stop = false;
-		while (stop == false && static_cast<int>(parabolicCoefficient_High) < 6) // TODO: should use (pC2 < pC+2.0) or so; this just needs to get over the lower limit with some leeway - not 'to the moon'.
+		while (parabolicCoefficient_High < 6.) // TODO: should use (pC2 < pC+2.0) or so; this just needs to get over the lower limit with some leeway - not 'to the moon'.
 		{
 			//Log(LOG_INFO) << ". . arc[2] = " << parabolicCoefficient_High;
 			std::vector<Position> trj;
@@ -5193,17 +5196,17 @@ bool TileEngine::validateThrow(
 								false,
 								&trj,
 								action.actor,
-								parabolicCoefficient_High);
+								parabolicCoefficient_High,
+								action.type != BA_THROW);
 			//Log(LOG_INFO) << ". . plotParabola()[2] = " << voxelTest;
 
 			if (voxelTest == VOXEL_OUTOFBOUNDS
 				|| voxelTest == VOXEL_WESTWALL
 				|| voxelTest == VOXEL_NORTHWALL
 				|| Position::toTileSpace(trj.at(0)) != posTarget)
-//				|| (trj.at(0) / Position(16,16,24)) != posTarget)
 			{
 				//Log(LOG_INFO) << ". . . stop[2] TRUE";
-				stop = true;
+				break;;
 			}
 			else
 				parabolicCoefficient_High += ARC_DELTA;

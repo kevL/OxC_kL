@@ -226,7 +226,7 @@ VoxelType Projectile::calculateShot(
 	//Log(LOG_INFO) << "\n";
 	//Log(LOG_INFO) << ". preAcu target = " << _targetVoxel << " tSpace " << (_targetVoxel / Position(16,16,24));
 	if (_action.type != BA_LAUNCH // Could base BL.. on psiSkill, or sumthin'
-		&& originVoxel / Position(16,16,24) != _targetVoxel / Position(16,16,24))
+		&& Position::toTileSpace(originVoxel) != Position::toTileSpace(_targetVoxel))
 	{
 		//Log(LOG_INFO) << ". preAcu target = " << _targetVoxel << " tSpace " << (_targetVoxel / Position(16,16,24));
 		applyAccuracy( // apply some accuracy modifiers. This will result in a new target voxel:
@@ -275,7 +275,6 @@ VoxelType Projectile::calculateShot(
  */
 VoxelType Projectile::calculateThrow(double accuracy)
 {
-	//Log(LOG_INFO) << "Projectile calculateThrow()";
 	const Position originVoxel = _battleSave->getTileEngine()->getOriginVoxel(_action);
 
 	VoxelType voxelType = VOXEL_OUTOFBOUNDS;
@@ -283,7 +282,7 @@ VoxelType Projectile::calculateThrow(double accuracy)
 	if (_battleSave->getTileEngine()->validateThrow(
 												_action,
 												originVoxel,
-												_targetVoxel, // use targetVoxel from ProjectileFlyBState instead of the arbitrary one that's been commented-out above^ Tks.
+												_targetVoxel,
 												&arc,
 												&voxelType) == true)
 	{
@@ -307,12 +306,13 @@ VoxelType Projectile::calculateThrow(double accuracy)
 																&_trj,
 																_action.actor,
 																arc,
+																_action.type != BA_THROW,
 																deltaVoxel);
 
 			// Don't let thrown items land on diagonal bigWalls.
 			// This prevents exploiting the blast-propagation routine out from both sides of a diagonal bigWall.
 			// See also TileEngine::validateThrow()
-			if (_action.type == BA_THROW)
+			if (voxelTest != VOXEL_OUTOFBOUNDS && _action.type == BA_THROW)
 			{
 				const Tile* const tileTarget = _battleSave->getTile(Position::toTileSpace(_trj.back())); // _trj.at(0) <- see TileEngine::validateThrow()
 				if (tileTarget != NULL
@@ -328,11 +328,9 @@ VoxelType Projectile::calculateThrow(double accuracy)
 			}
 		}
 
-		//Log(LOG_INFO) << "Projectile calculateThrow() EXIT w voxelType = " << voxelType;
 		return voxelType;
 	}
 
-	//Log(LOG_INFO) << "Projectile calculateThrow() EXIT out of bounds";
 	return VOXEL_OUTOFBOUNDS;
 }
 

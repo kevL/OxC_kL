@@ -245,6 +245,7 @@ private:
 				std::vector<Position>* const trj,
 				const BattleUnit* const excludeUnit,
 				const double arc,
+				const bool allowCeiling = false,
 				const Position& deltaVoxel = Position(0,0,0)) const;
 		/// Validates a throwing action.
 		bool validateThrow(
