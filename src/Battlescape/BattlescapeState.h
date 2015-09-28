@@ -211,7 +211,7 @@ private:
 	/// Animates a red cross icon when an injured soldier is selected.
 	void flashMedic();
 	/// Animates a target cursor over hostile unit when hostileUnit indicator is clicked.
-	void drawHostileTargeter();
+	void hostileTargeter();
 	/// Draws an execution explosion on the Map.
 	void executionExplosion();
 	/// Draws a shotgun blast explosion on the Map.

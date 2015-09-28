@@ -622,7 +622,7 @@ bool ProjectileFlyBState::createNewProjectile() // private.
 
 	if (soundId != -1)
 		_parent->getResourcePack()->getSound("BATTLE.CAT", soundId)
-									->play(-1, _parent->getMap()->getSoundAngle(_unit->getPosition()));
+			->play(-1, _parent->getMap()->getSoundAngle(_unit->getPosition()));
 
 	if (_unit->getArmor()->getShootFrames() != 0)
 		_parent->getMap()->showProjectile(false); // postpone showing the Celatid spit-blob till later
@@ -779,7 +779,7 @@ void ProjectileFlyBState::think()
 			{
 //				_parent->getMap()->resetCameraSmoothing();
 				Position
-					throwVoxel = _parent->getMap()->getProjectile()->getPosition(-1),
+					throwVoxel = _parent->getMap()->getProjectile()->getPosition(), // <- beware of 'offset -1'
 					pos = Position::toTileSpace(throwVoxel);
 
 				if (pos.x > _battleSave->getMapSizeX()) // note: Bounds-checking is also done better in Projectile::applyAccuracy()
@@ -967,8 +967,8 @@ void ProjectileFlyBState::think()
 						_prjImpact = prj->calculateShot(accuracy);
 						if (_prjImpact != VOXEL_EMPTY && _prjImpact != VOXEL_OUTOFBOUNDS) // insert an explosion and hit
 						{
-							prj->skipTrajectory();				// skip the pellet to the end of its path
-							shotVoxel = prj->getPosition(1);	// <- beware of 'offset 1'
+							prj->skipTrajectory();			// skip the pellet to the end of its path
+							shotVoxel = prj->getPosition();	// <- beware of 'offset 1'
 
 							if (_prjImpact == VOXEL_UNIT
 								&& (_action.type == BA_SNAPSHOT || _action.type == BA_AUTOSHOT || _action.type == BA_AIMEDSHOT))

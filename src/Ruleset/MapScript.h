@@ -71,8 +71,7 @@ enum MapScriptCommand
 	MSC_FILLAREA,		//  5
 	MSC_CHECKBLOCK,		//  6
 	MSC_REMOVE,			//  7
-	MSC_RESIZE,			//  8
-	MSC_SETUFO			//  9
+	MSC_RESIZE			//  8
 };
 
 class MapBlock;

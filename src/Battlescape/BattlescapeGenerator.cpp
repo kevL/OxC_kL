@@ -2714,12 +2714,16 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*>* const scri
 					break;
 
 					case MSC_ADDUFO:
+						// as above, note that the craft and the ufo will never be allowed to overlap.
+						// TODO: make _ufopos a vector ;|p
 						//Log(LOG_INFO) << "MSC_ADDUFO ->";
-						if (_ufo != NULL)
-						{
-							// as above, note that the craft and the ufo will never be allowed to overlap.
-							// TODO: make _ufopos a vector ;|p
+						if (_rules->getUfo((*i)->getUfoType()) != NULL)
+							ufoTerrain = _rules->getUfo((*i)->getUfoType())->getBattlescapeTerrainData();
+						else if (_ufo != NULL)
 							ufoTerrain = _ufo->getRules()->getBattlescapeTerrainData();
+
+						if (ufoTerrain != NULL)
+						{
 							ufoBlock = ufoTerrain->getRandomMapBlock(
 																	999,999,
 																	0, false);
@@ -2862,38 +2866,6 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*>* const scri
 							_mapsize_z = (*i)->getSizeZ();
 
 						init();
-					break;
-
-					case MSC_SETUFO:
-						if (ufoTerrain != NULL
-							&& _rules->getUfo((*i)->getUfoType()) != NULL)
-						{
-							ufoTerrain = _rules->getUfo((*i)->getUfoType())->getBattlescapeTerrainData();
-							ufoBlock = ufoTerrain->getRandomMapBlock(
-																	999,999,
-																	0, false);
-							if (addCraft(ufoBlock, *i, _ufoPos) == true)
-							{
-								for (
-										x = _ufoPos.x;
-										x != _ufoPos.x + _ufoPos.w;
-										++x)
-								{
-									for (
-											y = _ufoPos.y;
-											y != _ufoPos.y + _ufoPos.h;
-											++y)
-									{
-										if (_blocks[x][y] != NULL)
-											loadMAP(
-													_blocks[x][y],
-													x * 10, y * 10,
-													_terrainRule, 0);
-									}
-								}
-								success = true;
-							}
-						}
 				}
 			}
 		}
@@ -3017,8 +2989,8 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*>* const scri
 						k >= _craftZ;
 						--k)
 				{
-					if (_battleSave->getTile(Position(i, j, k)))
-						_battleSave->getTile(Position(i, j, k))->setDiscovered(true, 2);
+					if (_battleSave->getTile(Position(i,j,k)))
+						_battleSave->getTile(Position(i,j,k))->setDiscovered(true, 2);
 				}
 			}
 		} */

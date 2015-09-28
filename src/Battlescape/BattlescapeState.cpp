@@ -2919,7 +2919,7 @@ void BattlescapeState::animate()
 				flashMedic();
 
 			if (_hostileTargeter->getVisible() == true)
-				drawHostileTargeter();
+				hostileTargeter();
 
 			if (_battleGame->getExecution() == true)
 				executionExplosion();
@@ -3097,7 +3097,7 @@ void BattlescapeState::flashMedic() // private.
 /**
  * Animates a target cursor over hostile unit when hostileUnit indicator is clicked.
  */
-void BattlescapeState::drawHostileTargeter() // private.
+void BattlescapeState::hostileTargeter() // private.
 {
 	static const int cursorFrames[TARGET_FRAMES] = {0,1,2,3,4,0}; // note: does not show the last frame.
 
