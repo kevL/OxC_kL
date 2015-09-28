@@ -396,7 +396,7 @@ void Projectile::applyAccuracy( // private.
 			deltaVert;
 		static const double
 			div_HORI = 6.,
-			div_VERT = 6. * 1.69;
+			div_VERT = div_HORI * 1.69;
 
 		if (_action.autoShotCount == 1)
 		{

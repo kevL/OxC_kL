@@ -2576,8 +2576,8 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*>* const scri
 		++mapDataSetIdOffset;
 	}
 
-
 	// generate the map now and store it inside the tile objects
+	RuleTerrain* ufoTerrain = NULL;
 
 	// this mission type is "hard-coded" in terms of map layout
 	if (_battleSave->getTacType() == TCT_BASEDEFENSE)
@@ -2593,15 +2593,13 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*>* const scri
 			++i)
 	{
 		//Log(LOG_INFO) << "do script Command type = " << (int)(*i)->getType();
-//		scriptCommand = *i;
-
-		if ((*i)->getLabel() > 0
+		if ((*i)->getLabel() != 0
 			&& conditionals.find((*i)->getLabel()) != conditionals.end())
 		{
 			throw Exception("Map generator encountered an error: multiple commands are sharing the same label.");
 		}
 
-		success = conditionals[(*i)->getLabel()] = false;
+		success = conditionals[static_cast<size_t>((*i)->getLabel())] = false;
 
 
 		// if this command runs conditionally on the failures or successes of previous commands
@@ -2619,10 +2617,8 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*>* const scri
 				// ie: [1, -2] means this command only runs if command 1 succeeded and command 2 failed.
 				if (conditionals.find(std::abs(*condition)) != conditionals.end())
 				{
-					if ((*condition > 0
-							&& conditionals[*condition] == false)
-						|| (*condition < 0
-							&& conditionals[std::abs(*condition)] == true))
+					if ((*condition > 0 && conditionals[*condition] == false)
+						|| (*condition < 0 && conditionals[std::abs(*condition)] == true))
 					{
 						execute = false;
 						break;
@@ -2684,13 +2680,9 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*>* const scri
 						{
 							craftBlock = _craft->getRules()->getBattlescapeTerrainData()->getRandomMapBlock(
 																										999,999,
-																										0,
-																										false);
+																										0, false);
 							//Log(LOG_INFO) << ". craftBlock = " << craftBlock->getType();
-							if (addCraft(
-										craftBlock,
-										*i,
-										_craftPos) == true)
+							if (addCraft(craftBlock, *i, _craftPos) == true)
 							{
 								// by default addCraft adds blocks from group 1.
 								// this can be overwritten in the command by defining specific groups or blocks
@@ -2709,11 +2701,9 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*>* const scri
 									{
 										if (_blocks[x][y] != NULL)
 											loadMAP(
-												_blocks[x][y],
-												x * 10,
-												y * 10,
-												_terrainRule,
-												0);
+													_blocks[x][y],
+													x * 10, y * 10,
+													_terrainRule, 0);
 									}
 								}
 
@@ -2728,16 +2718,13 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*>* const scri
 						if (_ufo != NULL)
 						{
 							// as above, note that the craft and the ufo will never be allowed to overlap.
-							// TODO: make _ufopos a vector ;)
-							ufoBlock = _ufo->getRules()->getBattlescapeTerrainData()->getRandomMapBlock(
-																									999,999,
-																									0,
-																									false);
+							// TODO: make _ufopos a vector ;|p
+							ufoTerrain = _ufo->getRules()->getBattlescapeTerrainData();
+							ufoBlock = ufoTerrain->getRandomMapBlock(
+																	999,999,
+																	0, false);
 							//Log(LOG_INFO) << ". ufoBlock = " << ufoBlock->getType();
-							if (addCraft(
-										ufoBlock,
-										*i,
-										_ufoPos) == true)
+							if (addCraft(ufoBlock, *i, _ufoPos) == true)
 							{
 								for (
 										x = _ufoPos.x;
@@ -2751,11 +2738,9 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*>* const scri
 									{
 										if (_blocks[x][y])
 											loadMAP(
-												_blocks[x][y],
-												x * 10,
-												y * 10,
-												_terrainRule,
-												0);
+													_blocks[x][y],
+													x * 10, y * 10,
+													_terrainRule, 0);
 									}
 								}
 
@@ -2867,25 +2852,48 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*>* const scri
 							throw Exception("Map Generator encountered an error: The map cannot be resized after adding blocks.");
 						}
 
-						if ((*i)->getSizeX() > 0
-							&& (*i)->getSizeX() != _mapsize_x / 10)
-						{
+						if ((*i)->getSizeX() > 0 && (*i)->getSizeX() != _mapsize_x / 10)
 							_mapsize_x = (*i)->getSizeX() * 10;
-						}
 
-						if ((*i)->getSizeY() > 0
-							&& (*i)->getSizeY() != _mapsize_y / 10)
-						{
+						if ((*i)->getSizeY() > 0 && (*i)->getSizeY() != _mapsize_y / 10)
 							_mapsize_y = (*i)->getSizeY() * 10;
-						}
 
-						if ((*i)->getSizeZ() > 0
-							&& (*i)->getSizeZ() != _mapsize_z)
-						{
+						if ((*i)->getSizeZ() > 0 && (*i)->getSizeZ() != _mapsize_z)
 							_mapsize_z = (*i)->getSizeZ();
-						}
 
 						init();
+					break;
+
+					case MSC_SETUFO:
+						if (ufoTerrain != NULL
+							&& _rules->getUfo((*i)->getUfoType()) != NULL)
+						{
+							ufoTerrain = _rules->getUfo((*i)->getUfoType())->getBattlescapeTerrainData();
+							ufoBlock = ufoTerrain->getRandomMapBlock(
+																	999,999,
+																	0, false);
+							if (addCraft(ufoBlock, *i, _ufoPos))
+							{
+								for (
+										x = _ufoPos.x;
+										x != _ufoPos.x + _ufoPos.w;
+										++x)
+								{
+									for (
+											y = _ufoPos.y;
+											y != _ufoPos.y + _ufoPos.h;
+											++y)
+									{
+										if (_blocks[x][y] != NULL)
+											loadMAP(
+													_blocks[x][y],
+													x * 10, y * 10,
+													_terrainRule, 0);
+									}
+								}
+								success = true;
+							}
+						}
 				}
 			}
 		}
@@ -2903,11 +2911,11 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*>* const scri
 		placeXcomProperty();
 
 
-	if (ufoBlock != NULL)
+	if (ufoBlock != NULL && ufoTerrain != NULL)
 	{
 		for (std::vector<MapDataSet*>::const_iterator
-				i = _ufo->getRules()->getBattlescapeTerrainData()->getMapDataSets()->begin();
-				i != _ufo->getRules()->getBattlescapeTerrainData()->getMapDataSets()->end();
+				i = ufoTerrain->getMapDataSets()->begin();
+				i != ufoTerrain->getMapDataSets()->end();
 				++i)
 		{
 			(*i)->loadData();
@@ -2919,19 +2927,19 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*>* const scri
 			++craftDataSetIdOffset;
 		}
 
-		// TODO: put ufo positions in a vector rather than a single rect, and iterate here;
-		// will probably need to make ufomap a vector too.
+		// TODO: put ufo positions in a vector rather than a single rect and iterate here;
+		// would probably need to make ufoBlock a vector too.
 		loadMAP(
-			ufoBlock,
-			_ufoPos.x * 10,
-			_ufoPos.y * 10,
-			_ufo->getRules()->getBattlescapeTerrainData(),
-			mapDataSetIdOffset);
+				ufoBlock,
+				_ufoPos.x * 10,
+				_ufoPos.y * 10,
+				ufoTerrain,
+				mapDataSetIdOffset);
 		loadRMP(
-			ufoBlock,
-			_ufoPos.x * 10,
-			_ufoPos.y * 10,
-			Node::SEG_UFO);
+				ufoBlock,
+				_ufoPos.x * 10,
+				_ufoPos.y * 10,
+				Node::SEG_UFO);
 
 		for (int
 				i = 0;

@@ -71,7 +71,8 @@ enum MapScriptCommand
 	MSC_FILLAREA,		//  5
 	MSC_CHECKBLOCK,		//  6
 	MSC_REMOVE,			//  7
-	MSC_RESIZE			//  8
+	MSC_RESIZE,			//  8
+	MSC_SETUFO			//  9
 };
 
 class MapBlock;
@@ -98,6 +99,8 @@ private:
 
 	MapDirection _direction;
 	MapScriptCommand _type;
+
+	std::string _ufoType;
 
 	std::vector<int>
 		_blocks,
@@ -180,6 +183,9 @@ private:
 
 		/// Randomly generate a block from within either the array of groups or blocks.
 		MapBlock* getNextBlock(RuleTerrain* const terraRule);
+
+		/// Gets the UFO's name (for setUFO)
+		std::string getUfoType();
 };
 
 }

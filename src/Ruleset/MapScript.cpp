@@ -81,12 +81,12 @@ void MapScript::load(const YAML::Node& node)
 		else if (command == "addCraft")
 		{
 			_type = MSC_ADDCRAFT;
-			_groups.push_back(1); // this is a default, and can be overridden
+			_groups.push_back(1); // this is a default and can be overridden
 		}
 		else if (command == "addUFO")
 		{
 			_type = MSC_ADDUFO;
-			_groups.push_back(1); // this is a default, and can be overridden
+			_groups.push_back(1); // this is a default and can be overridden
 		}
 		else if (command == "digTunnel")
 			_type = MSC_DIGTUNNEL;
@@ -101,6 +101,11 @@ void MapScript::load(const YAML::Node& node)
 			_type = MSC_RESIZE;
 			_sizeX =
 			_sizeY = 0; // defaults: don't resize anything unless specified.
+		}
+		else if (command == "setUFO")
+		{
+			_type = MSC_SETUFO;
+			_groups.push_back(1); // this is a default and can be overridden
 		}
 		else
 		{
@@ -178,54 +183,40 @@ void MapScript::load(const YAML::Node& node)
 					++i)
 			{
 				*sizes[entry] = (*i).as<int>(1);
-
-				++entry;
-				if (entry == 3)
+				if (++entry == 3)
 					break;
 			}
 		}
-		else
-		{
-			_sizeX = mapNode.as<int>(_sizeX);
-			_sizeY = _sizeX;
-		}
+		else _sizeX = _sizeY = mapNode.as<int>(_sizeX);
 	}
 
 	if (const YAML::Node& mapNode = node["groups"])
 	{
 		_groups.clear();
-
 		if (mapNode.Type() == YAML::NodeType::Sequence)
 		{
 			for (YAML::const_iterator
 					i = mapNode.begin();
 					i != mapNode.end();
 					++i)
-			{
 				_groups.push_back((*i).as<int>(0));
-			}
 		}
-		else
-			_groups.push_back(mapNode.as<int>(0));
+		else _groups.push_back(mapNode.as<int>(0));
 	}
 
 	size_t selectionSize = _groups.size();
 	if (const YAML::Node& mapNode = node["blocks"])
 	{
 		_groups.clear();
-
 		if (mapNode.Type() == YAML::NodeType::Sequence)
 		{
 			for (YAML::const_iterator
 					i = mapNode.begin();
 					i != mapNode.end();
 					++i)
-			{
 				_blocks.push_back((*i).as<int>(0));
-			}
 		}
-		else
-			_blocks.push_back(mapNode.as<int>(0));
+		else _blocks.push_back(mapNode.as<int>(0));
 
 		selectionSize = _blocks.size();
 	}
@@ -246,12 +237,10 @@ void MapScript::load(const YAML::Node& node)
 				if (entry == selectionSize)
 					break;
 
-				_frequencies.at(entry) = (*i).as<int>(1);
-				++entry;
+				_frequencies.at(entry++) = (*i).as<int>(1);
 			}
 		}
-		else
-			_frequencies.at(0) = mapNode.as<int>(1);
+		else _frequencies.at(0) = mapNode.as<int>(1);
 	}
 
 	if (const YAML::Node& mapNode = node["maxUses"])
@@ -267,12 +256,10 @@ void MapScript::load(const YAML::Node& node)
 				if (entry == selectionSize)
 					break;
 
-				_maxUses.at(entry) = (*i).as<int>(-1);
-				++entry;
+				_maxUses.at(entry++) = (*i).as<int>(-1);
 			}
 		}
-		else
-			_maxUses.at(0) = mapNode.as<int>(-1);
+		else _maxUses.at(0) = mapNode.as<int>(-1);
 	}
 
 	if (const YAML::Node& mapNode = node["direction"])
@@ -313,6 +300,7 @@ void MapScript::load(const YAML::Node& node)
 
 	_executionChances	= node["executionChances"]	.as<int>(_executionChances);
 	_executions			= node["executions"]		.as<int>(_executions);
+	_ufoType			= node["ufoType"]			.as<std::string>(_ufoType);
 	_label				= std::abs(node["label"]	.as<int>(_label)); // take no chances, don't accept negative values here.
 }
 
@@ -354,8 +342,7 @@ int MapScript::getGroupNumber() // private.
 
 	if (_cumulativeFrequency > 0)
 	{
-		int pick = RNG::generate(
-							0,
+		int pick = RNG::generate(0,
 							_cumulativeFrequency - 1);
 
 		for (size_t
@@ -397,8 +384,7 @@ int MapScript::getBlockNumber() // private.
 {
 	if (_cumulativeFrequency > 0)
 	{
-		int pick = RNG::generate(
-							0,
+		int pick = RNG::generate(0,
 							_cumulativeFrequency - 1);
 
 		for (size_t
@@ -452,6 +438,15 @@ MapBlock* MapScript::getNextBlock(RuleTerrain* const terraRule)
 	}
 
 	return NULL;
+}
+
+/**
+ * Gets the type of the UFO for the case of "setUFO".
+ * @return, UFO type
+ */
+std::string MapScript::getUfoType()
+{
+	return _ufoType;
 }
 
 }
