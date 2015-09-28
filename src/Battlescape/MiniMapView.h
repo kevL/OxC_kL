@@ -44,8 +44,8 @@ class MiniMapView
 
 private:
 	bool
-		_isMouseScrolled,	// required for drag-scroll
-		_isMouseScrolling,	// required for drag-scroll
+		_isMouseScrolled,
+		_isMouseScrolling,
 		_mouseOverThreshold;
 
 	int
@@ -58,8 +58,8 @@ private:
 //		_yBeforeMouseScrolling;
 
 	Camera* _camera;
-	Game* _game;
-	SavedBattleGame* _battleSave;
+	const Game* _game;
+	const SavedBattleGame* _battleSave;
 	SurfaceSet* _set;
 
 	Position _posPreDragScroll;
@@ -87,9 +87,9 @@ private:
 				int h,
 				int x,
 				int y,
-				Game* game,
-				Camera* camera,
-				SavedBattleGame* battleSave);
+				const Game* const game,
+				Camera* const camera,
+				const SavedBattleGame* const battleSave);
 
 		/// Draws the minimap.
 		void draw();

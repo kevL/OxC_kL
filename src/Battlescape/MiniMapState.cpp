@@ -54,11 +54,10 @@ namespace OpenXcom
  * @param battleSave	- pointer to the SavedBattleGame
  */
 MiniMapState::MiniMapState(
-		Camera* camera,
-		SavedBattleGame* battleSave)
+		Camera* const camera,
+		const SavedBattleGame* const battleSave)
 {
-/*kL
-	if (Options::maximizeInfoScreens)
+/*	if (Options::maximizeInfoScreens)
 	{
 		Options::baseXResolution = Screen::ORIGINAL_WIDTH;
 		Options::baseYResolution = Screen::ORIGINAL_HEIGHT;
@@ -72,13 +71,12 @@ MiniMapState::MiniMapState(
 								camera,
 								battleSave);
 
-	_btnLvlUp	= new BattlescapeButton(18, 20, 24, 62);
-	_btnLvlDwn	= new BattlescapeButton(18, 20, 24, 88);
+	_btnLvlUp	= new BattlescapeButton(18, 20,  24,  62);
+	_btnLvlDwn	= new BattlescapeButton(18, 20,  24,  88);
 	_btnOk		= new BattlescapeButton(32, 32, 275, 145);
 
 	_txtLevel	= new Text(28, 16, 281, 73);
 
-//	battleSave->setPaletteByDepth(this);
 	setPalette("PAL_BATTLESCAPE");
 
 	add(_miniView); // put miniView *under* the background.
@@ -131,16 +129,14 @@ MiniMapState::MiniMapState(
 	_txtLevel->setBig();
 	_txtLevel->setHighContrast();
 	std::wostringstream level;
-//	if (_txtLevel->isTFTDMode() == true)
-//		level << tr("STR_LEVEL_SHORT");
-	level << (camera->getViewLevel() + 1);
+	level << ((camera->getViewLevel() + 1) % 10);
 	_txtLevel->setText(level.str());
 
 	_timerAnimate = new Timer(125);
 	_timerAnimate->onTimer((StateHandler)& MiniMapState::animate);
 	_timerAnimate->start();
 
-	_game->getSavedGame()->getBattleSave()->getBattleState()->getMap()->setNoDraw(true);
+	_game->getSavedGame()->getBattleSave()->getBattleState()->getMap()->setNoDraw();
 	_miniView->draw();
 }
 
@@ -180,8 +176,7 @@ void MiniMapState::handle(Action* action)
  */
 void MiniMapState::btnOkClick(Action*)
 {
-/*kL
-	if (Options::maximizeInfoScreens)
+/*	if (Options::maximizeInfoScreens)
 	{
 		Screen::updateScale(
 						Options::battlescapeScale,
@@ -203,9 +198,7 @@ void MiniMapState::btnOkClick(Action*)
 void MiniMapState::btnLevelUpClick(Action*)
 {
 	std::wostringstream level;
-//	if (_miniView->isTFTDMode() == true)
-//		level << tr("STR_LEVEL_SHORT");
-	level << (_miniView->up() + 1);
+	level << ((_miniView->up() + 1) % 10);
 	_txtLevel->setText(level.str());
 }
 
@@ -216,9 +209,7 @@ void MiniMapState::btnLevelUpClick(Action*)
 void MiniMapState::btnLevelDownClick(Action*)
 {
 	std::wostringstream level;
-//	if (_miniView->isTFTDMode() == true)
-//		level << tr("STR_LEVEL_SHORT");
-	level << (_miniView->down() + 1);
+	level << ((_miniView->down() + 1) % 10);
 	_txtLevel->setText(level.str());
 }
 

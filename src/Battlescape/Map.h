@@ -267,7 +267,7 @@ private:
 //		bool getBlastFlash() const;
 
 		/// Sets whether to draw or not.
-		void setNoDraw(bool noDraw);
+		void setNoDraw(bool noDraw = true);
 		/// Gets if the Hidden Movement screen is displayed.
 		bool getMapHidden() const;
 

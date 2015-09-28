@@ -60,8 +60,8 @@ private:
 	public:
 		/// Creates the MiniMapState.
 		MiniMapState(
-				Camera* camera,
-				SavedBattleGame* battleSave);
+				Camera* const camera,
+				const SavedBattleGame* const battleSave);
 		/// Cleans up the MiniMapState.
 		~MiniMapState();
 

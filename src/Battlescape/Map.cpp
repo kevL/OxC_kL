@@ -2603,7 +2603,7 @@ bool Map::getBlastFlash() const
 
 /**
  * Sets whether to draw or not.
- * @param noDraw - true to stop this Map from drawing
+ * @param noDraw - true to stop this Map from drawing (default true)
  */
 void Map::setNoDraw(bool noDraw)
 {
