@@ -213,9 +213,9 @@ private:
 	/// Animates a target cursor over hostile unit when hostileUnit indicator is clicked.
 	void drawHostileTargeter();
 	/// Draws an execution explosion on the Map.
-	void doExecutionExpl();
+	void executionExplosion();
 	/// Draws a shotgun blast explosion on the Map.
-	void doShotgunExpl();
+	void shotgunExplosion();
 
 	/// Popups a context sensitive list of actions the player can choose from.
 	void handAction(

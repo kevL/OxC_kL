@@ -968,7 +968,7 @@ void ProjectileFlyBState::think()
 						if (_prjImpact != VOXEL_EMPTY && _prjImpact != VOXEL_OUTOFBOUNDS) // insert an explosion and hit
 						{
 							prj->skipTrajectory();				// skip the pellet to the end of its path
-							shotVoxel = prj->getPosition(-1);	// <- beware of 'offset 1'
+							shotVoxel = prj->getPosition(1);	// <- beware of 'offset 1'
 
 							if (_prjImpact == VOXEL_UNIT
 								&& (_action.type == BA_SNAPSHOT || _action.type == BA_AUTOSHOT || _action.type == BA_AIMEDSHOT))

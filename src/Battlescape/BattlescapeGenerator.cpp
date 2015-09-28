@@ -2872,7 +2872,7 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*>* const scri
 							ufoBlock = ufoTerrain->getRandomMapBlock(
 																	999,999,
 																	0, false);
-							if (addCraft(ufoBlock, *i, _ufoPos))
+							if (addCraft(ufoBlock, *i, _ufoPos) == true)
 							{
 								for (
 										x = _ufoPos.x;

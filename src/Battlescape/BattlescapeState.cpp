@@ -2915,23 +2915,20 @@ void BattlescapeState::animate()
 			cycleHostileHotcons();
 			drawFuse();
 
-			if (selUnit->getFatalWounds() > 0)
+			if (selUnit->getFatalWounds() != 0)
 				flashMedic();
 
 			if (_hostileTargeter->getVisible() == true)
 				drawHostileTargeter();
 
 			if (_battleGame->getExecution() == true)
-				doExecutionExpl();
+				executionExplosion();
 
 			if (_battleGame->getShotgun() == true)
-				doShotgunExpl();
+				shotgunExplosion();
 
-			if (_isOverweight == true
-				&& RNG::seedless(0,3) == 0)
-			{
+			if (_isOverweight == true && RNG::seedless(0,3) == 0)
 				_overWeight->setVisible(!_overWeight->getVisible());
-			}
 
 			static int stickyTiks; // inits to 0.
 			if (_bigBtnBorder->getVisible() == true)
@@ -3116,7 +3113,7 @@ void BattlescapeState::drawHostileTargeter() // private.
 /**
  * Draws an execution explosion on the Map.
  */
-void BattlescapeState::doExecutionExpl() // private.
+void BattlescapeState::executionExplosion() // private.
 {
 	for (std::list<Explosion*>::const_iterator
 			i = _battleGame->getMap()->getExplosions()->begin();
@@ -3148,7 +3145,7 @@ void BattlescapeState::doExecutionExpl() // private.
 /**
  * Draws a shotgun explosion on the Map.
  */
-void BattlescapeState::doShotgunExpl() // private.
+void BattlescapeState::shotgunExplosion() // private.
 {
 	for (std::list<Explosion*>::const_iterator
 			i = _battleGame->getMap()->getExplosions()->begin();
