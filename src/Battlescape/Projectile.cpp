@@ -745,6 +745,15 @@ bool Projectile::traceProjectile()
 }
 
 /**
+ * Skips to the end of the trajectory.
+ */
+void Projectile::skipTrajectory()
+{
+//	while (traceProjectile() == true);	// why.
+	_trjId = _trj.size() - 1;			// old code
+}
+
+/**
  * Gets the current position in voxel space.
  * @param offsetId - ID offset (default 0)
  * @return, position in voxel space
@@ -790,15 +799,6 @@ BattleItem* Projectile::getItem() const
 Surface* Projectile::getSprite() const
 {
 	return _throwSprite;
-}
-
-/**
- * Skips to the end of the trajectory.
- */
-void Projectile::skipTrajectory()
-{
-//	while (traceProjectile() == true);	// why.
-	_trjId = _trj.size() - 1;			// old code
 }
 
 /**

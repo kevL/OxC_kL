@@ -107,6 +107,8 @@ private:
 
 		/// Moves the projectile one step in its trajectory.
 		bool traceProjectile();
+		/// Skips the bullet flight.
+		void skipTrajectory();
 
 		/// Gets the current position in voxel space.
 		Position getPosition(int offsetId = 0) const;
@@ -116,9 +118,6 @@ private:
 		BattleItem* getItem() const;
 		/// Gets the sprite.
 		Surface* getSprite() const;
-
-		/// Skips the bullet flight.
-		void skipTrajectory();
 
 		/// Gets the BattleAction associated with this projectile.
 		BattleAction* getActionPrj();

@@ -278,7 +278,7 @@ private:
 		void setWaypointAction(bool wp = true);
 
 		/// Sets whether to draw the projectile on the Map.
-		void setShowProjectile(bool show = true);
+		void showProjectile(bool show = true);
 };
 
 }

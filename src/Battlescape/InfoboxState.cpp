@@ -38,7 +38,7 @@ InfoboxState::InfoboxState(const std::wstring& msg)
 {
 	_screen = false;
 
-	_frame	= new Frame(260, 90, 30, 27);
+	_frame	= new Frame(260, 90, 30, 86); // was x= 27
 	_text	= new Text(250, 80, 35, 32);
 
 	setPalette("PAL_BATTLESCAPE");
@@ -61,7 +61,7 @@ InfoboxState::InfoboxState(const std::wstring& msg)
 	_text->setBig();
 
 	_timer = new Timer(INFOBOX_DELAY);
-	_timer->onTimer((StateHandler)& InfoboxState::close);
+	_timer->onTimer((StateHandler)& InfoboxState::exit);
 	_timer->start();
 }
 
@@ -84,7 +84,7 @@ void InfoboxState::handle(Action* action)
 	if (action->getDetails()->type == SDL_KEYDOWN
 		|| action->getDetails()->type == SDL_MOUSEBUTTONDOWN)
 	{
-		close();
+		exit();
 	}
 }
 
@@ -99,7 +99,7 @@ void InfoboxState::think()
 /**
  * Closes the window.
  */
-void InfoboxState::close()
+void InfoboxState::exit()
 {
 	_game->popState();
 }

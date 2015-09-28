@@ -42,7 +42,7 @@ private:
 		_frameStart,
 		_hit;
 
-	Position _position;
+	Position _pos;
 
 
 	public:
@@ -54,7 +54,7 @@ private:
 
 		/// Creates a new Explosion.
 		Explosion(
-				Position _position,
+				Position pos,
 				int frameStart,
 				int frameDelay = 0,
 				bool big = false,

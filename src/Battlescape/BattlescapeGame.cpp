@@ -92,7 +92,8 @@ BattlescapeGame::BattlescapeGame(
 		_playedAggroSound(false),
 		_endTurnRequested(false),
 		_firstInit(true),
-		_executeProgress(false)
+		_executeProgress(false),
+		_shotgunProgress(false)
 //		_endTurnProcessed(false)
 {
 	//Log(LOG_INFO) << "Create BattlescapeGame";
@@ -3701,6 +3702,24 @@ void BattlescapeGame::setExecution(bool execute)
 bool BattlescapeGame::getExecution() const
 {
 	return _executeProgress;
+}
+
+/**
+ * Sets if a shotgun blast is underway and needs animation.
+ * @param shotgun - true to shotgun (default true)
+ */
+void BattlescapeGame::setShotgun(bool shotgun)
+{
+	_shotgunProgress = shotgun;
+}
+
+/**
+ * Gets if a shotgun blast is underway and needs animation.
+ * @return, true if shotgun
+ */
+bool BattlescapeGame::getShotgun() const
+{
+	return _shotgunProgress;
 }
 
 }

@@ -2924,6 +2924,9 @@ void BattlescapeState::animate()
 			if (_battleGame->getExecution() == true)
 				doExecutionExpl();
 
+			if (_battleGame->getShotgun() == true)
+				doShotgunExpl();
+
 			if (_isOverweight == true
 				&& RNG::seedless(0,3) == 0)
 			{
@@ -3138,8 +3141,29 @@ void BattlescapeState::doExecutionExpl() // private.
 				return;
 			}
 		}
-		else
-			++i;
+		else ++i;
+	}
+}
+
+/**
+ * Draws a shotgun explosion on the Map.
+ */
+void BattlescapeState::doShotgunExpl() // private.
+{
+	for (std::list<Explosion*>::const_iterator
+			i = _battleGame->getMap()->getExplosions()->begin();
+			i != _battleGame->getMap()->getExplosions()->end();
+			)
+	{
+		if ((*i)->animate() == false) // done.
+		{
+			delete *i;
+			i = _battleGame->getMap()->getExplosions()->erase(i);
+
+			if (_battleGame->getMap()->getExplosions()->empty() == true)
+				_battleGame->setShotgun(false);
+		}
+		else ++i;
 	}
 }
 

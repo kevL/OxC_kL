@@ -167,7 +167,8 @@ private:
 		_executeProgress,
 		_firstInit,
 		_playedAggroSound,
-		_playerPanicHandled;
+		_playerPanicHandled,
+		_shotgunProgress;
 	int _AIActionCounter;
 
 	BattleAction _currentAction;
@@ -362,6 +363,11 @@ private:
 		void setExecution(bool execute = true);
 		/// Gets if an execution is underway.
 		bool getExecution() const;
+
+		/// Sets if a shotgun blast is underway.
+		void setShotgun(bool shotgun = true);
+		/// Gets if a shotgun blast is underway.
+		bool getShotgun() const;
 };
 
 }

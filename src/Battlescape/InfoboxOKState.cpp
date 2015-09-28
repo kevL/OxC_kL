@@ -48,11 +48,10 @@ InfoboxOKState::InfoboxOKState(const std::wstring& msg)
 {
 	_screen = false;
 
-	_frame		= new Frame(260, 90, 30, 27);
+	_frame		= new Frame(260, 90, 30, 86); // was x= 27
 	_txtTitle	= new Text(250, 58, 35, 34);
 	_btnOk		= new TextButton(120, 16, 100, 94);
 
-//	_game->getSavedGame()->getBattleSave()->setPaletteByDepth(this);
 	setPalette("PAL_BATTLESCAPE");
 
 	add(_frame,		"infoBoxOK",		"battlescape");
@@ -100,11 +99,6 @@ InfoboxOKState::~InfoboxOKState()
  */
 void InfoboxOKState::btnOkClick(Action*)
 {
-/*	if (_game->getSavedGame()->getBattleSave()->getSide() != FACTION_PLAYER
-		&& _game->getSavedGame()->getBattleSave()->getDebugMode() == false)
-	{
-		_game->getCursor()->setVisible(false);
-	} */
 	_game->getCursor()->setVisible(_cursorVisible);
 	_game->getCursor()->setHidden(_cursorHidden);
 

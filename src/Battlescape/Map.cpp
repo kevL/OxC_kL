@@ -2402,7 +2402,7 @@ void Map::cacheUnit(BattleUnit* const unit)
 }
 
 /**
- * Puts a projectile sprite on the map.
+ * Puts a Projectile on this Map.
  * @param projectile - projectile to place (default NULL)
  */
 void Map::setProjectile(Projectile* const projectile)
@@ -2417,8 +2417,8 @@ void Map::setProjectile(Projectile* const projectile)
 }
 
 /**
- * Gets the current projectile sprite on the map.
- * @return, pointer to Projectile or NULL if there is no projectile sprite on the map
+ * Gets the current Projectile.
+ * @return, pointer to Projectile or NULL
  */
 Projectile* Map::getProjectile() const
 {
@@ -2426,8 +2426,8 @@ Projectile* Map::getProjectile() const
 }
 
 /**
- * Gets a list of explosion sprites on the map.
- * @return, list of explosion sprites
+ * Gets a list of Explosions.
+ * @return, list of explosions to display
  */
 std::list<Explosion*>* Map::getExplosions()
 {
@@ -2435,7 +2435,7 @@ std::list<Explosion*>* Map::getExplosions()
 }
 
 /**
- * Gets the pointer to the camera.
+ * Gets the Camera.
  * @return, pointer to Camera
  */
 Camera* Map::getCamera()
@@ -2444,7 +2444,7 @@ Camera* Map::getCamera()
 }
 
 /**
- * Timers only work on surfaces so we have to pass this on to the camera object.
+ * Timers only work on surfaces so you have to pass this to the Camera.
  */
 void Map::scrollMouse()
 {
@@ -2452,7 +2452,7 @@ void Map::scrollMouse()
 }
 
 /**
- * Timers only work on surfaces so we have to pass this on to the camera object.
+ * Timers only work on surfaces so you have to pass this to the Camera.
  */
 void Map::scrollKey()
 {
@@ -2460,8 +2460,8 @@ void Map::scrollKey()
 }
 
 /**
- * Gets a list of waypoints on the map.
- * @return, pointer to a vector of Positions
+ * Gets a list of waypoint-positions on this Map.
+ * @return, pointer to a vector of positions
  */
 std::vector<Position>* Map::getWaypoints()
 {
@@ -2641,7 +2641,7 @@ void Map::setWaypointAction(bool wp)
  * Sets whether to draw the projectile on the Map.
  * @param show - true to show the projectile (default true)
  */
-void Map::setShowProjectile(bool show)
+void Map::showProjectile(bool show)
 {
 	_showProjectile = show;
 }

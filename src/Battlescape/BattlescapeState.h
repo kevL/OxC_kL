@@ -214,6 +214,8 @@ private:
 	void drawHostileTargeter();
 	/// Draws an execution explosion on the Map.
 	void doExecutionExpl();
+	/// Draws a shotgun blast explosion on the Map.
+	void doShotgunExpl();
 
 	/// Popups a context sensitive list of actions the player can choose from.
 	void handAction(

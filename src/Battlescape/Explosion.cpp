@@ -32,7 +32,7 @@ const int
 
 /**
  * Sets up a Explosion sprite with the specified size and position.
- * @param position		- explosion center position in voxel x/y/z
+ * @param pos			- explosion center position in voxel x/y/z
  * @param frameStart	- used to offset different explosions to different frames on the spritesheet
  * @param frameDelay	- used to delay the start of explosion (default 0)
  * @param big			- flag to indicate it is a real explosion (true) or a bullet hit (default false)
@@ -42,13 +42,13 @@ const int
  *						-1 - is a melee attack that MISSED
  */
 Explosion::Explosion(
-		Position position,
+		Position pos,
 		int frameStart,
 		int frameDelay,
 		bool big,
 		int hit)
 	:
-		_position(position),
+		_pos(pos),
 		_frameStart(frameStart),
 		_frameDelay(frameDelay),
 		_big(big),
@@ -117,7 +117,7 @@ bool Explosion::animate()
  */
 Position Explosion::getPosition() const
 {
-	return _position;
+	return _pos;
 }
 
 /**

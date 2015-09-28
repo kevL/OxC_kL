@@ -68,23 +68,19 @@ private:
 	/// Set the origin voxel - used by the blaster launcher.
 //	void setOriginVoxel(const Position& pos);
 	/// Set the boolean flag to angle a blaster bomb towards the floor.
-	void targetFloor();
+//	void targetFloor();
 
 	/// Peforms a melee attack.
 	void performMeleeAttack();
 
 
 	public:
-		/// Creates a new ProjectileFlyB class
-		ProjectileFlyBState(
-				BattlescapeGame* const parent,
-				BattleAction action);
-		/// Creates a new ProjectileFlyB class
+		/// Creates a new ProjectileFlyB state.
 		ProjectileFlyBState(
 				BattlescapeGame* const parent,
 				BattleAction action,
-				Position origin);
-		/// Cleans up the ProjectileFlyB.
+				Position origin = Position(0,0,-1));
+		/// Cleans up the ProjectileFlyB state.
 		~ProjectileFlyBState();
 
 		/// Initializes the state.

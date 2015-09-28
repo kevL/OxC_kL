@@ -51,21 +51,23 @@ namespace OpenXcom
 {
 
 /**
- * Sets up a ProjectileFlyBState [0] for a unit shooting.
- * @param parent - pointer to the BattlescapeGame
- * @param action - the current BattleAction struct (BattlescapeGame.h)
+ * Sets up a ProjectileFlyBState.
+ * @param parent	- pointer to the BattlescapeGame
+ * @param action	- the current BattleAction (BattlescapeGame.h)
+ * @param posOrigin	- origin in tile-space (default Position(0,0,-1))
  */
-ProjectileFlyBState::ProjectileFlyBState( // origin is unitTile
+ProjectileFlyBState::ProjectileFlyBState(
 		BattlescapeGame* const parent,
-		BattleAction action)
+		BattleAction action,
+		Position posOrigin)
 	:
 		BattleState(
 			parent,
 			action),
+		_posOrigin(posOrigin),
 		_battleSave(parent->getBattleSave()),
-		_posOrigin(action.actor->getPosition()),
-		_originVoxel(-1,-1,-1), // for BL waypoints
-		_targetVoxel(-1,-1,-1),
+		_originVoxel(0,0,-1),
+//		_targetVoxel(-1,-1,-1),
 		_unit(NULL),
 		_ammo(NULL),
 		_prjItem(NULL),
@@ -75,36 +77,9 @@ ProjectileFlyBState::ProjectileFlyBState( // origin is unitTile
 		_targetFloor(false),
 		_initUnitAnim(0)
 {
-	//Log(LOG_INFO) << "ProjectileFlyBState cTor.";
+	if (_posOrigin.z == -1)
+		_posOrigin = action.actor->getPosition();
 }
-
-/**
- * Sets up a ProjectileFlyBState [1] for a waypoint.
- * @param parent	- pointer to the BattlescapeGame
- * @param action	- the current BattleAction struct (BattlescapeGame.h)
- * @param posOrigin	- origin Position in tile-space
- */
-ProjectileFlyBState::ProjectileFlyBState( // blaster launch, BattlescapeGame::launchAction()
-		BattlescapeGame* const parent,
-		BattleAction action,
-		Position posOrigin)
-	:
-		BattleState(
-			parent,
-			action),
-		_battleSave(parent->getBattleSave()),
-		_posOrigin(posOrigin),
-		_originVoxel(-1,-1,-1), // for BL waypoints
-		_targetVoxel(-1,-1,-1),
-		_unit(NULL),
-		_ammo(NULL),
-		_prjItem(NULL),
-		_prjImpact(VOXEL_FLOOR),
-		_prjVector(0,0,-1),
-		_initialized(false),
-		_targetFloor(false),
-		_initUnitAnim(0)
-{}
 
 /**
  * Deletes the ProjectileFlyBState.
@@ -581,7 +556,7 @@ bool ProjectileFlyBState::createNewProjectile() // private.
 	}
 	else // shoot weapon
 	{
-		if (_originVoxel != Position(-1,-1,-1)) // origin is a BL waypoint
+		if (_originVoxel.z != -1) // origin is a BL waypoint
 		{
 			_prjImpact = prj->calculateShot( // this should probly be TE:plotLine() - cf. else(error) below_
 										_unit->getAccuracy(_action),
@@ -650,7 +625,7 @@ bool ProjectileFlyBState::createNewProjectile() // private.
 									->play(-1, _parent->getMap()->getSoundAngle(_unit->getPosition()));
 
 	if (_unit->getArmor()->getShootFrames() != 0)
-		_parent->getMap()->setShowProjectile(false); // postpone showing the Celatid spit-blob till later
+		_parent->getMap()->showProjectile(false); // postpone showing the Celatid spit-blob till later
 
 	//Log(LOG_INFO) << ". createNewProjectile() ret TRUE";
 	return true;
@@ -679,13 +654,13 @@ void ProjectileFlyBState::think()
 	if (_initUnitAnim == 1)
 	{
 		_initUnitAnim = 2;
-		_parent->getMap()->setShowProjectile();
+		_parent->getMap()->showProjectile();
 	}
 
 	_battleSave->getBattleState()->clearMouseScrollingState();
 	Camera* const camera = _parent->getMap()->getCamera();
 
-	// TODO: refactoring, Store the projectile in this state instead of getting it from the map each time.
+	// TODO: Store the projectile in this state instead of getting it from the map each time.
 	if (_parent->getMap()->getProjectile() == NULL)
 	{
 		if (_action.type == BA_AUTOSHOT
@@ -737,9 +712,7 @@ void ProjectileFlyBState::think()
 			{
 				//Log(LOG_INFO) << "ProjectileFlyBState::think() FINISH: cameraPosition was Set";
 				if (_action.type == BA_THROW // jump screen back to pre-shot position
-					|| _action.type == BA_AUTOSHOT
-					|| _action.type == BA_SNAPSHOT
-					|| _action.type == BA_AIMEDSHOT)
+					|| _action.type == BA_AUTOSHOT || _action.type == BA_SNAPSHOT || _action.type == BA_AIMEDSHOT)
 				{
 					//Log(LOG_INFO) << "ProjectileFlyBState::think() FINISH: resetting Camera to original pos";
 					if (camera->getPauseAfterShot() == true)	// TODO: move 'pauseAfterShot' to the BattleAction struct. done -> but it didn't work; i'm a numby.
@@ -800,13 +773,14 @@ void ProjectileFlyBState::think()
 			_parent->getMap()->getProjectile()->skipTrajectory(); // skip trajectory of 1st pellet; the rest are not even added to Map.
 		}
 
-		if (_parent->getMap()->getProjectile()->traceProjectile() == false) // projectile pathing cycle -> Finished
+		if (_parent->getMap()->getProjectile()->traceProjectile() == false) // cycle projectile pathing -> Finished
 		{
 			if (_action.type == BA_THROW)
 			{
 //				_parent->getMap()->resetCameraSmoothing();
-				Position pos = _parent->getMap()->getProjectile()->getPosition(-1);
-				pos = Position::toTileSpace(pos);
+				Position
+					throwVoxel = _parent->getMap()->getProjectile()->getPosition(-1),
+					pos = Position::toTileSpace(throwVoxel);
 
 				if (pos.x > _battleSave->getMapSizeX()) // note: Bounds-checking is also done better in Projectile::applyAccuracy()
 					--pos.x;
@@ -820,7 +794,7 @@ void ProjectileFlyBState::think()
 				{
 					_parent->statePushFront(new ExplosionBState( // it's a hot potato set to explode on contact
 															_parent,
-															_parent->getMap()->getProjectile()->getPosition(-1),
+															throwVoxel,
 															item,
 															_unit));
 				}
@@ -849,21 +823,15 @@ void ProjectileFlyBState::think()
 				_action.waypoints.pop_front();
 				_action.target = _action.waypoints.front();
 
-				// launch the next projectile in the waypoint cascade
-				ProjectileFlyBState* const wpNext = new ProjectileFlyBState(
-																		_parent,
-																		_action,
-																		_posOrigin); // -> tilePos for BL.
-				wpNext->_originVoxel = _parent->getMap()->getProjectile()->getPosition();
-//				wpNext->setOriginVoxel(_parent->getMap()->getProjectile()->getPosition()); // !getPosition(-1) -> tada, fixed. // -> voxlPos
+				ProjectileFlyBState* const blasterFlyB = new ProjectileFlyBState( // launch the next projectile in the waypoint cascade
+																			_parent,
+																			_action,
+																			_posOrigin); // -> tilePos for BL.
+				blasterFlyB->_originVoxel = _parent->getMap()->getProjectile()->getPosition(); // was (offset= -1) -> tada, fixed.
+				if (_action.target == _posOrigin) blasterFlyB->_targetFloor = true;
 
-				// this follows BL as it hits through waypoints
-				camera->centerOnPosition(_posOrigin);
-
-				if (_posOrigin == _action.target)
-					wpNext->targetFloor();
-
-				_parent->statePushNext(wpNext);
+				camera->centerOnPosition(_posOrigin); // this follows BL as it hits through waypoints
+				_parent->statePushNext(blasterFlyB);
 			}
 			else // shoot -> impact.
 			{
@@ -895,8 +863,8 @@ void ProjectileFlyBState::think()
 				if (_prjImpact != VOXEL_OUTOFBOUNDS) // *not* out of Map; caching will be taken care of in ExplosionBState
 				{
 					//Log(LOG_INFO) << "FlyB: *not* OoB";
-					int trjOffset;		// explosions impact not inside the voxel but two steps back;
-					if (_ammo != NULL	// projectiles generally move 2 voxels at a time
+					int trjOffset; // explosions impact not inside the voxel but two steps back;
+					if (_ammo != NULL
 						&& _ammo->getRules()->getExplosionRadius() != -1
 						&& _prjImpact != VOXEL_UNIT)
 					{
@@ -904,28 +872,28 @@ void ProjectileFlyBState::think()
 					}
 					else trjOffset = 0;
 
-					Position voxelExpl = _parent->getMap()->getProjectile()->getPosition(trjOffset);
+					Position explVoxel = _parent->getMap()->getProjectile()->getPosition(trjOffset);
+					const Position pos = Position::toTileSpace(explVoxel);
 
-					if (_prjVector.z != -1)
+					if (_prjVector.z != -1) // <- strikeVector by radial explosion vs. diagBigWall
 					{
-						const Position pos = Position::toTileSpace(voxelExpl);
 						Tile* const tileTrue = _parent->getBattlescapeState()->getSavedBattleGame()->getTile(pos);
 						_parent->getTileEngine()->setTrueTile(tileTrue);
 
-						voxelExpl.x -= _prjVector.x * 16; // note there is no safety on these for OoB.
-						voxelExpl.y -= _prjVector.y * 16;
+						explVoxel.x -= _prjVector.x * 16; // note there is no safety on these for OoB.
+						explVoxel.y -= _prjVector.y * 16;
 					}
 					else _parent->getTileEngine()->setTrueTile();
 
-					//Log(LOG_INFO) << "projFlyB think() new ExplosionBState() voxelExpl " << _parent->getMap()->getProjectile()->getPosition(trjOffset);
+					//Log(LOG_INFO) << "projFlyB think() new ExplosionBState() explVoxel " << _parent->getMap()->getProjectile()->getPosition(trjOffset);
 					//Log(LOG_INFO) << "projFlyB think() trjOffset " << trjOffset;
 					//Log(LOG_INFO) << "projFlyB think() projImpact voxelType " << (int)_prjImpact;
-					//Log(LOG_INFO) << "projFlyB think() voxelExpl.x = " << static_cast<float>(_parent->getMap()->getProjectile()->getPosition(trjOffset).x) / 16.f;
-					//Log(LOG_INFO) << "projFlyB think() voxelExpl.y = " << static_cast<float>(_parent->getMap()->getProjectile()->getPosition(trjOffset).y) / 16.f;
-					//Log(LOG_INFO) << "projFlyB think() voxelExpl.z = " << static_cast<float>(_parent->getMap()->getProjectile()->getPosition(trjOffset).z) / 24.f;
+					//Log(LOG_INFO) << "projFlyB think() explVoxel.x = " << static_cast<float>(_parent->getMap()->getProjectile()->getPosition(trjOffset).x) / 16.f;
+					//Log(LOG_INFO) << "projFlyB think() explVoxel.y = " << static_cast<float>(_parent->getMap()->getProjectile()->getPosition(trjOffset).y) / 16.f;
+					//Log(LOG_INFO) << "projFlyB think() explVoxel.z = " << static_cast<float>(_parent->getMap()->getProjectile()->getPosition(trjOffset).z) / 24.f;
 					_parent->statePushFront(new ExplosionBState(
 															_parent,
-															voxelExpl,
+															explVoxel,
 															_ammo,
 															_unit,
 															NULL,
@@ -933,18 +901,16 @@ void ProjectileFlyBState::think()
 																|| _action.autoShotCount == _action.weapon->getRules()->getAutoShots()
 																|| _action.weapon->getAmmoItem() == NULL));
 
-					if (_prjImpact == VOXEL_UNIT
+					if (_prjImpact == VOXEL_UNIT // note that Diary Statistics require direct hit by an explosive projectile for it to be considered as a 'been hit' shot.
 						&& (_action.type == BA_SNAPSHOT || _action.type == BA_AUTOSHOT || _action.type == BA_AIMEDSHOT))
 					{
-						posContacts.push_back(Position::toTileSpace(_parent->getMap()->getProjectile()->getPosition(trjOffset)));
+						posContacts.push_back(pos);
 					}
 
 					// ... Let's try something
 /*					if (_prjImpact == VOXEL_UNIT)
 					{
-						BattleUnit* victim = _battleSave->getTile(
-																_parent->getMap()->getProjectile()->getPosition(trjOffset) / Position(16,16,24))
-															->getUnit();
+						BattleUnit* victim = _battleSave->getTile(Position::toTileSpace(_parent->getMap()->getProjectile()->getPosition(trjOffset))->getUnit();
 						if (victim
 							&& !victim->isOut(true, true)
 							&& victim->getOriginalFaction() == FACTION_PLAYER
@@ -982,6 +948,8 @@ void ProjectileFlyBState::think()
 				// Special Shotgun Behaviour: determine *extra* projectile paths and add bullet hits at their termination points.
 				if (_ammo != NULL)
 				{
+					Position shotVoxel;
+
 					int pelletsLeft = _ammo->getRules()->getShotgunPellets() - 1; // shotgun pellets after 1st
 					while (pelletsLeft > 0)
 					{
@@ -995,28 +963,27 @@ void ProjectileFlyBState::think()
 							spread = static_cast<double>(pelletsLeft * _ammo->getRules()->getShotgunPattern()) * 0.003, // pellet spread.
 							accuracy = std::max(0.,
 											_unit->getAccuracy(_action) - spread);
+
 						_prjImpact = prj->calculateShot(accuracy);
-						if (_prjImpact != VOXEL_EMPTY
-							&& _prjImpact != VOXEL_OUTOFBOUNDS) // insert an explosion and hit
+						if (_prjImpact != VOXEL_EMPTY && _prjImpact != VOXEL_OUTOFBOUNDS) // insert an explosion and hit
 						{
-							prj->skipTrajectory();							// skip the pellet to the end of its path
-							const Position voxelExpl = prj->getPosition();	// <- beware of 'offset 1' <- removed.
+							prj->skipTrajectory();				// skip the pellet to the end of its path
+							shotVoxel = prj->getPosition(-1);	// <- beware of 'offset 1'
 
 							if (_prjImpact == VOXEL_UNIT
-								&& (_action.type == BA_SNAPSHOT
-									|| _action.type == BA_AUTOSHOT
-									|| _action.type == BA_AIMEDSHOT))
+								&& (_action.type == BA_SNAPSHOT || _action.type == BA_AUTOSHOT || _action.type == BA_AIMEDSHOT))
 							{
-								posContacts.push_back(Position::toTileSpace(voxelExpl));
+								posContacts.push_back(Position::toTileSpace(shotVoxel));
 							}
 
 							Explosion* const expl = new Explosion(
-																voxelExpl,
+																shotVoxel,
 																_ammo->getRules()->getHitAnimation());
 
 							_parent->getMap()->getExplosions()->push_back(expl);
+                            _parent->setShotgun(true);
 							_battleSave->getTileEngine()->hit(
-															voxelExpl,
+															shotVoxel,
 															_ammo->getRules()->getPower(),
 															_ammo->getRules()->getDamageType(),
 															_unit,
@@ -1192,23 +1159,23 @@ int ProjectileFlyBState::getMaxThrowDistance( // static.
 	return retDist;
 }
 
-/**
+/*
  * Set the origin voxel.
  * @note Used for the blaster launcher.
  * @param pos - reference the origin voxel
- */
-/* void ProjectileFlyBState::setOriginVoxel(const Position& pos) // private.
+ *
+void ProjectileFlyBState::setOriginVoxel(const Position& pos) // private.
 {
 	_originVoxel = pos;
 } */
 
-/**
+/*
  * Set the boolean flag to angle a blaster bomb towards the floor.
- */
+ *
 void ProjectileFlyBState::targetFloor() // private.
 {
 	_targetFloor = true;
-}
+} */
 
 /**
  * Peforms a melee attack.

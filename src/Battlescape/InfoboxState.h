@@ -61,7 +61,7 @@ private:
 		void think();
 
 		/// Closes the window.
-		void close();
+		void exit();
 };
 
 }
