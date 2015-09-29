@@ -319,7 +319,7 @@ void Map::draw()
 
 		if (_projectile != NULL) //&& _battleSave->getSide() == FACTION_PLAYER)
 		{
-			tile = _battleSave->getTile(Position::toTileSpace(_projectile->getPosition(0)));
+			tile = _battleSave->getTile(Position::toTileSpace(_projectile->getPosition()));
 			if (tile != NULL
 				&& (tile->getTileVisible() == true
 					|| _battleSave->getSide() != FACTION_PLAYER)) // shows projectile during aLien berserk
@@ -712,7 +712,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 						// Special case: crazy battleship tile+half floors; so check for content object diagonal wall directly above soldier also.
 						// Also, make sure the rankIcon isn't half-hidden by a westwall directly above the soldier.
 						// ... should probably be a subfunction
-						if (itX < endX && itZ > 0)
+						if (itZ > 0 && itX < endX)
 						{
 							const Tile* const tileEast = _battleSave->getTile(posMap + Position(1,0,0));
 
@@ -734,25 +734,25 @@ void Map::drawTerrain(Surface* const surface) // private.
 									&& unitEastBelow->getGeoscapeSoldier() != NULL
 									&& unitEastBelow->getFaction() == unitEastBelow->getOriginalFaction())
 								{
-									if (unitEastBelow->getFatalWounds() > 0)
+									const int tLevel = getTerrainLevel(
+																	unitEastBelow->getPosition(),
+																	unitEastBelow->getArmor()->getSize());
+
+									if (unitEastBelow->getFatalWounds() != 0)
 									{
 										sprite = _res->getSurface("RANK_ROOKIE"); // background panel for red cross icon.
 										if (sprite != NULL)
 											sprite->blitNShade(
 													surface,
 													posScreen.x + 2 + 16,
-													posScreen.y + 3 + 32 + getTerrainLevel(
-																						unitEastBelow->getPosition(),
-																						unitEastBelow->getArmor()->getSize()));
+													posScreen.y + 3 + 32 + tLevel);
 
 										sprite = _res->getSurfaceSet("SCANG.DAT")->getFrame(11); // small gray cross
 										if (sprite != NULL)
 											sprite->blitNShade(
 													surface,
 													posScreen.x + 4 + 16,
-													posScreen.y + 4 + 32 + getTerrainLevel(
-																						unitEastBelow->getPosition(),
-																						unitEastBelow->getArmor()->getSize()),
+													posScreen.y + 4 + 32 + tLevel,
 													_animFrame * 2,
 													false,
 													3); // 1=white, 3=red
@@ -767,54 +767,64 @@ void Map::drawTerrain(Surface* const surface) // private.
 											sprite->blitNShade(
 													surface,
 													posScreen.x + 2 + 16,
-													posScreen.y + 3 + 32 + getTerrainLevel(
-																						unitEastBelow->getPosition(),
-																						unitEastBelow->getArmor()->getSize()));
+													posScreen.y + 3 + 32 + tLevel);
 									}
 								}
 							}
 						} // kL_end.
 					} // end draw floor
 
-// Redraw unitNorth to prevent current-Floor from overdrawing it.
-					const Tile* const tileNorth = _battleSave->getTile(posMap + Position(-1,0,0));
-					if (tileNorth != NULL
-						&& tileNorth->getUnit() != NULL)
+// Redraw unitNorth, if it's moving NE/SW, to prevent current-Floor from overdrawing its feet.
+					if (hasFloor == true)
 					{
-						const BattleUnit* const unitNorth = tileNorth->getUnit();
-						if (unitNorth != NULL
-							&& unitNorth->getUnitVisible() == true // don't bother checking DebugMode.
-							&& (unitNorth->getUnitStatus() == STATUS_WALKING
-								|| unitNorth->getUnitStatus() == STATUS_FLYING)
-							&& (unitNorth->getDirection() == 1
-								|| unitNorth->getDirection() == 5))
+						const Tile* const tileWest = _battleSave->getTile(posMap + Position(-1,0,0));
+						if (tileWest != NULL)
 						{
-							trueLoc = isTrueLoc(unitNorth, tileNorth);
-							quadrant = getQuadrant(unitNorth, tileNorth, trueLoc);
-							sprite = unitNorth->getCache(quadrant);
-							if (sprite)
+							const BattleUnit* const unitWest = tileWest->getUnit();
+							if (unitWest != NULL)
 							{
-								if (unitNorth->isOut_t(OUT_HLTH_STUN) == true)
-									shade = std::min(5, tileShade);
-								else
-									shade = tileShade;
-
-								calculateWalkingOffset(unitNorth, &walkOffset, trueLoc);
-								sprite->blitNShade(
-										surface,
-										posScreen.x + walkOffset.x - 16,
-										posScreen.y + walkOffset.y - 8,
-										shade);
-
-								if (unitNorth->getFireUnit() != 0)
+								const Tile* const tileNorth = _battleSave->getTile(posMap + Position(0,-1,0));
+								if (tileNorth != NULL)
 								{
-									frame = 4 + (_animFrame / 2);
-									sprite = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
-									if (sprite)
-										sprite->blitNShade(
-												surface,
-												posScreen.x + walkOffset.x - 16,
-												posScreen.y + walkOffset.y - 8);
+									const BattleUnit* const unitNorth = tileNorth->getUnit();
+									if (unitNorth != NULL && unitNorth == unitWest)
+									{
+										if (unitNorth->getUnitVisible() == true // don't bother checking DebugMode.
+											&& (unitNorth->getUnitStatus() == STATUS_WALKING
+												|| unitNorth->getUnitStatus() == STATUS_FLYING)
+											&& (unitNorth->getDirection() == 1
+												|| unitNorth->getDirection() == 5))
+										{
+											trueLoc = isTrueLoc(unitNorth, tileNorth);
+											quadrant = getQuadrant(unitNorth, tileNorth, trueLoc);
+											sprite = unitNorth->getCache(quadrant);
+											if (sprite)
+											{
+												if (unitNorth->isOut_t(OUT_HLTH_STUN) == true)
+													shade = std::min(5, tileShade);
+												else
+													shade = tileShade;
+
+												calculateWalkingOffset(unitNorth, &walkOffset, trueLoc);
+												sprite->blitNShade(
+														surface,
+														posScreen.x + walkOffset.x + 16,
+														posScreen.y + walkOffset.y - 8,
+														shade);
+
+												if (unitNorth->getFireUnit() != 0)
+												{
+													frame = 4 + (_animFrame / 2);
+													sprite = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
+													if (sprite)
+														sprite->blitNShade(
+																surface,
+																posScreen.x + walkOffset.x + 16,
+																posScreen.y + walkOffset.y - 8);
+												}
+											}
+										}
+									}
 								}
 							}
 						}
@@ -822,11 +832,11 @@ void Map::drawTerrain(Surface* const surface) // private.
 
 // Draw Cursor Background
 					if (_cursorType != CT_NONE
+						&& _battleSave->getBattleState()->getMouseOverIcons() == false
 						&& _selectorX > itX - _cursorSize
 						&& _selectorY > itY - _cursorSize
 						&& _selectorX <= itX
-						&& _selectorY <= itY
-						&& _battleSave->getBattleState()->getMouseOverIcons() == false)
+						&& _selectorY <= itY)
 					{
 						if (_camera->getViewLevel() == itZ)
 						{
@@ -1006,25 +1016,25 @@ void Map::drawTerrain(Surface* const surface) // private.
 									&& unitBelow->getGeoscapeSoldier() != NULL
 									&& unitBelow->getFaction() == unitBelow->getOriginalFaction())
 								{
-									if (unitBelow->getFatalWounds() > 0)
+									const int tLevel = getTerrainLevel(
+																	unitBelow->getPosition(),
+																	unitBelow->getArmor()->getSize());
+
+									if (unitBelow->getFatalWounds() != 0)
 									{
 										sprite = _res->getSurface("RANK_ROOKIE"); // background panel for red cross icon.
 										if (sprite)
 											sprite->blitNShade(
 													surface,
 													posScreen.x + 2,
-													posScreen.y + 3 + 24 + getTerrainLevel(
-																						unitBelow->getPosition(),
-																						unitBelow->getArmor()->getSize()));
+													posScreen.y + 3 + 24 + tLevel);
 
 										sprite = _res->getSurfaceSet("SCANG.DAT")->getFrame(11); // small gray cross
 										if (sprite)
 											sprite->blitNShade(
 													surface,
 													posScreen.x + 4,
-													posScreen.y + 4 + 24 + getTerrainLevel(
-																						unitBelow->getPosition(),
-																						unitBelow->getArmor()->getSize()),
+													posScreen.y + 4 + 24 + tLevel,
 													_animFrame * 2,
 													false,
 													3); // red
@@ -1040,9 +1050,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 											sprite->blitNShade(
 													surface,
 													posScreen.x + 2,
-													posScreen.y + 3 + 24 + getTerrainLevel(
-																						unitBelow->getPosition(),
-																						unitBelow->getArmor()->getSize()));
+													posScreen.y + 3 + 24 + tLevel);
 									}
 								}
 							}
@@ -1184,16 +1192,14 @@ void Map::drawTerrain(Surface* const surface) // private.
 							const Tile* const tileAbove = _battleSave->getTile(posMap + Position(0,0,1));
 
 							if ((_camera->getViewLevel() == itZ
-									&& (_camera->getShowLayers() == false
-										|| itZ == endZ))
-								|| (tileAbove != NULL
-									&& tileAbove->getSprite(O_FLOOR) == NULL))
+									&& (_camera->getShowLayers() == false || itZ == endZ))
+								|| (tileAbove != NULL && tileAbove->getSprite(O_FLOOR) == NULL))
 							{
 								if (_unit != _battleSave->getSelectedUnit()
 									&& _unit->getGeoscapeSoldier() != NULL
 									&& _unit->getFaction() == _unit->getOriginalFaction())
 								{
-									if (_unit->getFatalWounds() > 0)
+									if (_unit->getFatalWounds() != 0)
 									{
 										sprite = _res->getSurface("RANK_ROOKIE"); // background panel for red cross icon.
 										if (sprite)
@@ -1202,15 +1208,14 @@ void Map::drawTerrain(Surface* const surface) // private.
 													posScreen.x + walkOffset.x + 2,
 													posScreen.y + walkOffset.y + 3);
 
-										sprite = _res->getSurfaceSet("SCANG.DAT")->getFrame(11); // small gray cross;
+										sprite = _res->getSurfaceSet("SCANG.DAT")->getFrame(11); // small gray cross
 										if (sprite)
 											sprite->blitNShade(
 													surface,
 													posScreen.x + walkOffset.x + 4,
 													posScreen.y + walkOffset.y + 4,
 													_animFrame * 2,
-													false,
-													3); // red
+													false, 3); // red
 									}
 									else
 									{
@@ -1229,8 +1234,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 								// Draw Exposed mark
 								if (_unit->getFaction() == FACTION_PLAYER
 									&& _unit->getFaction() == _unit->getOriginalFaction()
-									&& (_unit->getArmor()->getSize() == 1
-										|| quadrant == 1))
+									&& (_unit->getArmor()->getSize() == 1 || quadrant == 1))
 								{
 									const int exposure = _unit->getExposed();
 									if (exposure != -1)
@@ -1300,7 +1304,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 
 // Draw unitBelow if it is on raised ground & there is no Floor.
 					if (itZ > 0
-						&& tileBelow != NULL
+//						&& tileBelow != NULL
 						&& tileBelow->getTerrainLevel() < -11
 						&& _tile->hasNoFloor(tileBelow) == true)
 					{
@@ -1342,8 +1346,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 
 // Draw SMOKE & FIRE
 					if (_tile->isDiscovered(2) == true
-						&& (_tile->getSmoke() != 0
-							|| _tile->getFire() != 0))
+						&& (_tile->getSmoke() != 0 || _tile->getFire() != 0))
 					{
 						if (_tile->getFire() == 0)
 						{
@@ -1414,11 +1417,11 @@ void Map::drawTerrain(Surface* const surface) // private.
 
 // Draw Cursor Front
 					if (_cursorType != CT_NONE
+						&& _battleSave->getBattleState()->getMouseOverIcons() == false
 						&& _selectorX > itX - _cursorSize
 						&& _selectorY > itY - _cursorSize
 						&& _selectorX <= itX
-						&& _selectorY <= itY
-						&& _battleSave->getBattleState()->getMouseOverIcons() == false)
+						&& _selectorY <= itY)
 					{
 						if (_camera->getViewLevel() == itZ)
 						{
@@ -1456,8 +1459,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 							if (_cursorType == CT_AIM) // indicator for Firing.
 							{
 								// draw targetUnit over cursor's front if tile is blacked-out.
-								if (hasUnit == true
-									&& _tile->isDiscovered(2) == false)
+								if (hasUnit == true && _tile->isDiscovered(2) == false)
 								{
 									trueLoc = isTrueLoc(_unit, _tile);
 									quadrant = getQuadrant(_unit, _tile, trueLoc);
@@ -1541,11 +1543,9 @@ void Map::drawTerrain(Surface* const surface) // private.
 
 								const Position
 									originVoxel = _battleSave->getTileEngine()->getOriginVoxel(*action),
-									targetVoxel = Position( // TODO: conform this to ProjectileFlyBState (modifier keys) & Projectile::_targetVoxel
-														itX * 16 + 8,
-														itY * 16 + 8,
-														itZ * 24 - _battleSave->getTile(action->target)->getTerrainLevel());
-
+									targetVoxel = Position::toVoxelSpaceCentered( // TODO: conform this to ProjectileFlyBState (modifier keys) & Projectile::_targetVoxel
+																			Position(itX,itY,itZ),
+																			-_battleSave->getTile(action->target)->getTerrainLevel());
 								const bool canThrow = _battleSave->getTileEngine()->validateThrow(
 																							*action,
 																							originVoxel,
@@ -1585,8 +1585,8 @@ void Map::drawTerrain(Surface* const surface) // private.
 						if (_cursorType > CT_AIM // Psi, Waypoint, Throw
 							&& _camera->getViewLevel() == itZ)
 						{
-							const int arrowFrame[6] = {0,0,0,11,13,15};
-							sprite = _res->getSurfaceSet("CURSOR.PCK")->getFrame(arrowFrame[_cursorType] + (_animFrame / 4));
+							const int cursorFrames[6] = {0,0,0,11,13,15};
+							sprite = _res->getSurfaceSet("CURSOR.PCK")->getFrame(cursorFrames[_cursorType] + (_animFrame / 4));
 							sprite->blitNShade(
 									surface,
 									posScreen.x,
@@ -1608,8 +1608,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 					{
 						if (*i == posMap)
 						{
-							if (waypXOff == 2
-								&& waypYOff == 2)
+							if (waypXOff == 2 && waypYOff == 2)
 							{
 								sprite = _res->getSurfaceSet("CURSOR.PCK")->getFrame(7);
 								sprite->blitNShade(
@@ -1753,8 +1752,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 							{
 								const Tile* const tileBelow = _battleSave->getTile(posMap + Position(0,0,-1));
 
-								if (itZ > 0
-									&& _tile->hasNoFloor(tileBelow) == true)
+								if (itZ > 0 && _tile->hasNoFloor(tileBelow) == true)
 								{
 									sprite = _res->getSurfaceSet("Pathfinding")->getFrame(23);
 									if (sprite)
