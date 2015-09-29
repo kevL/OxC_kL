@@ -319,10 +319,7 @@ void Map::draw()
 
 		if (_projectile != NULL) //&& _battleSave->getSide() == FACTION_PLAYER)
 		{
-			tile = _battleSave->getTile(Position(
-											_projectile->getPosition(0).x / 16,
-											_projectile->getPosition(0).y / 16,
-											_projectile->getPosition(0).z / 24));
+			tile = _battleSave->getTile(Position::toTileSpace(_projectile->getPosition(0)));
 			if (tile != NULL
 				&& (tile->getTileVisible() == true
 					|| _battleSave->getSide() != FACTION_PLAYER)) // shows projectile during aLien berserk
@@ -341,10 +338,7 @@ void Map::draw()
 					i != _explosions.end();
 					++i)
 			{
-				tile = _battleSave->getTile(Position(
-												(*i)->getPosition().x / 16,
-												(*i)->getPosition().y / 16,
-												(*i)->getPosition().z / 24));
+				tile = _battleSave->getTile(Position::toTileSpace((*i)->getPosition()));
 				if (tile != NULL
 					&& (tile->getTileVisible() == true
 						|| (tile->getUnit() != NULL
@@ -380,7 +374,7 @@ void Map::draw()
 			if (delayHiddenScreen == true)
 			{
 				delayHiddenScreen = false;
-				SDL_Delay(372);
+				SDL_Delay(369);
 			}
 
 			_mapIsHidden = true;
@@ -470,7 +464,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 				bulletHighZ = _projectile->getPosition(trjOffset).z;
 		}
 
-		// convert bullet position from voxelspace to tilespace
+		// convert bullet position from voxel-space to tile-space
 		bulletLowX  /= 16;
 		bulletLowY  /= 16;
 		bulletHighX /= 16;
@@ -957,8 +951,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 										tileShade);
 							}
 
-							if (var == true
-								&& _tile->isDiscovered(2) == true)
+							if (var == true && _tile->isDiscovered(2) == true)
 							{
 								frame = 4 + (_animFrame / 2);
 								sprite = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
@@ -982,12 +975,17 @@ void Map::drawTerrain(Surface* const surface) // private.
 										posScreen.y + _tile->getTerrainLevel(),
 										tileShade);
 
-								if (var == true
-									&& _tile->isDiscovered(2) == true)
+								if (var == true && _tile->isDiscovered(2) == true)
 								{
-									sprite->setPixelColor(
-														16,28,
-														_fuseColor);
+									for (int
+											x = 0;
+											x != 3;
+											++x)
+									{
+										sprite->setPixelColor(
+															15 + x, 28,
+															_fuseColor);
+									}
 								}
 							}
 						}
@@ -1056,7 +1054,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 						&& _projectile != NULL)
 					{
 						Position voxel;
-						if (_projectile->getThrowItem() != NULL) // thrown item ( grenade, etc.)
+						if (_projectile->getThrowItem() != NULL)
 						{
 							sprite = _projectile->getThrowSprite();
 							if (sprite)

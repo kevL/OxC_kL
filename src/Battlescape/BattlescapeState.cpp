@@ -1780,9 +1780,8 @@ void BattlescapeState::btnMapDownClick(Action*)
  */
 void BattlescapeState::setLayerValue(int level)
 {
-	if (level < 0)
-		level = 0;
-	_numLayers->setValue(static_cast<unsigned int>(level + 1));
+//	if (level < 0) level = 0;
+	_numLayers->setValue(static_cast<unsigned>((level + 1) % 10));
 }
 
 /**
