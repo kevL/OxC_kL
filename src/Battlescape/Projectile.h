@@ -110,14 +110,14 @@ private:
 		/// Skips the bullet flight.
 		void skipTrajectory();
 
-		/// Gets the current position in voxel space.
+		/// Gets the projectile's current position in voxel-space.
 		Position getPosition(int offsetId = 0) const;
-		/// Gets a particle from the particle array.
-		int getParticle(int id) const;
-		/// Gets the item.
-		BattleItem* getItem() const;
-		/// Gets the sprite.
-		Surface* getSprite() const;
+		/// Gets an ID for the projectile's current surface.
+		int getBulletSprite(int id) const;
+		/// Gets the thrown item.
+		BattleItem* getThrowItem() const;
+		/// Gets the thrown item's sprite.
+		Surface* getThrowSprite() const;
 
 		/// Gets the BattleAction associated with this projectile.
 		BattleAction* getActionPrj();

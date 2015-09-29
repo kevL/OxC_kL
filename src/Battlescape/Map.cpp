@@ -442,7 +442,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 			part,
 			trjOffset;
 
-		if (_projectile->getItem() != NULL) // thrown item
+		if (_projectile->getThrowItem() != NULL)
 			part = 0;
 		else
 			part = BULLET_SPRITES - 1;
@@ -520,7 +520,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 						}
 					}
 
-					if (_projectile->getItem() != NULL
+					if (_projectile->getThrowItem() != NULL
 						|| _camera->isOnScreen(posFinal) == false)
 					{
 						_smoothingEngaged = true;
@@ -1056,9 +1056,9 @@ void Map::drawTerrain(Surface* const surface) // private.
 						&& _projectile != NULL)
 					{
 						Position voxel;
-						if (_projectile->getItem() != NULL) // thrown item ( grenade, etc.)
+						if (_projectile->getThrowItem() != NULL) // thrown item ( grenade, etc.)
 						{
-							sprite = _projectile->getSprite();
+							sprite = _projectile->getThrowSprite();
 							if (sprite)
 							{
 								voxel = _projectile->getPosition(); // draw shadow on the floor
@@ -1069,9 +1069,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 									&& voxel.y / 16 < itY + 2
 									&& voxel.z / 24 == itZ)
 								{
-									_camera->convertVoxelToScreen(
-																voxel,
-																&bullet);
+									_camera->convertVoxelToScreen(voxel, &bullet);
 									sprite->blitNShade(
 											surface,
 											bullet.x - 16,
@@ -1086,9 +1084,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 									&& voxel.y / 16 < itY + 2
 									&& voxel.z / 24 == itZ)
 								{
-									_camera->convertVoxelToScreen(
-																voxel,
-																&bullet);
+									_camera->convertVoxelToScreen(voxel, &bullet);
 									sprite->blitNShade(
 											surface,
 											bullet.x - 16,
@@ -1108,7 +1104,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 										id != BULLET_SPRITES;
 										++id)
 								{
-									sprite = _projectileSet->getFrame(_projectile->getParticle(id));
+									sprite = _projectileSet->getFrame(_projectile->getBulletSprite(id));
 									if (sprite)
 									{
 										voxel = _projectile->getPosition(1 - id); // draw shadow on the floor
@@ -1117,9 +1113,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 											&& voxel.y / 16 == itY
 											&& voxel.z / 24 == itZ)
 										{
-											_camera->convertVoxelToScreen(
-																		voxel,
-																		&bullet);
+											_camera->convertVoxelToScreen(voxel, &bullet);
 
 											bullet.x -= sprite->getWidth() / 2;
 											bullet.y -= sprite->getHeight() / 2;
@@ -1135,9 +1129,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 											&& voxel.y / 16 == itY
 											&& voxel.z / 24 == itZ)
 										{
-											_camera->convertVoxelToScreen(
-																		voxel,
-																		&bullet);
+											_camera->convertVoxelToScreen(voxel, &bullet);
 
 											bullet.x -= sprite->getWidth() / 2;
 											bullet.y -= sprite->getHeight() / 2;

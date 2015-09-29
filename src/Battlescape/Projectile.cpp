@@ -87,7 +87,7 @@ Projectile::Projectile(
 		if (_action.type == BA_THROW)
 		{
 			//Log(LOG_INFO) << "Create Projectile -> BA_THROW";
-			_throwSprite = res->getSurfaceSet("FLOOROB.PCK")->getFrame(getItem()->getRules()->getFloorSprite());
+			_throwSprite = res->getSurfaceSet("FLOOROB.PCK")->getFrame(_action.weapon->getRules()->getFloorSprite());
 			_speed /= 2;
 		}
 		else // ba_SHOOT!! or hit, or spit
@@ -724,7 +724,7 @@ bool Projectile::verifyTarget(const Position& originVoxel) // private.
 }
 
 /**
- * Moves projectile further along its trajectory.
+ * Moves this Projectile further along its trajectory.
  * @return, true if projectile is still pathing
  */
 bool Projectile::traceProjectile()
@@ -745,34 +745,36 @@ bool Projectile::traceProjectile()
 }
 
 /**
- * Skips to the end of the trajectory.
+ * Skips to the end of this Projectile's trajectory.
  */
 void Projectile::skipTrajectory()
 {
-//	while (traceProjectile() == true);	// why.
-	_trjId = _trj.size() - 1;			// old code
+	_trjId = _trj.size() - 1;
 }
 
 /**
- * Gets the current position in voxel space.
+ * Gets the current position of this Projectile in voxel space.
  * @param offsetId - ID offset (default 0)
- * @return, position in voxel space
+ * @return, position in voxel-space
  */
 Position Projectile::getPosition(int offsetId) const
 {
-	offsetId += static_cast<int>(_trjId);
-	if (offsetId > -1 && offsetId < static_cast<int>(_trj.size()))
-		return _trj.at(static_cast<size_t>(offsetId));
+	if (offsetId == 0) return _trj.at(_trjId);
 
-	return _trj.at(_trjId);
+	offsetId = std::max(
+					0,
+					std::min(
+						static_cast<int>(_trjId) + offsetId,
+						static_cast<int>(_trj.size() - 1)));
+	return _trj.at(static_cast<size_t>(offsetId));
 }
 
 /**
- * Gets a particle reference from the projectile surfaces.
+ * Gets an ID from this Projectile's surfaces.
  * @param id - index
  * @return, particle id
  */
-int Projectile::getParticle(int id) const
+int Projectile::getBulletSprite(int id) const
 {
 	if (_bulletSprite != -1)
 		return _bulletSprite + id;
@@ -781,10 +783,10 @@ int Projectile::getParticle(int id) const
 }
 
 /**
- * Gets the projectile item.
- * @return, pointer to a BattleItem (returns NULL when no item is thrown)
+ * Gets this Projectile's thrown item if it exists.
+ * @return, pointer to a BattleItem or NULL
  */
-BattleItem* Projectile::getItem() const
+BattleItem* Projectile::getThrowItem() const
 {
 	if (_action.type == BA_THROW)
 		return _action.weapon;
@@ -796,13 +798,13 @@ BattleItem* Projectile::getItem() const
  * Gets the thrown object's sprite.
  * @return, pointer to Surface
  */
-Surface* Projectile::getSprite() const
+Surface* Projectile::getThrowSprite() const
 {
 	return _throwSprite;
 }
 
 /**
- * Gets the BattleAction associated with this projectile.
+ * Gets the BattleAction associated with this Projectile.
  * @return, pointer to the BattleAction
  */
 BattleAction* Projectile::getActionPrj()
@@ -811,7 +813,7 @@ BattleAction* Projectile::getActionPrj()
 }
 
 /**
- * Gets the ACTUAL target-position for this projectile.
+ * Gets the ACTUAL target-position for this Projectile.
  * @note It is important to note that we use the final position of the
  * projectile here.
  * @return, trajectory finish as a tile position

@@ -788,7 +788,7 @@ void ProjectileFlyBState::think()
 				if (pos.y > _battleSave->getMapSizeY())
 					--pos.y;
 
-				BattleItem* const item = _parent->getMap()->getProjectile()->getItem();
+				BattleItem* const item = _parent->getMap()->getProjectile()->getThrowItem();
 				if (item->getRules()->getBattleType() == BT_GRENADE
 					&& item->getFuse() == 0) //&& Options::battleInstantGrenade == true // -> moved to PrimeGrenadeState (0 cannot be set w/out InstantGrenades)
 				{

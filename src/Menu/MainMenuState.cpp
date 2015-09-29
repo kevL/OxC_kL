@@ -113,6 +113,9 @@ MainMenuState::MainMenuState()
 
 	_btnQuit->setText(tr("STR_QUIT"));
 	_btnQuit->onMouseClick((ActionHandler)& MainMenuState::btnQuitClick);
+	_btnQuit->onKeyboardPress(
+					(ActionHandler)& MainMenuState::btnQuitClick,
+					Options::keyCancel);
 
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
@@ -128,8 +131,7 @@ MainMenuState::MainMenuState()
 
 	_game->getResourcePack()->playMusic(
 									OpenXcom::res_MUSIC_START_MAINMENU,
-									"",
-									1); // only once, Pls.
+									"", 1); // only once, Pls.
 
 	SDL_ShowCursor(SDL_ENABLE); // kL: stabilize my cursor. I disabled it in Game and show it here instead.
 }

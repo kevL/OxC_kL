@@ -38,8 +38,8 @@ InfoboxState::InfoboxState(const std::wstring& msg)
 {
 	_screen = false;
 
-	_frame	= new Frame(260, 90, 30, 86); // was x= 27
-	_text	= new Text(250, 80, 35, 32);
+	_frame	= new Frame(260, 90, 30, 86);
+	_text	= new Text(250, 80, 35, 91);
 
 	setPalette("PAL_BATTLESCAPE");
 

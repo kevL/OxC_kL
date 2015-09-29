@@ -48,9 +48,9 @@ InfoboxOKState::InfoboxOKState(const std::wstring& msg)
 {
 	_screen = false;
 
-	_frame		= new Frame(260, 90, 30, 86); // was x= 27
-	_txtTitle	= new Text(250, 58, 35, 34);
-	_btnOk		= new TextButton(120, 16, 100, 94);
+	_frame		= new Frame(260, 90, 30, 86);
+	_txtTitle	= new Text(250, 58, 35, 93);
+	_btnOk		= new TextButton(120, 16, 100, 153);
 
 	setPalette("PAL_BATTLESCAPE");
 
