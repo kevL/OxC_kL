@@ -2551,9 +2551,8 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*>* const scri
 
 	init();
 
-	MapBlock
-		* craftBlock = NULL,
-		* ufoBlock = NULL;
+	MapBlock* craftBlock = NULL;
+	std::vector<MapBlock*> ufoBlocks;
 
 	int
 		mapDataSetIdOffset = 0,
@@ -2724,20 +2723,25 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*>* const scri
 
 						if (ufoTerrain != NULL)
 						{
-							ufoBlock = ufoTerrain->getRandomMapBlock(
-																	999,999,
-																	0, false);
+							MapBlock* const ufoBlock = ufoTerrain->getRandomMapBlock(
+																				999,999,
+																				0, false);
 							//Log(LOG_INFO) << ". ufoBlock = " << ufoBlock->getType();
-							if (addCraft(ufoBlock, *i, _ufoPos) == true)
+
+							SDL_Rect ufoPosTest;
+							if (addCraft(ufoBlock, *i, ufoPosTest) == true)
 							{
+								_ufoPos.push_back(ufoPosTest);
+								ufoBlocks.push_back(ufoBlock);
+
 								for (
-										x = _ufoPos.x;
-										x != _ufoPos.x + _ufoPos.w;
+										x = ufoPosTest.x;
+										x != ufoPosTest.x + ufoPosTest.w;
 										++x)
 								{
 									for (
-											y = _ufoPos.y;
-											y != _ufoPos.y + _ufoPos.h;
+											y = ufoPosTest.y;
+											y != ufoPosTest.y + ufoPosTest.h;
 											++y)
 									{
 										if (_blocks[x][y])
@@ -2880,10 +2884,10 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*>* const scri
 	loadNodes();
 
 	if (_battleSave->getTacType() == TCT_BASEASSAULT)
-		placeXcomProperty();
+		placeXComProperty();
 
 
-	if (ufoBlock != NULL && ufoTerrain != NULL)
+	if (ufoTerrain != NULL && ufoBlocks.empty() == false)
 	{
 		for (std::vector<MapDataSet*>::const_iterator
 				i = ufoTerrain->getMapDataSets()->begin();
@@ -2899,36 +2903,37 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*>* const scri
 			++craftDataSetIdOffset;
 		}
 
-		// TODO: put ufo positions in a vector rather than a single rect and iterate here;
-		// would probably need to make ufoBlock a vector too.
-		loadMAP(
-				ufoBlock,
-				_ufoPos.x * 10,
-				_ufoPos.y * 10,
-				ufoTerrain,
-				mapDataSetIdOffset);
-		loadRMP(
-				ufoBlock,
-				_ufoPos.x * 10,
-				_ufoPos.y * 10,
-				Node::SEG_UFO);
-
-		for (int
+		for (size_t
 				i = 0;
-				i != ufoBlock->getSizeX() / 10;
+				i != ufoBlocks.size();
 				++i)
 		{
+			loadMAP(
+					ufoBlocks[i],
+					_ufoPos[i].x * 10, _ufoPos[i].y * 10,
+					ufoTerrain,
+					mapDataSetIdOffset);
+			loadRMP(
+					ufoBlocks[i],
+					_ufoPos[i].x * 10, _ufoPos[i].y * 10,
+					Node::SEG_UFO);
+
 			for (int
 					j = 0;
-					j != ufoBlock->getSizeY() / 10;
+					j != ufoBlocks[i]->getSizeX() / 10;
 					++j)
 			{
-				_segments[_ufoPos.x + i]
-						 [_ufoPos.y + j] = Node::SEG_UFO;
+				for (int
+						k = 0;
+						k != ufoBlocks[i]->getSizeY() / 10;
+						++k)
+				{
+					_segments[_ufoPos[i].x + j]
+							 [_ufoPos[i].y + k] = Node::SEG_UFO;
+				}
 			}
 		}
 	}
-
 
 	if (craftBlock != NULL)
 	{
@@ -3174,7 +3179,7 @@ void BattlescapeGenerator::generateBaseMap() // private.
  * Finds Alien Base start modules and iterates possible positions for Xcom's
  * starting equipment.
  */
-void BattlescapeGenerator::placeXcomProperty() // private.
+void BattlescapeGenerator::placeXComProperty() // private.
 {
 	const size_t
 		xSize = static_cast<size_t>(_mapsize_x / 10),

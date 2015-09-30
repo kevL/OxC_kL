@@ -4625,7 +4625,7 @@
 1433651396 f:\git\openxcom\src\basescape\craftequipmentstate.h
 	"../Engine/State.h"
 
-1442971521 f:\git\openxcom\src\battlescape\battlescapegenerator.h
+1443572633 f:\git\openxcom\src\battlescape\battlescapegenerator.h
 	"../Ruleset/MapScript.h"
 
 1443073317 f:\git\openxcom\src\battlescape\inventorystate.h
@@ -5551,7 +5551,7 @@
 
 1440163450 f:\git\openxcom\src\ruleset\ruleinventory.h
 
-1443481370 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
+1443573510 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
 	"BattlescapeGenerator.h"
 	"AlienBAIState.h"
 	"CivilianBAIState.h"
@@ -5961,7 +5961,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1443533594 source:f:\git\openxcom\src\battlescape\map.cpp
+1443569857 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	"BattlescapeMessage.h"
 	"BattlescapeState.h"

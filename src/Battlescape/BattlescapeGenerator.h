@@ -75,9 +75,8 @@ private:
 		_unitSequence;
 	size_t _battleOrder;
 
-	SDL_Rect
-		_craftPos,
-		_ufoPos;
+	SDL_Rect _craftPos;
+	std::vector<SDL_Rect> _ufoPos;
 
 	std::vector<std::vector<bool> > _landingzone;
 	std::vector<std::vector<int> >
@@ -167,7 +166,7 @@ private:
 	void generateBaseMap();
 
 	/// Finds Alien Base start modules for Xcom equipment spawning.
-	void placeXcomProperty();
+	void placeXComProperty();
 
 	/// Clears a module from the map.
 	void clearModule(

@@ -775,17 +775,18 @@ void Map::drawTerrain(Surface* const surface) // private.
 					} // end draw floor
 
 // Redraw unitNorth, if it's moving NE/SW, to prevent current-Floor from overdrawing its feet.
-					if (hasFloor == true)
+					if (itX != 0 && itY != 0
+						&& hasFloor == true)
 					{
 						const Tile* const tileWest = _battleSave->getTile(posMap + Position(-1,0,0));
-						if (tileWest != NULL)
-						{
+//						if (tileWest != NULL)
+//						{
 							const BattleUnit* const unitWest = tileWest->getUnit();
 							if (unitWest != NULL)
 							{
 								const Tile* const tileNorth = _battleSave->getTile(posMap + Position(0,-1,0));
-								if (tileNorth != NULL)
-								{
+//								if (tileNorth != NULL)
+//								{
 									const BattleUnit* const unitNorth = tileNorth->getUnit();
 									if (unitNorth != NULL && unitNorth == unitWest)
 									{
@@ -825,9 +826,9 @@ void Map::drawTerrain(Surface* const surface) // private.
 											}
 										}
 									}
-								}
+//								}
 							}
-						}
+//						}
 					}
 
 // Draw Cursor Background
@@ -1310,8 +1311,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 					{
 						BattleUnit* const unitBelow = tileBelow->getUnit();
 						if (unitBelow != NULL
-							&& (unitBelow->getUnitVisible() == true
-								|| _battleSave->getDebugMode() == true))
+							&& unitBelow->getUnitVisible() == true) //|| _battleSave->getDebugMode() == true))
 						{
 							trueLoc = isTrueLoc(unitBelow, tileBelow);
 							quadrant = getQuadrant(unitBelow, tileBelow, trueLoc);

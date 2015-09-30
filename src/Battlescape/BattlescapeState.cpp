@@ -3456,7 +3456,6 @@ void BattlescapeState::mouseInIcons(Action*)
 void BattlescapeState::mouseOutIcons(Action*)
 {
 	_mouseOverIcons = false;
-
 	_lstTileInfo->setVisible();
 }
 
