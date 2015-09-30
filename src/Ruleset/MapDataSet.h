@@ -31,7 +31,6 @@ namespace OpenXcom
 
 class Game;
 class MapData;
-class ResourcePack;
 class SurfaceSet;
 
 
@@ -52,7 +51,7 @@ private:
 		* _blankTile,
 		* _scorchedTile;
 
-	const Game* const _game;
+	const Game* _game;
 	SurfaceSet* _surfaceSet;
 
 	std::vector<MapData*> _objects;

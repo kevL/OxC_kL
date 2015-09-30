@@ -104,14 +104,14 @@ PathfindingNode* Pathfinding::getNode(const Position& pos) // private.
  * Calculates the shortest path; tries bresenham then A* algorithms.
  * @note 'missileTarget' is required only when called by AlienBAIState::pathWaypoints().
  * @param unit				- pointer to a BattleUnit
- * @param destPos			- destination Position
+ * @param posDest			- destination Position
  * @param missileTarget		- pointer to a targeted BattleUnit (default NULL)
  * @param maxTuCost			- maximum time units this path can cost (default 1000)
  * @param strafeRejected	- true if path needs to be recalculated w/out strafe (default false)
  */
 void Pathfinding::calculate(
 		const BattleUnit* const unit, // -> should not need 'unit' here anymore; done in setPathingUnit() unless FACTION_PLAYER ...
-		Position destPos,
+		Position posDest,
 		const BattleUnit* const missileTarget,
 		int maxTuCost,
 		bool strafeRejected)
@@ -123,10 +123,10 @@ void Pathfinding::calculate(
 	// i'm DONE with these out of bounds errors.
 	// kL_note: I really don't care what you're "DONE" with .....
 	int armorSize = unit->getArmor()->getSize();
-	if (destPos.x < 0
-		|| destPos.y < 0
-		|| destPos.x > _battleSave->getMapSizeX() - armorSize
-		|| destPos.y > _battleSave->getMapSizeY() - armorSize)
+	if (posDest.x < 0
+		|| posDest.y < 0
+		|| posDest.x > _battleSave->getMapSizeX() - armorSize
+		|| posDest.y > _battleSave->getMapSizeY() - armorSize)
 	{
 		return;
 	}
@@ -141,15 +141,15 @@ void Pathfinding::calculate(
 								// needs -1 passed in ...... plus it does further checks directly against maxTuCost.
 	{
 		_mType = MT_FLY;
-		strafeRejected = true;
 		maxTuCost = 1000;
+		strafeRejected = true;
 	}
 
 	if (unit->getFaction() != FACTION_PLAYER)
 		strafeRejected = true;
 
 
-	const Tile* tileDest = _battleSave->getTile(destPos);
+	const Tile* tileDest = _battleSave->getTile(posDest);
 
 	if (isBlocked(			// check if destination is blocked.
 				tileDest,	// <- note these aren't the actual destTiles yet.
@@ -166,25 +166,25 @@ void Pathfinding::calculate(
 
 	Position destPos2; // for keeping things straight if strafeRejected happens.
 	if (strafeRejected == false)
-		destPos2 = destPos;
+		destPos2 = posDest;
 
 	// The following check avoids causing the unit to walk behind the stairs if
 	// the player clicks behind the stairs to make it go up the stairs. It works
 	// only if the unit is on one of the 2 tiles on the stairs or on the tile
 	// right in front of the stairs.
 	// kL_note: I don't want this: (the function below can be removed too).
-/*	if (isOnStairs(startPos, destPos))
+/*	if (isOnStairs(posStart, posDest))
 	{
-		destPos.z++;
-		tileDest = _battleSave->getTile(destPos);
+		posDest.z++;
+		tileDest = _battleSave->getTile(posDest);
 	} */
 
 	while (tileDest->getTerrainLevel() == -24
-		&& destPos.z != _battleSave->getMapSizeZ())
+		&& posDest.z != _battleSave->getMapSizeZ())
 	{
-		++destPos.z;
-		tileDest = _battleSave->getTile(destPos);
-		//Log(LOG_INFO) << ". raising destTile 1 level, destPos = " << destPos;
+		++posDest.z;
+		tileDest = _battleSave->getTile(posDest);
+		//Log(LOG_INFO) << ". raising destTile 1 level, posDest = " << posDest;
 	}
 
 	// Check if there's a floor else lower the destination. This allows click in
@@ -193,9 +193,9 @@ void Pathfinding::calculate(
 	{
 		while (canFallDown(tileDest, armorSize))
 		{
-			--destPos.z;
-			tileDest = _battleSave->getTile(destPos);
-			//Log(LOG_INFO) << ". canFallDown() -1 level, destPos = " << destPos;
+			--posDest.z;
+			tileDest = _battleSave->getTile(posDest);
+			//Log(LOG_INFO) << ". canFallDown() -1 level, posDest = " << posDest;
 		}
 	}
 
@@ -231,7 +231,7 @@ void Pathfinding::calculate(
 				{
 					if (x != 0 || y != 0)
 					{
-						tileTest = _battleSave->getTile(destPos + Position(x,y,0));
+						tileTest = _battleSave->getTile(posDest + Position(x,y,0));
 						if (x != 0 && y != 0
 							&& ((tileTest->getMapData(O_NORTHWALL) != NULL
 									&& tileTest->getMapData(O_NORTHWALL)->isDoor() == true)
@@ -269,7 +269,7 @@ void Pathfinding::calculate(
 		}
 
 
-		const Position startPos = unit->getPosition();
+		const Position posStart = unit->getPosition();
 
 		const bool isMech = unit->getUnitRules() != NULL
 						 && unit->getUnitRules()->isMechanical();
@@ -278,9 +278,12 @@ void Pathfinding::calculate(
 			   && Options::battleStrafe == true
 			   && ((_Ctrl == true && isMech == false)
 					|| (_Alt == true && isMech == true))
-			   && startPos.z == destPos.z
-			   && std::abs(destPos.x - startPos.x) < 2
-			   && std::abs(destPos.y - startPos.y) < 2;
+			   && (//posStart.z == posDest.z ||
+					std::abs(
+							(_battleSave->getTile(posDest)->getTerrainLevel() - posDest.z * 24)
+						  - (_battleSave->getTile(posStart)->getTerrainLevel() - posStart.z * 24)) < 9)
+			   && std::abs(posDest.x - posStart.x) < 2
+			   && std::abs(posDest.y - posStart.y) < 2;
 
 		_battleAction->strafe = _strafe;
 
@@ -288,10 +291,10 @@ void Pathfinding::calculate(
 		const bool sneak = unit->getFaction() == FACTION_HOSTILE
 						&& Options::sneakyAI == true;
 
-		if (startPos.z == destPos.z
+		if (posStart.z == posDest.z
 			&& bresenhamPath(
-						startPos,
-						destPos,
+						posStart,
+						posDest,
 						missileTarget,
 						sneak
 						/*maxTuCost*/) == true)
@@ -305,8 +308,8 @@ void Pathfinding::calculate(
 			abortPath();
 
 			if (aStarPath(
-						startPos,
-						destPos,
+						posStart,
+						posDest,
 						missileTarget,
 						sneak,
 						maxTuCost) == false)

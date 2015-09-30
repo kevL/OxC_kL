@@ -4591,7 +4591,7 @@
 	"MapData.h"
 	"Unit.h"
 
-1443342244 f:\git\openxcom\src\ruleset\mapdata.h
+1443578373 f:\git\openxcom\src\ruleset\mapdata.h
 	"RuleItem.h"
 
 1443223683 f:\git\openxcom\src\ruleset\ruleitem.h
@@ -5384,7 +5384,7 @@
 1439006904 f:\git\openxcom\src\battlescape\medikitstate.h
 	"../Engine/State.h"
 
-1442870793 f:\git\openxcom\src\battlescape\pathfinding.h
+1443576829 f:\git\openxcom\src\battlescape\pathfinding.h
 	"PathfindingNode.h"
 	"Position.h"
 	"../Ruleset/MapData.h"
@@ -5551,7 +5551,7 @@
 
 1440163450 f:\git\openxcom\src\ruleset\ruleinventory.h
 
-1443573510 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
+1443575011 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
 	"BattlescapeGenerator.h"
 	"AlienBAIState.h"
 	"CivilianBAIState.h"
@@ -5607,7 +5607,7 @@
 
 1440555773 f:\git\openxcom\src\ruleset\mapblock.h
 
-1439853128 f:\git\openxcom\src\ruleset\mapdataset.h
+1443577872 f:\git\openxcom\src\ruleset\mapdataset.h
 
 1440027769 f:\git\openxcom\src\ruleset\mcdpatch.h
 	"MapData.h"
@@ -6094,7 +6094,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1443083459 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
+1443580113 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
 	"Pathfinding.h"
 	"PathfindingNode.h"
 	"PathfindingOpenSet.h"
@@ -11186,7 +11186,7 @@
 1442351139 f:\git\openxcom\src\ufopaedia\articlestateaward.h
 	"ArticleState.h"
 
-1440532480 f:\git\openxcom\src\ruleset\ruleunit.h
+1443584010 f:\git\openxcom\src\ruleset\ruleunit.h
 
 1441139017 source:f:\git\openxcom\src\ruleset\ruleunit.cpp
 	"RuleUnit.h"

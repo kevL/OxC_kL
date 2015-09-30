@@ -64,7 +64,7 @@ struct UnitStats
 	return *this;
 } */
 
-	public: // note, struct members are by default public
+	public: // note, struct members are public by default
 		UnitStats()
 			:
 				tu(0),
@@ -108,20 +108,20 @@ struct UnitStats
 
 		UnitStats& operator+= (const UnitStats& stats)
 		{
-			if (this != &stats) // kL: cf. Position.h
-			{
-				tu			+= stats.tu;
-				stamina		+= stats.stamina;
-				health		+= stats.health;
-				bravery		+= stats.bravery;
-				reactions	+= stats.reactions;
-				firing		+= stats.firing;
-				throwing	+= stats.throwing;
-				strength	+= stats.strength;
-				psiStrength	+= stats.psiStrength;
-				psiSkill	+= stats.psiSkill;
-				melee		+= stats.melee;
-			}
+//			if (this != &stats) // kL: cf. Position.h
+//			{
+			tu			+= stats.tu;
+			stamina		+= stats.stamina;
+			health		+= stats.health;
+			bravery		+= stats.bravery;
+			reactions	+= stats.reactions;
+			firing		+= stats.firing;
+			throwing	+= stats.throwing;
+			strength	+= stats.strength;
+			psiStrength	+= stats.psiStrength;
+			psiSkill	+= stats.psiSkill;
+			melee		+= stats.melee;
+//			}
 
 			return *this;
 		}
@@ -144,20 +144,20 @@ struct UnitStats
 
 		UnitStats& operator-= (const UnitStats& stats)
 		{
-			if (this != &stats) // kL: cf. Position.h
-			{
-				tu			-= stats.tu;
-				stamina		-= stats.stamina;
-				health		-= stats.health;
-				bravery		-= stats.bravery;
-				reactions	-= stats.reactions;
-				firing		-= stats.firing;
-				throwing	-= stats.throwing;
-				strength	-= stats.strength;
-				psiStrength	-= stats.psiStrength;
-				psiSkill	-= stats.psiSkill;
-				melee		-= stats.melee;
-			}
+//			if (this != &stats) // kL: cf. Position.h
+//			{
+			tu			-= stats.tu;
+			stamina		-= stats.stamina;
+			health		-= stats.health;
+			bravery		-= stats.bravery;
+			reactions	-= stats.reactions;
+			firing		-= stats.firing;
+			throwing	-= stats.throwing;
+			strength	-= stats.strength;
+			psiStrength	-= stats.psiStrength;
+			psiSkill	-= stats.psiSkill;
+			melee		-= stats.melee;
+//			}
 
 			return *this;
 		}

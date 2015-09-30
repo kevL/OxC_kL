@@ -28,7 +28,6 @@ namespace OpenXcom
 
 class MapDataSet;
 
-
 enum SpecialTileType
 {
 	TILE,					// 0
@@ -48,7 +47,6 @@ enum SpecialTileType
 	MUST_DESTROY			// 14
 };
 
-
 enum MovementType
 {
 	MT_WALK,	// 0
@@ -56,7 +54,6 @@ enum MovementType
 	MT_SLIDE,	// 2 to conform to their order in MCD files. because.
 	MT_FLOAT	// 3
 };
-
 
 enum VoxelType
 {
@@ -69,7 +66,6 @@ enum VoxelType
 	VOXEL_OUTOFBOUNDS	//  5
 };
 
-
 enum MapDataType
 {
 	O_BIGWALL = -1,	// -1
@@ -79,6 +75,15 @@ enum MapDataType
 	O_OBJECT,		//  3
 	O_NULTYPE		//  4
 };
+
+/* enum TerrainHeight
+{
+	TH_FLOOR,
+	TH_THIRD,
+	TH_HALF,
+	TH_TWOTHIRD,
+	TH_CEIL
+} */
 
 
 /**
@@ -131,6 +136,13 @@ private:
 
 
 	public:
+/*		static const int
+			TH_FLOOR	= 0,
+			TH_THIRD	= 8,
+			TH_HALF		= 12,
+			TH_TWOTHIRD	= 16,
+			TH_CEIL		= 24; */
+
 		/// cTor.
 		explicit MapData(MapDataSet* const dataSet);
 		/// dTor.
