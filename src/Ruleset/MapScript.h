@@ -89,7 +89,7 @@ private:
 		_sizeX,
 		_sizeY,
 		_sizeZ,
-		_executionChances,
+		_executionChance,
 		_executions,
 		_cumulativeFrequency,
 		_label;
@@ -150,8 +150,8 @@ private:
 		{ return _sizeZ; };
 
 		/// Get the chances of this command executing.
-		int getChancesOfExecution() const
-		{ return _executionChances; };
+		int chanceOfExecution() const
+		{ return _executionChance; };
 
 		/// Gets the label for this command.
 		int getLabel() const

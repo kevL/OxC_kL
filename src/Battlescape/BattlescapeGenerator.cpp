@@ -2251,15 +2251,15 @@ int BattlescapeGenerator::loadMAP( // private.
 /**
  * Loads an XCom format RMP file as battlefield Nodes.
  * @param block		- pointer to MapBlock
- * @param xoff		- Mapblock offset in X direction
- * @param yoff		- Mapblock offset in Y direction
+ * @param offset_x	- Mapblock offset in X direction
+ * @param offset_y	- Mapblock offset in Y direction
  * @param segment	- Mapblock segment
  * @sa http://www.ufopaedia.org/index.php?title=ROUTES
  */
 void BattlescapeGenerator::loadRMP( // private.
 		MapBlock* const block,
-		int xoff,
-		int yoff,
+		int offset_x,
+		int offset_y,
 		int segment)
 {
 	char array_RMP[24];
@@ -2305,8 +2305,8 @@ void BattlescapeGenerator::loadRMP( // private.
 			&& pos_z < _mapsize_z)
 		{
 			pos = Position(
-						xoff + pos_x,
-						yoff + pos_y,
+						offset_x + pos_x,
+						offset_y + pos_y,
 						block->getSizeZ() - pos_z - 1);
 
 			unitType		= static_cast<int>(array_RMP[19]); // -> Any=0; Flying=1; Small=2; FlyingLarge=3; Large=4
@@ -2634,7 +2634,7 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*>* const scri
 		}
 
 		// if there's a chance a command won't execute by design take that into account here
-		if (RNG::percent((*i)->getChancesOfExecution()) == true)
+		if (RNG::percent((*i)->chanceOfExecution()) == true)
 		{
 			//Log(LOG_INFO) << " execution TRUE";
 			// initialize the block selection arrays
@@ -2689,13 +2689,13 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*>* const scri
 								// this is intentional to allow for TFTD's cruise liners/etc
 								// in this situation, you can end up with ANYTHING under your craft, so be careful
 								for (
-										x = _craftPos.x;
-										x != _craftPos.x + _craftPos.w;
+										x = static_cast<int>(_craftPos.x);
+										x != static_cast<int>(_craftPos.x) + static_cast<int>(_craftPos.w);
 										++x)
 								{
 									for (
-											y = _craftPos.y;
-											y != _craftPos.y + _craftPos.h;
+											y = static_cast<int>(_craftPos.y);
+											y != static_cast<int>(_craftPos.y) + static_cast<int>(_craftPos.h);
 											++y)
 									{
 										if (_blocks[x][y] != NULL)
@@ -2735,13 +2735,13 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*>* const scri
 								ufoBlocks.push_back(ufoBlock);
 
 								for (
-										x = ufoPosTest.x;
-										x != ufoPosTest.x + ufoPosTest.w;
+										x = static_cast<int>(ufoPosTest.x);
+										x != static_cast<int>(ufoPosTest.x) + static_cast<int>(ufoPosTest.w);
 										++x)
 								{
 									for (
-											y = ufoPosTest.y;
-											y != ufoPosTest.y + ufoPosTest.h;
+											y = static_cast<int>(ufoPosTest.y);
+											y != static_cast<int>(ufoPosTest.y) + static_cast<int>(ufoPosTest.h);
 											++y)
 									{
 										if (_blocks[x][y])
@@ -2910,12 +2910,12 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*>* const scri
 		{
 			loadMAP(
 					ufoBlocks[i],
-					_ufoPos[i].x * 10, _ufoPos[i].y * 10,
+					static_cast<int>(_ufoPos[i].x) * 10, static_cast<int>(_ufoPos[i].y) * 10,
 					ufoTerrain,
 					mapDataSetIdOffset);
 			loadRMP(
 					ufoBlocks[i],
-					_ufoPos[i].x * 10, _ufoPos[i].y * 10,
+					static_cast<int>(_ufoPos[i].x) * 10, static_cast<int>(_ufoPos[i].y) * 10,
 					Node::SEG_UFO);
 
 			for (int
@@ -2928,8 +2928,8 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*>* const scri
 						k != ufoBlocks[i]->getSizeY() / 10;
 						++k)
 				{
-					_segments[_ufoPos[i].x + j]
-							 [_ufoPos[i].y + k] = Node::SEG_UFO;
+					_segments[static_cast<size_t>(_ufoPos[i].x) + static_cast<size_t>(j)]
+							 [static_cast<size_t>(_ufoPos[i].y) + static_cast<size_t>(k)] = Node::SEG_UFO;
 				}
 			}
 		}
@@ -2952,16 +2952,16 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*>* const scri
 
 		loadMAP(
 			craftBlock,
-			_craftPos.x * 10,
-			_craftPos.y * 10,
+			static_cast<int>(_craftPos.x * 10),
+			static_cast<int>(_craftPos.y * 10),
 			_craft->getRules()->getBattlescapeTerrainData(),
 			mapDataSetIdOffset + craftDataSetIdOffset,
 			false, // was true
 			true);
 		loadRMP(
 			craftBlock,
-			_craftPos.x * 10,
-			_craftPos.y * 10,
+			static_cast<int>(_craftPos.x * 10),
+			static_cast<int>(_craftPos.y * 10),
 			Node::SEG_CRAFT);
 
 		for (int
@@ -2974,8 +2974,8 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*>* const scri
 					j != craftBlock->getSizeY() / 10;
 					++j)
 			{
-				_segments[_craftPos.x + i]
-						 [_craftPos.y + j] = Node::SEG_CRAFT;
+				_segments[static_cast<size_t>(_craftPos.x) + static_cast<size_t>(i)]
+						 [static_cast<size_t>(_craftPos.y) + static_cast<size_t>(j)] = Node::SEG_CRAFT;
 			}
 		}
 
@@ -3003,7 +3003,7 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*>* const scri
 
 	delete _testBlock;
 
-	Tile* tile; // hack to ensure there's always a floor-tile on level 0
+	Tile* tile; // safety that ensures there's always a floor-tile on level 0
 	for (int
 			x = 0;
 			x != _mapsize_x;

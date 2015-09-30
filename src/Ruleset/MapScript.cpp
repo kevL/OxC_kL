@@ -40,7 +40,7 @@ MapScript::MapScript()
 		_sizeX(1),
 		_sizeY(1),
 		_sizeZ(0),
-		_executionChances(100),
+		_executionChance(100),
 		_executions(1),
 		_cumulativeFrequency(0),
 		_label(0),
@@ -293,7 +293,7 @@ void MapScript::load(const YAML::Node& node)
 		}
 	}
 
-	_executionChances	= node["executionChances"]	.as<int>(_executionChances);
+	_executionChance	= node["executionChance"]	.as<int>(_executionChance);
 	_executions			= node["executions"]		.as<int>(_executions);
 	_ufoType			= node["ufoType"]			.as<std::string>(_ufoType);
 	_label				= std::abs(node["label"]	.as<int>(_label)); // take no chances, don't accept negative values here.

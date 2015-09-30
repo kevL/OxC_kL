@@ -151,8 +151,8 @@ private:
 	/// Loads an XCom RMP file.
 	void loadRMP(
 			MapBlock* const block,
-			int xoff,
-			int yoff,
+			int offset_x,
+			int offset_y,
 			int segment);
 
 	/// Fills power sources with an alien fuel object.
