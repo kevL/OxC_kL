@@ -423,7 +423,7 @@ void SavedBattleGame::load(
 
 	// matches up tiles and units
 	Log(LOG_INFO) << ". reset tiles";
-	resetUnitTiles();
+	resetUnitsOnTiles();
 
 	Log(LOG_INFO) << ". load items";
 	const size_t CONTAINERS = 3;
@@ -1258,6 +1258,8 @@ bool SavedBattleGame::endBattlePhase()
 
 	if (_side == FACTION_PLAYER) // end of Player turn.
 	{
+		_scanDots.clear();
+
 		if (_selectedUnit != NULL
 			&& _selectedUnit->getOriginalFaction() == FACTION_PLAYER)
 		{
@@ -1493,28 +1495,27 @@ void SavedBattleGame::setBattleState(BattlescapeState* bs)
 /**
  * Resets all the units to their current standing tile(s).
  */
-void SavedBattleGame::resetUnitTiles()
+void SavedBattleGame::resetUnitsOnTiles()
 {
 	for (std::vector<BattleUnit*>::const_iterator
 			i = _units.begin();
 			i != _units.end();
 			++i)
 	{
-//		if ((*i)->isOut() == false)
 		if ((*i)->isOut_t(OUT_STAT) == false)
 		{
-			const int unitSize = (*i)->getArmor()->getSize() - 1;
+			const int armorSize = (*i)->getArmor()->getSize() - 1;
 
 			if ((*i)->getTile() != NULL // remove unit from its current tile
 				&& (*i)->getTile()->getUnit() == *i) // wtf, is this super-safety ......
 			{
 				for (int
-						x = unitSize;
+						x = armorSize;
 						x != -1;
 						--x)
 				{
 					for (int
-							y = unitSize;
+							y = armorSize;
 							y != -1;
 							--y)
 					{
@@ -1524,12 +1525,12 @@ void SavedBattleGame::resetUnitTiles()
 			}
 
 			for (int // set unit onto its proper tile
-					x = unitSize;
+					x = armorSize;
 					x != -1;
 					--x)
 			{
 				for (int
-						y = unitSize;
+						y = armorSize;
 						y != -1;
 						--y)
 				{
@@ -2839,58 +2840,6 @@ SavedGame* SavedBattleGame::getGeoscapeSave() const
 }
 
 /**
- * Gets the depth of the battlescape.
- * @return depth.
- */
-/* int SavedBattleGame::getDepth() const
-{
-	return _depth;
-} */
-
-/**
- * Sets the depth of the battlescape game.
- * @param depth the intended depth 0-3.
- */
-/* void SavedBattleGame::setDepth(int depth)
-{
-	_depth = depth;
-} */
-
-/**
- * Uses the depth variable to choose a palette.
- * @param state the state to set the palette for.
- */
-/* void SavedBattleGame::setPaletteByDepth(State* state)
-{
-	if (_depth == 0)
-		state->setPalette("PAL_BATTLESCAPE");
-	else
-	{
-		std::stringstream ss;
-		ss << "PAL_BATTLESCAPE_" << _depth;
-		state->setPalette(ss.str());
-	}
-} */
-
-/**
- * Sets the ambient battlescape sound effect.
- * @param sound the intended sound.
- */
-/* void SavedBattleGame::setAmbientSound(int sound)
-{
-	_ambience = sound;
-} */
-
-/**
- * Gets the ambient battlescape sound effect.
- * @return the intended sound.
- */
-/* int SavedBattleGame::getAmbientSound() const
-{
-	return _ambience;
-} */
-
-/**
  * Gets the list of items that are guaranteed to be recovered (ie: items that were in the skyranger).
  * @return, the list of items guaranteed recovered
  */
@@ -3116,6 +3065,15 @@ void SavedBattleGame::storeRfTriggerPosition(const Position& pos)
 const Position& SavedBattleGame::getRfTriggerPosition() const
 {
 	return _rfTriggerPosition;
+}
+
+/**
+ * Gets a ref to the scanner dots vector.
+ * @return, reference to a vector of pairs of ints which are positions of current Turn's scanner dots.
+ */
+std::vector<std::pair<int, int> >& SavedBattleGame::getScannerDots()
+{
+	return _scanDots;
 }
 
 }

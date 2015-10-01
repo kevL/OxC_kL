@@ -673,7 +673,7 @@ void BattlescapeGenerator::nextStage()
 					_battleSave->setBattleInventory(_tileEquipt);
 				}
 
-				_tileEquipt->setUnit(*i);		// bogus Tile until resetUnitTiles() runs
+				_tileEquipt->setUnit(*i);		// bogus Tile until resetUnitsOnTiles() runs
 				(*i)->setUnitVisible(false);	// when exiting preBattle's InventoryState.
 				(*i)->prepUnit(false);
 			}

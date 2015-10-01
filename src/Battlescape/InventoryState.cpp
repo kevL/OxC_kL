@@ -790,7 +790,7 @@ void InventoryState::btnOkClick(Action*)
 		if (_tuMode == false	// pre-Battle but
 			&& _parent != NULL)	// going into Battlescape!
 		{
-			_battleSave->resetUnitTiles();
+			_battleSave->resetUnitsOnTiles();
 
 			Tile* const invTile = _battleSave->getBattleInventory();
 			_battleSave->randomizeItemLocations(invTile);	// This doesn't seem to happen on second stage of Multi-State MISSIONS.

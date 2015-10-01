@@ -43,7 +43,7 @@ namespace OpenXcom
  * Initializes the Scanner State.
  * @param action - pointer to an Action
  */
-ScannerState::ScannerState(BattleAction* action)
+ScannerState::ScannerState(const BattleAction* const action)
 	:
 		_action(action)
 {
@@ -54,13 +54,13 @@ ScannerState::ScannerState(BattleAction* action)
 		_game->getScreen()->resetDisplay(false);
 	} */
 
-	_bg				= new InteractiveSurface(320, 200);
-	_scan			= new InteractiveSurface(320, 200);
-	_scannerView	= new ScannerView(
-									152,152,
-									56,24,
-									_game,
-									_action->actor);
+	_bg			= new InteractiveSurface(320, 200);
+	_scan		= new InteractiveSurface(320, 200);
+	_scanView	= new ScannerView(
+								152,152,
+								56,24,
+								_game,
+								_action->actor);
 
 	if (_game->getScreen()->getDY() > 50)
 		_screen = false;
@@ -68,7 +68,7 @@ ScannerState::ScannerState(BattleAction* action)
 	setPalette("PAL_BATTLESCAPE");
 
 	add(_scan);
-	add(_scannerView);
+	add(_scanView);
 	add(_bg);
 
 	centerAllSurfaces();
@@ -83,10 +83,16 @@ ScannerState::ScannerState(BattleAction* action)
 	_bg->onKeyboardPress(
 					(ActionHandler)& ScannerState::exitClick,
 					Options::keyCancel);
+	_bg->onKeyboardPress(
+					(ActionHandler)& ScannerState::exitClick,
+					Options::keyOk);
+	_bg->onKeyboardPress(
+					(ActionHandler)& ScannerState::exitClick,
+					Options::keyOkKeypad);
 
-	_timerAnimate = new Timer(125);
-	_timerAnimate->onTimer((StateHandler)& ScannerState::animate);
-	_timerAnimate->start();
+	_timer = new Timer(125);
+	_timer->onTimer((StateHandler)& ScannerState::animate);
+	_timer->start();
 
 //	update();
 }
@@ -96,7 +102,7 @@ ScannerState::ScannerState(BattleAction* action)
  */
 ScannerState::~ScannerState()
 {
-	delete _timerAnimate;
+	delete _timer;
 }
 
 /**
@@ -119,7 +125,7 @@ void ScannerState::handle(Action* action)
  */
 /*void ScannerState::update() // private.
 {
-	_scannerView->draw();
+	_scanView->draw();
 } */
 
 /**
@@ -127,7 +133,7 @@ void ScannerState::handle(Action* action)
 */
 void ScannerState::animate() // private.
 {
-	_scannerView->animate();
+	_scanView->animate();
 }
 
 /**
@@ -136,7 +142,7 @@ void ScannerState::animate() // private.
 void ScannerState::think()
 {
 	State::think();
-	_timerAnimate->think(this, NULL);
+	_timer->think(this, NULL);
 }
 
 /**
@@ -145,8 +151,7 @@ void ScannerState::think()
  */
 void ScannerState::exitClick(Action*) // private.
 {
-/*kL
-	if (Options::maximizeInfoScreens)
+/*	if (Options::maximizeInfoScreens)
 	{
 		Screen::updateScale(
 						Options::battlescapeScale,

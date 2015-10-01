@@ -48,15 +48,16 @@ ScannerView::ScannerView(
 		int h,
 		int x,
 		int y,
-		Game* game,
-		BattleUnit* unit)
+		const Game* const game,
+		const BattleUnit* const unit)
 	:
 		InteractiveSurface(
 			w,h,
 			x,y),
 		_game(game),
 		_unit(unit),
-		_frame(0)
+		_frame(0),
+		_dotsDone(false)
 {
 	_redraw = true;
 }
@@ -66,45 +67,52 @@ ScannerView::ScannerView(
  */
 void ScannerView::draw()
 {
-	SurfaceSet* srt = _game->getResourcePack()->getSurfaceSet("DETBLOB.DAT");
+	SurfaceSet* const srt = _game->getResourcePack()->getSurfaceSet("DETBLOB.DAT");
 	Surface* srf;
 
 	clear();
 
-	Tile* tile;
+	const Tile* tile;
+	int
+		xPos,
+		yPos;
+
+	SavedBattleGame* const battleSave = _game->getSavedGame()->getBattleSave();
+	std::vector<std::pair<int,int> >& scanDots = battleSave->getScannerDots();
 
 	this->lock();
 	for (int
 			x = -9;
-			x < 10;
+			x != 10;
 			++x)
 	{
 		for (int
 				y = -9;
-				y < 10;
+				y != 10;
 				++y)
 		{
 			for (int
 					z = 0;
-					z < _game->getSavedGame()->getBattleSave()->getMapSizeZ();
+					z != battleSave->getMapSizeZ();
 					++z)
 			{
-				tile = _game->getSavedGame()->getBattleSave()->getTile(Position(x,y,z)
-					 + Position(
-							_unit->getPosition().x,
-							_unit->getPosition().y,
-							0));
+				xPos = _unit->getPosition().x + x;
+				yPos = _unit->getPosition().y + y;
+
+				tile = battleSave->getTile(Position(xPos,yPos,z));
 				if (tile != NULL
 					&& tile->getUnit() != NULL
 					&& tile->getUnit()->getMotionPoints() != 0)
 				{
+					if (_dotsDone == false)
+						scanDots.push_back(std::make_pair(xPos,yPos));
+
 					int frame = (tile->getUnit()->getMotionPoints() / 5);
 					if (frame > -1)
 					{
-						if (frame > 5)
-							frame = 5;
+						if (frame > 5) frame = 5;
 
-						srf = srt->getFrame(frame + _frame);
+						srf = srt->getFrame(_frame + frame);
 						srf->blitNShade(
 									this,
 									Surface::getX() + ((9 + x) * 8) - 4,
@@ -116,8 +124,9 @@ void ScannerView::draw()
 		}
 	}
 
-	// the arrow of the direction the unit is pointed
-	srf = srt->getFrame(7 + _unit->getDirection());
+	_dotsDone = true;
+
+	srf = srt->getFrame(_unit->getDirection() + 7); // the arrow in the direction the unit is pointed
 	srf->blitNShade(
 				this,
 				Surface::getX() + (9 * 8) - 4,
@@ -139,9 +148,7 @@ void ScannerView::mouseClick(Action*, State*)
 */
 void ScannerView::animate()
 {
-	++_frame;
-
-	if (_frame == 2)
+	if (++_frame == 2)
 		_frame = 0;
 
 	_redraw = true;

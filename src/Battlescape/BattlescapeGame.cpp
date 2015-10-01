@@ -1369,14 +1369,11 @@ void BattlescapeGame::endTurnPhase() // private.
 				&& (*j)->getFuse() != -1
 				&& (*j)->getFuse() < 2) // it's a grenade to explode now
 			{
-				pos.x = _battleSave->getTiles()[i]->getPosition().x * 16 + 8;
-				pos.y = _battleSave->getTiles()[i]->getPosition().y * 16 + 8;
-				pos.z = _battleSave->getTiles()[i]->getPosition().z * 24 - _battleSave->getTiles()[i]->getTerrainLevel();
-
+				pos = Position::toVoxelSpaceCentered(
+												_battleSave->getTiles()[i]->getPosition(),
+												-_battleSave->getTiles()[i]->getTerrainLevel());
 				statePushNext(new ExplosionBState(
-												this,
-												pos,
-												*j,
+												this, pos, *j,
 												(*j)->getPreviousOwner()));
 				_battleSave->removeItem(*j);
 
@@ -1398,11 +1395,7 @@ void BattlescapeGame::endTurnPhase() // private.
 	Tile* tile = _battleSave->getTileEngine()->checkForTerrainExplosions();
 	if (tile != NULL)
 	{
-		pos = Position(
-					tile->getPosition().x * 16 + 8,
-					tile->getPosition().y * 16 + 8,
-					tile->getPosition().z * 24 + 10);
-
+		pos = Position::toVoxelSpaceCentered(tile->getPosition(), 10);
 		// kL_note: This seems to be screwing up.
 		// Further info: what happens is that an explosive part of a tile gets destroyed by fire
 		// during an endTurn sequence, has its setExplosive() set, then is somehow triggered

@@ -42,11 +42,11 @@ class ScannerState
 {
 
 private:
-	BattleAction* _action;
+	const BattleAction* _action;
 	InteractiveSurface* _bg;
-	ScannerView* _scannerView;
+	ScannerView* _scanView;
 	Surface* _scan;
-	Timer* _timerAnimate;
+	Timer* _timer;
 
 	/// Updates scanner interface.
 //	void update();
@@ -59,7 +59,7 @@ private:
 
 	public:
 		/// Creates the ScannerState.
-		explicit ScannerState(BattleAction* action);
+		explicit ScannerState(const BattleAction* const action);
 		/// dTor.
 		~ScannerState();
 

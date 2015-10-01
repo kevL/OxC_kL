@@ -4527,7 +4527,7 @@
 	"State.h"
 	"Surface.h"
 
-1440093973 f:\git\openxcom\src\engine\surfaceset.h
+1443669368 f:\git\openxcom\src\engine\surfaceset.h
 
 1437993221 f:\git\openxcom\src\ruleset\rulecraft.h
 
@@ -4637,7 +4637,7 @@
 
 1432464769 f:\git\openxcom\src\savegame\itemcontainer.h
 
-1443235610 f:\git\openxcom\src\savegame\savedbattlegame.h
+1443671598 f:\git\openxcom\src\savegame\savedbattlegame.h
 	"BattleUnit.h"
 
 1443594937 f:\git\openxcom\src\savegame\battleunit.h
@@ -5392,7 +5392,7 @@
 1442353254 f:\git\openxcom\src\battlescape\primegrenadestate.h
 	"../Engine/State.h"
 
-1433916034 f:\git\openxcom\src\battlescape\scannerstate.h
+1443669813 f:\git\openxcom\src\battlescape\scannerstate.h
 	"../Engine/State.h"
 
 1443339987 f:\git\openxcom\src\battlescape\tileengine.h
@@ -5466,7 +5466,7 @@
 1432984133 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1443594937 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1443672914 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	"AlienBAIState.h"
 	"BattlescapeState.h"
@@ -5551,7 +5551,7 @@
 
 1440163450 f:\git\openxcom\src\ruleset\ruleinventory.h
 
-1443575011 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
+1443670690 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
 	"BattlescapeGenerator.h"
 	"AlienBAIState.h"
 	"CivilianBAIState.h"
@@ -5935,7 +5935,7 @@
 	<SDL.h>
 	<yaml-cpp/yaml.h>
 
-1443302726 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
+1443670690 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
 	"InventoryState.h"
 	"BattlescapeState.h"
 	"Inventory.h"
@@ -5961,7 +5961,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1443594435 source:f:\git\openxcom\src\battlescape\map.cpp
+1443675612 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	"BattlescapeMessage.h"
 	"BattlescapeState.h"
@@ -6180,7 +6180,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Soldier.h"
 
-1438167637 source:f:\git\openxcom\src\battlescape\scannerstate.cpp
+1443669813 source:f:\git\openxcom\src\battlescape\scannerstate.cpp
 	"ScannerState.h"
 	"ScannerView.h"
 	"../Engine/Action.h"
@@ -6192,10 +6192,10 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1430149550 f:\git\openxcom\src\battlescape\scannerview.h
+1443676239 f:\git\openxcom\src\battlescape\scannerview.h
 	"../Engine/InteractiveSurface.h"
 
-1440379500 source:f:\git\openxcom\src\battlescape\scannerview.cpp
+1443678186 source:f:\git\openxcom\src\battlescape\scannerview.cpp
 	"ScannerView.h"
 	"../Engine/Action.h"
 	"../Engine/Game.h"
@@ -6598,7 +6598,7 @@
 	<malloc.h>
 	<ppcinline/exec.h>
 
-1439263608 source:f:\git\openxcom\src\engine\surfaceset.cpp
+1443669368 source:f:\git\openxcom\src\engine\surfaceset.cpp
 	"SurfaceSet.h"
 	"Surface.h"
 
@@ -8539,7 +8539,7 @@
 	"../Interface/Text.h"
 	"../Ruleset/RuleResearch.h"
 
-1443302726 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
+1443672986 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
 	"SavedBattleGame.h"
 	"BattleItem.h"
 	"Node.h"

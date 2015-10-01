@@ -127,6 +127,8 @@ private:
 		_tileSearch;
 	std::vector<std::vector<std::pair<int, int> > > _baseModules;
 
+	std::vector<std::pair<int, int> > _scanDots;
+
 //	Uint8 _dragButton;			// this is a cache for Options::getString("battleScrollDragButton")
 //	bool _dragInvert;			// this is a cache for Options::getString("battleScrollDragInvert")
 //	int
@@ -284,7 +286,7 @@ private:
 		/// Load map resources.
 		void loadMapResources(const Game* const game);
 		/// Resets tiles units are standing on
-		void resetUnitTiles();
+		void resetUnitsOnTiles();
 
 		/// Removes an item from the game.
 		void removeItem(BattleItem* const item);
@@ -406,19 +408,6 @@ private:
 		/// Gets a pointer to the Geoscape save.
 		SavedGame* getGeoscapeSave() const;
 
-		/// Gets the depth of the battlescape game.
-		int getDepth() const;
-		/// Sets the depth of the battlescape game.
-		void setDepth(int depth);
-
-		/// Uses the depth variable to set a palette.
-//		void setPaletteByDepth(State* state);
-
-		/// Sets the ambient sound effect;
-//		void setAmbientSound(int sound);
-		/// Gets the ambient sound effect;
-//		int getAmbientSound() const;
-
 		/// Gets the list of items guaranteed to be recovered.
 		std::vector<BattleItem*>* getGuaranteedRecoveredItems();
 		/// Gets the list of items that MIGHT get recovered.
@@ -470,6 +459,9 @@ private:
 		void storeRfTriggerPosition(const Position& pos);
 		/// Gets the camera-position where the last RF-trigger happened.
 		const Position& getRfTriggerPosition() const;
+
+		/// Gets a ref to the scanner dots vector.
+		std::vector<std::pair<int, int> >& getScannerDots();
 };
 
 }

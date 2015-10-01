@@ -668,7 +668,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 					itY <= endY;
 					++itY)
 			{
-				posMap = Position(itX, itY, itZ);
+				posMap = Position(itX,itY,itZ);
 				_camera->convertMapToScreen(posMap, &posScreen);
 				posScreen += _camera->getMapOffset();
 
@@ -682,7 +682,10 @@ void Map::drawTerrain(Surface* const surface) // private.
 					if (_tile == NULL)
 						continue;
 
-					tileBelow = _battleSave->getTile(posMap + Position(0,0,-1));
+					if (itZ != 0)
+						tileBelow = _battleSave->getTile(posMap + Position(0,0,-1));
+					else
+						tileBelow = NULL;
 
 					if (_tile->isDiscovered(2) == true)
 						tileShade = _tile->getShade();
@@ -1657,6 +1660,29 @@ void Map::drawTerrain(Surface* const surface) // private.
 						++waypId;
 					}
 					// end waypoints.
+
+// Draw scanner dots
+					if (itZ == _camera->getViewLevel()
+						&& _battleSave->getScannerDots().empty() == false)
+					{
+						std::pair<int,int> dotTest = std::make_pair(
+																_tile->getPosition().x,
+																_tile->getPosition().y);
+						if (std::find(
+								_battleSave->getScannerDots().begin(),
+								_battleSave->getScannerDots().end(),
+								dotTest) != _battleSave->getScannerDots().end())
+						{
+							sprite = _res->getSurfaceSet("SCANG.DAT")->getFrame(330); // gray square cross
+							sprite->blitNShade(
+									surface,
+									posScreen.x + 14,
+									posScreen.y + 30,
+									0, false,
+									3); // red
+						}
+					}
+					// end scanner dots.
 
 // Draw Map's border-sprite only on ground tiles
 					if (itZ == _battleSave->getGroundLevel()

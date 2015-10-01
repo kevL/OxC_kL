@@ -39,10 +39,11 @@ class ScannerView
 {
 
 private:
+	bool _dotsDone;
 	int _frame;
 
-	BattleUnit* _unit;
-	Game* _game;
+	const BattleUnit* _unit;
+	const Game* _game;
 
 	///
 	void mouseClick(Action* action, State* state);
@@ -55,8 +56,8 @@ private:
 				int h,
 				int x,
 				int y,
-				Game* game,
-				BattleUnit* unit);
+				const Game* const game,
+				const BattleUnit* const unit);
 
 		/// Draw the scanner.
 		void draw();
