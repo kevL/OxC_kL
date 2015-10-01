@@ -417,7 +417,7 @@ BattleUnit::~BattleUnit()
 /* Soldier Diary, not needed for nonSoldiers. Or soldiers for that matter ....
 	if (getGeoscapeSoldier() == NULL)
 	{
-		for (std::vector<BattleUnitKills*>::const_iterator
+		for (std::vector<BattleUnitKill*>::const_iterator
 				i = _statistics->kills.begin();
 				i != _statistics->kills.end();
 				++i)

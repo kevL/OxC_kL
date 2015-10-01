@@ -1797,7 +1797,7 @@ void BattlescapeGame::checkForCasualties(
 						if (attackUnit->getGeoscapeSoldier() != NULL)
 						{
 							defendUnit->setMurdererId(attackUnit->getId());
-							attackUnit->getStatistics()->kills.push_back(new BattleUnitKills(
+							attackUnit->getStatistics()->kills.push_back(new BattleUnitKill(
 																						killStatRank,
 																						killStatRace,
 																						killStatWeapon,
@@ -1991,7 +1991,7 @@ void BattlescapeGame::checkForCasualties(
 					if (attackUnit != NULL
 						&& attackUnit->getGeoscapeSoldier() != NULL)
 					{
-						attackUnit->getStatistics()->kills.push_back(new BattleUnitKills(
+						attackUnit->getStatistics()->kills.push_back(new BattleUnitKill(
 																					killStatRank,
 																					killStatRace,
 																					killStatWeapon,

@@ -31,8 +31,8 @@ class Action;
 
 /**
  * Mouse cursor that replaces the system cursor.
- * Drawn as a shaded triangle-like shape, automatically
- * matches the mouse coordinates.
+ * @note Drawn as a shaded triangle-like shape that automatically matches the
+ * SDL Mouse coordinates.
  */
 class Cursor
 	:

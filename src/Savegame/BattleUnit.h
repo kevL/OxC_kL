@@ -109,9 +109,9 @@ enum OutCheck
 
 
 /**
- * SoldierDiary container for battle unit kills statistics.
+ * SoldierDiary container for the statistics of a BattleUnitKill.
  */
-struct BattleUnitKills
+struct BattleUnitKill
 {
 	std::string
 		_rank,
@@ -202,13 +202,13 @@ struct BattleUnitKills
 	}
 
 	///
-	explicit BattleUnitKills(const YAML::Node& node)
+	explicit BattleUnitKill(const YAML::Node& node)
 	{
 		load(node);
 	}
 
 	/// cTor.
-	BattleUnitKills(
+	BattleUnitKill(
 			std::string unitRank,
 			std::string race,
 			std::string weapon,
@@ -231,7 +231,7 @@ struct BattleUnitKills
 	{}
 
 	/// dTor.
-	~BattleUnitKills()
+	~BattleUnitKill()
 	{}
 };
 
@@ -262,13 +262,13 @@ struct BattleUnitStatistics
 		medikitApplications,	// Tracks how many times a unit has used the medikit
 		revivedSoldier;			// Tracks how many times this soldier revived another unit
 
-	std::vector<BattleUnitKills*> kills; // Tracks kills
+	std::vector<BattleUnitKill*> kills; // Tracks kills
 
 
 	/// Checks if unit has fired on a friendly.
 	bool hasFriendlyFired() const
 	{
-		for (std::vector<BattleUnitKills*>::const_iterator
+		for (std::vector<BattleUnitKill*>::const_iterator
 				i = kills.begin();
 				i != kills.end();
 				++i)
@@ -283,7 +283,7 @@ struct BattleUnitStatistics
 	/// Gets if unit has killed or stunned a hostile.
 	bool hasKillOrStun() const
 	{
-		for (std::vector<BattleUnitKills*>::const_iterator
+		for (std::vector<BattleUnitKill*>::const_iterator
 				i = kills.begin();
 				i != kills.end();
 				++i)
@@ -331,7 +331,7 @@ struct BattleUnitStatistics
 					i != YAMLkills.end();
 					++i)
 			{
-				kills.push_back(new BattleUnitKills(*i));
+				kills.push_back(new BattleUnitKill(*i));
 			}
 		}
 
@@ -361,7 +361,7 @@ struct BattleUnitStatistics
 
 		if (kills.empty() == false)
 		{
-			for (std::vector<BattleUnitKills*>::const_iterator
+			for (std::vector<BattleUnitKill*>::const_iterator
 					i = kills.begin();
 					i != kills.end();
 					++i)

@@ -393,7 +393,7 @@ DebriefingState::DebriefingState()
 
 			int soldierAlienKills = 0;
 
-			for (std::vector<BattleUnitKills*>::const_iterator
+			for (std::vector<BattleUnitKill*>::const_iterator
 					j = statistics->kills.begin();
 					j != statistics->kills.end();
 					++j)

@@ -649,6 +649,8 @@ void Map::drawTerrain(Surface* const surface) // private.
 		halfRight = false, // avoid VC++ linker warning.
 		trueLoc;
 
+//	const BattleUnit* unitBelow;
+
 
 	surface->lock();
 	for (int
@@ -694,6 +696,8 @@ void Map::drawTerrain(Surface* const surface) // private.
 					hasFloor =
 					hasObject = false;
 
+//					unitBelow = NULL;
+
 // Draw Floor
 					sprite = _tile->getSprite(O_FLOOR);
 					if (sprite)
@@ -716,23 +720,24 @@ void Map::drawTerrain(Surface* const surface) // private.
 						{
 							const Tile* const tileEast = _battleSave->getTile(posMap + Position(1,0,0));
 
-							if (tileEast != NULL
-								&& tileEast->getSprite(O_FLOOR) == NULL
+							if (//tileEast != NULL &&
+								tileEast->getSprite(O_FLOOR) == NULL
 								&& (tileEast->getMapData(O_OBJECT) == NULL // special case ->
 									|| tileEast->getMapData(O_OBJECT)->getBigWall() != BIGWALL_NWSE))
 							{
 								const Tile* const tileEastBelow = _battleSave->getTile(posMap + Position(1,0,-1));
 
-								const BattleUnit* unitEastBelow;
+/*								const BattleUnit* unitEastBelow;
 								if (tileEastBelow != NULL)
 									unitEastBelow = tileEastBelow->getUnit();
 								else
-									unitEastBelow = NULL;
+									unitEastBelow = NULL; */
+								const BattleUnit* const unitEastBelow = tileEastBelow->getUnit();
 
 								if (unitEastBelow != NULL
 									&& unitEastBelow != _battleSave->getSelectedUnit()
 									&& unitEastBelow->getGeoscapeSoldier() != NULL
-									&& unitEastBelow->getFaction() == unitEastBelow->getOriginalFaction())
+									&& unitEastBelow->getFaction() == FACTION_PLAYER)// unitEastBelow->getOriginalFaction())
 								{
 									const int tLevel = getTerrainLevel(
 																	unitEastBelow->getPosition(),
@@ -782,7 +787,12 @@ void Map::drawTerrain(Surface* const surface) // private.
 //						if (tileWest != NULL)
 //						{
 							const BattleUnit* const unitWest = tileWest->getUnit();
-							if (unitWest != NULL)
+							if (unitWest != NULL
+								&& unitWest->getUnitVisible() == true // don't bother checking DebugMode.
+								&& (unitWest->getUnitStatus() == STATUS_WALKING
+									|| unitWest->getUnitStatus() == STATUS_FLYING)
+								&& (unitWest->getDirection() == 1
+									|| unitWest->getDirection() == 5))
 							{
 								const Tile* const tileNorth = _battleSave->getTile(posMap + Position(0,-1,0));
 //								if (tileNorth != NULL)
@@ -790,11 +800,11 @@ void Map::drawTerrain(Surface* const surface) // private.
 									const BattleUnit* const unitNorth = tileNorth->getUnit();
 									if (unitNorth != NULL && unitNorth == unitWest)
 									{
-										if (unitNorth->getUnitVisible() == true // don't bother checking DebugMode.
+/*										if (unitNorth->getUnitVisible() == true // don't bother checking DebugMode.
 											&& (unitNorth->getUnitStatus() == STATUS_WALKING
 												|| unitNorth->getUnitStatus() == STATUS_FLYING)
 											&& (unitNorth->getDirection() == 1
-												|| unitNorth->getDirection() == 5))
+												|| unitNorth->getDirection() == 5)) */
 										{
 											trueLoc = isTrueLoc(unitNorth, tileNorth);
 											quadrant = getQuadrant(unitNorth, tileNorth, trueLoc);
@@ -1008,9 +1018,9 @@ void Map::drawTerrain(Surface* const surface) // private.
 							&& hasFloor == false
 							&& hasObject == false)
 						{
-							if (tileBelow != NULL)
-							{
-								BattleUnit* const unitBelow = tileBelow->getUnit();
+//							if (tileBelow != NULL)
+//							{
+								const BattleUnit* const unitBelow = tileBelow->getUnit();
 
 								if (unitBelow != NULL
 									&& unitBelow != _battleSave->getSelectedUnit()
@@ -1054,7 +1064,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 													posScreen.y + 3 + 24 + tLevel);
 									}
 								}
-							}
+//							}
 						}
 					} // Void <- end.
 
@@ -1306,12 +1316,13 @@ void Map::drawTerrain(Surface* const surface) // private.
 // Draw unitBelow if it is on raised ground & there is no Floor.
 					if (itZ > 0
 //						&& tileBelow != NULL
-						&& tileBelow->getTerrainLevel() < -11
+//						&& tileBelow->getTerrainLevel() < -11
 						&& _tile->hasNoFloor(tileBelow) == true)
 					{
-						BattleUnit* const unitBelow = tileBelow->getUnit();
+						const BattleUnit* const unitBelow = tileBelow->getUnit();
 						if (unitBelow != NULL
-							&& unitBelow->getUnitVisible() == true) //|| _battleSave->getDebugMode() == true))
+							&& unitBelow->getUnitVisible() == true //|| _battleSave->getDebugMode() == true))
+							&& unitBelow->getHeight(true) - tileBelow->getTerrainLevel() > 25) // head sticks up; should be a greater value before clipping occurs vs. aboveTile's background objects. Try 25
 						{
 							trueLoc = isTrueLoc(unitBelow, tileBelow);
 							quadrant = getQuadrant(unitBelow, tileBelow, trueLoc);
@@ -1342,6 +1353,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 								}
 							}
 						}
+//						else unitBelow = NULL; // for use below when deciding whether to redraw cursorFront.
 					}
 
 // Draw SMOKE & FIRE
@@ -1423,11 +1435,27 @@ void Map::drawTerrain(Surface* const surface) // private.
 						&& _selectorX <= itX
 						&& _selectorY <= itY)
 					{
-						if (_camera->getViewLevel() == itZ)
+						if (_camera->getViewLevel() > itZ)
 						{
+							frame = 5; // blue static box
+							sprite = _res->getSurfaceSet("CURSOR.PCK")->getFrame(frame);
+							sprite->blitNShade(
+									surface,
+									posScreen.x,
+									posScreen.y);
+						}
+						else if (_camera->getViewLevel() == itZ)
+//							|| (unitBelow != NULL && unitBelow->getPosition().z == _camera->getViewLevel())) // BattleUnit was redrawn below curTile.
+						{
+/*							int vertOffset;
+							if (unitBelow != NULL)
+								vertOffset = 24;
+							else
+								vertOffset = 0; */
+
 							if (_cursorType != CT_AIM)
 							{
-								if (hasUnit == true
+								if (hasUnit == true //|| unitBelow != NULL)
 									&& (_cursorType != CT_PSI
 										|| ((_battleSave->getBattleGame()->getCurrentAction()->type == BA_PSICOURAGE
 												&& _unit->getFaction() != FACTION_HOSTILE)
@@ -1441,7 +1469,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 							}
 							else // CT_AIM ->
 							{
-								if (hasUnit == true)
+								if (hasUnit == true) //|| unitBelow != NULL)
 									frame = 7 + (_animFrame / 2);	// yellow animated crosshairs
 								else
 									frame = 6;						// red static crosshairs
@@ -1451,7 +1479,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 							sprite->blitNShade(
 									surface,
 									posScreen.x,
-									posScreen.y);
+									posScreen.y);// + vertOffset);
 
 // UFOExtender Accuracy
 							// display adjusted accuracy value on crosshair (and more).
@@ -1534,7 +1562,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 								_numAccuracy->blitNShade(
 													surface,
 													posScreen.x,
-													posScreen.y);
+													posScreen.y);// + vertOffset);
 							}
 							else if (_cursorType == CT_THROW) // indicator for Throwing.
 							{
@@ -1569,24 +1597,15 @@ void Map::drawTerrain(Surface* const surface) // private.
 								_numAccuracy->blitNShade(
 													surface,
 													posScreen.x,
-													posScreen.y);
+													posScreen.y);// + vertOffset);
 							}
-						}
-						else if (_camera->getViewLevel() > itZ)
-						{
-							frame = 5; // blue static box
-							sprite = _res->getSurfaceSet("CURSOR.PCK")->getFrame(frame);
-							sprite->blitNShade(
-									surface,
-									posScreen.x,
-									posScreen.y);
 						}
 
 						if (_cursorType > CT_AIM // Psi, Waypoint, Throw
-							&& _camera->getViewLevel() == itZ)
+							&& _camera->getViewLevel() == itZ)// || unitBelow != NULL)) // BattleUnit was redrawn below curTile.
 						{
-							const int cursorFrames[6] = {0,0,0,11,13,15};
-							sprite = _res->getSurfaceSet("CURSOR.PCK")->getFrame(cursorFrames[_cursorType] + (_animFrame / 4));
+							static const int cursorSprites[6] = {0,0,0,11,13,15};
+							sprite = _res->getSurfaceSet("CURSOR.PCK")->getFrame(cursorSprites[_cursorType] + (_animFrame / 4));
 							sprite->blitNShade(
 									surface,
 									posScreen.x,

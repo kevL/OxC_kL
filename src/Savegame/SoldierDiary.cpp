@@ -199,7 +199,7 @@ SoldierDiary::SoldierDiary(const SoldierDiary& copyThis)
 			UnitFaction faction = copyThis._killList.at(i)->_faction;
 			UnitStatus status = copyThis._killList.at(i)->_status;
 
-			_killList.push_back(new BattleUnitKills(
+			_killList.push_back(new BattleUnitKill(
 												unitRank,
 												race,
 												weapon,
@@ -226,7 +226,7 @@ SoldierDiary::~SoldierDiary()
 		delete *i;
 	}
 
-	for (std::vector<BattleUnitKills*>::const_iterator
+	for (std::vector<BattleUnitKill*>::const_iterator
 			i = _killList.begin();
 			i != _killList.end();
 			++i)
@@ -240,7 +240,7 @@ SoldierDiary::~SoldierDiary()
  * @param assignThis - reference the diary to assign to this SoldierDiary
  * @return, address of the new diary
  */
-SoldierDiary& SoldierDiary::operator=(const SoldierDiary& assignThis)
+SoldierDiary& SoldierDiary::operator= (const SoldierDiary& assignThis)
 {
 	if (this != &assignThis)
 	{
@@ -336,7 +336,7 @@ SoldierDiary& SoldierDiary::operator=(const SoldierDiary& assignThis)
 			delete *i;
 		}
 
-		for (std::vector<BattleUnitKills*>::const_iterator
+		for (std::vector<BattleUnitKill*>::const_iterator
 				i = _killList.begin();
 				i != _killList.end();
 				++i)
@@ -379,7 +379,7 @@ SoldierDiary& SoldierDiary::operator=(const SoldierDiary& assignThis)
 				UnitFaction faction = assignThis._killList.at(i)->_faction;
 				UnitStatus status = assignThis._killList.at(i)->_status;
 
-				_killList.push_back(new BattleUnitKills(
+				_killList.push_back(new BattleUnitKill(
 													unitRank,
 													race,
 													weapon,
@@ -420,7 +420,7 @@ void SoldierDiary::load(const YAML::Node& node)
 				i != killList.end();
 				++i)
 		{
-			_killList.push_back(new BattleUnitKills(*i));
+			_killList.push_back(new BattleUnitKill(*i));
 		}
 	}
 
@@ -484,7 +484,7 @@ YAML::Node SoldierDiary::save() const
 		node["awards"].push_back((*i)->save());
 	}
 
-	for (std::vector<BattleUnitKills*>::const_iterator
+	for (std::vector<BattleUnitKill*>::const_iterator
 			i = _killList.begin();
 			i != _killList.end();
 			++i)
@@ -537,7 +537,7 @@ YAML::Node SoldierDiary::save() const
 
 /**
  * Updates this SoldierDiary's statistics.
- * @note BattleUnitKills is a substruct of BattleUnitStatistics.
+ * @note BattleUnitKill is a substruct of BattleUnitStatistics.
  * @param unitStatistics	- pointer to BattleUnitStatistics to get stats from (BattleUnit.h)
  * @param missionStatistics	- pointer to MissionStatistics to get stats from (SavedGame.h)
  * @param rules				- pointer to Ruleset
@@ -548,8 +548,8 @@ void SoldierDiary::updateDiary(
 		const Ruleset* const rules)
 {
 	//Log(LOG_INFO) << "SoldierDiary::updateDiary()";
-	const std::vector<BattleUnitKills*> unitKills = unitStatistics->kills;
-	for (std::vector<BattleUnitKills*>::const_iterator
+	const std::vector<BattleUnitKill*> unitKills = unitStatistics->kills;
+	for (std::vector<BattleUnitKill*>::const_iterator
 			i = unitKills.begin();
 			i != unitKills.end();
 			++i)
@@ -844,7 +844,7 @@ bool SoldierDiary::manageAwards(const Ruleset* const rules)
 							thisIteration = -1,
 							lastIteration = -1;
 
-						for (std::vector<BattleUnitKills*>::const_iterator // loop over the KILLS
+						for (std::vector<BattleUnitKill*>::const_iterator // loop over the KILLS
 								singleKill = _killList.begin();
 								singleKill != _killList.end();
 								++singleKill)
@@ -1091,7 +1091,7 @@ std::vector<int>& SoldierDiary::getMissionIdList()
  * Gets a vector of all kills in this SoldierDiary.
  * @return, address of a vector of pointers to BattleUnitKills
  */
-std::vector<BattleUnitKills*>& SoldierDiary::getKills()
+std::vector<BattleUnitKill*>& SoldierDiary::getKills()
 {
 	return _killList;
 }
@@ -1104,7 +1104,7 @@ std::map<std::string, int> SoldierDiary::getAlienRankTotal() const
 {
 	std::map<std::string, int> ret;
 
-	for(std::vector<BattleUnitKills*>::const_iterator
+	for(std::vector<BattleUnitKill*>::const_iterator
 			i = _killList.begin();
 			i != _killList.end();
 			++i)
@@ -1123,7 +1123,7 @@ std::map<std::string, int> SoldierDiary::getAlienRaceTotal() const
 {
 	std::map<std::string, int> ret;
 
-	for(std::vector<BattleUnitKills*>::const_iterator
+	for(std::vector<BattleUnitKill*>::const_iterator
 			i = _killList.begin();
 			i != _killList.end();
 			++i)
@@ -1141,7 +1141,7 @@ std::map<std::string, int> SoldierDiary::getWeaponTotal() const
 {
 	std::map<std::string, int> ret;
 
-	for(std::vector<BattleUnitKills*>::const_iterator
+	for(std::vector<BattleUnitKill*>::const_iterator
 			i = _killList.begin();
 			i != _killList.end();
 			++i)
@@ -1160,7 +1160,7 @@ std::map<std::string, int> SoldierDiary::getWeaponAmmoTotal() const
 {
 	std::map<std::string, int> ret;
 
-	for(std::vector<BattleUnitKills*>::const_iterator
+	for(std::vector<BattleUnitKill*>::const_iterator
 			i = _killList.begin();
 			i != _killList.end();
 			++i)

@@ -215,7 +215,7 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(
 	size_t row = 0;
 //	bool stunOrKill = false;
 
-	for (std::vector<BattleUnitKills*>::const_iterator
+	for (std::vector<BattleUnitKill*>::const_iterator
 			i = diary->getKills().begin();
 			i != diary->getKills().end();
 			++i)

@@ -127,7 +127,7 @@ private:
 
 	std::vector<int> _missionIdList;
 	std::vector<SoldierAward*> _awards;
-	std::vector<BattleUnitKills*> _killList;
+	std::vector<BattleUnitKill*> _killList;
 
 	std::map<std::string, int>
 		_regionTotal,
@@ -219,7 +219,7 @@ private:
 		/// Gets the mission id list.
 		std::vector<int>& getMissionIdList();
 		/// Gets the kill list.
-		std::vector<BattleUnitKills*>& getKills();
+		std::vector<BattleUnitKill*>& getKills();
 };
 
 }
