@@ -2478,12 +2478,6 @@ bool BattlescapeGame::cancelCurrentAction(bool force)
 				}
 				else
 				{
-/*					if (Options::battleConfirmFireMode == true && _currentAction.waypoints.empty() == false)
-					{
-						_currentAction.waypoints.pop_back();
-						getMap()->getWaypoints()->pop_back();
-						return true;
-					} */
 					_currentAction.targeting = false;
 					_currentAction.type = BA_NONE;
 
@@ -2716,25 +2710,9 @@ void BattlescapeGame::primaryAction(const Position& pos)
 					_currentAction.weapon = NULL;
 			}
 		}
-		else if (Options::battleConfirmFireMode == true
-			&& (_currentAction.waypoints.empty() == true
-				|| _currentAction.waypoints.front() != pos))
-		{
-			_currentAction.waypoints.clear();
-			_currentAction.waypoints.push_back(pos);
-
-			getMap()->getWaypoints()->clear();
-			getMap()->getWaypoints()->push_back(pos);
-		}
 		else
 		{
 			//Log(LOG_INFO) << ". . . . FIRING or THROWING";
-			if (Options::battleConfirmFireMode == true)
-			{
-				_currentAction.waypoints.clear();
-				getMap()->getWaypoints()->clear();
-			}
-
 			getMap()->setCursorType(CT_NONE);
 			_parentState->getGame()->getCursor()->setHidden();
 

@@ -105,7 +105,16 @@ void ScannerView::draw()
 					&& tile->getUnit()->getMotionPoints() != 0)
 				{
 					if (_dotsDone == false)
-						scanDots.push_back(std::make_pair(xPos,yPos));
+					{
+						std::pair<int,int> dot = std::make_pair(xPos,yPos);
+						if (std::find(
+									scanDots.begin(),
+									scanDots.end(),
+									dot) == scanDots.end())
+						{
+							scanDots.push_back(dot);
+						}
+					}
 
 					int frame = (tile->getUnit()->getMotionPoints() / 5);
 					if (frame > -1)

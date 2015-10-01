@@ -1619,47 +1619,65 @@ void Map::drawTerrain(Surface* const surface) // private.
 
 // Draw WayPoints if any on current Tile
 					int
-						waypId = 1,
-						waypXOff = 2,
-						waypYOff = 2;
+						wpVal = 1,
+						offset_x = 2,
+						offset_y = 2;
 
 					for (std::vector<Position>::const_iterator
 							i = _waypoints.begin();
 							i != _waypoints.end();
-							++i)
+							++i, ++wpVal)
 					{
-						if (*i == posMap)
+						if (*i == posMap) // note that 2 BL waypoints can be at the same Position.
 						{
-							if (waypXOff == 2 && waypYOff == 2)
+							if (offset_x == 2 && offset_y == 2)
 							{
-								sprite = _res->getSurfaceSet("CURSOR.PCK")->getFrame(7);
+//								sprite = _res->getSurfaceSet("CURSOR.PCK")->getFrame(7);
+								sprite = _res->getSurfaceSet("TARGET.PCK")->getFrame(0);
 								sprite->blitNShade(
 										surface,
 										posScreen.x,
 										posScreen.y);
 							}
 
-							if (_battleSave->getBattleGame()->getCurrentAction()->type == BA_LAUNCH)
-							{
-								numWp->setValue(static_cast<unsigned>(waypId));
-								numWp->draw();
-								numWp->blitNShade(
-										surface,
-										posScreen.x + waypXOff,
-										posScreen.y + waypYOff);
+							numWp->setValue(static_cast<unsigned>(wpVal));
+							numWp->draw();
+							numWp->blitNShade(
+									surface,
+									posScreen.x + offset_x,
+									posScreen.y + offset_y);
 
-								waypXOff += (waypId > 9) ? 8 : 6;
-								if (waypXOff > 25)
-								{
-									waypXOff = 2;
-									waypYOff += 8;
-								}
+							if (wpVal > 9)
+								offset_x += 8;
+							else
+								offset_x += 6;
+
+							if (offset_x > 25)
+							{
+								offset_x = 2;
+								offset_y += 6;
 							}
 						}
-
-						++waypId;
 					}
 					// end waypoints.
+
+// Draw Map's border-sprite only on ground tiles
+					if (itZ == _battleSave->getGroundLevel()
+						|| (itZ == 0 && _battleSave->getGroundLevel() == -1))
+					{
+						if (itX == 0
+							|| itX == _battleSave->getMapSizeX() - 1
+							|| itY == 0
+							|| itY == _battleSave->getMapSizeY() - 1)
+						{
+							sprite = _res->getSurfaceSet("SCANG.DAT")->getFrame(330); // gray square cross
+							sprite->blitNShade(
+									surface,
+									posScreen.x + 14,
+									posScreen.y + 31);
+						}
+					}
+					// end border icon.
 
 // Draw scanner dots
 					if (itZ == _camera->getViewLevel()
@@ -1683,24 +1701,6 @@ void Map::drawTerrain(Surface* const surface) // private.
 						}
 					}
 					// end scanner dots.
-
-// Draw Map's border-sprite only on ground tiles
-					if (itZ == _battleSave->getGroundLevel()
-						|| (itZ == 0 && _battleSave->getGroundLevel() == -1))
-					{
-						if (itX == 0
-							|| itX == _battleSave->getMapSizeX() - 1
-							|| itY == 0
-							|| itY == _battleSave->getMapSizeY() - 1)
-						{
-							sprite = _res->getSurfaceSet("SCANG.DAT")->getFrame(330); // gray square cross
-							sprite->blitNShade(
-									surface,
-									posScreen.x + 14,
-									posScreen.y + 31);
-						}
-					}
-					// end border icon.
 				}
 				// is inside the Surface
 			}
