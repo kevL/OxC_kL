@@ -45,6 +45,10 @@ class MediTargetState
 {
 
 private:
+	static const Uint8
+		ORANGE	=  96,
+		PINK	= 176;
+
 	BattleAction* _action;
 
 	Text

@@ -1231,7 +1231,7 @@ void BattlescapeState::printTileInventory() // private.
 
 				if (item->getUnit() != NULL)
 				{
-					if (item->getUnit()->getType().compare(0,11, "STR_FLOATER") == 0) // TODO: require Floater autopsy research; also, InventoryState::setExtraInfo()
+					if (item->getUnit()->getType().compare(0,11, "STR_FLOATER") == 0) // See medikit w/ Autopsy OR inventory w/ Autopsy+Race research.
 					{
 						wst1 += tr("STR_FLOATER");
 						wst1 += L" (status doubtful)";

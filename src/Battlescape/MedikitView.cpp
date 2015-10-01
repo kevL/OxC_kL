@@ -107,8 +107,7 @@ void MedikitView::draw()
 					this,
 					Surface::getX(),
 					Surface::getY(),
-					0,
-					false,
+					0, false,
 					color);
 	}
 	this->unlock();

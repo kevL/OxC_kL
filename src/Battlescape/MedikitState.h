@@ -45,6 +45,11 @@ class MedikitState
 {
 
 private:
+	static const Uint8
+		WHITE	=   0,
+		RED		=  35,
+		LIME	= 255;
+
 	Bar
 		* _barEnergy,
 		* _barHealth,
@@ -74,13 +79,13 @@ private:
 		* _txtWound;
 
 	/// Handler for the end button.
-	void onCloseClick(Action* action);
+	void closeClick(Action* action);
 	/// Handler for the heal button.
-	void onHealClick(Action* action);
+	void healClick(Action* action);
 	/// Handler for the stimulant button.
-	void onStimClick(Action* action);
+	void stimClick(Action* action);
 	/// Handler for the pain killer button.
-	void onPainClick(Action* action);
+	void painClick(Action* action);
 
 	/// Updates the medikit interface.
 	void update();

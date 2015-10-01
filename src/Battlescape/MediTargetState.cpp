@@ -73,7 +73,7 @@ MediTargetState::MediTargetState(BattleAction* const action)
 	add(_txtHealth,	"messageWindows",		"battlescape");
 	add(_txtEnergy,	"messageWindows",		"battlescape");
 	add(_txtMorale,	"messageWindows",		"battlescape");
-	add(_lstTarget);//,	"messageWindows",		"battlescape");
+	add(_lstTarget);//"messageWindows",		"battlescape");
 	add(_btnCancel,	"messageWindowButtons",	"battlescape");
 
 	centerAllSurfaces();
@@ -98,8 +98,8 @@ MediTargetState::MediTargetState(BattleAction* const action)
 	_txtMorale->setText(L"rl"); // STR_MORALE
 	_txtMorale->setHighContrast();
 
-	_lstTarget->setColumns(5, 108, 18, 47, 37, 18);
-	_lstTarget->setColor(Palette::blockOffset(11));
+	_lstTarget->setColumns(5, 108,18,47,37,18);
+	_lstTarget->setColor(PINK);
 	_lstTarget->setBackground(_window);
 	_lstTarget->setSelectable();
 	_lstTarget->setMargin(6);
@@ -112,6 +112,12 @@ MediTargetState::MediTargetState(BattleAction* const action)
 	_btnCancel->onKeyboardPress(
 					(ActionHandler)& MediTargetState::btnCancelClick,
 					Options::keyCancel);
+	_btnCancel->onKeyboardPress(
+					(ActionHandler)& MediTargetState::btnCancelClick,
+					Options::keyOk);
+	_btnCancel->onKeyboardPress(
+					(ActionHandler)& MediTargetState::btnCancelClick,
+					Options::keyOkKeypad);
 }
 
 /**
@@ -193,10 +199,7 @@ void MediTargetState::init()
 								Text::formatNumber(_targetUnits.back()->getMorale()).c_str());
 
 				if (actorFound == false)
-					_lstTarget->setRowColor(
-										0,
-										Palette::blockOffset(6), // orange
-										true);
+					_lstTarget->setRowColor(0, ORANGE, true);
 			}
 		}
 
@@ -206,8 +209,7 @@ void MediTargetState::init()
 			actorFound = true;
 			i = targetUnits->begin();
 		}
-		else
-			++i;
+		else ++i;
 	}
 
 	if (_targetUnits.size() == 1)

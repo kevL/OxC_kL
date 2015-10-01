@@ -1262,14 +1262,16 @@ void InventoryState::setExtraInfo( // private.
 
 	if (item->getUnit() != NULL)
 	{
-		if (item->getUnit()->getType().compare(0,11, "STR_FLOATER") == 0) // TODO: require Floater autopsy research; also, BattlescapeState::printTileInventory()
+		if (item->getUnit()->getType().compare(0,11, "STR_FLOATER") == 0
+			&& (_game->getSavedGame()->isResearched("STR_FLOATER") == false
+				|| _game->getSavedGame()->isResearched("STR_FLOATER_AUTOPSY") == false))
 		{
 			label << tr("STR_FLOATER") // STR_FLOATER_CORPSE
 				  << L" (status doubtful)";
 		}
 		else if (item->getUnit()->getUnitStatus() == STATUS_UNCONSCIOUS)
 			label << item->getUnit()->getName(_game->getLanguage());
-		else
+		else // dead.
 		{
 			label << tr(itRule->getType());
 
@@ -1301,8 +1303,7 @@ void InventoryState::setExtraInfo( // private.
 
 	if (unit != NULL
 		&& isArt == false
-		&& (bat != BA_NONE
-			|| itRule->getBattleType() == BT_AMMO))
+		&& (bat != BA_NONE || itRule->getBattleType() == BT_AMMO))
 	{
 		std::string actionType;
 		int tu;

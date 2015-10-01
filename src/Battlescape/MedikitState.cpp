@@ -166,7 +166,7 @@ MedikitState::MedikitState(BattleAction* action)
 	if (_game->getScreen()->getDY() > 50)
 	{
 		_screen = false;
-		_bg->drawRect(67, 44, 190, 100, Palette::blockOffset(15)+15);
+		_bg->drawRect(67, 44, 190, 100, LIME);
 	}
 
 	_txtPart	= new Text(16, 9,  89, 120);
@@ -214,8 +214,8 @@ MedikitState::MedikitState(BattleAction* action)
 	add(_barTimeUnits,	"barTUs",		"battlescape");
 	add(_numTotalHP); // goes on top of Health (stun) bar.
 
-	_numHealth->setColor(Palette::blockOffset(2)+3);	// 9-pips lighter than Battlescape-icons value for that NumberText.
-	_numTotalHP->setColor(Palette::blockOffset(2)+3);	// ditto.
+	_numHealth->setColor(RED);
+	_numTotalHP->setColor(RED);
 
 	const int hp = _action->targetUnit->getBaseStats()->health;
 	_numTotalHP->setValue(static_cast<unsigned>(hp));
@@ -267,18 +267,24 @@ MedikitState::MedikitState(BattleAction* action)
 	_txtWound->setHighContrast();
 
 	_txtUnit->setText(_action->targetUnit->getName(_game->getLanguage()));
-	_txtUnit->setColor(0); // white
+	_txtUnit->setColor(WHITE);
 	_txtUnit->setHighContrast();
 	_txtUnit->setAlign(ALIGN_RIGHT);
 
-	_btnClose->onMouseClick((ActionHandler)& MedikitState::onCloseClick);
+	_btnClose->onMouseClick((ActionHandler)& MedikitState::closeClick);
 	_btnClose->onKeyboardPress(
-					(ActionHandler)& MedikitState::onCloseClick,
+					(ActionHandler)& MedikitState::closeClick,
 					Options::keyCancel);
+	_btnClose->onKeyboardPress(
+					(ActionHandler)& MedikitState::closeClick,
+					Options::keyOk);
+	_btnClose->onKeyboardPress(
+					(ActionHandler)& MedikitState::closeClick,
+					Options::keyOkKeypad);
 
-	_btnHeal->onMouseClick((ActionHandler)& MedikitState::onHealClick);
-	_btnStim->onMouseClick((ActionHandler)& MedikitState::onStimClick);
-	_btnPain->onMouseClick((ActionHandler)& MedikitState::onPainClick);
+	_btnHeal->onMouseClick((ActionHandler)& MedikitState::healClick);
+	_btnStim->onMouseClick((ActionHandler)& MedikitState::stimClick);
+	_btnPain->onMouseClick((ActionHandler)& MedikitState::painClick);
 
 	update();
 }
@@ -295,7 +301,7 @@ void MedikitState::handle(Action* action)
 		&& action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
 		_game->popState();
-//		onCloseClick(NULL);
+//		closeClick(NULL);
 	}
 }
 
@@ -303,7 +309,7 @@ void MedikitState::handle(Action* action)
  * Returns to the previous screen.
  * @param action - pointer to an Action
  */
-void MedikitState::onCloseClick(Action*)
+void MedikitState::closeClick(Action*)
 {
 /*	if (Options::maximizeInfoScreens)
 	{
@@ -322,7 +328,7 @@ void MedikitState::onCloseClick(Action*)
  * Handler for clicking the heal button.
  * @param action - pointer to an Action
  */
-void MedikitState::onHealClick(Action*)
+void MedikitState::healClick(Action*)
 {
 	const int healQty = _action->weapon->getHealQuantity();
 	if (healQty != 0)
@@ -345,7 +351,7 @@ void MedikitState::onHealClick(Action*)
 			{
 				_action->actor->getStatistics()->revivedSoldier += 2;
 				_game->popState();
-//				onCloseClick(NULL);
+//				closeClick(NULL);
 			}
 			else
 				update();
@@ -353,7 +359,7 @@ void MedikitState::onHealClick(Action*)
 		else
 		{
 			_action->result = "STR_NOT_ENOUGH_TIME_UNITS";
-//			onCloseClick(NULL);
+//			closeClick(NULL);
 		}
 	}
 }
@@ -362,7 +368,7 @@ void MedikitState::onHealClick(Action*)
  * Handler for clicking the stimulant button.
  * @param action - pointer to an Action
  */
-void MedikitState::onStimClick(Action*)
+void MedikitState::stimClick(Action*)
 {
 	const int stimQty = _action->weapon->getStimulantQuantity();
 	if (stimQty != 0)
@@ -382,7 +388,7 @@ void MedikitState::onStimClick(Action*)
 					++_action->actor->getStatistics()->revivedSoldier;
 
 				_game->popState();
-//				onCloseClick(NULL);
+//				closeClick(NULL);
 			}
 			else
 				update();
@@ -390,7 +396,7 @@ void MedikitState::onStimClick(Action*)
 		else
 		{
 			_action->result = "STR_NOT_ENOUGH_TIME_UNITS";
-//			onCloseClick(NULL);
+//			closeClick(NULL);
 		}
 	}
 }
@@ -399,7 +405,7 @@ void MedikitState::onStimClick(Action*)
  * Handler for clicking the painkiller button.
  * @param action - pointer to an Action
  */
-void MedikitState::onPainClick(Action*)
+void MedikitState::painClick(Action*)
 {
 	const int painQty = _action->weapon->getPainKillerQuantity();
 	if (painQty != 0)
@@ -429,7 +435,7 @@ void MedikitState::onPainClick(Action*)
 				battleSave->getBattleGame()->getMap()->getCamera()->centerOnPosition(_action->targetUnit->getPosition());
 
 				_game->popState();
-//				onCloseClick(NULL);
+//				closeClick(NULL);
 			}
 			else
 				update();
@@ -437,7 +443,7 @@ void MedikitState::onPainClick(Action*)
 		else
 		{
 			_action->result = "STR_NOT_ENOUGH_TIME_UNITS";
-//			onCloseClick(NULL);
+//			closeClick(NULL);
 		}
 	}
 }
