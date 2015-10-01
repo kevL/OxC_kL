@@ -1069,7 +1069,7 @@ void ProjectileFlyBState::cancel()
 
 /**
  * Validates the throwing range.
- * @param action		- pointer to BattleAction struct (BattlescapeGame.h)
+ * @param action		- pointer to BattleAction (BattlescapeGame.h)
  * @param originVoxel	- reference the origin in voxel-space
  * @param tile			- pointer to the targeted tile
  * @return, true if the range is valid
@@ -1094,8 +1094,8 @@ bool ProjectileFlyBState::validThrowRange( // static.
 
 	const int delta_z = originVoxel.z
 					  - action->target.z * 24 + tile->getTerrainLevel();
-	const double maxDist = static_cast<double>(
-						   getMaxThrowDistance( // tile-space
+	const double maxDist = static_cast<double>( // tile-space
+						   getMaxThrowDistance(
 											weight,
 											action->actor->getStrength(),
 											delta_z)

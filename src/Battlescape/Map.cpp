@@ -514,8 +514,11 @@ void Map::drawTerrain(Surface* const surface) // private.
 						}
 					}
 
-					if (_projectile->getThrowItem() != NULL
-						|| _camera->isOnScreen(posFinal) == false)
+					if (_camera->isOnScreen(posFinal) == false
+						|| (_projectile->getThrowItem() != NULL
+							&& _battleSave->getTileEngine()->distance(
+																	prjAction->actor->getPosition(),
+																	posFinal) > 8))
 					{
 						_smoothingEngaged = true;
 						_camera->setPauseAfterShot();
