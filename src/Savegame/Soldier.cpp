@@ -562,8 +562,8 @@ bool Soldier::trainPsiDay()
 				++_currentStats.psiSkill;
 			}
 
-			if (_currentStats.psiStrength < _solRule->getStatCaps().psiStrength
-				&& Options::allowPsiStrengthImprovement == true)
+			if (_currentStats.psiStrength < _solRule->getStatCaps().psiStrength)
+//				&& Options::allowPsiStrengthImprovement == true)
 			{
 				pct = std::max(
 							1,

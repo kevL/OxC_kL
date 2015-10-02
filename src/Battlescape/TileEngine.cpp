@@ -5523,7 +5523,7 @@ bool TileEngine::psiAttack(BattleAction* const action)
 	{
 		if (action->type == BA_PSICOURAGE)
 		{
-			const int moraleGain = 10 + RNG::generate(0,20);
+			const int moraleGain = 10 + RNG::generate(0,20) + (action->actor->getBaseStats()->psiSkill / 10);
 			action->value = moraleGain;
 			victim->moraleChange(moraleGain);
 
@@ -5532,8 +5532,8 @@ bool TileEngine::psiAttack(BattleAction* const action)
 
 		if (action->actor->getOriginalFaction() == FACTION_PLAYER)
 			action->actor->addPsiSkillExp();
-		else if (victim->getOriginalFaction() == FACTION_PLAYER
-			&& Options::allowPsiStrengthImprovement == true)
+		else if (victim->getOriginalFaction() == FACTION_PLAYER)
+//			&& Options::allowPsiStrengthImprovement == true)
 		{
 			victim->addPsiStrengthExp();
 		}
@@ -5549,9 +5549,7 @@ bool TileEngine::psiAttack(BattleAction* const action)
 		if (victim->getFaction() == FACTION_HOSTILE
 			&& victim->getOriginalFaction() != FACTION_HOSTILE)
 		{
-			victim->hostileMcParameters(
-									psiStrength,
-									psiSkill);
+			victim->hostileMcParameters(psiStrength, psiSkill);
 		}
 		else
 		{
@@ -5559,9 +5557,9 @@ bool TileEngine::psiAttack(BattleAction* const action)
 			psiSkill = statsVictim->psiSkill;
 		}
 
-		const double
-			defense = static_cast<double>(psiStrength) + (static_cast<double>(psiSkill) / 5.),
-			dist = static_cast<double>(distance(
+		const float
+			defense = static_cast<float>(psiStrength) + (static_cast<float>(psiSkill) / 5.f),
+			dist = static_cast<float>(distance(
 											action->actor->getPosition(),
 											action->target));
 
@@ -5571,26 +5569,28 @@ bool TileEngine::psiAttack(BattleAction* const action)
 		{
 			bonusSkill = 21; // ... arbitrary kL
 		}
-		else
-			bonusSkill = 0;
+		else bonusSkill = 0;
 
-		double attack = static_cast<double>(statsActor->psiStrength * (statsActor->psiSkill + bonusSkill)) / 50.;
+		float attack = static_cast<float>(statsActor->psiStrength * (statsActor->psiSkill + bonusSkill)) / 50.f;
 		//Log(LOG_INFO) << ". . . defense = " << (int)defense;
 		//Log(LOG_INFO) << ". . . attack = " << (int)attack;
 		//Log(LOG_INFO) << ". . . dist = " << (int)dist;
 
-		attack -= dist * 2.;
+		attack -= dist * 2.f;
 		attack -= defense;
-
-		if (action->type == BA_PSICONTROL)
-			attack += 15.;
-		else if (action->type == BA_PSIPANIC)
-			attack += 45.;
-		else // Psi-Confuse
-			attack += 55.;
-
-		attack *= 100.;
-		attack /= 56.;
+		switch (action->type)
+		{
+			case BA_PSICONTROL:
+				attack += 15.f;
+			break;
+			case BA_PSIPANIC:
+				attack += 45.f;
+			break;
+			case BA_PSICONFUSE:
+				attack += 55.f;
+		}
+		attack *= 100.f;
+		attack /= 56.f;
 
 		const int success = static_cast<int>(attack);
 		action->value = success;
@@ -5601,10 +5601,22 @@ bool TileEngine::psiAttack(BattleAction* const action)
 			//Log(LOG_INFO) << ". . Success";
 			if (action->actor->getOriginalFaction() == FACTION_PLAYER)
 			{
-				if (victim->getOriginalFaction() == FACTION_HOSTILE) // no extra-XP for re-controlling Soldiers.
-					action->actor->addPsiSkillExp(2);
-				else if (victim->getOriginalFaction() == FACTION_NEUTRAL) // only 1 extra-XP for controlling Civies.
-					action->actor->addPsiSkillExp();
+				int xp = 0; // avoid vc++ linker warnings.
+				switch (action->type)
+				{
+					case BA_PSICONTROL:
+						if (victim->getOriginalFaction() == FACTION_HOSTILE) // no extra-XP for re-controlling Soldiers.
+							xp = 2;
+						else if (victim->getOriginalFaction() == FACTION_NEUTRAL) // only 1 extra-XP for controlling Civies.
+							xp = 1;
+					break;
+					case BA_PSIPANIC:
+						xp = 1;
+					break;
+//					case BA_PSICONFUSE:
+//					default: xp = 0;
+				}
+				action->actor->addPsiSkillExp(xp);
 			}
 
 			//Log(LOG_INFO) << ". . victim morale[0] = " << victim->getMorale();
@@ -5630,7 +5642,7 @@ bool TileEngine::psiAttack(BattleAction* const action)
 				//Log(LOG_INFO) << ". . . action->type == BA_PSICONFUSE";
 				const int tuLoss = (statsActor->psiSkill + 2) / 3;
 				//Log(LOG_INFO) << ". . . tuLoss = " << tuLoss;
-				if (tuLoss > 0)
+				if (tuLoss != 0)
 					victim->setTimeUnits(victim->getTimeUnits() - tuLoss);
 			}
 			else // BA_PSICONTROL
@@ -5715,13 +5727,10 @@ bool TileEngine::psiAttack(BattleAction* const action)
 				info = "STR_CONTROL_";
 
 			//Log(LOG_INFO) << "te:psiAttack() success = " << success;
-			_battleSave->getBattleState()->warning(
-												info,
-												true,
-												success);
+			_battleSave->getBattleState()->warning(info, true, success);
 
-			if (victim->getOriginalFaction() == FACTION_PLAYER
-				&& Options::allowPsiStrengthImprovement == true)
+			if (victim->getOriginalFaction() == FACTION_PLAYER)
+//				&& Options::allowPsiStrengthImprovement == true)
 			{
 				int resistXp;
 				if (action->actor->getFaction() == FACTION_HOSTILE)

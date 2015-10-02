@@ -79,10 +79,13 @@ protected:
 
 	std::vector<BattleItem*> _inventory;
 
-	/// Gets if this Tile will accept '_smoke' value.
-	bool canSmoke() const;
+	/// Checks if this Tile can have smoke.
+	bool isSmokable() const;
+	/// Checks if this Tile can have fire.
+	bool isFirable() const;
+
 	/// Converts obscure inverse MCD notation to understandable percentages.
-	int convertBurnToPCT(int burn) const;
+	int convertBurnToPct(int burn) const;
 
 
 	public:

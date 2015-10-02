@@ -293,39 +293,34 @@ void MapDataSet::loadData()
 						armor,	// HE
 						1,		// smoke
 						1,		// fire
-						1);		// gas, kL
-//kL					armor);	// gas
+						1);		// gas
+//						armor);	// gas
 
 			if ((*i)->getDieMCD() != 0)
 				_objects.at(static_cast<size_t>((*i)->getDieMCD()))
 												->setBlock(
 														1,
 														1,
-														armor, // hm, sets Death HE-block value same as orig part ...
+														armor, // sets Death HE-block value same as orig part ... hm.
 														1,
 														1,
-														1); // kL
-//kL													armor);
+														1);
+//														armor);
 
-			if ((*i)->isGravLift() == false)	// kL
-				(*i)->setStopLOS();				// kL
+			if ((*i)->isGravLift() == false)
+				(*i)->setStopLOS();
 		}
 	}
 
 	// Load terrain sprites/surfaces/PCK files into a SurfaceSet.
-	// kL_begin: Let extraSprites override terrain sprites.
-	//Log(LOG_INFO) << ". terrain_PCK = " << _name;
+	// Let extraSprites override terrain sprites.
 	std::ostringstream test;
 	test << _name << ".PCK";
 	SurfaceSet* const srt = _game->getResourcePack()->getSurfaceSet(test.str());
 	if (srt != NULL)
-	{
-		//Log(LOG_INFO) << ". . Overriding terrain SurfaceSet:" << _name << ".PCK";
 		_surfaceSet = srt;
-	}
-	else // kL_end.
+	else
 	{
-		//Log(LOG_INFO) << ". . Creating new terrain SurfaceSet:" << _name << ".PCK";
 		std::ostringstream
 			oststr1,
 			oststr2;
@@ -344,7 +339,6 @@ void MapDataSet::loadData()
  */
 void MapDataSet::unloadData()
 {
-	//Log(LOG_INFO) << "MapDataSet::unloadData()";
 	if (_loaded == true)
 	{
 		for (std::vector<MapData*>::const_iterator
@@ -356,29 +350,15 @@ void MapDataSet::unloadData()
 			i = _objects.erase(i);
 		}
 
-		// kL_begin: but don't delete the extraSprites for terrain!!!
-		// hm what about deleting only the Pointer?? ie, leave the ResourcePack's surfaceSet intact?
-		// Conclusion, seems to work ... but gives an assertion failure in VC++ when exiting game after debugging.
+		// but don't delete the extraSprites for terrain!!!
 		std::ostringstream test;
 		test << _name << ".PCK";
 		const SurfaceSet* const srt = _game->getResourcePack()->getSurfaceSet(test.str());
 		if (srt == NULL)
 			delete _surfaceSet;
 
-/*		if (srt != NULL)
-		{
-			//Log(LOG_INFO) << ". Deleting terrain SurfaceSet POINTER:" << _name << ".PCK";
-			delete &_surfaceSet; // Asserion Failure!
-		}
-		else // kL_end.
-		{
-			//Log(LOG_INFO) << ". Deleting terrain SurfaceSet:" << _name << ".PCK";
-			delete _surfaceSet;
-		} */
-
 		_loaded = false;
 	}
-	//Log(LOG_INFO) << "MapDataSet::unloadData() EXIT";
 }
 
 /**
@@ -386,9 +366,9 @@ void MapDataSet::unloadData()
  * @param file		- reference the filename of the DAT file
  * @param voxelData	- pointer to a vector of voxelDatums
  */
-void MapDataSet::loadLoft(
+void MapDataSet::loadLoft( // static.
 		const std::string& file,
-		std::vector<Uint16>* voxelData)
+		std::vector<Uint16>* const voxelData)
 {
 	std::ifstream mapFile( // Load file
 						file.c_str(),

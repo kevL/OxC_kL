@@ -690,9 +690,7 @@ bool Tile::damage(
 	bool objectiveDestroyed = false;
 
 	if (power >= _objects[part]->getArmor())
-		objectiveDestroyed = destroy(
-									part,
-									type);
+		objectiveDestroyed = destroy(part, type);
 
 	return objectiveDestroyed;
 }
@@ -712,8 +710,7 @@ void Tile::setExplosive(
 		int explType,
 		bool force)
 {
-	if (force == true
-		|| _explosive < power)
+	if (force == true || _explosive < power)
 	{
 		_explosive = power;
 		_explosiveType = explType;
@@ -760,7 +757,7 @@ int Tile::getFlammability() const
 		}
 	}
 
-	return convertBurnToPCT(burn);
+	return convertBurnToPct(burn);
 }
 
 /**
@@ -771,8 +768,7 @@ int Tile::getFlammability() const
  */
 int Tile::getFlammability(MapDataType part) const
 {
-	return convertBurnToPCT(_objects[part]->getFlammable());
-//	return _objects[static_cast<size_t>(part)]->getFlammable();
+	return convertBurnToPct(_objects[part]->getFlammable());
 }
 
 /**
@@ -781,7 +777,7 @@ int Tile::getFlammability(MapDataType part) const
  * @param burn - flammability from an MCD file (see MapData)
  * @return, basic percent chance that this stuff burns
  */
-int Tile::convertBurnToPCT(int burn) const // private.
+int Tile::convertBurnToPct(int burn) const // private.
 {
 	if (burn > 254)
 		return 0;
@@ -838,8 +834,7 @@ int Tile::getFuel(MapDataType part) const
  */
 bool Tile::ignite(int power)
 {
-	if (power != 0
-		&& canSmoke() == true)
+	if (power != 0 && isSmokable() == true)
 	{
 		const int fuel = getFuel();
 		if (fuel != 0)
@@ -852,12 +847,9 @@ bool Tile::ignite(int power)
 				{
 					addSmoke((burn + 15) / 16);
 
-					if (_pos.z == 0						// TODO: pass in tileBelow and check its terrainLevel for -24
-						|| _objects[O_FLOOR] != NULL	// drop fire through to tilesBelow ...
-						|| _objects[O_OBJECT] != NULL)
-					{
+					// TODO: pass in tileBelow and check its terrainLevel for -24; drop fire through to any tileBelow ...
+					if (isFirable() == true)
 						addFire(fuel + 1);
-					}
 
 					return true;
 				}
@@ -874,22 +866,17 @@ bool Tile::ignite(int power)
  */
 void Tile::addFire(int turns)
 {
-	if (turns != 0
-		&& canSmoke() == true)
+	if (turns != 0 && isFirable() == true)
 	{
-		if (_smoke == 0
-			&& _fire == 0)
-		{
-			_animOffset = RNG::generate(0,3);
-		}
+		if (_smoke == 0 && _fire == 0)
+			_animOffset = RNG::seedless(0,3);
 
 		_fire += turns;
 
-		if (_fire > 12)
-			_fire = 12;
+		if (_fire > 12) _fire = 12;
 
-		if (_smoke <= _fire)
-			_smoke = _fire + RNG::generate(1,5);
+		if (_smoke < _fire + 2)
+			_smoke = _fire + RNG::seedless(2,3);
 	}
 }
 
@@ -898,12 +885,9 @@ void Tile::addFire(int turns)
  */
 void Tile::decreaseFire()
 {
-	--_fire;
-
-	if (_fire < 1)
+	if (--_fire < 1)
 	{
 		_fire = 0;
-
 		if (_smoke == 0)
 			_animOffset = 0;
 	}
@@ -924,18 +908,12 @@ int Tile::getFire() const
  */
 void Tile::addSmoke(int turns)
 {
-	if (turns != 0
-		&& canSmoke() == true)
+	if (turns != 0 && isSmokable() == true)
 	{
-		if (_smoke == 0
-			&& _fire == 0)
-		{
-			_animOffset = RNG::generate(0,3);
-		}
+		if (_smoke == 0 && _fire == 0)
+			_animOffset = RNG::seedless(0,3);
 
-		_smoke += turns;
-
-		if (_smoke > 17)
+		if ((_smoke += turns) > 17)
 			_smoke = 17;
 	}
 }
@@ -948,12 +926,11 @@ void Tile::decreaseSmoke()
 	if (_fire != 0) // don't let smoke deplete faster than fire depletes.
 		--_smoke;
 	else
-		_smoke -= (RNG::generate(1, _smoke) + 2) / 3;
+		_smoke -= (RNG::seedless(1, _smoke) + 2) / 3;
 
 	if (_smoke < 1)
 	{
 		_smoke = 0;
-
 		if (_fire == 0)
 			_animOffset = 0;
 	}
@@ -969,18 +946,32 @@ int Tile::getSmoke() const
 }
 
 /**
- * Gets if this Tile will accept '_smoke' or '_fire' value.
- * @note diag bigWalls take no smoke/fire. 'Cause I don't want it showing on both sides.
- * And I don't want it creeping through diagonal UFO hulls ....
- * @return, true if smoke/fire possible
+ * Checks if this Tile can have smoke.
+ * @note Only the object is checked. Diagonal bigWalls never smoke.
+ * @return, true if smoke can occupy this Tile
  */
-bool Tile::canSmoke() const // private
+bool Tile::isSmokable() const // private.
 {
 	return _objects[O_OBJECT] == NULL
-		   || (_objects[O_OBJECT]->getBigWall() != BIGWALL_NESW
+		|| (_objects[O_OBJECT]->getBigWall() != BIGWALL_NESW
+			&& _objects[O_OBJECT]->getBigWall() != BIGWALL_NWSE
+			&& _objects[O_OBJECT]->blockSmoke() == false);
+}
+
+/**
+ * Checks if this Tile can have fire.
+ * @note Only the floor and object are checked. Diagonal bigWalls never fire.
+ * Fire needs a floor.
+ * @return, true if fire can occupy this Tile
+ */
+bool Tile::isFirable() const // private.
+{
+	return (_objects[O_FLOOR] != NULL
+		&& _objects[O_FLOOR]->blockFire() == false)
+		&& (_objects[O_OBJECT] == NULL
+			|| (_objects[O_OBJECT]->getBigWall() != BIGWALL_NESW
 				&& _objects[O_OBJECT]->getBigWall() != BIGWALL_NWSE
-				&& (_objects[O_OBJECT]->getBigWall() != BIGWALL_BLOCK
-					|| _objects[O_OBJECT]->blockSmoke() == false)); // <- TODO: remove bias vs. Smoke; ie. include Fire later
+				&& _objects[O_OBJECT]->blockFire() == false));
 }
 
 /**
@@ -1237,9 +1228,7 @@ void Tile::setUnit(
 		const Tile* const tileBelow)
 {
 	if (unit != NULL)
-		unit->setTile(
-					this,
-					tileBelow);
+		unit->setTile(this, tileBelow);
 
 	_unit = unit;
 }

@@ -88,7 +88,7 @@ private:
 		/// Loads voxeldata from a DAT file.
 		static void loadLoft(
 				const std::string& file,
-				std::vector<Uint16>* voxelData);
+				std::vector<Uint16>* const voxelData);
 
 		/// Gets a blank floor tile.
 		static MapData* getBlankFloorTile();
