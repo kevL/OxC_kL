@@ -180,7 +180,7 @@ private:
 		/// Sets the soldier's wound recovery time.
 		void setRecovery(int recovery);
 		/// Gets a soldier's wounds as a percent.
-		int getRecoveryPCT() const;
+		int getRecoveryPct() const;
 		/// Heals wound recoveries.
 		void heal();
 

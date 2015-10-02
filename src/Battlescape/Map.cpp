@@ -1954,7 +1954,9 @@ bool Map::checkWest( // private.
 			&& (tile5 == NULL
 				|| (tile5->getMapData(O_NORTHWALL) == NULL
 					&& (tile5->getMapData(O_OBJECT) == NULL
-						|| tile5->getMapData(O_OBJECT)->getBigWall() != BIGWALL_NESW))));
+						|| tile5->getMapData(O_OBJECT)->getBigWall() != BIGWALL_NESW
+						|| tile5->getMapData(O_OBJECT)->getBigWall() != BIGWALL_BLOCK))));
+//						|| tile5->getMapData(O_OBJECT)->getBigWall() != BIGWALL_NORTH
 
 	if (ret == false) // unit is too far away from wall to clip - now don't let the floor clip it
 	{
@@ -1999,7 +2001,9 @@ bool Map::checkNorth( // private.
 			&& (tile1 == NULL
 				|| (tile1->getMapData(O_WESTWALL) == NULL
 					&& (tile1->getMapData(O_OBJECT) == NULL
-						|| tile1->getMapData(O_OBJECT)->getBigWall() != BIGWALL_NESW))));
+						|| tile1->getMapData(O_OBJECT)->getBigWall() != BIGWALL_NESW
+						|| tile1->getMapData(O_OBJECT)->getBigWall() != BIGWALL_BLOCK))));
+//						|| tile1->getMapData(O_OBJECT)->getBigWall() != BIGWALL_WEST
 
 	if (ret == false) // unit is too far away from wall to clip - now don't let the floor clip it
 	{

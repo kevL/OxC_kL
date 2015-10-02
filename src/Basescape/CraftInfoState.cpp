@@ -526,10 +526,7 @@ void CraftInfoState::btnOkClick(Action*)
  */
 void CraftInfoState::btnW1Click(Action*)
 {
-	_game->pushState(new CraftWeaponsState(
-										_base,
-										_craftId,
-										0));
+	_game->pushState(new CraftWeaponsState(_base, _craftId, 0));
 }
 
 /**
@@ -538,10 +535,7 @@ void CraftInfoState::btnW1Click(Action*)
  */
 void CraftInfoState::btnW2Click(Action*)
 {
-	_game->pushState(new CraftWeaponsState(
-										_base,
-										_craftId,
-										1));
+	_game->pushState(new CraftWeaponsState(_base, _craftId, 1));
 }
 
 /**
@@ -550,9 +544,7 @@ void CraftInfoState::btnW2Click(Action*)
  */
 void CraftInfoState::btnCrewClick(Action*)
 {
-	_game->pushState(new CraftSoldiersState(
-										_base,
-										_craftId));
+	_game->pushState(new CraftSoldiersState(_base, _craftId));
 }
 
 /**
@@ -561,9 +553,7 @@ void CraftInfoState::btnCrewClick(Action*)
  */
 void CraftInfoState::btnEquipClick(Action*)
 {
-	_game->pushState(new CraftEquipmentState(
-										_base,
-										_craftId));
+	_game->pushState(new CraftEquipmentState(_base, _craftId));
 }
 
 /**
@@ -572,9 +562,7 @@ void CraftInfoState::btnEquipClick(Action*)
  */
 void CraftInfoState::btnArmorClick(Action*)
 {
-	_game->pushState(new CraftArmorState(
-									_base,
-									_craftId));
+	_game->pushState(new CraftArmorState(_base, _craftId));
 }
 
 /**

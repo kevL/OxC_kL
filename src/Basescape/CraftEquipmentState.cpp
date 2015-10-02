@@ -71,7 +71,7 @@ CraftEquipmentState::CraftEquipmentState(
 		_base(base),
 		_craft(base->getCrafts()->at(craftId)),
 		_sel(0),
-		_selUnit(0)
+		_selUnitId(0)
 {
 	_window			= new Window(this, 320, 200);
 
@@ -141,16 +141,16 @@ CraftEquipmentState::CraftEquipmentState(
 	_txtCraft->setText(tr("STR_CRAFT"));
 
 	_txtSpace->setText(tr("STR_SPACE_CREW_HWP_FREE_")
-					.arg(_craft->getNumSoldiers())
-					.arg(_craft->getNumVehicles())
-					.arg(_craft->getSpaceAvailable()));
+						.arg(_craft->getNumSoldiers())
+						.arg(_craft->getNumVehicles())
+						.arg(_craft->getSpaceAvailable()));
 
 	_txtLoad->setText(tr("STR_LOAD_CAPACITY_FREE_")
-					.arg(_craft->getLoadCapacity())
-					.arg(_craft->getLoadCapacity() - _craft->calcLoadCurrent()));
+						.arg(_craft->getLoadCapacity())
+						.arg(_craft->getLoadCapacity() - _craft->calcLoadCurrent()));
 
 	_lstEquipment->setArrowColumn(189, ARROW_HORIZONTAL);
-	_lstEquipment->setColumns(3, 147, 85, 41);
+	_lstEquipment->setColumns(3, 147,85,41);
 	_lstEquipment->setBackground(_window);
 	_lstEquipment->setSelectable();
 	_lstEquipment->setMargin();
@@ -241,9 +241,7 @@ CraftEquipmentState::CraftEquipmentState(
 			else
 				color = _lstEquipment->getSecondaryColor();
 
-			_lstEquipment->setRowColor(
-									row++,
-									color);
+			_lstEquipment->setRowColor(row++, color);
 		}
 	}
 
@@ -276,8 +274,7 @@ void CraftEquipmentState::init()
 	const SavedBattleGame* const battleSave = _game->getSavedGame()->getBattleSave();
 	if (battleSave != NULL)
 	{
-		_selUnit = battleSave->getSelectedUnit()->getBattleOrder();
-
+		_selUnitId = battleSave->getSelectedUnit()->getBattleOrder();
 		_game->getSavedGame()->setBattleSave(NULL);
 		_craft->setInBattlescape(false);
 	}
@@ -428,12 +425,12 @@ void CraftEquipmentState::updateQuantity()
 	_lstEquipment->setCellText(_sel, 2, woststr2.str());
 
 	_txtSpace->setText(tr("STR_SPACE_CREW_HWP_FREE_")
-					.arg(_craft->getNumSoldiers())
-					.arg(_craft->getNumVehicles())
-					.arg(_craft->getSpaceAvailable()));
+						.arg(_craft->getNumSoldiers())
+						.arg(_craft->getNumVehicles())
+						.arg(_craft->getSpaceAvailable()));
 	_txtLoad->setText(tr("STR_LOAD_CAPACITY_FREE_")
-					.arg(_craft->getLoadCapacity())
-					.arg(_craft->getLoadCapacity() - _craft->calcLoadCurrent()));
+						.arg(_craft->getLoadCapacity())
+						.arg(_craft->getLoadCapacity() - _craft->calcLoadCurrent()));
 
 	calcCost();
 }
@@ -467,9 +464,7 @@ void CraftEquipmentState::moveLeftByValue(int change)
 
 		if (craftQty != 0)
 		{
-			change = std::min(
-							change,
-							craftQty);
+			change = std::min(change, craftQty);
 
 			if (itRule->isFixed() == true) // convert vehicle to item
 			{
@@ -598,9 +593,7 @@ void CraftEquipmentState::moveRightByValue(int change)
 						const RuleItem* const ammoRule = _game->getRuleset()->getItem(itRule->getCompatibleAmmo()->front());
 						int clipSize = ammoRule->getClipSize();
 						if (clipSize > 0 && itRule->getClipSize() > 0)
-						{
 							clipSize = itRule->getClipSize() / clipSize;
-						}
 
 						if (_game->getSavedGame()->getMonthsPassed() == -1)
 							baseQty = 1;
@@ -622,10 +615,7 @@ void CraftEquipmentState::moveRightByValue(int change)
 									_base->getStorageItems()->removeItem(_items[_sel]);
 								}
 
-								_craft->getVehicles()->push_back(new Vehicle(
-																			itRule,
-																			clipSize,
-																			tankSize));
+								_craft->getVehicles()->push_back(new Vehicle(itRule, clipSize, tankSize));
 							}
 						}
 						else // not enough Ammo
@@ -720,10 +710,7 @@ void CraftEquipmentState::btnInventoryClick(Action*)
 	_game->getSavedGame()->setBattleSave(battleSave);
 	BattlescapeGenerator bgen = BattlescapeGenerator(_game);
 
-	bgen.runInventory(
-					_craft,
-					NULL,
-					_selUnit);
+	bgen.runInventory(_craft, NULL, _selUnitId);
 
 	_game->getScreen()->clear();
 	_game->pushState(new InventoryState());

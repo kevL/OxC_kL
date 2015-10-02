@@ -545,8 +545,7 @@ void SoldierInfoState::init()
 	{
 		_btnArmor->setColor(PURPLE);
 	}
-	else
-		_btnArmor->setColor(PURPLE_OUT);
+	else _btnArmor->setColor(PURPLE_OUT);
 
 	std::wstring craft;
 	if (_soldier->getCraft() == NULL)
@@ -557,10 +556,10 @@ void SoldierInfoState::init()
 
 
 	const int recovery = _soldier->getRecovery();
-	if (recovery > 0)
+	if (recovery != 0)
 	{
 		Uint8 color;
-		const int pct = _soldier->getRecoveryPCT();
+		const int pct = _soldier->getRecoveryPct();
 		if (pct > 50)
 			color = ORANGE;
 		else if (pct > 10)

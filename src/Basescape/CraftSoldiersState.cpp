@@ -118,7 +118,7 @@ CraftSoldiersState::CraftSoldiersState(
 	_txtRank->setText(tr("STR_RANK"));
 	_txtCraft->setText(tr("STR_CRAFT"));
 
-	_lstSoldiers->setColumns(3, 116, 85, 71);
+	_lstSoldiers->setColumns(3, 116,85,71);
 	_lstSoldiers->setArrowColumn(180, ARROW_VERTICAL);
 	_lstSoldiers->setBackground(_window);
 	_lstSoldiers->setSelectable();
@@ -160,8 +160,11 @@ void CraftSoldiersState::init()
 	State::init();
 
 	// Reset stuff when coming back from pre-battle Inventory.
-	if (_game->getSavedGame()->getBattleSave() != NULL)
+	const SavedBattleGame* const battleSave = _game->getSavedGame()->getBattleSave();
+	if (battleSave != NULL)
 	{
+// unfortunately this would rely on the list of battleSoldiers *not* changing when entering/cancelling InventoryState
+//		_selUnitId = battleSave->getSelectedUnit()->getBattleOrder();
 		_game->getSavedGame()->setBattleSave(NULL);
 		_craft->setInBattlescape(false);
 	}
@@ -174,8 +177,7 @@ void CraftSoldiersState::init()
 	for (std::vector<Soldier*>::const_iterator
 			i = _base->getSoldiers()->begin();
 			i != _base->getSoldiers()->end();
-			++i,
-				++row)
+			++i, ++row)
 	{
 		_lstSoldiers->addRow(
 						3,
@@ -193,30 +195,24 @@ void CraftSoldiersState::init()
 				color = static_cast<Uint8>(_game->getRuleset()->getInterface("craftSoldiers")->getElement("otherCraft")->color);
 		}
 
-		_lstSoldiers->setRowColor(
-								row,
-								color);
+		_lstSoldiers->setRowColor(row, color);
 
-		if ((*i)->getRecovery() > 0)
+		if ((*i)->getRecovery() != 0)
 		{
-			const int pct = (*i)->getRecoveryPCT();
+			const int pct = (*i)->getRecoveryPct();
 			if (pct > 50)
-				color = Palette::blockOffset(6); // orange
+				color = ORANGE;
 			else if (pct > 10)
-				color = Palette::blockOffset(9); // yellow
+				color = YELLOW;
 			else
-				color = Palette::blockOffset(3); // green
+				color = GREEN;
 
-			_lstSoldiers->setCellColor(
-									row,
-									2,
-									color,
-									true);
+			_lstSoldiers->setCellColor(row, 2, color, true);
 		}
 	}
 
 	_btnInventory->setVisible(
-							_craft->getNumSoldiers() > 0
+							_craft->getNumSoldiers() != 0
 							&& _game->getSavedGame()->getMonthsPassed() != -1);
 
 	_txtSpace->setText(tr("STR_SPACE_CREW_HWP_FREE_")
@@ -239,9 +235,7 @@ void CraftSoldiersState::init()
  */
 void CraftSoldiersState::btnOkClick(Action*)
 {
-	_base->setRecallRow(
-					REC_SOLDIER,
-					_lstSoldiers->getScroll());
+	_base->setRecallRow(REC_SOLDIER, _lstSoldiers->getScroll());
 	_game->popState();
 }
 
@@ -260,9 +254,7 @@ void CraftSoldiersState::btnUnloadClick(Action*)
 			(*i)->setCraft(NULL);
 	}
 
-	_base->setRecallRow(
-					REC_SOLDIER,
-					_lstSoldiers->getScroll());
+	_base->setRecallRow(REC_SOLDIER, _lstSoldiers->getScroll());
 
 	init();
 }
@@ -284,48 +276,43 @@ void CraftSoldiersState::lstSoldiersPress(Action* action)
 
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		Soldier* const soldier = _base->getSoldiers()->at(_lstSoldiers->getSelectedRow());
+		Soldier* const sol = _base->getSoldiers()->at(_lstSoldiers->getSelectedRow());
 
-		if (soldier->getRecovery() > 0
-			|| (soldier->getCraft() != NULL
-				&& soldier->getCraft()->getCraftStatus() == "STR_OUT"))
+		if (sol->getRecovery() != 0
+			|| (sol->getCraft() != NULL
+				&& sol->getCraft()->getCraftStatus() == "STR_OUT"))
 		{
 			return;
 		}
 
 		Uint8 color;
-		if (soldier->getCraft() == NULL
-			&& _craft->getSpaceAvailable() > 0
+		if (sol->getCraft() == NULL
+			&& _craft->getSpaceAvailable() != 0
 			&& _craft->getLoadCapacity() - _craft->calcLoadCurrent() > 9)
 		{
-			soldier->setCraft(_craft);
+			sol->setCraft(_craft);
 			color = _lstSoldiers->getSecondaryColor();
 			_lstSoldiers->setCellText(
-									row,
-									2,
+									row, 2,
 									_craft->getName(_game->getLanguage()));
 		}
 		else
 		{
 			color = _lstSoldiers->getColor();
 
-			if (soldier->getCraft() != NULL
-				&& soldier->getCraft()->getCraftStatus() != "STR_OUT")
+			if (sol->getCraft() != NULL
+				&& sol->getCraft()->getCraftStatus() != "STR_OUT")
 			{
-				soldier->setCraft(NULL);
+				sol->setCraft(NULL);
 				_lstSoldiers->setCellText(
-										row,
-										2,
+										row, 2,
 										tr("STR_NONE_UC"));
 			}
 		}
-
-		_lstSoldiers->setRowColor(
-								row,
-								color);
+		_lstSoldiers->setRowColor(row, color);
 
 		_btnInventory->setVisible(
-								_craft->getNumSoldiers() > 0
+								_craft->getNumSoldiers() != 0
 								&& _game->getSavedGame()->getMonthsPassed() != -1);
 
 		_txtSpace->setText(tr("STR_SPACE_CREW_HWP_FREE_")
@@ -340,9 +327,7 @@ void CraftSoldiersState::lstSoldiersPress(Action* action)
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
-		_base->setRecallRow(
-						REC_SOLDIER,
-						_lstSoldiers->getScroll());
+		_base->setRecallRow(REC_SOLDIER, _lstSoldiers->getScroll());
 		_game->pushState(new SoldierInfoState(_base, row));
 		kL_soundPop->play(Mix_GroupAvailable(0));
 	}
@@ -354,19 +339,17 @@ void CraftSoldiersState::lstSoldiersPress(Action* action)
  */
 void CraftSoldiersState::lstLeftArrowClick(Action* action)
 {
-	_base->setRecallRow(
-					REC_SOLDIER,
-					_lstSoldiers->getScroll());
+	_base->setRecallRow(REC_SOLDIER, _lstSoldiers->getScroll());
 
 	const size_t row = _lstSoldiers->getSelectedRow();
 	if (row > 0)
 	{
-		Soldier* const soldier = _base->getSoldiers()->at(row);
+		Soldier* const sol = _base->getSoldiers()->at(row);
 
 		if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 		{
 			_base->getSoldiers()->at(row) = _base->getSoldiers()->at(row - 1);
-			_base->getSoldiers()->at(row - 1) = soldier;
+			_base->getSoldiers()->at(row - 1) = sol;
 
 			if (row != _lstSoldiers->getScroll())
 			{
@@ -377,22 +360,18 @@ void CraftSoldiersState::lstLeftArrowClick(Action* action)
 			}
 			else
 			{
-				_base->setRecallRow(
-								REC_SOLDIER,
-								_lstSoldiers->getScroll() - 1);
+				_base->setRecallRow(REC_SOLDIER, _lstSoldiers->getScroll() - 1);
 				_lstSoldiers->scrollUp(false);
 			}
 		}
 		else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 		{
-			_base->setRecallRow(
-							REC_SOLDIER,
-							_lstSoldiers->getScroll() + 1);
+			_base->setRecallRow(REC_SOLDIER, _lstSoldiers->getScroll() + 1);
 
 			_base->getSoldiers()->erase(_base->getSoldiers()->begin() + row);
 			_base->getSoldiers()->insert(
 									_base->getSoldiers()->begin(),
-									soldier);
+									sol);
 		}
 
 		init();
@@ -405,23 +384,21 @@ void CraftSoldiersState::lstLeftArrowClick(Action* action)
  */
 void CraftSoldiersState::lstRightArrowClick(Action* action)
 {
-	_base->setRecallRow(
-					REC_SOLDIER,
-					_lstSoldiers->getScroll());
+	_base->setRecallRow(REC_SOLDIER, _lstSoldiers->getScroll());
 
 	const size_t
 		qtySoldiers = _base->getSoldiers()->size(),
 		row = _lstSoldiers->getSelectedRow();
 
-	if (qtySoldiers > 0
+	if (qtySoldiers != 0
 		&& row < qtySoldiers - 1)
 	{
-		Soldier* const soldier = _base->getSoldiers()->at(row);
+		Soldier* const sol = _base->getSoldiers()->at(row);
 
 		if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 		{
 			_base->getSoldiers()->at(row) = _base->getSoldiers()->at(row + 1);
-			_base->getSoldiers()->at(row + 1) = soldier;
+			_base->getSoldiers()->at(row + 1) = sol;
 
 			if (row != _lstSoldiers->getVisibleRows() - 1 + _lstSoldiers->getScroll())
 			{
@@ -432,9 +409,7 @@ void CraftSoldiersState::lstRightArrowClick(Action* action)
 			}
 			else
 			{
-				_base->setRecallRow(
-								REC_SOLDIER,
-								_lstSoldiers->getScroll() + 1);
+				_base->setRecallRow(REC_SOLDIER, _lstSoldiers->getScroll() + 1);
 				_lstSoldiers->scrollDown(false);
 			}
 		}
@@ -443,7 +418,7 @@ void CraftSoldiersState::lstRightArrowClick(Action* action)
 			_base->getSoldiers()->erase(_base->getSoldiers()->begin() + row);
 			_base->getSoldiers()->insert(
 									_base->getSoldiers()->end(),
-									soldier);
+									sol);
 		}
 
 		init();
@@ -456,15 +431,15 @@ void CraftSoldiersState::lstRightArrowClick(Action* action)
 */
 void CraftSoldiersState::btnInventoryClick(Action*)
 {
-	_base->setRecallRow(
-					REC_SOLDIER,
-					_lstSoldiers->getScroll());
+	_base->setRecallRow(REC_SOLDIER, _lstSoldiers->getScroll());
 
-	SavedBattleGame* const battle = new SavedBattleGame();
-	_game->getSavedGame()->setBattleSave(battle);
+	SavedBattleGame* const battleSave = new SavedBattleGame();
+	_game->getSavedGame()->setBattleSave(battleSave);
 	BattlescapeGenerator bgen = BattlescapeGenerator(_game);
 
 	bgen.runInventory(_craft);
+// unfortunately this would rely on the list of battleSoldiers *not* changing when entering/cancelling InventoryState
+//	bgen.runInventory(_craft, NULL, _selUnitId);
 
 	_game->getScreen()->clear();
 	_game->pushState(new InventoryState());

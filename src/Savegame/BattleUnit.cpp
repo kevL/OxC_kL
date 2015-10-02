@@ -3281,12 +3281,11 @@ void BattleUnit::postMissionProcedures(
 		UnitStats* const stats = sol->getCurrentStats();
 		const UnitStats caps = sol->getRules()->getStatCaps();
 
-		if (dead == false
-			&& stats->health > _health)
+		if (dead == false && stats->health > _health)
 		{
 			const int recovery = stats->health - _health;
 			sol->setRecovery(RNG::generate(
-										recovery / 2,
+										(recovery + 1) / 2, // round up.
 										recovery));
 		}
 

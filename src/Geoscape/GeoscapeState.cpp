@@ -2658,7 +2658,7 @@ void GeoscapeState::time1Day()
 
 			if ((*j)->getRecovery() != 0)
 			{
-				int chanceDeath = (*j)->getRecoveryPCT();
+				int chanceDeath = (*j)->getRecoveryPct();
 				if (chanceDeath > 10)
 				{
 					//Log(LOG_INFO) << "\n";

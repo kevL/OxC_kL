@@ -182,8 +182,7 @@ void SoldiersState::init()
 	for (std::vector<Soldier*>::const_iterator
 			i = _base->getSoldiers()->begin();
 			i != _base->getSoldiers()->end();
-			++i,
-				++row)
+			++i, ++row)
 	{
 		_lstSoldiers->addRow(
 						3,
@@ -200,7 +199,7 @@ void SoldiersState::init()
 			if ((*i)->getRecovery() != 0)
 			{
 				Uint8 color;
-				const int pct = (*i)->getRecoveryPCT();
+				const int pct = (*i)->getRecoveryPct();
 				if (pct > 50)
 					color = ORANGE;
 				else if (pct > 10)

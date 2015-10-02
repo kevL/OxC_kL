@@ -49,7 +49,7 @@ class CraftEquipmentState
 private:
 	size_t
 		_sel,
-		_selUnit;
+		_selUnitId;
 	Uint8 _ammoColor;
 
 	Base* _base;

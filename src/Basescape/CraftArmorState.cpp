@@ -179,7 +179,7 @@ void CraftArmorState::init()
 
 		if ((*i)->getRecovery() > 0)
 		{
-			const int pct = (*i)->getRecoveryPCT();
+			const int pct = (*i)->getRecoveryPct();
 			if (pct > 50)
 				color = ORANGE;
 			else if (pct > 10)
@@ -187,11 +187,7 @@ void CraftArmorState::init()
 			else
 				color = GREEN;
 
-			_lstSoldiers->setCellColor(
-									row,
-									2,
-									color,
-									true);
+			_lstSoldiers->setCellColor(row, 2, color, true);
 		}
 	}
 

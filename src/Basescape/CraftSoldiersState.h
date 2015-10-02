@@ -43,6 +43,11 @@ class CraftSoldiersState
 {
 
 private:
+	static const Uint8
+		GREEN	=  48,
+		ORANGE	=  96,
+		YELLOW	= 144;
+
 	Base* _base;
 	Craft* _craft;
 	Text

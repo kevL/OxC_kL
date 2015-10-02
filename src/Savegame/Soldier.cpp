@@ -490,9 +490,7 @@ int Soldier::getRecovery() const
  */
 void Soldier::setRecovery(int recovery)
 {
-	_recovery = recovery;
-
-	if (_recovery > 0) // dismiss from craft
+	if ((_recovery = recovery) > 0) // dismiss from craft
 		_craft = NULL;
 }
 
@@ -500,7 +498,7 @@ void Soldier::setRecovery(int recovery)
  * Gets this Soldier's remaining woundage as a percent.
  * @return, wounds as percent
  */
-int Soldier::getRecoveryPCT() const
+int Soldier::getRecoveryPct() const
 {
 	return static_cast<int>(std::floor(
 		   static_cast<float>(_recovery) / static_cast<float>(_currentStats.health) * 100.f));
@@ -511,10 +509,7 @@ int Soldier::getRecoveryPCT() const
  */
 void Soldier::heal()
 {
-	--_recovery;
-
-	if (_recovery < 0)
-		_recovery = 0;
+	if (--_recovery < 0) _recovery = 0;
 }
 
 /**

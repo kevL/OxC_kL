@@ -47,7 +47,7 @@ enum bigWallTypes
 	BIGWALL_EAST,	// 6
 	BIGWALL_SOUTH,	// 7
 	BIGWALL_E_S,	// 8
-	BIGWALL_W_N		// 9
+	BIGWALL_W_N		// 9 NOT USED in UFO.
 };
 
 

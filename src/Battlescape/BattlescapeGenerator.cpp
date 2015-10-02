@@ -2481,9 +2481,7 @@ void BattlescapeGenerator::runInventory(
 					_mapsize_y,
 					_mapsize_z);
 
-	MapDataSet* const dataSet = new MapDataSet(
-											"blank",
-											_game);
+	MapDataSet* const dataSet = new MapDataSet("blank", _game);
 	MapData* const data = new MapData(dataSet);
 
 	for (size_t
