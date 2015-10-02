@@ -1991,9 +1991,6 @@ void SavedBattleGame::tileVolatiles()
 		tilesFired,
 		tilesSmoked;
 
-	Tile* tile;
-	int var;
-
 	for (size_t
 			i = 0;
 			i != _mapSize;
@@ -2011,6 +2008,9 @@ void SavedBattleGame::tileVolatiles()
 	//Log(LOG_INFO) << "tilesFired.size = " << tilesFired.size();
 	//Log(LOG_INFO) << "tilesSmoked.size = " << tilesSmoked.size();
 
+	Tile* tile;
+	int var;
+
 	for (std::vector<Tile*>::const_iterator
 			i = tilesFired.begin();
 			i != tilesFired.end();
@@ -2018,7 +2018,7 @@ void SavedBattleGame::tileVolatiles()
 	{
 		(*i)->decreaseFire();
 
-		var = (*i)->getFire() * 16;
+		var = (*i)->getFire() << 4;
 
 		if (var != 0)
 		{
@@ -2028,19 +2028,11 @@ void SavedBattleGame::tileVolatiles()
 					dir += 2)
 			{
 				Position spreadPos;
-				Pathfinding::directionToVector(
-											dir,
-											&spreadPos);
+				Pathfinding::directionToVector(dir, &spreadPos);
 				tile = getTile((*i)->getPosition() + spreadPos);
 
-				if (tile != NULL
-					&& _te->horizontalBlockage(
-											*i,
-											tile,
-											DT_IN) == 0)
-				{
+				if (tile != NULL && _te->horizontalBlockage(*i, tile, DT_IN) == 0)
 					tile->ignite(var);
-				}
 			}
 		}
 		else
@@ -2050,19 +2042,11 @@ void SavedBattleGame::tileVolatiles()
 				if ((*i)->getMapData(O_OBJECT)->getFlammable() != 255
 					&& (*i)->getMapData(O_OBJECT)->getArmor() != 255)
 				{
-					if ((*i)->destroy(
-									O_OBJECT,
-									getObjectiveType()) == true)
-					{
+					if ((*i)->destroyTile(O_OBJECT, getObjectiveType()) == true)
 						addDestroyedObjective();
-					}
 
-					if ((*i)->destroy(
-									O_FLOOR,
-									getObjectiveType()) == true)
-					{
+					if ((*i)->destroyTile(O_FLOOR, getObjectiveType()) == true)
 						addDestroyedObjective();
-					}
 				}
 			}
 			else if ((*i)->getMapData(O_FLOOR) != NULL)
@@ -2070,12 +2054,8 @@ void SavedBattleGame::tileVolatiles()
 				if ((*i)->getMapData(O_FLOOR)->getFlammable() != 255
 					&& (*i)->getMapData(O_FLOOR)->getArmor() != 255)
 				{
-					if ((*i)->destroy(
-									O_FLOOR,
-									getObjectiveType()) == true)
-					{
+					if ((*i)->destroyTile(O_FLOOR, getObjectiveType()) == true)
 						addDestroyedObjective();
-					}
 				}
 			}
 
@@ -2090,16 +2070,13 @@ void SavedBattleGame::tileVolatiles()
 	{
 		(*i)->decreaseSmoke();
 
-		var = (*i)->getSmoke() / 2;
+		var = (*i)->getSmoke() >> 1;
 
 		if (var > 1)
 		{
 			tile = getTile((*i)->getPosition() + Position(0,0,1));
-			if (tile != NULL
-				&& tile->hasNoFloor(*i) == true) // TODO: use verticalBlockage() instead
-			{
+			if (tile != NULL && tile->hasNoFloor(*i) == true) // TODO: use verticalBlockage() instead
 				tile->addSmoke(var / 3);
-			}
 
 			for (int
 					dir = 0;
@@ -2109,18 +2086,10 @@ void SavedBattleGame::tileVolatiles()
 				if (RNG::percent(var * 8) == true)
 				{
 					Position posSpread;
-					Pathfinding::directionToVector(
-												dir,
-												&posSpread);
+					Pathfinding::directionToVector(dir, &posSpread);
 					tile = getTile((*i)->getPosition() + posSpread);
-					if (tile != NULL
-						&& _te->horizontalBlockage(
-												*i,
-												tile,
-												DT_SMOKE) == 0)
-					{
-						tile->addSmoke(var / 2);
-					}
+					if (tile != NULL && _te->horizontalBlockage(*i, tile, DT_SMOKE) == 0)
+						tile->addSmoke(var >> 1);
 				}
 			}
 		}
@@ -2194,10 +2163,7 @@ void SavedBattleGame::reviveUnit(
 					  && tileCorpse->getUnit() != unit
 					  && tileCorpse->getUnit()->getArmor()->getSize() == 2;
 
-		if (placeUnitNearPosition(
-								unit,
-								posCorpse,
-								largeUnit) == true)
+		if (placeUnitNearPosition(unit, posCorpse, largeUnit) == true)
 		{
 			unit->setUnitStatus(STATUS_STANDING);
 
@@ -2212,9 +2178,7 @@ void SavedBattleGame::reviveUnit(
 			unit->setRevived();
 
 			_te->calculateUnitLighting();
-			_te->calculateFOV(
-							unit->getPosition(),
-							true);
+			_te->calculateFOV(unit->getPosition(), true);
 			removeCorpse(unit);
 		}
 	}

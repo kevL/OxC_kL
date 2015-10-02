@@ -621,7 +621,7 @@ int Tile::getShade() const
  * @param type - SpecialTileType
  * @return, true if an 'objective' was destroyed
  */
-bool Tile::destroy(
+bool Tile::destroyTile( // TODO: If floor gets destroyed, destroy object also.
 		MapDataType part,
 		SpecialTileType type)
 {
@@ -637,38 +637,36 @@ bool Tile::destroy(
 
 		objective = (_objects[part]->getSpecialType() == type);
 
-		const MapData* const origPart = _objects[part];
+		const MapData* const partOrg = _objects[part];
 		const int origMapDataSetID = _mapDataSetId[part];
 
-		setMapData(
-				 NULL,
-				-1,-1,
-				part);
+		setMapData(NULL,-1,-1, part);
 
-		if (origPart->getDieMCD() != 0)
+		if (partOrg->getDieMCD() != 0)
 		{
-			MapData* const dead = origPart->getDataset()->getObjects()->at(origPart->getDieMCD());
+			MapData* const dead = partOrg->getDataset()->getObjects()->at(partOrg->getDieMCD());
 			setMapData(
 					dead,
-					origPart->getDieMCD(),
+					partOrg->getDieMCD(),
 					origMapDataSetID,
 					dead->getPartType());
 		}
 
-		if (origPart->getExplosive() != 0)
+		if (partOrg->getExplosive() != 0)
 			setExplosive(
-					origPart->getExplosive(),
-					origPart->getExplosiveType());
+					partOrg->getExplosive(),
+					partOrg->getExplosiveType());
 	}
 
-	if (part == O_FLOOR // check if the floor on the lowest level is gone
-		&& getPosition().z == 0
-		&& _objects[O_FLOOR] == NULL)
+	if (part == O_FLOOR) // check if the floor on the lowest level is gone.
 	{
-		setMapData( // replace with scorched earth
-				MapDataSet::getScorchedEarthTile(),
-				1,0,
-				O_FLOOR);
+		if (_pos.z == 0 && _objects[O_FLOOR] == NULL)
+			setMapData( // replace with scorched earth
+					MapDataSet::getScorchedEarthTile(),
+					1,0, O_FLOOR);
+
+		if (_objects[O_OBJECT] != NULL) // destroy the object if floor is gone.
+			destroyTile(O_OBJECT, type);
 	}
 
 	return objective;
@@ -681,7 +679,7 @@ bool Tile::destroy(
  * @param type	- SpecialTileType
  * @return, true if an objective was destroyed
  */
-bool Tile::damage(
+bool Tile::damageTile(
 		MapDataType part,
 		int power,
 		SpecialTileType type)
@@ -690,7 +688,7 @@ bool Tile::damage(
 	bool objectiveDestroyed = false;
 
 	if (power >= _objects[part]->getArmor())
-		objectiveDestroyed = destroy(part, type);
+		objectiveDestroyed = destroyTile(part, type);
 
 	return objectiveDestroyed;
 }

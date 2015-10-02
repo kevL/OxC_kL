@@ -2080,10 +2080,10 @@ BattleUnit* TileEngine::hit(
 										[(targetVoxel.y / 16) / 10].second--;
 				}
 
-				if (tile->damage(
-							partType,
-							power,
-							_battleSave->getObjectiveType()) == true)
+				if (tile->damageTile(
+								partType,
+								power,
+								_battleSave->getObjectiveType()) == true)
 				{
 					_battleSave->addDestroyedObjective();
 				}
@@ -4115,11 +4115,8 @@ bool TileEngine::detonate(Tile* const tile) const
 			i != std::numeric_limits<size_t>::max();
 			--i)
 	{
-		if (tiles[i] == NULL
-			|| tiles[i]->getMapData(parts[i]) == NULL)
-		{
+		if (tiles[i] == NULL || tiles[i]->getMapData(parts[i]) == NULL)
 			continue; // no tile or no tile-part
-		}
 
 		const int bigWall = tiles[i]->getMapData(parts[i])->getBigWall();
 
@@ -4154,8 +4151,7 @@ bool TileEngine::detonate(Tile* const tile) const
 		part = parts[i];
 
 		if (i == 6
-			&& (bigWall == BIGWALL_NESW
-				|| bigWall == BIGWALL_NWSE) // diagonals
+			&& (bigWall == BIGWALL_NESW || bigWall == BIGWALL_NWSE) // diagonals
 			&& tiles[i]->getMapData(part)->getArmor() * 2 > explTest) // not enough to destroy
 		{
 			diagWallDestroyed = false;
@@ -4181,8 +4177,7 @@ bool TileEngine::detonate(Tile* const tile) const
 			explTest -= tiles[i]->getMapData(part)->getArmor() * 2;
 
 			if (i == 6
-				&& (bigWall == BIGWALL_NESW // diagonals for the current tile
-					|| bigWall == BIGWALL_NWSE))
+				&& (bigWall == BIGWALL_NESW || bigWall == BIGWALL_NWSE)) // diagonals for the current tile
 			{
 				diagWallDestroyed = true;
 			}
@@ -4201,12 +4196,8 @@ bool TileEngine::detonate(Tile* const tile) const
 			else
 				partTemp = part;
 
-			if (tiles[i]->destroy( // DESTROY HERE <-|
-								part,
-								_battleSave->getObjectiveType()) == true)
-			{
+			if (tiles[i]->destroyTile(part, _battleSave->getObjectiveType()) == true) // DESTROY HERE <-|
 				objectiveDestroyed = true;
-			}
 
 			part = partTemp;
 		}
@@ -4224,7 +4215,7 @@ bool TileEngine::detonate(Tile* const tile) const
 			&& tileAbove->hasNoFloor(tile) == true // TODO: use verticalBlockage() instead
 			&& RNG::percent(tile->getSmoke() * 8) == true)
 		{
-			tileAbove->addSmoke((tile->getSmoke()) / 3);
+			tileAbove->addSmoke(tile->getSmoke() / 3);
 		}
 	}
 
