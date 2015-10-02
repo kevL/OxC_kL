@@ -708,6 +708,9 @@ BattlescapeState::BattlescapeState()
 	_btnCenter->onKeyboardPress(
 					(ActionHandler)& BattlescapeState::btnCenterClick,
 					Options::keyBattleCenterUnit);
+	_btnCenter->onKeyboardPress(
+					(ActionHandler)& BattlescapeState::btnCenterClick,
+					SDLK_KP5);
 //	_btnCenter->setTooltip("STR_CENTER_SELECTED_UNIT");
 //	_btnCenter->onMouseIn((ActionHandler)& BattlescapeState::txtTooltipIn);
 //	_btnCenter->onMouseOut((ActionHandler)& BattlescapeState::txtTooltipOut);
