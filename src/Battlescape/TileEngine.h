@@ -261,7 +261,7 @@ private:
 				const Position& pos2,
 				const bool considerZ = true);
 		/// Checks the distance squared between two positions.
-		static int distanceSq(
+		static int distanceSqr(
 				const Position& pos1,
 				const Position& pos2,
 				const bool considerZ = true);

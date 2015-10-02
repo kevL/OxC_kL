@@ -328,7 +328,7 @@ void CivilianBAIState::setupEscape()
 
 	int
 		bestTileScore = -100000,
-		score,
+		tileScore,
 		tu = _unit->getTimeUnits() / 2,
 		unitsSpotting = countSpottingUnits(_unit->getPosition()),
 		dist = 0;
@@ -355,7 +355,7 @@ void CivilianBAIState::setupEscape()
 	{
 		_escapeAction->target = _unit->getPosition();
 
-		score = 0;
+		tileScore = 0;
 
 		if (tries < _battleSave->SEARCH_SIZE) //121 // looking for cover
 		{
@@ -363,7 +363,7 @@ void CivilianBAIState::setupEscape()
 			_escapeAction->target.x += randTileSearch[tries].x;
 			_escapeAction->target.y += randTileSearch[tries].y;
 
-			score = BASE_SUCCESS_SYSTEMATIC;
+			tileScore = BASE_SUCCESS_SYSTEMATIC;
 
 			if (_escapeAction->target == _unit->getPosition())
 			{
@@ -374,14 +374,14 @@ void CivilianBAIState::setupEscape()
 					_escapeAction->target.y += RNG::generate(-20,20);
 				}
 				else
-					score += CUR_TILE_PREF;
+					tileScore += CUR_TILE_PREF;
 			}
 		}
 		else
 		{
 			//if (_traceAI && tries == 121) Log(LOG_INFO) << "best score after systematic search was: " << bestTileScore;
 
-			score = BASE_SUCCESS_DESPERATE; // ruuuuuuun
+			tileScore = BASE_SUCCESS_DESPERATE; // ruuuuuuun
 
 			_escapeAction->target = _unit->getPosition();
 			_escapeAction->target.x += RNG::generate(-10,10);
@@ -407,12 +407,12 @@ void CivilianBAIState::setupEscape()
 										_escapeAction->target);
 
 		if (dist >= distTarget)
-			score -= (distTarget - dist) * 10;
+			tileScore -= (distTarget - dist) * 10;
 		else
-			score += (distTarget - dist) * 10;
+			tileScore += (distTarget - dist) * 10;
 
 		if (tile == NULL) // no you can't quit the battlefield by running off the map.
-			score = -100001;
+			tileScore = -100001;
 		else
 		{
 			const int spotters = countSpottingUnits(_escapeAction->target);
@@ -429,23 +429,23 @@ void CivilianBAIState::setupEscape()
 			if (_spottingEnemies != 0 || spotters != 0)
 			{
 				if (_spottingEnemies <= spotters) // that's for giving away our position
-					score -= (1 + spotters - _spottingEnemies) * EXPOSURE_PENALTY;
+					tileScore -= (1 + spotters - _spottingEnemies) * EXPOSURE_PENALTY;
 				else
-					score += (_spottingEnemies - spotters) * EXPOSURE_PENALTY;
+					tileScore += (_spottingEnemies - spotters) * EXPOSURE_PENALTY;
 			}
 
 			if (tile->getFire() != 0)
-				score -= FIRE_PENALTY;
+				tileScore -= FIRE_PENALTY;
 
 //			if (_traceAI)
 //			{
-//				tile->setPreviewColor(score < 0 ? 3 : (score < FAST_PASS_THRESHOLD / 2 ? 8 : (score < FAST_PASS_THRESHOLD ? 9 : 5)));
+//				tile->setPreviewColor(tileScore < 0 ? 3 : (tileScore < FAST_PASS_THRESHOLD / 2 ? 8 : (tileScore < FAST_PASS_THRESHOLD ? 9 : 5)));
 //				tile->setPreviewDir(10);
-//				tile->setPreviewTu(score);
+//				tile->setPreviewTu(tileScore);
 //			}
 		}
 
-		if (tile != NULL && score > bestTileScore)
+		if (tile != NULL && tileScore > bestTileScore)
 		{
 			// calculate TUs to tile;
 			// could be getting this from findReachable() somehow but that would break something for sure...
@@ -458,7 +458,7 @@ void CivilianBAIState::setupEscape()
 			if (_escapeAction->target == _unit->getPosition()
 				|| pf->getStartDirection() != -1)
 			{
-				bestTileScore = score;
+				bestTileScore = tileScore;
 				posBest = _escapeAction->target;
 				_escapeTUs = pf->getTotalTUCost();
 
@@ -467,9 +467,9 @@ void CivilianBAIState::setupEscape()
 
 //				if (_traceAI)
 //				{
-//					tile->setPreviewColor(score < 0? 7: (score < FAST_PASS_THRESHOLD / 2? 10: (score < FAST_PASS_THRESHOLD ?4: 5)));
+//					tile->setPreviewColor(tileScore < 0? 7: (tileScore < FAST_PASS_THRESHOLD / 2? 10: (tileScore < FAST_PASS_THRESHOLD ?4: 5)));
 //					tile->setPreviewDir(10);
-//					tile->setPreviewTu(score);
+//					tile->setPreviewTu(tileScore);
 //				}
 			}
 
@@ -484,18 +484,16 @@ void CivilianBAIState::setupEscape()
 
 	//if (_traceAI) _battleSave->getTile(_escapeAction->target)->setPreviewColor(13);
 
-	if (bestTileScore <= -100000)
+	if (bestTileScore < -99999)
 	{
 		//if (_traceAI) Log(LOG_INFO) << "Escape estimation failed.";
 		// do something, just don't look dumbstruck :P
 		_escapeAction->type = BA_RETHINK;
 		return;
 	}
-	else
-	{
-		//if (_traceAI) Log(LOG_INFO) << "Escape estimation completed after " << tries << " tries, " << TileEngine::distance(_unit->getPosition(), posBest) << " squares or so away.";
-		_escapeAction->type = BA_MOVE;
-	}
+
+	//if (_traceAI) Log(LOG_INFO) << "Escape estimation completed after " << tries << " tries, " << TileEngine::distance(_unit->getPosition(), posBest) << " squares or so away.";
+	_escapeAction->type = BA_MOVE;
 }
 
 /**
@@ -525,7 +523,7 @@ void CivilianBAIState::setupPatrol()
 				++i)
 		{
 			Node* node = *i;
-			const int distTest = _battleSave->getTileEngine()->distanceSq(_unit->getPosition(), node->getPosition());
+			const int distTest = _battleSave->getTileEngine()->distanceSqr(_unit->getPosition(), node->getPosition());
 			if (_unit->getPosition().z == node->getPosition().z
 				&& distTest < dist
 				&& (node->getNodeType() & Node::TYPE_SMALL))

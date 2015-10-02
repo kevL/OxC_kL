@@ -100,14 +100,14 @@ UnitDieBState::UnitDieBState(
 	if (_unit->getFaction() == FACTION_HOSTILE)
 	{
 		const std::vector<Node*>* const nodeList = _battleSave->getNodes();
-		if (nodeList != NULL) // this better not happen.
+		if (nodeList != NULL) // this better happen.
 		{
 			for (std::vector<Node*>::const_iterator
 					i = nodeList->begin();
 					i != nodeList->end();
 					++i)
 			{
-				if (TileEngine::distanceSq(
+				if (TileEngine::distanceSqr(
 										(*i)->getPosition(),
 										_unit->getPosition(),
 										false) < 5)

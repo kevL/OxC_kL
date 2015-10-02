@@ -4640,7 +4640,7 @@
 1443671598 f:\git\openxcom\src\savegame\savedbattlegame.h
 	"BattleUnit.h"
 
-1443594937 f:\git\openxcom\src\savegame\battleunit.h
+1443760098 f:\git\openxcom\src\savegame\battleunit.h
 	"SavedGame.h"
 	"Soldier.h"
 	"../Battlescape/BattlescapeGame.h"
@@ -5395,7 +5395,7 @@
 1443669813 f:\git\openxcom\src\battlescape\scannerstate.h
 	"../Engine/State.h"
 
-1443693350 f:\git\openxcom\src\battlescape\tileengine.h
+1443759875 f:\git\openxcom\src\battlescape\tileengine.h
 	"BattlescapeGame.h"
 	"Position.h"
 	"../Ruleset/MapData.h"
@@ -5408,7 +5408,7 @@
 	"../Battlescape/Position.h"
 	"../Ruleset/MapData.h"
 
-1443698113 source:f:\git\openxcom\src\battlescape\alienbaistate.cpp
+1443757759 source:f:\git\openxcom\src\battlescape\alienbaistate.cpp
 	"AlienBAIState.h"
 	"../Battlescape/BattlescapeState.h"
 	"../Battlescape/Map.h"
@@ -5961,7 +5961,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1443753604 source:f:\git\openxcom\src\battlescape\map.cpp
+1443757010 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	"BattlescapeMessage.h"
 	"BattlescapeState.h"

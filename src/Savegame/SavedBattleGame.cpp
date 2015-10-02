@@ -1921,7 +1921,7 @@ Node* SavedBattleGame::getNearestNode(const BattleUnit* const unit) const
 		* node = NULL,
 		* nodeTest;
 	int
-		dist = 1000000,
+		distSqr = 100000,
 		distTest;
 
 	for (std::vector<Node*>::const_iterator
@@ -1930,17 +1930,17 @@ Node* SavedBattleGame::getNearestNode(const BattleUnit* const unit) const
 			++i)
 	{
 		nodeTest = *i;
-		distTest = TileEngine::distanceSq(
-									unit->getPosition(),
-									nodeTest->getPosition());
+		distTest = TileEngine::distanceSqr(
+										unit->getPosition(),
+										nodeTest->getPosition());
 
 		if (unit->getPosition().z == nodeTest->getPosition().z
-			&& distTest < dist
+			&& distTest < distSqr
 			&& (unit->getArmor()->getSize() == 1
 				|| !(nodeTest->getNodeType() & Node::TYPE_SMALL)))
 		{
+			distSqr = distTest;
 			node = nodeTest;
-			dist = distTest;
 		}
 	}
 

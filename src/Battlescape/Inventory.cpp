@@ -1180,7 +1180,7 @@ void Inventory::arrangeGround(bool alterOffset)
 				++i)
 		{
 			(*i)->setSlot(ground);
-			(*i)->setSlotX(1000000);
+			(*i)->setSlotX(100000);
 			(*i)->setSlotY(0);
 		}
 

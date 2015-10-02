@@ -575,7 +575,6 @@ void AlienBAIState::setupPatrol() // private.
 			&& dir != _unit->getDirection())
 		{
 			_unit->lookAt(dir);
-
 			while (_unit->getUnitStatus() == STATUS_TURNING)
 				_unit->turn();
 		}
@@ -592,48 +591,35 @@ void AlienBAIState::setupPatrol() // private.
 	pf->setPathingUnit(_unit);
 
 	int triesLeft = 5;
-	while (_toNode == NULL
-		&& triesLeft != 0)
+	while (_toNode == NULL && triesLeft != 0)
 	{
 		--triesLeft;
 		scout = true; // look for a new node to walk towards
 
 		// note: aLiens attacking XCOM Base are always on scout.
-//		if (_battleSave->getTacticalType() != "STR_BASE_DEFENSE")
 		if (_battleSave->getTacType() != TCT_BASEDEFENSE)
 		{
 			// after turn 20 or if the morale is low, everyone moves out the UFO and scout
-
 			// kL_note: That, above is wrong. Orig behavior depends on "aggression" setting;
 			// determines whether aliens come out of UFO to scout/search (attack, actually).
-
 			// also anyone standing in fire should also probably move
-/*			if (   _fromNode == NULL
-				|| _fromNode->getNodeRank() == NR_SCOUT
-				|| (   _battleSave->getTile(_unit->getPosition()) != NULL
-					&& _battleSave->getTile(_unit->getPosition())->getFire() != 0)
-				|| (_battleSave->isCheating() == true
-					&& RNG::percent(_unit->getAggression() * 25) == true)) // kL
-			{
-				scout = true;
-			}
-			else
-				scout = false; */
 			if (_fromNode != NULL
 				&& _fromNode->getNodeRank() != NR_SCOUT
 				&& (_battleSave->getTile(_unit->getPosition()) == NULL // <- shouldn't be necessary.
 					|| _battleSave->getTile(_unit->getPosition())->getFire() == 0)
 				&& (_battleSave->isCheating() == false
-					|| RNG::percent(_unit->getAggression() * 25) == false)) // kL
+					|| RNG::percent(_unit->getAggression() * 25) == false))
 			{
 				scout = false;
 			}
 		}
-		else if (_unit->getArmor()->getSize() == 1)	// in base defense missions the non-large aliens walk towards
-		{											// target nodes - or once there shoot objects thereabouts, so
-			if (_fromNode->isTarget() == true		// scan this room for objects to destroy
+		else if (_unit->getArmor()->getSize() == 1)	// in base defense missions the non-large aliens walk towards target nodes - or
+		{											// once there shoot objects thereabouts so scan this room for objects to destroy
+			if (_fromNode->isTarget() == true
 				&& _unit->getMainHandWeapon() != NULL
-				&& _unit->getMainHandWeapon()->getRules()->getAccuracySnap() != 0 // TODO: this ought be expanded to include melee etc.
+				&& (_unit->getMainHandWeapon()->getRules()->getAccuracySnap() != 0 // TODO: this ought be expanded to include melee.
+					|| _unit->getMainHandWeapon()->getRules()->getAccuracyAuto() != 0
+					|| _unit->getMainHandWeapon()->getRules()->getAccuracyAimed() != 0)
 				&& _unit->getMainHandWeapon()->getAmmoItem() != NULL
 				&& _unit->getMainHandWeapon()->getAmmoItem()->getRules()->getDamageType() != DT_HE
 				&& _battleSave->getModuleMap()[_fromNode->getPosition().x / 10][_fromNode->getPosition().y / 10].second > 0)
@@ -653,10 +639,8 @@ void AlienBAIState::setupPatrol() // private.
 							++j)
 					{
 						data = _battleSave->getTile(Position(i,j,1))->getMapData(O_OBJECT);
-						if (data != NULL
-							&& data->isBaseModule() == true)
-//							&& data->getDieMCD()
-//							&& data->getArmor() < 60)
+						if (data != NULL && data->isBaseModule() == true)
+//							&& data->getDieMCD() && data->getArmor() < 60)
 						{
 							_patrolAction->actor = _unit;
 							_patrolAction->target = Position(i,j,1);
@@ -673,7 +657,7 @@ void AlienBAIState::setupPatrol() // private.
 			else
 			{
 				int // find closest high value target which is not already allocated
-					dist = 1000000,
+					distSqr = 100000,
 					distTest;
 
 				for (std::vector<Node*>::const_iterator
@@ -681,17 +665,16 @@ void AlienBAIState::setupPatrol() // private.
 						i != _battleSave->getNodes()->end();
 						++i)
 				{
-					if ((*i)->isTarget() == true
-						&& (*i)->isAllocated() == false)
+					if ((*i)->isTarget() == true && (*i)->isAllocated() == false)
 					{
 						node = *i;
-						distTest = TileEngine::distanceSq(
-													_unit->getPosition(),
-													node->getPosition());
+						distTest = TileEngine::distanceSqr(
+														_unit->getPosition(),
+														node->getPosition());
 						if (_toNode == NULL
-							|| (distTest < dist && node != _fromNode))
+							|| (distTest < distSqr && node != _fromNode))
 						{
-							dist = distTest;
+							distSqr = distTest;
 							_toNode = node;
 						}
 					}

@@ -721,7 +721,7 @@ void TileEngine::calculateFOV(
 			i != _battleSave->getUnits()->end();
 			++i)
 	{
-		if (distanceSq(pos, (*i)->getPosition(), false) <= MAX_VIEW_DISTANCE_SQR)
+		if (distanceSqr(pos, (*i)->getPosition(), false) <= MAX_VIEW_DISTANCE_SQR)
 			calculateFOV(*i);
 	}
 	_spotSound = true;
@@ -5464,7 +5464,7 @@ int TileEngine::distance( // static.
  * @param considerZ	- true to consider the z coordinate (default true)
  * @return, distance
  */
-int TileEngine::distanceSq( // static.
+int TileEngine::distanceSqr( // static.
 		const Position& pos1,
 		const Position& pos2,
 		const bool considerZ)

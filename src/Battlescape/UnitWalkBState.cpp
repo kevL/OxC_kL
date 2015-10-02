@@ -1037,8 +1037,6 @@ void UnitWalkBState::postPathProcedures() // private.
 				if (action.weapon != NULL) // also checked in getActionTu() & ProjectileFlyBState::init()
 				{
 					action.TU = _unit->getActionTu(action.type, action.weapon);
-
-//					_parent->statePushBack(new MeleeAttackBState(_parent, action));
 					_parent->statePushBack(new ProjectileFlyBState(_parent, action));
 
 					if (instaWeapon == true)
@@ -1059,7 +1057,6 @@ void UnitWalkBState::postPathProcedures() // private.
 		if (dir != -1)
 		{
 			_unit->lookAt(dir % 8);
-
 			while (_unit->getUnitStatus() == STATUS_TURNING)
 			{
 				_unit->turn();
@@ -1073,20 +1070,13 @@ void UnitWalkBState::postPathProcedures() // private.
 
 
 	_terrain->calculateUnitLighting();
-
-//	_terrain->calculateFOV(_unit);
 	_terrain->calculateFOV(_unit->getPosition(), true); // in case unit opened a door and stopped without doing Status_WALKING
-
 
 	_unit->clearCache();
 	_parent->getMap()->cacheUnit(_unit);
 
 	if (_falling == false)
-	{
-		//Log(LOG_INFO) << ". postPath falling FALSE popState";
 		_parent->popState();
-	}
-	//else Log(LOG_INFO) << ". postPath falling TRUE";
 }
 
 /**
@@ -1100,8 +1090,10 @@ int UnitWalkBState::getFinalDirection() const // private.
 	if (RNG::percent((diff + 1) * 20 - _unit->getRankInt() * 5) == true)
 	{
 		const BattleUnit* facedUnit = NULL;
+		int
+			distSqr = 100000,
+			distTest;
 
-		int testDist = 255;
 		for (std::vector<BattleUnit*>::const_iterator
 				i = _battleSave->getUnits()->begin();
 				i != _battleSave->getUnits()->end();
@@ -1112,12 +1104,12 @@ int UnitWalkBState::getFinalDirection() const // private.
 				&& (*i)->getExposed() != -1
 				&& (*i)->getExposed() <= _unit->getIntelligence())
 			{
-				const int dist = TileEngine::distance(
+				distTest = TileEngine::distanceSqr(
 												_unit->getPosition(),
 												(*i)->getPosition());
-				if (dist < testDist)
+				if (distTest < distSqr)
 				{
-					testDist = dist;
+					distSqr = distTest;
 					facedUnit = *i;
 				}
 			}
