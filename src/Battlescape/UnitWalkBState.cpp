@@ -1097,36 +1097,35 @@ void UnitWalkBState::postPathProcedures() // private.
 int UnitWalkBState::getFinalDirection() const // private.
 {
 	const int diff = static_cast<int>(_parent->getBattlescapeState()->getSavedGame()->getDifficulty());
-	if (RNG::percent((diff + 1) * 20 - _unit->getRankInt() * 5) == false)
-		return -1;
-
-	const BattleUnit* facedUnit = NULL;
-
-	int testDist = 255;
-	for (std::vector<BattleUnit*>::const_iterator
-			i = _battleSave->getUnits()->begin();
-			i != _battleSave->getUnits()->end();
-			++i)
+	if (RNG::percent((diff + 1) * 20 - _unit->getRankInt() * 5) == true)
 	{
-		if ((*i)->getFaction() == FACTION_PLAYER
-			&& (*i)->isOut_t(OUT_STAT) == false
-//			&& (*i)->isOut(true, true) == false
-			&& (*i)->getExposed() != -1
-			&& (*i)->getExposed() <= _unit->getIntelligence())
+		const BattleUnit* facedUnit = NULL;
+
+		int testDist = 255;
+		for (std::vector<BattleUnit*>::const_iterator
+				i = _battleSave->getUnits()->begin();
+				i != _battleSave->getUnits()->end();
+				++i)
 		{
-			const int dist = _battleSave->getTileEngine()->distance(
-																(*i)->getPosition(),
-																_unit->getPosition());
-			if (dist < testDist)
+			if ((*i)->getFaction() == FACTION_PLAYER
+				&& (*i)->isOut_t(OUT_STAT) == false
+				&& (*i)->getExposed() != -1
+				&& (*i)->getExposed() <= _unit->getIntelligence())
 			{
-				testDist = dist;
-				facedUnit = *i;
+				const int dist = TileEngine::distance(
+												_unit->getPosition(),
+												(*i)->getPosition());
+				if (dist < testDist)
+				{
+					testDist = dist;
+					facedUnit = *i;
+				}
 			}
 		}
-	}
 
-	if (facedUnit != NULL)
-		return _unit->directionTo(facedUnit->getPosition());
+		if (facedUnit != NULL)
+			return _unit->directionTo(facedUnit->getPosition());
+	}
 
 	return -1;
 }

@@ -94,8 +94,8 @@ private:
 		_cursorSize,
 		_iconHeight,
 		_iconWidth,
-		_mouseX,
-		_mouseY,
+		_mX,
+		_mY,
 		_reveal,
 		_selectorX,
 		_selectorY,
@@ -129,8 +129,18 @@ private:
 	std::list<Explosion*> _explosions;
 	std::vector<Position> _waypoints;
 
-	///
+	/// Draw the battlefield.
 	void drawTerrain(Surface* const surface);
+	/// Checks if a southwesterly wall should suppress unit-sprite drawing.
+	bool checkWest(
+			const Tile* const tile6,
+			const Tile* const tile5,
+			const BattleUnit* unit = NULL) const;
+	 /// Checks if a northeasterly wall should suppress unit-sprite drawing.
+	bool checkNorth(
+			const Tile* const tile0,
+			const Tile* const tile1,
+			const BattleUnit* unit = NULL) const;
 
 	/// Gets if a Tile is a/the true location of unit.
 	bool isTrueLoc(

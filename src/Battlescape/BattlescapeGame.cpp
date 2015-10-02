@@ -2565,9 +2565,9 @@ void BattlescapeGame::primaryAction(const Position& pos)
 							_currentAction.actor->getHostileUnits()->end(),
 							targetUnit) != _currentAction.actor->getHostileUnits()->end())
 				{
-					if (getTileEngine()->distance( // in Range
-											_currentAction.actor->getPosition(),
-											_currentAction.target) <= _currentAction.weapon->getRules()->getMaxRange())
+					if (TileEngine::distance( // in Range
+										_currentAction.actor->getPosition(),
+										_currentAction.target) <= _currentAction.weapon->getRules()->getMaxRange())
 					{
 						if (_currentAction.actor->spendTimeUnits(_currentAction.TU) == true)
 						{
@@ -2622,9 +2622,9 @@ void BattlescapeGame::primaryAction(const Position& pos)
 							_currentAction.actor->getHostileUnits()->end(),
 							targetUnit) != _currentAction.actor->getHostileUnits()->end())
 				{
-					if (getTileEngine()->distance( // in Range
-											_currentAction.actor->getPosition(),
-											_currentAction.target) <= _currentAction.weapon->getRules()->getMaxRange())
+					if (TileEngine::distance( // in Range
+										_currentAction.actor->getPosition(),
+										_currentAction.target) <= _currentAction.weapon->getRules()->getMaxRange())
 					{
 						// get the sound/animation started
 //						getMap()->setCursorType(CT_NONE);
@@ -3177,9 +3177,9 @@ BattleItem* BattlescapeGame::surveyItems(BattleUnit* const unit) const
 				i != groundItems.end();
 				++i)
 		{
-			dist = _battleSave->getTileEngine()->distance(
-														posUnit,
-														(*i)->getTile()->getPosition());
+			dist = TileEngine::distance(
+									posUnit,
+									(*i)->getTile()->getPosition());
 			worthTest = (*i)->getRules()->getAttraction() / (dist + 1);
 			if (worthTest >= worth)
 			{
@@ -3195,9 +3195,8 @@ BattleItem* BattlescapeGame::surveyItems(BattleUnit* const unit) const
 
 		if (choiceItems.empty() == false)
 		{
-			size_t pick = static_cast<size_t>(RNG::generate(
-														0,
-														static_cast<int>(choiceItems.size()) - 1));
+			size_t pick = static_cast<size_t>(RNG::generate(0,
+						  static_cast<int>(choiceItems.size()) - 1));
 			ret = choiceItems.at(pick);
 		}
 	}

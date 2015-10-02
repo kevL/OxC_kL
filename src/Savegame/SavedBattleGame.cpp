@@ -1930,15 +1930,14 @@ Node* SavedBattleGame::getNearestNode(const BattleUnit* const unit) const
 			++i)
 	{
 		nodeTest = *i;
-		distTest = _te->distanceSq(
-								unit->getPosition(),
-								nodeTest->getPosition());
+		distTest = TileEngine::distanceSq(
+									unit->getPosition(),
+									nodeTest->getPosition());
 
 		if (unit->getPosition().z == nodeTest->getPosition().z
 			&& distTest < dist
 			&& (unit->getArmor()->getSize() == 1
-				|| !(
-					nodeTest->getNodeType() & Node::TYPE_SMALL)))
+				|| !(nodeTest->getNodeType() & Node::TYPE_SMALL)))
 		{
 			node = nodeTest;
 			dist = distTest;

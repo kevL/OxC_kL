@@ -107,10 +107,10 @@ UnitDieBState::UnitDieBState(
 					i != nodeList->end();
 					++i)
 			{
-				if (_battleSave->getTileEngine()->distanceSq(
-														(*i)->getPosition(),
-														_unit->getPosition(),
-														false) < 5)
+				if (TileEngine::distanceSq(
+										(*i)->getPosition(),
+										_unit->getPosition(),
+										false) < 5)
 				{
 					(*i)->setNodeType((*i)->getNodeType() | Node::TYPE_DANGEROUS);
 				}

@@ -256,15 +256,15 @@ private:
 				VoxelType* const voxelType = NULL) const;
 
 		/// Checks the distance between two positions.
-		int distance(
+		static int distance(
 				const Position& pos1,
 				const Position& pos2,
-				const bool considerZ = true) const;
+				const bool considerZ = true);
 		/// Checks the distance squared between two positions.
-		int distanceSq(
+		static int distanceSq(
 				const Position& pos1,
 				const Position& pos2,
-				const bool considerZ = true) const;
+				const bool considerZ = true);
 		/// Checks the distance between two positions precisely.
 //		double distancePrecise(
 //				const Position& pos1,

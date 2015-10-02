@@ -39,7 +39,7 @@ BattleAIState::BattleAIState(
 /**
  * Deletes the BattleAIState.
  */
-BattleAIState::~BattleAIState()
+BattleAIState::~BattleAIState() // virtual.
 {}
 
 /**
@@ -53,7 +53,7 @@ void BattleAIState::load(const YAML::Node&)
  * Saves the AI state to a YAML file.
  * @return, YAML node
  */
-YAML::Node BattleAIState::save() const
+YAML::Node BattleAIState::save() const // virtual.
 {
 	return YAML::Node();
 }
@@ -72,7 +72,7 @@ YAML::Node BattleAIState::save() const
  * Runs any code the state needs to keep updating every AI cycle.
  * @param action - (possible) AI BattleAction to execute after thinking is done.
  */
-void BattleAIState::think(BattleAction*)
+void BattleAIState::think(BattleAction*) // virtual.
 {}
 
 }

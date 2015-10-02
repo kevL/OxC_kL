@@ -197,9 +197,9 @@ void ProjectileFlyBState::init()
 				_action.result = "STR_NO_ROUNDS_LEFT";
 				popThis = true;
 			}
-			else if (_parent->getTileEngine()->distance(
-													_unit->getPosition(),
-													_action.target) > _action.weapon->getRules()->getMaxRange())
+			else if (TileEngine::distance(
+									_unit->getPosition(),
+									_action.target) > _action.weapon->getRules()->getMaxRange())
 			{
 				//Log(LOG_INFO) << ". . . out of range, EXIT";
 				_action.result = "STR_OUT_OF_RANGE";
@@ -1024,7 +1024,7 @@ void ProjectileFlyBState::think()
 							{
 								++statsActor->shotsLandedCounter;
 
-								if (_parent->getTileEngine()->distance(_unit->getPosition(), *i) > _action.weapon->getRules()->getAimRange())
+								if (TileEngine::distance(_unit->getPosition(), *i) > _action.weapon->getRules()->getAimRange())
 									++statsActor->longDistanceHitCounter;
 							}
 							else if (victim->getOriginalFaction() == FACTION_HOSTILE) // no Lucky Shots on civies or agents MC'd or not

@@ -102,8 +102,8 @@ Map::Map(
 		_arrow_kneel(NULL),
 		_selectorX(0),
 		_selectorY(0),
-		_mouseX(0),
-		_mouseY(0),
+		_mX(0),
+		_mY(0),
 		_cursorType(CT_NORMAL),
 		_cursorSize(1),
 		_animFrame(0),
@@ -414,10 +414,10 @@ void Map::setPalette(
 }
 
 /**
- * Draw the terrain.
- * @note Keep this function as optimised as possible. It's big so minimise
- * overhead of function calls.
- * @param surface - the Surface to draw on
+ * Draw the battlefield.
+ * @note Keep this function as optimised as possible - it's big and needs to be
+ * fast so minimize overhead of function calls.
+ * @param surface - the surface to draw on
  */
 void Map::drawTerrain(Surface* const surface) // private.
 {
@@ -427,23 +427,24 @@ void Map::drawTerrain(Surface* const surface) // private.
 		bulletLowY	= 16000,
 		bulletHighX	= 0,
 		bulletHighY	= 0,
-		bulletHighZ	= 0;
+		bulletHighZ	= 0,
+		viewLevel = _camera->getViewLevel();
 
 	if (_projectile != NULL // if there is a bullet get the highest x and y tiles to draw it on
 		&& _explosions.empty() == true)
 	{
 		int
-			part,
+			qtyProjectileSpriteFrames,
 			trjOffset;
 
 		if (_projectile->getThrowItem() != NULL)
-			part = 0;
+			qtyProjectileSpriteFrames = 0;
 		else
-			part = BULLET_SPRITES - 1;
+			qtyProjectileSpriteFrames = BULLET_SPRITES - 1;
 
 		for (int
 				i = 0;
-				i <= part;
+				i <= qtyProjectileSpriteFrames;
 				++i)
 		{
 			trjOffset = 1 - i;
@@ -465,10 +466,10 @@ void Map::drawTerrain(Surface* const surface) // private.
 		}
 
 		// convert bullet position from voxel-space to tile-space
-		bulletLowX  /= 16;
-		bulletLowY  /= 16;
-		bulletHighX /= 16;
-		bulletHighY /= 16;
+		bulletLowX  >>= 4;
+		bulletLowY  >>= 4;
+		bulletHighX >>= 4;
+		bulletHighY >>= 4;
 		bulletHighZ /= 24;
 
 		// if the projectile is outside the viewport - center back on it
@@ -478,62 +479,62 @@ void Map::drawTerrain(Surface* const surface) // private.
 									_projectile->getPosition(),
 									&bullet);
 
-			if (Options::battleSmoothCamera == true)
+/*			if (Options::battleSmoothCamera == true)
+			{ */
+			if (_bulletStart == true)
 			{
-				if (_bulletStart == true)
+				_bulletStart = false;
+
+				const Position posFinal = _projectile->getFinalPosition();
+
+				BattleAction* const prjAction = _projectile->getActionPrj();
+				if (prjAction->actor->getFaction() != _battleSave->getSide()
+					|| bullet.x < 0
+					|| bullet.x > surface->getWidth() - 1
+					|| bullet.y < 0
+					|| bullet.y > _playableHeight - 1)
 				{
-					_bulletStart = false;
+					_camera->centerOnPosition( // note that this centers each reaction-shooter.
+											Position(
+												bulletLowX,
+												bulletLowY,
+												bulletHighZ),
+											false);
+					_camera->convertVoxelToScreen(
+											_projectile->getPosition(),
+											&bullet);
 
-					const Position posFinal = _projectile->getFinalPosition();
-
-					BattleAction* const prjAction = _projectile->getActionPrj();
-					if (prjAction->actor->getFaction() != _battleSave->getSide()
-						|| bullet.x < 0
-						|| bullet.x > surface->getWidth() - 1
-						|| bullet.y < 0
-						|| bullet.y > _playableHeight - 1)
+					if (prjAction->actor->getFaction() != _battleSave->getSide()	// moved here from TileEngine::reactionShot()
+						&& _camera->isOnScreen(posFinal) == false)					// because this is the (accurate) position of the bullet-shot-actor's Camera mapOffset.
 					{
-						_camera->centerOnPosition( // note that this centers each reaction-shooter.
-												Position(
-													bulletLowX,
-													bulletLowY,
-													bulletHighZ),
-												false);
-						_camera->convertVoxelToScreen(
-												_projectile->getPosition(),
-												&bullet);
-
-						if (prjAction->actor->getFaction() != _battleSave->getSide()	// moved here from TileEngine::reactionShot()
-							&& _camera->isOnScreen(posFinal) == false)					// because this is the (accurate) position of the bullet-shot-actor's Camera mapOffset.
-						{
-							//Log(LOG_INFO) << "Map add rfActor " << prjAction->actor->getId() << " " << _camera->getMapOffset() << " final Pos offScreen";
-							std::map<int, Position>* const rfShotList (_battleSave->getTileEngine()->getRfShotList());
-							rfShotList->insert(std::pair<int, Position>(
-																	prjAction->actor->getId(),
-																	_camera->getMapOffset()));
-						}
-					}
-
-					if (_camera->isOnScreen(posFinal) == false
-						|| (_projectile->getThrowItem() != NULL
-							&& _battleSave->getTileEngine()->distance(
-																	prjAction->actor->getPosition(),
-																	posFinal) > 8))
-					{
-						_smoothingEngaged = true;
-						_camera->setPauseAfterShot();
-						//Log(LOG_INFO) << ". shot going offScreen OR throw - setPauseAfterShot";
+						//Log(LOG_INFO) << "Map add rfActor " << prjAction->actor->getId() << " " << _camera->getMapOffset() << " final Pos offScreen";
+						std::map<int, Position>* const rfShotList (_battleSave->getTileEngine()->getRfShotList());
+						rfShotList->insert(std::pair<int, Position>(
+																prjAction->actor->getId(),
+																_camera->getMapOffset()));
 					}
 				}
-				else if (_smoothingEngaged == true)
-					_camera->jumpXY(
-								surface->getWidth() / 2 - bullet.x,
-								_playableHeight / 2 - bullet.y);
 
-				const int posBullet_z = (_projectile->getPosition().z) / 24;
-				if (_camera->getViewLevel() != posBullet_z)
-					_camera->setViewLevel(posBullet_z);
+				if (_camera->isOnScreen(posFinal) == false
+					|| (_projectile->getThrowItem() != NULL
+						&& TileEngine::distance(
+											prjAction->actor->getPosition(),
+											posFinal) > 8)) // no smoothing unless throw > 8 tiles
+				{
+					_smoothingEngaged = true;
+					_camera->setPauseAfterShot();
+					//Log(LOG_INFO) << ". shot going offScreen OR throw - setPauseAfterShot";
+				}
 			}
+			else if (_smoothingEngaged == true)
+				_camera->jumpXY(
+							surface->getWidth() / 2 - bullet.x,
+							_playableHeight / 2 - bullet.y);
+
+			const int posBullet_z = (_projectile->getPosition().z) / 24;
+			if (viewLevel != posBullet_z)
+				_camera->setViewLevel(viewLevel = posBullet_z);
+/*			}
 			else // NOT smoothCamera: I don't use this.
 			// Camera remains stationary when xCom actively fires at target;
 			// that is, target is already onScreen due to targeting cursor click.
@@ -568,20 +569,18 @@ void Map::drawTerrain(Surface* const surface) // private.
 											&bullet);
 				}
 				while (enough == false);
-			}
+			} */
 		}
 	}
-	else // if (no projectile OR explosions waiting)
-		_smoothingEngaged = false;
+	else _smoothingEngaged = false; // no projectile OR explosions-waiting
 
-	const bool pathPreview = _battleSave->getPathfinding()->isPathPreviewed();
+	const bool pathPreviewed = _battleSave->getPathfinding()->isPathPreviewed();
 	NumberText* numWp = NULL;
 
 	if (_waypoints.empty() == false
-		|| (pathPreview == true
-			&& (_previewSetting & PATH_TU_COST)))
+		|| (pathPreviewed == true && (_previewSetting & PATH_TU_COST)))
 	{
-		// note: WpID is used for both pathPreview and BL waypoints.
+		// note: numWp is used for both pathPreview and BL-waypoints.
 		// Leave them the same color.
 		numWp = new NumberText(15, 15, 20, 30);
 		numWp->setPalette(getPalette());
@@ -601,7 +600,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 	if (_camera->getShowLayers() == true)
 		endZ = _battleSave->getMapSizeZ() - 1;
 	else
-		endZ = _camera->getViewLevel();
+		endZ = viewLevel;
 
 	_camera->convertScreenToMap(
 							0,
@@ -624,8 +623,8 @@ void Map::drawTerrain(Surface* const surface) // private.
 							&d,
 							&endY);
 
-	beginY -= (_camera->getViewLevel() * 2);
-	beginX -= (_camera->getViewLevel() * 2);
+	beginY -= (viewLevel * 2);
+	beginX -= (viewLevel * 2);
 	if (beginX < 0) beginX = 0;
 	if (beginY < 0) beginY = 0;
 
@@ -634,7 +633,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 	const Tile* tileBelow;
 
 	Position
-		posMap,
+		posField,
 		posScreen,
 		walkOffset;
 
@@ -649,7 +648,6 @@ void Map::drawTerrain(Surface* const surface) // private.
 		hasUnit,
 		hasFloor, // these denote characteristics of 'tile' as in the current Tile of the loop.
 		hasObject,
-		halfRight = false, // avoid VC++ linker warning.
 		trueLoc;
 
 //	const BattleUnit* unitBelow;
@@ -671,8 +669,8 @@ void Map::drawTerrain(Surface* const surface) // private.
 					itY <= endY;
 					++itY)
 			{
-				posMap = Position(itX,itY,itZ);
-				_camera->convertMapToScreen(posMap, &posScreen);
+				posField = Position(itX,itY,itZ);
+				_camera->convertMapToScreen(posField, &posScreen);
 				posScreen += _camera->getMapOffset();
 
 				if (posScreen.x > -_spriteWidth // only render cells that are inside the surface (ie viewport ala player's monitor)
@@ -680,13 +678,13 @@ void Map::drawTerrain(Surface* const surface) // private.
 					&& posScreen.y > -_spriteHeight
 					&& posScreen.y < surface->getHeight() + _spriteHeight)
 				{
-					_tile = _battleSave->getTile(posMap);
+					_tile = _battleSave->getTile(posField);
 
 					if (_tile == NULL)
 						continue;
 
 					if (itZ != 0)
-						tileBelow = _battleSave->getTile(posMap + Position(0,0,-1));
+						tileBelow = _battleSave->getTile(posField + Position(0,0,-1));
 					else
 						tileBelow = NULL;
 
@@ -701,8 +699,6 @@ void Map::drawTerrain(Surface* const surface) // private.
 						  && (_unit->getUnitVisible() == true || _battleSave->getDebugMode() == true);
 					hasFloor =
 					hasObject = false;
-
-//					unitBelow = NULL;
 
 // Draw Floor
 					sprite = _tile->getSprite(O_FLOOR);
@@ -724,26 +720,18 @@ void Map::drawTerrain(Surface* const surface) // private.
 						// ... should probably be a subfunction
 						if (itZ > 0 && itX < endX)
 						{
-							const Tile* const tileEast = _battleSave->getTile(posMap + Position(1,0,0));
-
-							if (//tileEast != NULL &&
-								tileEast->getSprite(O_FLOOR) == NULL
+							const Tile* const tileEast = _battleSave->getTile(posField + Position(1,0,0));
+							if (tileEast->getSprite(O_FLOOR) == NULL
 								&& (tileEast->getMapData(O_OBJECT) == NULL // special case ->
 									|| tileEast->getMapData(O_OBJECT)->getBigWall() != BIGWALL_NWSE))
 							{
-								const Tile* const tileEastBelow = _battleSave->getTile(posMap + Position(1,0,-1));
-
-/*								const BattleUnit* unitEastBelow;
-								if (tileEastBelow != NULL)
-									unitEastBelow = tileEastBelow->getUnit();
-								else
-									unitEastBelow = NULL; */
+								const Tile* const tileEastBelow = _battleSave->getTile(posField + Position(1,0,-1));
 								const BattleUnit* const unitEastBelow = tileEastBelow->getUnit();
 
 								if (unitEastBelow != NULL
 									&& unitEastBelow != _battleSave->getSelectedUnit()
 									&& unitEastBelow->getGeoscapeSoldier() != NULL
-									&& unitEastBelow->getFaction() == FACTION_PLAYER)// unitEastBelow->getOriginalFaction())
+									&& unitEastBelow->getFaction() == FACTION_PLAYER)
 								{
 									const int tLevel = getTerrainLevel(
 																	unitEastBelow->getPosition(),
@@ -765,8 +753,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 													posScreen.x + 4 + 16,
 													posScreen.y + 4 + 32 + tLevel,
 													_animFrame * 2,
-													false,
-													3); // 1=white, 3=red
+													false, 3); // red
 									}
 									else
 									{
@@ -785,66 +772,61 @@ void Map::drawTerrain(Surface* const surface) // private.
 						} // kL_end.
 					} // end draw floor
 
-// Redraw unitNorth, if it's moving NE/SW, to prevent current-Floor from overdrawing its feet.
+// Redraw unitNorth moving NE/SW to stop current-Floor from clipping feet.
 					if (itX != 0 && itY != 0
 						&& hasFloor == true)
 					{
-						const Tile* const tileWest = _battleSave->getTile(posMap + Position(-1,0,0));
-//						if (tileWest != NULL)
-//						{
-							const BattleUnit* const unitWest = tileWest->getUnit();
-							if (unitWest != NULL
-								&& unitWest->getUnitVisible() == true // don't bother checking DebugMode.
-								&& (unitWest->getUnitStatus() == STATUS_WALKING
-									|| unitWest->getUnitStatus() == STATUS_FLYING)
-								&& (unitWest->getDirection() == 1
-									|| unitWest->getDirection() == 5))
+						const Tile* const tileWest = _battleSave->getTile(posField + Position(-1,0,0));
+						const BattleUnit* const unitWest = tileWest->getUnit();
+						if (unitWest != NULL
+							&& unitWest->getUnitVisible() == true // don't bother checking DebugMode.
+							&& (unitWest->getUnitStatus() == STATUS_WALKING
+								|| unitWest->getUnitStatus() == STATUS_FLYING)
+							&& (unitWest->getDirection() == 1
+								|| unitWest->getDirection() == 5))
+						{
+							const Tile* const tileNorth = _battleSave->getTile(posField + Position(0,-1,0));
+							const BattleUnit* const unitNorth = tileNorth->getUnit();
+							if (unitNorth == unitWest)
 							{
-								const Tile* const tileNorth = _battleSave->getTile(posMap + Position(0,-1,0));
-//								if (tileNorth != NULL)
-//								{
-									const BattleUnit* const unitNorth = tileNorth->getUnit();
-									if (unitNorth != NULL && unitNorth == unitWest)
+								const Tile* const tileSouthWest = _battleSave->getTile(posField + Position(-1,1,0));
+								if (checkWest(tileWest, tileSouthWest, unitNorth) == true)
+								{
+									const Tile* const tileNorthEast = _battleSave->getTile(posField + Position(1,-1,0));
+									if (checkNorth(tileNorth, tileNorthEast, unitNorth) == true)
 									{
-/*										if (unitNorth->getUnitVisible() == true // don't bother checking DebugMode.
-											&& (unitNorth->getUnitStatus() == STATUS_WALKING
-												|| unitNorth->getUnitStatus() == STATUS_FLYING)
-											&& (unitNorth->getDirection() == 1
-												|| unitNorth->getDirection() == 5)) */
+										trueLoc = isTrueLoc(unitNorth, tileNorth);
+										quadrant = getQuadrant(unitNorth, tileNorth, trueLoc);
+										sprite = unitNorth->getCache(quadrant);
+										if (sprite)
 										{
-											trueLoc = isTrueLoc(unitNorth, tileNorth);
-											quadrant = getQuadrant(unitNorth, tileNorth, trueLoc);
-											sprite = unitNorth->getCache(quadrant);
-											if (sprite)
+											if (unitNorth->isOut_t(OUT_HLTH_STUN) == true)
+												shade = std::min(5, tileShade);
+											else
+												shade = tileShade;
+
+											calculateWalkingOffset(unitNorth, &walkOffset, trueLoc);
+											sprite->blitNShade(
+													surface,
+													posScreen.x + walkOffset.x + 16,
+													posScreen.y + walkOffset.y - 8,
+													shade);
+
+											if (unitNorth->getFireUnit() != 0)
 											{
-												if (unitNorth->isOut_t(OUT_HLTH_STUN) == true)
-													shade = std::min(5, tileShade);
-												else
-													shade = tileShade;
-
-												calculateWalkingOffset(unitNorth, &walkOffset, trueLoc);
-												sprite->blitNShade(
-														surface,
-														posScreen.x + walkOffset.x + 16,
-														posScreen.y + walkOffset.y - 8,
-														shade);
-
-												if (unitNorth->getFireUnit() != 0)
-												{
-													frame = 4 + (_animFrame / 2);
-													sprite = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
-													if (sprite)
-														sprite->blitNShade(
-																surface,
-																posScreen.x + walkOffset.x + 16,
-																posScreen.y + walkOffset.y - 8);
-												}
+												frame = 4 + (_animFrame / 2);
+												sprite = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
+												if (sprite)
+													sprite->blitNShade(
+															surface,
+															posScreen.x + walkOffset.x + 16,
+															posScreen.y + walkOffset.y - 8);
 											}
 										}
 									}
-//								}
+								}
 							}
-//						}
+						}
 					}
 
 // Draw Cursor Background
@@ -855,7 +837,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 						&& _selectorX <= itX
 						&& _selectorY <= itY)
 					{
-						if (_camera->getViewLevel() == itZ)
+						if (viewLevel == itZ)
 						{
 							if (_cursorType != CT_AIM)
 							{
@@ -868,8 +850,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 								{
 									frame = (_animFrame % 2);		// yellow flashing box
 								}
-								else
-									frame = 0;						// red static box
+								else frame = 0;						// red static box
 							}
 							else // CT_AIM ->
 							{
@@ -886,11 +867,9 @@ void Map::drawTerrain(Surface* const surface) // private.
 										posScreen.x,
 										posScreen.y);
 						}
-						else if (_camera->getViewLevel() > itZ)
+						else if (viewLevel > itZ)
 						{
-							frame = 2;								// blue static box
-
-							sprite = _res->getSurfaceSet("CURSOR.PCK")->getFrame(frame);
+							sprite = _res->getSurfaceSet("CURSOR.PCK")->getFrame(2); // blue static box
 							if (sprite != NULL)
 								sprite->blitNShade(
 										surface,
@@ -913,8 +892,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 							{
 								shade = std::min(9, _tile->getShade());
 							}
-							else
-								shade = tileShade;
+							else shade = tileShade;
 
 							sprite->blitNShade(
 									surface,
@@ -933,20 +911,14 @@ void Map::drawTerrain(Surface* const surface) // private.
 							{
 								shade = std::min(9, _tile->getShade());
 							}
-							else
-								shade = tileShade;
-
-							if (_tile->getMapData(O_WESTWALL) != NULL)
-								halfRight = true;
-							else
-								halfRight = false;
+							else shade = tileShade;
 
 							sprite->blitNShade(
 									surface,
 									posScreen.x,
 									posScreen.y - _tile->getMapData(O_NORTHWALL)->getYOffset(),
 									shade,
-									halfRight);
+									(_tile->getMapData(O_WESTWALL) != NULL));
 						}
 
 // Draw Object in Background & Center
@@ -970,13 +942,11 @@ void Map::drawTerrain(Surface* const surface) // private.
 						{
 							sprite = _res->getSurfaceSet("FLOOROB.PCK")->getFrame(spriteId);
 							if (sprite)
-							{
 								sprite->blitNShade(
 										surface,
 										posScreen.x,
 										posScreen.y + _tile->getTerrainLevel(),
 										tileShade);
-							}
 
 							if (var == true && _tile->isDiscovered(2) == true)
 							{
@@ -1024,53 +994,48 @@ void Map::drawTerrain(Surface* const surface) // private.
 							&& hasFloor == false
 							&& hasObject == false)
 						{
-//							if (tileBelow != NULL)
-//							{
-								const BattleUnit* const unitBelow = tileBelow->getUnit();
+							const BattleUnit* const unitBelow = tileBelow->getUnit();
 
-								if (unitBelow != NULL
-									&& unitBelow != _battleSave->getSelectedUnit()
-									&& unitBelow->getGeoscapeSoldier() != NULL
-									&& unitBelow->getFaction() == unitBelow->getOriginalFaction())
+							if (unitBelow != NULL
+								&& unitBelow != _battleSave->getSelectedUnit()
+								&& unitBelow->getGeoscapeSoldier() != NULL
+								&& unitBelow->getFaction() == unitBelow->getOriginalFaction())
+							{
+								const int tLevel = getTerrainLevel(
+																unitBelow->getPosition(),
+																unitBelow->getArmor()->getSize());
+
+								if (unitBelow->getFatalWounds() != 0)
 								{
-									const int tLevel = getTerrainLevel(
-																	unitBelow->getPosition(),
-																	unitBelow->getArmor()->getSize());
+									sprite = _res->getSurface("RANK_ROOKIE"); // background panel for red cross icon.
+									if (sprite)
+										sprite->blitNShade(
+												surface,
+												posScreen.x + 2,
+												posScreen.y + 3 + 24 + tLevel);
 
-									if (unitBelow->getFatalWounds() != 0)
-									{
-										sprite = _res->getSurface("RANK_ROOKIE"); // background panel for red cross icon.
-										if (sprite)
-											sprite->blitNShade(
-													surface,
-													posScreen.x + 2,
-													posScreen.y + 3 + 24 + tLevel);
-
-										sprite = _res->getSurfaceSet("SCANG.DAT")->getFrame(11); // small gray cross
-										if (sprite)
-											sprite->blitNShade(
-													surface,
-													posScreen.x + 4,
-													posScreen.y + 4 + 24 + tLevel,
-													_animFrame * 2,
-													false,
-													3); // red
-									}
-									else
-									{
-										std::string soldierRank = unitBelow->getRankString(); // eg. STR_COMMANDER -> RANK_COMMANDER
-										soldierRank = "RANK" + soldierRank.substr(3, soldierRank.length() - 3);
-
-										sprite = _res->getSurface(soldierRank);
-//										sprite = NULL;
-										if (sprite)
-											sprite->blitNShade(
-													surface,
-													posScreen.x + 2,
-													posScreen.y + 3 + 24 + tLevel);
-									}
+									sprite = _res->getSurfaceSet("SCANG.DAT")->getFrame(11); // small gray cross
+									if (sprite)
+										sprite->blitNShade(
+												surface,
+												posScreen.x + 4,
+												posScreen.y + 4 + 24 + tLevel,
+												_animFrame * 2,
+												false, 3); // red
 								}
-//							}
+								else
+								{
+									std::string soldierRank = unitBelow->getRankString(); // eg. STR_COMMANDER -> RANK_COMMANDER
+									soldierRank = "RANK" + soldierRank.substr(3, soldierRank.length() - 3);
+
+									sprite = _res->getSurface(soldierRank);
+									if (sprite)
+										sprite->blitNShade(
+												surface,
+												posScreen.x + 2,
+												posScreen.y + 3 + 24 + tLevel);
+								}
+							}
 						}
 					} // Void <- end.
 
@@ -1086,11 +1051,11 @@ void Map::drawTerrain(Surface* const surface) // private.
 							{
 								voxel = _projectile->getPosition(); // draw shadow on the floor
 								voxel.z = _battleSave->getTileEngine()->castShadow(voxel);
-								if (voxel.x / 16 >= itX
-									&& voxel.y / 16 >= itY
-									&& voxel.x / 16 < itX + 2
-									&& voxel.y / 16 < itY + 2
-									&& voxel.z / 24 == itZ)
+								if (   (voxel.x >> 4) >= itX
+									&& (voxel.y >> 4) >= itY
+									&& (voxel.x >> 4) <  itX + 2
+									&& (voxel.y >> 4) <  itY + 2
+									&&  voxel.z / 24 ==  itZ)
 								{
 									_camera->convertVoxelToScreen(voxel, &bullet);
 									sprite->blitNShade(
@@ -1101,11 +1066,11 @@ void Map::drawTerrain(Surface* const surface) // private.
 								}
 
 								voxel = _projectile->getPosition(); // draw thrown object
-								if (voxel.x / 16 >= itX
-									&& voxel.y / 16 >= itY
-									&& voxel.x / 16 < itX + 2
-									&& voxel.y / 16 < itY + 2
-									&& voxel.z / 24 == itZ)
+								if (   (voxel.x >> 4) >= itX
+									&& (voxel.y >> 4) >= itY
+									&& (voxel.x >> 4) <  itX + 2
+									&& (voxel.y >> 4) <  itY + 2
+									&&  voxel.z / 24 ==  itZ)
 								{
 									_camera->convertVoxelToScreen(voxel, &bullet);
 									sprite->blitNShade(
@@ -1117,7 +1082,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 						}
 						else // fired projectile (a bullet-sprite, not a thrown item)
 						{
-							if (itX >= bulletLowX // draw bullet on the correct tile
+							if (   itX >= bulletLowX // draw bullet on the correct tile
 								&& itX <= bulletHighX
 								&& itY >= bulletLowY
 								&& itY <= bulletHighY)
@@ -1132,9 +1097,9 @@ void Map::drawTerrain(Surface* const surface) // private.
 									{
 										voxel = _projectile->getPosition(1 - id); // draw shadow on the floor
 										voxel.z = _battleSave->getTileEngine()->castShadow(voxel);
-										if (voxel.x / 16 == itX
-											&& voxel.y / 16 == itY
-											&& voxel.z / 24 == itZ)
+										if (   (voxel.x >> 4) == itX
+											&& (voxel.y >> 4) == itY
+											&&  voxel.z / 24  == itZ)
 										{
 											_camera->convertVoxelToScreen(voxel, &bullet);
 
@@ -1148,9 +1113,9 @@ void Map::drawTerrain(Surface* const surface) // private.
 										}
 
 										voxel = _projectile->getPosition(1 - id); // draw bullet itself
-										if (voxel.x / 16 == itX
-											&& voxel.y / 16 == itY
-											&& voxel.z / 24 == itZ)
+										if (   (voxel.x >> 4) == itX
+											&& (voxel.y >> 4) == itY
+											&&  voxel.z / 24  == itZ)
 										{
 											_camera->convertVoxelToScreen(voxel, &bullet);
 
@@ -1171,123 +1136,164 @@ void Map::drawTerrain(Surface* const surface) // private.
 // Main Draw BattleUnit ->
 					if (hasUnit == true)
 					{
-						trueLoc = isTrueLoc(_unit, _tile);
-						quadrant = getQuadrant(_unit, _tile, trueLoc);
-						sprite = _unit->getCache(quadrant);
-						if (sprite)
+						bool draw = true;
+						if (_unit->getUnitStatus() == STATUS_WALKING
+							|| _unit->getUnitStatus() == STATUS_FLYING)
 						{
-							if (_unit->isOut_t(OUT_HLTH_STUN) == true)
-								shade = std::min(5, tileShade);
-							else
-								shade = tileShade;
-
-//							if (shade != 0 // try to even out lighting of all four quadrants of large units.
-//								&& quadrant != 0)
-//							{
-//								shade -= 1; // TODO: trickle this throughout this function!
-//							}
-
-							calculateWalkingOffset(_unit, &walkOffset, trueLoc);
-							sprite->blitNShade(
-									surface,
-									posScreen.x + walkOffset.x,
-									posScreen.y + walkOffset.y,
-									shade);
-
-							if (_unit->getFireUnit() != 0)
+							switch (_unit->getDirection())
 							{
-								frame = 4 + (_animFrame / 2);
-								sprite = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
-								if (sprite)
-									sprite->blitNShade(
-											surface,
-											posScreen.x + walkOffset.x,
-											posScreen.y + walkOffset.y);
-							}
-
-							// kL_begin #3 of 3:
-							const Tile* const tileAbove = _battleSave->getTile(posMap + Position(0,0,1));
-
-							if ((_camera->getViewLevel() == itZ
-									&& (_camera->getShowLayers() == false || itZ == endZ))
-								|| (tileAbove != NULL && tileAbove->getSprite(O_FLOOR) == NULL))
-							{
-								if (_unit != _battleSave->getSelectedUnit()
-									&& _unit->getGeoscapeSoldier() != NULL
-									&& _unit->getFaction() == _unit->getOriginalFaction())
+								case 0:
+								case 4:
 								{
-									if (_unit->getFatalWounds() != 0)
-									{
-										sprite = _res->getSurface("RANK_ROOKIE"); // background panel for red cross icon.
-										if (sprite)
-											sprite->blitNShade(
-													surface,
-													posScreen.x + walkOffset.x + 2,
-													posScreen.y + walkOffset.y + 3);
+									const Tile
+										* const tileNorth = _battleSave->getTile(posField + Position(0,-1,0)),
+										* const tileNorthEast = _battleSave->getTile(posField + Position(1,-1,0));
+									draw = checkNorth(tileNorth, tileNorthEast);
+								}
+								break;
 
-										sprite = _res->getSurfaceSet("SCANG.DAT")->getFrame(11); // small gray cross
-										if (sprite)
-											sprite->blitNShade(
-													surface,
-													posScreen.x + walkOffset.x + 4,
-													posScreen.y + walkOffset.y + 4,
-													_animFrame * 2,
-													false, 3); // red
-									}
-									else
-									{
-										std::string soldierRank = _unit->getRankString(); // eg. STR_COMMANDER -> RANK_COMMANDER
-										soldierRank = "RANK" + soldierRank.substr(3, soldierRank.length() - 3);
+								case 2:
+								case 6:
+								{
+									const Tile
+										* const tileWest = _battleSave->getTile(posField + Position(-1,0,0)),
+										* const tileSouthWest = _battleSave->getTile(posField + Position(-1,1,0));
+									draw = checkWest(tileWest, tileSouthWest);
+								}
+								break;
 
-										sprite = _res->getSurface(soldierRank);
-										if (sprite)
-											sprite->blitNShade(
-													surface,
-													posScreen.x + walkOffset.x + 2,
-													posScreen.y + walkOffset.y + 3);
-									}
+								case 1:
+								case 5:
+								{
+									const Tile
+										* const tileSouthWest = _battleSave->getTile(posField + Position(-1,1,0)),
+										* const tileSouthSouthWest = _battleSave->getTile(posField + Position(-1,2,0));
+									draw = checkWest(tileSouthWest, tileSouthSouthWest);
+
+									const Tile
+										* const tileNorthEast = _battleSave->getTile(posField + Position(1,-1,0)),
+										* const tileNorthNorthEast = _battleSave->getTile(posField + Position(1,-2,0));
+									draw = draw
+										&& checkNorth(tileNorthEast, tileNorthNorthEast);
+								}
+							}
+						}
+
+						if (draw == true)
+						{
+							trueLoc = isTrueLoc(_unit, _tile);
+							quadrant = getQuadrant(_unit, _tile, trueLoc);
+							sprite = _unit->getCache(quadrant);
+							if (sprite)
+							{
+								if (_unit->isOut_t(OUT_HLTH_STUN) == true)
+									shade = std::min(5, tileShade);
+								else
+									shade = tileShade;
+
+//								if (shade != 0 && quadrant != 0) // try to even out lighting of all four quadrants of large units.
+//									shade -= 1; // TODO: trickle this throughout this function!
+
+								calculateWalkingOffset(_unit, &walkOffset, trueLoc);
+								sprite->blitNShade(
+										surface,
+										posScreen.x + walkOffset.x,
+										posScreen.y + walkOffset.y,
+										shade);
+
+								if (_unit->getFireUnit() != 0)
+								{
+									sprite = _res->getSurfaceSet("SMOKE.PCK")->getFrame(4 + (_animFrame / 2));
+									if (sprite)
+										sprite->blitNShade(
+												surface,
+												posScreen.x + walkOffset.x,
+												posScreen.y + walkOffset.y);
 								}
 
-								// Draw Exposed mark
-								if (_unit->getFaction() == FACTION_PLAYER
-									&& _unit->getFaction() == _unit->getOriginalFaction()
-									&& (_unit->getArmor()->getSize() == 1 || quadrant == 1))
+								// kL_begin #3 of 3:
+								const Tile* const tileAbove = _battleSave->getTile(posField + Position(0,0,1));
+
+								if ((viewLevel == itZ
+										&& (_camera->getShowLayers() == false || itZ == endZ))
+									|| (tileAbove != NULL && tileAbove->getSprite(O_FLOOR) == NULL))
 								{
-									const int exposure = _unit->getExposed();
-									if (exposure != -1)
+									if (_unit != _battleSave->getSelectedUnit()
+										&& _unit->getGeoscapeSoldier() != NULL
+										&& _unit->getFaction() == _unit->getOriginalFaction())
 									{
-										int
-											colorGroup,
-											colorOffset;
-										if (_animFrame < 4)
+										if (_unit->getFatalWounds() != 0)
 										{
-											colorGroup = 0; // white
-											colorOffset = 2;
+											sprite = _res->getSurface("RANK_ROOKIE"); // background panel for red cross icon.
+											if (sprite)
+												sprite->blitNShade(
+														surface,
+														posScreen.x + walkOffset.x + 2,
+														posScreen.y + walkOffset.y + 3);
+
+											sprite = _res->getSurfaceSet("SCANG.DAT")->getFrame(11); // small gray cross
+											if (sprite)
+												sprite->blitNShade(
+														surface,
+														posScreen.x + walkOffset.x + 4,
+														posScreen.y + walkOffset.y + 4,
+														_animFrame * 2,
+														false, 3); // red
 										}
 										else
 										{
-											colorGroup = 10; // yellow
-											colorOffset = 3;
-										}
+											std::string soldierRank = _unit->getRankString(); // eg. STR_COMMANDER -> RANK_COMMANDER
+											soldierRank = "RANK" + soldierRank.substr(3, soldierRank.length() - 3);
 
-										_numExposed->setValue(static_cast<unsigned>(exposure));
-										_numExposed->draw();
-										_numExposed->blitNShade(
-															surface,
-															posScreen.x + walkOffset.x + 21,
-															posScreen.y + walkOffset.y + 6,
-															colorOffset,
-															false,
-															colorGroup);
+											sprite = _res->getSurface(soldierRank);
+											if (sprite)
+												sprite->blitNShade(
+														surface,
+														posScreen.x + walkOffset.x + 2,
+														posScreen.y + walkOffset.y + 3);
+										}
 									}
-								}
-							} // kL_end.
+
+									// Draw Exposed mark
+									if (_unit->getFaction() == FACTION_PLAYER
+										&& _unit->getFaction() == _unit->getOriginalFaction()
+										&& (_unit->getArmor()->getSize() == 1 || quadrant == 1))
+									{
+										const int exposure = _unit->getExposed();
+										if (exposure != -1)
+										{
+											int
+												colorGroup,
+												colorOffset;
+											if (_animFrame < 4)
+											{
+												colorGroup = 0; // white
+												colorOffset = 2;
+											}
+											else
+											{
+												colorGroup = 10; // yellow
+												colorOffset = 3;
+											}
+
+											_numExposed->setValue(static_cast<unsigned>(exposure));
+											_numExposed->draw();
+											_numExposed->blitNShade(
+																surface,
+																posScreen.x + walkOffset.x + 21,
+																posScreen.y + walkOffset.y + 6,
+																colorOffset,
+																false,
+																colorGroup);
+										}
+									}
+								} // kL_end.
+							}
 						}
 					}
 					// end Main Draw BattleUnit.
 
-// Draw Unconscious Soldier icon
-					// - might want to redundant this, like rankIcons.
+// Draw Unconscious Soldier icon - might want to redundant this, like rankIcons.
 					if (_unit == NULL)
 					{
 						const int status = _tile->hasUnconsciousUnit();
@@ -1313,22 +1319,18 @@ void Map::drawTerrain(Surface* const surface) // private.
 										posScreen.x + 2,
 										posScreen.y + 1,
 										_animFrame * 2,
-										false,
-										color);
+										false, color);
 						}
 					}
 					// end unconscious soldier icon.
 
 // Draw unitBelow if it is on raised ground & there is no Floor.
-					if (itZ > 0
-//						&& tileBelow != NULL
-//						&& tileBelow->getTerrainLevel() < -11
-						&& _tile->hasNoFloor(tileBelow) == true)
+					if (itZ > 0 && _tile->hasNoFloor(tileBelow) == true)
 					{
 						const BattleUnit* const unitBelow = tileBelow->getUnit();
 						if (unitBelow != NULL
-							&& unitBelow->getUnitVisible() == true //|| _battleSave->getDebugMode() == true))
-							&& unitBelow->getHeight(true) - tileBelow->getTerrainLevel() > 25) // head sticks up; should be a greater value before clipping occurs vs. aboveTile's background objects. Try 25
+							&& unitBelow->getUnitVisible() == true // don't bother checking DebugMode
+							&& unitBelow->getHeight(true) - tileBelow->getTerrainLevel() > 25) // head sticks up
 						{
 							trueLoc = isTrueLoc(unitBelow, tileBelow);
 							quadrant = getQuadrant(unitBelow, tileBelow, trueLoc);
@@ -1370,7 +1372,6 @@ void Map::drawTerrain(Surface* const surface) // private.
 						{
 							frame = ResourcePack::SMOKE_OFFSET;
 							frame += (_tile->getSmoke() + 1) / 2;
-
 							shade = tileShade;
 						}
 						else
@@ -1397,8 +1398,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 						&& (_previewSetting & PATH_ARROWS)
 						&& _tile->isDiscovered(0) == true)
 					{
-						if (itZ > 0
-							&& _tile->hasNoFloor(tileBelow) == true)
+						if (itZ > 0 && _tile->hasNoFloor(tileBelow) == true)
 						{
 							sprite = _res->getSurfaceSet("Pathfinding")->getFrame(11);
 							if (sprite)
@@ -1441,17 +1441,16 @@ void Map::drawTerrain(Surface* const surface) // private.
 						&& _selectorX <= itX
 						&& _selectorY <= itY)
 					{
-						if (_camera->getViewLevel() > itZ)
+						if (viewLevel > itZ)
 						{
-							frame = 5; // blue static box
-							sprite = _res->getSurfaceSet("CURSOR.PCK")->getFrame(frame);
+							sprite = _res->getSurfaceSet("CURSOR.PCK")->getFrame(5); // blue static box
 							sprite->blitNShade(
 									surface,
 									posScreen.x,
 									posScreen.y);
 						}
-						else if (_camera->getViewLevel() == itZ)
-//							|| (unitBelow != NULL && unitBelow->getPosition().z == _camera->getViewLevel())) // BattleUnit was redrawn below curTile.
+						else if (viewLevel == itZ)
+//							|| (unitBelow != NULL && unitBelow->getPosition().z == viewLevel)) // BattleUnit was redrawn below curTile.
 						{
 /*							int vertOffset;
 							if (unitBelow != NULL)
@@ -1470,8 +1469,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 								{
 									frame = 3 + (_animFrame % 2);	// yellow flashing box
 								}
-								else
-									frame = 3;						// red static box
+								else frame = 3;						// red static box
 							}
 							else // CT_AIM ->
 							{
@@ -1521,9 +1519,9 @@ void Map::drawTerrain(Surface* const surface) // private.
 								const RuleItem* const weaponRule = action->weapon->getRules();
 								const int
 									lowerLimit = weaponRule->getMinRange(),
-									distance = _battleSave->getTileEngine()->distance(
-																					Position(itX,itY,itZ),
-																					action->actor->getPosition());
+									distance = TileEngine::distance(
+																Position(itX,itY,itZ),
+																action->actor->getPosition());
 								int upperLimit;
 								switch (action->type)
 								{
@@ -1608,7 +1606,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 						}
 
 						if (_cursorType > CT_AIM // Psi, Waypoint, Throw
-							&& _camera->getViewLevel() == itZ)// || unitBelow != NULL)) // BattleUnit was redrawn below curTile.
+							&& viewLevel == itZ)// || unitBelow != NULL)) // BattleUnit was redrawn below curTile.
 						{
 							static const int cursorSprites[6] = {0,0,0,11,13,15};
 							sprite = _res->getSurfaceSet("CURSOR.PCK")->getFrame(cursorSprites[_cursorType] + (_animFrame / 4));
@@ -1631,12 +1629,11 @@ void Map::drawTerrain(Surface* const surface) // private.
 							i != _waypoints.end();
 							++i, ++wpVal)
 					{
-						if (*i == posMap) // note that 2 BL waypoints can be at the same Position.
+						if (*i == posField) // note that 2 BL waypoints can be at the same Position.
 						{
 							if (offset_x == 2 && offset_y == 2)
 							{
-//								sprite = _res->getSurfaceSet("CURSOR.PCK")->getFrame(7);
-								sprite = _res->getSurfaceSet("TARGET.PCK")->getFrame(0);
+								sprite = _res->getSurfaceSet("TARGET.PCK")->getFrame(0); // was "CURSOR.PCK" frame= 7
 								sprite->blitNShade(
 										surface,
 										posScreen.x,
@@ -1683,7 +1680,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 					// end border icon.
 
 // Draw scanner dots
-					if (itZ == _camera->getViewLevel()
+					if (itZ == viewLevel
 						&& _battleSave->getScannerDots().empty() == false)
 					{
 						std::pair<int,int> dotTest = std::make_pair(
@@ -1699,8 +1696,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 									surface,
 									posScreen.x + 14,
 									posScreen.y + 30,
-									0, false,
-									3); // red
+									0, false, 3); // red
 						}
 					}
 					// end scanner dots.
@@ -1722,7 +1718,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 		if (_unit != NULL
 			&& (_unit->getUnitStatus() == STATUS_STANDING
 				|| _unit->getUnitStatus() == STATUS_TURNING)
-			&& _unit->getPosition().z <= _camera->getViewLevel())
+			&& _unit->getPosition().z <= viewLevel)
 		{
 			_camera->convertMapToScreen(
 									_unit->getPosition(),
@@ -1759,10 +1755,9 @@ void Map::drawTerrain(Surface* const surface) // private.
 	}
 	// end arrow.
 
-	if (pathPreview == true)
+	if (pathPreviewed == true)
 	{
-		if (numWp != NULL)
-			numWp->setBordered(); // make a border for the pathfinding display
+		if (numWp != NULL) numWp->setBordered(); // make a border for the pathPreview display
 
 		for (int
 				itZ = beginZ;
@@ -1779,16 +1774,16 @@ void Map::drawTerrain(Surface* const surface) // private.
 						itY <= endY;
 						++itY)
 				{
-					posMap = Position(itX,itY,itZ);
-					_camera->convertMapToScreen(posMap, &posScreen);
+					posField = Position(itX,itY,itZ);
+					_camera->convertMapToScreen(posField, &posScreen);
 					posScreen += _camera->getMapOffset();
 
-					if (posScreen.x > -_spriteWidth // only render cells that are inside the surface
+					if (posScreen.x > -_spriteWidth // only render pathPreview inside the surface
 						&& posScreen.x < surface->getWidth() + _spriteWidth
 						&& posScreen.y > -_spriteHeight
 						&& posScreen.y < surface->getHeight() + _spriteHeight)
 					{
-						_tile = _battleSave->getTile(posMap);
+						_tile = _battleSave->getTile(posField);
 
 						if (_tile != NULL
 							&& _tile->isDiscovered(2) == true
@@ -1798,7 +1793,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 
 							if (_previewSetting & PATH_ARROWS)
 							{
-								const Tile* const tileBelow = _battleSave->getTile(posMap + Position(0,0,-1));
+								const Tile* const tileBelow = _battleSave->getTile(posField + Position(0,0,-1));
 
 								if (itZ > 0 && _tile->hasNoFloor(tileBelow) == true)
 								{
@@ -1812,8 +1807,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 												_tile->getPreviewColor());
 								}
 
-								const int overlay = _tile->getPreviewDir() + 12;
-								sprite = _res->getSurfaceSet("Pathfinding")->getFrame(overlay);
+								sprite = _res->getSurfaceSet("Pathfinding")->getFrame(_tile->getPreviewDir() + 12);
 								if (sprite)
 									sprite->blitNShade(
 											surface,
@@ -1823,8 +1817,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 											_tile->getPreviewColor());
 							}
 
-							if ((_previewSetting & PATH_TU_COST)
-								&& _tile->getPreviewTu() > -1)
+							if ((_previewSetting & PATH_TU_COST) && _tile->getPreviewTu() > -1)
 							{
 								int offset_x = 2;
 								if (_tile->getPreviewTu() > 9)
@@ -1859,9 +1852,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 				}
 			}
 		}
-
-		if (numWp != NULL)
-			numWp->setBordered(false); // remove the border in case it's used for missile waypoints.
+//		if (numWp != NULL) numWp->setBordered(false); // remove the border in case it's used for missile waypoints. -> uh, you're going to delete it the next line:
 	}
 
 	delete numWp;
@@ -1869,9 +1860,8 @@ void Map::drawTerrain(Surface* const surface) // private.
 
 	if (_explosionInFOV == true) // check if they got hit or explosion animations
 	{
-/*		// big explosions cause the screen to flash as bright as possible before
-		// any explosions are actually drawn. Tthis causes everything to look
-		// like EGA for a single frame.
+/*		// big explosions cause the screen to flash as bright as possible before any explosions
+		// are actually drawn. This causes everything to look like EGA for a single frame.
 		if (_flashScreen == true)
 		{
 			Uint8 color;
@@ -1937,6 +1927,96 @@ void Map::drawTerrain(Surface* const surface) // private.
 }
 
 /**
+ * Checks if a southwesterly wall should suppress unit-sprite drawing.
+ * @note When a unit moves west it can clip through a previously drawn wall.
+ * @param tile6	- pointer to the tile west of current
+ * @param tile5	- pointer to the tile southwest of current
+ * @param unit	- pointer to BattleUnit not '_unit' (default NULL)
+ * @return, true to allow drawing the unit's sprite
+ */
+bool Map::checkWest( // private.
+		const Tile* const tile6,
+		const Tile* const tile5,
+		const BattleUnit* unit) const
+{
+	bool ret;
+
+	if (unit == NULL) // '_unit' is Valid.
+	{
+		ret = tile6 == NULL
+		   || tile6->getUnit() != _unit;
+	}
+	else ret = false; // '_unit' is NOT Valid.
+
+	ret = ret
+		|| ((tile6->getMapData(O_OBJECT) == NULL
+				|| tile6->getMapData(O_OBJECT)->getBigWall() != BIGWALL_SOUTH)
+			&& (tile5 == NULL
+				|| (tile5->getMapData(O_NORTHWALL) == NULL
+					&& (tile5->getMapData(O_OBJECT) == NULL
+						|| tile5->getMapData(O_OBJECT)->getBigWall() != BIGWALL_NESW))));
+
+	if (ret == false) // unit is too far away from wall to clip - now don't let the floor clip it
+	{
+		if (unit == NULL) unit = _unit;
+		switch (unit->getDirection())
+		{
+			case 1:
+			case 2: ret = unit->getPosition() == unit->getDestination(); break;
+			case 5:
+			case 6: ret = unit->getPosition() == unit->getLastPosition();
+		}
+	}
+
+	return ret;
+}
+
+/**
+ * Checks if a northeasterly wall should suppress unit-sprite drawing.
+ * @note When a unit moves north it can clip through a previously drawn wall.
+ * @param tile0	- pointer to the tile north of current
+ * @param tile1	- pointer to the tile northeast of current
+ * @param unit	- pointer to BattleUnit not '_unit' (default NULL)
+ * @return, true to allow drawing the unit's sprite
+ */
+bool Map::checkNorth( // private.
+		const Tile* const tile0,
+		const Tile* const tile1,
+		const BattleUnit* unit) const
+{
+	bool ret;
+
+	if (unit == NULL) // '_unit' is Valid.
+	{
+		ret = tile0 == NULL
+		   || tile0->getUnit() != _unit;
+	}
+	else ret = false; // '_unit' is NOT Valid.
+
+	ret = ret
+		|| ((tile0->getMapData(O_OBJECT) == NULL
+				|| tile0->getMapData(O_OBJECT)->getBigWall() != BIGWALL_EAST)
+			&& (tile1 == NULL
+				|| (tile1->getMapData(O_WESTWALL) == NULL
+					&& (tile1->getMapData(O_OBJECT) == NULL
+						|| tile1->getMapData(O_OBJECT)->getBigWall() != BIGWALL_NWSE))));
+
+	if (ret == false) // unit is too far away from wall to clip - now don't let the floor clip it
+	{
+		if (unit == NULL) unit = _unit;
+		switch (unit->getDirection())
+		{
+			case 0:
+			case 1: ret = unit->getPosition() == unit->getLastPosition(); break;
+			case 4:
+			case 5: ret = unit->getPosition() == unit->getDestination();
+		}
+	}
+
+	return ret;
+}
+
+/**
  * Handles mouse presses on the map.
  * @param action	- pointer to an Action
  * @param state		- State that the action handlers belong to
@@ -1990,11 +2070,9 @@ void Map::mouseOver(Action* action, State* state)
 	InteractiveSurface::mouseOver(action, state);
 	_camera->mouseOver(action, state);
 
-	_mouseX = static_cast<int>(action->getAbsoluteXMouse());
-	_mouseY = static_cast<int>(action->getAbsoluteYMouse());
-	setSelectorPosition(
-					_mouseX,
-					_mouseY);
+	_mX = static_cast<int>(action->getAbsoluteXMouse());
+	_mY = static_cast<int>(action->getAbsoluteYMouse());
+	setSelectorPosition(_mX,_mY);
 }
 
 /**
@@ -2003,8 +2081,8 @@ void Map::mouseOver(Action* action, State* state)
  */
 void Map::findMousePosition(Position& mousePos)
 {
-	mousePos.x = _mouseX;
-	mousePos.y = _mouseY;
+	mousePos.x = _mX;
+	mousePos.y = _mY;
 	mousePos.z = 0;
 }
 
@@ -2014,9 +2092,7 @@ void Map::findMousePosition(Position& mousePos)
  */
 void Map::animateMap(bool redraw)
 {
-	++_animFrame;
- 	if (_animFrame == 8)
-		_animFrame = 0;
+ 	if (++_animFrame == 8) _animFrame = 0;
 
 	for (size_t // animate tiles
 			i = 0;
@@ -2039,12 +2115,8 @@ void Map::animateMap(bool redraw)
 		}
 	}
 
-
-	if (--_fuseColor == 15)
-		_fuseColor = 31;
-
-	if (redraw == true)
-		_redraw = true;
+	if (--_fuseColor == 15) _fuseColor = 31;
+	if (redraw == true) _redraw = true;
 }
 
 /**
@@ -2052,9 +2124,7 @@ void Map::animateMap(bool redraw)
  */
 void Map::refreshSelectorPosition()
 {
-	setSelectorPosition(
-					_mouseX,
-					_mouseY);
+	setSelectorPosition(_mX,_mY);
 }
 
 /**
@@ -2076,11 +2146,8 @@ void Map::setSelectorPosition(
 							&_selectorX,
 							&_selectorY);
 
-	if (pre_X != _selectorX
-		|| pre_Y != _selectorY)
-	{
+	if (pre_X != _selectorX || pre_Y != _selectorY)
 		_redraw = true;
-	}
 }
 
 /**
@@ -2535,7 +2602,6 @@ void Map::setHeight(int height)
 	Surface::setHeight(height);
 
 	_playableHeight = height - _iconHeight;
-
 	if (_playableHeight < 200)
 		height = _playableHeight;
 	else
@@ -2552,7 +2618,6 @@ void Map::setHeight(int height)
 void Map::setWidth(int width)
 {
 	Surface::setWidth(width);
-
 	_hiddenScreen->setX(_hiddenScreen->getX() + (width - getWidth()) / 2);
 }
 
@@ -2593,9 +2658,7 @@ int Map::getSoundAngle(const Position& pos) const
 	const int midPoint = getWidth() / 2;
 
 	Position screenPos;
-	_camera->convertMapToScreen(
-							pos,
-							&screenPos);
+	_camera->convertMapToScreen(pos, &screenPos);
 
 	// cap the position to the screen edges relative to the center,
 	// negative values indicating a left-shift, and positive values shifting to the right.

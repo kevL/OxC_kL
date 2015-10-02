@@ -48,7 +48,7 @@ class CivilianBAIState
 private:
 //	bool _traceAI;
 	int
-		_AIMode,
+//		_AIMode,
 		_escapeTUs,
 		_spottingEnemies,
 		_visibleEnemies;
@@ -58,6 +58,7 @@ private:
 		* _patrolAction;
 	BattleUnit* _aggroTarget;
 
+	AIMode _AIMode;
 
 	protected:
 		Node

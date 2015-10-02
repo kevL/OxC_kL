@@ -721,14 +721,8 @@ void TileEngine::calculateFOV(
 			i != _battleSave->getUnits()->end();
 			++i)
 	{
-		if (distanceSq(
-					pos,
-					(*i)->getPosition(),
-					false) <= MAX_VIEW_DISTANCE_SQR)
-		{
-			//Log(LOG_INFO) << "calcFoV for " << (*i)->getId();
+		if (distanceSq(pos, (*i)->getPosition(), false) <= MAX_VIEW_DISTANCE_SQR)
 			calculateFOV(*i);
-		}
 	}
 	_spotSound = true;
 }
@@ -5443,10 +5437,10 @@ VoxelType TileEngine::voxelCheck(
  * @param considerZ	- true to consider the z coordinate (default true)
  * @return, distance
  */
-int TileEngine::distance(
+int TileEngine::distance( // static.
 		const Position& pos1,
 		const Position& pos2,
-		const bool considerZ) const
+		const bool considerZ)
 {
 	const int
 		x = pos1.x - pos2.x,
@@ -5470,10 +5464,10 @@ int TileEngine::distance(
  * @param considerZ	- true to consider the z coordinate (default true)
  * @return, distance
  */
-int TileEngine::distanceSq(
+int TileEngine::distanceSq( // static.
 		const Position& pos1,
 		const Position& pos2,
-		const bool considerZ) const
+		const bool considerZ)
 {
 	const int
 		x = pos1.x - pos2.x,

@@ -1893,9 +1893,9 @@ BattleUnit* BattlescapeGenerator::addAlien( // private.
 		Position posCraft = _battleSave->getUnits()->at(0)->getPosition(); // aLiens face Craft
 		int dir;
 		if (RNG::percent((diff + 1) * 20) == true
-			&& _battleSave->getTileEngine()->distance(
-													node->getPosition(),
-													posCraft) < 25)
+			&& TileEngine::distance(
+								node->getPosition(),
+								posCraft) < 25)
 		{
 			dir = unit->directionTo(posCraft);
 		}
