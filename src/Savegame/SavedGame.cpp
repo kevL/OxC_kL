@@ -1320,7 +1320,7 @@ void SavedGame::addFinishedResearch(
 
 /**
  * Gets the list of already discovered ResearchProjects.
- * @return, address of the vector of pointers of already discovered ResearchProjects
+ * @return, reference to the vector of pointers listing discovered ResearchProjects
  */
 const std::vector<const RuleResearch*>& SavedGame::getDiscoveredResearch() const
 {
@@ -1340,10 +1340,14 @@ void SavedGame::getAvailableResearchProjects(
 {
 	std::vector<const RuleResearch*> unlocked;
 
-	const std::vector<const RuleResearch*>& discovered (getDiscoveredResearch());
+/*	const std::vector<const RuleResearch*>& discovered (getDiscoveredResearch());
 	for (std::vector<const RuleResearch*>::const_iterator
 			i = discovered.begin();
 			i != discovered.end();
+			++i) */
+	for (std::vector<const RuleResearch*>::const_iterator
+			i = _discovered.begin();
+			i != _discovered.end();
 			++i)
 	{
 		for (std::vector<std::string>::const_iterator
@@ -1371,22 +1375,22 @@ void SavedGame::getAvailableResearchProjects(
 		{
 			liveAlien = (rules->getUnit(resRule->getType()) != NULL);
 			if (std::find(
-						discovered.begin(),
-						discovered.end(),
-						resRule) != discovered.end())
+						_discovered.begin(),
+						_discovered.end(),
+						resRule) != _discovered.end())
 			{
 				cullProject = true;
 				if (resRule->getGetOneFree().empty() == false)
 				{
 					for (std::vector<std::string>::const_iterator
-							ohBoy = resRule->getGetOneFree().begin();
-							ohBoy != resRule->getGetOneFree().end();
-							++ohBoy)
+							j = resRule->getGetOneFree().begin();
+							j != resRule->getGetOneFree().end();
+							++j)
 					{
 						if (std::find(
-									discovered.begin(),
-									discovered.end(),
-									rules->getResearch(*ohBoy)) == discovered.end())
+									_discovered.begin(),
+									_discovered.end(),
+									rules->getResearch(*j)) == _discovered.end())
 						{
 							cullProject = false;
 							break;
@@ -1401,17 +1405,17 @@ void SavedGame::getAvailableResearchProjects(
 								resRule->getUnlocked().end(),
 								"STR_LEADER_PLUS") != resRule->getUnlocked().end()
 							&& std::find(
-									discovered.begin(),
-									discovered.end(),
-									rules->getResearch("STR_LEADER_PLUS")) == discovered.end())
+									_discovered.begin(),
+									_discovered.end(),
+									rules->getResearch("STR_LEADER_PLUS")) == _discovered.end())
 						|| (std::find(
 								resRule->getUnlocked().begin(),
 								resRule->getUnlocked().end(),
 								"STR_COMMANDER_PLUS") != resRule->getUnlocked().end()
 							&& std::find(
-									discovered.begin(),
-									discovered.end(),
-									rules->getResearch("STR_COMMANDER_PLUS")) == discovered.end()))
+									_discovered.begin(),
+									_discovered.end(),
+									rules->getResearch("STR_COMMANDER_PLUS")) == _discovered.end()))
 					{
 						cullProject = false;
 					}
@@ -1438,9 +1442,9 @@ void SavedGame::getAvailableResearchProjects(
 							++j)
 					{
 						if (std::find(
-									discovered.begin(),
-									discovered.end(),
-									rules->getResearch(resRule->getRequirements().at(j))) != discovered.end())
+									_discovered.begin(),
+									_discovered.end(),
+									rules->getResearch(resRule->getRequirements().at(j))) != _discovered.end())
 						{
 							++tally;
 						}
@@ -1500,8 +1504,7 @@ bool SavedGame::isResearchAvailable(
 {
 	if (resRule != NULL)
 	{
-		const std::vector<const RuleResearch*>& discovered (getDiscoveredResearch());
-
+//		const std::vector<const RuleResearch*>& discovered (getDiscoveredResearch());
 		if (_debug == false
 			&& std::find(
 						unlocked.begin(),
@@ -1515,17 +1518,17 @@ bool SavedGame::isResearchAvailable(
 							resRule->getUnlocked().end(),
 							"STR_LEADER_PLUS") != resRule->getUnlocked().end()
 						&& std::find(
-								discovered.begin(),
-								discovered.end(),
-								rules->getResearch("STR_LEADER_PLUS")) == discovered.end())
+								_discovered.begin(),
+								_discovered.end(),
+								rules->getResearch("STR_LEADER_PLUS")) == _discovered.end())
 					|| (std::find(
 							resRule->getUnlocked().begin(),
 							resRule->getUnlocked().end(),
 							"STR_COMMANDER_PLUS") != resRule->getUnlocked().end()
 						&& std::find(
-								discovered.begin(),
-								discovered.end(),
-								rules->getResearch("STR_COMMANDER_PLUS")) == discovered.end())))
+								_discovered.begin(),
+								_discovered.end(),
+								rules->getResearch("STR_COMMANDER_PLUS")) == _discovered.end())))
 			{
 				return true;
 			}
@@ -1552,9 +1555,9 @@ bool SavedGame::isResearchAvailable(
 			{
 				const RuleResearch* const resRule (rules->getResearch(*i));
 				if (std::find(
-							discovered.begin(),
-							discovered.end(),
-							resRule) == discovered.end())
+							_discovered.begin(),
+							_discovered.end(),
+							resRule) == _discovered.end())
 				{
 					return false;
 				}

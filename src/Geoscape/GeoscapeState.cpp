@@ -2753,7 +2753,6 @@ void GeoscapeState::time1Day()
 		}
 
 		std::vector<ResearchProject*> projectsComplete; // handle science projects - Research.
-
 		for (std::vector<ResearchProject*>::const_iterator
 				j = (*i)->getResearch().begin();
 				j != (*i)->getResearch().end();
@@ -2773,7 +2772,6 @@ void GeoscapeState::time1Day()
 				++j)
 		{
 			const RuleResearch* const resRule ((*j)->getRules());
-
 			(*i)->removeResearch(
 							*j,
 							_rules->getUnit(resRule->getType()) != NULL); // interrogation of aLien Unit complete.
@@ -2783,38 +2781,32 @@ void GeoscapeState::time1Day()
 				&& _rules->getUnit(resRule->getType()) != NULL)
 			{
 				(*i)->getStorageItems()->addItem(_rules->getArmor(_rules->getUnit(resRule->getType())->getArmor())->getCorpseGeoscape());
-				// ;) -> kL_note: heh i noticed that.
+				// ;) <- kL_note: heh i noticed that.
 			}
 
 			const RuleResearch* gofRule (NULL);
 			if (resRule->getGetOneFree().empty() == false)
 			{
-				std::vector<std::string> gofList;
-
+				std::vector<std::string> gofChoices;
 				for (std::vector<std::string>::const_iterator
 						k = resRule->getGetOneFree().begin();
 						k != resRule->getGetOneFree().end();
 						++k)
 				{
-					bool gof = true;
-					for (std::vector<const RuleResearch*>::const_iterator
-							l = _gameSave->getDiscoveredResearch().begin();
-							l != _gameSave->getDiscoveredResearch().end();
-							++l)
+					if (std::find(
+							_gameSave->getDiscoveredResearch().begin(),
+							_gameSave->getDiscoveredResearch().end(),
+							_rules->getResearch(*k)) == _gameSave->getDiscoveredResearch().end())
 					{
-						if ((*l)->getType() == *k)
-							gof = false;
+						gofChoices.push_back(*k);
 					}
-
-					if (gof == true)
-						gofList.push_back(*k);
 				}
 
-				if (gofList.empty() == false)
+				if (gofChoices.empty() == false)
 				{
 					const size_t pick = static_cast<size_t>(RNG::generate(0,
-										static_cast<int>(gofList.size()) - 1));
-					gofRule = _rules->getResearch(gofList.at(pick));
+										static_cast<int>(gofChoices.size()) - 1));
+					gofRule = _rules->getResearch(gofChoices.at(pick));
 					_gameSave->addFinishedResearch(gofRule, _rules);
 
 					if (gofRule->getLookup().empty() == false)
