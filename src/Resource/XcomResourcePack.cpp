@@ -510,7 +510,7 @@ XcomResourcePack::XcomResourcePack(const Ruleset* const rules)
 
 							if (CrossPlatform::fileExists(CrossPlatform::getDataFile(oststr.str())) == true)
 							{
-								Log(LOG_INFO) << "Music: load file " << st << exts[l];
+								//Log(LOG_INFO) << "Music: load file " << st << exts[l];
 								_musicFile[st] = new Music();
 								_musicFile[st]->load(CrossPlatform::getDataFile(oststr.str()));
 
@@ -728,7 +728,7 @@ XcomResourcePack::XcomResourcePack(const Ruleset* const rules)
 			++i)
 	{
 		st = i->first;
-		Log(LOG_INFO) << ". sheetName = " << i->first;
+		//Log(LOG_INFO) << ". sheetName = " << i->first;
 
 		ExtraSprites* const spritePack = i->second;
 		const bool subdivision = spritePack->getSubX() != 0

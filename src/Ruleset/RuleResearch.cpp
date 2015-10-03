@@ -25,15 +25,21 @@ namespace OpenXcom
 
 /**
  * Creates a new RuleResearch.
- * @param name - reference to the ID string of this RuleResearch
+ * @param type - reference to the type string of this RuleResearch
  */
-RuleResearch::RuleResearch(const std::string& name)
+RuleResearch::RuleResearch(const std::string& type)
 	:
-		_name(name),
+		_type(type),
 		_cost(0),
 		_points(0),
-		_needItem(false),
+		_needsItem(false),
 		_listOrder(0)
+{}
+
+/**
+ * dTor.
+ */
+RuleResearch::~RuleResearch()
 {}
 
 /**
@@ -45,19 +51,21 @@ void RuleResearch::load(
 		const YAML::Node& node,
 		int listOrder)
 {
-	_name			= node["name"]			.as<std::string>(_name);
+	_type			= node["type"]			.as<std::string>(_type);
 	_lookup			= node["lookup"]		.as<std::string>(_lookup);
 	_cost			= node["cost"]			.as<int>(_cost);
 	_points			= node["points"]		.as<int>(_points);
-	_dependencies	= node["dependencies"]	.as< std::vector<std::string> >(_dependencies);
-	_unlocks		= node["unlocks"]		.as< std::vector<std::string> >(_unlocks);
-	_getOneFree		= node["getOneFree"]	.as< std::vector<std::string> >(_getOneFree);
-	_requires		= node["requires"]		.as< std::vector<std::string> >(_requires);
-	_needItem		= node["needItem"]		.as<bool>(_needItem);
+	_dependencies	= node["dependencies"]	.as<std::vector<std::string> >(_dependencies);
+	_unlocks		= node["unlocks"]		.as<std::vector<std::string> >(_unlocks);
+	_getOneFree		= node["getOneFree"]	.as<std::vector<std::string> >(_getOneFree);
+	_requires		= node["requires"]		.as<std::vector<std::string> >(_requires);
+	_needsItem		= node["needsItem"]		.as<bool>(_needsItem);
 	_listOrder		= node["listOrder"]		.as<int>(_listOrder);
 
 	if (_listOrder == 0)
 		_listOrder = listOrder;
+
+	//Log(LOG_INFO) << ". . . load Research Rule: " << _type;
 }
 
 /**
@@ -70,18 +78,18 @@ int RuleResearch::getCost() const
 }
 
 /**
- * Gets the name of this ResearchProject.
- * @return, reference to the ID string
+ * Gets the type of this ResearchProject.
+ * @return, reference to the type string
  */
-const std::string& RuleResearch::getName() const
+const std::string& RuleResearch::getType() const
 {
-	return _name;
+	return _type;
 }
 
 /**
  * Gets the list of dependencies - ie. ResearchProjects - that must be
  * discovered before this one.
- * @return, reference to a vector of ID strings
+ * @return, reference to a vector of type strings
  */
 const std::vector<std::string>& RuleResearch::getDependencies() const
 {
@@ -92,9 +100,9 @@ const std::vector<std::string>& RuleResearch::getDependencies() const
  * Checks if this ResearchProject needs a corresponding Item to be researched.
  * @return, true if a corresponding item is required
  */
-bool RuleResearch::needItem() const
+bool RuleResearch::needsItem() const
 {
-	return _needItem;
+	return _needsItem;
 }
 
 /**

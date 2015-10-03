@@ -1325,21 +1325,21 @@ ufopaedia:
 #------------------------------------------------------------------------------
 research:
 #------------------------------------------------------------------------------
-  - name: STR_REINFORCED_SHOTGUN
+  - type: STR_REINFORCED_SHOTGUN
     listOrder: 901
     cost: 800
     points: 10
     dependencies:
       - STR_ALIEN_ALLOYS
 #------------------------------------------------------------------------------
-  - name: STR_ALLOY_SHOTGUN_SHELLS
+  - type: STR_ALLOY_SHOTGUN_SHELLS
     listOrder: 902
     cost: 400
     points: 10
     dependencies:
       - STR_REINFORCED_SHOTGUN
 #------------------------------------------------------------------------------
-  - name: STR_ELERIUM_SHOTGUN_SHELLS
+  - type: STR_ELERIUM_SHOTGUN_SHELLS
     listOrder: 903
     cost: 500
     points: 10

@@ -48,8 +48,8 @@ class RuleResearch
 private:
 	std::string
 		_lookup,
-		_name;
-	bool _needItem;
+		_type;
+	bool _needsItem;
 	int
 		_cost,
 		_listOrder,
@@ -64,7 +64,9 @@ private:
 
 	public:
 		/// cTor.
-		explicit RuleResearch(const std::string& name);
+		explicit RuleResearch(const std::string& type);
+		/// dTor.
+		~RuleResearch();
 
 		/// Loads the research from YAML.
 		void load(
@@ -74,14 +76,14 @@ private:
 		/// Gets time needed to discover this ResearchProject.
 		int getCost() const;
 
-		/// Gets the research name.
-		const std::string& getName() const;
+		/// Gets the research type.
+		const std::string& getType() const;
 
 		/// Gets the research dependencies.
 		const std::vector<std::string>& getDependencies() const;
 
 		/// Checks if this ResearchProject needs a corresponding Item for research.
-		bool needItem() const;
+		bool needsItem() const;
 
 		/// Gets the list of ResearchProjects unlocked by this research.
 		const std::vector<std::string>& getUnlocked() const;

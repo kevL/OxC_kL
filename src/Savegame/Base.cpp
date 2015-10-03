@@ -1485,7 +1485,7 @@ void Base::removeResearch(
 		else
 		{
 			if (grantHelp == true)
-				researchHelp(project->getRules()->getName());
+				researchHelp(project->getRules()->getType());
 
 			_research.erase(i);
 		}
@@ -1508,7 +1508,7 @@ void Base::researchHelp(const std::string& aLien)
 	{
 		if ((*i)->getOffline() == false)
 		{
-			rp = (*i)->getRules()->getName();
+			rp = (*i)->getRules()->getType();
 
 			if (aLien.find("_SOLDIER") != std::string::npos)
 				coef = getSoldierHelp(rp);
@@ -2019,8 +2019,8 @@ int Base::getInterrogatedAliens() const
 			++i)
 	{
 		resRule = (*i)->getRules();
-		if (resRule->needItem() == true
-			&& _rules->getUnit(resRule->getName()) != NULL)
+		if (resRule->needsItem() == true
+			&& _rules->getUnit(resRule->getType()) != NULL)
 		{
 			++total;
 		}

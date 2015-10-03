@@ -536,7 +536,7 @@ void Ruleset::load(const std::string& source)
 	else
 		loadFiles(dir);
 
-//	_modIndex += 1000;
+	_modIndex += 1000;
 }
 
 /**
@@ -804,8 +804,7 @@ void Ruleset::loadFile(const std::string& file) // protected.
 		RuleResearch* const rule = loadRule(
 										*i,
 										&_research,
-										&_researchIndex,
-										"name");
+										&_researchIndex);
 		if (rule != NULL)
 		{
 			_researchListOrder += 100;

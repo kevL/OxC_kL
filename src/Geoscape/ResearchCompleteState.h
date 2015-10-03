@@ -32,9 +32,10 @@ class Text;
 class Base;
 class RuleResearch;
 
+
 /**
  * Window which inform the player that a research project is finished.
- * Allow him to view information about the project (its Ufopaedia entry).
+ * @note Allow him/her to view information about the project (its Ufopaedia entry).
  */
 class ResearchCompleteState
 	:
@@ -58,9 +59,10 @@ private:
 	public:
 		/// Creates the EndResearch state.
 		ResearchCompleteState(
-				const RuleResearch* research,
-				const RuleResearch* bonus);
-		// kL_note: no dTor ...
+				const RuleResearch* const research,
+				const RuleResearch* const bonus);
+		/// dTor.
+		~ResearchCompleteState();
 
 		/// Handler for clicking the OK button.
 		void btnOkClick(Action* action);

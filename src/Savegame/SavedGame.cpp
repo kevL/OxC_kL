@@ -786,7 +786,7 @@ void SavedGame::save(const std::string& file) const
 			i != _discovered.end();
 			++i)
 	{
-		node["discovered"].push_back((*i)->getName());
+		node["discovered"].push_back((*i)->getType());
 	}
 
 	for (std::vector<const RuleResearch*>::const_iterator
@@ -794,7 +794,7 @@ void SavedGame::save(const std::string& file) const
 			i != _poppedResearch.end();
 			++i)
 	{
-		node["poppedResearch"].push_back((*i)->getName());
+		node["poppedResearch"].push_back((*i)->getType());
 	}
 
 	node["alienStrategy"] = _alienStrategy->save();
@@ -1289,11 +1289,7 @@ void SavedGame::addFinishedResearch(
 				i != _bases.end();
 				++i)
 		{
-			getDependentResearchBasic(
-									availableResearch,
-									resRule,
-									rules,
-									*i);
+			getDependentResearchBasic(availableResearch, resRule, rules, *i);
 		}
 
 		for (std::vector<RuleResearch*>::const_iterator
@@ -1373,7 +1369,7 @@ void SavedGame::getAvailableResearchProjects(
 		resRule = rules->getResearch(*i);
 		if (isResearchAvailable(resRule, unlocked, rules) == true)
 		{
-			liveAlien = (rules->getUnit(resRule->getName()) != NULL);
+			liveAlien = (rules->getUnit(resRule->getType()) != NULL);
 			if (std::find(
 						discovered.begin(),
 						discovered.end(),
@@ -1430,8 +1426,8 @@ void SavedGame::getAvailableResearchProjects(
 						base->getResearch().begin(),
 						base->getResearch().end(),
 						findRuleResearch(resRule)) == base->getResearch().end()
-				&& (resRule->needItem() == false
-					|| base->getStorageItems()->getItemQty(resRule->getName()) != 0))
+				&& (resRule->needsItem() == false
+					|| base->getStorageItems()->getItemQty(resRule->getType()) != 0))
 			{
 				if (resRule->getRequirements().empty() == true)
 				{
@@ -1512,7 +1508,7 @@ bool SavedGame::isResearchAvailable(
 						unlocked.end(),
 						resRule) == unlocked.end())
 		{
-			if (rules->getUnit(resRule->getName()) != NULL
+			if (rules->getUnit(resRule->getType()) != NULL
 				&& resRule->getGetOneFree().empty() == false
 				&& ((std::find(
 							resRule->getUnlocked().begin(),
@@ -1597,7 +1593,7 @@ void SavedGame::getDependentResearch(
 			&& std::find(
 						(*i)->getDependencies().begin(),
 						(*i)->getDependencies().end(),
-						resRule->getName()) != (*i)->getDependencies().end())
+						resRule->getType()) != (*i)->getDependencies().end())
 		{
 			getDependentResearchBasic(dependents, *i, rules, base);
 		}
@@ -1605,8 +1601,8 @@ void SavedGame::getDependentResearch(
 }
 
 /**
- * Gets the list of newly available ResearchProjects once a ResearchProject
- * has been completed.
+ * Gets the list of newly available ResearchProjects once a ResearchProject has
+ * been completed.
  * @note This function doesn't check for fake ResearchProjects.
  * @param dependents	- reference to a vector of pointers to the RuleResearches that are now available
  * @param resRule		- pointer to the RuleResearch that has just been discovered
@@ -1629,11 +1625,11 @@ void SavedGame::getDependentResearchBasic( // private.
 		if (std::find(
 					(*i)->getDependencies().begin(),
 					(*i)->getDependencies().end(),
-					resRule->getName()) != (*i)->getDependencies().end()
+					resRule->getType()) != (*i)->getDependencies().end()
 			|| std::find(
 					(*i)->getUnlocked().begin(),
 					(*i)->getUnlocked().end(),
-					resRule->getName()) != (*i)->getUnlocked().end())
+					resRule->getType()) != (*i)->getUnlocked().end())
 		{
 			dependents.push_back(*i);
 
@@ -1668,7 +1664,7 @@ void SavedGame::getDependentManufacture(
 			&& std::find(
 						reqs.begin(),
 						reqs.end(),
-						resRule->getName()) != reqs.end())
+						resRule->getType()) != reqs.end())
 		{
 			dependents.push_back(manufRule);
 		}
@@ -1677,16 +1673,15 @@ void SavedGame::getDependentManufacture(
 
 /**
  * Returns if a certain research has been completed.
- * @param resRule - reference a research ID
- * @return, true if research has been researched
+ * @param resType - reference a research type
+ * @return, true if type has been researched
  */
-bool SavedGame::isResearched(const std::string& research) const
+bool SavedGame::isResearched(const std::string& resType) const
 {
-	if (_debug == true
-		|| research.empty() == true
-		|| _rules->getResearch(research) == NULL
-		|| (_rules->getItem(research) != NULL
-			&& _rules->getItem(research)->isResearchExempt() == true))
+	if (_debug == true || resType.empty() == true
+		|| _rules->getResearch(resType) == NULL
+		|| (_rules->getItem(resType) != NULL
+			&& _rules->getItem(resType)->isResearchExempt() == true))
 	{
 		return true;
 	}
@@ -1696,7 +1691,7 @@ bool SavedGame::isResearched(const std::string& research) const
 			i != _discovered.end();
 			++i)
 	{
-		if ((*i)->getName() == research)
+		if ((*i)->getType() == resType)
 			return true;
 	}
 
@@ -1705,38 +1700,24 @@ bool SavedGame::isResearched(const std::string& research) const
 
 /**
  * Returns if a certain list of research has been completed.
- * @param research - reference a vector of strings of research IDs
- * @return, true if research has been researched
+ * @param resTypes - reference a vector of strings of research types
+ * @return, true if all types have been researched
  */
-bool SavedGame::isResearched(const std::vector<std::string>& research) const
+bool SavedGame::isResearched(const std::vector<std::string>& resTypes) const
 {
-	if (_debug == true || research.empty() == true)
+	if (_debug == true || resTypes.empty() == true)
 		return true;
 
-	std::vector<std::string> matches = research;
-
-	for (std::vector<const RuleResearch*>::const_iterator
-			i = _discovered.begin();
-			i != _discovered.end();
-			++i)
+	for (std::vector<std::string>::const_iterator
+			j = resTypes.begin();
+			j != resTypes.end();
+			++j)
 	{
-		for (std::vector<std::string>::const_iterator
-				j = matches.begin();
-				j != matches.end();
-				++j)
-		{
-			if ((*i)->getName() == *j)
-			{
-				j = matches.erase(j);
-				break;
-			}
-		}
-
-		if (matches.empty() == true)
-			return true;
+		if (isResearched(*j) == false)
+			return false;
 	}
 
-	return false;
+	return true;
 }
 
 /**
@@ -1767,7 +1748,7 @@ Soldier* SavedGame::getSoldier(int id) const
 /**
  * Handles the higher promotions - not the rookie-squaddie ones.
  * @param participants - a list of soldiers that were actually present at the battle
- * @return, true if some promotions happened - to show the promotions screen
+ * @return, true if some promotions happened - show the promotions screen
  */
 bool SavedGame::handlePromotions(std::vector<Soldier*>& participants)
 {

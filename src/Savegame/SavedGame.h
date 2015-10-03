@@ -473,9 +473,9 @@ private:
 				const std::vector<const RuleResearch*>& unlocked,
 				const Ruleset* const rules) const;
 		/// Gets if a research project has been unlocked.
-		bool isResearched(const std::string& research) const;
+		bool isResearched(const std::string& researchType) const;
 		/// Gets if a list of research projects has been unlocked.
-		bool isResearched(const std::vector<std::string>& research) const;
+		bool isResearched(const std::vector<std::string>& researchTypes) const;
 
 		/// Gets the soldier matching this ID.
 		Soldier* getSoldier(int id) const;

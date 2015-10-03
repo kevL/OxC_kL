@@ -49,7 +49,7 @@ crafts:
     score: 150
 #-----------------------------------
 #research:
-#  - name: STR_UNMANNED_AIRCRAFT
+#  - type: STR_UNMANNED_AIRCRAFT
 #    listOrder: 3107
 #    cost: 300
 #    points: 20

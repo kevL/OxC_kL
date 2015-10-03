@@ -15,7 +15,7 @@ crafts:
     refuelRate: 5000
     score: 400
 #research:
-#  - name: STR_IMPROVED_INTERCEPTOR
+#  - type: STR_IMPROVED_INTERCEPTOR
 #    cost: 400
 #    points: 20
 manufacture:

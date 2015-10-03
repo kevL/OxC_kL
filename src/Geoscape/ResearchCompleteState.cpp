@@ -44,8 +44,8 @@ namespace OpenXcom
  * @param bonus		- pointer to bonus unlocked research
  */
 ResearchCompleteState::ResearchCompleteState(
-		const RuleResearch* research,
-		const RuleResearch* bonus)
+		const RuleResearch* const research,
+		const RuleResearch* const bonus)
 	:
 		_research(research),
 		_bonus(bonus)
@@ -53,11 +53,11 @@ ResearchCompleteState::ResearchCompleteState(
 	_screen = false;
 
 	_window			= new Window(this, 230, 140, 45, 30, POPUP_BOTH);
-	_txtTitle		= new Text(230, 17, 45, 70);
 
+	_txtTitle		= new Text(230, 17, 45, 70);
 	_txtResearch	= new Text(230, 17, 45, 96);
 
-	_btnReport		= new TextButton(80, 16, 64, 146);
+	_btnReport		= new TextButton(80, 16,  64, 146);
 	_btnOk			= new TextButton(80, 16, 176, 146);
 
 	setInterface("geoResearch");
@@ -95,10 +95,16 @@ ResearchCompleteState::ResearchCompleteState(
 	_txtResearch->setAlign(ALIGN_CENTER);
 	_txtResearch->setBig();
 	if (research != NULL)
-		_txtResearch->setText(tr(research->getName()));
+		_txtResearch->setText(tr(research->getType()));
 	else
 		_txtResearch->setVisible(false);
 }
+
+/**
+ * dTor.
+ */
+ResearchCompleteState::~ResearchCompleteState()
+{}
 
 /**
  * Returns to the previous screen
@@ -119,28 +125,24 @@ void ResearchCompleteState::btnReportClick(Action*)
 
 	if (_bonus != NULL)
 	{
-		std::string bonusName;
+		std::string type;
 		if (_bonus->getLookup().empty() == true)
-			bonusName = _bonus->getName();
+			type = _bonus->getType();
 		else
-			bonusName = _bonus->getLookup();
+			type = _bonus->getLookup();
 
-		Ufopaedia::openArticle(
-							_game,
-							bonusName);
+		Ufopaedia::openArticle(_game, type);
 	}
 
 	if (_research != NULL)
 	{
-		std::string name;
+		std::string type;
 		if (_research->getLookup().empty() == true)
-			name = _research->getName();
+			type = _research->getType();
 		else
-			name = _research->getLookup();
+			type = _research->getLookup();
 
-		Ufopaedia::openArticle(
-							_game,
-							name);
+		Ufopaedia::openArticle(_game, type);
 	}
 }
 

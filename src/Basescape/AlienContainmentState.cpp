@@ -176,9 +176,9 @@ AlienContainmentState::AlienContainmentState(
 			i != _base->getResearch().end();
 			++i)
 	{
-		itRule = _game->getRuleset()->getItem((*i)->getRules()->getName());
+		itRule = _game->getRuleset()->getItem((*i)->getRules()->getType());
 		if (itRule != NULL && itRule->isAlien() == true)
-			baseProjects.push_back((*i)->getRules()->getName());
+			baseProjects.push_back((*i)->getRules()->getType());
 	}
 
 	if (baseProjects.empty() == false)

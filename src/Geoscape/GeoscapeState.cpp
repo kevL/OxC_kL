@@ -2776,13 +2776,13 @@ void GeoscapeState::time1Day()
 
 			(*i)->removeResearch(
 							*j,
-							_rules->getUnit(resRule->getName()) != NULL); // interrogation of aLien Unit complete.
+							_rules->getUnit(resRule->getType()) != NULL); // interrogation of aLien Unit complete.
 
 			if (Options::spendResearchedItems == true // if the live alien is "researched" its corpse is sent to stores.
-				&& resRule->needItem() == true
-				&& _rules->getUnit(resRule->getName()) != NULL)
+				&& resRule->needsItem() == true
+				&& _rules->getUnit(resRule->getType()) != NULL)
 			{
-				(*i)->getStorageItems()->addItem(_rules->getArmor(_rules->getUnit(resRule->getName())->getArmor())->getCorpseGeoscape());
+				(*i)->getStorageItems()->addItem(_rules->getArmor(_rules->getUnit(resRule->getType())->getArmor())->getCorpseGeoscape());
 				// ;) -> kL_note: heh i noticed that.
 			}
 
@@ -2802,7 +2802,7 @@ void GeoscapeState::time1Day()
 							l != _gameSave->getDiscoveredResearch().end();
 							++l)
 					{
-						if ((*l)->getName() == *k)
+						if ((*l)->getType() == *k)
 							gof = false;
 					}
 
@@ -2813,7 +2813,7 @@ void GeoscapeState::time1Day()
 				if (gofList.empty() == false)
 				{
 					const size_t pick = static_cast<size_t>(RNG::generate(0,
-										static_cast<int>(gofList.size() - 1)));
+										static_cast<int>(gofList.size()) - 1));
 					gofRule = _rules->getResearch(gofList.at(pick));
 					_gameSave->addFinishedResearch(gofRule, _rules);
 
@@ -2827,7 +2827,7 @@ void GeoscapeState::time1Day()
 
 			std::string lookUp = resRule->getLookup();
 			if (lookUp.empty() == true)
-				lookUp = resRule->getName();
+				lookUp = resRule->getType();
 
 			const RuleResearch* resRule0;
 			if (_gameSave->isResearched(lookUp) == false)
@@ -2859,7 +2859,7 @@ void GeoscapeState::time1Day()
 
 			if (resRule0 != NULL) // check for need to research clip before manufacturing weapon
 			{
-				const RuleItem* const itRule (_rules->getItem(resRule0->getName()));
+				const RuleItem* const itRule (_rules->getItem(resRule0->getType()));
 				if (itRule != NULL
 					&& itRule->getBattleType() == BT_FIREARM
 					&& itRule->getCompatibleAmmo()->empty() == false)
@@ -2915,8 +2915,8 @@ void GeoscapeState::time1Day()
 						l != (*k)->getResearch().end();
 						++l)
 				{
-					if (resRule->getName() == (*l)->getRules()->getName()
-						&& _rules->getUnit((*l)->getRules()->getName()) == NULL)
+					if (resRule->getType() == (*l)->getRules()->getType()
+						&& _rules->getUnit((*l)->getRules()->getType()) == NULL)
 					{
 						(*k)->removeResearch(*l, false);
 						break;

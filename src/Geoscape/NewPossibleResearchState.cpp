@@ -106,10 +106,10 @@ NewPossibleResearchState::NewPossibleResearchState(
 	{
 		if (_game->getSavedGame()->wasResearchPopped(*i) == false
 			&& (*i)->getRequirements().empty() == true
-			&& ((*i)->needItem() == false || _game->getRuleset()->getUnit((*i)->getName()) == NULL)) // not liveAlien.
+			&& ((*i)->needsItem() == false || _game->getRuleset()->getUnit((*i)->getType()) == NULL)) // not liveAlien.
 		{
 			_game->getSavedGame()->addPoppedResearch((*i));
-			_lstPossibilities->addRow(1, tr((*i)->getName ()).c_str());
+			_lstPossibilities->addRow(1, tr((*i)->getType ()).c_str());
 		}
 		else
 			++tally;

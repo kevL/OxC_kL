@@ -47,19 +47,20 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the ResearchProject screen.
- * @param base - pointer to the Base to get info from
- * @param rule - pointer to a RuleResearch which will be used to create a new ResearchProject
+ * @param base		- pointer to the Base to get info from
+ * @param resRule	- pointer to a RuleResearch which will be used to create a new ResearchProject
  */
 ResearchInfoState::ResearchInfoState(
-		Base* base,
-		RuleResearch* rule)
+		Base* const base,
+		const RuleResearch* const resRule)
 	:
 		_base(base),
-		_rule(rule),
+		_resRule(resRule),
 		_project(new ResearchProject( // time = 65 to 130%
-								rule,
-								(rule->getCost() * RNG::generate(65,130)) / 100))
+								resRule,
+								(resRule->getCost() * RNG::generate(65,130)) / 100))
 {
+	//Log(LOG_INFO) << "ResearchInfoState cTor w/ resRule " << resRule->getType();
 	buildUi();
 }
 
@@ -69,13 +70,14 @@ ResearchInfoState::ResearchInfoState(
  * @param project	- pointer to a ResearchProject to modify
  */
 ResearchInfoState::ResearchInfoState(
-		Base* base,
-		ResearchProject* project)
+		Base* const base,
+		ResearchProject* const project)
 	:
 		_base(base),
 		_project(project),
-		_rule(NULL)
+		_resRule(NULL)
 {
+	//Log(LOG_INFO) << "ResearchInfoState cTor w/ project " << project->getRules()->getType();
 	buildUi();
 }
 
@@ -135,10 +137,10 @@ void ResearchInfoState::buildUi()
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK05.SCR"));
 
 	_txtTitle->setBig();
-	if (_rule != NULL)
-		_txtTitle->setText(tr(_rule->getName()));
+	if (_resRule != NULL)
+		_txtTitle->setText(tr(_resRule->getType()));
 	else
-		_txtTitle->setText(tr(_project->getRules()->getName()));
+		_txtTitle->setText(tr(_project->getRules()->getType()));
 
 	_txtAllocatedScientist->setBig();
 
@@ -148,15 +150,15 @@ void ResearchInfoState::buildUi()
 //	_txtLess->setText(tr("STR_DECREASE"));
 //	_txtLess->setBig();
 
-	if (_rule != NULL)
+	if (_resRule != NULL)
 	{
 		_base->addResearch(_project);
 
-		if (_rule->needItem() == true
+		if (_resRule->needsItem() == true
 			&& (Options::spendResearchedItems == true
-				|| _game->getRuleset()->getUnit(_rule->getName()) != NULL))
+				|| _game->getRuleset()->getUnit(_resRule->getType()) != NULL))
 		{
-			_base->getStorageItems()->removeItem(_rule->getName());
+			_base->getStorageItems()->removeItem(_resRule->getType());
 		}
 	}
 
@@ -176,7 +178,7 @@ void ResearchInfoState::buildUi()
 	_timerLess = new Timer(250);
 	_timerLess->onTimer((StateHandler)& ResearchInfoState::lessSci);
 
-	if (_rule != NULL)
+	if (_resRule != NULL)
 	{
 		_btnCancel->setText(tr("STR_CANCEL_UC"));
 		_btnCancel->onKeyboardPress(
@@ -224,22 +226,22 @@ void ResearchInfoState::btnOkClick(Action*)
 void ResearchInfoState::btnCancelClick(Action*)
 {
 	const RuleResearch* resRule;
-	if (_rule != NULL)
-		resRule = _rule;
+	if (_resRule != NULL)
+		resRule = _resRule;
 	else
 		resRule = _project->getRules();
 
-	if (resRule->needItem() == true
+	if (resRule->needsItem() == true
 		&& (Options::spendResearchedItems == true
-			|| _game->getRuleset()->getUnit(resRule->getName()) != NULL))
+			|| _game->getRuleset()->getUnit(resRule->getType()) != NULL))
 	{
-		_base->getStorageItems()->addItem(resRule->getName());
+		_base->getStorageItems()->addItem(resRule->getType());
 	}
 
 	_base->removeResearch(
 						_project,
 						false,
-						_rule == NULL);
+						_resRule == NULL);
 
 	_game->popState();
 }

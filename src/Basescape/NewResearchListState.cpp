@@ -167,7 +167,7 @@ void NewResearchListState::fillProjectList() // private.
 		// can't exploit the system by forcing a recalculation of totalCost ....
 		if ((*i)->getOffline() == true)
 		{
-			std::wstring wst = tr((*i)->getRules()->getName());
+			std::wstring wst = tr((*i)->getRules()->getType());
 			if ((*i)->getSpent() != 0)
 				wst += L" (" + Text::formatNumber((*i)->getSpent()) + L")";
 
@@ -192,7 +192,7 @@ void NewResearchListState::fillProjectList() // private.
 	{
 		if ((*i)->getRequirements().empty() == true)
 		{
-			_lstResearch->addRow(1, tr((*i)->getName()).c_str());
+			_lstResearch->addRow(1, tr((*i)->getType()).c_str());
 			++i;
 		}
 		else

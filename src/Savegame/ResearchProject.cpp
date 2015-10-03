@@ -170,7 +170,7 @@ YAML::Node ResearchProject::save() const
 {
 	YAML::Node node;
 
-	node["project"]		= _resRule->getName();
+	node["project"]		= _resRule->getType();
 	node["assigned"]	= _assigned;
 	node["spent"]		= _spent;
 	node["cost"]		= _cost;

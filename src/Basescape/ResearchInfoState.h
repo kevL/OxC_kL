@@ -52,7 +52,7 @@ private:
 	Base* _base;
 //	InteractiveSurface* _srfScientists;
 	ResearchProject* _project;
-	RuleResearch* _rule;
+	const RuleResearch* _resRule;
 	Text
 		* _txtAllocatedScientist,
 		* _txtAvailableScientist,
@@ -114,12 +114,12 @@ private:
 	public:
 		/// Creates a ResearchProject state.
 		ResearchInfoState(
-				Base* base,
-				RuleResearch* rule);
+				Base* const base,
+				const RuleResearch* const resRule);
 		/// Creates a ResearchProject state.
 		ResearchInfoState(
-				Base* base,
-				ResearchProject* project);
+				Base* const base,
+				ResearchProject* const project);
 		/// Cleans up the ResearchInfo state.
 		~ResearchInfoState();
 };

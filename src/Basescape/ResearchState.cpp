@@ -51,7 +51,7 @@ namespace OpenXcom
 {
 
 /**
- * Initializes all the elements in the Research screen.
+ * Initializes all the elements in the main Research screen.
  * @param base	- pointer to the base to get info from
  * @param state	- pointer to the BasescapeState (default NULL when geoscape-invoked)
  */
@@ -158,7 +158,7 @@ ResearchState::ResearchState(
 	_txtProgress->setText(tr("STR_PROGRESS"));
 
 	_lstResearch->setBackground(_window);
-	_lstResearch->setColumns(4, 137, 58, 48, 34);
+	_lstResearch->setColumns(4, 137,58,48,34);
 	_lstResearch->setSelectable();
 	_lstResearch->setMargin();
 	_lstResearch->onMouseClick((ActionHandler)& ResearchState::onSelectProject);
@@ -182,7 +182,7 @@ void ResearchState::init()
 	_lstResearch->clearList();
 	_online.clear();
 
-	const std::vector<ResearchProject*>& currentProjects (_base->getResearch()); // init.
+	const std::vector<ResearchProject*>& currentProjects (_base->getResearch());
 	for (std::vector<ResearchProject*>::const_iterator
 			i = currentProjects.begin();
 			i != currentProjects.end();
@@ -208,12 +208,11 @@ void ResearchState::init()
 						   / static_cast<double>(assigned)));
 			daysLeft = Text::formatNumber(days);
 		}
-		else
-			 daysLeft = L"-";
+		else daysLeft = L"-";
 
 		_lstResearch->addRow(
 						4,
-						tr((*i)->getRules()->getName()).c_str(),
+						tr((*i)->getRules()->getType()).c_str(),
 						woststr.str().c_str(),
 						tr((*i)->getResearchProgress()).c_str(),
 						daysLeft.c_str());
@@ -253,13 +252,11 @@ void ResearchState::btnNewClick(Action*)
  */
 void ResearchState::btnAliens(Action*)
 {
-	_game->pushState(new AlienContainmentState(
-											_base,
-											OPT_GEOSCAPE));
+	_game->pushState(new AlienContainmentState(_base, OPT_GEOSCAPE));
 }
 
 /**
- * Selects a ResearchProject to begin research.
+ * Shows current research information.
  * @param action - pointer to an Action
  */
 void ResearchState::onSelectProject(Action*)
@@ -280,11 +277,8 @@ void ResearchState::onSelectProject(Action*)
 		++j;
 	}
 
-	const std::vector<ResearchProject*>& currentProjects (_base->getResearch()); // init.
-	_game->pushState(new ResearchInfoState(
-										_base,
-										currentProjects[id]));
-//										currentProjects[_lstResearch->getSelectedRow()]));
+	const std::vector<ResearchProject*>& currentProjects (_base->getResearch());
+	_game->pushState(new ResearchInfoState(_base, currentProjects[id]));
 }
 
 /**
@@ -296,13 +290,11 @@ void ResearchState::miniClick(Action*)
 	if (_state != NULL) // cannot switch bases if coming from geoscape.
 	{
 		const size_t baseId = _mini->getHoveredBase();
-
 		if (baseId < _baseList->size())
 		{
 			Base* const base = _baseList->at(baseId);
 
-			if (base != _base
-				&& base->hasResearch() == true)
+			if (base != _base && base->hasResearch() == true)
 			{
 				_txtHoverBase->setText(L"");
 
@@ -324,15 +316,13 @@ void ResearchState::miniClick(Action*)
 void ResearchState::viewMouseOver(Action*)
 {
 	const size_t baseId = _mini->getHoveredBase();
-
 	if (baseId < _baseList->size()
 		&& _base != _baseList->at(baseId)
 		&& _baseList->at(baseId)->hasResearch() == true)
 	{
 		_txtHoverBase->setText(_baseList->at(baseId)->getName(_game->getLanguage()).c_str());
 	}
-	else
-		_txtHoverBase->setText(L"");
+	else _txtHoverBase->setText(L"");
 }
 
 /**

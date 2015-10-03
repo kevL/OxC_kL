@@ -4390,7 +4390,7 @@
 
 1441247516 f:\git\openxcom\src\savegame\target.h
 
-1443842552 f:\git\openxcom\src\savegame\savedgame.h
+1443894031 f:\git\openxcom\src\savegame\savedgame.h
 	"GameTime.h"
 	"Soldier.h"
 	"../Ruleset/RuleAlienMission.h"
@@ -4799,7 +4799,7 @@
 	"../Savegame/ResearchProject.h"
 	"../Savegame/SavedGame.h"
 
-1440461462 f:\git\openxcom\src\ruleset\ruleresearch.h
+1443900119 f:\git\openxcom\src\ruleset\ruleresearch.h
 
 1443846053 f:\git\openxcom\src\savegame\researchproject.h
 
@@ -4937,7 +4937,7 @@
 	"../Savegame/Base.h"
 	"../Savegame/SavedGame.h"
 
-1442610523 source:f:\git\openxcom\src\basescape\newresearchliststate.cpp
+1443896387 source:f:\git\openxcom\src\basescape\newresearchliststate.cpp
 	"NewResearchListState.h"
 	"ResearchInfoState.h"
 	"../Engine/Game.h"
@@ -4954,7 +4954,7 @@
 1442610242 f:\git\openxcom\src\basescape\newresearchliststate.h
 	"../Engine/State.h"
 
-1442665317 f:\git\openxcom\src\basescape\researchinfostate.h
+1443897244 f:\git\openxcom\src\basescape\researchinfostate.h
 	"../Engine/State.h"
 
 1440097637 source:f:\git\openxcom\src\basescape\placefacilitystate.cpp
@@ -5039,7 +5039,7 @@
 
 1443320722 f:\git\openxcom\src\savegame\transfer.h
 
-1443320845 source:f:\git\openxcom\src\basescape\researchinfostate.cpp
+1443900684 source:f:\git\openxcom\src\basescape\researchinfostate.cpp
 	"ResearchInfoState.h"
 	"../Engine/Action.h"
 	"../Engine/Game.h"
@@ -5059,7 +5059,7 @@
 	<algorithm>
 	<cstdint>
 
-1442519922 source:f:\git\openxcom\src\basescape\researchstate.cpp
+1443900040 source:f:\git\openxcom\src\basescape\researchstate.cpp
 	"ResearchState.h"
 	"AlienContainmentState.h"
 	"BasescapeState.h"
@@ -6958,7 +6958,7 @@
 1442441486 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1443839487 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1443897457 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	"AlienBaseState.h"
 	"BaseDefenseState.h"
@@ -7069,7 +7069,7 @@
 	"../Engine/State.h"
 	"../Savegame/Production.h"
 
-1430149550 f:\git\openxcom\src\geoscape\researchcompletestate.h
+1443896727 f:\git\openxcom\src\geoscape\researchcompletestate.h
 	"../Engine/State.h"
 
 1443830537 f:\git\openxcom\src\geoscape\researchrequiredstate.h
@@ -7267,7 +7267,7 @@
 	"../Ruleset/RuleManufacture.h"
 	"../Savegame/Base.h"
 
-1443842262 source:f:\git\openxcom\src\geoscape\newpossibleresearchstate.cpp
+1443896514 source:f:\git\openxcom\src\geoscape\newpossibleresearchstate.cpp
 	"NewPossibleResearchState.h"
 	"../Basescape/ResearchState.h"
 	"../Engine/Game.h"
@@ -7310,7 +7310,7 @@
 	"../Savegame/Base.h"
 	"../Savegame/SavedGame.h"
 
-1441839185 source:f:\git\openxcom\src\geoscape\researchcompletestate.cpp
+1443896774 source:f:\git\openxcom\src\geoscape\researchcompletestate.cpp
 	"ResearchCompleteState.h"
 	"../Engine/Game.h"
 	"../Interface/Text.h"
@@ -8287,10 +8287,10 @@
 	"RuleRegion.h"
 	"RuleCity.h"
 
-1440461473 source:f:\git\openxcom\src\ruleset\ruleresearch.cpp
+1443900521 source:f:\git\openxcom\src\ruleset\ruleresearch.cpp
 	"RuleResearch.h"
 
-1443225595 source:f:\git\openxcom\src\ruleset\ruleset.cpp
+1443901379 source:f:\git\openxcom\src\ruleset\ruleset.cpp
 	"Ruleset.h"
 	"AlienRace.h"
 	"AlienDeployment.h"
@@ -8397,7 +8397,7 @@
 	"../Ruleset/RuleRegion.h"
 	"../Ruleset/Ruleset.h"
 
-1443844428 source:f:\git\openxcom\src\savegame\base.cpp
+1443896822 source:f:\git\openxcom\src\savegame\base.cpp
 	"Base.h"
 	"BaseFacility.h"
 	"Craft.h"
@@ -8534,7 +8534,7 @@
 	"Region.h"
 	"../Ruleset/RuleRegion.h"
 
-1443846109 source:f:\git\openxcom\src\savegame\researchproject.cpp
+1443896832 source:f:\git\openxcom\src\savegame\researchproject.cpp
 	"ResearchProject.h"
 	"../Interface/Text.h"
 	"../Ruleset/RuleResearch.h"
@@ -8564,7 +8564,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/Ruleset.h"
 
-1443842679 source:f:\git\openxcom\src\savegame\savedgame.cpp
+1443896881 source:f:\git\openxcom\src\savegame\savedgame.cpp
 	"SavedGame.h"
 	"AlienBase.h"
 	"AlienMission.h"
@@ -11068,7 +11068,7 @@
 
 1431968325 f:\git\openxcom\src\ruleset\rulevideo.h
 
-1443832530 source:f:\git\openxcom\src\basescape\aliencontainmentstate.cpp
+1443896353 source:f:\git\openxcom\src\basescape\aliencontainmentstate.cpp
 	"AlienContainmentState.h"
 	"SellState.h"
 	"../Engine/Action.h"
