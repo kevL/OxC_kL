@@ -45,19 +45,19 @@ private:
 		_cost,
 		_spent;
 
-	RuleResearch* _project;
+	const RuleResearch* _resRule;
 
 
 	public:
 		/// Constructor.
 		ResearchProject(
-				RuleResearch* project,
+				const RuleResearch* const resRule,
 				int cost = 0);
 		/// dTor.
 		~ResearchProject();
 
-		/// Game logic. Called every new day to compute time spent.
-		bool step();
+		/// Called every new day to compute time spent.
+		bool stepProject();
 
 		/// Gets the ResearchProject Ruleset.
 		const RuleResearch* getRules() const;

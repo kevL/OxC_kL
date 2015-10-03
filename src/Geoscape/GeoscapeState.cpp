@@ -2711,7 +2711,7 @@ void GeoscapeState::time1Day()
 				++j;
 		}
 
-		if ((*i)->getAvailablePsiLabs() != 0) // handle psionic training
+		if ((*i)->getAvailablePsiLabs() != 0) // handle psi-training and AutoStat.
 		{
 			bool sortSoldiers = false;
 
@@ -2738,130 +2738,128 @@ void GeoscapeState::time1Day()
 				j != (*i)->getFacilities()->end();
 				++j)
 		{
-			if ((*j)->buildFinished() == false)
+			if ((*j)->buildFinished() == false
+				&& (*j)->buildFacility() == true) // completed.
 			{
-				if ((*j)->buildFacility() == true) // completed.
-				{
-					if (prodEvents.empty() == false) // set the previous event to NOT show btn.
-						prodEvents.back().gotoBaseBtn = false;
+				if (prodEvents.empty() == false) // set the previous event to NOT show btn.
+					prodEvents.back().gotoBaseBtn = false;
 
-					prodEvents.push_back(ProductionCompleteInfo(
-															*i,
-															tr((*j)->getRules()->getType()),
-															true,
-															PROGRESS_CONSTRUCTION));
-				}
+				prodEvents.push_back(ProductionCompleteInfo(
+														*i,
+														tr((*j)->getRules()->getType()),
+														true,
+														PROGRESS_CONSTRUCTION));
 			}
 		}
 
-		std::vector<ResearchProject*> resDone; // handle science projects
+		std::vector<ResearchProject*> projectsComplete; // handle science projects - Research.
 
 		for (std::vector<ResearchProject*>::const_iterator
 				j = (*i)->getResearch().begin();
 				j != (*i)->getResearch().end();
 				++j)
 		{
-			if ((*j)->step() == true)
-				resDone.push_back(*j);
+			if ((*j)->stepProject() == true)
+				projectsComplete.push_back(*j);
 		}
 
-		if (resDone.empty() == false)
+		if (projectsComplete.empty() == false)
 			resetTimer();
 
 
 		for (std::vector<ResearchProject*>::const_iterator
-				j = resDone.begin();
-				j != resDone.end();
+				j = projectsComplete.begin();
+				j != projectsComplete.end();
 				++j)
 		{
+			const RuleResearch* const resRule ((*j)->getRules());
+
 			(*i)->removeResearch(
 							*j,
-							_rules->getUnit((*j)->getRules()->getName()) != NULL); // interrogation of aLien Unit complete.
+							_rules->getUnit(resRule->getName()) != NULL); // interrogation of aLien Unit complete.
 
-			RuleResearch* bonus = NULL;
-			const RuleResearch* const research ((*j)->getRules());
-
-			if (Options::spendResearchedItems == true // if the live alien is "researched" his corpse is sent to stores.
-				&& research->needItem() == true
-				&& _rules->getUnit(research->getName()) != NULL)
+			if (Options::spendResearchedItems == true // if the live alien is "researched" its corpse is sent to stores.
+				&& resRule->needItem() == true
+				&& _rules->getUnit(resRule->getName()) != NULL)
 			{
-				(*i)->getStorageItems()->addItem(_rules->getArmor(_rules->getUnit(research->getName())->getArmor())->getCorpseGeoscape());
+				(*i)->getStorageItems()->addItem(_rules->getArmor(_rules->getUnit(resRule->getName())->getArmor())->getCorpseGeoscape());
 				// ;) -> kL_note: heh i noticed that.
 			}
 
-			if ((*j)->getRules()->getGetOneFree().empty() == false)
+			const RuleResearch* gofRule (NULL);
+			if (resRule->getGetOneFree().empty() == false)
 			{
-				std::vector<std::string> possibilities;
+				std::vector<std::string> gofList;
 
 				for (std::vector<std::string>::const_iterator
-						k = (*j)->getRules()->getGetOneFree().begin();
-						k != (*j)->getRules()->getGetOneFree().end();
+						k = resRule->getGetOneFree().begin();
+						k != resRule->getGetOneFree().end();
 						++k)
 				{
-					bool oneFree = true;
+					bool gof = true;
 					for (std::vector<const RuleResearch*>::const_iterator
 							l = _gameSave->getDiscoveredResearch().begin();
 							l != _gameSave->getDiscoveredResearch().end();
 							++l)
 					{
 						if ((*l)->getName() == *k)
-							oneFree = false;
+							gof = false;
 					}
 
-					if (oneFree == true)
-						possibilities.push_back(*k);
+					if (gof == true)
+						gofList.push_back(*k);
 				}
 
-				if (possibilities.empty() == false)
+				if (gofList.empty() == false)
 				{
-					const size_t randFree = static_cast<size_t>(RNG::generate(0,
-											static_cast<int>(possibilities.size() - 1)));
-					bonus = _rules->getResearch(possibilities.at(randFree));
-					_gameSave->addFinishedResearch(bonus, _rules);
+					const size_t pick = static_cast<size_t>(RNG::generate(0,
+										static_cast<int>(gofList.size() - 1)));
+					gofRule = _rules->getResearch(gofList.at(pick));
+					_gameSave->addFinishedResearch(gofRule, _rules);
 
-					if (bonus->getLookup().empty() == false)
+					if (gofRule->getLookup().empty() == false)
 						_gameSave->addFinishedResearch(
-													_rules->getResearch(bonus->getLookup()),
+													_rules->getResearch(gofRule->getLookup()),
 													_rules);
 				}
 			}
 
-			const RuleResearch* newResearch;
 
-			std::string lookUp = research->getLookup();
+			std::string lookUp = resRule->getLookup();
 			if (lookUp.empty() == true)
-				lookUp = research->getName();
+				lookUp = resRule->getName();
 
-			if (_gameSave->isResearched(lookUp) == true)
-				newResearch = NULL;
+			const RuleResearch* resRule0;
+			if (_gameSave->isResearched(lookUp) == false)
+				resRule0 = resRule;
 			else
-				newResearch = research;
+				resRule0 = NULL;
 
-			_gameSave->addFinishedResearch(research, _rules); // this adds the actual research project to _discovered vector.
+			_gameSave->addFinishedResearch(resRule, _rules); // this adds the research project to _discovered vector.
 
-			if (research->getLookup().empty() == false)
+			if (resRule->getLookup().empty() == false)
 				_gameSave->addFinishedResearch(
-											_rules->getResearch(research->getLookup()),
+											_rules->getResearch(resRule->getLookup()),
 											_rules);
 
-			resEvents.push_back(new ResearchCompleteState(newResearch, bonus));
+			resEvents.push_back(new ResearchCompleteState(resRule0, gofRule));
 
 			std::vector<RuleResearch*> newPossibleResearch;
 			_gameSave->getDependentResearch(
 										newPossibleResearch,
-										(*j)->getRules(),
+										resRule,
 										_rules,
 										*i);
 
 			std::vector<RuleManufacture*> newPossibleManufacture;
 			_gameSave->getDependentManufacture(
 											newPossibleManufacture,
-											(*j)->getRules(),
+											resRule,
 											_rules);
 
-			if (newResearch != NULL) // check for possible researching weapon before clip
+			if (resRule0 != NULL) // check for need to research clip before manufacturing weapon
 			{
-				const RuleItem* const itRule = _rules->getItem(newResearch->getName());
+				const RuleItem* const itRule (_rules->getItem(resRule0->getName()));
 				if (itRule != NULL
 					&& itRule->getBattleType() == BT_FIREARM
 					&& itRule->getCompatibleAmmo()->empty() == false)
@@ -2870,7 +2868,7 @@ void GeoscapeState::time1Day()
 					if (manufRule != NULL
 						&& manufRule->getRequirements().empty() == false)
 					{
-						const std::vector<std::string>& req = manufRule->getRequirements();
+						const std::vector<std::string>& req (manufRule->getRequirements());
 						const RuleItem* const aRule (_rules->getItem(itRule->getCompatibleAmmo()->front()));
 						if (aRule != NULL
 							&& std::find(
@@ -2917,7 +2915,7 @@ void GeoscapeState::time1Day()
 						l != (*k)->getResearch().end();
 						++l)
 				{
-					if ((*j)->getRules()->getName() == (*l)->getRules()->getName()
+					if (resRule->getName() == (*l)->getRules()->getName()
 						&& _rules->getUnit((*l)->getRules()->getName()) == NULL)
 					{
 						(*k)->removeResearch(*l, false);

@@ -36,17 +36,17 @@ const float
 
 /**
  * Constructs a ResearchProject at a Base.
- * @param project	- pointer to RuleResearch
+ * @param resRule	- pointer to RuleResearch
  * @param cost		- the cost to complete the project in man-days (default 0)
  */
 ResearchProject::ResearchProject(
-		RuleResearch* project,
+		const RuleResearch* const resRule,
 		int cost)
 	:
-		_project(project),
+		_resRule(resRule),
+		_cost(cost),
 		_assigned(0),
 		_spent(0),
-		_cost(cost),
 		_offline(false)
 {}
 
@@ -58,13 +58,11 @@ ResearchProject::~ResearchProject()
 
 /**
  * Called every day to compute time spent on this ResearchProject.
- * @return, true if project finishes on the step
+ * @return, true if project finishes
  */
-bool ResearchProject::step()
+bool ResearchProject::stepProject()
 {
-	_spent += _assigned;
-
-	if (_spent >= _cost)
+	if ((_spent += _assigned) >= _cost)
 		return true;
 
 	return false;
@@ -76,7 +74,7 @@ bool ResearchProject::step()
  */
 const RuleResearch* ResearchProject::getRules() const
 {
-	return _project;
+	return _resRule;
 }
 
 /**
@@ -162,7 +160,6 @@ void ResearchProject::load(const YAML::Node& node)
 	_spent		= node["spent"]		.as<int>(_spent);
 	_cost		= node["cost"]		.as<int>(_cost);
 	_offline	= node["offline"]	.as<bool>(_offline);
-
 }
 
 /**
@@ -173,7 +170,7 @@ YAML::Node ResearchProject::save() const
 {
 	YAML::Node node;
 
-	node["project"]		= _project->getName();
+	node["project"]		= _resRule->getName();
 	node["assigned"]	= _assigned;
 	node["spent"]		= _spent;
 	node["cost"]		= _cost;
@@ -190,21 +187,15 @@ std::string ResearchProject::getResearchProgress() const
 {
 /*	if (_assigned == 0)
 		return "STR_NONE";
-
 	const float progress = static_cast<float>(_spent) / static_cast<float>(_cost);
-
 	if (progress < PROGRESS_LIMIT_UNKNOWN)	// < 0.1
 		return "STR_UNKNOWN";
-
 	if (progress < PROGRESS_LIMIT_POOR)		// < 0.2
 		return "STR_POOR";
-
 	if (progress < PROGRESS_LIMIT_AVERAGE)	// < 0.5
 		return "STR_AVERAGE";
-
 	if (progress < PROGRESS_LIMIT_GOOD)		// < 0.8
 		return "STR_GOOD";
-
 	return "STR_EXCELLENT"; */
 
 	if (_assigned == 0)
