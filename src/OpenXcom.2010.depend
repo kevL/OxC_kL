@@ -4390,7 +4390,7 @@
 
 1441247516 f:\git\openxcom\src\savegame\target.h
 
-1443839399 f:\git\openxcom\src\savegame\savedgame.h
+1443842552 f:\git\openxcom\src\savegame\savedgame.h
 	"GameTime.h"
 	"Soldier.h"
 	"../Ruleset/RuleAlienMission.h"
@@ -4500,7 +4500,7 @@
 
 1440532657 f:\git\openxcom\src\savegame\weightedoptions.h
 
-1436388140 f:\git\openxcom\src\savegame\basefacility.h
+1443844103 f:\git\openxcom\src\savegame\basefacility.h
 
 1443319800 f:\git\openxcom\src\savegame\craft.h
 	"CraftId.h"
@@ -7267,7 +7267,7 @@
 	"../Ruleset/RuleManufacture.h"
 	"../Savegame/Base.h"
 
-1442358523 source:f:\git\openxcom\src\geoscape\newpossibleresearchstate.cpp
+1443842262 source:f:\git\openxcom\src\geoscape\newpossibleresearchstate.cpp
 	"NewPossibleResearchState.h"
 	"../Basescape/ResearchState.h"
 	"../Engine/Game.h"
@@ -7582,7 +7582,7 @@
 	"OptionsBaseState.h"
 	"../Engine/State.h"
 
-1443321700 source:f:\git\openxcom\src\menu\newbattlestate.cpp
+1443842724 source:f:\git\openxcom\src\menu\newbattlestate.cpp
 	"NewBattleState.h"
 	"../Basescape/CraftInfoState.h"
 	"../Battlescape/BattlescapeGenerator.h"
@@ -8275,7 +8275,7 @@
 	"RuleInventory.h"
 	"RuleItem.h"
 
-1443223683 source:f:\git\openxcom\src\ruleset\ruleitem.cpp
+1443832617 source:f:\git\openxcom\src\ruleset\ruleitem.cpp
 	"RuleItem.h"
 	"RuleInventory.h"
 	"../Engine/SurfaceSet.h"
@@ -8424,7 +8424,7 @@
 	"../Ruleset/Ruleset.h"
 	"../Savegame/SavedGame.h"
 
-1436385548 source:f:\git\openxcom\src\savegame\basefacility.cpp
+1443844074 source:f:\git\openxcom\src\savegame\basefacility.cpp
 	"BaseFacility.h"
 	"Base.h"
 	"../Ruleset/RuleBaseFacility.h"
@@ -8564,7 +8564,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/Ruleset.h"
 
-1443839411 source:f:\git\openxcom\src\savegame\savedgame.cpp
+1443842679 source:f:\git\openxcom\src\savegame\savedgame.cpp
 	"SavedGame.h"
 	"AlienBase.h"
 	"AlienMission.h"
@@ -11068,7 +11068,7 @@
 
 1431968325 f:\git\openxcom\src\ruleset\rulevideo.h
 
-1443319905 source:f:\git\openxcom\src\basescape\aliencontainmentstate.cpp
+1443832530 source:f:\git\openxcom\src\basescape\aliencontainmentstate.cpp
 	"AlienContainmentState.h"
 	"SellState.h"
 	"../Engine/Action.h"

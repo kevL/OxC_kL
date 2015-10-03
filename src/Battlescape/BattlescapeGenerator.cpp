@@ -3036,7 +3036,7 @@ void BattlescapeGenerator::generateBaseMap() // private.
 			i != _base->getFacilities()->end();
 			++i)
 	{
-		if ((*i)->getBuildTime() == 0)
+		if ((*i)->buildFinished() == true)
 		{
 			const int
 				xLimit = (*i)->getX() + (*i)->getRules()->getSize() - 1,

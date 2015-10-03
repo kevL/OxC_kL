@@ -2738,11 +2738,9 @@ void GeoscapeState::time1Day()
 				j != (*i)->getFacilities()->end();
 				++j)
 		{
-			if ((*j)->getBuildTime() != 0)
+			if ((*j)->buildFinished() == false)
 			{
-				(*j)->build();
-
-				if ((*j)->getBuildTime() == 0)
+				if ((*j)->buildFacility() == true) // completed.
 				{
 					if (prodEvents.empty() == false) // set the previous event to NOT show btn.
 						prodEvents.back().gotoBaseBtn = false;
@@ -2781,9 +2779,9 @@ void GeoscapeState::time1Day()
 							_rules->getUnit((*j)->getRules()->getName()) != NULL); // interrogation of aLien Unit complete.
 
 			RuleResearch* bonus = NULL;
-			const RuleResearch* const research = (*j)->getRules();
+			const RuleResearch* const research ((*j)->getRules());
 
-			if (Options::spendResearchedItems == true // if "researched" the live alien his body sent to stores.
+			if (Options::spendResearchedItems == true // if the live alien is "researched" his corpse is sent to stores.
 				&& research->needItem() == true
 				&& _rules->getUnit(research->getName()) != NULL)
 			{
@@ -2816,13 +2814,10 @@ void GeoscapeState::time1Day()
 
 				if (possibilities.empty() == false)
 				{
-					const size_t randFree = static_cast<size_t>(RNG::generate(
-																		0,
-																		static_cast<int>(possibilities.size() - 1)));
+					const size_t randFree = static_cast<size_t>(RNG::generate(0,
+											static_cast<int>(possibilities.size() - 1)));
 					bonus = _rules->getResearch(possibilities.at(randFree));
-					_gameSave->addFinishedResearch(
-												bonus,
-												_rules);
+					_gameSave->addFinishedResearch(bonus, _rules);
 
 					if (bonus->getLookup().empty() == false)
 						_gameSave->addFinishedResearch(
@@ -2842,18 +2837,14 @@ void GeoscapeState::time1Day()
 			else
 				newResearch = research;
 
-			_gameSave->addFinishedResearch( // this adds the actual research project to _discovered vector.
-										research,
-										_rules);
+			_gameSave->addFinishedResearch(research, _rules); // this adds the actual research project to _discovered vector.
 
 			if (research->getLookup().empty() == false)
 				_gameSave->addFinishedResearch(
 											_rules->getResearch(research->getLookup()),
 											_rules);
 
-			resEvents.push_back(new ResearchCompleteState(
-													newResearch,
-													bonus));
+			resEvents.push_back(new ResearchCompleteState(newResearch, bonus));
 
 			std::vector<RuleResearch*> newPossibleResearch;
 			_gameSave->getDependentResearch(
@@ -2875,12 +2866,12 @@ void GeoscapeState::time1Day()
 					&& itRule->getBattleType() == BT_FIREARM
 					&& itRule->getCompatibleAmmo()->empty() == false)
 				{
-					const RuleManufacture* const manufRule = _rules->getManufacture(itRule->getType());
+					const RuleManufacture* const manufRule (_rules->getManufacture(itRule->getType()));
 					if (manufRule != NULL
 						&& manufRule->getRequirements().empty() == false)
 					{
 						const std::vector<std::string>& req = manufRule->getRequirements();
-						const RuleItem* const aRule = _rules->getItem(itRule->getCompatibleAmmo()->front());
+						const RuleItem* const aRule (_rules->getItem(itRule->getCompatibleAmmo()->front()));
 						if (aRule != NULL
 							&& std::find(
 										req.begin(),
@@ -3004,7 +2995,7 @@ void GeoscapeState::time1Day()
 																	alm_BASE,
 																	_game->getSavedGame()->getMonthsPassed());
 	const int aLienPts = (missionRule->getPoints() * (static_cast<int>(_gameSave->getDifficulty()) + 1)) / 100;
-	if (aLienPts > 0)
+	if (aLienPts != 0)
 	{
 		for (std::vector<AlienBase*>::const_iterator
 				i = _gameSave->getAlienBases()->begin();

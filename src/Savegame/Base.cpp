@@ -564,7 +564,7 @@ int Base::detect(Target* const target) const
 			i != _facilities.end();
 			++i)
 	{
-		if ((*i)->getBuildTime() == 0)
+		if ((*i)->buildFinished() == true)
 		{
 			const double radarRange = static_cast<double>((*i)->getRules()->getRadarRange()) * greatCircleConversionFactor;
 			if (radarRange > targetDist)
@@ -607,7 +607,7 @@ double Base::insideRadarRange(const Target* const target) const
 				&& hyperDet == false;
 			++i)
 	{
-		if ((*i)->getBuildTime() == 0)
+		if ((*i)->buildFinished() == true)
 		{
 			const double radarRange = static_cast<double>((*i)->getRules()->getRadarRange()) * greatCircleConversionFactor;
 			if (targetDist < radarRange)
@@ -776,7 +776,7 @@ int Base::getAvailableQuarters() const
 			i != _facilities.end();
 			++i)
 	{
-		if ((*i)->getBuildTime() == 0)
+		if ((*i)->buildFinished() == true)
 			total += (*i)->getRules()->getPersonnel();
 	}
 
@@ -899,7 +899,7 @@ int Base::getAvailableStores() const
 			i != _facilities.end();
 			++i)
 	{
-		if ((*i)->getBuildTime() == 0)
+		if ((*i)->buildFinished() == true)
 			total += (*i)->getRules()->getStorage();
 	}
 
@@ -990,7 +990,7 @@ int Base::getAvailableLaboratories() const
 			i != _facilities.end();
 			++i)
 	{
-		if ((*i)->getBuildTime() == 0)
+		if ((*i)->buildFinished() == true)
 			total += (*i)->getRules()->getLaboratories();
 	}
 
@@ -1029,7 +1029,7 @@ int Base::getAvailableWorkshops() const
 			i != _facilities.end();
 			++i)
 	{
-		if ((*i)->getBuildTime() == 0)
+		if ((*i)->buildFinished() == true)
 			total += (*i)->getRules()->getWorkshops();
 	}
 
@@ -1079,7 +1079,7 @@ int Base::getAvailableHangars() const
 			i != _facilities.end();
 			++i)
 	{
-		if ((*i)->getBuildTime() == 0)
+		if ((*i)->buildFinished() == true)
 			total += (*i)->getRules()->getCrafts();
 	}
 
@@ -1166,7 +1166,7 @@ int Base::getDefenseTotal() const
 			i != _facilities.end();
 			++i)
 	{
-		if ((*i)->getBuildTime() == 0)
+		if ((*i)->buildFinished() == true)
 			total += (*i)->getRules()->getDefenseValue();
 	}
 
@@ -1192,7 +1192,7 @@ int Base::getDefenseTotal() const
 			i != _facilities.end();
 			++i)
 	{
-		if ((*i)->getBuildTime() == 0
+		if ((*i)->buildFinished() == true
 			&& (*i)->getRules()->getRadarRange() > 0)
 		{
 			range = (*i)->getRules()->getRadarRange();
@@ -1225,7 +1225,7 @@ int Base::getShortRangeTotal() const
 			i != _facilities.end();
 			++i)
 	{
-		if ((*i)->getBuildTime() == 0)
+		if ((*i)->buildFinished() == true)
 		{
 			range = (*i)->getRules()->getRadarRange();
 			if (range > 0
@@ -1257,7 +1257,7 @@ int Base::getShortRangeTotal() const
 			++i)
 	{
 		if ((*i)->getRules()->getRadarRange() > minRadarRange
-			&& (*i)->getBuildTime() == 0)
+			&& (*i)->buildFinished() == true)
 //			&& (*i)->getRules()->getRadarRange() > 1500) // was changed to 1700
 		{
 			total++;
@@ -1281,7 +1281,7 @@ int Base::getLongRangeTotal() const
 			i != _facilities.end();
 			++i)
 	{
-		if ((*i)->getBuildTime() == 0
+		if ((*i)->buildFinished() == true
 			&& (*i)->getRules()->getRadarRange() > _rules->getRadarCutoffRange())
 		{
 			total += (*i)->getRules()->getRadarChance();
@@ -1389,7 +1389,7 @@ int Base::getFacilityMaintenance() const
 			i != _facilities.end();
 			++i)
 	{
-		if ((*i)->getBuildTime() == 0)
+		if ((*i)->buildFinished() == true)
 			total += (*i)->getRules()->getMonthlyCost();
 	}
 
@@ -1857,7 +1857,7 @@ bool Base::getHyperDetection() const
 			i != _facilities.end();
 			++i)
 	{
-		if ((*i)->getBuildTime() == 0
+		if ((*i)->buildFinished() == true
 			&& (*i)->getRules()->isHyperwave() == true)
 		{
 			return true;
@@ -1878,7 +1878,7 @@ bool Base::hasResearch() const
 			i != _facilities.end();
 			++i)
 	{
-		if ((*i)->getBuildTime() == 0
+		if ((*i)->buildFinished() == true
 			&& (*i)->getRules()->getLaboratories() != 0)
 		{
 			return true;
@@ -1899,7 +1899,7 @@ bool Base::hasProduction() const
 			i != _facilities.end();
 			++i)
 	{
-		if ((*i)->getBuildTime() == 0
+		if ((*i)->buildFinished() == true
 			&& (*i)->getRules()->getWorkshops() != 0)
 		{
 			return true;
@@ -1922,7 +1922,7 @@ int Base::getAvailablePsiLabs() const
 			i != _facilities.end();
 			++i)
 	{
-		if ((*i)->getBuildTime() == 0)
+		if ((*i)->buildFinished() == true)
 			total += (*i)->getRules()->getPsiLaboratories();
 	}
 
@@ -1962,7 +1962,7 @@ int Base::getAvailableContainment() const
 			i != _facilities.end();
 			++i)
 	{
-		if ((*i)->getBuildTime() == 0)
+		if ((*i)->buildFinished() == true)
 			total += (*i)->getRules()->getAliens();
 	}
 
@@ -2102,7 +2102,7 @@ bool Base::getBasePlaced() const
  */
 /* bool isMindShield::operator()(const BaseFacility* facility) const
 {
-	if (facility->getBuildTime() != 0)
+	if (facility->buildFinished() == false)
 		return false; // Still building this
 
 	return facility->getRules()->isMindShield();
@@ -2127,7 +2127,7 @@ bool Base::getBasePlaced() const
  */
 /* bool isCompleted::operator()(const BaseFacility* facility) const
 {
-	return facility->getBuildTime() == 0;
+	return facility->buildFinished() == true;
 } */
 
 /**
@@ -2153,7 +2153,7 @@ int Base::getDetectionChance(
 				i != _facilities.end();
 				++i)
 		{
-			if ((*i)->getBuildTime() == 0)
+			if ((*i)->buildFinished() == true)
 			{
 				++(*facQty);
 				if ((*i)->getRules()->isMindShield() == true)
@@ -2173,7 +2173,7 @@ int Base::getDetectionChance(
 			i != _facilities.end();
 			++i)
 	{
-		if ((*i)->getBuildTime() == 0)
+		if ((*i)->buildFinished() == true)
 		{
 			++facQty0;
 			if ((*i)->getRules()->isMindShield() == true)
@@ -2212,7 +2212,7 @@ size_t Base::getGravShields() const
 			i != _facilities.end();
 			++i)
 	{
-		if ((*i)->getBuildTime() == 0
+		if ((*i)->buildFinished() == true
 			&& (*i)->getRules()->isGravShield() == true)
 		{
 			++total;
@@ -2233,7 +2233,7 @@ void Base::setupDefenses()
 			i = _facilities.begin();
 			i != _facilities.end();
 			++i)
-		if ((*i)->getBuildTime() == 0
+		if ((*i)->buildFinished() == true
 			&& (*i)->getRules()->getDefenseValue() != 0)
 		{
 			_defenses.push_back(*i);
@@ -2521,7 +2521,7 @@ std::list<std::vector<BaseFacility*>::const_iterator> Base::getDisconnectedFacil
 
 
 			if (x > 0
-				&& (fac->getBuildTime() == 0
+				&& (fac->buildFinished() == true
 					|| (borLeft != NULL
 						&& (borLeft == fac
 							|| borLeft->getBuildTime() > borLeft->getRules()->getBuildTime()))))
@@ -2532,7 +2532,7 @@ std::list<std::vector<BaseFacility*>::const_iterator> Base::getDisconnectedFacil
 			}
 
 			if (x < BASE_SIZE - 1
-				&& (fac->getBuildTime() == 0
+				&& (fac->buildFinished() == true
 					|| (borRight != NULL
 						&& (borRight == fac
 							|| borRight->getBuildTime() > borRight->getRules()->getBuildTime()))))
@@ -2543,7 +2543,7 @@ std::list<std::vector<BaseFacility*>::const_iterator> Base::getDisconnectedFacil
 			}
 
 			if (y > 0
-				&& (fac->getBuildTime() == 0
+				&& (fac->buildFinished() == true
 					|| (borTop != NULL
 						&& (borTop == fac
 							|| borTop->getBuildTime() > borTop->getRules()->getBuildTime()))))
@@ -2554,7 +2554,7 @@ std::list<std::vector<BaseFacility*>::const_iterator> Base::getDisconnectedFacil
 			}
 
 			if (y < BASE_SIZE - 1
-				&& (fac->getBuildTime() == 0
+				&& (fac->buildFinished() == true
 					|| (borBottom != NULL
 						&& (borBottom == fac
 							|| borBottom->getBuildTime() > borBottom->getRules()->getBuildTime()))))

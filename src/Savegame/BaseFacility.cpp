@@ -145,10 +145,20 @@ void BaseFacility::setBuildTime(int buildTime)
 
 /**
  * Handles the facility building each day.
+ * @return, true if finished
  */
-void BaseFacility::build()
+bool BaseFacility::buildFacility()
 {
-	--_buildTime;
+	return (--_buildTime == 0);
+}
+
+/**
+ * Gets if this Facility has finished building.
+ * @return, true if finished
+ */
+bool BaseFacility::buildFinished() const
+{
+	return (_buildTime == 0);
 }
 
 /**
@@ -157,23 +167,25 @@ void BaseFacility::build()
  */
 bool BaseFacility::inUse() const
 {
-	if (_buildTime != 0)
-		return false;
+	if (_buildTime == 0)
+	{
+		return (_facRule->getPersonnel() != 0
+				&& _base->getAvailableQuarters() - _facRule->getPersonnel() < _base->getUsedQuarters())
+			|| (_facRule->getStorage() != 0
+				&& _base->getAvailableStores() - _facRule->getStorage() < _base->getUsedStores())
+			|| (_facRule->getLaboratories() != 0
+				&& _base->getAvailableLaboratories() - _facRule->getLaboratories() < _base->getUsedLaboratories())
+			|| (_facRule->getWorkshops() != 0
+				&& _base->getAvailableWorkshops() - _facRule->getWorkshops() < _base->getUsedWorkshops())
+			|| (_facRule->getCrafts() != 0
+				&& _base->getAvailableHangars() - _facRule->getCrafts() < _base->getUsedHangars())
+			|| (_facRule->getPsiLaboratories() != 0
+				&& _base->getAvailablePsiLabs() - _facRule->getPsiLaboratories() < _base->getUsedPsiLabs())
+			|| (_facRule->getAliens() != 0
+				&& _base->getAvailableContainment() - _facRule->getAliens() < _base->getUsedContainment());
+	}
 
-	return (_facRule->getPersonnel() > 0
-			&& _base->getAvailableQuarters() - _facRule->getPersonnel() < _base->getUsedQuarters())
-		|| (_facRule->getStorage() > 0
-			&& _base->getAvailableStores() - _facRule->getStorage() < _base->getUsedStores())
-		|| (_facRule->getLaboratories() > 0
-			&& _base->getAvailableLaboratories() - _facRule->getLaboratories() < _base->getUsedLaboratories())
-		|| (_facRule->getWorkshops() > 0
-			&& _base->getAvailableWorkshops() - _facRule->getWorkshops() < _base->getUsedWorkshops())
-		|| (_facRule->getCrafts() > 0
-			&& _base->getAvailableHangars() - _facRule->getCrafts() < _base->getUsedHangars())
-		|| (_facRule->getPsiLaboratories() > 0
-			&& _base->getAvailablePsiLabs() - _facRule->getPsiLaboratories() < _base->getUsedPsiLabs())
-		|| (_facRule->getAliens() > 0
-			&& _base->getAvailableContainment() - _facRule->getAliens() < _base->getUsedContainment());
+	return false;
 }
 
 /**

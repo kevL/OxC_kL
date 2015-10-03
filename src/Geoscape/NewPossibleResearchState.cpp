@@ -98,8 +98,7 @@ NewPossibleResearchState::NewPossibleResearchState(
 	_lstPossibilities->setAlign(ALIGN_CENTER);
 	_lstPossibilities->setBig();
 
-	size_t tally (0); // init.
-
+	size_t tally (0);
 	for (std::vector<RuleResearch *>::const_iterator
 			i = possibilities.begin();
 			i != possibilities.end();

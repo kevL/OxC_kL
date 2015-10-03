@@ -300,7 +300,7 @@ void NewBattleState::load(const std::string& filename)
 				savedGame->getBases()->push_back(base);
 
 				// Add research
-				const std::vector<std::string> &research = _rules->getResearchList();
+				const std::vector<std::string>& research = _rules->getResearchList();
 				for (std::vector<std::string>::const_iterator
 						i = research.begin();
 						i != research.end();

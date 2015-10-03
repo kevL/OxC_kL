@@ -289,46 +289,45 @@ void BasescapeState::init()
 			i != _base->getFacilities()->end();
 			++i)
 	{
-		if ((*i)->getBuildTime() == 0)
+		if ((*i)->buildFinished() == true)
 		{
-			if ((*i)->getRules()->getPersonnel() > 0)
+			if ((*i)->getRules()->getPersonnel() != 0)
 			{
 				hasQuarters = true;
 
 				if (_base->getSoldiers()->empty() == false)
 					hasSoldiers = true;
 
-				if (_base->getScientists() > 0
-					|| _base->getAllocatedScientists() > 0)
+				if (_base->getScientists() != 0
+					|| _base->getAllocatedScientists() != 0)
 				{
 					hasScientists = true;
 				}
 
-				if (_base->getEngineers() > 0
-					|| _base->getAllocatedEngineers() > 0)
+				if (_base->getEngineers() != 0
+					|| _base->getAllocatedEngineers() != 0)
 				{
 					hasEngineers = true;
 				}
 			}
 
-			if ((*i)->getRules()->getCrafts() > 0)
+			if ((*i)->getRules()->getCrafts() != 0)
 			{
 				hasHangar = true;
-
 				if (_base->getCrafts()->empty() == false)
 					hasCraft = true;
 			}
 
-			if ((*i)->getRules()->getAliens() > 0)
+			if ((*i)->getRules()->getAliens() != 0)
 				hasAlienCont = true;
 
-			if ((*i)->getRules()->getLaboratories() > 0)
+			if ((*i)->getRules()->getLaboratories() != 0)
 				hasLabs = true;
 
-			if ((*i)->getRules()->getWorkshops() > 0)
+			if ((*i)->getRules()->getWorkshops() != 0)
 				hasProd = true;
 
-			if ((*i)->getRules()->getStorage() > 0)
+			if ((*i)->getRules()->getStorage() != 0)
 				hasStores = true;
 		}
 	}
@@ -565,7 +564,7 @@ void BasescapeState::viewLeftClick(Action*)
 		_game->pushState(new MonthlyCostsState(_base));
 		bPop = true;
 	}
-	else if (fac->getBuildTime() == 0)
+	else if (fac->buildFinished() == true)
 	{
 		if (fac->getRules()->getCrafts() != 0)
 		{

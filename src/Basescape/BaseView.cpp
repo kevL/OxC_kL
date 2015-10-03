@@ -299,7 +299,7 @@ bool BaseView::isPlaceable(const RuleBaseFacility* const facRule) const
 					&& (allowQ == true
 						|| _facilities[gridX - 1]
 									  [gridY + i]
-								->getBuildTime() == 0))
+								->buildFinished() == true))
 
 				|| (   gridX + i < Base::BASE_SIZE			// check top
 					&& gridY != 0
@@ -308,7 +308,7 @@ bool BaseView::isPlaceable(const RuleBaseFacility* const facRule) const
 					&& (allowQ == true
 						|| _facilities[gridX + i]
 									  [gridY - 1]
-								->getBuildTime() == 0))
+								->buildFinished() == true))
 
 				|| (   gridX + facSize < Base::BASE_SIZE	// check right
 					&& gridY + i < Base::BASE_SIZE
@@ -317,7 +317,7 @@ bool BaseView::isPlaceable(const RuleBaseFacility* const facRule) const
 					&& (allowQ == true
 						|| _facilities[gridX + facSize]
 									  [gridY + i]
-								->getBuildTime() == 0))
+								->buildFinished() == true))
 
 				|| (   gridX + i < Base::BASE_SIZE			// check bottom
 					&& gridY + facSize < Base::BASE_SIZE
@@ -326,7 +326,7 @@ bool BaseView::isPlaceable(const RuleBaseFacility* const facRule) const
 					&& (allowQ == true
 						|| _facilities[gridX + i]
 									  [gridY + facSize]
-								->getBuildTime() == 0)))
+								->buildFinished() == true)))
 			{
 				return true;
 			}
@@ -359,7 +359,7 @@ bool BaseView::isQueuedBuilding(const RuleBaseFacility* const facRule) const
 							  [gridY + i] != NULL
 				&& _facilities[gridX - 1]
 							  [gridY + i]
-						->getBuildTime() == 0)
+						->buildFinished() == true)
 
 			|| (   gridX + i < Base::BASE_SIZE			// check top
 				&& gridY != 0
@@ -367,7 +367,7 @@ bool BaseView::isQueuedBuilding(const RuleBaseFacility* const facRule) const
 							  [gridY - 1] != NULL
 				&& _facilities[gridX + i]
 							  [gridY - 1]
-						->getBuildTime() == 0)
+						->buildFinished() == true)
 
 			|| (   gridX + facSize < Base::BASE_SIZE	// check right
 				&& gridY + i < Base::BASE_SIZE
@@ -375,7 +375,7 @@ bool BaseView::isQueuedBuilding(const RuleBaseFacility* const facRule) const
 							  [gridY + i] != NULL
 				&& _facilities[gridX + facSize]
 							  [gridY + i]
-						->getBuildTime() == 0)
+						->buildFinished() == true)
 
 			|| (   gridX + i < Base::BASE_SIZE			// check bottom
 				&& gridY + facSize < Base::BASE_SIZE
@@ -383,7 +383,7 @@ bool BaseView::isQueuedBuilding(const RuleBaseFacility* const facRule) const
 							  [gridY + facSize] != NULL
 				&& _facilities[gridX + i]
 							  [gridY + facSize]
-						->getBuildTime() == 0))
+						->buildFinished() == true))
 		{
 			return false;
 		}
@@ -405,7 +405,7 @@ void BaseView::reCalcQueuedBuildings()
 			i != _base->getFacilities()->end();
 			++i)
 	{
-		if ((*i)->getBuildTime() != 0)
+		if ((*i)->buildFinished() == false)
 		{
 			// set all queued buildings to infinite.
 			if ((*i)->getBuildTime() > (*i)->getRules()->getBuildTime())
@@ -588,7 +588,7 @@ void BaseView::draw()
 					++x)
 			{
 				sprite = (*i)->getRules()->getSpriteShape() + j++;
-				if ((*i)->getBuildTime() != 0)
+				if ((*i)->buildFinished() == false)
 					sprite += std::max( // outline
 									3,
 									facSize * facSize);
@@ -607,7 +607,7 @@ void BaseView::draw()
 			i != _base->getFacilities()->end();
 			++i)
 	{
-		if ((*i)->getBuildTime() == 0)
+		if ((*i)->buildFinished() == true)
 		{
 			Surface* srfTunnel;
 			const size_t
@@ -625,7 +625,7 @@ void BaseView::draw()
 						++y)
 				{
 					if (   _facilities[x][y] != NULL
-						&& _facilities[x][y]->getBuildTime() == 0)
+						&& _facilities[x][y]->buildFinished() == true)
 					{
 						srfTunnel = _texture->getFrame(7);
 						srfTunnel->setX(static_cast<int>(x) * GRID_SIZE - GRID_SIZE / 2);
@@ -643,7 +643,7 @@ void BaseView::draw()
 						++x)
 				{
 					if (   _facilities[x][y] != NULL
-						&& _facilities[x][y]->getBuildTime() == 0)
+						&& _facilities[x][y]->buildFinished() == true)
 					{
 						srfTunnel = _texture->getFrame(8);
 						srfTunnel->setX(static_cast<int>(x) * GRID_SIZE);
@@ -689,7 +689,7 @@ void BaseView::draw()
 		}
 
 		// draw time remaining
-		if ((*i)->getBuildTime() != 0)
+		if ((*i)->buildFinished() == false)
 		{
 			Text* const text = new Text(
 									GRID_SIZE * facSize,
@@ -740,7 +740,7 @@ void BaseView::draw()
 			if (fac != NULL)
 			{
 				if (i != _base->getCrafts()->end()
-					&& fac->getBuildTime() == 0
+					&& fac->buildFinished() == true
 					&& fac->getRules()->getCrafts() != 0
 					&& fac->getCraft() == NULL)
 				{

@@ -1579,7 +1579,7 @@ void Globe::drawRadars()
 							j != (*i)->getFacilities()->end();
 							++j)
 					{
-						if ((*j)->getBuildTime() == 0)
+						if ((*j)->buildFinished() == true)
 						{
 							range = static_cast<double>((*j)->getRules()->getRadarRange());
 							if (_radarDetail > 2)

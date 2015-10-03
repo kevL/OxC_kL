@@ -181,7 +181,7 @@ void MiniBaseView::draw()
 					j != base->getFacilities()->end();
 					++j)
 			{
-				if ((*j)->getBuildTime() == 0)
+				if ((*j)->buildFinished() == true)
 					color = GREEN;
 				else
 					color = RED_D;

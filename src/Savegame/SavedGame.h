@@ -316,6 +316,8 @@ private:
 			const RuleResearch* const resRule,
 			const Ruleset* const rules,
 			Base* const base) const;
+	/// Removes a research from the "popped up" array.
+	void removePoppedResearch(const RuleResearch* const resRule);
 	///
 	static SaveInfo getSaveInfo(
 			const std::string& file,
@@ -568,8 +570,6 @@ private:
 		void addPoppedResearch(const RuleResearch* const resRule);
 		/// Checks if a research is on the "popped up" array.
 		bool wasResearchPopped(const RuleResearch* const resRule);
-		/// Removes a research from the "popped up" array.
-		void removePoppedResearch(const RuleResearch* const resRule);
 
 		/// Gets the list of dead soldiers.
 		std::vector<SoldierDead*>* getDeadSoldiers();

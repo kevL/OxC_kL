@@ -574,7 +574,7 @@ void SavedGame::load(
 			++i)
 	{
 		const std::string research = i->as<std::string>();
-		if (rules->getResearch(research))
+		if (rules->getResearch(research) != NULL)
 			_discovered.push_back(rules->getResearch(research));
 	}
 
@@ -593,15 +593,14 @@ void SavedGame::load(
 	}
 
 	Log(LOG_INFO) << ". load popped research";
-	const YAML::Node& research = doc["poppedResearch"];
 	for (YAML::const_iterator
-			i = research.begin();
-			i != research.end();
+			i = doc["poppedResearch"].begin();
+			i != doc["poppedResearch"].end();
 			++i)
 	{
-		const std::string id = i->as<std::string>();
-		if (rules->getResearch(id))
-			_poppedResearch.push_back(rules->getResearch(id));
+		const std::string research = i->as<std::string>();
+		if (rules->getResearch(research) != NULL)
+			_poppedResearch.push_back(rules->getResearch(research));
 	}
 
 	Log(LOG_INFO) << ". load alien strategy";
@@ -1325,7 +1324,7 @@ void SavedGame::addFinishedResearch(
 
 /**
  * Gets the list of already discovered ResearchProjects.
- * @return, address of the vector of pointers of already discovered research projects
+ * @return, address of the vector of pointers of already discovered ResearchProjects
  */
 const std::vector<const RuleResearch*>& SavedGame::getDiscoveredResearch() const
 {
@@ -1480,13 +1479,11 @@ void SavedGame::getAvailableProductions(
 			++i)
 	{
 		RuleManufacture* const manufRule = rules->getManufacture(*i);
-		if (isResearched(manufRule->getRequirements()) == false)
-			continue;
-
-		if (std::find_if(
-					baseProductions.begin(),
-					baseProductions.end(),
-					equalProduction(manufRule)) == baseProductions.end())
+		if (isResearched(manufRule->getRequirements()) == true
+			&& std::find_if(
+						baseProductions.begin(),
+						baseProductions.end(),
+						equalProduction(manufRule)) == baseProductions.end())
 		{
 			productionList.push_back(manufRule);
 		}
@@ -1575,7 +1572,7 @@ bool SavedGame::isResearchAvailable(
 }
 
 /**
- * Gets a list of newly available research projects once a ResearchProject has
+ * Gets a list of newly available ResearchProjects once a ResearchProject has
  * been completed.
  * @note This function checks for fake ResearchProjects.
  * @param dependents	- reference to a vector of pointers to the RuleResearches that are now available
@@ -1608,7 +1605,7 @@ void SavedGame::getDependentResearch(
 }
 
 /**
- * Gets the list of newly available research projects once a ResearchProject
+ * Gets the list of newly available ResearchProjects once a ResearchProject
  * has been completed.
  * @note This function doesn't check for fake ResearchProjects.
  * @param dependents	- reference to a vector of pointers to the RuleResearches that are now available
@@ -2253,7 +2250,8 @@ bool SavedGame::getDetail()
 } */
 
 /**
- * Marks a research project as having popped up -> "we can now research".
+ * Marks a ResearchProject as having popped up -> "we can now research".
+ * @note Used by NewPossibleResearchState.
  * @param research - pointer to the RuleResearch
  */
 void SavedGame::addPoppedResearch(const RuleResearch* const resRule)
@@ -2263,7 +2261,8 @@ void SavedGame::addPoppedResearch(const RuleResearch* const resRule)
 }
 
 /**
- * Checks if a research project has previously popped up.
+ * Checks if a ResearchProject has previously popped up.
+ * @note Used by NewPossibleResearchState.
  * @param resRule - pointer to the RuleResearch
  * @return, true if popped
  */
@@ -2276,17 +2275,18 @@ bool SavedGame::wasResearchPopped(const RuleResearch* const resRule)
 }
 
 /**
- * Checks for and removes a research project from the popped-up list.
+ * Checks for and removes a ResearchProject from the popped-up list.
+ * @note Called from addFinishedResearch().
  * @param resRule - pointer to the RuleResearch
  */
-void SavedGame::removePoppedResearch(const RuleResearch* const resRule)
+void SavedGame::removePoppedResearch(const RuleResearch* const resRule) // private.
 {
-	std::vector<const RuleResearch*>::const_iterator r = std::find(
-																_poppedResearch.begin(),
-																_poppedResearch.end(),
-																resRule);
-	if (r != _poppedResearch.end())
-		_poppedResearch.erase(r);
+	std::vector<const RuleResearch*>::const_iterator pRule = std::find(
+																	_poppedResearch.begin(),
+																	_poppedResearch.end(),
+																	resRule);
+	if (pRule != _poppedResearch.end())
+		_poppedResearch.erase(pRule);
 }
 
 /**

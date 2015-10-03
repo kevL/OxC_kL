@@ -82,7 +82,9 @@ private:
 		void setBuildTime(int buildTime);
 
 		/// Builds up the facility.
-		void build();
+		bool buildFacility();
+		/// Gets if this Facility has finished building.
+		bool buildFinished() const;
 
 		/// Checks if the facility is currently in use.
 		bool inUse() const;
