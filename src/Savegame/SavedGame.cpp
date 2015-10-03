@@ -1283,7 +1283,7 @@ void SavedGame::addFinishedResearch(
 
 	if (rules != NULL)
 	{
-		std::vector<RuleResearch*> availableResearch;
+		std::vector<const RuleResearch*> availableResearch;
 		for (std::vector<Base*>::const_iterator
 				i = _bases.begin();
 				i != _bases.end();
@@ -1292,7 +1292,7 @@ void SavedGame::addFinishedResearch(
 			getDependentResearchBasic(availableResearch, resRule, rules, *i);
 		}
 
-		for (std::vector<RuleResearch*>::const_iterator
+		for (std::vector<const RuleResearch*>::const_iterator
 				i = availableResearch.begin();
 				i != availableResearch.end();
 				++i)
@@ -1334,17 +1334,11 @@ const std::vector<const RuleResearch*>& SavedGame::getDiscoveredResearch() const
  * @param base		- pointer to a Base
  */
 void SavedGame::getAvailableResearchProjects(
-		std::vector<RuleResearch*>& projects,
+		std::vector<const RuleResearch*>& projects,
 		const Ruleset* const rules,
 		Base* const base) const
 {
 	std::vector<const RuleResearch*> unlocked;
-
-/*	const std::vector<const RuleResearch*>& discovered (getDiscoveredResearch());
-	for (std::vector<const RuleResearch*>::const_iterator
-			i = discovered.begin();
-			i != discovered.end();
-			++i) */
 	for (std::vector<const RuleResearch*>::const_iterator
 			i = _discovered.begin();
 			i != _discovered.end();
@@ -1360,7 +1354,7 @@ void SavedGame::getAvailableResearchProjects(
 	}
 
 
-	RuleResearch* resRule;
+	const RuleResearch* resRule;
 	bool
 		liveAlien,
 		cullProject;
@@ -1462,30 +1456,29 @@ void SavedGame::getAvailableResearchProjects(
 
 /**
  * Get the list of RuleManufacture which can be manufactured in a Base.
- * @param productionList	- reference the list of Productions to be made available
- * @param rules				- pointer to the Ruleset
- * @param base				- pointer to a Base
+ * @param productions	- reference the list of Productions to be made available
+ * @param rules			- pointer to the Ruleset
+ * @param base			- pointer to a Base
  */
 void SavedGame::getAvailableProductions(
-		std::vector<RuleManufacture*>& productionList,
+		std::vector<const RuleManufacture*>& productions,
 		const Ruleset* const rules,
 		const Base* const base) const
 {
 	const std::vector<Production*> baseProductions (base->getProductions());
-
 	for (std::vector<std::string>::const_iterator
 			i = rules->getManufactureList().begin();
 			i != rules->getManufactureList().end();
 			++i)
 	{
-		RuleManufacture* const manufRule = rules->getManufacture(*i);
+		const RuleManufacture* const manufRule = rules->getManufacture(*i);
 		if (isResearched(manufRule->getRequirements()) == true
 			&& std::find_if(
 						baseProductions.begin(),
 						baseProductions.end(),
 						equalProduction(manufRule)) == baseProductions.end())
 		{
-			productionList.push_back(manufRule);
+			productions.push_back(manufRule);
 		}
 	}
 }
@@ -1504,7 +1497,6 @@ bool SavedGame::isResearchAvailable(
 {
 	if (resRule != NULL)
 	{
-//		const std::vector<const RuleResearch*>& discovered (getDiscoveredResearch());
 		if (_debug == false
 			&& std::find(
 						unlocked.begin(),
@@ -1580,7 +1572,7 @@ bool SavedGame::isResearchAvailable(
  * @param base			- pointer to a Base
  */
 void SavedGame::getDependentResearch(
-		std::vector<RuleResearch*>& dependents,
+		std::vector<const RuleResearch*>& dependents,
 		const RuleResearch* const resRule,
 		const Ruleset* const rules,
 		Base* const base) const
@@ -1613,14 +1605,14 @@ void SavedGame::getDependentResearch(
  * @param base			- pointer to a Base
  */
 void SavedGame::getDependentResearchBasic( // private.
-		std::vector<RuleResearch*>& dependents,
+		std::vector<const RuleResearch*>& dependents,
 		const RuleResearch* const resRule,
 		const Ruleset* const rules,
 		Base* const base) const
 {
-	std::vector<RuleResearch*> possible;
+	std::vector<const RuleResearch*> possible;
 	getAvailableResearchProjects(possible, rules, base);
-	for (std::vector<RuleResearch*>::const_iterator
+	for (std::vector<const RuleResearch*>::const_iterator
 			i = possible.begin();
 			i != possible.end();
 			++i)
@@ -1650,11 +1642,11 @@ void SavedGame::getDependentResearchBasic( // private.
  * @param rules			- pointer to the game Ruleset
  */
 void SavedGame::getDependentManufacture(
-		std::vector<RuleManufacture*>& dependents,
+		std::vector<const RuleManufacture*>& dependents,
 		const RuleResearch* const resRule,
 		const Ruleset* const rules) const
 {
-	const std::vector<std::string>& manufList = rules->getManufactureList();
+	const std::vector<std::string>& manufList (rules->getManufactureList());
 	for (std::vector<std::string>::const_iterator
 			i = manufList.begin();
 			i != manufList.end();

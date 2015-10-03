@@ -50,7 +50,7 @@ namespace OpenXcom
  */
 NewPossibleResearchState::NewPossibleResearchState(
 		Base* const base,
-		const std::vector<RuleResearch*>& possibilities,
+		const std::vector<const RuleResearch*>& possibilities,
 		bool showResearchButton)
 	:
 		_base(base)
@@ -99,7 +99,7 @@ NewPossibleResearchState::NewPossibleResearchState(
 	_lstPossibilities->setBig();
 
 	size_t tally (0);
-	for (std::vector<RuleResearch *>::const_iterator
+	for (std::vector<const RuleResearch*>::const_iterator
 			i = possibilities.begin();
 			i != possibilities.end();
 			++i)

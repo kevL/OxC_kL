@@ -293,14 +293,14 @@ struct ProductionCompleteInfo
 struct NewPossibleResearchInfo
 {
 	bool showResearchButton;
-	std::vector<RuleResearch*> newPossibleResearch;
+	std::vector<const RuleResearch*> newPossibleResearch;
 
 	Base* base;
 
 	/// cTor.
 	NewPossibleResearchInfo(
 			Base* a_base,
-			const std::vector<RuleResearch*>& a_newPossibleResearch,
+			const std::vector<const RuleResearch*>& a_newPossibleResearch,
 			bool a_showResearchButton)
 		:
 			base(a_base),
@@ -312,14 +312,14 @@ struct NewPossibleResearchInfo
 struct NewPossibleManufactureInfo
 {
 	bool showManufactureButton;
-	std::vector<RuleManufacture*> newPossibleManufacture;
+	std::vector<const RuleManufacture*> newPossibleManufacture;
 
 	Base* base;
 
 	/// cTor.
 	NewPossibleManufactureInfo(
 			Base* a_base,
-			const std::vector<RuleManufacture*>& a_newPossibleManufacture,
+			const std::vector<const RuleManufacture*>& a_newPossibleManufacture,
 			bool a_showManufactureButton)
 		:
 			base(a_base),
@@ -2836,14 +2836,14 @@ void GeoscapeState::time1Day()
 
 			resEvents.push_back(new ResearchCompleteState(resRule0, gofRule));
 
-			std::vector<RuleResearch*> newPossibleResearch;
+			std::vector<const RuleResearch*> newPossibleResearch;
 			_gameSave->getDependentResearch(
 										newPossibleResearch,
 										resRule,
 										_rules,
 										*i);
 
-			std::vector<RuleManufacture*> newPossibleManufacture;
+			std::vector<const RuleManufacture*> newPossibleManufacture;
 			_gameSave->getDependentManufacture(
 											newPossibleManufacture,
 											resRule,

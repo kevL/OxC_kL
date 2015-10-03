@@ -56,7 +56,7 @@ private:
 	Window* _window;
 
 	std::vector<ResearchProject*> _offlines;
-	std::vector<RuleResearch*> _projects;
+	std::vector<const RuleResearch*> _resRules;
 
 	///
 	void onSelectProject(Action* action);

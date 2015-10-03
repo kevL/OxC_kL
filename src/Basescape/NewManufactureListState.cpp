@@ -126,7 +126,7 @@ NewManufactureListState::NewManufactureListState(
 	_catStrings.push_back("STR_ALL_ITEMS");
 
 	std::string cat;
-	for (std::vector<RuleManufacture*>::iterator
+	for (std::vector<const RuleManufacture*>::iterator
 			i = _possibleProductions.begin();
 			i != _possibleProductions.end();
 			++i)
@@ -191,7 +191,7 @@ void NewManufactureListState::lstProdClick(Action*)
 	_scroll = _lstManufacture->getScroll();
 
 	const RuleManufacture* manufRule = NULL;
-	for (std::vector<RuleManufacture*>::iterator
+	for (std::vector<const RuleManufacture*>::iterator
 			i = _possibleProductions.begin();
 			i != _possibleProductions.end();
 			++i)
@@ -246,7 +246,7 @@ void NewManufactureListState::fillProductionList()
 											_game->getRuleset(),
 											_base);
 
-	for (std::vector<RuleManufacture*>::const_iterator
+	for (std::vector<const RuleManufacture*>::const_iterator
 			i = _possibleProductions.begin();
 			i != _possibleProductions.end();
 			++i)

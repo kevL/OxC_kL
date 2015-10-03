@@ -312,7 +312,7 @@ private:
 
 	///
 	void getDependentResearchBasic(
-			std::vector<RuleResearch*>& dependents,
+			std::vector<const RuleResearch*>& dependents,
 			const RuleResearch* const resRule,
 			const Ruleset* const rules,
 			Base* const base) const;
@@ -449,22 +449,23 @@ private:
 		const std::vector<const RuleResearch*>& getDiscoveredResearch() const;
 		/// Gets the list of research projects which can be researched at a particular Base.
 		void getAvailableResearchProjects(
-				std::vector<RuleResearch*>& projects,
+				std::vector<const RuleResearch*>& projects,
 				const Ruleset* const rules,
 				Base* const base) const;
 		/// Gets the list of Productions which can be manufactured in a Base.
 		void getAvailableProductions(
-				std::vector<RuleManufacture*>& productionList,
+				std::vector<const RuleManufacture*>& productions,
 				const Ruleset* const rules,
 				const Base* const base) const;
 		/// Gets the list of newly available research projects once a research project has been completed.
-		void getDependentResearch(std::vector<RuleResearch*>& dependents,
+		void getDependentResearch(
+				std::vector<const RuleResearch*>& dependents,
 				const RuleResearch* const resRule,
 				const Ruleset* const rules,
 				Base* const base) const;
 		/// Gets the list of newly available manufacture projects once a research project has been completed.
 		void getDependentManufacture(
-				std::vector<RuleManufacture*>& dependents,
+				std::vector<const RuleManufacture*>& dependents,
 				const RuleResearch* const resRule,
 				const Ruleset* const rules) const;
 		/// Checks whether a research project can be researched

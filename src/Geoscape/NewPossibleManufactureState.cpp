@@ -47,7 +47,7 @@ namespace OpenXcom
  */
 NewPossibleManufactureState::NewPossibleManufactureState(
 		Base* const base,
-		const std::vector<RuleManufacture*>& possibilities,
+		const std::vector<const RuleManufacture*>& possibilities,
 		bool showManufactureButton)
 	:
 		_base(base)
@@ -96,7 +96,7 @@ NewPossibleManufactureState::NewPossibleManufactureState(
 	_lstPossibilities->setAlign(ALIGN_CENTER);
 	_lstPossibilities->setBig();
 
-	for (std::vector<RuleManufacture*>::const_iterator
+	for (std::vector<const RuleManufacture*>::const_iterator
 			i = possibilities.begin();
 			i != possibilities.end();
 			++i)

@@ -4385,12 +4385,12 @@
 
 1442988766 f:\git\openxcom\src\resource\resourcepack.h
 
-1443319780 f:\git\openxcom\src\savegame\base.h
+1443907919 f:\git\openxcom\src\savegame\base.h
 	"Target.h"
 
 1441247516 f:\git\openxcom\src\savegame\target.h
 
-1443902603 f:\git\openxcom\src\savegame\savedgame.h
+1443908083 f:\git\openxcom\src\savegame\savedgame.h
 	"GameTime.h"
 	"Soldier.h"
 	"../Ruleset/RuleAlienMission.h"
@@ -4871,7 +4871,7 @@
 	"../Savegame/Production.h"
 	"../Savegame/SavedGame.h"
 
-1442610506 f:\git\openxcom\src\basescape\newmanufactureliststate.h
+1443908264 f:\git\openxcom\src\basescape\newmanufactureliststate.h
 	"../Engine/State.h"
 
 1440459233 f:\git\openxcom\src\engine\screen.h
@@ -4919,7 +4919,7 @@
 	"../Savegame/Base.h"
 	"../Savegame/SavedGame.h"
 
-1442612810 source:f:\git\openxcom\src\basescape\newmanufactureliststate.cpp
+1443908286 source:f:\git\openxcom\src\basescape\newmanufactureliststate.cpp
 	"NewManufactureListState.h"
 	"ManufactureCostsState.h"
 	"ManufactureStartState.h"
@@ -4937,7 +4937,7 @@
 	"../Savegame/Base.h"
 	"../Savegame/SavedGame.h"
 
-1443896387 source:f:\git\openxcom\src\basescape\newresearchliststate.cpp
+1443908538 source:f:\git\openxcom\src\basescape\newresearchliststate.cpp
 	"NewResearchListState.h"
 	"ResearchInfoState.h"
 	"../Engine/Game.h"
@@ -4951,7 +4951,7 @@
 	"../Savegame/ResearchProject.h"
 	"../Savegame/SavedGame.h"
 
-1442610242 f:\git\openxcom\src\basescape\newresearchliststate.h
+1443908394 f:\git\openxcom\src\basescape\newresearchliststate.h
 	"../Engine/State.h"
 
 1443897244 f:\git\openxcom\src\basescape\researchinfostate.h
@@ -6958,7 +6958,7 @@
 1442441486 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1443897457 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1443908684 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	"AlienBaseState.h"
 	"BaseDefenseState.h"
@@ -7059,10 +7059,10 @@
 1442441015 f:\git\openxcom\src\geoscape\multipletargetsstate.h
 	"../Engine/State.h"
 
-1440480123 f:\git\openxcom\src\geoscape\newpossiblemanufacturestate.h
+1443908784 f:\git\openxcom\src\geoscape\newpossiblemanufacturestate.h
 	"../Engine/State.h"
 
-1440480134 f:\git\openxcom\src\geoscape\newpossibleresearchstate.h
+1443908736 f:\git\openxcom\src\geoscape\newpossibleresearchstate.h
 	"../Engine/State.h"
 
 1442516522 f:\git\openxcom\src\geoscape\productioncompletestate.h
@@ -8397,7 +8397,7 @@
 	"../Ruleset/RuleRegion.h"
 	"../Ruleset/Ruleset.h"
 
-1443896822 source:f:\git\openxcom\src\savegame\base.cpp
+1443907880 source:f:\git\openxcom\src\savegame\base.cpp
 	"Base.h"
 	"BaseFacility.h"
 	"Craft.h"
@@ -8564,7 +8564,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/Ruleset.h"
 
-1443905169 source:f:\git\openxcom\src\savegame\savedgame.cpp
+1443908161 source:f:\git\openxcom\src\savegame\savedgame.cpp
 	"SavedGame.h"
 	"AlienBase.h"
 	"AlienMission.h"

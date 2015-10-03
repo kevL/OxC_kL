@@ -57,7 +57,7 @@ private:
 		/// Creates the NewPossibleManufacture state.
 		NewPossibleManufactureState(
 				Base* const base,
-				const std::vector<RuleManufacture*>& possibilities,
+				const std::vector<const RuleManufacture*>& possibilities,
 				bool showManufactureButton);
 
 		/// Handler for clicking the OK button.

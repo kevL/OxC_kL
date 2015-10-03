@@ -134,7 +134,7 @@ void NewResearchListState::onSelectProject(Action*) // private.
 	if (static_cast<int>(_lstResearch->getSelectedRow()) > _cutoff)
 		_game->pushState(new ResearchInfoState( // brand new project
 											_base,
-											_projects[static_cast<size_t>(static_cast<int>(_lstResearch->getSelectedRow()) - (_cutoff + 1))]));
+											_resRules[static_cast<size_t>(static_cast<int>(_lstResearch->getSelectedRow()) - (_cutoff + 1))]));
 	else
 		_game->pushState(new ResearchInfoState( // offline project reactivation.
 											_base,
@@ -149,7 +149,7 @@ void NewResearchListState::fillProjectList() // private.
 {
 	_cutoff = -1;
 	_offlines.clear();
-	_projects.clear();
+	_resRules.clear();
 	_lstResearch->clearList();
 
 	size_t row = 0;
@@ -173,7 +173,7 @@ void NewResearchListState::fillProjectList() // private.
 
 			_lstResearch->addRow(1, wst.c_str());
 			// Try to blend these in but doesn't really work due to ordering:
-//			if ((*i)->getSpent() > 0)
+//			if ((*i)->getSpent() != 0)
 			_lstResearch->setRowColor(row++, color, true);
 
 			_offlines.push_back(*i);
@@ -183,20 +183,19 @@ void NewResearchListState::fillProjectList() // private.
 
 
 	_game->getSavedGame()->getAvailableResearchProjects(
-													_projects,
+													_resRules,
 													_game->getRuleset(),
 													_base);
 
-	std::vector<RuleResearch*>::const_iterator i = _projects.begin();
-	while (i != _projects.end())
+	std::vector<const RuleResearch*>::const_iterator i = _resRules.begin();
+	while (i != _resRules.end())
 	{
 		if ((*i)->getRequirements().empty() == true)
 		{
 			_lstResearch->addRow(1, tr((*i)->getType()).c_str());
 			++i;
 		}
-		else
-			i = _projects.erase(i);
+		else i = _resRules.erase(i);
 	}
 }
 
