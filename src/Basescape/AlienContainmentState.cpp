@@ -80,7 +80,6 @@ AlienContainmentState::AlienContainmentState(
 	_txtLiveAliens	= new Text( 50, 9, 154, 40);
 	_txtDeadAliens	= new Text( 50, 9, 204, 40);
 	_txtInResearch	= new Text( 47, 9, 254, 40);
-//	_lstAliens->setColumns(4, 130, 50, 50, 47);
 
 	_lstAliens		= new TextList(285, 121, 16, 50);
 
@@ -152,7 +151,7 @@ AlienContainmentState::AlienContainmentState(
 	_txtDeadAliens->setText(tr("STR_DEAD_ALIENS"));
 	_txtInResearch->setText(tr("STR_RESEARCH"));
 
-	_lstAliens->setColumns(4, 130, 50, 50, 47);
+	_lstAliens->setColumns(4, 130,50,50,47);
 	_lstAliens->setArrowColumn(158, ARROW_HORIZONTAL);
 	_lstAliens->setBackground(_window);
 	_lstAliens->setSelectable();
@@ -167,7 +166,6 @@ AlienContainmentState::AlienContainmentState(
 	_lstAliens->onRightArrowClick((ActionHandler)& AlienContainmentState::lstItemsRightArrowClick);
 
 	const RuleItem* itRule;
-	const RuleResearch* rpRule;
 	int qtyAliens;
 	size_t row = 0;
 	Uint8 color;
@@ -178,13 +176,9 @@ AlienContainmentState::AlienContainmentState(
 			i != _base->getResearch().end();
 			++i)
 	{
-		rpRule = (*i)->getRules();
-		itRule = _game->getRuleset()->getItem(rpRule->getName());
-		if (itRule != NULL
-			&& itRule->isAlien() == true)
-		{
-			baseProjects.push_back(rpRule->getName());
-		}
+		itRule = _game->getRuleset()->getItem((*i)->getRules()->getName());
+		if (itRule != NULL && itRule->isAlien() == true)
+			baseProjects.push_back((*i)->getRules()->getName());
 	}
 
 	if (baseProjects.empty() == false)
@@ -229,13 +223,11 @@ AlienContainmentState::AlienContainmentState(
 
 				itRule = _game->getRuleset()->getItem(*i);
 				if (_game->getSavedGame()->isResearched(itRule->getType()) == false)
-					color = Palette::blockOffset(13)+5; // yellow
+					color = YELLOW;
 				else
 					color = _lstAliens->getColor();
 
-				_lstAliens->setRowColor(
-									row++,
-									color);
+				_lstAliens->setRowColor(row++, color);
 			}
 		}
 	}
@@ -435,9 +427,7 @@ void AlienContainmentState::increaseByValue(int change)
 		const int qtyType = getQuantity() - _qty[_sel];
 		if (qtyType > 0)
 		{
-			change = std::min(
-							change,
-							qtyType);
+			change = std::min(change, qtyType);
 			_qty[_sel] += change;
 			_fishFood += change;
 
@@ -463,12 +453,9 @@ void AlienContainmentState::decrease()
  */
 void AlienContainmentState::decreaseByValue(int change)
 {
-	if (change > 0
-		&& _qty[_sel] > 0)
+	if (change > 0 && _qty[_sel] > 0)
 	{
-		change = std::min(
-						change,
-						_qty[_sel]);
+		change = std::min(change, _qty[_sel]);
 		_qty[_sel] -= change;
 		_fishFood -= change;
 
@@ -497,7 +484,7 @@ void AlienContainmentState::update() // private.
 	{
 		const RuleItem* const itRule = _game->getRuleset()->getItem(_aliens[_sel]);
 		if (_game->getSavedGame()->isResearched(itRule->getType()) == false)
-			color = Palette::blockOffset(13)+5; // yellow
+			color = YELLOW;
 		else
 			color = _lstAliens->getColor();
 	}

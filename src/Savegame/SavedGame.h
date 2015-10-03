@@ -311,11 +311,11 @@ private:
 	std::vector<Waypoint*> _waypoints;
 
 	///
-	void getDependableResearchBasic(
-			std::vector<RuleResearch*>& dependables,
-			const RuleResearch* research,
-			const Ruleset* ruleset,
-			Base* base) const;
+	void getDependentResearchBasic(
+			std::vector<RuleResearch*>& dependents,
+			const RuleResearch* const resRule,
+			const Ruleset* const rules,
+			Base* const base) const;
 	///
 	static SaveInfo getSaveInfo(
 			const std::string& file,
@@ -438,42 +438,41 @@ private:
 		/// Sets the current battle save.
 		void setBattleSave(SavedBattleGame* battleSave);
 
-		/// Adds a finished ResearchProject.
+		/// Adds a finished research project.
 		void addFinishedResearch(
-				const RuleResearch* resRule,
-				const Ruleset* rules = NULL,
+				const RuleResearch* const resRule,
+				const Ruleset* const rules = NULL,
 				bool score = true);
 		/// Gets the list of already discovered research projects.
 		const std::vector<const RuleResearch*>& getDiscoveredResearch() const;
-		/// Gets the list of ResearchProject which can be researched in a Base.
+		/// Gets the list of research projects which can be researched at a particular Base.
 		void getAvailableResearchProjects(
 				std::vector<RuleResearch*>& projects,
-				const Ruleset* ruleset,
-				Base* base) const;
+				const Ruleset* const rules,
+				Base* const base) const;
 		/// Gets the list of Productions which can be manufactured in a Base.
 		void getAvailableProductions(
-				std::vector<RuleManufacture*>& productions,
-				const Ruleset* ruleset,
-				Base* base) const;
-		/// Gets the list of newly available research projects once a research has been completed.
-		void getDependableResearch(std::vector<RuleResearch*>& dependables,
-				const RuleResearch* research,
-				const Ruleset* ruleset,
-				Base* base) const;
-		/// Gets the list of newly available manufacture projects once a research has been completed.
-		void getDependableManufacture(
-				std::vector<RuleManufacture*>& dependables,
-				const RuleResearch* research,
-				const Ruleset* ruleset,
-				Base* base) const;
-		/// Checks whether a ResearchProject can be researched
+				std::vector<RuleManufacture*>& productionList,
+				const Ruleset* const rules,
+				const Base* const base) const;
+		/// Gets the list of newly available research projects once a research project has been completed.
+		void getDependentResearch(std::vector<RuleResearch*>& dependents,
+				const RuleResearch* const resRule,
+				const Ruleset* const rules,
+				Base* const base) const;
+		/// Gets the list of newly available manufacture projects once a research project has been completed.
+		void getDependentManufacture(
+				std::vector<RuleManufacture*>& dependents,
+				const RuleResearch* const resRule,
+				const Ruleset* const rules) const;
+		/// Checks whether a research project can be researched
 		bool isResearchAvailable(
-				RuleResearch* resRule,
+				const RuleResearch* const resRule,
 				const std::vector<const RuleResearch*>& unlocked,
-				const Ruleset* ruleset) const;
-		/// Gets if a research has been unlocked.
+				const Ruleset* const rules) const;
+		/// Gets if a research project has been unlocked.
 		bool isResearched(const std::string& research) const;
-		/// Gets if a list of research has been unlocked.
+		/// Gets if a list of research projects has been unlocked.
 		bool isResearched(const std::vector<std::string>& research) const;
 
 		/// Gets the soldier matching this ID.
@@ -482,19 +481,19 @@ private:
 		bool handlePromotions(std::vector<Soldier*>& participants);
 		/// Processes a soldier for promotion.
 		void processSoldier(
-				Soldier* soldier,
+				const Soldier* const soldier,
 				PromotionInfo& promoData);
 		/// Checks how many soldiers of a rank exist and which one has the highest score.
 		Soldier* inspectSoldiers(
-				std::vector<Soldier*>& soldiers,
-				std::vector<Soldier*>& participants,
+				const std::vector<Soldier*>& soldiers,
+				const std::vector<Soldier*>& participants,
 				SoldierRank soldierRank);
 
 		///  Returns the list of alien bases.
 		std::vector<AlienBase*>* getAlienBases();
 
 		/// Sets debug mode.
-		void setDebugMode();
+		void toggleDebugMode();
 		/// Gets debug mode.
 		bool getDebugMode() const;
 
@@ -566,11 +565,11 @@ private:
 		bool getDetail(); */
 
 		/// Adds a research to the "popped up" array.
-		void addPoppedResearch(const RuleResearch* research);
+		void addPoppedResearch(const RuleResearch* const resRule);
 		/// Checks if a research is on the "popped up" array.
-		bool wasResearchPopped(const RuleResearch* research);
+		bool wasResearchPopped(const RuleResearch* const resRule);
 		/// Removes a research from the "popped up" array.
-		void removePoppedResearch(const RuleResearch* research);
+		void removePoppedResearch(const RuleResearch* const resRule);
 
 		/// Gets the list of dead soldiers.
 		std::vector<SoldierDead*>* getDeadSoldiers();

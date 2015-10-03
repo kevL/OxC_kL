@@ -992,8 +992,7 @@ void GeoscapeState::handle(Action* action)
 			{
 				if (action->getDetails()->key.keysym.sym == SDLK_d)	// "ctrl-d" - enable debug mode
 				{
-					_gameSave->setDebugMode();
-
+					_gameSave->toggleDebugMode();
 					if (_gameSave->getDebugMode() == true)
 					{
 						_debug = "DEBUG MODE : ";
@@ -2857,22 +2856,21 @@ void GeoscapeState::time1Day()
 													bonus));
 
 			std::vector<RuleResearch*> newPossibleResearch;
-			_gameSave->getDependableResearch(
+			_gameSave->getDependentResearch(
 										newPossibleResearch,
 										(*j)->getRules(),
 										_rules,
 										*i);
 
 			std::vector<RuleManufacture*> newPossibleManufacture;
-			_gameSave->getDependableManufacture(
+			_gameSave->getDependentManufacture(
 											newPossibleManufacture,
 											(*j)->getRules(),
-											_rules,
-											*i);
+											_rules);
 
 			if (newResearch != NULL) // check for possible researching weapon before clip
 			{
-				RuleItem* const itRule = _rules->getItem(newResearch->getName());
+				const RuleItem* const itRule = _rules->getItem(newResearch->getName());
 				if (itRule != NULL
 					&& itRule->getBattleType() == BT_FIREARM
 					&& itRule->getCompatibleAmmo()->empty() == false)
@@ -2882,12 +2880,12 @@ void GeoscapeState::time1Day()
 						&& manufRule->getRequirements().empty() == false)
 					{
 						const std::vector<std::string>& req = manufRule->getRequirements();
-						const RuleItem* const amRule = _rules->getItem(itRule->getCompatibleAmmo()->front());
-						if (amRule != NULL
+						const RuleItem* const aRule = _rules->getItem(itRule->getCompatibleAmmo()->front());
+						if (aRule != NULL
 							&& std::find(
 										req.begin(),
 										req.end(),
-										amRule->getType()) != req.end()
+										aRule->getType()) != req.end()
 							&& _gameSave->isResearched(manufRule->getRequirements()) == false)
 						{
 							resEvents.push_back(new ResearchRequiredState(itRule));

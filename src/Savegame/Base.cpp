@@ -1407,7 +1407,7 @@ int Base::getMonthlyMaintenace() const
 }
 
 /**
- * Adds a new Production to the Base
+ * Adds a new Production to this Base.
  * @param prod - pointer to a Production
  */
 void Base::addProduction(Production* prod)
@@ -1416,7 +1416,7 @@ void Base::addProduction(Production* prod)
 }
 
 /**
- * Removes a Production from the Base.
+ * Removes a Production from this Base.
  * @param prod - pointer to a Production
  */
 void Base::removeProduction(Production* prod)
@@ -1432,7 +1432,7 @@ void Base::removeProduction(Production* prod)
 }
 
 /**
- * Gets the list of Base Productions.
+ * Gets the list of this Base's Productions.
  * @return, the list of Base Productions
  */
 const std::vector<Production*>& Base::getProductions() const
@@ -1441,7 +1441,7 @@ const std::vector<Production*>& Base::getProductions() const
 }
 
 /**
- * Returns the list of all base's ResearchProject
+ * Returns the list of all this Base's ResearchProjects.
  * @return, list of base's ResearchProject
  */
 const std::vector<ResearchProject*>& Base::getResearch() const
@@ -1450,7 +1450,7 @@ const std::vector<ResearchProject*>& Base::getResearch() const
 }
 
 /**
- * Adds a new ResearchProject to Base
+ * Adds a new ResearchProject to this Base.
  * @param project - project to add
  */
 void Base::addResearch(ResearchProject* const project)
@@ -1459,7 +1459,7 @@ void Base::addResearch(ResearchProject* const project)
 }
 
 /**
- * Removes a ResearchProject from base.
+ * Removes a ResearchProject from this base.
  * @param project	- pointer to a ResearchProject for removal
  * @param grantHelp	- true to apply researchHelp() (default true)
  * @param goOffline	- true to hide project but not remove it from base's ResearchProjects (default false)
@@ -1471,11 +1471,10 @@ void Base::removeResearch(
 {
 	_scientists += project->getAssigned();
 
-	std::vector<ResearchProject*>::const_iterator
-			i = std::find(
-						_research.begin(),
-						_research.end(),
-						project);
+	std::vector<ResearchProject*>::const_iterator i = std::find(
+															_research.begin(),
+															_research.end(),
+															project);
 	if (i != _research.end())
 	{
 		if (goOffline == true)
@@ -1880,7 +1879,7 @@ bool Base::hasResearch() const
 			++i)
 	{
 		if ((*i)->getBuildTime() == 0
-			&& (*i)->getRules()->getLaboratories() > 0)
+			&& (*i)->getRules()->getLaboratories() != 0)
 		{
 			return true;
 		}
@@ -1901,7 +1900,7 @@ bool Base::hasProduction() const
 			++i)
 	{
 		if ((*i)->getBuildTime() == 0
-			&& (*i)->getRules()->getWorkshops() > 0)
+			&& (*i)->getRules()->getWorkshops() != 0)
 		{
 			return true;
 		}
@@ -2157,16 +2156,12 @@ int Base::getDetectionChance(
 			if ((*i)->getBuildTime() == 0)
 			{
 				++(*facQty);
-
 				if ((*i)->getRules()->isMindShield() == true)
 					++(*shields);
 			}
 		}
 
-		return calcDetChance(
-						diff,
-						*facQty,
-						*shields);
+		return calcDetChance(diff, *facQty, *shields);
 	}
 
 	int
@@ -2181,16 +2176,12 @@ int Base::getDetectionChance(
 		if ((*i)->getBuildTime() == 0)
 		{
 			++facQty0;
-
 			if ((*i)->getRules()->isMindShield() == true)
 				++shields0;
 		}
 	}
 
-	return calcDetChance(
-					diff,
-					facQty0,
-					shields0);
+	return calcDetChance(diff, facQty0, shields0);
 }
 
 /**

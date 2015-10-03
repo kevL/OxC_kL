@@ -48,7 +48,7 @@ private:
 
 	public:
 		/// Creates the ResearchRequired state.
-		explicit ResearchRequiredState(RuleItem* item);
+		explicit ResearchRequiredState(const RuleItem* const itRule);
 
 		/// Handler for clicking the OK button.
 		void btnOkClick(Action* action);

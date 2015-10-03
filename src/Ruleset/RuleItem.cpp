@@ -1148,7 +1148,7 @@ bool RuleItem::isResearchExempt() const
  */
 bool RuleItem::canExecute() const
 {
-	return (_canExecute == true);
+	return _canExecute;
 }
 
 /**
@@ -1157,7 +1157,7 @@ bool RuleItem::canExecute() const
  */
 bool RuleItem::defusePulse() const
 {
-	return (_defusePulse == true);
+	return _defusePulse;
 }
 
 }

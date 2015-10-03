@@ -37,9 +37,9 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Research Required screen.
- * @param item - pointer to a researched weapon
+ * @param itRule - pointer to a researched weapon
  */
-ResearchRequiredState::ResearchRequiredState(RuleItem* item)
+ResearchRequiredState::ResearchRequiredState(const RuleItem* const itRule)
 {
 	_screen = false;
 
@@ -66,13 +66,16 @@ ResearchRequiredState::ResearchRequiredState(RuleItem* item)
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& ResearchRequiredState::btnOkClick,
 					Options::keyOk);
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& ResearchRequiredState::btnOkClick,
+					Options::keyOkKeypad);
 
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setVerticalAlign(ALIGN_MIDDLE);
 	const std::string
-		weapon = item->getType(),
-		clip = item->getCompatibleAmmo()->front();
+		weapon = itRule->getType(),
+		clip = itRule->getCompatibleAmmo()->front();
 	_txtTitle->setText(tr("STR_YOU_NEED_TO_RESEARCH_ITEM_TO_PRODUCE_ITEM")
 					   .arg(tr(clip))
 					   .arg(tr(weapon)));

@@ -49,6 +49,8 @@ class AlienContainmentState
 {
 
 private:
+	static const Uint8 YELLOW = 213;
+
 	bool _overCrowded;
 	int
 		_fishFood,
