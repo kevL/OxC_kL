@@ -4748,7 +4748,7 @@
 	"CraftId.h"
 	"MovingTarget.h"
 
-1443931576 source:f:\git\openxcom\src\basescape\craftweaponsstate.cpp
+1443943773 source:f:\git\openxcom\src\basescape\craftweaponsstate.cpp
 	"CraftWeaponsState.h"
 	"../Engine/Game.h"
 	"../Interface/Text.h"
@@ -8564,7 +8564,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/Ruleset.h"
 
-1443908161 source:f:\git\openxcom\src\savegame\savedgame.cpp
+1443958794 source:f:\git\openxcom\src\savegame\savedgame.cpp
 	"SavedGame.h"
 	"AlienBase.h"
 	"AlienMission.h"

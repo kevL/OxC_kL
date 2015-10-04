@@ -267,9 +267,7 @@ std::vector<SaveInfo> SavedGame::getList(
 		{
 			try
 			{
-				info.push_back(getSaveInfo(
-										*i,
-										lang));
+				info.push_back(getSaveInfo(*i, lang));
 			}
 			catch (Exception &e)
 			{
@@ -294,9 +292,7 @@ std::vector<SaveInfo> SavedGame::getList(
 	{
 		try
 		{
-			info.push_back(getSaveInfo(
-									*i,
-									lang));
+			info.push_back(getSaveInfo(*i, lang));
 		}
 		catch (Exception &e)
 		{
@@ -402,14 +398,14 @@ void SavedGame::load(
 		Ruleset* const rules)
 {
 	//Log(LOG_INFO) << "SavedGame::load()";
-	const std::string st = Options::getUserFolder() + file;
-	const std::vector<YAML::Node> nodes = YAML::LoadAllFromFile(st);
+	const std::string st (Options::getUserFolder() + file);
+	const std::vector<YAML::Node> nodes (YAML::LoadAllFromFile(st));
 	if (nodes.empty() == true)
 	{
 		throw Exception(file + " is not a valid save file");
 	}
 
-	YAML::Node brief = nodes[0]; // Get brief save info
+	YAML::Node brief (nodes[0]); // Get brief save info
 
 /*	std::string version = brief["version"].as<std::string>();
 	if (version != OPENXCOM_VERSION_SHORT)
@@ -426,8 +422,7 @@ void SavedGame::load(
 	YAML::Node doc = nodes[1]; // Get full save data
 
 	if (doc["rng"]
-		&& (Options::reSeedOnLoad == false
-			|| _ironman == true))
+		&& (Options::reSeedOnLoad == false || _ironman == true))
 	{
 		RNG::setSeed(doc["rng"].as<uint64_t>());
 	}
@@ -435,7 +430,7 @@ void SavedGame::load(
 		RNG::setSeed(0);
 
 //	_difficulty = static_cast<GameDifficulty>(doc["difficulty"].as<int>(_difficulty));
-	int diff = doc["difficulty"].as<int>(_difficulty);
+	int diff (doc["difficulty"].as<int>(_difficulty));
 	if (diff < 0) // safety.
 	{
 		diff = 0;
@@ -468,10 +463,10 @@ void SavedGame::load(
 			i != doc["countries"].end();
 			++i)
 	{
-		const std::string type = (*i)["type"].as<std::string>();
+		const std::string type ((*i)["type"].as<std::string>());
 		if (rules->getCountry(type))
 		{
-			Country* const c = new Country(rules->getCountry(type));
+			Country* const c (new Country(rules->getCountry(type)));
 			c->load(*i);
 			_countries.push_back(c);
 		}
@@ -483,10 +478,10 @@ void SavedGame::load(
 			i != doc["regions"].end();
 			++i)
 	{
-		const std::string type = (*i)["type"].as<std::string>();
+		const std::string type ((*i)["type"].as<std::string>());
 		if (rules->getRegion(type))
 		{
-			Region* const r = new Region(rules->getRegion(type));
+			Region* const r (new Region(rules->getRegion(type)));
 			r->load(*i);
 			_regions.push_back(r);
 		}
@@ -499,24 +494,22 @@ void SavedGame::load(
 			i != doc["alienBases"].end();
 			++i)
 	{
-		AlienBase* const b = new AlienBase();
+		AlienBase* const b (new AlienBase());
 		b->load(*i);
 		_alienBases.push_back(b);
 	}
 
 	Log(LOG_INFO) << ". load missions";
 	// Missions must be loaded before UFOs.
-	const YAML::Node& missions = doc["alienMissions"];
+	const YAML::Node& missions (doc["alienMissions"]);
 	for (YAML::const_iterator
 			i = missions.begin();
 			i != missions.end();
 			++i)
 	{
-		const std::string missionType = (*i)["type"].as<std::string>();
-		const RuleAlienMission& missionRule = *rules->getAlienMission(missionType);
-		std::auto_ptr<AlienMission> mission (new AlienMission( // init.
-															missionRule,
-															*this));
+		const std::string missionType ((*i)["type"].as<std::string>());
+		const RuleAlienMission& missionRule (*rules->getAlienMission(missionType));
+		std::auto_ptr<AlienMission> mission (new AlienMission(missionRule, *this));
 		mission->load(*i);
 		_activeMissions.push_back(mission.release());
 	}
@@ -527,14 +520,11 @@ void SavedGame::load(
 			i != doc["ufos"].end();
 			++i)
 	{
-		const std::string type = (*i)["type"].as<std::string>();
+		const std::string type ((*i)["type"].as<std::string>());
 		if (rules->getUfo(type))
 		{
-			Ufo* const u = new Ufo(rules->getUfo(type));
-			u->load(
-					*i,
-					*rules,
-					*this);
+			Ufo* const u (new Ufo(rules->getUfo(type)));
+			u->load(*i, *rules, *this);
 			_ufos.push_back(u);
 		}
 	}
@@ -545,7 +535,7 @@ void SavedGame::load(
 			i != doc["waypoints"].end();
 			++i)
 	{
-		Waypoint* const w = new Waypoint();
+		Waypoint* const w (new Waypoint());
 		w->load(*i);
 		_waypoints.push_back(w);
 	}
@@ -557,8 +547,8 @@ void SavedGame::load(
 			++i)
 	{
 		const std::string
-			type = (*i)["type"].as<std::string>(),
-			deployment = (*i)["deployment"].as<std::string>("STR_TERROR_MISSION");
+			type ((*i)["type"].as<std::string>()),
+			deployment ((*i)["deployment"].as<std::string>("STR_TERROR_MISSION"));
 		MissionSite* const ms = new MissionSite(
 											rules->getAlienMission(type),
 											rules->getDeployment(deployment));
@@ -573,7 +563,7 @@ void SavedGame::load(
 			i != doc["discovered"].end();
 			++i)
 	{
-		const std::string research = i->as<std::string>();
+		const std::string research (i->as<std::string>());
 		if (rules->getResearch(research) != NULL)
 			_discovered.push_back(rules->getResearch(research));
 	}
@@ -584,11 +574,8 @@ void SavedGame::load(
 			i != doc["bases"].end();
 			++i)
 	{
-		Base* const b = new Base(rules);
-		b->load(
-				*i,
-				this,
-				false);
+		Base* const b (new Base(rules));
+		b->load(*i, this, false);
 		_bases.push_back(b);
 	}
 
@@ -598,7 +585,7 @@ void SavedGame::load(
 			i != doc["poppedResearch"].end();
 			++i)
 	{
-		const std::string research = i->as<std::string>();
+		const std::string research (i->as<std::string>());
 		if (rules->getResearch(research) != NULL)
 			_poppedResearch.push_back(rules->getResearch(research));
 	}
@@ -612,17 +599,14 @@ void SavedGame::load(
 			i != doc["deadSoldiers"].end();
 			++i)
 	{
-		SoldierDead* const solDead = new SoldierDead(
-												L"",
-												0,
+		SoldierDead* const solDead (new SoldierDead(
+												L"", 0,
 												RANK_ROOKIE,
 												GENDER_MALE,
 												LOOK_BLONDE,
-												0,
-												0,
-												NULL,
+												0,0, NULL,
 												UnitStats(),
-												UnitStats());
+												UnitStats()));
 		solDead->load(*i);
 		_deadSoldiers.push_back(solDead);
 	}
@@ -633,9 +617,8 @@ void SavedGame::load(
 			i != doc["missionStatistics"].end();
 			++i)
 	{
-		MissionStatistics* const ms = new MissionStatistics();
+		MissionStatistics* const ms (new MissionStatistics());
 		ms->load(*i);
-
 		_missionStatistics.push_back(ms);
 	}
 
@@ -643,10 +626,7 @@ void SavedGame::load(
 	{
 		Log(LOG_INFO) << "SavedGame: loading battlegame";
 		_battleSave = new SavedBattleGame();
-		_battleSave->load(
-						battle,
-						rules,
-						this);
+		_battleSave->load(battle, rules, this);
 		Log(LOG_INFO) << "SavedGame: loading battlegame DONE";
 	}
 }
@@ -657,7 +637,7 @@ void SavedGame::load(
  */
 void SavedGame::save(const std::string& file) const
 {
-	const std::string st = Options::getUserFolder() + file;
+	const std::string st (Options::getUserFolder() + file);
 	std::ofstream ofstr (st.c_str()); // init.
 	if (ofstr.fail() == true)
 	{

@@ -923,7 +923,7 @@ GeoscapeState::GeoscapeState()
 }
 
 /**
- * Deletes timers.
+ * Deletes timers and clears dogfights.
  */
 GeoscapeState::~GeoscapeState()
 {
@@ -1351,8 +1351,7 @@ void GeoscapeState::timeAdvance()
 
 		for (int
 				i = 0;
-				i != timeSpan
-					&& _pause == false;
+				i != timeSpan && _pause == false;
 				++i)
 		{
 			const TimeTrigger trigger = _gameSave->getTime()->advance();
@@ -1368,7 +1367,6 @@ void GeoscapeState::timeAdvance()
 		}
 
 		_pause = (_dogfightsToStart.empty() == false);
-
 		updateTimeDisplay();
 	}
 
@@ -1795,13 +1793,13 @@ void GeoscapeState::time5Seconds()
 }
 
 /**
+ * *** FUNCTOR ***
  * Functor that attempts to detect an XCOM base.
  */
 class DetectXCOMBase
 	:
 		public std::unary_function<Ufo*, bool>
 {
-
 private:
 	const int _diff;
 	const Base& _base;
@@ -1889,6 +1887,7 @@ bool DetectXCOMBase::operator() (const Ufo* ufo) const
 
 
 /**
+ * *** FUNCTOR ***
  * Functor that marks an XCOM base for retaliation.
  * @note This is required because of the iterator type.
  * @note Only used if Aggressive Retaliation option is false.
@@ -2162,6 +2161,7 @@ void GeoscapeState::time10Minutes()
 }
 
 /**
+ * *** FUNCTOR ***
  * @brief Call AlienMission::think() with proper parameters.
  * @note This function object calls AlienMission::think() with the proper parameters.
  */
@@ -2169,7 +2169,6 @@ class callThink
 	:
 		public std::unary_function<AlienMission*, void>
 {
-
 private:
 	Game& _game;
 	const Globe& _globe;
@@ -2191,13 +2190,12 @@ private:
 		/// Call AlienMission::think() with stored parameters.
 		void operator() (AlienMission* mission) const
 		{
-			mission->think(
-						_game,
-						_globe);
+			mission->think(_game, _globe);
 		}
 };
 
 /**
+ * *** FUNCTOR ***
  * @brief Process a MissionSite.
  * This function object will count down towards expiring a MissionSite and
  * handle expired MissionSites.
@@ -2254,6 +2252,7 @@ bool GeoscapeState::processMissionSite(MissionSite* const site) const
 }
 
 /**
+ * *** FUNCTOR ***
  * @brief Advance time for crashed UFOs.
  * @note This function object will decrease the expiration timer for crashed UFOs.
  */
@@ -2500,10 +2499,7 @@ void GeoscapeState::time1Hour()
 				j != (*i)->getProductions().end();
 				++j)
 		{
-			progress[*j] = (*j)->step(
-									*i,
-									_gameSave,
-									_rules);
+			progress[*j] = (*j)->step(*i, _gameSave, _rules);
 		}
 
 		for (std::map<Production*, ProductionProgress>::const_iterator
@@ -2576,6 +2572,7 @@ void GeoscapeState::time1Hour()
 
 
 /**
+ * *** FUNCTOR ***
  * This class will attempt to generate a supply mission for a base.
  * @note Each alien base has a 4% chance to generate a supply mission.
  */
@@ -2612,10 +2609,8 @@ void GenerateSupplyMission::operator() (const AlienBase* const base) const
 	if (RNG::percent(4) == true)
 	{
 		// Spawn supply mission for this base.
-		const RuleAlienMission& rule = *_rules.getAlienMission("STR_ALIEN_SUPPLY");
-		AlienMission* const mission = new AlienMission(
-													rule,
-													_gameSave);
+		const RuleAlienMission& missionRule = *_rules.getAlienMission("STR_ALIEN_SUPPLY");
+		AlienMission* const mission = new AlienMission(missionRule, _gameSave);
 		mission->setRegion(
 					_gameSave.locateRegion(*base)->getRules()->getType(),
 					_rules);
@@ -2662,19 +2657,19 @@ void GeoscapeState::time1Day()
 				{
 					//Log(LOG_INFO) << "\n";
 					//Log(LOG_INFO) << ". Soldier = " << (*j)->getId() << " woundsPCT = " << chanceDeath;
-					const int lastMissionId = (*j)->getDiary()->getMissionIdList().back();
-					const std::vector<MissionStatistics*>* const missionStats = _gameSave->getMissionStatistics();
-					const int daysTotal = missionStats->at(lastMissionId)->injuryList[(*j)->getId()];
+					const int lastMissionId ((*j)->getDiary()->getMissionIdList().back());
+					const std::vector<MissionStatistics*>* const missionStats (_gameSave->getMissionStatistics());
+					const int daysTotal (missionStats->at(lastMissionId)->injuryList[(*j)->getId()]);
 
 					//Log(LOG_INFO) << ". . daysTotal = " << daysTotal;
 					if (daysTotal > 0) // safety.
 					{
-						const float healthFactor = static_cast<float>(daysTotal) / static_cast<float>((*j)->getCurrentStats()->health);
+						const float healthFactor (static_cast<float>(daysTotal) / static_cast<float>((*j)->getCurrentStats()->health));
 						//Log(LOG_INFO) << ". . healthFactor = " << healthFactor;
 						chanceDeath = static_cast<int>(std::ceil(
 									  static_cast<float>(chanceDeath) * healthFactor));
 
-						const int roll = RNG::generate(1,1000);
+						const int roll (RNG::generate(1,1000));
 						//Log(LOG_INFO) << ". . chance to Die = " << chanceDeath << " roll = " << roll;
 						if (roll <= chanceDeath)
 						{
@@ -2927,7 +2922,7 @@ void GeoscapeState::time1Day()
 		&& newResEvents.empty() == true)
 	{
 		newResEvents.push_back(NewPossibleResearchInfo(
-												std::vector<RuleResearch*>(),
+												std::vector<const RuleResearch*>(),
 												true));
 	} */
 
@@ -3150,7 +3145,7 @@ void GeoscapeState::time1Month()
 }
 
 /**
- * Slows down the timer back to minimum speed, for when important events occur.
+ * Slows down the timer back to minimum speed for when important events occur.
  */
 void GeoscapeState::resetTimer()
 {
@@ -4182,9 +4177,7 @@ bool GeoscapeState::processCommand(RuleMissionScript* const missionCommand)
 												*_gameSave);
 	mission->setRace(raceType);
 	mission->setId(_gameSave->getCanonicalId("ALIEN_MISSIONS"));
-	mission->setRegion(
-					targetRegion,
-					*_game->getRuleset());
+	mission->setRegion(targetRegion, *_rules);
 	mission->setMissionSiteZone(targetZone);
 	strategy.addMissionRun(missionCommand->getVarName());
 	mission->start(missionCommand->getDelay());
