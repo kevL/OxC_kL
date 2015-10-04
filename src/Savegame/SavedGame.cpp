@@ -1250,9 +1250,9 @@ void SavedGame::addFinishedResearch(
 		bool score)
 {
 	if (std::find(
-				_discovered.begin(),
-				_discovered.end(),
-				resRule) == _discovered.end())
+			_discovered.begin(),
+			_discovered.end(),
+			resRule) == _discovered.end())
 	{
 		_discovered.push_back(resRule);
 		removePoppedResearch(resRule);
@@ -1283,7 +1283,7 @@ void SavedGame::addFinishedResearch(
 					addFinishedResearch(*i, rules);
 				else
 				{
-					size_t id (0); // init.
+					size_t id (0);
 					for (std::vector<std::string>::const_iterator
 							j = (*i)->getRequirements().begin();
 							j != (*i)->getRequirements().end();
@@ -1362,9 +1362,9 @@ void SavedGame::getAvailableResearchProjects(
 							++j)
 					{
 						if (std::find(
-									_discovered.begin(),
-									_discovered.end(),
-									rules->getResearch(*j)) == _discovered.end())
+								_discovered.begin(),
+								_discovered.end(),
+								rules->getResearch(*j)) == _discovered.end())
 						{
 							cullProject = false;
 							break;
@@ -1416,9 +1416,9 @@ void SavedGame::getAvailableResearchProjects(
 							++j)
 					{
 						if (std::find(
-									_discovered.begin(),
-									_discovered.end(),
-									rules->getResearch(resRule->getRequirements().at(j))) != _discovered.end())
+								_discovered.begin(),
+								_discovered.end(),
+								rules->getResearch(resRule->getRequirements().at(j))) != _discovered.end())
 						{
 							++tally;
 						}
@@ -1479,9 +1479,9 @@ bool SavedGame::isResearchAvailable(
 	{
 		if (_debug == false
 			&& std::find(
-						unlocked.begin(),
-						unlocked.end(),
-						resRule) == unlocked.end())
+					unlocked.begin(),
+					unlocked.end(),
+					resRule) == unlocked.end())
 		{
 			if (rules->getUnit(resRule->getType()) != NULL
 				&& resRule->getGetOneFree().empty() == false
@@ -1511,9 +1511,9 @@ bool SavedGame::isResearchAvailable(
 					++i)
 			{
 				if (std::find(
-							unlocked.begin(),
-							unlocked.end(),
-							rules->getResearch(*i)) == unlocked.end())
+						unlocked.begin(),
+						unlocked.end(),
+						rules->getResearch(*i)) == unlocked.end())
 				{
 					return true;
 				}
@@ -1527,9 +1527,9 @@ bool SavedGame::isResearchAvailable(
 			{
 				const RuleResearch* const resRule (rules->getResearch(*i));
 				if (std::find(
-							_discovered.begin(),
-							_discovered.end(),
-							resRule) == _discovered.end())
+						_discovered.begin(),
+						_discovered.end(),
+						resRule) == _discovered.end())
 				{
 					return false;
 				}
@@ -1566,9 +1566,9 @@ void SavedGame::getDependentResearch(
 	{
 		if ((*i)->getCost() == 0
 			&& std::find(
-						(*i)->getDependencies().begin(),
-						(*i)->getDependencies().end(),
-						resRule->getType()) != (*i)->getDependencies().end())
+					(*i)->getDependencies().begin(),
+					(*i)->getDependencies().end(),
+					resRule->getType()) != (*i)->getDependencies().end())
 		{
 			getDependentResearchBasic(dependents, *i, rules, base);
 		}

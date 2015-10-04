@@ -2767,17 +2767,23 @@ void GeoscapeState::time1Day()
 				++j)
 		{
 			const RuleResearch* const resRule ((*j)->getRules());
-			(*i)->removeResearch(
-							*j,
-							_rules->getUnit(resRule->getType()) != NULL); // interrogation of aLien Unit complete.
 
-			if (Options::spendResearchedItems == true // if the live alien is "researched" its corpse is sent to stores.
+			const bool liveAlien (_rules->getUnit(resRule->getType()) != NULL);
+			(*i)->removeResearch(*j, liveAlien == true); // interrogation of aLien Unit complete.
+
+			if (liveAlien == true // if the live alien is "researched" its corpse is sent to stores.
 				&& resRule->needsItem() == true
-				&& _rules->getUnit(resRule->getType()) != NULL)
+				&& Options::spendResearchedItems == true)
 			{
 				(*i)->getStorageItems()->addItem(_rules->getArmor(_rules->getUnit(resRule->getType())->getArmor())->getCorpseGeoscape());
 				// ;) <- kL_note: heh i noticed that.
 			}
+
+//			if (liveAlien == true)
+//				getCrackedAlien(
+//							resRule->getType,	// alien type
+//							gofCrack,			// navigator spills the beans on a missionType, or engineer spills the beans on a ufoType
+//							originCrack);		// alien spills the beans on Origins.
 
 			const RuleResearch* gofRule (NULL);
 			if (resRule->getGetOneFree().empty() == false)
@@ -2812,7 +2818,7 @@ void GeoscapeState::time1Day()
 			}
 
 
-			std::string lookUp = resRule->getLookup();
+			std::string lookUp = resRule->getLookup(); // UfoPaedia article.
 			if (lookUp.empty() == true)
 				lookUp = resRule->getType();
 
@@ -2821,6 +2827,7 @@ void GeoscapeState::time1Day()
 				resRule0 = resRule;
 			else
 				resRule0 = NULL;
+
 
 			_gameSave->addFinishedResearch(resRule, _rules); // this adds the research project to _discovered vector.
 
@@ -2831,20 +2838,20 @@ void GeoscapeState::time1Day()
 
 			resEvents.push_back(new ResearchCompleteState(resRule0, gofRule));
 
-			std::vector<const RuleResearch*> newPossibleResearch;
+			std::vector<const RuleResearch*> newResearchPossible;
 			_gameSave->getDependentResearch(
-										newPossibleResearch,
+										newResearchPossible,
 										resRule,
 										_rules,
 										*i);
 
-			std::vector<const RuleManufacture*> newPossibleManufacture;
+			std::vector<const RuleManufacture*> newManufacturePossible;
 			_gameSave->getDependentManufacture(
-											newPossibleManufacture,
+											newManufacturePossible,
 											resRule,
 											_rules);
 
-			if (resRule0 != NULL) // check for need to research clip before manufacturing weapon
+			if (resRule0 != NULL) // check for need to research clip before manufacturing weapon allowed.
 			{
 				const RuleItem* const itRule (_rules->getItem(resRule0->getType()));
 				if (itRule != NULL
@@ -2870,25 +2877,25 @@ void GeoscapeState::time1Day()
 				}
 			}
 
-			if (newPossibleResearch.empty() == false) // only show the "allocate research" button for the last notification
+			if (newResearchPossible.empty() == false) // only show the "allocate research" button for the last notification
 			{
 				if (newResEvents.empty() == false)
 					newResEvents.back().showResearchButton = false;
 
 				newResEvents.push_back(NewPossibleResearchInfo(
 														*i,
-														newPossibleResearch,
+														newResearchPossible,
 														true));
 			}
 
-			if (newPossibleManufacture.empty() == false)
+			if (newManufacturePossible.empty() == false)
 			{
 				if (newProdEvents.empty() == false) // only show the "allocate production" button for the last notification
 					newProdEvents.back().showManufactureButton = false;
 
 				newProdEvents.push_back(NewPossibleManufactureInfo(
 															*i,
-															newPossibleManufacture,
+															newManufacturePossible,
 															true));
 			}
 

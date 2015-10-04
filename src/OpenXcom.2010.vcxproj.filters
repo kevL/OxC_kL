@@ -817,15 +817,6 @@
     <ClCompile Include="Menu\LoadGameState.cpp">
       <Filter>Menu</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Adlib\adlplayer.cpp">
-      <Filter>Engine\Adlib</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\AdlibMusic.cpp">
-      <Filter>Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Adlib\fmopl.cpp">
-      <Filter>Engine\Adlib</Filter>
-    </ClCompile>
     <ClCompile Include="Interface\ScrollBar.cpp">
       <Filter>Interface</Filter>
     </ClCompile>
@@ -1742,15 +1733,6 @@
     </ClInclude>
     <ClInclude Include="Menu\LoadGameState.h">
       <Filter>Menu</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Adlib\adlplayer.h">
-      <Filter>Engine\Adlib</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Adlib\fmopl.h">
-      <Filter>Engine\Adlib</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\AdlibMusic.h">
-      <Filter>Engine</Filter>
     </ClInclude>
     <ClInclude Include="Interface\ScrollBar.h">
       <Filter>Interface</Filter>

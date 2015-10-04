@@ -176,7 +176,7 @@ void LoadGameState::think()
 		_game->popState();
 		_game->getCursor()->setVisible();
 
-		SavedGame* const gameSave = new SavedGame(_game->getRuleset());
+		SavedGame* const gameSave (new SavedGame(_game->getRuleset()));
 		try
 		{
 			Log(LOG_INFO) << "LoadGameState: loading";
@@ -201,9 +201,9 @@ void LoadGameState::think()
 
 				_game->getScreen()->resetDisplay(false);
 
-				BattlescapeState* const bs = new BattlescapeState();
-				_game->pushState(bs);
-				_game->getSavedGame()->getBattleSave()->setBattleState(bs);
+				BattlescapeState* const battleState (new BattlescapeState());
+				_game->pushState(battleState);
+				_game->getSavedGame()->getBattleSave()->setBattleState(battleState);
 			}
 		}
 		catch (Exception& e)

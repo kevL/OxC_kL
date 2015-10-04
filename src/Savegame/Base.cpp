@@ -1530,6 +1530,7 @@ void Base::researchHelp(const std::string& aLien)
 				const int cost = (*i)->getCost();
 				const double spent = static_cast<double>((*i)->getSpent());
 
+				coef = RNG::generate(0., coef);
 				(*i)->setSpent(static_cast<int>(Round(
 							spent + ((static_cast<double>(cost) - spent) * coef))));
 

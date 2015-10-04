@@ -167,10 +167,10 @@
 #include "./version.h"
 
 
-#include "./Engine/Adlib/adlplayer.h"
-#include "./Engine/Adlib/fmopl.h"
+//#include "./Engine/Adlib/adlplayer.h"
+//#include "./Engine/Adlib/fmopl.h"
+//#include "./Engine/AdlibMusic.h"
 
-#include "./Engine/AdlibMusic.h"
 #include "./Engine/CatFile.h"
 #include "./Engine/CrossPlatform.h"
 #include "./Engine/Exception.h"
