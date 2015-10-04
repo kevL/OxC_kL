@@ -1606,16 +1606,14 @@ RuleTerrain* Ruleset::getTerrain(const std::string& type) const
 /**
  * Returns the info about a specific map data file.
  * @param name - reference a MapDataSet type
- * @return, pointer to Rule for the MapDataSet
+ * @return, pointer to rule for the MapDataSet
  */
 MapDataSet* Ruleset::getMapDataSet(const std::string& name)
 {
 	std::map<std::string, MapDataSet*>::const_iterator i = _mapDataSets.find(name);
 	if (i == _mapDataSets.end())
 	{
-		MapDataSet* const dataSet = new MapDataSet(
-												name,
-												_game);
+		MapDataSet* const dataSet (new MapDataSet(name, _game));
 		_mapDataSets[name] = dataSet;
 		return dataSet;
 	}

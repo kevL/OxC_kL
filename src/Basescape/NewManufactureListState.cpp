@@ -121,7 +121,7 @@ NewManufactureListState::NewManufactureListState(
 
 	_game->getSavedGame()->getAvailableProductions(
 											_possibleProductions,
-											_game->getRuleset(),
+//											_game->getRuleset(),
 											_base);
 	_catStrings.push_back("STR_ALL_ITEMS");
 
@@ -243,7 +243,7 @@ void NewManufactureListState::fillProductionList()
 
 	_game->getSavedGame()->getAvailableProductions(
 											_possibleProductions,
-											_game->getRuleset(),
+//											_game->getRuleset(),
 											_base);
 
 	for (std::vector<const RuleManufacture*>::const_iterator

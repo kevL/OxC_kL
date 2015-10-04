@@ -2808,12 +2808,10 @@ void GeoscapeState::time1Day()
 					const size_t pick = static_cast<size_t>(RNG::generate(0,
 										static_cast<int>(gofChoices.size()) - 1));
 					gofRule = _rules->getResearch(gofChoices.at(pick));
-					_gameSave->addFinishedResearch(gofRule, _rules);
+					_gameSave->addFinishedResearch(gofRule);
 
 					if (gofRule->getLookup().empty() == false)
-						_gameSave->addFinishedResearch(
-													_rules->getResearch(gofRule->getLookup()),
-													_rules);
+						_gameSave->addFinishedResearch(_rules->getResearch(gofRule->getLookup()));
 				}
 			}
 
@@ -2829,12 +2827,10 @@ void GeoscapeState::time1Day()
 				resRule0 = NULL;
 
 
-			_gameSave->addFinishedResearch(resRule, _rules); // this adds the research project to _discovered vector.
+			_gameSave->addFinishedResearch(resRule); // this adds the research project to _discovered vector.
 
 			if (resRule->getLookup().empty() == false)
-				_gameSave->addFinishedResearch(
-											_rules->getResearch(resRule->getLookup()),
-											_rules);
+				_gameSave->addFinishedResearch(_rules->getResearch(resRule->getLookup()));
 
 			resEvents.push_back(new ResearchCompleteState(resRule0, gofRule));
 
@@ -2842,14 +2838,14 @@ void GeoscapeState::time1Day()
 			_gameSave->getDependentResearch(
 										newResearchPossible,
 										resRule,
-										_rules,
+//										_rules,
 										*i);
 
 			std::vector<const RuleManufacture*> newManufacturePossible;
 			_gameSave->getDependentManufacture(
 											newManufacturePossible,
-											resRule,
-											_rules);
+											resRule);
+//											_rules);
 
 			if (resRule0 != NULL) // check for need to research clip before manufacturing weapon allowed.
 			{

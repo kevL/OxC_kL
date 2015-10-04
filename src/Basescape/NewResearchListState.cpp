@@ -184,7 +184,7 @@ void NewResearchListState::fillProjectList() // private.
 
 	_game->getSavedGame()->getAvailableResearchProjects(
 													_resRules,
-													_game->getRuleset(),
+//													_game->getRuleset(),
 													_base);
 
 	std::vector<const RuleResearch*>::const_iterator i = _resRules.begin();

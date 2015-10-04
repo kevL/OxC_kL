@@ -306,7 +306,7 @@ void NewBattleState::load(const std::string& filename)
 						i != research.end();
 						++i)
 				{
-					savedGame->addFinishedResearch(_rules->getResearch(*i));
+					savedGame->addFinishedResearch(_rules->getResearch(*i), true);
 				}
 
 				// Generate items
@@ -508,7 +508,7 @@ void NewBattleState::initPlay()
 			i != research.end();
 			++i)
 	{
-		savedGame->addFinishedResearch(_rules->getResearch(*i));
+		savedGame->addFinishedResearch(_rules->getResearch(*i), true);
 	}
 
 	_game->setSavedGame(savedGame);

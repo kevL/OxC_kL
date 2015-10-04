@@ -226,7 +226,7 @@ void SavedBattleGame::load(
 
 	setTacType(_tacticalType);
 
-	const int selectedUnit = node["selectedUnit"].as<int>();
+	const int selectedUnit (node["selectedUnit"].as<int>());
 
 	Log(LOG_INFO) << ". load mapdatasets";
 	for (YAML::const_iterator
@@ -252,7 +252,7 @@ void SavedBattleGame::load(
 				i != node["tiles"].end();
 				++i)
 		{
-			Position pos = (*i)["position"].as<Position>();
+			const Position pos ((*i)["position"].as<Position>());
 			getTile(pos)->load((*i));
 		}
 	}
@@ -263,7 +263,7 @@ void SavedBattleGame::load(
 		Tile::SerializationKey serKey;
 		// WARNING: Don't trust extracting integers from YAML as anything other than 'int' ...
 		// NOTE: Many load sequences use '.as<size_t>' .....
-		const size_t totalTiles = node["totalTiles"].as<size_t>();
+		const size_t totalTiles (node["totalTiles"].as<size_t>());
 
 		std::memset(
 				&serKey,
@@ -281,24 +281,20 @@ void SavedBattleGame::load(
 		serKey.boolFields		= node["tileBoolFieldsSize"].as<Uint8>(1); // boolean flags used to be stored in an unmentioned byte (Uint8) :|
 
 		// load binary tile data!
-		const YAML::Binary binTiles = node["binTiles"].as<YAML::Binary>();
+		const YAML::Binary binTiles (node["binTiles"].as<YAML::Binary>());
 
 		Uint8
-			* readBuffer = (Uint8*)binTiles.data(), // <- static_cast prob. here
-			* const dataEnd = readBuffer + totalTiles * serKey.totalBytes;
+			* readBuffer ((Uint8*)binTiles.data()), // <- static_cast prob. here
+			* const dataEnd (readBuffer + totalTiles * serKey.totalBytes);
 
 		while (readBuffer < dataEnd)
 		{
-			int index = unserializeInt(
-									&readBuffer,
-									serKey.index);
+			int index (unserializeInt(&readBuffer, serKey.index));
 			assert(
 				index > -1
 				&& index < static_cast<int>(_mapSize));
 
-			_tiles[static_cast<size_t>(index)]->loadBinary( // loadBinary's privileges to advance *readBuffer have been revoked
-														readBuffer,
-														serKey);
+			_tiles[static_cast<size_t>(index)]->loadBinary(readBuffer, serKey); // loadBinary's privileges to advance *readBuffer have been revoked
 			readBuffer += serKey.totalBytes - serKey.index;	// readBuffer is now incremented strictly by totalBytes in case there are obsolete fields present in the data
 		}
 	}
@@ -320,7 +316,7 @@ void SavedBattleGame::load(
 			i != node["nodes"].end();
 			++i)
 	{
-		Node* const nod = new Node();
+		Node* const nod (new Node());
 		nod->load(*i);
 		_nodes.push_back(nod);
 	}
@@ -343,69 +339,60 @@ void SavedBattleGame::load(
 		faction			= static_cast<UnitFaction>((*i)["faction"]			.as<int>());
 		originalFaction	= static_cast<UnitFaction>((*i)["originalFaction"]	.as<int>(faction));
 
-		const GameDifficulty diff = savedGame->getDifficulty();
+		const GameDifficulty diff (savedGame->getDifficulty());
 		if (id < BattleUnit::MAX_SOLDIER_ID)	// BattleUnit is linked to a geoscape soldier
 		{
 			unit = new BattleUnit(				// look up the matching soldier
-								savedGame->getSoldier(id),
-								diff);			// kL_add: For VictoryPts value per death.
+							savedGame->getSoldier(id),
+							diff);				// kL_add: For VictoryPts value per death.
 		}
 		else									// create a new Unit, not-soldier but Vehicle, Civie, or aLien.
 		{
 			const std::string
-				type	= (*i)["genUnitType"]	.as<std::string>(),
-				armor	= (*i)["genUnitArmor"]	.as<std::string>();
+				type	((*i)["genUnitType"]	.as<std::string>()),
+				armor	((*i)["genUnitArmor"]	.as<std::string>());
 
-			if (rules->getUnit(type) == NULL // safeties.
-				|| rules->getArmor(armor) == NULL)
-			{
-				continue;
-			}
-
-			unit = new BattleUnit(
-								rules->getUnit(type),
-								originalFaction,
-								id,
-								rules->getArmor(armor),
-								diff,
-								savedGame->getMonthsPassed());
+			if (rules->getUnit(type) != NULL && rules->getArmor(armor) != NULL) // safeties.
+				unit = new BattleUnit(
+									rules->getUnit(type),
+									originalFaction,
+									id,
+									rules->getArmor(armor),
+									diff,
+									savedGame->getMonthsPassed());
+			else unit = NULL;
 		}
 
-		Log(LOG_INFO) << ". . load unit " << id;
-		unit->load(*i);
-		_units.push_back(unit);
-		Log(LOG_INFO) << ". . . Done";
-
-		if (faction == FACTION_PLAYER)
+		if (unit != NULL)
 		{
-			if (unit->getId() == selectedUnit
-				|| (_selectedUnit == NULL
-					&& unit->isOut_t(OUT_STAT) == false))
+			Log(LOG_INFO) << ". . load unit " << id;
+			unit->load(*i);
+			_units.push_back(unit);
+
+			if (faction == FACTION_PLAYER)
 			{
-				_selectedUnit = unit;
+				if (unit->getId() == selectedUnit
+					|| (_selectedUnit == NULL && unit->isOut_t(OUT_STAT) == false))
+				{
+					_selectedUnit = unit;
+				}
 			}
-		}
 
-		if (faction != FACTION_PLAYER
-			&& unit->getUnitStatus() != STATUS_DEAD)
-		{
-			if (const YAML::Node& ai = (*i)["AI"])
+			if (faction != FACTION_PLAYER
+				&& unit->getUnitStatus() != STATUS_DEAD)
 			{
-				BattleAIState* aiState;
+				if (const YAML::Node& ai = (*i)["AI"])
+				{
+					BattleAIState* aiState;
 
-				if (faction == FACTION_HOSTILE)
-					aiState = new AlienBAIState(
-											this,
-											unit,
-											NULL);
-				else
-					aiState = new CivilianBAIState(
-												this,
-												unit,
-												NULL);
+					if (faction == FACTION_HOSTILE)
+						aiState = new AlienBAIState(this, unit, NULL);
+					else
+						aiState = new CivilianBAIState(this, unit, NULL);
 
-				aiState->load(ai);
-				unit->setAIState(aiState);
+					aiState->load(ai);
+					unit->setAIState(aiState);
+				}
 			}
 		}
 	}
@@ -454,10 +441,10 @@ void SavedBattleGame::load(
 			if (rules->getItem(type) != NULL)
 			{
 				id = (*i)["id"].as<int>(-1);
-				BattleItem* item = new BattleItem(
-											rules->getItem(type),
-											NULL,
-											id);
+				BattleItem* const item (new BattleItem(
+													rules->getItem(type),
+													NULL,
+													id));
 
 				item->load(*i);
 				type = (*i)["inventoryslot"].as<std::string>();
@@ -466,9 +453,9 @@ void SavedBattleGame::load(
 					item->setSlot(rules->getInventory(type));
 
 				const int
-					owner		= (*i)["owner"]			.as<int>(),
-					prevOwner	= (*i)["previousOwner"]	.as<int>(-1),
-					unit		= (*i)["unit"]			.as<int>();
+					owner		((*i)["owner"]			.as<int>()),
+					prevOwner	((*i)["previousOwner"]	.as<int>(-1)),
+					unit		((*i)["unit"]			.as<int>());
 
 				for (std::vector<BattleUnit*>::const_iterator // match up items and units
 						bu = _units.begin();
@@ -495,7 +482,7 @@ void SavedBattleGame::load(
 				if (item->getSlot() != NULL // match up items and tiles
 					&& item->getSlot()->getType() == INV_GROUND)
 				{
-					const Position pos = (*i)["position"].as<Position>();
+					const Position pos ((*i)["position"].as<Position>());
 
 					if (pos.x != -1)
 						getTile(pos)->addItem(
@@ -518,7 +505,7 @@ void SavedBattleGame::load(
 	{
 		if (rules->getItem((*i)["type"].as<std::string>()) != NULL)
 		{
-			const int ammo = (*i)["ammoItem"].as<int>();
+			const int ammo ((*i)["ammoItem"].as<int>());
 			if (ammo != -1)
 			{
 				for (std::vector<BattleItem*>::const_iterator

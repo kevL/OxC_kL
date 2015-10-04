@@ -4390,7 +4390,7 @@
 
 1441247516 f:\git\openxcom\src\savegame\target.h
 
-1443908083 f:\git\openxcom\src\savegame\savedgame.h
+1443978296 f:\git\openxcom\src\savegame\savedgame.h
 	"GameTime.h"
 	"Soldier.h"
 	"../Ruleset/RuleAlienMission.h"
@@ -4554,7 +4554,7 @@
 1442671642 f:\git\openxcom\src\interface\window.h
 	"../Engine/Surface.h"
 
-1443225579 f:\git\openxcom\src\ruleset\ruleset.h
+1443975912 f:\git\openxcom\src\ruleset\ruleset.h
 	"../Ruleset/RuleAlienMission.h"
 	"../Savegame/GameTime.h"
 
@@ -4637,7 +4637,7 @@
 
 1432464769 f:\git\openxcom\src\savegame\itemcontainer.h
 
-1443671598 f:\git\openxcom\src\savegame\savedbattlegame.h
+1443975946 f:\git\openxcom\src\savegame\savedbattlegame.h
 	"BattleUnit.h"
 
 1443943268 f:\git\openxcom\src\savegame\battleunit.h
@@ -4919,7 +4919,7 @@
 	"../Savegame/Base.h"
 	"../Savegame/SavedGame.h"
 
-1443908286 source:f:\git\openxcom\src\basescape\newmanufactureliststate.cpp
+1443977145 source:f:\git\openxcom\src\basescape\newmanufactureliststate.cpp
 	"NewManufactureListState.h"
 	"ManufactureCostsState.h"
 	"ManufactureStartState.h"
@@ -4937,7 +4937,7 @@
 	"../Savegame/Base.h"
 	"../Savegame/SavedGame.h"
 
-1443908538 source:f:\git\openxcom\src\basescape\newresearchliststate.cpp
+1443977156 source:f:\git\openxcom\src\basescape\newresearchliststate.cpp
 	"NewResearchListState.h"
 	"ResearchInfoState.h"
 	"../Engine/Game.h"
@@ -6958,7 +6958,7 @@
 1442441486 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1443908684 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1443978833 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	"AlienBaseState.h"
 	"BaseDefenseState.h"
@@ -7582,7 +7582,7 @@
 	"OptionsBaseState.h"
 	"../Engine/State.h"
 
-1443842724 source:f:\git\openxcom\src\menu\newbattlestate.cpp
+1443978871 source:f:\git\openxcom\src\menu\newbattlestate.cpp
 	"NewBattleState.h"
 	"../Basescape/CraftInfoState.h"
 	"../Battlescape/BattlescapeGenerator.h"
@@ -8290,7 +8290,7 @@
 1443901781 source:f:\git\openxcom\src\ruleset\ruleresearch.cpp
 	"RuleResearch.h"
 
-1443901379 source:f:\git\openxcom\src\ruleset\ruleset.cpp
+1443975912 source:f:\git\openxcom\src\ruleset\ruleset.cpp
 	"Ruleset.h"
 	"AlienRace.h"
 	"AlienDeployment.h"
@@ -8539,7 +8539,7 @@
 	"../Interface/Text.h"
 	"../Ruleset/RuleResearch.h"
 
-1443825165 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
+1443978703 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
 	"SavedBattleGame.h"
 	"BattleItem.h"
 	"Node.h"
@@ -8564,7 +8564,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/Ruleset.h"
 
-1443958794 source:f:\git\openxcom\src\savegame\savedgame.cpp
+1443979411 source:f:\git\openxcom\src\savegame\savedgame.cpp
 	"SavedGame.h"
 	"AlienBase.h"
 	"AlienMission.h"
@@ -10595,7 +10595,7 @@
 	"../Engine/State.h"
 	"../Savegame/SavedGame.h"
 
-1442319385 source:f:\git\openxcom\src\menu\loadgamestate.cpp
+1443975047 source:f:\git\openxcom\src\menu\loadgamestate.cpp
 	"LoadGameState.h"
 	"ErrorMessageState.h"
 	"../Battlescape/BattlescapeState.h"
