@@ -301,15 +301,12 @@ struct BattleUnitStatistics
 	///
 	void load(const YAML::Node& node)
 	{
-		if (const YAML::Node& killsYaml = node["kills"])
+		for (YAML::const_iterator
+				i = node["kills"].begin();
+				i != node["kills"].end();
+				++i)
 		{
-			for (YAML::const_iterator
-					i = killsYaml.begin();
-					i != killsYaml.end();
-					++i)
-			{
-				kills.push_back(new BattleUnitKill(*i));
-			}
+			kills.push_back(new BattleUnitKill(*i));
 		}
 
 		wasUnconscious			= node["wasUnconscious"]		.as<bool>(wasUnconscious);
@@ -336,15 +333,12 @@ struct BattleUnitStatistics
 	{
 		YAML::Node node;
 
-		if (kills.empty() == false)
+		for (std::vector<BattleUnitKill*>::const_iterator
+				i = kills.begin();
+				i != kills.end();
+				++i)
 		{
-			for (std::vector<BattleUnitKill*>::const_iterator
-					i = kills.begin();
-					i != kills.end();
-					++i)
-			{
-				node["kills"].push_back((*i)->save());
-			}
+			node["kills"].push_back((*i)->save());
 		}
 
 		if (wasUnconscious != false)		node["wasUnconscious"]			= wasUnconscious;

@@ -174,23 +174,24 @@ void CraftWeaponsState::btnCancelClick(Action*)
 void CraftWeaponsState::lstWeaponsClick(Action*)
 {
 	ItemContainer* const storage = _base->getStorageItems();
-	bool closeState;
-
-	const RuleCraftWeapon* const cwRule (_cwRules[_lstWeapons->getSelectedRow()]);
-	std::string stLaunch;
-	if (cwRule != NULL)
-	{
-		stLaunch = cwRule->getLauncherItem();
-		if (storage->getItemQty(stLaunch) == 0)
-			stLaunch.clear();
-	}
 
 	CraftWeapon* cw = _craft->getWeapons()->at(_pod);
-	if (cw != NULL
-		&& (cwRule == NULL
-			|| (cwRule != cw->getRules() && stLaunch.empty() == false)))
+	const RuleCraftWeapon* cwRule (_cwRules[_lstWeapons->getSelectedRow()]);
+
+	std::string launcherType;
+	if (cwRule != NULL)
 	{
-		closeState = true;
+		launcherType = cwRule->getLauncherItem();
+		if (storage->getItemQty(launcherType) == 0
+			|| (cw != NULL && cw->getRules() == cwRule))
+		{
+			launcherType.clear();
+		}
+	}
+
+	if (cw != NULL
+		&& (cwRule == NULL || launcherType.empty() == false))
+	{
 		storage->addItem(cw->getRules()->getLauncherItem());
 		storage->addItem(
 					cw->getRules()->getClipItem(),
@@ -199,21 +200,20 @@ void CraftWeaponsState::lstWeaponsClick(Action*)
 		delete cw;
 		_craft->getWeapons()->at(_pod) = NULL;
 	}
-	else closeState = false;
 
-	if (cwRule != NULL && stLaunch.empty() == false)
+	if (launcherType.empty() == false)
 	{
-		closeState = true;
-		storage->removeItem(stLaunch);
+		storage->removeItem(launcherType);
 
 		cw = new CraftWeapon(cwRule);
 		cw->setRearming();
 		_craft->getWeapons()->at(_pod) = cw;
 		_craft->checkup();
-	}
-	else closeState = false;
 
-	if (closeState == true)
+		cwRule = NULL;
+	}
+
+	if (cwRule == NULL)
 		_game->popState();
 }
 
