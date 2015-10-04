@@ -127,20 +127,38 @@ struct BattleUnitKill
 	UnitStatus _status;
 
 
-	/// Makes turn unique across all kills.
-	void makeTurnUnique()
+	/// cTor.
+	BattleUnitKill(
+			std::string unitRank,
+			std::string race,
+			std::string weapon,
+			std::string weaponAmmo,
+			UnitFaction faction,
+			UnitStatus status,
+			int mission,
+			int turn,
+			int points)
+		:
+			_rank(unitRank),
+			_race(race),
+			_weapon(weapon),
+			_weaponAmmo(weaponAmmo),
+			_faction(faction),
+			_status(status),
+			_mission(mission),
+			_turn(turn),
+			_points(points)
+	{}
+
+	///
+	explicit BattleUnitKill(const YAML::Node& node)
 	{
-		_turn += _mission * 300; // Maintains divisibility by 3 as well.
+		load(node);
 	}
 
-	/// Checks to see if turn was on HOSTILE side.
-	bool hostileTurn() const
-	{
-		if ((_turn - 1) % 3 == 0)
-			return true;
-
-		return false;
-	}
+	/// dTor.
+	~BattleUnitKill()
+	{}
 
 	///
 	void load(const YAML::Node &node)
@@ -169,6 +187,7 @@ struct BattleUnitKill
 		node["mission"]		= _mission;
 		node["turn"]		= _turn;
 		node["points"]		= _points;
+
 		node["status"]		= static_cast<int>(_status);
 		node["faction"]		= static_cast<int>(_faction);
 
@@ -183,7 +202,6 @@ struct BattleUnitKill
 			case STATUS_DEAD:			return "STATUS_DEAD";
 			case STATUS_UNCONSCIOUS:	return "STATUS_UNCONSCIOUS";
 		}
-
 		return "status error";
 	}
 
@@ -197,43 +215,25 @@ struct BattleUnitKill
 			case FACTION_HOSTILE:	return "FACTION_HOSTILE";
 			case FACTION_NEUTRAL:	return "FACTION_NEUTRAL";
 		}
-
 		return "faction error";
 	}
 
-	///
-	explicit BattleUnitKill(const YAML::Node& node)
+	/// Makes turn unique across all kills.
+	void makeTurnUnique()
 	{
-		load(node);
+		_turn += _mission * 300; // Maintains divisibility by 3 as well.
 	}
 
-	/// cTor.
-	BattleUnitKill(
-			std::string unitRank,
-			std::string race,
-			std::string weapon,
-			std::string weaponAmmo,
-			UnitFaction faction,
-			UnitStatus status,
-			int mission,
-			int turn,
-			int points)
-		:
-			_rank(unitRank),
-			_race(race),
-			_weapon(weapon),
-			_weaponAmmo(weaponAmmo),
-			_faction(faction),
-			_status(status),
-			_mission(mission),
-			_turn(turn),
-			_points(points)
-	{}
+	/// Checks to see if turn was on HOSTILE side.
+	bool hostileTurn() const
+	{
+		if ((_turn - 1) % 3 == 0)
+			return true;
 
-	/// dTor.
-	~BattleUnitKill()
-	{}
-};
+		return false;
+	}
+
+}; // end BattlUnitKill.
 
 
 /**
@@ -241,6 +241,7 @@ struct BattleUnitKill
  */
 struct BattleUnitStatistics
 {
+
 	bool
 		ironMan,		// Tracks if the soldier was the only soldier on the mission
 		KIA,			// Tracks if the soldier was killed in battle
@@ -265,70 +266,46 @@ struct BattleUnitStatistics
 	std::vector<BattleUnitKill*> kills; // Tracks kills
 
 
-	/// Checks if unit has fired on a friendly.
-	bool hasFriendlyFired() const
-	{
-		for (std::vector<BattleUnitKill*>::const_iterator
-				i = kills.begin();
-				i != kills.end();
-				++i)
-		{
-			if ((*i)->_faction == FACTION_PLAYER)
-				return true;
-		}
+	/// cTor.
+	BattleUnitStatistics()
+		:
+			wasUnconscious(false),
+			shotAtCounter(0),
+			hitCounter(0),
+			shotByFriendlyCounter(0),
+			shotFriendlyCounter(0),
+			longDistanceHitCounter(0),
+			lowAccuracyHitCounter(0),
+			shotsFiredCounter(0),
+			shotsLandedCounter(0),
+			medikitApplications(0),
+			revivedSoldier(0),
+			ironMan(false), // ->> calculated at end of Tactical, do not save ->
+			loneSurvivor(false),
+			nikeCross(false),
+			KIA(false),
+			MIA(false),
+			daysWounded(0)
+	{}
 
-		return false;
+	///
+	explicit BattleUnitStatistics(const YAML::Node& node)
+	{
+		load(node);
 	}
 
-	/// Gets if unit has killed or stunned a hostile.
-	bool hasKillOrStun() const
-	{
-		for (std::vector<BattleUnitKill*>::const_iterator
-				i = kills.begin();
-				i != kills.end();
-				++i)
-		{
-			if ((*i)->_faction == FACTION_HOSTILE
-				&& ((*i)->_status == STATUS_DEAD
-					|| (*i)->_status == STATUS_UNCONSCIOUS))
-			{
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	/// Checks if these statistics are default.
-	bool statsDefault() const
-	{
-		if (kills.empty() == true
-			&& wasUnconscious == false
-			&& shotAtCounter == 0
-			&& hitCounter == 0
-			&& shotByFriendlyCounter == 0
-			&& shotFriendlyCounter == 0
-			&& longDistanceHitCounter == 0
-			&& lowAccuracyHitCounter == 0
-			&& shotsFiredCounter == 0
-			&& shotsLandedCounter == 0
-			&& medikitApplications == 0
-			&& revivedSoldier == 0)
-		{
-			return true;
-		}
-
-		return false;
-	}
+	/// dTor.
+	~BattleUnitStatistics()
+	{}
 
 	///
 	void load(const YAML::Node& node)
 	{
-		if (const YAML::Node& YAMLkills = node["kills"])
+		if (const YAML::Node& killsYaml = node["kills"])
 		{
 			for (YAML::const_iterator
-					i = YAMLkills.begin();
-					i != YAMLkills.end();
+					i = killsYaml.begin();
+					i != killsYaml.end();
 					++i)
 			{
 				kills.push_back(new BattleUnitKill(*i));
@@ -346,12 +323,12 @@ struct BattleUnitStatistics
 		shotsLandedCounter		= node["shotsLandedCounter"]	.as<int>(shotsLandedCounter);
 		medikitApplications		= node["medikitApplications"]	.as<int>(medikitApplications);
 		revivedSoldier			= node["revivedSoldier"]		.as<int>(revivedSoldier);
-/*		ironMan =
+		ironMan =
 		loneSurvivor =
 		nikeCross =
 		KIA =
 		MIA = false;
-		daysWounded = 0; */
+		daysWounded = 0;
 	}
 
 	///
@@ -385,38 +362,62 @@ struct BattleUnitStatistics
 		return node;
 	}
 
-	///
-	explicit BattleUnitStatistics(const YAML::Node& node)
+	/// Checks if these statistics are default.
+	bool statsDefault() const
 	{
-		load(node);
+		if (kills.empty() == true
+			&& wasUnconscious == false
+			&& shotAtCounter == 0
+			&& hitCounter == 0
+			&& shotByFriendlyCounter == 0
+			&& shotFriendlyCounter == 0
+			&& longDistanceHitCounter == 0
+			&& lowAccuracyHitCounter == 0
+			&& shotsFiredCounter == 0
+			&& shotsLandedCounter == 0
+			&& medikitApplications == 0
+			&& revivedSoldier == 0)
+		{
+			return true;
+		}
+
+		return false;
 	}
 
-	/// cTor.
-	BattleUnitStatistics()
-		:
-			wasUnconscious(false),
-			shotAtCounter(0),
-			hitCounter(0),
-			shotByFriendlyCounter(0),
-			shotFriendlyCounter(0),
-			longDistanceHitCounter(0),
-			lowAccuracyHitCounter(0),
-			shotsFiredCounter(0),
-			shotsLandedCounter(0),
-			medikitApplications(0),
-			revivedSoldier(0),
-			ironMan(false), // ->> calculated at end of Tactical, do not save ->
-			loneSurvivor(false),
-			nikeCross(false),
-			KIA(false),
-			MIA(false),
-			daysWounded(0)
-	{}
+	/// Checks if unit has fired on a friendly.
+	bool hasFriendlyFired() const
+	{
+		for (std::vector<BattleUnitKill*>::const_iterator
+				i = kills.begin();
+				i != kills.end();
+				++i)
+		{
+			if ((*i)->_faction == FACTION_PLAYER)
+				return true;
+		}
 
-	/// dTor.
-	~BattleUnitStatistics()
-	{}
-};
+		return false;
+	}
+
+	/// Gets if unit has killed or stunned a hostile.
+	bool hasKillOrStun() const
+	{
+		for (std::vector<BattleUnitKill*>::const_iterator
+				i = kills.begin();
+				i != kills.end();
+				++i)
+		{
+			if ((*i)->_faction == FACTION_HOSTILE
+				&& ((*i)->_status == STATUS_DEAD || (*i)->_status == STATUS_UNCONSCIOUS))
+			{
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+}; // end BattleUnitStatistics.
 
 
 /**

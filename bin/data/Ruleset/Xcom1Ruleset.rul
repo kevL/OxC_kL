@@ -314,7 +314,7 @@ craftWeapons: #new order: stingray,avalanche,cannon,fusionball,lasercannon,plasm
     ammoMax: 100
     rearmRate: 25
     launcher: STR_CANNON
-    clip: STR_CANNON_ROUNDS_X50
+    clip: STR_CANNON_ROUNDS_50
     prjType: 2
     prjSpeed: 8
   - type: STR_STINGRAY
@@ -396,7 +396,7 @@ items:
     costBuy: 25000
     costSell: 5000
     transferTime: 48
-  - type: STR_CANNON_ROUNDS_X50
+  - type: STR_CANNON_ROUNDS_50
     size: 0.3
     costBuy: 4475
     costSell: 1000
@@ -4504,7 +4504,7 @@ startingBase:
       STR_STINGRAY_LAUNCHER: 2
       STR_STINGRAY_MISSILES: 18
       STR_CANNON: 1
-      STR_CANNON_ROUNDS_X50: 5
+      STR_CANNON_ROUNDS_50: 5
       STR_PISTOL: 2
       STR_PISTOL_CLIP: 6
       STR_RIFLE: 8

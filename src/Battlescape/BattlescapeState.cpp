@@ -212,13 +212,13 @@ BattlescapeState::BattlescapeState()
 
 	std::fill_n(
 			_hostileUnit,
-			UNIT_HOTCONS,
+			HOTSQRS,
 			static_cast<BattleUnit*>(NULL));
 
 	int offset_x = 0;
 	for (size_t
 			i = 0;
-			i != UNIT_HOTCONS;
+			i != HOTSQRS;
 			++i)
 	{
 		if (i > 9)
@@ -236,7 +236,7 @@ BattlescapeState::BattlescapeState()
 
 	for (size_t // center 10+ on buttons
 			i = 9;
-			i != UNIT_HOTCONS;
+			i != HOTSQRS;
 			++i)
 	{
 		_numHostileUnit[i]->setX(_numHostileUnit[i]->getX() - 2);
@@ -385,7 +385,7 @@ BattlescapeState::BattlescapeState()
 
 	for (size_t
 			i = 0;
-			i != UNIT_HOTCONS;
+			i != HOTSQRS;
 			++i)
 	{
 		add(_btnHostileUnit[i]);
@@ -893,7 +893,7 @@ BattlescapeState::BattlescapeState()
 	const Uint8 color = static_cast<Uint8>(_rules->getInterface("battlescape")->getElement("visibleUnits")->color);
 	for (size_t
 			i = 0;
-			i != UNIT_HOTCONS;
+			i != HOTSQRS;
 			++i)
 	{
 		_btnHostileUnit[i]->onMousePress((ActionHandler)& BattlescapeState::btnHostileUnitPress);
@@ -2185,10 +2185,10 @@ void BattlescapeState::btnHostileUnitPress(Action* action)
 		btnMapUpClick(NULL);
 	else
 	{
-		size_t i;
-		for ( // find out which button was pressed
+		size_t i; // find out which button was pressed
+		for (
 				i = 0;
-				i != UNIT_HOTCONS;
+				i != HOTSQRS;
 				++i)
 		{
 			if (_btnHostileUnit[i] == action->getSender())
@@ -2197,7 +2197,12 @@ void BattlescapeState::btnHostileUnitPress(Action* action)
 
 		if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 		{
+			// *** cppCheck false positive ***
+			// kL_note: Invoke cppCheck w/ "--inline-suppr BattlescapeState.cpp"
+			// it says this is going to try accessing _hostileUnit[] at index=HOTSQRS.
+			// cppcheck-suppress arrayIndexOutOfBounds
 			_map->getCamera()->centerOnPosition(_hostileUnit[i]->getPosition());
+			// (but note that it makes no such burp against _hostileUnit[] below_)
 
 			_hostileTargeter->setVisible();
 			_hostileTargeterFrame = 0;
@@ -2223,7 +2228,7 @@ void BattlescapeState::btnHostileUnitPress(Action* action)
 				++j)
 			{
 				if ((*j)->getFaction() == FACTION_PLAYER
-					&& (*j)->isOut() == false
+					&& (*j)->isOut_t(OUT_STAT) == false
 					&& std::find(
 							(*j)->getHostileUnits()->begin(),
 							(*j)->getHostileUnits()->end(),
@@ -2242,7 +2247,7 @@ void BattlescapeState::btnHostileUnitPress(Action* action)
 					++j)
 				{
 					if ((*j)->getFaction() == FACTION_PLAYER
-						&& (*j)->isOut() == false
+						&& (*j)->isOut_t(OUT_STAT) == false
 						&& std::find(
 								(*j)->getHostileUnits()->begin(),
 								(*j)->getHostileUnits()->end(),
@@ -2531,7 +2536,7 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 {
 	for (size_t // remove target indicators
 			i = 0;
-			i != UNIT_HOTCONS;
+			i != HOTSQRS;
 			++i)
 	{
 		_btnHostileUnit[i]->setVisible(false);
@@ -2627,7 +2632,7 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 		for (std::vector<BattleUnit*>::const_iterator
 			i = _battleSave->getUnits()->begin();
 			i != _battleSave->getUnits()->end()
-				&& j != UNIT_HOTCONS;
+				&& j != HOTSQRS;
 			++i)
 		{
 			if ((*i)->isOut() == false
@@ -2675,7 +2680,7 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 		}
 
 		const int wounds = selUnit->getFatalWounds();
-		if (wounds > 0)
+		if (wounds != 0)
 		{
 			Surface* srfStatus = _game->getResourcePack()->getSurface("RANK_ROOKIE");
 			if (srfStatus != NULL)
@@ -2804,7 +2809,7 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 
 			if (itRule->getBattleType() == BT_FIREARM
 				&& (rtItem->selfPowered() == false
-					|| itRule->getClipSize() > 0))
+					|| itRule->getClipSize() != 0))
 			{
 				_numAmmoRight->setVisible();
 				if (rtItem->getAmmoItem() != NULL)
@@ -2835,7 +2840,7 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 
 			if (itRule->getBattleType() == BT_FIREARM
 				&& (ltItem->selfPowered() == false
-					|| itRule->getClipSize() > 0))
+					|| itRule->getClipSize() != 0))
 			{
 				_numAmmoLeft->setVisible();
 				if (ltItem->getAmmoItem() != NULL)
@@ -2858,7 +2863,7 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 
 		showPsiButton( // getSpecialWeapon() != NULL
 					selUnit->getOriginalFaction() == FACTION_HOSTILE
-					&& selUnit->getBaseStats()->psiSkill > 0);
+					&& selUnit->getBaseStats()->psiSkill != 0);
 	}
 }
 
@@ -2872,7 +2877,7 @@ void BattlescapeState::updateHostileHotcons()
 	{
 		for (size_t // hide target indicators & clear targets
 				i = 0;
-				i != UNIT_HOTCONS;
+				i != HOTSQRS;
 				++i)
 		{
 			_btnHostileUnit[i]->setVisible(false);
@@ -2885,10 +2890,9 @@ void BattlescapeState::updateHostileHotcons()
 		for (std::vector<BattleUnit*>::const_iterator
 			i = _battleSave->getUnits()->begin();
 			i != _battleSave->getUnits()->end()
-				&& j != UNIT_HOTCONS;
+				&& j != HOTSQRS;
 			++i)
 		{
-//			if ((*i)->isOut() == false
 			if ((*i)->isOut_t(OUT_STAT) == false
 				&& (*i)->getUnitVisible() == true
 				&& (*i)->getFaction() == FACTION_HOSTILE)
@@ -2970,8 +2974,7 @@ void BattlescapeState::drawFuse() // private.
 					_btnLeftHandItem->getX() + 27,
 					_btnLeftHandItem->getY() - 1,
 					pulse[_fuseFrame],
-					false,
-					3); // red
+					false, 3); // red
 		_btnLeftHandItem->unlock();
 	}
 
@@ -2986,8 +2989,7 @@ void BattlescapeState::drawFuse() // private.
 					_btnRightHandItem->getX() + 27,
 					_btnRightHandItem->getY() - 1,
 					pulse[_fuseFrame],
-					false,
-					3); // red
+					false, 3); // red
 		_btnRightHandItem->unlock();
 	}
 
@@ -3012,7 +3014,7 @@ void BattlescapeState::cycleHostileHotcons() // private.
 
 	for (size_t
 			i = 0;
-			i != UNIT_HOTCONS;
+			i != HOTSQRS;
 			++i)
 	{
 		if (_btnHostileUnit[i]->getVisible() == true)

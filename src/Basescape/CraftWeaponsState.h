@@ -29,6 +29,7 @@ namespace OpenXcom
 {
 
 class Base;
+class Craft;
 class RuleCraftWeapon;
 class Text;
 class TextButton;
@@ -46,6 +47,7 @@ class CraftWeaponsState
 
 private:
 	Base* _base;
+	Craft* _craft;
 	Text
 		* _txtAmmunition,
 		* _txtArmament,
@@ -55,11 +57,9 @@ private:
 	TextList* _lstWeapons;
 	Window* _window;
 
-	size_t
-		_craftId,
-		_pod;
+	size_t _pod;
 
-	std::vector<RuleCraftWeapon*> _weaponRules;
+	std::vector<const RuleCraftWeapon*> _cwRules;
 
 
 	public:

@@ -61,6 +61,10 @@ struct DebriefingStat
 struct ReequipStat
 {
 	std::string type;
+	// *** cppCheck false positive ***
+	// kL_note: Invoke cppCheck w/ "--inline-suppr DebriefingState.h"
+	// it says this is never used.
+	// cppcheck-suppress unusedStructMember
 	int qtyLost;
 	std::wstring craft;
 };

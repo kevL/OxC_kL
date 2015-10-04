@@ -536,7 +536,7 @@ en-US:
   STR_PLASMA_BEAM: "Plasma Beam"
   STR_STINGRAY_MISSILES: "Stingray round"
   STR_AVALANCHE_MISSILES: "Avalanche round"
-  STR_CANNON_ROUNDS_X50: "Cannon round"
+  STR_CANNON_ROUNDS_50: "Cannon round"
   STR_FUSION_BALL: "Fusion round"
   STR_SOLDIER: "Soldier"
   STR_SCIENTIST: "Scientist"

@@ -115,7 +115,7 @@ private:
 
 	public:
 		/// Creates the Sell state.
-		SellState(Base* const base);
+		explicit SellState(Base* const base);
 //				OptionsOrigin origin = OPT_GEOSCAPE);
 		/// Cleans up the Sell state.
 		~SellState();

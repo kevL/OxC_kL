@@ -80,7 +80,7 @@ private:
 
 	public:
 		/// Creates a new mission script.
-		RuleMissionScript(const std::string& type);
+		explicit RuleMissionScript(const std::string& type);
 		/// Deletes a mission script.
 		~RuleMissionScript();
 

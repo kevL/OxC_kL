@@ -62,8 +62,8 @@ class BattlescapeState
 
 private:
 	static const size_t
-		UNIT_HOTCONS	= 20,
-		TARGET_FRAMES	= 6,
+		HOTSQRS			= 20,
+		TARGET_FRAMES	=  6,
 		PULSE_FRAMES	= 22;
 
 	static const Uint8
@@ -129,20 +129,20 @@ private:
 //		* _reserve;
 //		* _btnReserveNone, * _btnReserveSnap, * _btnReserveAimed, * _btnReserveAuto, * _btnReserveKneel, * _btnZeroTUs;
 	BattlescapeGame* _battleGame;
-	BattleUnit* _hostileUnit[UNIT_HOTCONS];
+	BattleUnit* _hostileUnit[HOTSQRS];
 	InteractiveSurface
 		* _icons,
 		* _btnLeftHandItem,
 		* _btnRightHandItem,
 		* _btnStats,
-		* _btnHostileUnit[UNIT_HOTCONS],
+		* _btnHostileUnit[HOTSQRS],
 		* _btnWounds,
 		* _btnLogo;
 //	ImageButton* _reserve;
 //	ImageButton* _btnReserveNone, * _btnReserveSnap, * _btnReserveAimed, * _btnReserveAuto, * _btnReserveKneel, * _btnZeroTUs;
 	Map* _map;
 	NumberText
-		* _numHostileUnit[UNIT_HOTCONS],
+		* _numHostileUnit[HOTSQRS],
 
 		* _numTUAim,
 		* _numTUAuto,

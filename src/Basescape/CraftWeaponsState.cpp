@@ -58,7 +58,7 @@ CraftWeaponsState::CraftWeaponsState(
 		size_t pod)
 	:
 		_base(base),
-		_craftId(craftId),
+		_craft(base->getCrafts()->at(craftId)),
 		_pod(pod)
 {
 	_screen = false;
@@ -111,20 +111,21 @@ CraftWeaponsState::CraftWeaponsState(
 	_lstWeapons->setSelectable();
 	_lstWeapons->setMargin();
 	_lstWeapons->addRow(1, tr("STR_NONE_UC").c_str());
-	_weaponRules.push_back(NULL);
 
-	const std::vector<std::string>& weapons = _game->getRuleset()->getCraftWeaponsList();
+	_cwRules.push_back(NULL); // no weapon/disarm.
+
+	const std::vector<std::string>& cwList = _game->getRuleset()->getCraftWeaponsList();
 	for (std::vector<std::string>::const_iterator
-			i = weapons.begin();
-			i != weapons.end();
+			i = cwList.begin();
+			i != cwList.end();
 			++i)
 	{
-		RuleCraftWeapon* const cwRule = _game->getRuleset()->getCraftWeapon(*i);
+		const RuleCraftWeapon* const cwRule = _game->getRuleset()->getCraftWeapon(*i);
 		const RuleItem* const laRule = _game->getRuleset()->getItem(cwRule->getLauncherItem());
 
 		if (_game->getSavedGame()->isResearched(laRule->getRequirements()) == true)
 		{
-			_weaponRules.push_back(cwRule);
+			_cwRules.push_back(cwRule);
 
 			std::wostringstream
 				woststr1,
@@ -172,49 +173,45 @@ void CraftWeaponsState::btnCancelClick(Action*)
  */
 void CraftWeaponsState::lstWeaponsClick(Action*)
 {
-	bool closeState = false;
+	ItemContainer* const storage = _base->getStorageItems();
+	bool closeState;
 
-	const RuleCraftWeapon* const cwRule = _weaponRules[_lstWeapons->getSelectedRow()];
-	CraftWeapon* cw = _base->getCrafts()->at(_craftId)->getWeapons()->at(_pod);
-	ItemContainer* storage = _base->getStorageItems();
+	const RuleCraftWeapon* const cwRule (_cwRules[_lstWeapons->getSelectedRow()]);
+	std::string stLaunch;
+	if (cwRule != NULL)
+	{
+		stLaunch = cwRule->getLauncherItem();
+		if (storage->getItemQty(stLaunch) == 0)
+			stLaunch.clear();
+	}
 
-	if (cwRule == NULL && cw != NULL)
+	CraftWeapon* cw = _craft->getWeapons()->at(_pod);
+	if (cw != NULL
+		&& (cwRule == NULL
+			|| (cwRule != cw->getRules() && stLaunch.empty() == false)))
 	{
 		closeState = true;
-
 		storage->addItem(cw->getRules()->getLauncherItem());
 		storage->addItem(
 					cw->getRules()->getClipItem(),
 					cw->getClipsLoaded(_game->getRuleset()));
 
 		delete cw;
-		_base->getCrafts()->at(_craftId)->getWeapons()->at(_pod) = NULL;
+		_craft->getWeapons()->at(_pod) = NULL;
 	}
+	else closeState = false;
 
-	if (cwRule != NULL
-		&& (cw == NULL || cw->getRules() != cwRule)
-		&& storage->getItemQty(cwRule->getLauncherItem()) != 0)
+	if (cwRule != NULL && stLaunch.empty() == false)
 	{
 		closeState = true;
-
-		if (cw != NULL)
-		{
-			storage->addItem(cw->getRules()->getLauncherItem());
-			storage->addItem(
-						cw->getRules()->getClipItem(),
-						cw->getClipsLoaded(_game->getRuleset()));
-
-			delete cw;
-			_base->getCrafts()->at(_craftId)->getWeapons()->at(_pod) = NULL;
-		}
-
-		storage->removeItem(cwRule->getLauncherItem());
+		storage->removeItem(stLaunch);
 
 		cw = new CraftWeapon(cwRule);
 		cw->setRearming();
-		_base->getCrafts()->at(_craftId)->getWeapons()->at(_pod) = cw;
-		_base->getCrafts()->at(_craftId)->checkup();
+		_craft->getWeapons()->at(_pod) = cw;
+		_craft->checkup();
 	}
+	else closeState = false;
 
 	if (closeState == true)
 		_game->popState();
