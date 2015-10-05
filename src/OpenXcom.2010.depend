@@ -4390,7 +4390,7 @@
 
 1441247516 f:\git\openxcom\src\savegame\target.h
 
-1443978296 f:\git\openxcom\src\savegame\savedgame.h
+1444027286 f:\git\openxcom\src\savegame\savedgame.h
 	"GameTime.h"
 	"Soldier.h"
 	"../Ruleset/RuleAlienMission.h"
@@ -4558,7 +4558,7 @@
 	"../Ruleset/RuleAlienMission.h"
 	"../Savegame/GameTime.h"
 
-1431493222 f:\git\openxcom\src\savegame\gametime.h
+1444027324 f:\git\openxcom\src\savegame\gametime.h
 
 1443773128 source:f:\git\openxcom\src\basescape\craftarmorstate.cpp
 	"CraftArmorState.h"
@@ -4919,7 +4919,7 @@
 	"../Savegame/Base.h"
 	"../Savegame/SavedGame.h"
 
-1443977145 source:f:\git\openxcom\src\basescape\newmanufactureliststate.cpp
+1444024787 source:f:\git\openxcom\src\basescape\newmanufactureliststate.cpp
 	"NewManufactureListState.h"
 	"ManufactureCostsState.h"
 	"ManufactureStartState.h"
@@ -4937,7 +4937,7 @@
 	"../Savegame/Base.h"
 	"../Savegame/SavedGame.h"
 
-1443977156 source:f:\git\openxcom\src\basescape\newresearchliststate.cpp
+1444024807 source:f:\git\openxcom\src\basescape\newresearchliststate.cpp
 	"NewResearchListState.h"
 	"ResearchInfoState.h"
 	"../Engine/Game.h"
@@ -5055,9 +5055,7 @@
 	"../Savegame/ItemContainer.h"
 	"../Savegame/ResearchProject.h"
 
-1435636566 f:\git\openxcom\src\engine\rng.h
-	<algorithm>
-	<cstdint>
+1444024118 f:\git\openxcom\src\engine\rng.h
 
 1443900040 source:f:\git\openxcom\src\basescape\researchstate.cpp
 	"ResearchState.h"
@@ -6958,7 +6956,7 @@
 1442441486 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1443978833 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1444024571 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	"AlienBaseState.h"
 	"BaseDefenseState.h"
@@ -7582,7 +7580,7 @@
 	"OptionsBaseState.h"
 	"../Engine/State.h"
 
-1443978871 source:f:\git\openxcom\src\menu\newbattlestate.cpp
+1444022824 source:f:\git\openxcom\src\menu\newbattlestate.cpp
 	"NewBattleState.h"
 	"../Basescape/CraftInfoState.h"
 	"../Battlescape/BattlescapeGenerator.h"
@@ -8500,7 +8498,7 @@
 1440359453 source:f:\git\openxcom\src\savegame\equipmentlayoutitem.cpp
 	"EquipmentLayoutItem.h"
 
-1431492103 source:f:\git\openxcom\src\savegame\gametime.cpp
+1444027332 source:f:\git\openxcom\src\savegame\gametime.cpp
 	"GameTime.h"
 	"../Engine/Language.h"
 
@@ -8564,7 +8562,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/Ruleset.h"
 
-1444019897 source:f:\git\openxcom\src\savegame\savedgame.cpp
+1444027898 source:f:\git\openxcom\src\savegame\savedgame.cpp
 	"SavedGame.h"
 	"AlienBase.h"
 	"AlienMission.h"

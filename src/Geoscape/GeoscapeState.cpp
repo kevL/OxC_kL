@@ -2834,18 +2834,17 @@ void GeoscapeState::time1Day()
 
 			resEvents.push_back(new ResearchCompleteState(resRule0, gofRule));
 
+
 			std::vector<const RuleResearch*> newResearchPossible;
 			_gameSave->getDependentResearch(
 										newResearchPossible,
 										resRule,
-//										_rules,
 										*i);
 
 			std::vector<const RuleManufacture*> newManufacturePossible;
 			_gameSave->getDependentManufacture(
 											newManufacturePossible,
 											resRule);
-//											_rules);
 
 			if (resRule0 != NULL) // check for need to research clip before manufacturing weapon allowed.
 			{

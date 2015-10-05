@@ -233,7 +233,7 @@ int GameTime::getDay() const
  * @param lang - pointer to current language
  * @return, localized day string
  */
-std::wstring GameTime::getDayString(Language* lang) const
+std::wstring GameTime::getDayString(const Language* const lang) const
 {
 	std::string st;
 	switch (_day)

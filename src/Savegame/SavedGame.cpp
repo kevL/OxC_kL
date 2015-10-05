@@ -68,7 +68,7 @@ const std::string
 	SavedGame::QUICKSAVE			= "_quick_.asav";
 
 
-///
+/// *** FUNCTOR ***
 struct findRuleResearch
 	:
 		public std::unary_function<ResearchProject*, bool>
@@ -90,7 +90,7 @@ bool findRuleResearch::operator() (const ResearchProject* const r) const
 }
 
 
-///
+/// *** FUNCTOR ***
 struct equalProduction
 	:
 		public std::unary_function<Production*, bool>
@@ -114,7 +114,7 @@ bool equalProduction::operator() (const Production* const p) const
 
 /**
  * Initializes a brand new saved game according to the specified difficulty.
- * @param rules - pointer to the Ruleset kL
+ * @param rules - pointer to the Ruleset
  */
 SavedGame::SavedGame(const Ruleset* const rules)
 	:
@@ -257,9 +257,9 @@ std::vector<SaveInfo> SavedGame::getList(
 
 	if (autoquick == true)
 	{
-		const std::vector<std::string> saves = CrossPlatform::getFolderContents(
+		const std::vector<std::string> saves (CrossPlatform::getFolderContents(
 																			Options::getUserFolder(),
-																			"asav");
+																			"asav"));
 		for (std::vector<std::string>::const_iterator
 				i = saves.begin();
 				i != saves.end();
@@ -282,9 +282,9 @@ std::vector<SaveInfo> SavedGame::getList(
 		}
 	}
 
-	const std::vector<std::string> saves = CrossPlatform::getFolderContents(
+	const std::vector<std::string> saves (CrossPlatform::getFolderContents(
 																		Options::getUserFolder(),
-																		"sav");
+																		"sav"));
 	for (std::vector<std::string>::const_iterator
 			i = saves.begin();
 			i != saves.end();
@@ -311,18 +311,18 @@ std::vector<SaveInfo> SavedGame::getList(
 
 /**
  * Gets the info of a specific save file.
- * @param file - reference the filename of a save
+ * @param file - reference a save by filename
  * @param lang - pointer to the loaded Language
- * @return, SaveInfo struct (SavedGame.h)
+ * @return, the SaveInfo (SavedGame.h)
  */
 SaveInfo SavedGame::getSaveInfo( // private.
 		const std::string& file,
-		Language* lang)
+		const Language* const lang)
 {
-	const std::string fullname = Options::getUserFolder() + file;
-	const YAML::Node doc = YAML::LoadFile(fullname);
-	SaveInfo save;
+	const std::string path (Options::getUserFolder() + file);
+	const YAML::Node doc (YAML::LoadFile(path));
 
+	SaveInfo save;
 	save.fileName = file;
 
 	if (save.fileName == QUICKSAVE)
@@ -350,39 +350,50 @@ SaveInfo SavedGame::getSaveInfo( // private.
 		save.reserved = false;
 	}
 
-	save.timestamp = CrossPlatform::getDateModified(fullname);
-	const std::pair<std::wstring, std::wstring> strTime = CrossPlatform::timeToString(save.timestamp);
-	save.isoDate = strTime.first;
-	save.isoTime = strTime.second;
+	save.timestamp = CrossPlatform::getDateModified(path);
+	const std::pair<std::wstring, std::wstring> timePair (CrossPlatform::timeToString(save.timestamp));
+	save.isoDate = timePair.first;
+	save.isoTime = timePair.second;
 
 	std::wostringstream details;
 	if (doc["base"])
 	{
-		details << Language::utf8ToWstr(doc["base"].as<std::string>());
-		details << L" - ";
+		details << Language::utf8ToWstr(doc["base"].as<std::string>())
+				<< L" - ";
 	}
 
-	GameTime gt = GameTime(6,1,1,1999,12,0,0);
+	GameTime gt (GameTime(6,1,1,1999,12,0,0));
 	gt.load(doc["time"]);
-	details << gt.getDayString(lang) << L" " << lang->getString(gt.getMonthString()) << L" " << gt.getYear() << L" ";
-	details << gt.getHour() << L":" << std::setfill(L'0') << std::setw(2) << gt.getMinute();
+	details << gt.getDayString(lang)
+			<< L" "
+			<< lang->getString(gt.getMonthString())
+			<< L" "
+			<< gt.getYear()
+			<< L" "
+			<< gt.getHour()
+			<< L":"
+			<< std::setfill(L'0')
+			<< std::setw(2)
+			<< gt.getMinute();
 
 	if (doc["turn"])
 	{
-		details << L" - ";
-		details << lang->getString(doc["mission"].as<std::string>()) << L" ";
-		details << lang->getString("STR_TURN").arg(doc["turn"].as<int>());
+		details << L" - "
+				<< lang->getString(doc["mission"].as<std::string>())
+				<< L" "
+				<< lang->getString("STR_TURN").arg(doc["turn"].as<int>());
 	}
 
 	if (doc["ironman"].as<bool>(false))
-		details << L" " << lang->getString("STR_IRONMAN");
+		details << L" "
+				<< lang->getString("STR_IRONMAN");
 
 	save.details = details.str();
 
 	if (doc["rulesets"])
 		save.rulesets = doc["rulesets"].as<std::vector<std::string> >();
 
-	save.mode = (GameMode)doc["mode"].as<int>();
+	save.mode = static_cast<GameMode>(doc["mode"].as<int>());
 
 	return save;
 }
@@ -429,12 +440,11 @@ void SavedGame::load(
 	else
 		RNG::setSeed(0);
 
-//	_difficulty = static_cast<GameDifficulty>(doc["difficulty"].as<int>(_difficulty));
 	int diff (doc["difficulty"].as<int>(_difficulty));
 	if (diff < 0) // safety.
 	{
 		diff = 0;
-		Log(LOG_WARNING) << "Difficulty in the save file is negative ... loading as ZERO.";
+		Log(LOG_WARNING) << "Difficulty in the save file is negative ... loading as BEGINNER.";
 	}
 	_difficulty = static_cast<GameDifficulty>(diff);
 
@@ -1261,18 +1271,18 @@ void SavedGame::addFinishedResearch(
 
 	if (score == true)
 	{
-		std::vector<const RuleResearch*> availableResearch;
+		std::vector<const RuleResearch*> openedResearch;
 		for (std::vector<Base*>::const_iterator
 				i = _bases.begin();
 				i != _bases.end();
 				++i)
 		{
-			getDependentResearchBasic(availableResearch, resRule, *i);
+			getDependentResearchBasic(openedResearch, resRule, *i);
 		}
 
 		for (std::vector<const RuleResearch*>::const_iterator
-				i = availableResearch.begin();
-				i != availableResearch.end();
+				i = openedResearch.begin();
+				i != openedResearch.end();
 				++i)
 		{
 			if ((*i)->getCost() == 0)
@@ -1308,7 +1318,6 @@ const std::vector<const RuleResearch*>& SavedGame::getDiscoveredResearch() const
 /**
  * Gets the list of RuleResearch which can be researched in a Base.
  * @param projects	- reference a vector of pointers to the ResearchProjects that are available
-// * @param rules	- pointer to the game Ruleset
  * @param base		- pointer to a Base
  */
 void SavedGame::getAvailableResearchProjects(

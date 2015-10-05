@@ -20,8 +20,8 @@
 #ifndef OPENXCOM_RNG_H
 #define OPENXCOM_RNG_H
 
-#include <algorithm>
-#include <cstdint>
+//#include <algorithm>
+//#include <cstdint>
 
 //#define __STDC_LIMIT_MACROS
 //#include <stdint.h>

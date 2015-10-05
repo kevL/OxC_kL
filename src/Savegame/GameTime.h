@@ -99,7 +99,7 @@ private:
 		/// Gets the ingame day.
 		int getDay() const;
 		/// Gets a string version of the ingame day.
-		std::wstring getDayString(Language* lang) const;
+		std::wstring getDayString(const Language* const lang) const;
 
 		/// Gets the ingame month.
 		int getMonth() const;

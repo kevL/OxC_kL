@@ -320,7 +320,7 @@ private:
 	///
 	static SaveInfo getSaveInfo(
 			const std::string& file,
-			Language* lang);
+			const Language* const lang);
 
 	public:
 		static const std::string
