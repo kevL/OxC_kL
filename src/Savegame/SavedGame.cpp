@@ -1241,14 +1241,10 @@ void SavedGame::setBattleSave(SavedBattleGame* battleSave)
 /**
  * Adds a ResearchProject to the list of already discovered ResearchProjects.
  * @param resRule	- the newly found ResearchProject
-// * @param rules	- the game Ruleset (default NULL if skirmish)
- * @param skirmish	- true if skirmish battle (default false)
- * @param score		- true to score points for research done (default true)
+ * @param score		- true to score points for research done; false for skirmish battles (default true)
  */
 void SavedGame::addFinishedResearch(
 		const RuleResearch* const resRule,
-//		const Ruleset* const rules,
-		bool skirmish,
 		bool score)
 {
 	if (std::find(
@@ -1259,12 +1255,11 @@ void SavedGame::addFinishedResearch(
 		_discovered.push_back(resRule);
 		removePoppedResearch(resRule);
 
-		if (score == true && skirmish == false)
+		if (score == true)
 			addResearchScore(resRule->getPoints());
 	}
 
-//	if (rules != NULL)
-	if (skirmish == false)
+	if (score == true)
 	{
 		std::vector<const RuleResearch*> availableResearch;
 		for (std::vector<Base*>::const_iterator
@@ -1272,7 +1267,7 @@ void SavedGame::addFinishedResearch(
 				i != _bases.end();
 				++i)
 		{
-			getDependentResearchBasic(availableResearch, resRule /*, rules */, *i);
+			getDependentResearchBasic(availableResearch, resRule, *i);
 		}
 
 		for (std::vector<const RuleResearch*>::const_iterator
@@ -1318,7 +1313,6 @@ const std::vector<const RuleResearch*>& SavedGame::getDiscoveredResearch() const
  */
 void SavedGame::getAvailableResearchProjects(
 		std::vector<const RuleResearch*>& projects,
-//		const Ruleset* const rules,
 		Base* const base) const
 {
 	std::vector<const RuleResearch*> unlocked;
@@ -1348,7 +1342,7 @@ void SavedGame::getAvailableResearchProjects(
 			++i)
 	{
 		resRule = _rules->getResearch(*i);
-		if (isResearchAvailable(resRule, unlocked /*, _rules */) == true)
+		if (isResearchAvailable(resRule, unlocked) == true)
 		{
 			liveAlien = (_rules->getUnit(resRule->getType()) != NULL);
 			if (std::find(
@@ -1440,12 +1434,10 @@ void SavedGame::getAvailableResearchProjects(
 /**
  * Get the list of RuleManufacture which can be manufactured in a Base.
  * @param productions	- reference the list of Productions to be made available
-// * @param rules		- pointer to the Ruleset
  * @param base			- pointer to a Base
  */
 void SavedGame::getAvailableProductions(
 		std::vector<const RuleManufacture*>& productions,
-//		const Ruleset* const rules,
 		const Base* const base) const
 {
 	const std::vector<Production*> baseProductions (base->getProductions());
@@ -1470,13 +1462,11 @@ void SavedGame::getAvailableProductions(
  * Checks whether a ResearchProject can be researched.
  * @param resRule	- pointer to a RuleResearch to test
  * @param unlocked	- reference to a vector of pointers to the currently unlocked RuleResearch
-// * @param rules	- pointer to the current Ruleset
  * @return, true if the RuleResearch can be researched
  */
 bool SavedGame::isResearchAvailable(
 		const RuleResearch* const resRule,
 		const std::vector<const RuleResearch*>& unlocked) const
-//		const Ruleset* const rules) const
 {
 	if (resRule != NULL)
 	{
@@ -1551,16 +1541,14 @@ bool SavedGame::isResearchAvailable(
  * @note This function checks for fake ResearchProjects.
  * @param dependents	- reference to a vector of pointers to the RuleResearches that are now available
  * @param resRule		- pointer to the RuleResearch that has just been discovered
-// * @param rules		- pointer to the game Ruleset
  * @param base			- pointer to a Base
  */
 void SavedGame::getDependentResearch(
 		std::vector<const RuleResearch*>& dependents,
 		const RuleResearch* const resRule,
-//		const Ruleset* const rules,
 		Base* const base) const
 {
-	getDependentResearchBasic(dependents, resRule /*, rules */, base);
+	getDependentResearchBasic(dependents, resRule, base);
 
 	for (std::vector<const RuleResearch*>::const_iterator
 			i = _discovered.begin();
@@ -1573,7 +1561,7 @@ void SavedGame::getDependentResearch(
 					(*i)->getDependencies().end(),
 					resRule->getType()) != (*i)->getDependencies().end())
 		{
-			getDependentResearchBasic(dependents, *i /*, rules */, base);
+			getDependentResearchBasic(dependents, *i, base);
 		}
 	}
 }
@@ -1584,17 +1572,15 @@ void SavedGame::getDependentResearch(
  * @note This function doesn't check for fake ResearchProjects.
  * @param dependents	- reference to a vector of pointers to the RuleResearches that are now available
  * @param resRule		- pointer to the RuleResearch that has just been discovered
-// * @param rules		- pointer to the game Ruleset
  * @param base			- pointer to a Base
  */
 void SavedGame::getDependentResearchBasic( // private.
 		std::vector<const RuleResearch*>& dependents,
 		const RuleResearch* const resRule,
-//		const Ruleset* const rules,
 		Base* const base) const
 {
 	std::vector<const RuleResearch*> possible;
-	getAvailableResearchProjects(possible /*, rules */, base);
+	getAvailableResearchProjects(possible, base);
 	for (std::vector<const RuleResearch*>::const_iterator
 			i = possible.begin();
 			i != possible.end();
@@ -1612,7 +1598,7 @@ void SavedGame::getDependentResearchBasic( // private.
 			dependents.push_back(*i);
 
 			if ((*i)->getCost() == 0)
-				getDependentResearchBasic(dependents, *i /*, rules */, base);
+				getDependentResearchBasic(dependents, *i, base);
 		}
 	}
 }
@@ -1622,12 +1608,10 @@ void SavedGame::getDependentResearchBasic( // private.
  * has been completed. This function checks for fake ResearchProjects.
  * @param dependents	- reference to a vector of pointers to the RuleResearches that are now available
  * @param resRule		- pointer to the RuleResearch that has just been discovered
-// * @param rules		- pointer to the game Ruleset
  */
 void SavedGame::getDependentManufacture(
 		std::vector<const RuleManufacture*>& dependents,
 		const RuleResearch* const resRule) const
-//		const Ruleset* const rules) const
 {
 	const std::vector<std::string>& manufList (_rules->getManufactureList());
 	for (std::vector<std::string>::const_iterator
@@ -1640,9 +1624,9 @@ void SavedGame::getDependentManufacture(
 
 		if (isResearched(manufRule->getRequirements()) == true
 			&& std::find(
-						reqs.begin(),
-						reqs.end(),
-						resRule->getType()) != reqs.end())
+					reqs.begin(),
+					reqs.end(),
+					resRule->getType()) != reqs.end())
 		{
 			dependents.push_back(manufRule);
 		}
@@ -1977,7 +1961,7 @@ private:
  * Find a mission type in the active alien missions.
  * @param region	- the region's string ID
  * @param objective	- the active mission's objective
- * @return, pointer to the AlienMission (NULL if no mission matched)
+ * @return, pointer to the AlienMission or NULL
  */
 AlienMission* SavedGame::findAlienMission(
 		const std::string& region,
@@ -2029,7 +2013,6 @@ void SavedGame::setWarned(bool warned)
 	_warned = warned;
 }
 
-
 /**
  * *** FUNCTOR ***
  * Checks if a point is contained in a region.
@@ -2040,7 +2023,8 @@ class ContainsPoint
 		public std::unary_function<const Region*, bool>
 {
 private:
-	double _lon,_lat;
+	double
+		_lon,_lat;
 
 	public:
 		/// Remember the coordinates.
@@ -2052,8 +2036,8 @@ private:
 				_lat(lat)
 		{}
 
-		/// Check is the region contains the stored point.
-		bool operator()(const Region* const region) const
+		/// Check if the region contains the stored point.
+		bool operator() (const Region* const region) const
 		{
 			return region->getRules()->insideRegion(_lon,_lat);
 		}
@@ -2183,7 +2167,6 @@ void SavedGame::toggleRadarLines()
 {
 	_radarLines = !_radarLines;
 } */
-
 /*
  * @return, the state of the radar line drawing.
  *
@@ -2191,7 +2174,6 @@ bool SavedGame::getRadarLines()
 {
 	return _radarLines;
 } */
-
 /*
  * Toggles the state of the detail drawing.
  *
@@ -2199,7 +2181,6 @@ void SavedGame::toggleDetail()
 {
 	_detail = !_detail;
 } */
-
 /*
  * @return, the state of the detail drawing.
  *
@@ -2262,11 +2243,11 @@ std::vector<SoldierDead*>* SavedGame::getDeadSoldiers()
 	return &_deadSoldiers;
 }
 
-/**
+/*
  * Returns the last selected player base.
  * @return, pointer to base
- */
-/* Base* SavedGame::getSelectedBase()
+ *
+Base* SavedGame::getSelectedBase()
 {
 	// in case a base was destroyed or something...
 	if (_selectedBase < _bases.size())
@@ -2274,30 +2255,27 @@ std::vector<SoldierDead*>* SavedGame::getDeadSoldiers()
 	else
 		return _bases.front();
 } */
-
-/**
+/*
  * Sets the last selected player base.
  * @param base - # of the base
- */
-/* void SavedGame::setSelectedBase(size_t base)
+ *
+void SavedGame::setSelectedBase(size_t base)
 {
 	_selectedBase = base;
 } */
-
-/**
+/*
  * Sets the last selected armour.
  * @param value - the new value for last selected armor - Armor type string
- */
-/* void SavedGame::setLastSelectedArmor(const std::string& value)
+ *
+void SavedGame::setLastSelectedArmor(const std::string& value)
 {
 	_lastselectedArmor = value;
 } */
-
-/**
+/*
  * Gets the last selected armour.
  * @return, last used armor type string
- */
-/* std::string SavedGame::getLastSelectedArmor()
+ *
+std::string SavedGame::getLastSelectedArmor()
 {
 	return _lastselectedArmor;
 } */
@@ -2345,7 +2323,7 @@ std::string SavedGame::getDebugArg() const
  */
 bool SavedGame::getDebugArgDone()
 {
-	const bool ret = _debugArgDone;
+	const bool ret (_debugArgDone);
 
 	if (_debugArgDone == true)
 		_debugArgDone = false;

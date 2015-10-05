@@ -314,7 +314,6 @@ private:
 	void getDependentResearchBasic(
 			std::vector<const RuleResearch*>& dependents,
 			const RuleResearch* const resRule,
-//			const Ruleset* const rules,
 			Base* const base) const;
 	/// Removes a research from the "popped up" array.
 	void removePoppedResearch(const RuleResearch* const resRule);
@@ -443,37 +442,30 @@ private:
 		/// Adds a finished research project.
 		void addFinishedResearch(
 				const RuleResearch* const resRule,
-//				const Ruleset* const rules = NULL,
-				bool skirmish = false,
 				bool score = true);
 		/// Gets the list of already discovered research projects.
 		const std::vector<const RuleResearch*>& getDiscoveredResearch() const;
 		/// Gets the list of research projects which can be researched at a particular Base.
 		void getAvailableResearchProjects(
 				std::vector<const RuleResearch*>& projects,
-//				const Ruleset* const rules,
 				Base* const base) const;
 		/// Gets the list of Productions which can be manufactured in a Base.
 		void getAvailableProductions(
 				std::vector<const RuleManufacture*>& productions,
-//				const Ruleset* const rules,
 				const Base* const base) const;
 		/// Gets the list of newly available research projects once a research project has been completed.
 		void getDependentResearch(
 				std::vector<const RuleResearch*>& dependents,
 				const RuleResearch* const resRule,
-//				const Ruleset* const rules,
 				Base* const base) const;
 		/// Gets the list of newly available manufacture projects once a research project has been completed.
 		void getDependentManufacture(
 				std::vector<const RuleManufacture*>& dependents,
 				const RuleResearch* const resRule) const;
-//				const Ruleset* const rules) const;
 		/// Checks whether a research project can be researched
 		bool isResearchAvailable(
 				const RuleResearch* const resRule,
 				const std::vector<const RuleResearch*>& unlocked) const;
-//				const Ruleset* const rules) const;
 		/// Gets if a research project has been unlocked.
 		bool isResearched(const std::string& resType) const;
 		/// Gets if a list of research projects has been unlocked.

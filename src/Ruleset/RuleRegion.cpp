@@ -66,8 +66,7 @@ void RuleRegion::load(const YAML::Node& node)
 	_type		= node["type"]		.as<std::string>(_type);
 	_buildCost	= node["buildCost"]	.as<int>(_buildCost);
 
-	std::vector<std::vector<double> > areas;
-	areas = node["areas"].as<std::vector<std::vector<double> > >(areas);
+	std::vector<std::vector<double> > areas (node["areas"].as<std::vector<std::vector<double> > >());
 	for (size_t
 			i = 0;
 			i != areas.size();
@@ -99,7 +98,7 @@ void RuleRegion::load(const YAML::Node& node)
 	references and negative texture entries remain in sync? */
 
 	// kL_begin:
-	MissionArea area = *_missionZones.at(MZ_CITY).areas.begin();
+	MissionArea area (*_missionZones.at(MZ_CITY).areas.begin());
 
 	// Delete a possible placeholder in the Geography ruleset, by removing
 	// its pointlike MissionArea at MissionZone[3] MZ_CITY; ie [0,0,0,0].
@@ -109,12 +108,12 @@ void RuleRegion::load(const YAML::Node& node)
 
 	if (const YAML::Node& cities = node["cities"])
 	{
-		for (YAML::const_iterator
+		for (YAML::const_iterator // load all Cities that are in YAML-ruleset
 				i = cities.begin();
 				i != cities.end();
 				++i)
 		{
-			RuleCity* const city = new RuleCity(); // Load all Cities that are in YAML-ruleset
+			RuleCity* const city (new RuleCity());
 			city->load(*i);
 			_cities.push_back(city);
 
@@ -187,11 +186,8 @@ bool RuleRegion::insideRegion(
 		inLat = (lat >= _latMin[i]
 			  && lat < _latMax[i]);
 
-		if (inLon == true
-			&& inLat == true)
-		{
+		if (inLon == true && inLat == true)
 			return true;
-		}
 	}
 
 	return false;
@@ -205,29 +201,19 @@ bool RuleRegion::insideRegion(
 std::vector<RuleCity*>* RuleRegion::getCities()
 {
 	if (_cities.empty() == true) // kL_note: unused for now. Just return the cities, thanks anyway.
-	{
 		for (std::vector<MissionZone>::const_iterator
 				i = _missionZones.begin();
 				i != _missionZones.end();
 				++i)
-		{
 			for (std::vector<MissionArea>::const_iterator
 					j = i->areas.begin();
 					j != i->areas.end();
 					++j)
-			{
-				if (j->isPoint() == true
-					&& j->site.empty() == false)
-				{
+				if (j->isPoint() == true && j->site.empty() == false)
 					_cities.push_back(new RuleCity(
-											j->site,
-											j->lonMin,
-											j->latMin));
-				}
-			}
-		}
-	}
-
+												j->site,
+												j->lonMin,
+												j->latMin));
 	return &_cities;
 }
 
@@ -260,38 +246,40 @@ std::pair<double, double> RuleRegion::getRandomPoint(size_t zone) const
 {
 	if (zone < _missionZones.size())
 	{
-		const size_t pick = RNG::generate(
-										0,
-										static_cast<int>(_missionZones[zone].areas.size()) - 1);
+		const size_t pick = static_cast<size_t>(RNG::generate(0,
+							static_cast<int>(_missionZones[zone].areas.size()) - 1));
 
-		double
+/*		double
 			lonMin = _missionZones[zone].areas[pick].lonMin,
 			lonMax = _missionZones[zone].areas[pick].lonMax,
 			latMin = _missionZones[zone].areas[pick].latMin,
 			latMax = _missionZones[zone].areas[pick].latMax;
-
-		if (lonMin > lonMax)
+		if (lonMin > lonMax) // safeties.
 		{
 			lonMin = _missionZones[zone].areas[pick].lonMax;
 			lonMax = _missionZones[zone].areas[pick].lonMin;
 		}
-
 		if (latMin > latMax)
 		{
 			latMin = _missionZones[zone].areas[pick].latMax;
 			latMax = _missionZones[zone].areas[pick].latMin;
 		}
-
 		const double
 			lon = RNG::generate(lonMin, lonMax),
-			lat = RNG::generate(latMin, latMax);
+			lat = RNG::generate(latMin, latMax); */
 
-		return std::make_pair(
-							lon,
-							lat);
+		const double
+			lon = RNG::generate(
+							_missionZones[zone].areas[pick].lonMin,
+							_missionZones[zone].areas[pick].lonMax),
+			lat = RNG::generate(
+							_missionZones[zone].areas[pick].latMin,
+							_missionZones[zone].areas[pick].latMax);
+
+		return std::make_pair(lon,lat);
 	}
 
-	assert(0 && "Invalid zone number");
+//	assert(0 && "Invalid zone number");
 	return std::make_pair(0.,0.);
 }
 
@@ -303,7 +291,7 @@ std::pair<double, double> RuleRegion::getRandomPoint(size_t zone) const
  */
 MissionArea RuleRegion::getMissionPoint(
 		size_t zone,
-		Target* target) const
+		const Target* const target) const
 {
 	if (zone < _missionZones.size())
 	{
@@ -321,12 +309,12 @@ MissionArea RuleRegion::getMissionPoint(
 		}
 	}
 
-	assert(0 && "Invalid zone number");
+//	assert(0 && "Invalid zone number");
 	return MissionArea();
 }
 
 /**
- * Gets the area data for the random mission point in the Region.
+ * Gets the area data for the random mission point in this Region.
  * @return, a MissionArea from which to extract coordinates, textures, or any other pertinent information
  */
 MissionArea RuleRegion::getRandomMissionPoint(size_t zone) const
@@ -346,13 +334,12 @@ MissionArea RuleRegion::getRandomMissionPoint(size_t zone) const
 		}
 
 		if (randArea.empty() == false)
-			return randArea.at(static_cast<size_t>(RNG::generate(
-															0,
-															randArea.size() - 1)));
+			return randArea.at(static_cast<size_t>(RNG::generate(0,
+							   static_cast<int>(randArea.size()) - 1)));
 
 	}
 
-	assert(0 && "Invalid zone number");
+//	assert(0 && "Invalid zone number");
 	return MissionArea();
 }
 

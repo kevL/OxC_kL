@@ -113,51 +113,51 @@ private:
 		static const int MZ_CITY = 3;
 
 
-		/// Creates a blank region ruleset.
+		/// Creates a blank Region ruleset.
 		explicit RuleRegion(const std::string& type);
-		/// Cleans up the region ruleset.
+		/// Cleans up the Region ruleset.
 		~RuleRegion();
 
-		/// Loads the region from YAML.
+		/// Loads the Region from YAML.
 		void load(const YAML::Node& node);
 
-		/// Gets the region's type.
+		/// Gets the Region's type.
 		const std::string& getType() const;
 
-		/// Gets the region's base cost.
+		/// Gets the Region's cost to construct a Base.
 		int getBaseCost() const;
 
-		/// Checks if a point is inside the region.
+		/// Checks if a point is inside the Region.
 		bool insideRegion(
 				double lon,
 				double lat) const;
 
-		/// Gets the cities in this region.
+		/// Gets the Cities in the Region.
 		std::vector<RuleCity*>* getCities();
 
-		/// Gets the weight of this region for mission selection.
+		/// Gets the weight of the Region for mission selection.
 		size_t getWeight() const;
-		/// Gets the weighted list of missions for this region.
+		/// Gets the weighted list of missions for the Region.
 		const WeightedOptions& getAvailableMissions() const
 		{ return _missionWeights; }
 
-		/// Gets the substitute mission region.
+		/// Gets the substitute Mission Region.
 		const std::string& getMissionRegion() const
 		{ return _missionRegion; }
 
-		/// Gets a list of MissionZones.
+		/// Gets the list of MissionZones in the Region.
 		const std::vector<MissionZone>& getMissionZones() const;
 
-		/// Gets a random point inside a mission zone.
+		/// Gets a random point inside a MissionZone.
 		std::pair<double, double> getRandomPoint(size_t zone) const;
-		/// Gets the mission area for the corresponding target.
+		/// Gets the MissionArea for a corresponding zone and target.
 		MissionArea getMissionPoint(
 				size_t zone,
-				Target* target) const;
-		/// Gets a random mission area.
+				const Target* const target) const;
+		/// Gets a random MissionArea in the Region.
 		MissionArea getRandomMissionPoint(size_t zone) const;
 
-		/// Gets this Country's borders.
+		/// Gets the Region's borders.
 		const std::vector<double>& getLonMax() const {return _lonMax;}
 		const std::vector<double>& getLonMin() const {return _lonMin;}
 		const std::vector<double>& getLatMax() const {return _latMax;}
