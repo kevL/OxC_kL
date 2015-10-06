@@ -296,18 +296,16 @@ Music* ResourcePack::getRandomMusic( // private.
 
 		if (_musicAssignment.find(trackType) != _musicAssignment.end())
 		{
-			const std::map<std::string, std::vector<std::pair<std::string, int> > > assignment = _musicAssignment.at(trackType);
+			const std::map<std::string, std::vector<std::pair<std::string, int> > > assignment (_musicAssignment.at(trackType));
 			if (assignment.find(terrainType) != assignment.end())
 			{
-				const std::vector<std::pair<std::string, int> > terrainMusic = assignment.at(terrainType);
-				const size_t pick = static_cast<size_t>(RNG::seedless(0,
-									static_cast<int>(terrainMusic.size() - 1)));
-				const std::pair<std::string, int> musicId = terrainMusic[pick];
+				const std::vector<std::pair<std::string, int> > terrainMusic (assignment.at(terrainType));
+				const std::pair<std::string, int> trackId (terrainMusic[RNG::pick(terrainMusic.size(), true)]);
 
-				//Log(LOG_DEBUG) << "MUSIC: " << musicId.first;
-				//Log(LOG_INFO) << "MUSIC: " << musicId.first;
+				//Log(LOG_DEBUG) << "MUSIC: " << trackId.first;
+				//Log(LOG_INFO) << "MUSIC: " << trackId.first;
 
-				return _musicFile.at(musicId.first);
+				return _musicFile.at(trackId.first);
 			}
 			//else Log(LOG_INFO) << "ResourcePack::getRandomMusic() No music for terrain - MUTE";
 		}

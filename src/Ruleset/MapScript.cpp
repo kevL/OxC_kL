@@ -337,8 +337,8 @@ int MapScript::getGroupNumber() // private.
 
 	if (_cumulativeFrequency > 0)
 	{
-		int pick = RNG::generate(0,
-							_cumulativeFrequency - 1);
+		int pick (RNG::generate(0,
+							_cumulativeFrequency - 1));
 
 		for (size_t
 				i = 0;
@@ -347,8 +347,7 @@ int MapScript::getGroupNumber() // private.
 		{
 			if (pick < _frequenciesTemp.at(i))
 			{
-				const int ret = _groupsTemp.at(i);
-
+				const int ret (_groupsTemp.at(i));
 				if (_maxUsesTemp.at(i) > 0)
 				{
 					if (--_maxUsesTemp.at(i) == 0)
@@ -359,10 +358,8 @@ int MapScript::getGroupNumber() // private.
 						_maxUsesTemp.erase(_maxUsesTemp.begin() + i);
 					}
 				}
-
 				return ret;
 			}
-
 			pick -= _frequenciesTemp.at(i);
 		}
 	}
@@ -389,8 +386,7 @@ int MapScript::getBlockNumber() // private.
 		{
 			if (pick < _frequenciesTemp.at(i))
 			{
-				const int ret = _blocksTemp.at(i);
-
+				const int ret (_blocksTemp.at(i));
 				if (_maxUsesTemp.at(i) > 0)
 				{
 					if (--_maxUsesTemp.at(i) == 0)
@@ -401,10 +397,8 @@ int MapScript::getBlockNumber() // private.
 						_maxUsesTemp.erase(_maxUsesTemp.begin() + i);
 					}
 				}
-
 				return ret;
 			}
-
 			pick -= _frequenciesTemp.at(i);
 		}
 	}
@@ -425,7 +419,7 @@ MapBlock* MapScript::getNextBlock(RuleTerrain* const terraRule)
 										_sizeY * 10,
 										getGroupNumber());
 
-	const int result = getBlockNumber();
+	const int result (getBlockNumber());
 	if (result < static_cast<int>(terraRule->getMapBlocks()->size())
 		&& result != MBT_UNDEFINED)
 	{

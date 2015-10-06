@@ -44,17 +44,17 @@ void setSeed(uint64_t seed = 0);
 
 /// Generates a random integer number, inclusive.
 int generate(
-		int minRand,
-		int maxRand);
+		int valMin,
+		int valMax);
 /// Generates a random floating-point number.
 double generate(
-		double minRand,
-		double maxRand);
+		double valMin,
+		double valMax);
 
 /// Generates a random integer number inclusive (non-seed version).
 int seedless(
-		int minRand,
-		int maxRand);
+		int valMin,
+		int valMax);
 
 /// Get normally distributed value.
 double boxMuller(
@@ -62,10 +62,17 @@ double boxMuller(
 		double deviation = 1.);
 
 /// Generates a percentage chance.
-bool percent(int value);
+bool percent(int valPct);
 
 /// Generates a random integer number, exclusive.
-int generateEx(int maxRand);
+int generateExclusive(int valMax);
+
+/// Picks an entry from a vector.
+size_t pick(size_t valSize);
+/// Picks an entry from a vector using the seedless generator.
+size_t pick(
+		size_t valSize,
+		bool);
 
 
 /// Shuffles a list randomly.
@@ -79,7 +86,7 @@ void shuffle(T& container)
 	std::random_shuffle(
 					container.begin(),
 					container.end(),
-					generateEx);
+					generateExclusive);
 }
 
 }

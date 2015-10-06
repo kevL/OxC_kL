@@ -2987,12 +2987,7 @@ BattleItem* BattleUnit::getGrenade() const
 	}
 
 	if (grenades.empty() == false)
-	{
-		const size_t pick = RNG::generate(
-										0,
-										grenades.size() - 1);
-		return grenades[pick];
-	}
+		return grenades[RNG::pick(grenades.size())];
 
 	return NULL;
 }

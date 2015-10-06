@@ -219,8 +219,7 @@ ConfirmLandingState::ConfirmLandingState(
 
 					if (terrainList.empty() == false) // SAFETY.
 					{
-						const size_t pick = static_cast<size_t>(RNG::generate(0,
-											static_cast<int>(terrainList.size()) - 1));
+						const size_t pick (RNG::pick(terrainList.size()));
 						Log(LOG_INFO) << ". . . . size = " << (int)terrainList.size() << " pick = " << (int)pick;
 						Log(LOG_INFO) << ". . . . terrain = " << terrainList.at(pick) << " - Not Weighted";
 						_terrainRule = _game->getRuleset()->getTerrain(terrainList.at(pick));

@@ -37,8 +37,8 @@ class WeightedOptions
 {
 
 private:
-	size_t _totalWeight;					// The total weight of all options.
-	std::map<std::string, size_t> _choices;	// Options and weights
+	size_t _totalWeight;					// The total weight of all types.
+	std::map<std::string, size_t> _options;	// types and weights
 
 
 	public:
@@ -54,13 +54,13 @@ private:
 		YAML::Node save() const;
 
 		/// Selects from the items by probability.
-		std::string choose() const;
+		std::string getOptionResult() const;
 		/// Selects the most likely item.
 //		std::string topChoice() const;
 
 		/// Sets an option's weight.
 		void setWeight(
-				const std::string& id,
+				const std::string& type,
 				size_t weight);
 
 		/// Gets if this set of options has no weight at all.
@@ -70,10 +70,10 @@ private:
 		/// Removes all weights and entries.
 		void clearWeights()
 		{	_totalWeight = 0;
-			_choices.clear(); }
+			_options.clear(); }
 
 		/// Gets the list of strings associated with these weights.
-		std::vector<std::string> getNames() const;
+		std::vector<std::string> getTypes() const;
 };
 
 }

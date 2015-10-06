@@ -220,10 +220,7 @@ void BattlescapeGenerator::setTerrain(RuleTerrain* terrain)
  */
 void BattlescapeGenerator::setShade(int shade)
 {
-	if (shade > 15) shade = 15;
-	else if (shade < 0) shade = 0;
-
-	_shade = shade;
+	_shade = std::max(0, std::min(15, shade));
 }
 
 /**
@@ -269,13 +266,9 @@ void BattlescapeGenerator::run()
 						&_mapsize_x,
 						&_mapsize_y,
 						&_mapsize_z);
-	size_t pick;
 	if (_terrainRule == NULL)	// '_terrainRule' NOT set for Cydonia, Base assault/defense. Already set for NewBattleState ...... & UFO, & missionSite.
 	{
-		pick = static_cast<size_t>(RNG::generate(0,
-			   static_cast<int>(deployRule->getDeployTerrains().size()) - 1));
-		_terrainRule = _rules->getTerrain(deployRule->getDeployTerrains().at(pick));
-
+		_terrainRule = _rules->getTerrain(deployRule->getDeployTerrains().at(RNG::pick(deployRule->getDeployTerrains().size())));
 		if (_terrainRule == NULL)
 		{
 			// trouble: no texture and no deployment terrain, most likely scenario is a UFO landing on water: use the first available terrain.
@@ -425,24 +418,14 @@ void BattlescapeGenerator::run()
 		}
 	} */
 
-	std::vector<std::string> deployTracks = deployRule->getDeploymentMusics(); // this is const but I don't want to deal with it.
-	if (deployTracks.empty() == false)
-	{
-		pick = static_cast<size_t>(RNG::generate(0,
-			   static_cast<int>(deployTracks.size()) - 1));
-		_battleSave->setMusic(deployTracks.at(pick));
-	}
+	std::vector<std::string> tracks (deployRule->getDeploymentMusics());
+	if (tracks.empty() == false)
+		_battleSave->setMusic(tracks.at(RNG::pick(tracks.size())));
 	else
 	{
-		//Log(LOG_INFO) << "bGen deployment Tracks empty - check terrain Tracks";
-		std::vector<std::string> terrainTracks = _terrainRule->getTerrainMusics(); // this is const but I don't want to deal with it.
-		if (terrainTracks.empty() == false)
-		{
-			pick = static_cast<size_t>(RNG::generate(0,
-				   static_cast<int>(terrainTracks.size()) - 1));
-			_battleSave->setMusic(terrainTracks.at(pick));
-		}
-		//else Log(LOG_INFO) << "bGen terrain Tracks empty also";
+		tracks = _terrainRule->getTerrainMusics();
+		if (tracks.empty() == false)
+			_battleSave->setMusic(tracks.at(RNG::pick(tracks.size())));
 	}
 
 	_battleSave->getTileEngine()->calculateSunShading();
@@ -459,7 +442,7 @@ void BattlescapeGenerator::nextStage()
 {
 	_battleSave->resetTurnCounter();
 
-	int aliensAlive = 0;
+	int aliensAlive (0);
 
 	const Position posBogus (Position(-1,-1,-1));
 	for (std::vector<BattleUnit*>::const_iterator // kill all enemy units or those not in endpoint area if aborted
@@ -592,46 +575,46 @@ void BattlescapeGenerator::nextStage()
 	}
 
 
-	AlienDeployment* const deployRule = _rules->getDeployment(_battleSave->getTacticalType());
+	AlienDeployment* const deployRule (_rules->getDeployment(_battleSave->getTacticalType()));
 	deployRule->getDimensions(
 						&_mapsize_x,
 						&_mapsize_y,
 						&_mapsize_z);
 
-	const size_t pick = static_cast<size_t>(RNG::generate(0,
-						static_cast<int>(deployRule->getDeployTerrains().size()) - 1));
-	_terrainRule = _rules->getTerrain(deployRule->getDeployTerrains().at(pick));
+	_terrainRule = _rules->getTerrain(deployRule->getDeployTerrains().at(RNG::pick(deployRule->getDeployTerrains().size())));
 
 
-	const std::vector<MapScript*>* script = NULL; // rule: Deployment takes priority over Terrain.
+	const std::vector<MapScript*>* scripts (NULL); // rule: Deployment takes priority over Terrain.
 
-	const std::string scriptDeploy = deployRule->getScript();
-	if (scriptDeploy.empty() == false)
+	std::string script (deployRule->getScript());
+	if (script.empty() == false)
 	{
-		script = _rules->getMapScript(scriptDeploy);
-		if (script == NULL)
-			Log(LOG_WARNING) << "BattlescapeGenerator::nextStage() - There is a Deployment script defined ["
-							 << scriptDeploy << "] but could not find its rule.";
-	}
-
-	if (script == NULL)
-	{
-		const std::string scriptTerra = _terrainRule->getScript();
-		if (scriptTerra.empty() == false)
+		scripts = _rules->getMapScript(script);
+		if (scripts == NULL)
 		{
-			script = _rules->getMapScript(scriptTerra);
-			if (script == NULL)
-				Log(LOG_WARNING) << "BattlescapeGenerator::nextStage() - There is a Terrain script defined ["
-								 << scriptTerra << "] but could not find its rule.";
+			Log(LOG_WARNING) << "BattlescapeGenerator::nextStage() - There is a Deployment script defined ["
+							 << script << "] but could not find its rule.";
 		}
 	}
 
-	if (script == NULL)
+	if (scripts == NULL)
+	{
+		script = _terrainRule->getScript();
+		if (script.empty() == false)
+		{
+			scripts = _rules->getMapScript(script);
+			if (scripts == NULL)
+				Log(LOG_WARNING) << "BattlescapeGenerator::nextStage() - There is a Terrain script defined ["
+								 << script << "] but could not find its rule.";
+		}
+	}
+
+	if (scripts == NULL)
 	{
 		throw Exception("Map generator encountered an error: no script found. See log for detail.");
 	}
 
-	generateMap(script); // <-- BATTLE MAP GENERATION.
+	generateMap(scripts); // <-- BATTLE MAP GENERATION.
 	setupObjectives(deployRule);
 
 	setShade(deployRule->getShade()); // note: 2nd stage must have deployment-shade set, else 0 (bright).
@@ -1939,7 +1922,6 @@ bool BattlescapeGenerator::placeUnitNearFriend(BattleUnit* const unit) // privat
 		Position posEntry;
 		int tries;
 		bool isLarge;
-		size_t pick;
 
 		for (int
 				i = 0;
@@ -1953,9 +1935,7 @@ bool BattlescapeGenerator::placeUnitNearFriend(BattleUnit* const unit) // privat
 			while (posEntry == Position(-1,-1,-1)
 				&& tries != 0)
 			{
-				pick = static_cast<size_t>(RNG::generate(0,
-					   static_cast<int>(_battleSave->getUnits()->size()) - 1));
-				friendUnit = _battleSave->getUnits()->at(pick);
+				friendUnit = _battleSave->getUnits()->at(RNG::pick(_battleSave->getUnits()->size()));
 				if (friendUnit->getFaction() == unit->getFaction()
 					&& friendUnit->getPosition() != Position(-1,-1,-1)
 					&& friendUnit->getArmor()->getSize() >= unit->getArmor()->getSize())
@@ -1984,22 +1964,19 @@ bool BattlescapeGenerator::placeUnitNearFriend(BattleUnit* const unit) // privat
  */
 void BattlescapeGenerator::deployCivilians(int civilians) // private.
 {
-	if (civilians > 0)
+	if (civilians != 0)
 	{
 		const int qty = std::max(
 							1,
 							RNG::generate(
 										civilians / 2,
 										civilians));
-		size_t pick;
 		for (int
 				i = 0;
 				i != qty;
 				++i)
 		{
-			pick = static_cast<size_t>(RNG::generate(0,
-				   static_cast<int>(_terrainRule->getCivilianTypes().size()) - 1));
-			addCivilian(_rules->getUnit(_terrainRule->getCivilianTypes().at(pick)));
+			addCivilian(_rules->getUnit(_terrainRule->getCivilianTypes().at(RNG::pick(_terrainRule->getCivilianTypes().size()))));
 		}
 	}
 }
@@ -3395,7 +3372,7 @@ bool BattlescapeGenerator::selectPosition( // private.
 	size_y /= 10;
 
 	std::pair<int, int> select;
-	std::vector<std::pair<int, int> > valid;
+	std::vector<std::pair<int, int> > validPairs;
 	bool add;
 
 	for (std::vector<SDL_Rect*>::const_iterator
@@ -3432,9 +3409,9 @@ bool BattlescapeGenerator::selectPosition( // private.
 					select = std::make_pair(x,y);
 
 					if (std::find(
-								valid.begin(),
-								valid.end(),
-								select) == valid.end())
+								validPairs.begin(),
+								validPairs.end(),
+								select) == validPairs.end())
 					{
 						//Log(LOG_INFO) << ". . . . Test add";
 						add = true;
@@ -3463,7 +3440,7 @@ bool BattlescapeGenerator::selectPosition( // private.
 						if (add == true)
 						{
 							//Log(LOG_INFO) << ". . . . ADDING";
-							valid.push_back(select);
+							validPairs.push_back(select);
 						}
 					}
 				}
@@ -3472,12 +3449,10 @@ bool BattlescapeGenerator::selectPosition( // private.
 	}
 	//Log(LOG_INFO) << ". done selections";
 
-	if (valid.empty() == false)
+	if (validPairs.empty() == false)
 	{
 		//Log(LOG_INFO) << ". . pick selection, ret TRUE";
-		const size_t pick = static_cast<size_t>(RNG::generate(0,
-							static_cast<int>(valid.size()) - 1));
-		select = valid.at(pick);
+		select = validPairs.at(RNG::pick(validPairs.size()));
 		ret_x = select.first;
 		ret_y = select.second;
 

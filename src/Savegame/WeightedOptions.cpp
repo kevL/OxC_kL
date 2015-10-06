@@ -38,10 +38,10 @@ void WeightedOptions::load(const YAML::Node& node)
 			val != node.end();
 			++val)
 	{
-		const std::string id	= val->first	.as<std::string>();
-		const size_t weight		= val->second	.as<size_t>();
+		const std::string type	(val->first	.as<std::string>());
+		const size_t weight		(val->second.as<size_t>());
 
-		setWeight(id, weight);
+		setWeight(type, weight);
 	}
 }
 
@@ -52,10 +52,9 @@ void WeightedOptions::load(const YAML::Node& node)
 YAML::Node WeightedOptions::save() const
 {
 	YAML::Node node;
-
 	for (std::map<std::string, size_t>::const_iterator
-			i = _choices.begin();
-			i != _choices.end();
+			i = _options.begin();
+			i != _options.end();
 			++i)
 	{
 		node[i->first] = i->second;
@@ -71,31 +70,24 @@ YAML::Node WeightedOptions::save() const
  * @note kL rewrite
  * @return, the key of the selected choice
  */
-std::string WeightedOptions::choose() const
+std::string WeightedOptions::getOptionResult() const
 {
-	Log(LOG_INFO) << "WeightedOptions::choose()";
 	if (_totalWeight != 0)
 	{
-		const size_t pick = static_cast<size_t>(RNG::generate(1,
-							static_cast<int>(_totalWeight)));
-		Log(LOG_INFO) << ". pick = " << (int)pick;
-		size_t tally = 0;
-		std::map<std::string, size_t>::const_iterator i = _choices.begin();
-		while (i != _choices.end())
+		const size_t pick (static_cast<size_t>(RNG::generate(1, // can't use RNG::pick() because 1.
+						   static_cast<int>(_totalWeight))));
+		size_t tally (0);
+		std::map<std::string, size_t>::const_iterator i (_options.begin());
+		while (i != _options.end())
 		{
-			Log(LOG_INFO) << ". . type = " << i->first << " weight = " << i->second;
 			tally += i->second;
-			Log(LOG_INFO) << ". . tally = " << (int)tally;
 			if (pick <= tally)
-			{
-				Log(LOG_INFO) << ". . . choice = " << i->first;
 				return i->first;
-			}
+
 			++i;
 		}
 	}
 
-	Log(LOG_INFO) << "WeightedOptions::choose() EXIT w/ blank";
 	return "";
 }
 
@@ -112,63 +104,51 @@ std::string WeightedOptions::topChoice() const
 	{
 		size_t topWeight = 0;
 		std::vector<std::string> rets;
-
-		for (std::map<std::string, size_t>::const_iterator
-				i = _choices.begin();
-				i != _choices.end();
-				++i)
+		for (std::map<std::string, size_t>::const_iterator i = _options.begin(); i != _options.end(); ++i)
 		{
 			if (i->second > topWeight)
 			{
 				rets.clear();
 				rets.push_back(i->first);
-
 				topWeight = i->second;
 			}
-			else if (i->second != 0
-				&& i->second == topWeight)
-			{
+			else if (i->second != 0 && i->second == topWeight)
 				rets.push_back(i->first);
-			}
 		}
-
-		const size_t pick = RNG::generate(
-									0,
-									rets.size() - 1);
+		const size_t pick = RNG::generate(0, rets.size() - 1);
 		return rets.at(pick);
 	}
-
 	return "";
 } */
 
 /**
  * Sets this WeightedOptions' weight.
  * @note If @a weight is set to 0 the option is removed from the list of choices.
- * @note If @a id already exists the new weight replaces the old one; otherwise
- * @a id is added to the list of choices with @a weight as the weight.
- * @param id		- reference the option name
+ * @note If @a type already exists the new weight replaces the old one; otherwise
+ * @a type is added to the list of choices with @a weight as the weight.
+ * @param type		- reference the option name
  * @param weight	- the option's new weight
  */
 void WeightedOptions::setWeight(
-		const std::string& id,
+		const std::string& type,
 		size_t weight)
 {
-	std::map<std::string, size_t>::iterator option = _choices.find(id);
-	if (option != _choices.end())
+	std::map<std::string, size_t>::iterator i (_options.find(type));
+	if (i != _options.end())
 	{
-		_totalWeight -= option->second;
+		_totalWeight -= i->second;
 
 		if (weight != 0)
 		{
-			option->second = weight;
+			i->second = weight;
 			_totalWeight += weight;
 		}
 		else
-			_choices.erase(option);
+			_options.erase(i);
 	}
 	else if (weight != 0)
 	{
-		_choices.insert(std::make_pair(id, weight));
+		_options.insert(std::make_pair(type, weight));
 		_totalWeight += weight;
 	}
 }
@@ -177,19 +157,18 @@ void WeightedOptions::setWeight(
  * Gets the list of strings associated with these weights.
  * @return, vector of strings in these weights
  */
-std::vector<std::string> WeightedOptions::getNames() const
+std::vector<std::string> WeightedOptions::getTypes() const
 {
-	std::vector<std::string> names;
-
+	std::vector<std::string> types;
 	for (std::map<std::string, size_t>::const_iterator
-			i = _choices.begin();
-			i != _choices.end();
+			i = _options.begin();
+			i != _options.end();
 			++i)
 	{
-		names.push_back((*i).first);
+		types.push_back((*i).first);
 	}
 
-	return names;
+	return types;
 }
 
 }

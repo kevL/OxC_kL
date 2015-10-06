@@ -2805,9 +2805,7 @@ void GeoscapeState::time1Day()
 
 				if (gofChoices.empty() == false)
 				{
-					const size_t pick = static_cast<size_t>(RNG::generate(0,
-										static_cast<int>(gofChoices.size()) - 1));
-					gofRule = _rules->getResearch(gofChoices.at(pick));
+					gofRule = _rules->getResearch(gofChoices.at(RNG::pick(gofChoices.size())));
 					_gameSave->addFinishedResearch(gofRule);
 
 					if (gofRule->getLookup().empty() == false)
@@ -4000,16 +3998,11 @@ bool GeoscapeState::processCommand(RuleMissionScript* const missionCommand)
 			if (missionCommand->hasRegionWeights() == true)
 				targetRegion = missionCommand->genMissionDatum(month, GT_REGION);
 			else
-			{
-				const size_t pick = static_cast<size_t>(RNG::generate(0,
-									static_cast<int>(_rules->getRegionsList().size()) - 1));
-				targetRegion = _rules->getRegionsList().at(pick);
-			}
-
+				targetRegion = _rules->getRegionsList().at(RNG::pick(_rules->getRegionsList().size()));
 
 			int
 				low = -1,
-				high = -1, // darn vc++ compiler warning ...
+				high = -1, // avoid vc++ linker warning.
 				testArea = 0;
 
 			for (std::vector<std::pair<std::string, size_t> >::const_iterator

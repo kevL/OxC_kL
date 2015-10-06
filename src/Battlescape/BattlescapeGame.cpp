@@ -2313,11 +2313,8 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* const unit) // private.
 				Pathfinding* const pf = _battleSave->getPathfinding();
 				pf->setPathingUnit(unit);
 
-				const std::vector<int> reachable = pf->findReachable(unit, tu);
-				const size_t
-					pick = static_cast<size_t>(RNG::generate(0,
-						   static_cast<int>(reachable.size()) - 1)),
-					tileId = static_cast<size_t>(reachable[pick]);
+				const std::vector<int> reachable (pf->findReachable(unit, tu));
+				const size_t tileId (static_cast<size_t>(reachable[RNG::pick(reachable.size())])); // <-- WARNING: no Safety on size !
 
 				_battleSave->getTileCoords(
 										tileId,
@@ -2344,7 +2341,7 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* const unit) // private.
 			{
 				//Log(LOG_INFO) << ". BERSERK";
 				ba.type = BA_TURN;
-				const int pivotQty = RNG::generate(2,5);
+				const int pivotQty (RNG::generate(2,5));
 				for (int
 						i = 0;
 						i != pivotQty;
@@ -2368,11 +2365,7 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* const unit) // private.
 				{
 					if (ba.weapon->getRules()->getBattleType() == BT_FIREARM)
 					{
-						const size_t
-							mapSize = _battleSave->getMapSizeXYZ(),
-							pick = static_cast<size_t>(RNG::generate(0,
-								   static_cast<int>(mapSize) - 1));
-						Tile* const targetTile = _battleSave->getTiles()[pick];
+						Tile* const targetTile (_battleSave->getTiles()[RNG::pick(_battleSave->getMapSizeXYZ())]);
 						ba.target = targetTile->getPosition();
 						if (_battleSave->getTile(ba.target) != NULL)
 						{
@@ -2380,7 +2373,7 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* const unit) // private.
 
 							ba.cameraPosition = _battleSave->getBattleState()->getMap()->getCamera()->getMapOffset();
 							ba.type = BA_SNAPSHOT;
-							const int actionTu = ba.actor->getActionTu(ba.type, ba.weapon);
+							const int actionTu (ba.actor->getActionTu(ba.type, ba.weapon));
 							int shots; // tabulate how many shots can be fired before unit runs out of TUs
 							if (actionTu != 0)
 								shots = tu / actionTu;
@@ -2416,11 +2409,10 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* const unit) // private.
 								statePushBack(new UnitTurnBState(this, ba, false));
 
 								const Position
-									originVoxel = _battleSave->getTileEngine()->getOriginVoxel(ba),
-									targetVoxel = Position(
-														ba.target.x * 16 + 8,
-														ba.target.y * 16 + 8,
-														ba.target.z * 24 - _battleSave->getTile(ba.target)->getTerrainLevel());
+									originVoxel (_battleSave->getTileEngine()->getOriginVoxel(ba)),
+									targetVoxel (Position::toVoxelSpaceCentered(
+																			ba.target,
+																			-_battleSave->getTile(ba.target)->getTerrainLevel()));
 
 								if (_battleSave->getTileEngine()->validateThrow(
 																			ba,
@@ -3194,11 +3186,7 @@ BattleItem* BattlescapeGame::surveyItems(BattleUnit* const unit) const
 		}
 
 		if (choiceItems.empty() == false)
-		{
-			size_t pick = static_cast<size_t>(RNG::generate(0,
-						  static_cast<int>(choiceItems.size()) - 1));
-			ret = choiceItems.at(pick);
-		}
+			ret = choiceItems.at(RNG::pick(choiceItems.size()));
 	}
 
 	return ret;

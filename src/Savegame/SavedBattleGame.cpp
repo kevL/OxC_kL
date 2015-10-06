@@ -1560,17 +1560,10 @@ void SavedBattleGame::randomizeItemLocations(Tile* const tile)
 		{
 			if ((*i)->getSlot()->getId() == "STR_GROUND")
 			{
-				const size_t pick = static_cast<size_t>(RNG::generate(
-																0,
-																static_cast<int>(_storageSpace.size()) - 1));
-				getTile(_storageSpace.at(pick))->addItem(
-													*i,
-													(*i)->getSlot());
-
+				getTile(_storageSpace.at(RNG::pick(_storageSpace.size())))->addItem(*i, (*i)->getSlot());
 				i = tile->getInventory()->erase(i);
 			}
-			else
-				++i;
+			else ++i;
 		}
 	}
 }
@@ -1742,7 +1735,7 @@ Node* SavedBattleGame::getSpawnNode(
 			i != _nodes.end();
 			++i)
 	{
-		if ((*i)->getPriority() > 0							// spawn-priority 0 is not spawnplace
+		if ((*i)->getPriority() != 0						// spawn-priority 0 is not spawnplace
 			&& (*i)->getNodeRank() == unitRank				// ranks must match
 			&& isNodeType(*i, unit)
 //			&& (!((*i)->getNodeType() & Node::TYPE_SMALL)	// the small unit bit is not set on the node
@@ -1764,14 +1757,10 @@ Node* SavedBattleGame::getSpawnNode(
 		}
 	}
 
-	if (spawnNodes.empty() == true)
-		return NULL;
+	if (spawnNodes.empty() == false)
+		return spawnNodes[RNG::pick(spawnNodes.size())];
 
-	const size_t pick = static_cast<size_t>(RNG::generate(
-													0,
-													static_cast<int>(spawnNodes.size()) - 1));
-
-	return spawnNodes[pick];
+	return NULL;
 }
 
 /**
@@ -1793,7 +1782,7 @@ Node* SavedBattleGame::getPatrolNode(
 	std::vector<Node*>
 		scoutNodes,
 		rankedNodes;
-	Node* node = NULL;
+	Node* node;
 
 	size_t nodeQty;
 	if (scout == true)
@@ -1807,14 +1796,14 @@ Node* SavedBattleGame::getPatrolNode(
 			++i)
 	{
 		if (scout == true
-			|| fromNode->getNodeLinks()->at(i) > 0)							// non-scouts need Links to travel along.
+			|| fromNode->getNodeLinks()->at(i) != 0)							// non-scouts need Links to travel along.
 		{
 			if (scout == true)
 				node = getNodes()->at(i);
 			else
 				node = getNodes()->at(static_cast<size_t>(fromNode->getNodeLinks()->at(i)));
 
-			if ((node->getPatrol() > 0
+			if ((node->getPatrol() != 0
 					|| node->getNodeRank() > NR_SCOUT
 					|| scout == true)										// for non-scouts find a node with a desirability above 0
 				&& node->isAllocated() == false								// check if not allocated
@@ -1858,14 +1847,10 @@ Node* SavedBattleGame::getPatrolNode(
 	if (scoutNodes.empty() == true)
 	{
 		//Log(LOG_INFO) << " . scoutNodes is EMPTY.";
-		if (scout == false
-			&& unit->getArmor()->getSize() > 1)
+		if (scout == false && unit->getArmor()->getSize() > 1)
 		{
 //			return Sectopod::CTD();
-			return getPatrolNode(
-								true,
-								unit,
-								fromNode);
+			return getPatrolNode(true, unit, fromNode);
 		}
 
 		//Log(LOG_INFO) << " . return NULL";
@@ -1873,26 +1858,18 @@ Node* SavedBattleGame::getPatrolNode(
 	}
 	//Log(LOG_INFO) << " . scoutNodes is NOT Empty.";
 
-	size_t pick;
-
 	if (scout == true // picks a random destination
 		|| rankedNodes.empty() == true
 		|| RNG::percent(19) == true) // officers can go for a stroll ...
 	{
 		//Log(LOG_INFO) << " . scout";
-		pick = static_cast<size_t>(RNG::generate(
-											0,
-											static_cast<int>(scoutNodes.size()) - 1));
 		//Log(LOG_INFO) << " . return scoutNodes @ " << pick;
-		return scoutNodes[pick];
+		return scoutNodes[RNG::pick(scoutNodes.size())];
 	}
 	//Log(LOG_INFO) << " . !scout";
 
-	pick = static_cast<size_t>(RNG::generate(
-										0,
-										static_cast<int>(rankedNodes.size()) - 1));
 	//Log(LOG_INFO) << " . return scoutNodes @ " << pick;
-	return rankedNodes[pick];
+	return rankedNodes[RNG::pick(rankedNodes.size())];
 }
 
 /**

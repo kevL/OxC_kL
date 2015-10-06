@@ -1143,11 +1143,7 @@ void DogfightState::updateDogfight()
 						ufoFireWeapon();
 					}
 					else // This is where the magic happens, Lulzor!!
-					{
-						const size_t pick = static_cast<size_t>(RNG::generate(0,
-											static_cast<int>(altIntercepts.size()) - 1));
-						_ufo->setShootingAt(altIntercepts.at(pick));
-					}
+						_ufo->setShootingAt(altIntercepts.at(RNG::pick(altIntercepts.size())));
 				}
 			}
 			else

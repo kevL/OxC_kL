@@ -153,7 +153,7 @@ YAML::Node AlienStrategy::save() const
  */
 std::string AlienStrategy::chooseRandomRegion(const Ruleset* const rules)
 {
-	std::string chosen = _regionChances.choose();
+	std::string chosen (_regionChances.getOptionResult());
 	if (chosen.empty() == true)
 	{
 		// no more missions to choose from, refresh
@@ -171,7 +171,7 @@ std::string AlienStrategy::chooseRandomRegion(const Ruleset* const rules)
 		// re-initialize the list
  		init(rules);
 		// now try that again:
- 		chosen = _regionChances.choose();
+ 		chosen = _regionChances.getOptionResult();
 	}
 
 	assert(chosen != "");
@@ -186,10 +186,10 @@ std::string AlienStrategy::chooseRandomRegion(const Ruleset* const rules)
  */
 std::string AlienStrategy::chooseRandomMission(const std::string& region) const
 {
-	MissionsByRegion::const_iterator found = _regionMissions.find(region);
+	MissionsByRegion::const_iterator found (_regionMissions.find(region));
 	assert(found != _regionMissions.end());
 
-	return found->second->choose();
+	return found->second->getOptionResult();
 }
 
 /**
@@ -202,7 +202,7 @@ bool AlienStrategy::removeMission(
 		const std::string& region,
 		const std::string& mission)
 {
-	MissionsByRegion::const_iterator found = _regionMissions.find(region);
+	MissionsByRegion::const_iterator found (_regionMissions.find(region));
 	if (found != _regionMissions.end())
 	{
 		found->second->setWeight(mission, 0);
@@ -258,9 +258,7 @@ void AlienStrategy::addMissionLocation(
 	if (track == 0)
 		return;
 
-	_missionLocations[id].push_back(std::make_pair(
-												region,
-												zone));
+	_missionLocations[id].push_back(std::make_pair(region, zone));
 	if (_missionLocations[id].size() > track)
 		_missionLocations.erase(_missionLocations.begin());
 }
@@ -302,8 +300,7 @@ bool AlienStrategy::validMissionLocation(
  */
 bool AlienStrategy::validMissionRegion(const std::string& region) const
 {
-	std::map<std::string, WeightedOptions*>::const_iterator i = _regionMissions.find(region);
-	return (i != _regionMissions.end());
+	return (_regionMissions.find(region) != _regionMissions.end());
 }
 
 }

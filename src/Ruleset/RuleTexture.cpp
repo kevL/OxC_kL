@@ -81,14 +81,11 @@ std::string RuleTexture::getRandomDeployment() const
 	if (_deployTypes.empty() == true)
 		return "";
 
-
-	std::map<std::string, int>::const_iterator i = _deployTypes.begin();
-
+	std::map<std::string, int>::const_iterator i (_deployTypes.begin());
 	if (_deployTypes.size() == 1)
 		return i->first;
 
-
-	int totalWeight = 0;
+	int totalWeight (0);
 	for (
 			;
 			i != _deployTypes.end();
@@ -97,12 +94,9 @@ std::string RuleTexture::getRandomDeployment() const
 		totalWeight += i->second;
 	}
 
-	if (totalWeight > 0)
+	if (totalWeight != 0)
 	{
-		int pick = RNG::generate(
-							1,
-							totalWeight);
-
+		int pick = RNG::generate(1, totalWeight);
 		for (
 				i = _deployTypes.begin();
 				i != _deployTypes.end();
@@ -114,7 +108,6 @@ std::string RuleTexture::getRandomDeployment() const
 				pick -= i->second;
 		}
 	}
-
 	return "";
 }
 
@@ -128,11 +121,10 @@ std::string RuleTexture::getRandomTerrain(const Target* const target) const
 {
 	Log(LOG_INFO) << "RuleTexture::getRandomTerrain(TARGET)";
 	double
-		lon,
-		lat;
+		lon,lat;
 	std::map<int, std::string> eligibleTerrains;
 
-	int totalWeight = 0;
+	int totalWeight (0);
 
 	for (std::vector<TerrainCriteria>::const_iterator
 			i = _terrains.begin();
@@ -140,7 +132,6 @@ std::string RuleTexture::getRandomTerrain(const Target* const target) const
 			++i)
 	{
 		Log(LOG_INFO) << ". terrainType = " << i->type;
-
 		if (i->weight > 0)
 		{
 			bool inBounds = false;
@@ -150,7 +141,7 @@ std::string RuleTexture::getRandomTerrain(const Target* const target) const
 				lon = target->getLongitude();
 				lat = target->getLatitude();
 
-				if (   lon >= i->lonMin
+				if (lon >= i->lonMin
 					&& lon <  i->lonMax
 					&& lat >= i->latMin
 					&& lat <  i->latMax)
@@ -159,11 +150,9 @@ std::string RuleTexture::getRandomTerrain(const Target* const target) const
 				}
 			}
 
-			if (target == NULL
-				|| inBounds == true)
+			if (target == NULL || inBounds == true)
 			{
 				Log(LOG_INFO) << ". . weight = " << i->weight;
-
 				totalWeight += i->weight;
 				eligibleTerrains[totalWeight] = i->type;
 			}
@@ -171,11 +160,9 @@ std::string RuleTexture::getRandomTerrain(const Target* const target) const
 		}
 	}
 
-	if (totalWeight > 0)
+	if (totalWeight != 0)
 	{
-		const int pick = RNG::generate(
-									1,
-									totalWeight);
+		const int pick = RNG::generate(1, totalWeight);
 		for (std::map<int, std::string>::const_iterator
 				i = eligibleTerrains.begin();
 				i != eligibleTerrains.end();
@@ -185,7 +172,6 @@ std::string RuleTexture::getRandomTerrain(const Target* const target) const
 				return i->second;
 		}
 	}
-
 	return ""; // this means nothing. Literally. That is, if the code runs here -> CTD.
 }
 

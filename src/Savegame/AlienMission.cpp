@@ -478,10 +478,6 @@ Ufo* AlienMission::spawnUfo( // private.
 
 		if (baseTargets.empty() == false)
 		{
-			const size_t pick = RNG::generate(
-										0,
-										baseTargets.size() - 1);
-
 			// Spawn a battleship straight for the XCOM Base.
 			const RuleUfo& battleshipRule = *rules.getUfo(_missionRule.getSpawnUfo());
 			const UfoTrajectory& trjBattleship = *rules.getUfoTrajectory(UfoTrajectory::RETALIATION_ASSAULT_RUN);
@@ -508,6 +504,7 @@ Ufo* AlienMission::spawnUfo( // private.
 			ufo->setLatitude(coord.second);
 
 			wp = new Waypoint();
+			const size_t pick (RNG::pick(baseTargets.size()));
 			wp->setLongitude(baseTargets[pick]->getLongitude());
 			wp->setLatitude(baseTargets[pick]->getLatitude());
 
@@ -942,10 +939,7 @@ void AlienMission::ufoLifting(
 				if (countryList.empty() == false)
 				{
 					//Log(LOG_INFO) << "AlienMission::think(), GAAH! new Pact & aLien base";
-					const size_t pick = RNG::generate(
-												0,
-												countryList.size() - 1);
-					Country* const infiltrated = countryList.at(pick);
+					Country* const infiltrated = countryList.at(RNG::pick(countryList.size()));
 					// kL_note: Ironically, this likely allows multiple alien
 					// bases in Russia solely because of infiltrations ...!!
 					if (infiltrated->getType() != "STR_RUSSIA") // heh.

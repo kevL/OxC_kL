@@ -249,7 +249,7 @@ SavedGame::~SavedGame()
  * @param autoquick	- true to include autosaves and quicksaves
  * @return, vector of SavesInfo structs (SavedGame.h)
  */
-std::vector<SaveInfo> SavedGame::getList(
+std::vector<SaveInfo> SavedGame::getList( // static.
 		Language* lang,
 		bool autoquick)
 {
@@ -315,7 +315,7 @@ std::vector<SaveInfo> SavedGame::getList(
  * @param lang - pointer to the loaded Language
  * @return, the SaveInfo (SavedGame.h)
  */
-SaveInfo SavedGame::getSaveInfo( // private.
+SaveInfo SavedGame::getSaveInfo( // private. static.
 		const std::string& file,
 		const Language* const lang)
 {

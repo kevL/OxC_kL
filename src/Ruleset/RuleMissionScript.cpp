@@ -148,8 +148,7 @@ void RuleMissionScript::load(const YAML::Node& node)
 	_useTable = node["useTable"].as<bool>(_useTable);
 
 	if (_varName.empty() == true
-		&& (_maxRuns > 0
-			|| _avoidRepeats > 0))
+		&& (_maxRuns > 0 || _avoidRepeats > 0))
 	{
 		throw Exception("Error in mission script: " + _type + ": no varName provided for a script with maxRuns or repeatAvoidance.");
 	}
@@ -327,7 +326,7 @@ const std::set<std::string> RuleMissionScript::getAllMissionTypes() const
 			i != _missionWeights.end();
 			++i)
 	{
-		std::vector<std::string> ids = (*i).second->getNames();
+		std::vector<std::string> ids ((*i).second->getTypes());
 		for (std::vector<std::string>::const_iterator
 				j = ids.begin();
 				j != ids.end();
@@ -349,7 +348,7 @@ const std::vector<std::string> RuleMissionScript::getMissionTypes(const size_t m
 {
 	std::vector<std::string> missions;
 
-	std::vector<std::pair<size_t, WeightedOptions*> >::const_reverse_iterator rweight = _missionWeights.rbegin();
+	std::vector<std::pair<size_t, WeightedOptions*> >::const_reverse_iterator rweight (_missionWeights.rbegin());
 	while (month < rweight->first)
 	{
 		++rweight;
@@ -360,7 +359,7 @@ const std::vector<std::string> RuleMissionScript::getMissionTypes(const size_t m
 		}
 	}
 
-	std::vector<std::string> ids = rweight->second->getNames();
+	std::vector<std::string> ids (rweight->second->getTypes());
 	for (std::vector<std::string>::const_iterator
 			i = ids.begin();
 			i != ids.end();
@@ -381,7 +380,7 @@ const std::vector<std::string> RuleMissionScript::getRegions(const size_t month)
 {
 	std::vector<std::string> regions;
 
-	std::vector<std::pair<size_t, WeightedOptions*> >::const_reverse_iterator rweight = _regionWeights.rbegin();
+	std::vector<std::pair<size_t, WeightedOptions*> >::const_reverse_iterator rweight (_regionWeights.rbegin());
 	while (month < rweight->first)
 	{
 		++rweight;
@@ -392,7 +391,7 @@ const std::vector<std::string> RuleMissionScript::getRegions(const size_t month)
 		}
 	}
 
-	std::vector<std::string> ids = rweight->second->getNames();
+	std::vector<std::string> ids (rweight->second->getTypes());
 	for (std::vector<std::string>::const_iterator
 			i = ids.begin();
 			i != ids.end();
@@ -433,7 +432,7 @@ std::string RuleMissionScript::genMissionDatum(
 	while (monthsPassed < rweight->first)
 		++rweight;
 
-	return rweight->second->choose();
+	return rweight->second->getOptionResult();
 }
 
 /**

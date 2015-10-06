@@ -99,46 +99,44 @@ void setSeed(uint64_t seed)
 
 /**
  * Generates a random integer number within a certain range.
- * @param minRand - minimum number, inclusive
- * @param maxRand - maximum number, inclusive
+ * @param valMin - minimum number, inclusive
+ * @param valMax - maximum number, inclusive
  * @return, generated number
  */
 int generate(
-		int minRand,
-		int maxRand)
+		int valMin,
+		int valMax)
 {
 	//Log(LOG_INFO) << "rng:generate(int)";
-	if (minRand == maxRand)
-		return minRand;
+	if (valMin == valMax)
+		return valMin;
 
-	if (minRand > maxRand)
-		std::swap(minRand, maxRand);
+	if (valMin > valMax)
+		std::swap(valMin, valMax);
 
-	uint64_t r = next();
-	return (static_cast<int>(r % (maxRand - minRand + 1)) + minRand);
+	return static_cast<int>(next() % (valMax - valMin + 1)) + valMin;
 }
 
 /**
  * Generates a random decimal number within a certain range.
- * @param minRand - minimum number
- * @param maxRand - maximum number
+ * @param valMin - minimum number
+ * @param valMax - maximum number
  * @return, generated number
  */
 double generate(
-		double minRand,
-		double maxRand)
+		double valMin,
+		double valMax)
 {
 	//Log(LOG_INFO) << "rng:generate(double)";
-	double diff = maxRand - minRand;
-	if (AreSame(diff, 0.))
-		return minRand;
+	double delta (valMax - valMin);
+	if (AreSame(delta, 0.))
+		return valMin;
 
-	diff = (static_cast<double>(std::numeric_limits<uint64_t>::max()) / diff);
-	if (AreSame(diff, 0.))
-		return minRand;
+	delta = (static_cast<double>(std::numeric_limits<uint64_t>::max()) / delta);
+	if (AreSame(delta, 0.))
+		return valMin;
 
-	const double r = static_cast<double>(next());
-	return ((r / diff) + minRand);
+	return (static_cast<double>(next()) / delta) + valMin;
 }
 
 /**
@@ -149,17 +147,17 @@ double generate(
  * @return, generated number
  */
 int seedless(
-		int minRand,
-		int maxRand)
+		int valMin,
+		int valMax)
 {
 	//Log(LOG_INFO) << "rng:generate(int)";
-	if (minRand == maxRand)
-		return minRand;
+	if (valMin == valMax)
+		return valMin;
 
-	if (minRand > maxRand)
-		std::swap(minRand, maxRand);
+	if (valMin > valMax)
+		std::swap(valMin, valMax);
 
-	return (std::rand() % (maxRand - minRand + 1) + minRand);
+	return (std::rand() % (valMax - valMin + 1) + valMin);
 }
 
 /*
@@ -181,7 +179,7 @@ double boxMuller(
 		double deviation)
 {
 	//Log(LOG_INFO) << "rng:boxMuller()";
-	static bool use_last = false;
+	static bool use_last;
 
 	static double y2;
 	double y1;
@@ -194,11 +192,9 @@ double boxMuller(
 	else
 	{
 		use_last = true;
-
 		double
 			x1,x2,
 			w;
-
 		do
 		{
 			x1 = (generate(0.,1.) * 2.) - 1.;
@@ -217,33 +213,58 @@ double boxMuller(
 
 /**
  * Generates a random percent chance of an event occurring and returns the result.
- * @param value - value percentage (0-100%)
+ * @param valPct - value percentage (0-100%)
  * @return, true if the chance succeeded
  */
-bool percent(int value)
+bool percent(int valPct)
 {
 	//Log(LOG_INFO) << "rng:percent()";
-	if (value < 1)
+	if (valPct < 1)
 		return false;
-	else if (value > 99)
+
+	if (valPct > 99)
 		return true;
 
-	return (generate(0,99) < value);
+	return (generate(0,99) < valPct);
 }
 
 /**
  * Generates a random positive integer up to a number.
- * @param maxRand - maximum number, exclusive
+ * @param valMax - maximum number exclusive
  * @return, generated number
  */
-int generateEx(int maxRand)
+int generateExclusive(int valMax)
 {
-	//Log(LOG_INFO) << "rng:generateEx()";
-	if (maxRand < 2)
+	//Log(LOG_INFO) << "rng:generateExclusive()";
+	if (valMax < 2)
 		return 0;
 
-	uint64_t r = next();
-	return static_cast<int>(r % maxRand);
+	return static_cast<int>(next() % valMax);
+}
+
+/**
+ * Picks an entry from a vector.
+ * @note Don't try shoving an empty vector into here.
+ * @param val - size of the vector
+ * @return, picked id
+ */
+size_t pick(size_t valSize)
+{
+	return static_cast<size_t>(generate(0, static_cast<int>(valSize) - 1));
+}
+
+/**
+ * Picks an entry from a vector using the seedless generator.
+ * @note Don't try shoving an empty vector into here.
+ * @param val			- size of the vector
+ * @param useSeedless	- true/false to use the seedless (external) generator
+ * @return, picked id
+ */
+size_t pick(
+		size_t valSize,
+		bool)
+{
+	return static_cast<size_t>(seedless(0, static_cast<int>(valSize) - 1));
 }
 
 }

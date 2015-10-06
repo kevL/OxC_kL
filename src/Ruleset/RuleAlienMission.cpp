@@ -170,11 +170,11 @@ void RuleAlienMission::load(const YAML::Node& node)
  */
 std::string RuleAlienMission::generateRace(size_t monthsPassed) const
 {
-	std::vector<std::pair<size_t, WeightedOptions*> >::const_reverse_iterator race = _raceDistribution.rbegin();
-	while (monthsPassed < race->first)
-		++race;
+	std::vector<std::pair<size_t, WeightedOptions*> >::const_reverse_iterator i = _raceDistribution.rbegin();
+	while (monthsPassed < i->first)
+		++i;
 
-	std::string raceType = race->second->choose();
+	std::string raceType = i->second->getOptionResult();
 	Log(LOG_INFO) << "RuleAlienMission::generateRace ret = " << raceType;
 	return raceType;
 }
