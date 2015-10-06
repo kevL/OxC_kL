@@ -271,7 +271,7 @@ void AlienStrategy::addMissionLocation(
  * @param zone		- number of the region to check
  * @return, true if the region is valid (it's not in the table)
  */
-bool AlienStrategy::validMissionLocation(
+bool AlienStrategy::validateMissionLocation(
 		const std::string& id,
 		const std::string& region,
 		size_t zone)
@@ -298,7 +298,7 @@ bool AlienStrategy::validMissionLocation(
  * @param region - region to check for validity
  * @return, true if the region appears in the table
  */
-bool AlienStrategy::validMissionRegion(const std::string& region) const
+bool AlienStrategy::validateMissionRegion(const std::string& region) const
 {
 	return (_regionMissions.find(region) != _regionMissions.end());
 }

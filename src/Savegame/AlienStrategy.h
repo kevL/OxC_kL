@@ -85,12 +85,12 @@ private:
 				size_t zone,
 				size_t track);
 		/// Checks if a given mission location has been attacked already.
-		bool validMissionLocation(
+		bool validateMissionLocation(
 				const std::string& id,
 				const std::string& region,
 				size_t zone);
 		/// Checks that a given region appears in the strategy table.
-		bool validMissionRegion(const std::string& region) const;
+		bool validateMissionRegion(const std::string& region) const;
 };
 
 }

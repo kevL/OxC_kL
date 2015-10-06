@@ -39,17 +39,17 @@ class SoldierAward
 
 private:
 	bool _new;
-	size_t _decorLevel;
+	size_t _level;
 	std::string
 		_type,
-		_noun;
+		_qual;
 
 
 	public:
 		/// Creates a award of the specified type.
 		SoldierAward(
 				const std::string& type,
-				const std::string& noun = "noNoun");
+				const std::string& qualifier = "noQual");
 		/// Creates a new award and loads its contents from YAML.
 		explicit SoldierAward(const YAML::Node& node);
 		/// Cleans up the award.
@@ -62,16 +62,16 @@ private:
 
 		/// Gets award name.
 		const std::string getType() const;
-		/// Gets award noun.
-		const std::string getNoun() const;
-		/// Gets the award's decoration level's name.
-		const std::string getDecorLevelType(int skip) const;
+		/// Gets award qualifier.
+		const std::string getQualifier() const;
+		/// Gets the award's decoration-level's name.
+		const std::string getClassType(int skip) const;
+		/// Gets the award's decoration-level's int.
+		size_t getClassLevel() const;
 		/// Gets the award's decoration description.
-		const std::string getDecorDesc() const;
+		const std::string getClassDescription() const;
 		/// Gets the award's decoration class.
-		const std::string getDecorClass() const;
-		/// Gets the award's decoration level's int.
-		size_t getDecorLevelInt() const;
+		const std::string getClassDegree() const;
 
 		/// Gets the newness of the award.
 		bool isNew() const;
@@ -133,7 +133,7 @@ private:
 		_regionTotal,
 		_countryTotal,
 		_typeTotal,
-		_UFOTotal;
+		_ufoTotal;
 
 	///
 /*	void manageModularCommendations(
@@ -144,7 +144,7 @@ private:
 	///
 /*	void awardCommendation(
 			const std::string& type,
-			const std::string& noun = "noNoun"); */
+			const std::string& noun = "noQual"); */
 
 
 	public:
@@ -186,7 +186,7 @@ private:
 		/// Gets the list of missions, mapped by type.
 		std::map<std::string, int>& getTypeTotal();
 		/// Gets the list of missions, mapped by UFO.
-		std::map<std::string, int>& getUFOTotal();
+		std::map<std::string, int>& getUfoTotal();
 
 		/// Gets the total score.
 		int getScoreTotal() const;

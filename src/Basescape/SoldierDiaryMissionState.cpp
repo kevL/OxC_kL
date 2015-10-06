@@ -94,7 +94,7 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(
 	centerAllSurfaces();
 
 
-	const std::vector<MissionStatistics*>* const missionStatistics = _game->getSavedGame()->getMissionStatistics();
+	const std::vector<MissionStatistics*>* const missionStatistics (_game->getSavedGame()->getMissionStatistics());
 	size_t missionId;
 	int daysWounded;
 
@@ -102,7 +102,7 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(
 
 	if (_base == NULL)
 	{
-		const std::vector<SoldierDead*>* const deadList = _game->getSavedGame()->getDeadSoldiers();
+		const std::vector<SoldierDead*>* const deadList (_game->getSavedGame()->getDeadSoldiers());
 
 /*		if (deadList->empty() == true)
 		{
@@ -113,7 +113,7 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(
 		if (_soldierId >= deadList->size())
 			_soldierId = 0;
 
-		const SoldierDead* const deadSoldier = deadList->at(_soldierId);
+		const SoldierDead* const deadSoldier (deadList->at(_soldierId));
 		diary = deadSoldier->getDiary();
 
 		missionId = diary->getMissionIdList().at(_rowEntry);
@@ -124,7 +124,7 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(
 	}
 	else
 	{
-		const std::vector<Soldier*>* const liveList = _base->getSoldiers();
+		const std::vector<Soldier*>* const liveList (_base->getSoldiers());
 
 /*		if (liveList->empty() == true)
 		{
@@ -135,7 +135,7 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(
 		if (_soldierId >= liveList->size())
 			_soldierId = 0;
 
-		const Soldier* const soldier = liveList->at(_soldierId);
+		const Soldier* const soldier (liveList->at(_soldierId));
 		diary = soldier->getDiary();
 
 		missionId = diary->getMissionIdList().at(_rowEntry);
@@ -146,43 +146,43 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(
 	}
 
 
-	_window->setColor(Palette::blockOffset(13)+10);
+	_window->setColor(BLUE);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK14.SCR"));
 
-	_btnOk->setColor(Palette::blockOffset(13)+5);
+	_btnOk->setColor(YELLOW);
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& SoldierDiaryMissionState::btnOkClick);
 	_btnOk->onKeyboardPress(
 			(ActionHandler)& SoldierDiaryMissionState::btnOkClick,
 			Options::keyCancel);
 
-	_txtTitle->setColor(Palette::blockOffset(13)+5);
+	_txtTitle->setColor(YELLOW);
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
 	_txtTitle->setText(tr("STR_MISSION_DETAILS"));
 
-	_txtScore->setColor(Palette::blockOffset(13)+5);
-	_txtScore->setSecondaryColor(Palette::blockOffset(13));
+	_txtScore->setColor(YELLOW);
+	_txtScore->setSecondaryColor(WHITE);
 	_txtScore->setText(tr("STR_SCORE_VALUE").arg(missionStatistics->at(missionId)->score));
 
-	_txtMissionType->setColor(Palette::blockOffset(13)+5);
-	_txtMissionType->setSecondaryColor(Palette::blockOffset(13));
+	_txtMissionType->setColor(YELLOW);
+	_txtMissionType->setSecondaryColor(WHITE);
 	_txtMissionType->setText(tr("STR_MISSION_TYPE").arg(tr(missionStatistics->at(missionId)->getMissionTypeLowerCase())));
 
-	_txtUFO->setColor(Palette::blockOffset(13)+5);
-	_txtUFO->setSecondaryColor(Palette::blockOffset(13));
+	_txtUFO->setColor(YELLOW);
+	_txtUFO->setSecondaryColor(WHITE);
 	_txtUFO->setText(tr("STR_UFO_TYPE").arg(tr(missionStatistics->at(missionId)->ufo)));
-	if (missionStatistics->at(missionId)->ufo == "NO_UFO")
+	if (missionStatistics->at(missionId)->ufo == "NUL_UFO")
 		_txtUFO->setVisible(false);
 
-	_txtRace->setColor(Palette::blockOffset(13)+5);
-	_txtRace->setSecondaryColor(Palette::blockOffset(13));
+	_txtRace->setColor(YELLOW);
+	_txtRace->setSecondaryColor(WHITE);
 	_txtRace->setText(tr("STR_RACE_TYPE").arg(tr(missionStatistics->at(missionId)->alienRace)));
 	if (missionStatistics->at(missionId)->alienRace == "STR_UNKNOWN")
 		_txtRace->setVisible(false);
 
-	_txtDaylight->setColor(Palette::blockOffset(13)+5);
-	_txtDaylight->setSecondaryColor(Palette::blockOffset(13));
+	_txtDaylight->setColor(YELLOW);
+	_txtDaylight->setSecondaryColor(WHITE);
 	if (missionStatistics->at(missionId)->shade < 9)
 		_txtDaylight->setText(tr("STR_DAYLIGHT_TYPE").arg(tr("STR_DAY")));
 	else
@@ -192,8 +192,8 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(
 		_txtDaysWounded->setVisible(false);
 	else
 	{
-		_txtDaysWounded->setColor(Palette::blockOffset(13)+5);
-		_txtDaysWounded->setSecondaryColor(Palette::blockOffset(13));
+		_txtDaysWounded->setColor(YELLOW);
+		_txtDaysWounded->setSecondaryColor(WHITE);
 
 		if (daysWounded == -1)
 			_txtDaysWounded->setText(tr("STR_DAYS_WOUNDED").arg(tr("STR_KIA")).arg(L""));
@@ -203,16 +203,16 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(
 			_txtDaysWounded->setText(tr("STR_DAYS_WOUNDED").arg(daysWounded).arg(L" dy"));
 	}
 
-	_lstKills->setColor(Palette::blockOffset(13));
-	_lstKills->setArrowColor(Palette::blockOffset(13)+5);
-	_lstKills->setColumns(3, 27, 96, 94);
+	_lstKills->setColor(WHITE);
+	_lstKills->setArrowColor(YELLOW);
+	_lstKills->setColumns(3, 27,96,94);
 //	_lstKills->setBackground(_window);
 //	_lstKills->setSelectable(false);
 
 	int
-		killQty = 0,
-		points = 0;
-	size_t row = 0;
+		killQty (0),
+		points (0);
+	size_t row (0);
 //	bool stunOrKill = false;
 
 	for (std::vector<BattleUnitKill*>::const_iterator
@@ -255,10 +255,7 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(
 							strStatus.str().c_str(),
 							strUnit.str().c_str(),
 							strWeapon.str().c_str());
-			_lstKills->setCellColor(
-								row++,
-								0,
-								Palette::blockOffset(13)+5);
+			_lstKills->setCellColor(row++, 0, YELLOW);
 		}
 	}
 
@@ -271,8 +268,8 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(
 
 	if (killQty != 0)
 	{
-		_txtKills->setColor(Palette::blockOffset(13)+5);
-		_txtKills->setSecondaryColor(Palette::blockOffset(13));
+		_txtKills->setColor(YELLOW);
+		_txtKills->setSecondaryColor(WHITE);
 		_txtKills->setText(tr("STR_MARKS").arg(killQty));
 	}
 	else
@@ -280,8 +277,8 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(
 
 	if (points != 0)
 	{
-		_txtPoints->setColor(Palette::blockOffset(13)+5);
-		_txtPoints->setSecondaryColor(Palette::blockOffset(13));
+		_txtPoints->setColor(YELLOW);
+		_txtPoints->setSecondaryColor(WHITE);
 		_txtPoints->setText(tr("STR_POINTS_VALUE").arg(points));
 	}
 	else

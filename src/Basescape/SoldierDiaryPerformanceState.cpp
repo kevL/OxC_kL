@@ -283,22 +283,22 @@ SoldierDiaryPerformanceState::SoldierDiaryPerformanceState(
 
 	_lstLocation->setColor(WHITE);
 	_lstLocation->setArrowColor(PINK);
-	_lstLocation->setColumns(2, 80, 12);
+	_lstLocation->setColumns(2, 80,12);
 //	_lstLocation->setBackground(_window);
 
 	_lstType->setColor(WHITE);
 	_lstType->setArrowColor(PINK);
-	_lstType->setColumns(2, 100, 14);
+	_lstType->setColumns(2, 100,14);
 //	_lstType->setBackground(_window);
 
 	_lstUFO->setColor(WHITE);
 	_lstUFO->setArrowColor(PINK);
-	_lstUFO->setColumns(2, 80, 12);
+	_lstUFO->setColumns(2, 80,12);
 //	_lstUFO->setBackground(_window);
 
 	_lstMissionTotals->setColor(YELLOW);
 	_lstMissionTotals->setSecondaryColor(WHITE);
-	_lstMissionTotals->setColumns(4, 70, 70, 70, 78);
+	_lstMissionTotals->setColumns(4, 70,70,70,78);
 //	_lstMissionTotals->setBackground(_window);
 
 
@@ -314,22 +314,22 @@ SoldierDiaryPerformanceState::SoldierDiaryPerformanceState(
 
 	_lstRace->setColor(WHITE);
 	_lstRace->setArrowColor(PINK);
-	_lstRace->setColumns(2, 80, 18);
+	_lstRace->setColumns(2, 80,18);
 //	_lstRace->setBackground(_window);
 
 	_lstRank->setColor(WHITE);
 	_lstRank->setArrowColor(PINK);
-	_lstRank->setColumns(2, 80, 18);
+	_lstRank->setColumns(2, 80,18);
 //	_lstRank->setBackground(_window);
 
 	_lstWeapon->setColor(WHITE);
 	_lstWeapon->setArrowColor(PINK);
-	_lstWeapon->setColumns(2, 80, 18);
+	_lstWeapon->setColumns(2, 80,18);
 //	_lstWeapon->setBackground(_window);
 
 	_lstKillTotals->setColor(YELLOW);
 	_lstKillTotals->setSecondaryColor(WHITE);
-	_lstKillTotals->setColumns(3, 70, 70, 70);
+	_lstKillTotals->setColumns(3, 70,70,70);
 //	_lstKillTotals->setBackground(_window);
 
 
@@ -345,7 +345,7 @@ SoldierDiaryPerformanceState::SoldierDiaryPerformanceState(
 
 	_lstAwards->setColor(WHITE);
 	_lstAwards->setArrowColor(PINK);
-	_lstAwards->setColumns(3, 148, 52, 40);
+	_lstAwards->setColumns(3, 148,52,40);
 	_lstAwards->setSelectable();
 	_lstAwards->setBackground(_window);
 	_lstAwards->onMouseOver((ActionHandler)& SoldierDiaryPerformanceState::lstInfoMouseOver);
@@ -509,7 +509,7 @@ void SoldierDiaryPerformanceState::init()
 						wst3.c_str());
 
 
-	const size_t lstRows = 6;
+	const size_t lstRows (6);
 	TextList* const lstArray[lstRows] = // Kill & Mission stats ->
 	{
 		_lstRace,
@@ -527,7 +527,7 @@ void SoldierDiaryPerformanceState::init()
 		_diary->getWeaponTotal(),
 		_diary->getRegionTotal(),
 		_diary->getTypeTotal(),
-		_diary->getUFOTotal()
+		_diary->getUfoTotal()
 	};
 
 	for (size_t
@@ -535,31 +535,28 @@ void SoldierDiaryPerformanceState::init()
 			i != lstRows;
 			++i)
 	{
-		size_t row = 0;
+		size_t row (0);
 
 		for (std::map<std::string, int>::const_iterator
 				j = mapArray[i].begin();
 				j != mapArray[i].end();
 				++j)
 		{
-			if ((*j).first == "NO_UFO")
-				continue;
+			if ((*j).first != "NUL_UFO")
+			{
+				std::wstringstream
+					woststr1,
+					woststr2;
 
-			std::wstringstream
-				woststr1,
-				woststr2;
+				woststr1 << tr((*j).first.c_str());
+				woststr2 << (*j).second;
 
-			woststr1 << tr((*j).first.c_str());
-			woststr2 << (*j).second;
-
-			lstArray[i]->addRow(
-							2,
-							woststr1.str().c_str(),
-							woststr2.str().c_str());
-			lstArray[i]->setCellColor(
-									row++,
-									0,
-									YELLOW);
+				lstArray[i]->addRow(
+								2,
+								woststr1.str().c_str(),
+								woststr2.str().c_str());
+				lstArray[i]->setCellColor(row++, 0, YELLOW);
+			}
 		}
 	}
 
@@ -572,17 +569,17 @@ void SoldierDiaryPerformanceState::init()
 		if (_game->getRuleset()->getAwardsList().empty() == true)
 			break;
 
-		const RuleAward* const awardRule = _game->getRuleset()->getAwardsList()[(*i)->getType()];
+		const RuleAward* const awardRule (_game->getRuleset()->getAwardsList()[(*i)->getType()]);
 		std::wstringstream
 			woststr1,
 			woststr2,
 			woststr3,
 			woststr4;
 
-		if ((*i)->getNoun() != "noNoun")
+		if ((*i)->getQualifier() != "noQual")
 		{
-			woststr1 << tr((*i)->getType().c_str()).arg(tr((*i)->getNoun()).c_str());
-			woststr4 << tr(awardRule->getDescription().c_str()).arg(tr((*i)->getNoun()).c_str());
+			woststr1 << tr((*i)->getType().c_str()).arg(tr((*i)->getQualifier()).c_str());
+			woststr4 << tr(awardRule->getDescription().c_str()).arg(tr((*i)->getQualifier()).c_str());
 		}
 		else
 		{
@@ -590,8 +587,8 @@ void SoldierDiaryPerformanceState::init()
 			woststr4 << tr(awardRule->getDescription().c_str());
 		}
 
-		woststr2 << tr((*i)->getDecorDesc().c_str());
-		woststr3 << tr((*i)->getDecorClass().c_str());
+		woststr2 << tr((*i)->getClassDescription().c_str());
+		woststr3 << tr((*i)->getClassDegree().c_str());
 
 		_lstAwards->addRow(
 						3,
@@ -640,7 +637,7 @@ void SoldierDiaryPerformanceState::drawSprites()
 			sprite = awardRule->getSprite();
 			_srtSprite->getFrame(sprite)->blit(_srfSprite[j - scroll]);
 
-			sprite = static_cast<int>((*i)->getDecorLevelInt()); // handle award decoration sprites
+			sprite = static_cast<int>((*i)->getClassLevel()); // handle award decoration sprites
 			if (sprite != 0)
 				_srtDecor->getFrame(sprite)->blit(_srfDecor[j - scroll]);
 		}

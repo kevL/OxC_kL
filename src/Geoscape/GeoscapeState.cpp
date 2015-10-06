@@ -3892,15 +3892,15 @@ bool GeoscapeState::processCommand(RuleMissionScript* const missionCommand)
 		targetRegion,
 		missionType,
 		raceType;
-	size_t targetZone = std::numeric_limits<size_t>::max(); // darn vc++ linker warning ...
+	size_t targetZone (std::numeric_limits<size_t>::max()); // darn vc++ linker warning ...
 
 	if (missionCommand->getSiteType() == true)
 	{
 		missionType = missionCommand->genMissionDatum(month, GT_MISSION);
-		const std::vector<std::string> missions = missionCommand->getMissionTypes(month);
+		const std::vector<std::string> missions (missionCommand->getMissionTypes(month));
 		size_t
-			missionsTotal = missions.size(),
-			testMission = 0;
+			missionsTotal (missions.size()),
+			testMission (0);
 
 		for (
 				;
@@ -3948,21 +3948,21 @@ bool GeoscapeState::processCommand(RuleMissionScript* const missionCommand)
 
 				if (processThisRegion == true)
 				{
-					const RuleRegion* const regionRule = _rules->getRegion(*j);
+					const RuleRegion* const regionRule (_rules->getRegion(*j));
 					if (regionRule->getMissionZones().size() > targetZone)
 					{
-						size_t testZone = 0;
-						const std::vector<MissionArea> areas = regionRule->getMissionZones()[targetZone].areas;
+						size_t testZone (0);
+						const std::vector<MissionArea> areas (regionRule->getMissionZones()[targetZone].areas);
 						for (std::vector<MissionArea>::const_iterator
 								k = areas.begin();
 								k != areas.end();
 								++k)
 						{
 							if ((*k).isPoint() == true
-								&& strategy.validMissionLocation(
-															missionCommand->getVarName(),
-															regionRule->getType(),
-															testZone) == true)
+								&& strategy.validateMissionLocation(
+																missionCommand->getVarName(),
+																regionRule->getType(),
+																testZone) == true)
 							{
 								validAreas.push_back(std::make_pair(
 																regionRule->getType(),
@@ -4042,7 +4042,7 @@ bool GeoscapeState::processCommand(RuleMissionScript* const missionCommand)
 			regionsMaster.push_back(_gameSave->locateRegion(**i)->getRules()->getType());
 		}
 
-		std::vector<std::string> types = missionCommand->getMissionTypes(month);
+		std::vector<std::string> types (missionCommand->getMissionTypes(month));
 		if (types.empty() == true)
 		{
 			for (std::vector<std::string>::const_iterator
@@ -4050,7 +4050,7 @@ bool GeoscapeState::processCommand(RuleMissionScript* const missionCommand)
 					i != regionsMaster.end();
 					)
 			{
-				if (strategy.validMissionRegion(*i) == true)
+				if (strategy.validateMissionRegion(*i) == true)
 					++i;
 				else
 					i = regionsMaster.erase(i);
@@ -4060,16 +4060,14 @@ bool GeoscapeState::processCommand(RuleMissionScript* const missionCommand)
 				return false;
 
 
-			targetRegion = regionsMaster[static_cast<size_t>(RNG::generate(0,
-										 static_cast<int>(regionsMaster.size()) - 1))];
+			targetRegion = regionsMaster[RNG::pick(regionsMaster.size())];
 		}
 		else
 		{
 			std::vector<std::string> regions;
 			size_t
-				typesTotal = types.size(),
-				entry = static_cast<size_t>(RNG::generate(0,
-						static_cast<int>(typesTotal) - 1));
+				typesTotal (types.size()),
+				id (RNG::pick(typesTotal));
 
 			for (size_t
 					i = 0;
@@ -4083,7 +4081,7 @@ bool GeoscapeState::processCommand(RuleMissionScript* const missionCommand)
 						j != _gameSave->getAlienMissions().end();
 						++j)
 				{
-					if (types[entry] == (*j)->getRules().getType())
+					if (types[id] == (*j)->getRules().getType())
 					{
 						for (std::vector<std::string>::const_iterator
 								k = regions.begin();
@@ -4100,17 +4098,13 @@ bool GeoscapeState::processCommand(RuleMissionScript* const missionCommand)
 
 				if (regions.empty() == false)
 				{
-					missionType = types[entry];
-					targetRegion = regions[static_cast<size_t>(RNG::generate(0,
-										   static_cast<int>(regions.size()) - 1))];
+					missionType = types[id];
+					targetRegion = regions[RNG::pick(regions.size())];
 					break;
 				}
 
-				if (typesTotal > 1
-					&& ++entry == typesTotal)
-				{
-					entry = 0;
-				}
+				if (typesTotal > 1 && ++id == typesTotal)
+					id = 0;
 			}
 		}
 	}
@@ -4158,7 +4152,7 @@ bool GeoscapeState::processCommand(RuleMissionScript* const missionCommand)
 	else
 		raceType = missionCommand->genMissionDatum(month, GT_RACE);
 
-	if (_rules->getAlienRace(raceType) == 0)
+	if (_rules->getAlienRace(raceType) == NULL)
 	{
 		throw Exception("Error proccessing mission script named: "
 						+ missionCommand->getType()

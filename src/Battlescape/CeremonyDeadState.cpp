@@ -50,7 +50,7 @@ CeremonyDeadState::CeremonyDeadState(std::vector<SoldierDead*> soldiersLost)
 {
 	_window			= new Window(this, 320, 200);
 	_txtTitle		= new Text(300, 16, 10, 8);
-	_lstLost		= new TextList(285, 9, 16, 26);
+	_lstLost		= new TextList(285,   9, 16, 26);
 	_lstSoldiers	= new TextList(285, 113, 16, 36);
 	_txtMedalInfo	= new Text(280, 25, 20, 150);
 	_btnOk			= new TextButton(288, 16, 16, 177);
@@ -79,13 +79,13 @@ CeremonyDeadState::CeremonyDeadState(std::vector<SoldierDead*> soldiersLost)
 	_txtTitle->setBig();
 
 	_lstLost->setColor(CYAN);
-	_lstLost->setColumns(2, 200, 77);
+	_lstLost->setColumns(2, 200,77);
 	_lstLost->setBackground(_window);
 	_lstLost->setSelectable();
 	_lstLost->setMargin();
 
-	_lstSoldiers->setColor(GREEN); // note is Olive in CeremonyState
-	_lstSoldiers->setColumns(2, 200, 77);
+	_lstSoldiers->setColor(GREEN); // note, is Olive in CeremonyState
+	_lstSoldiers->setColumns(2, 200,77);
 	_lstSoldiers->setBackground(_window);
 	_lstSoldiers->setSelectable();
 	_lstSoldiers->setMargin();
@@ -110,9 +110,8 @@ CeremonyDeadState::CeremonyDeadState(std::vector<SoldierDead*> soldiersLost)
 					Options::keyCancel);
 
 
-	const int rowsLost = std::min(	// the soldiersLost list has maximum 8 rows so that there's room below it for the awards List
-								8,
-								static_cast<int>(soldiersLost.size()));
+	const int rowsLost (std::min(8, // the soldiersLost list has maximum 8 rows so that there's room below it for the awards List
+								static_cast<int>(soldiersLost.size())));
 	_lstLost->setHeight(rowsLost * 8 + 1);
 
 	_lstSoldiers->setY(_lstSoldiers->getY() + (rowsLost - 1) * 8);
@@ -131,93 +130,87 @@ CeremonyDeadState::CeremonyDeadState(std::vector<SoldierDead*> soldiersLost)
 	}
 
 
-	std::string noun;
+	std::string qualifier;
 	bool
-		titleChosen = true,
-		modularAward;
+		titleChosen (true),
+		qualifiedAward;
 	size_t
-		row = 0,
+		row (0),
 		titleRow;
 
-	std::map<std::string, RuleAward*> awardList = _game->getRuleset()->getAwardsList();
+	std::map<std::string, RuleAward*> awardList (_game->getRuleset()->getAwardsList());
 	for (std::map<std::string, RuleAward*>::const_iterator
-			award = awardList.begin();
-			award != awardList.end();
+			i = awardList.begin();
+			i != awardList.end();
 			)
 	{
-		modularAward = false;
-		noun = "noNoun";
+		qualifiedAward = false;
+		qualifier = "noQual";
 
 		if (titleChosen == true)
 		{
-			_lstSoldiers->addRow(2, L"", L""); // Blank row, will be filled in later -> unless it's the last row ......
-			_titleRows.insert(std::pair<size_t, std::string>(
-															row++,
-															""));
+			_lstSoldiers->addRow(2, L"",L""); // Blank row, will be filled in later -> unless it's the last row ......
+			_titleRows.insert(std::pair<size_t, std::string>(row++, ""));
 		}
 
 		titleChosen = false;
 		titleRow = row - 1;
 
 		for (std::vector<SoldierDead*>::const_iterator
-				soldier = soldiersLost.begin();
-				soldier != soldiersLost.end();
-				++soldier)
+				j = soldiersLost.begin();
+				j != soldiersLost.end();
+				++j)
 		{
 			for (std::vector<SoldierAward*>::const_iterator
-					soldierAward = (*soldier)->getDiary()->getSoldierAwards()->begin();
-					soldierAward != (*soldier)->getDiary()->getSoldierAwards()->end();
-					++soldierAward)
+					k = (*j)->getDiary()->getSoldierAwards()->begin();
+					k != (*j)->getDiary()->getSoldierAwards()->end();
+					++k)
 			{
-				if ((*soldierAward)->getType() == (*award).first
-					&& (*soldierAward)->isNew() == true
-					&& noun == "noNoun")
+				if ((*k)->getType() == (*i).first
+					&& (*k)->isNew() == true
+					&& qualifier == "noQual")
 				{
-					(*soldierAward)->setOld();
+					(*k)->setOld();
 					++row;
 
-					if ((*soldierAward)->getNoun() != "noNoun")
+					if ((*k)->getQualifier() != "noQual")
 					{
-						noun = (*soldierAward)->getNoun();
-						modularAward = true;
+						qualifier = (*k)->getQualifier();
+						qualifiedAward = true;
 					}
 
-					std::wstringstream wststr;
-					wststr << L"  ";
-					wststr << (*soldier)->getName().c_str();
+					std::wostringstream woststr;
+					woststr << L"  ";
+					woststr << (*j)->getName().c_str();
 
 					int
-						skip = 0,
-						lastInt = -2,
-						thisInt; // = -1;
-					size_t j = 0;
+						skip (0),
+						lastInt (-2),
+						thisInt;
 
+					size_t nextLevel (0);
 					for (std::vector<int>::const_iterator
-							i = (*award).second->getCriteria()->begin()->second.begin();
-							i != (*award).second->getCriteria()->begin()->second.end();
-							++i)
+							l = (*i).second->getCriteria()->begin()->second.begin();
+							l != (*i).second->getCriteria()->begin()->second.end();
+							++l)
 					{
-						if (j == (*soldierAward)->getDecorLevelInt() + 1)
+						if (nextLevel == (*k)->getClassLevel() + 1)
 							break;
 
-						thisInt = *i;
-						if (i != (*award).second->getCriteria()->begin()->second.begin())
-						{
-							--i;
-							lastInt = *i;
-							++i;
-						}
+						thisInt = *l;
+						if (l != (*i).second->getCriteria()->begin()->second.begin())
+							lastInt = *(l - 1);
 
 						if (thisInt == lastInt)
 							++skip;
 
-						++j;
+						++nextLevel;
 					}
 
 					_lstSoldiers->addRow(
 									2,
-									wststr.str().c_str(),
-									tr((*soldierAward)->getDecorLevelType(skip)).c_str());
+									woststr.str().c_str(),
+									tr((*k)->getClassType(skip)).c_str());
 					break;
 				}
 			}
@@ -225,35 +218,30 @@ CeremonyDeadState::CeremonyDeadState(std::vector<SoldierDead*> soldiersLost)
 
 		if (titleRow != row - 1)
 		{
-			if (modularAward == true)
+			if (qualifiedAward == true)
 				_lstSoldiers->setCellText(
 										titleRow,
 										0,
-										tr((*award).first).arg(tr(noun).c_str()).c_str());
+										tr((*i).first).arg(tr(qualifier).c_str()).c_str());
 			else
 				_lstSoldiers->setCellText(
 										titleRow,
 										0,
-										tr((*award).first).c_str());
+										tr((*i).first).c_str());
 
-			_lstSoldiers->setRowColor(
-								titleRow,
-								Palette::blockOffset(9), // brown
-								true);
+			_lstSoldiers->setRowColor(titleRow, BROWN, true);
 
-
-			std::string info = (*award).second->getDescriptionGeneral(); // look for Generic Desc first.
+			const std::string info ((*i).second->getDescriptionGeneral()); // look for Generic Desc first.
 			if (info.empty() == false)
 				_titleRows[titleRow] = info;
 			else
-				_titleRows[titleRow] = (*award).second->getDescription();
-
+				_titleRows[titleRow] = (*i).second->getDescription();
 
 			titleChosen = true;
 		}
 
-		if (noun == "noNoun")
-			++award;
+		if (qualifier == "noQual")
+			++i;
 	}
 }
 
@@ -283,7 +271,7 @@ void CeremonyDeadState::btnOkClick(Action*)
  */
 void CeremonyDeadState::lstInfoMouseOver(Action*)
 {
-	const size_t row = _lstSoldiers->getSelectedRow();
+	const size_t row (_lstSoldiers->getSelectedRow());
 	if (_titleRows.find(row) != _titleRows.end())
 		_txtMedalInfo->setText(tr(_titleRows[row].c_str()));
 	else

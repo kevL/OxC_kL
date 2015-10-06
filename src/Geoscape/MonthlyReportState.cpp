@@ -28,6 +28,7 @@
 #include "../Battlescape/CeremonyState.h"
 
 #include "../Engine/Game.h"
+#include "../Engine/Language.h" // temp Debug. for soldier name
 //#include "../Engine/LocalizedText.h"
 //#include "../Engine/Options.h"
 
@@ -283,6 +284,9 @@ MonthlyReportState::MonthlyReportState()
 					Options::keyOk);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& MonthlyReportState::btnOkClick,
+					Options::keyOkKeypad);
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& MonthlyReportState::btnOkClick,
 					Options::keyCancel);
 
 
@@ -300,13 +304,14 @@ MonthlyReportState::MonthlyReportState()
 					Options::keyOk);
 	_btnBigOk->onKeyboardPress(
 					(ActionHandler)& MonthlyReportState::btnOkClick,
+					Options::keyOkKeypad);
+	_btnBigOk->onKeyboardPress(
+					(ActionHandler)& MonthlyReportState::btnOkClick,
 					Options::keyCancel);
 	_btnBigOk->setVisible(false);
 
 
-	_game->getResourcePack()->playMusic(
-									music,
-									"",1);
+	_game->getResourcePack()->playMusic(music, "", 1);
 }
 
 /**
@@ -325,10 +330,10 @@ void MonthlyReportState::calculateChanges() // private.
 	_ratingLast = 0;
 
 	int
-		total = 0,
-		aLienTotal = 0;
+		total (0),
+		aLienTotal (0);
 
-	const size_t lastMonth = _gameSave->getFundsList().size() - 2;
+	const size_t lastMonth (_gameSave->getFundsList().size() - 2);
 
 	for (std::vector<Region*>::const_iterator
 			i = _gameSave->getRegions()->begin();
@@ -346,14 +351,14 @@ void MonthlyReportState::calculateChanges() // private.
 	}
 
 
-	const int diff = static_cast<int>(_gameSave->getDifficulty());
+	const int diff (static_cast<int>(_gameSave->getDifficulty()));
 
 	for (std::vector<Country*>::const_iterator
 			i = _gameSave->getCountries()->begin();
 			i != _gameSave->getCountries()->end();
 			++i)
 	{
-		std::string st = (*i)->getRules()->getType();
+		std::string st ((*i)->getRules()->getType());
 
 		if ((*i)->getNewPact() == true)
 			_pactList.push_back(st);
@@ -480,10 +485,15 @@ void MonthlyReportState::btnOkClick(Action*)
 					j != (*i)->getSoldiers()->end();
 					++j)
 			{
+				//Log(LOG_INFO) << "MonthReport: sol " << (Language::wstrToCp((*j)->getName()));
 				(*j)->getDiary()->addMonthlyService();
 
 				if ((*j)->getDiary()->manageAwards(_game->getRuleset()) == true)
+				{
+					//Log(LOG_INFO) << ". MR: Award";
 					_soldiersMedalled.push_back(*j);
+				}
+				//Log(LOG_INFO) << ". MR: no Award";
 			}
 		}
 
@@ -553,7 +563,7 @@ std::wstring MonthlyReportState::countryList( // private.
 			woststr << tr(singular).arg(tr(countries.front()));
 		else
 		{
-			LocalizedText countryList = tr(countries.front());
+			LocalizedText countryList (tr(countries.front()));
 
 			std::vector<std::string>::const_iterator i;
 			for (

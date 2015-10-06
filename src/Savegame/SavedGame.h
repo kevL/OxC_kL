@@ -191,7 +191,7 @@ struct MissionStatistics
 			timeStat(0,0,0,0,0,0,0),
 			region("STR_REGION_UNKNOWN"),
 			country("STR_UNKNOWN"),
-			ufo("NO_UFO"),
+			ufo("NUL_UFO"),
 			success(false),
 			score(0),
 			alienRace("STR_UNKNOWN"),

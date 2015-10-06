@@ -22,6 +22,7 @@
 //#include <sstream>
 
 #include "../Engine/Game.h"
+#include "../Engine/Language.h" // temp Debug. for soldier name
 //#include "../Engine/LocalizedText.h"
 //#include "../Engine/Options.h"
 
@@ -73,7 +74,7 @@ CeremonyState::CeremonyState(std::vector<Soldier*> soldiersMedalled)
 	_txtTitle->setBig();
 
 	_lstSoldiers->setColor(OLIVE); // note is Green in CeremonyDeadState
-	_lstSoldiers->setColumns(2, 200, 77);
+	_lstSoldiers->setColumns(2, 200,77);
 	_lstSoldiers->setBackground(_window);
 	_lstSoldiers->setSelectable();
 	_lstSoldiers->setMargin();
@@ -98,22 +99,23 @@ CeremonyState::CeremonyState(std::vector<Soldier*> soldiersMedalled)
 					Options::keyCancel);
 
 
-	std::string noun;
+	std::string qualifier;
 	bool
-		titleChosen = true,
-		modular;
+		titleChosen (true),
+		qualifiedAward;
 	size_t
-		row = 0,
+		row (0),
 		titleRow;
 
-	std::map<std::string, RuleAward*> awardsList = _game->getRuleset()->getAwardsList();
+	std::map<std::string, RuleAward*> awardsList (_game->getRuleset()->getAwardsList());
 	for (std::map<std::string, RuleAward*>::const_iterator
 			i = awardsList.begin();
 			i != awardsList.end();
 			)
 	{
-		modular = false;
-		noun = "noNoun";
+		//Log(LOG_INFO) << "Ceremony Award " << (*i).first;
+		qualifiedAward = false;
+		qualifier = "noQual";
 
 		if (titleChosen == true)
 		{
@@ -124,61 +126,64 @@ CeremonyState::CeremonyState(std::vector<Soldier*> soldiersMedalled)
 		titleChosen = false;
 		titleRow = row - 1;
 
+		//Log(LOG_INFO) << "Ceremony Soldiers total = " << (int)soldiersMedalled.size();
 		for (std::vector<Soldier*>::const_iterator
 				j = soldiersMedalled.begin();
 				j != soldiersMedalled.end();
 				++j)
 		{
+			//Log(LOG_INFO) << "Ceremony: sol " << (Language::wstrToCp((*j)->getName()));
 			for (std::vector<SoldierAward*>::const_iterator
 					k = (*j)->getDiary()->getSoldierAwards()->begin();
 					k != (*j)->getDiary()->getSoldierAwards()->end();
 					++k)
 			{
+				//Log(LOG_INFO) << ". award = " << (*k)->getType();
 				if ((*k)->getType() == (*i).first
 					&& (*k)->isNew() == true
-					&& noun == "noNoun")
+					&& qualifier == "noQual")
 				{
 					(*k)->setOld();
 					++row;
 
-					if ((*k)->getNoun() != "noNoun")
+					if ((*k)->getQualifier() != "noQual")
 					{
-						noun = (*k)->getNoun();
-						modular = true;
+						qualifier = (*k)->getQualifier();
+						qualifiedAward = true;
 					}
 
-					std::wstringstream wss;
-					wss << L"  ";
-					wss << (*j)->getName().c_str();
+					std::wostringstream woststr;
+					woststr << L"  ";
+					woststr << (*j)->getName().c_str();
 
 					int
-						skip = 0,
-						previous = -2,
-						current;
-					size_t next = 0;
+						skip (0),
+						lastInt (-2),
+						thisInt;
 
+					size_t nextLevel (0);
 					for (std::vector<int>::const_iterator
 							l = (*i).second->getCriteria()->begin()->second.begin();
 							l != (*i).second->getCriteria()->begin()->second.end();
 							++l)
 					{
-						if (next == (*k)->getDecorLevelInt() + 1)
+						if (nextLevel == (*k)->getClassLevel() + 1)
 							break;
 
-						current = *l;
+						thisInt = *l;
 						if (l != (*i).second->getCriteria()->begin()->second.begin())
-							previous = (*l) - 1;
+							lastInt = *(l - 1);
 
-						if (current == previous)
+						if (thisInt == lastInt)
 							++skip;
 
-						++next;
+						++nextLevel;
 					}
 
 					_lstSoldiers->addRow(
 									2,
-									wss.str().c_str(),
-									tr((*k)->getDecorLevelType(skip)).c_str());
+									woststr.str().c_str(),
+									tr((*k)->getClassType(skip)).c_str());
 					break;
 				}
 			}
@@ -186,11 +191,11 @@ CeremonyState::CeremonyState(std::vector<Soldier*> soldiersMedalled)
 
 		if (titleRow != row - 1)
 		{
-			if (modular == true)
+			if (qualifiedAward == true)
 				_lstSoldiers->setCellText(
 										titleRow,
 										0,
-										tr((*i).first).arg(tr(noun).c_str()).c_str());
+										tr((*i).first).arg(tr(qualifier).c_str()).c_str());
 			else
 				_lstSoldiers->setCellText(
 										titleRow,
@@ -199,7 +204,7 @@ CeremonyState::CeremonyState(std::vector<Soldier*> soldiersMedalled)
 
 			_lstSoldiers->setRowColor(titleRow, GREEN);
 
-			std::string info = (*i).second->getDescriptionGeneral(); // look for Generic Desc first.
+			std::string info ((*i).second->getDescriptionGeneral()); // look for Generic Desc first.
 			if (info.empty() == false)
 				_titleRows[titleRow] = info;
 			else
@@ -208,7 +213,7 @@ CeremonyState::CeremonyState(std::vector<Soldier*> soldiersMedalled)
 			titleChosen = true;
 		}
 
-		if (noun == "noNoun")
+		if (qualifier == "noQual")
 			++i;
 	}
 }
