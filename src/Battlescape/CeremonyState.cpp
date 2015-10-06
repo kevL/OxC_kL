@@ -22,7 +22,6 @@
 //#include <sstream>
 
 #include "../Engine/Game.h"
-#include "../Engine/Language.h" // temp Debug. for soldier name
 //#include "../Engine/LocalizedText.h"
 //#include "../Engine/Options.h"
 
@@ -113,7 +112,6 @@ CeremonyState::CeremonyState(std::vector<Soldier*> soldiersMedalled)
 			i != awardsList.end();
 			)
 	{
-		//Log(LOG_INFO) << "Ceremony Award " << (*i).first;
 		qualifiedAward = false;
 		qualifier = "noQual";
 
@@ -126,19 +124,16 @@ CeremonyState::CeremonyState(std::vector<Soldier*> soldiersMedalled)
 		titleChosen = false;
 		titleRow = row - 1;
 
-		//Log(LOG_INFO) << "Ceremony Soldiers total = " << (int)soldiersMedalled.size();
 		for (std::vector<Soldier*>::const_iterator
 				j = soldiersMedalled.begin();
 				j != soldiersMedalled.end();
 				++j)
 		{
-			//Log(LOG_INFO) << "Ceremony: sol " << (Language::wstrToCp((*j)->getName()));
 			for (std::vector<SoldierAward*>::const_iterator
 					k = (*j)->getDiary()->getSoldierAwards()->begin();
 					k != (*j)->getDiary()->getSoldierAwards()->end();
 					++k)
 			{
-				//Log(LOG_INFO) << ". award = " << (*k)->getType();
 				if ((*k)->getType() == (*i).first
 					&& (*k)->isNew() == true
 					&& qualifier == "noQual")

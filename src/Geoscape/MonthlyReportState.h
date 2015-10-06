@@ -74,9 +74,11 @@ private:
 	std::wstring countryList(
 			const std::vector<std::string>& countries,
 			const std::string& singular,
-			const std::string& plural);
+			const std::string& plural) const;
 	/// Calculates monthly scores.
 	void calculateChanges();
+	/// Handles monthly soldier awards.
+	void awards();
 
 
 	public:

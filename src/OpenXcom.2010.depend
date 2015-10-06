@@ -7051,7 +7051,7 @@
 1435515873 f:\git\openxcom\src\geoscape\lowfuelstate.h
 	"../Engine/State.h"
 
-1442645878 f:\git\openxcom\src\geoscape\monthlyreportstate.h
+1444151852 f:\git\openxcom\src\geoscape\monthlyreportstate.h
 	"../Engine/State.h"
 
 1442441015 f:\git\openxcom\src\geoscape\multipletargetsstate.h
@@ -7212,12 +7212,11 @@
 	"../Resource/ResourcePack.h"
 	"../Savegame/Craft.h"
 
-1444143469 source:f:\git\openxcom\src\geoscape\monthlyreportstate.cpp
+1444151779 source:f:\git\openxcom\src\geoscape\monthlyreportstate.cpp
 	"MonthlyReportState.h"
 	"DefeatState.h"
 	"../Battlescape/CeremonyState.h"
 	"../Engine/Game.h"
-	"../Engine/Language.h"
 	"../Menu/SaveGameState.h"
 	"../Interface/Text.h"
 	"../Interface/TextButton.h"
@@ -10764,7 +10763,7 @@
 	"../Savegame/SoldierDead.h"
 	"../Savegame/SoldierDiary.h"
 
-1444144818 source:f:\git\openxcom\src\savegame\soldierdiary.cpp
+1444148698 source:f:\git\openxcom\src\savegame\soldierdiary.cpp
 	"SoldierDiary.h"
 	"../Ruleset/RuleAward.h"
 	"../Ruleset/Ruleset.h"
@@ -11285,7 +11284,7 @@
 1444104096 f:\git\openxcom\src\battlescape\ceremonydeadstate.h
 	"../Engine/State.h"
 
-1444139503 source:f:\git\openxcom\src\battlescape\ceremonystate.cpp
+1444149567 source:f:\git\openxcom\src\battlescape\ceremonystate.cpp
 	"CeremonyState.h"
 	"../Engine/Game.h"
 	"../Interface/Text.h"

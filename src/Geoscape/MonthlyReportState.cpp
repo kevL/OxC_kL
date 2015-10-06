@@ -28,7 +28,6 @@
 #include "../Battlescape/CeremonyState.h"
 
 #include "../Engine/Game.h"
-#include "../Engine/Language.h" // temp Debug. for soldier name
 //#include "../Engine/LocalizedText.h"
 //#include "../Engine/Options.h"
 
@@ -220,7 +219,7 @@ MonthlyReportState::MonthlyReportState()
 	woststr.str(L"");
 	woststr << wst;
 
-	bool resetWarning = true;
+	bool resetWarning (true);
 	if (_gameOver == false)
 	{
 		if (_gameSave->getFunds() < -999999)
@@ -254,11 +253,8 @@ MonthlyReportState::MonthlyReportState()
 		}
 	}
 
-	if (resetWarning == true
-		&& _gameSave->getWarned() == true)
-	{
+	if (resetWarning == true && _gameSave->getWarned() == true)
 		_gameSave->setWarned(false);
-	}
 
 	woststr << countryList(
 					_happyList,
@@ -312,6 +308,8 @@ MonthlyReportState::MonthlyReportState()
 
 
 	_game->getResourcePack()->playMusic(music, "", 1);
+
+	awards();
 }
 
 /**
@@ -363,10 +361,7 @@ void MonthlyReportState::calculateChanges() // private.
 		if ((*i)->getNewPact() == true)
 			_pactList.push_back(st);
 
-		(*i)->newMonth(
-					total,
-					aLienTotal,
-					diff);
+		(*i)->newMonth(total, aLienTotal, diff);
 
 		_deltaFunds += (*i)->getFunding().back()
 					 - (*i)->getFunding().at(lastMonth);
@@ -475,28 +470,6 @@ void MonthlyReportState::btnOkClick(Action*)
 	{
 		_game->popState();
 
-		for (std::vector<Base*>::const_iterator // Award medals for service time
-				i = _gameSave->getBases()->begin();
-				i != _gameSave->getBases()->end();
-				++i)
-		{
-			for (std::vector<Soldier*>::const_iterator
-					j = (*i)->getSoldiers()->begin();
-					j != (*i)->getSoldiers()->end();
-					++j)
-			{
-				//Log(LOG_INFO) << "MonthReport: sol " << (Language::wstrToCp((*j)->getName()));
-				(*j)->getDiary()->addMonthlyService();
-
-				if ((*j)->getDiary()->manageAwards(_game->getRuleset()) == true)
-				{
-					//Log(LOG_INFO) << ". MR: Award";
-					_soldiersMedalled.push_back(*j);
-				}
-				//Log(LOG_INFO) << ". MR: no Award";
-			}
-		}
-
 		if (_soldiersMedalled.empty() == false)
 			_game->pushState(new CeremonyState(_soldiersMedalled));
 
@@ -552,7 +525,7 @@ void MonthlyReportState::btnOkClick(Action*)
 std::wstring MonthlyReportState::countryList( // private.
 		const std::vector<std::string>& countries,
 		const std::string& singular,
-		const std::string& plural)
+		const std::string& plural) const
 {
 	std::wostringstream woststr;
 
@@ -580,6 +553,29 @@ std::wstring MonthlyReportState::countryList( // private.
 	}
 
 	return woststr.str();
+}
+
+/**
+ * Handles monthly soldier awards.
+ */
+void MonthlyReportState::awards() // private.
+{
+	for (std::vector<Base*>::const_iterator // Award medals for service time
+			i = _gameSave->getBases()->begin();
+			i != _gameSave->getBases()->end();
+			++i)
+	{
+		for (std::vector<Soldier*>::const_iterator
+				j = (*i)->getSoldiers()->begin();
+				j != (*i)->getSoldiers()->end();
+				++j)
+		{
+			(*j)->getDiary()->addMonthlyService();
+
+			if ((*j)->getDiary()->manageAwards(_game->getRuleset()) == true)
+				_soldiersMedalled.push_back(*j);
+		}
+	}
 }
 
 }
