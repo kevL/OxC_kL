@@ -2780,14 +2780,19 @@ void GeoscapeState::time1Day()
 			}
 
 			bool
-				gofCrack (true),
-				unlocksCrack (true);
+				gofCrack,
+				unlocksCrack;
 
 			if (liveAlien == true)
 				getAlienCracks(
 							resRule->getType(),
 							gofCrack,
 							unlocksCrack);
+			else
+			{
+				gofCrack = true;
+				unlocksCrack = true;
+			}
 
 			const RuleResearch* gofRule (NULL);
 			if (gofCrack == true
@@ -3034,17 +3039,17 @@ void GeoscapeState::time1Day()
  */
 void GeoscapeState::getAlienCracks( // private.
 			const std::string& alienType,
-			bool gof,
-			bool unlocks) const
+			bool& gof,
+			bool& unlocks) const
 {
 	int
-		gofPct (50),
-		unlocksPct (50); // defaults.
+		gofPct (100),
+		unlocksPct (100); // defaults.
 
 	if (alienType.find("_TERRORIST") != std::string::npos)
 	{
 		gofPct = 10;
-//		unlocksPct = 50;
+		unlocksPct = 50;
 	}
 	else if (alienType.find("_FLOATER") != std::string::npos)
 	{
@@ -3059,11 +3064,11 @@ void GeoscapeState::getAlienCracks( // private.
 	else if (alienType.find("_SNAKEMAN") != std::string::npos)
 	{
 		gofPct = 60;
-//		unlocksPct = 50;
+		unlocksPct = 50;
 	}
 	else if (alienType.find("_MUTON") != std::string::npos)
 	{
-//		gofPct = 50;
+		gofPct = 50;
 		unlocksPct = 60;
 	}
 	else if (alienType.find("_ETHEREAL") != std::string::npos)

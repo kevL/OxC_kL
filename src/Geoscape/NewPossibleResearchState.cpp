@@ -44,14 +44,14 @@ namespace OpenXcom
 {
 /**
  * Initializes all the elements in the EndResearch screen.
- * @param base					- pointer to the Base to get info from
- * @param possibilities			- reference the vector of pointers to RuleResearch projects
- * @param showResearchButton	- true to show new research button
+ * @param base		- pointer to the Base to get info from
+ * @param resRules	- reference the vector of pointers to RuleResearch projects
+ * @param showBtn	- true to show new research button
  */
 NewPossibleResearchState::NewPossibleResearchState(
 		Base* const base,
-		const std::vector<const RuleResearch*>& possibilities,
-		bool showResearchButton)
+		const std::vector<const RuleResearch*>& resRules,
+		bool showBtn)
 	:
 		_base(base)
 {
@@ -78,18 +78,21 @@ NewPossibleResearchState::NewPossibleResearchState(
 
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK05.SCR"));
 
-	_btnOk->setText(tr(showResearchButton ? "STR_OK" : "STR_MORE"));
+	_btnOk->setText(tr(showBtn ? "STR_OK" : "STR_MORE"));
 	_btnOk->onMouseClick((ActionHandler)& NewPossibleResearchState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& NewPossibleResearchState::btnOkClick,
 					Options::keyCancel);
 
 	_btnResearch->setText(tr("STR_ALLOCATE_RESEARCH"));
-	_btnResearch->setVisible(showResearchButton);
+	_btnResearch->setVisible(showBtn);
 	_btnResearch->onMouseClick((ActionHandler)& NewPossibleResearchState::btnResearchClick);
 	_btnResearch->onKeyboardPress(
 					(ActionHandler)& NewPossibleResearchState::btnResearchClick,
 					Options::keyOk);
+	_btnResearch->onKeyboardPress(
+					(ActionHandler)& NewPossibleResearchState::btnResearchClick,
+					Options::keyOkKeypad);
 
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
@@ -98,28 +101,24 @@ NewPossibleResearchState::NewPossibleResearchState(
 	_lstPossibilities->setAlign(ALIGN_CENTER);
 	_lstPossibilities->setBig();
 
-	size_t tally (0);
+	bool go (false);
 	for (std::vector<const RuleResearch*>::const_iterator
-			i = possibilities.begin();
-			i != possibilities.end();
+			i = resRules.begin();
+			i != resRules.end();
 			++i)
 	{
 		if (_game->getSavedGame()->wasResearchPopped(*i) == false
-			&& (*i)->getRequirements().empty() == true
-			&& ((*i)->needsItem() == false || _game->getRuleset()->getUnit((*i)->getType()) == NULL)) // not liveAlien.
+			&& (*i)->getCost() != 0
+			&& _game->getRuleset()->getUnit((*i)->getType()) == NULL)
 		{
+			go = true;
 			_game->getSavedGame()->addPoppedResearch((*i));
 			_lstPossibilities->addRow(1, tr((*i)->getType ()).c_str());
 		}
-		else
-			++tally;
 	}
 
-	if (possibilities.empty() == false
-		&& possibilities.size() != tally)
-	{
+	if (go == true)
 		_txtTitle->setText(tr("STR_WE_CAN_NOW_RESEARCH"));
-	}
 }
 
 /**

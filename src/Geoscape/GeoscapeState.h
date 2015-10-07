@@ -150,8 +150,8 @@ private:
 	/// Assigns whether an aLien cracked under pressure.
 	void getAlienCracks(
 				const std::string& alienType,
-				bool gof,
-				bool unlocks) const;
+				bool& gof,
+				bool& unlocks) const;
 	/// Starts a new dogfight.
 	void startDogfight();
 

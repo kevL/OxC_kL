@@ -43,7 +43,7 @@ RuleResearch::~RuleResearch()
 {}
 
 /**
- * Loads the research project from a YAML file.
+ * Loads the RuleResearch from a YAML file.
  * @param node		- reference a YAML node
  * @param listOrder	- list weight
  */
@@ -64,12 +64,10 @@ void RuleResearch::load(
 
 	if (_listOrder == 0)
 		_listOrder = listOrder;
-
-	//Log(LOG_INFO) << ". . . load Research Rule: " << _type;
 }
 
 /**
- * Gets the cost of this ResearchProject.
+ * Gets the cost of this RuleResearch.
  * @return, cost in man/days
  */
 int RuleResearch::getCost() const
@@ -78,7 +76,7 @@ int RuleResearch::getCost() const
 }
 
 /**
- * Gets the type of this ResearchProject.
+ * Gets the type of this RuleResearch.
  * @return, reference to the type string
  */
 const std::string& RuleResearch::getType() const
@@ -87,7 +85,7 @@ const std::string& RuleResearch::getType() const
 }
 
 /**
- * Gets the list of dependencies - ie. ResearchProjects - that must be
+ * Gets the list of dependencies - ie. research types - that must be
  * discovered before this one.
  * @return, reference to a vector of type strings
  */
@@ -97,8 +95,8 @@ const std::vector<std::string>& RuleResearch::getDependencies() const
 }
 
 /**
- * Checks if this ResearchProject needs a corresponding Item to be researched.
- * @return, true if a corresponding item is required
+ * Checks if this RuleResearch needs a corresponding Item to be researched.
+ * @return, true if item is required
  */
 bool RuleResearch::needsItem() const
 {
@@ -106,8 +104,8 @@ bool RuleResearch::needsItem() const
 }
 
 /**
- * Gets the list of ResearchProjects unlocked by this ResearchProject.
- * @return, reference to a vector of ID strings
+ * Gets the list of research types unlocked by this RuleResearch.
+ * @return, reference to a vector of type strings
  */
 const std::vector<std::string>& RuleResearch::getUnlocks() const
 {
@@ -115,7 +113,7 @@ const std::vector<std::string>& RuleResearch::getUnlocks() const
 }
 
 /**
- * Get the points earned for this ResearchProject.
+ * Get the points earned for completing this RuleResearch.
  * @return, points granted
  */
 int RuleResearch::getPoints() const
@@ -124,8 +122,8 @@ int RuleResearch::getPoints() const
 }
 
 /**
- * Gets the list of ResearchProjects granted at random for free by this research.
- * @return, reference to a vector of ID strings
+ * Gets the list of research types granted at random for free by this RuleResearch.
+ * @return, reference to a vector of type strings
  */
 const std::vector<std::string>& RuleResearch::getGetOneFree() const
 {
@@ -136,23 +134,23 @@ const std::vector<std::string>& RuleResearch::getGetOneFree() const
  * Gets what article to look up in the Ufopedia.
  * @return, article to look up
  */
-std::string RuleResearch::getLookup() const
+const std::string& RuleResearch::getLookup() const
 {
 	return _lookup;
 }
 
 /**
- * Gets the requirements for this ResearchProject.
- * @return, reference to a vector of ID strings
+ * Gets the requirements for this RuleResearch.
+ * @return, reference to a vector of type strings
  */
-const std::vector<std::string>& RuleResearch::getRequirements() const
+const std::vector<std::string>& RuleResearch::getPrerequisites() const
 {
 	return _requires;
 }
 
 /**
- * Gets the list weight for this ResearchProject.
- * @return, list weight
+ * Gets the list priority for this RuleResearch.
+ * @return, list priority
  */
 int RuleResearch::getListOrder() const
 {

@@ -1294,7 +1294,7 @@ void SavedGame::addFinishedResearch(
 				i != dependents.end();
 				++i)
 		{
-			reqs = &((*i)->getRequirements()); // gawd i hate c++
+			reqs = &((*i)->getPrerequisites()); // gawd i hate c++
 			if ((*i)->getCost() == 0)
 			{
 				if (reqs->empty() == true)
@@ -1413,19 +1413,19 @@ void SavedGame::getAvailableResearchProjects(
 				size_t tally (0);
 				for (size_t
 						j = 0;
-						j != resRule->getRequirements().size();
+						j != resRule->getPrerequisites().size();
 						++j)
 				{
 					if (std::find(
 							_discovered.begin(),
 							_discovered.end(),
-							_rules->getResearch(resRule->getRequirements().at(j))) != _discovered.end())
+							_rules->getResearch(resRule->getPrerequisites().at(j))) != _discovered.end())
 					{
 						++tally;
 					}
 				}
 
-				if (tally == resRule->getRequirements().size())
+				if (tally == resRule->getPrerequisites().size())
 					availableProjects.push_back(resRule);
 			}
 		}

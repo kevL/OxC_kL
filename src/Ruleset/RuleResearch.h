@@ -30,10 +30,10 @@ namespace OpenXcom
 
 /**
  * Represents one research project.
- * @note Dependency is the list of RuleResearchs which must be discovered before
- * a RuleResearch became available.
+ * @note Dependency is the list of RuleResearch's which must be discovered before
+ * a RuleResearch becomes available.
  * @note Unlocks are used to immediately unlock a RuleResearch even if not all
- * the dependencies have been researched.
+ * its dependencies have been researched.
  * @note Fake ResearchProjects: A RuleResearch is fake one if its cost is 0.
  * They are used to to create check points in the dependency tree. For example
  * if there is a Research E which needs either A & B or C & D two fake research
@@ -73,7 +73,7 @@ private:
 				const YAML::Node& node,
 				int listOrder);
 
-		/// Gets time needed to discover this ResearchProject.
+		/// Gets time needed to discover this RuleResearch.
 		int getCost() const;
 
 		/// Gets the research type.
@@ -82,25 +82,25 @@ private:
 		/// Gets the research dependencies.
 		const std::vector<std::string>& getDependencies() const;
 
-		/// Checks if this ResearchProject needs a corresponding Item for research.
+		/// Checks if this RuleResearch needs a corresponding Item for research.
 		bool needsItem() const;
 
-		/// Gets the list of ResearchProjects unlocked by this research.
+		/// Gets the list of RuleResearch's unlocked by this research.
 		const std::vector<std::string>& getUnlocks() const;
 
-		/// Gets the points earned for discovering this ResearchProject.
+		/// Gets the points earned for discovering this RuleResearch.
 		int getPoints() const;
 
-		/// Gets the list of ResearchProjects granted at random for free by this research.
+		/// Gets the list of research types granted at random for free by this one.
 		const std::vector<std::string>& getGetOneFree() const;
 
 		/// Gets what to look up in the Ufopedia.
-		std::string getLookup() const;
+		const std::string& getLookup() const;
 
-		/// Gets the requirements for this ResearchProject.
-		const std::vector<std::string>& getRequirements() const;
+		/// Gets the requirements for this RuleResearch.
+		const std::vector<std::string>& getPrerequisites() const;
 
-		/// Gets the list weight for this ResearchProject.
+		/// Gets the list priority for this RuleResearch.
 		int getListOrder() const;
 };
 

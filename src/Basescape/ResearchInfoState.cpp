@@ -231,14 +231,18 @@ void ResearchInfoState::btnCancelClick(Action*)
 	else
 		resRule = _project->getRules();
 
+	const bool liveAlien (_game->getRuleset()->getUnit(resRule->getType()) != NULL);
+
 	if (resRule->needsItem() == true
-		&& (Options::spendResearchedItems == true
-			|| _game->getRuleset()->getUnit(resRule->getType()) != NULL))
+		&& (Options::spendResearchedItems == true || liveAlien == true))
 	{
 		_base->getStorageItems()->addItem(resRule->getType());
 	}
 
-	_base->removeResearch(_project, false, _resRule == NULL);
+	_base->removeResearch(
+					_project,
+					false,
+					_resRule == NULL && liveAlien == false);
 
 	_game->popState();
 }

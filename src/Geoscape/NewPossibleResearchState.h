@@ -57,8 +57,8 @@ private:
 		/// Creates the NewPossibleResearch state.
 		NewPossibleResearchState(
 				Base* const base,
-				const std::vector<const RuleResearch*>& possibilities,
-				bool showResearchButton);
+				const std::vector<const RuleResearch*>& resRules,
+				bool showBtn);
 
 		/// Handler for clicking the OK button.
 		void btnOkClick(Action* action);

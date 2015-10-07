@@ -161,7 +161,6 @@ void NewResearchListState::fillProjectList() // private.
 			i != currentProjects.end();
 			++i)
 	{
-		Log(LOG_INFO) << "baseResearch " << (*i)->getRules()->getType();
 		// If cancelled projects are not marked 'offline' they'd lose spent
 		// research time; if they are not marked 'offline' even though no
 		// spent time has accumulated, they still need to be tracked so player
@@ -173,8 +172,6 @@ void NewResearchListState::fillProjectList() // private.
 				wst += L" (" + Text::formatNumber((*i)->getSpent()) + L")";
 
 			_lstResearch->addRow(1, wst.c_str());
-			// Try to blend these in but doesn't really work due to ordering:
-//			if ((*i)->getSpent() != 0)
 			_lstResearch->setRowColor(row++, color, true);
 
 			_offlines.push_back(*i);
@@ -186,18 +183,13 @@ void NewResearchListState::fillProjectList() // private.
 	std::vector<const RuleResearch*>::const_iterator i (_resRules.begin());
 	while (i != _resRules.end())
 	{
-		Log(LOG_INFO) << "available " << (*i)->getType();
-		if ((*i)->getRequirements().empty() == true)
+		if ((*i)->getCost() != 0)
 		{
-			Log(LOG_INFO) << ". no Req -> LIST";
 			_lstResearch->addRow(1, tr((*i)->getType()).c_str());
 			++i;
 		}
 		else
-		{
-			Log(LOG_INFO) << ". rejected";
 			i = _resRules.erase(i); // erase it so it doesn't show up in ResearchInfoState list.
-		}
 	}
 }
 
