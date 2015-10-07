@@ -52,15 +52,15 @@ private:
 	Window* _window;
 
 	const RuleResearch
-		* _research,
-		* _bonus;
+		* _resRule,
+		* _gofRule;
 
 
 	public:
 		/// Creates the EndResearch state.
 		ResearchCompleteState(
-				const RuleResearch* const research,
-				const RuleResearch* const bonus);
+				const RuleResearch* const resRule,
+				const RuleResearch* const gofRule);
 		/// dTor.
 		~ResearchCompleteState();
 

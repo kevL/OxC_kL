@@ -310,11 +310,15 @@ private:
 	std::vector<Ufo*> _ufos;
 	std::vector<Waypoint*> _waypoints;
 
-	///
+	/// Gets the list of newly available ResearchProjects that appear when a project is completed.
 	void getDependentResearchBasic(
 			std::vector<const RuleResearch*>& dependents,
 			const RuleResearch* const resRule,
 			Base* const base) const;
+	/// Checks whether a ResearchProject can be started.
+	bool isResearchAvailable(
+			const RuleResearch* const resRule,
+			const std::vector<const RuleResearch*>& unlocked) const;
 	/// Removes a research from the "popped up" array.
 	void removePoppedResearch(const RuleResearch* const resRule);
 	///
@@ -439,39 +443,35 @@ private:
 		/// Sets the current battle save.
 		void setBattleSave(SavedBattleGame* battleSave);
 
-		/// Adds a finished research project.
+		/// Adds a finished ResearchProject.
 		void addFinishedResearch(
 				const RuleResearch* const resRule,
 				bool score = true);
-		/// Gets the list of already discovered research projects.
+		/// Gets a list of already discovered ResearchProjects.
 		const std::vector<const RuleResearch*>& getDiscoveredResearch() const;
-		/// Gets the list of research projects which can be researched at a particular Base.
+		/// Gets a list of ResearchProjects that can be started at a particular Base.
 		void getAvailableResearchProjects(
-				std::vector<const RuleResearch*>& projects,
+				std::vector<const RuleResearch*>& availableProjects,
 				Base* const base) const;
-		/// Gets the list of Productions which can be manufactured in a Base.
+		/// Gets a list of Productions that can be manufactured at a particular Base.
 		void getAvailableProductions(
-				std::vector<const RuleManufacture*>& productions,
+				std::vector<const RuleManufacture*>& availableProductions,
 				const Base* const base) const;
-		/// Gets the list of newly available research projects once a research project has been completed.
+		/// Gets the list of newly available ResearchProjects that appear when a project is completed.
 		void getDependentResearch(
 				std::vector<const RuleResearch*>& dependents,
 				const RuleResearch* const resRule,
 				Base* const base) const;
-		/// Gets the list of newly available manufacture projects once a research project has been completed.
+		/// Gets the list of newly available Productions that appear when a ResearchProject is completed.
 		void getDependentManufacture(
 				std::vector<const RuleManufacture*>& dependents,
 				const RuleResearch* const resRule) const;
-		/// Checks whether a research project can be researched
-		bool isResearchAvailable(
-				const RuleResearch* const resRule,
-				const std::vector<const RuleResearch*>& unlocked) const;
-		/// Gets if a research project has been unlocked.
+		/// Checks if a ResearchProject is discovered.
 		bool isResearched(const std::string& resType) const;
-		/// Gets if a list of research projects has been unlocked.
+		/// Checks if a list of ResearchProjects is discovered.
 		bool isResearched(const std::vector<std::string>& resTypes) const;
 
-		/// Gets the soldier matching this ID.
+		/// Gets the soldier matching an ID.
 		Soldier* getSoldier(int id) const;
 		/// Handles the higher promotions.
 		bool handlePromotions(std::vector<Soldier*>& participants);

@@ -152,10 +152,10 @@ void NewResearchListState::fillProjectList() // private.
 	_resRules.clear();
 	_lstResearch->clearList();
 
-	size_t row = 0;
-	const Uint8 color = _lstResearch->getSecondaryColor();
+	size_t row (0);
+	const Uint8 color (_lstResearch->getSecondaryColor());
 
-	const std::vector<ResearchProject*>& currentProjects (_base->getResearch()); // init.
+	const std::vector<ResearchProject*>& currentProjects (_base->getResearch());
 	for (std::vector<ResearchProject*>::const_iterator
 			i = currentProjects.begin();
 			i != currentProjects.end();
@@ -181,12 +181,8 @@ void NewResearchListState::fillProjectList() // private.
 		}
 	}
 
-
-	_game->getSavedGame()->getAvailableResearchProjects(
-													_resRules,
-													_base);
-
-	std::vector<const RuleResearch*>::const_iterator i = _resRules.begin();
+	_game->getSavedGame()->getAvailableResearchProjects(_resRules, _base);
+	std::vector<const RuleResearch*>::const_iterator i (_resRules.begin());
 	while (i != _resRules.end())
 	{
 		if ((*i)->getRequirements().empty() == true)

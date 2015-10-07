@@ -4390,7 +4390,7 @@
 
 1441247516 f:\git\openxcom\src\savegame\target.h
 
-1444109007 f:\git\openxcom\src\savegame\savedgame.h
+1444192532 f:\git\openxcom\src\savegame\savedgame.h
 	"GameTime.h"
 	"Soldier.h"
 	"../Ruleset/RuleAlienMission.h"
@@ -7212,7 +7212,7 @@
 	"../Resource/ResourcePack.h"
 	"../Savegame/Craft.h"
 
-1444151779 source:f:\git\openxcom\src\geoscape\monthlyreportstate.cpp
+1444152069 source:f:\git\openxcom\src\geoscape\monthlyreportstate.cpp
 	"MonthlyReportState.h"
 	"DefeatState.h"
 	"../Battlescape/CeremonyState.h"

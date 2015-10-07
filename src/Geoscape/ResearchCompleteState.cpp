@@ -40,15 +40,15 @@ namespace OpenXcom
 /**
  * Initializes all the elements in the ResearchComplete screen.
  * @param game		- pointer to the core game
- * @param research	- pointer to the completed research
- * @param bonus		- pointer to bonus unlocked research
+ * @param resRule	- pointer to the completed research
+ * @param gofRule	- pointer to bonus unlocked research
  */
 ResearchCompleteState::ResearchCompleteState(
-		const RuleResearch* const research,
-		const RuleResearch* const bonus)
+		const RuleResearch* const resRule,
+		const RuleResearch* const gofRule)
 	:
-		_research(research),
-		_bonus(bonus)
+		_resRule(resRule),
+		_gofRule(gofRule)
 {
 	_screen = false;
 
@@ -94,8 +94,8 @@ ResearchCompleteState::ResearchCompleteState(
 
 	_txtResearch->setAlign(ALIGN_CENTER);
 	_txtResearch->setBig();
-	if (research != NULL)
-		_txtResearch->setText(tr(research->getType()));
+	if (_resRule != NULL)
+		_txtResearch->setText(tr(_resRule->getType()));
 	else
 		_txtResearch->setVisible(false);
 }
@@ -123,24 +123,24 @@ void ResearchCompleteState::btnReportClick(Action*)
 {
 	_game->popState();
 
-	if (_bonus != NULL)
+	if (_gofRule != NULL)
 	{
 		std::string type;
-		if (_bonus->getLookup().empty() == true)
-			type = _bonus->getType();
+		if (_gofRule->getLookup().empty() == true)
+			type = _gofRule->getType();
 		else
-			type = _bonus->getLookup();
+			type = _gofRule->getLookup();
 
 		Ufopaedia::openArticle(_game, type);
 	}
 
-	if (_research != NULL)
+	if (_resRule != NULL)
 	{
 		std::string type;
-		if (_research->getLookup().empty() == true)
-			type = _research->getType();
+		if (_resRule->getLookup().empty() == true)
+			type = _resRule->getType();
 		else
-			type = _research->getLookup();
+			type = _resRule->getLookup();
 
 		Ufopaedia::openArticle(_game, type);
 	}

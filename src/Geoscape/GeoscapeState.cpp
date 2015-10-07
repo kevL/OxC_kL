@@ -2781,9 +2781,10 @@ void GeoscapeState::time1Day()
 
 //			if (liveAlien == true)
 //				getCrackedAlien(
-//							resRule->getType,	// alien type
-//							gofCrack,			// navigator spills the beans on a missionType, or engineer spills the beans on a ufoType
-//							originCrack);		// alien spills the beans on Origins.
+//							resRule->getType,	// alien type -> needs both race & rank there.
+//							gofCrack,			// navigator spills the beans on a missionType, or engineer spills the beans on a ufoType, or medic spills the beans on a missionType - "getOneFree"
+//							originCrack);		// alien spills the beans on Origins. Or, generally, it's "unlocks" entries.
+// Then I need to prevent the aLien from disappearing from the 'available research' vector(s).
 
 			const RuleResearch* gofRule (NULL);
 			if (resRule->getGetOneFree().empty() == false)
@@ -3776,8 +3777,8 @@ void GeoscapeState::handleBaseDefense(
  */
 void GeoscapeState::determineAlienMissions()
 {
-	AlienStrategy& strategy = _gameSave->getAlienStrategy();
-	const int month = _game->getSavedGame()->getMonthsPassed();
+	AlienStrategy& strategy (_gameSave->getAlienStrategy());
+	const int month (_game->getSavedGame()->getMonthsPassed());
 	std::vector<RuleMissionScript*> availableMissions;
 	std::map<int, bool> conditions;
 
@@ -3797,7 +3798,7 @@ void GeoscapeState::determineAlienMissions()
 				|| missionCommand->getMaxRuns() > strategy.getMissionsRun(missionCommand->getVarName()))
 			&& missionCommand->getMinDifficulty() <= _gameSave->getDifficulty())
 		{
-			bool go = true;
+			bool go (true);
 			for (std::map<std::string, bool>::const_iterator
 					j = missionCommand->getResearchTriggers().begin();
 					j != missionCommand->getResearchTriggers().end()
@@ -3820,8 +3821,8 @@ void GeoscapeState::determineAlienMissions()
 	{
 		missionCommand = *i;
 		bool
-			process = true,
-			success = false;
+			process (true),
+			success (false);
 
 		for (std::vector<int>::const_iterator
 				j = missionCommand->getConditionals().begin();
@@ -3829,7 +3830,7 @@ void GeoscapeState::determineAlienMissions()
 					&& process == true;
 				++j)
 		{
-			std::map<int, bool>::const_iterator found = conditions.find(std::abs(*j));
+			std::map<int, bool>::const_iterator found (conditions.find(std::abs(*j)));
 			process = (found == conditions.end()
 				   || (found->second == true && *j > 0)
 				   || (found->second == false && *j < 0));
@@ -3885,8 +3886,8 @@ void GeoscapeState::determineAlienMissions()
  */
 bool GeoscapeState::processCommand(RuleMissionScript* const missionCommand)
 {
-	AlienStrategy& strategy = _gameSave->getAlienStrategy();
-	const int month = _game->getSavedGame()->getMonthsPassed();
+	AlienStrategy& strategy (_gameSave->getAlienStrategy());
+	const int month (_game->getSavedGame()->getMonthsPassed());
 	const RuleAlienMission* missionRule;
 	std::string
 		targetRegion,
