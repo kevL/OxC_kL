@@ -544,12 +544,12 @@ void Base::setEngineers(int engineers)
  */
 int Base::detect(Target* const target) const
 {
-	double targetDist = insideRadarRange(target);
+	double targetDist (insideRadarRange(target));
 
 	if (AreSame(targetDist, 0.))
 		return 0;
 
-	int ret = 0;
+	int ret (0);
 
 	if (targetDist < 0.)
 	{
@@ -557,7 +557,7 @@ int Base::detect(Target* const target) const
 		targetDist = -targetDist;
 	}
 
-	int pct = 0;
+	int pct (0);
 
 	for (std::vector<BaseFacility*>::const_iterator
 			i = _facilities.begin();
@@ -566,13 +566,13 @@ int Base::detect(Target* const target) const
 	{
 		if ((*i)->buildFinished() == true)
 		{
-			const double radarRange = static_cast<double>((*i)->getRules()->getRadarRange()) * greatCircleConversionFactor;
+			const double radarRange (static_cast<double>((*i)->getRules()->getRadarRange()) * greatCircleConversionFactor);
 			if (radarRange > targetDist)
 				pct += (*i)->getRules()->getRadarChance();
 		}
 	}
 
-	const Ufo* const ufo = dynamic_cast<Ufo*>(target);
+	const Ufo* const ufo (dynamic_cast<Ufo*>(target));
 	if (ufo != NULL)
 	{
 		pct += ufo->getVisibility();
@@ -593,36 +593,32 @@ int Base::detect(Target* const target) const
  */
 double Base::insideRadarRange(const Target* const target) const
 {
-	const double targetDist = getDistance(target) * earthRadius;
+	const double targetDist (getDistance(target) * earthRadius);
 	if (targetDist > static_cast<double>(_rules->getMaxRadarRange()) * greatCircleConversionFactor)
 		return 0.;
 
 
-	double ret = 0.; // lets hope UFO is not *right on top of Base* Lol
-	bool hyperDet = false;
+	double ret (0.); // lets hope UFO is not *right on top of Base* Lol
+	bool hyperDet (false);
 
 	for (std::vector<BaseFacility*>::const_iterator
 			i = _facilities.begin();
-			i != _facilities.end()
-				&& hyperDet == false;
+			i != _facilities.end() && hyperDet == false;
 			++i)
 	{
 		if ((*i)->buildFinished() == true)
 		{
-			const double radarRange = static_cast<double>((*i)->getRules()->getRadarRange()) * greatCircleConversionFactor;
+			const double radarRange (static_cast<double>((*i)->getRules()->getRadarRange()) * greatCircleConversionFactor);
 			if (targetDist < radarRange)
 			{
 				ret = targetDist; // identical value for every i; looking only for hyperDet after 1st successful iteration.
-
 				if ((*i)->getRules()->isHyperwave() == true)
 					hyperDet = true;
 			}
 		}
 	}
 
-	if (hyperDet == true)
-		ret = -ret;
-
+	if (hyperDet == true) ret = -ret;
 	return ret;
 }
 
@@ -634,7 +630,7 @@ double Base::insideRadarRange(const Target* const target) const
  */
 int Base::getAvailableSoldiers(const bool combatReady) const
 {
-	int total = 0;
+	int total (0);
 
 	for (std::vector<Soldier*>::const_iterator
 			i = _soldiers.begin();
@@ -665,7 +661,7 @@ int Base::getAvailableSoldiers(const bool combatReady) const
  */
 int Base::getTotalSoldiers() const
 {
-	int total = static_cast<int>(_soldiers.size());
+	int total (static_cast<int>(_soldiers.size()));
 
 	for (std::vector<Transfer*>::const_iterator
 			i = _transfers.begin();
@@ -694,7 +690,7 @@ int Base::getTotalSoldiers() const
  */
 int Base::getTotalScientists() const
 {
-	int total = _scientists;
+	int total (_scientists);
 
 	for (std::vector<Transfer*>::const_iterator
 			i = _transfers.begin();
@@ -732,7 +728,7 @@ int Base::getTotalScientists() const
  */
 int Base::getTotalEngineers() const
 {
-	int total = _engineers;
+	int total (_engineers);
 
 	for (std::vector<Transfer*>::const_iterator
 			i = _transfers.begin();
@@ -769,7 +765,7 @@ int Base::getUsedQuarters() const
  */
 int Base::getAvailableQuarters() const
 {
-	int total = 0;
+	int total (0);
 
 	for (std::vector<BaseFacility*>::const_iterator
 			i = _facilities.begin();
@@ -791,7 +787,7 @@ int Base::getAvailableQuarters() const
  */
 double Base::getUsedStores() const
 {
-	double total = _items->getTotalSize(_rules); // items
+	double total (_items->getTotalSize(_rules)); // items
 
 	for (std::vector<Craft*>::const_iterator
 			i = _crafts.begin();
@@ -810,8 +806,8 @@ double Base::getUsedStores() const
 			if ((*j)->getRules()->getCompatibleAmmo()->empty() == false) // craft vehicle ammo
 			{
 				const RuleItem
-					* const vhclRule = _rules->getItem((*j)->getRules()->getType()),
-					* const ammoRule = _rules->getItem(vhclRule->getCompatibleAmmo()->front());
+					* const vhclRule (_rules->getItem((*j)->getRules()->getType())),
+					* const ammoRule (_rules->getItem(vhclRule->getCompatibleAmmo()->front()));
 
 				total += ammoRule->getSize() * (*j)->getAmmo();
 			}
@@ -877,8 +873,8 @@ double Base::getUsedStores() const
 bool Base::storesOverfull(double offset) const
 {
 	const double
-		total = static_cast<double>(getAvailableStores()),
-		used = getUsedStores() + offset;
+		total (static_cast<double>(getAvailableStores())),
+		used (getUsedStores() + offset);
 
 	return (used > total + 0.05);
 }
@@ -892,7 +888,7 @@ bool Base::storesOverfull(double offset) const
  */
 int Base::getAvailableStores() const
 {
-	int total = 0;
+	int total (0);
 
 	for (std::vector<BaseFacility*>::const_iterator
 			i = _facilities.begin();
@@ -912,7 +908,7 @@ int Base::getAvailableStores() const
  */
 /* double Base::getIgnoredStores()
 {
-	double space = 0.0;
+	double space (0.);
 
 	for (std::vector<Craft*>::const_iterator
 			c = getCrafts()->begin();
@@ -963,7 +959,7 @@ int Base::getAvailableStores() const
  */
 int Base::getUsedLaboratories() const
 {
-	int total = 0;
+	int total (0);
 
 	const std::vector<ResearchProject*>& research(getResearch());
 	for (std::vector<ResearchProject*>::const_iterator
@@ -983,7 +979,7 @@ int Base::getUsedLaboratories() const
  */
 int Base::getAvailableLaboratories() const
 {
-	int total = 0;
+	int total (0);
 
 	for (std::vector<BaseFacility*>::const_iterator
 			i = _facilities.begin();
@@ -1003,7 +999,7 @@ int Base::getAvailableLaboratories() const
  */
 int Base::getUsedWorkshops() const
 {
-	int total = 0;
+	int total (0);
 
 	for (std::vector<Production*>::const_iterator
 			i = _productions.begin();
@@ -1022,7 +1018,7 @@ int Base::getUsedWorkshops() const
  */
 int Base::getAvailableWorkshops() const
 {
-	int total = 0;
+	int total (0);
 
 	for (std::vector<BaseFacility*>::const_iterator
 			i = _facilities.begin();
@@ -1042,7 +1038,7 @@ int Base::getAvailableWorkshops() const
  */
 int Base::getUsedHangars() const
 {
-	int total = static_cast<int>(_crafts.size());
+	int total (static_cast<int>(_crafts.size()));
 
 	for (std::vector<Transfer*>::const_iterator
 			i = _transfers.begin();
@@ -1072,7 +1068,7 @@ int Base::getUsedHangars() const
  */
 int Base::getAvailableHangars() const
 {
-	int total = 0;
+	int total (0);
 
 	for (std::vector<BaseFacility*>::const_iterator
 			i = _facilities.begin();
@@ -1119,7 +1115,7 @@ int Base::getFreePsiLabs() const
 */
 int Base::getAllocatedScientists() const
 {
-	int total = 0;
+	int total (0);
 
 	const std::vector<ResearchProject*>& research(getResearch());
 	for (std::vector<ResearchProject*>::const_iterator
@@ -1139,7 +1135,7 @@ int Base::getAllocatedScientists() const
 */
 int Base::getAllocatedEngineers() const
 {
-	int total = 0;
+	int total (0);
 
 	for (std::vector<Production*>::const_iterator
 			i = _productions.begin();
@@ -1159,7 +1155,7 @@ int Base::getAllocatedEngineers() const
  */
 int Base::getDefenseTotal() const
 {
-	int total = 0;
+	int total (0);
 
 	for (std::vector<BaseFacility*>::const_iterator
 			i = _facilities.begin();
@@ -1217,8 +1213,8 @@ int Base::getDefenseTotal() const
 int Base::getShortRangeTotal() const
 {
 	int
-		total = 0,
-		range = 0;
+		total (0),
+		range;
 
 	for (std::vector<BaseFacility*>::const_iterator
 			i = _facilities.begin();
@@ -1228,11 +1224,9 @@ int Base::getShortRangeTotal() const
 		if ((*i)->buildFinished() == true)
 		{
 			range = (*i)->getRules()->getRadarRange();
-			if (range > 0
-				&& range < _rules->getRadarCutoffRange() + 1)
+			if (range != 0 && range <= _rules->getRadarCutoffRange())
 			{
 				total += (*i)->getRules()->getRadarChance();
-
 				if (total > 100)
 					return 100;
 			}
@@ -1248,7 +1242,7 @@ int Base::getShortRangeTotal() const
  */
 /* int Base::getLongRangeDetection() const
 {
-	int total = 0;
+	int total (0);
 	int minRadarRange = _rules->getMinRadarRange();
 
 	for (std::vector<BaseFacility*>::const_iterator
@@ -1274,7 +1268,7 @@ int Base::getShortRangeTotal() const
  */
 int Base::getLongRangeTotal() const
 {
-	int total = 0;
+	int total (0);
 
 	for (std::vector<BaseFacility*>::const_iterator
 			i = _facilities.begin();
@@ -1285,7 +1279,6 @@ int Base::getLongRangeTotal() const
 			&& (*i)->getRules()->getRadarRange() > _rules->getRadarCutoffRange())
 		{
 			total += (*i)->getRules()->getRadarChance();
-
 			if (total > 100)
 				return 100;
 		}
@@ -1303,7 +1296,7 @@ int Base::getLongRangeTotal() const
  */
 int Base::getCraftCount(const std::string& craft) const
 {
-	int total = 0;
+	int total (0);
 
 	for (std::vector<Transfer*>::const_iterator
 			i = _transfers.begin();
@@ -1336,7 +1329,7 @@ int Base::getCraftCount(const std::string& craft) const
  */
 int Base::getCraftMaintenance() const
 {
-	int total = 0;
+	int total (0);
 
 	for (std::vector<Transfer*>::const_iterator
 			i = _transfers.begin();
@@ -1365,7 +1358,7 @@ int Base::getCraftMaintenance() const
  */
 int Base::getPersonnelMaintenance() const
 {
-	int total = 0;
+	int total (0);
 
 	total += getTotalSoldiers() * _rules->getSoldierCost();
 	total += getTotalEngineers() * _rules->getEngineerCost();
@@ -1382,7 +1375,7 @@ int Base::getPersonnelMaintenance() const
  */
 int Base::getFacilityMaintenance() const
 {
-	int total = 0;
+	int total (0);
 
 	for (std::vector<BaseFacility*>::const_iterator
 			i = _facilities.begin();
@@ -1423,13 +1416,21 @@ void Base::removeProduction(Production* prod)
 {
 	_engineers += prod->getAssignedEngineers();
 
-	std::vector<Production*>::const_iterator i = std::find(
-														_productions.begin(),
-														_productions.end(),
-														prod);
-	if (i != _productions.end())
-		_productions.erase(i);
+	for (std::vector<Production*>::const_iterator
+			i = _productions.begin();
+			i != _productions.end();
+			++i)
+	{
+		if (*i == prod)
+		{
+			_productions.erase(i);
+			return;
+		}
+	}
 }
+/*	std::vector<Production*>::const_iterator i (std::find(_productions.begin(), _productions.end(), prod));
+	if (i != _productions.end())
+		_productions.erase(i); */
 
 /**
  * Gets the list of this Base's Productions.
@@ -1471,10 +1472,10 @@ void Base::removeResearch(
 {
 	_scientists += project->getAssigned();
 
-	std::vector<ResearchProject*>::const_iterator i = std::find(
+	std::vector<ResearchProject*>::const_iterator i (std::find(
 															_research.begin(),
 															_research.end(),
-															project);
+															project));
 	if (i != _research.end())
 	{
 		if (goOffline == true)
@@ -1498,7 +1499,7 @@ void Base::removeResearch(
  */
 void Base::researchHelp(const std::string& aLien)
 {
-	std::string rp;
+	std::string resType;
 	double coef;
 
 	for (std::vector<ResearchProject*>::const_iterator
@@ -1508,27 +1509,27 @@ void Base::researchHelp(const std::string& aLien)
 	{
 		if ((*i)->getOffline() == false)
 		{
-			rp = (*i)->getRules()->getType();
+			resType = (*i)->getRules()->getType();
 
 			if (aLien.find("_SOLDIER") != std::string::npos)
-				coef = getSoldierHelp(rp);
+				coef = getSoldierHelp(resType);
 			else if (aLien.find("_NAVIGATOR") != std::string::npos)
-				coef = getNavigatorHelp(rp);
+				coef = getNavigatorHelp(resType);
 			else if (aLien.find("_MEDIC") != std::string::npos)
-				coef = getMedicHelp(rp);
+				coef = getMedicHelp(resType);
 			else if (aLien.find("_ENGINEER") != std::string::npos)
-				coef = getEngineerHelp(rp);
+				coef = getEngineerHelp(resType);
 			else if (aLien.find("_LEADER") != std::string::npos)
-				coef = getLeaderHelp(rp);
+				coef = getLeaderHelp(resType);
 			else if (aLien.find("_COMMANDER") != std::string::npos)
-				coef = getCommanderHelp(rp);
+				coef = getCommanderHelp(resType);
 			else
 				coef = 0.;
 
 			if (AreSame(coef, 0.) == false)
 			{
-				const int cost = (*i)->getCost();
-				const double spent = static_cast<double>((*i)->getSpent());
+				const int cost ((*i)->getCost());
+				const double spent (static_cast<double>((*i)->getSpent()));
 
 				coef = RNG::generate(0., coef);
 				(*i)->setSpent(static_cast<int>(Round(
@@ -1547,32 +1548,32 @@ void Base::researchHelp(const std::string& aLien)
  * Gets soldier coefficient for Research Help.
  * @return, help coef
  */
-double Base::getSoldierHelp(const std::string& rp)
+double Base::getSoldierHelp(const std::string& resType)
 {
-	if (rp.compare("STR_ALIEN_GRENADE") == 0
-		|| rp.compare("STR_ALIEN_ENTERTAINMENT") == 0
-		|| rp.compare("STR_PERSONAL_ARMOR") == 0)
+	if (resType.compare("STR_ALIEN_GRENADE") == 0
+		|| resType.compare("STR_ALIEN_ENTERTAINMENT") == 0
+		|| resType.compare("STR_PERSONAL_ARMOR") == 0)
 	{
 		return 0.5;
 	}
 
-	if (rp.compare("STR_HEAVY_PLASMA_CLIP") == 0
-		|| rp.compare("STR_PLASMA_RIFLE_CLIP") == 0
-		|| rp.compare("STR_PLASMA_PISTOL_CLIP") == 0)
+	if (resType.compare("STR_HEAVY_PLASMA_CLIP") == 0
+		|| resType.compare("STR_PLASMA_RIFLE_CLIP") == 0
+		|| resType.compare("STR_PLASMA_PISTOL_CLIP") == 0)
 	{
 		return 0.4;
 	}
 
-	if (rp.compare("STR_POWER_SUIT") == 0)
+	if (resType.compare("STR_POWER_SUIT") == 0)
 		return 0.25;
 
-	if (rp.compare("STR_ALIEN_ORIGINS") == 0)
+	if (resType.compare("STR_ALIEN_ORIGINS") == 0)
 		return 0.2;
 
-	if (rp.compare("STR_THE_MARTIAN_SOLUTION") == 0
-		|| rp.compare("STR_HEAVY_PLASMA") == 0
-		|| rp.compare("STR_PLASMA_RIFLE") == 0
-		|| rp.compare("STR_PLASMA_PISTOL") == 0)
+	if (resType.compare("STR_THE_MARTIAN_SOLUTION") == 0
+		|| resType.compare("STR_HEAVY_PLASMA") == 0
+		|| resType.compare("STR_PLASMA_RIFLE") == 0
+		|| resType.compare("STR_PLASMA_PISTOL") == 0)
 	{
 		return 0.1;
 	}
@@ -1584,58 +1585,58 @@ double Base::getSoldierHelp(const std::string& rp)
  * Gets navigator coefficient for Research Help.
  * @return, help coef
  */
-double Base::getNavigatorHelp(const std::string& rp)
+double Base::getNavigatorHelp(const std::string& resType)
 {
-	if (rp.compare("STR_HYPER_WAVE_DECODER") == 0
-		|| rp.compare("STR_UFO_NAVIGATION") == 0)
+	if (resType.compare("STR_HYPER_WAVE_DECODER") == 0
+		|| resType.compare("STR_UFO_NAVIGATION") == 0)
 	{
 		return 0.8;
 	}
 
-	if (rp.compare("STR_MOTION_SCANNER") == 0
-		|| rp.compare("STR_ALIEN_ENTERTAINMENT") == 0)
+	if (resType.compare("STR_MOTION_SCANNER") == 0
+		|| resType.compare("STR_ALIEN_ENTERTAINMENT") == 0)
 	{
 		return 0.5;
 	}
 
-	if (rp.compare("STR_GRAV_SHIELD") == 0
-		|| rp.compare("STR_ALIEN_ALLOYS") == 0)
+	if (resType.compare("STR_GRAV_SHIELD") == 0
+		|| resType.compare("STR_ALIEN_ALLOYS") == 0)
 	{
 		return 0.4;
 	}
 
-	if (rp.compare("STR_ALIEN_ORIGINS") == 0)
+	if (resType.compare("STR_ALIEN_ORIGINS") == 0)
 		return 0.35;
 
-	if (rp.compare("STR_FLYING_SUIT") == 0)
+	if (resType.compare("STR_FLYING_SUIT") == 0)
 		return 0.3;
 
-	if (rp.compare("STR_UFO_POWER_SOURCE") == 0
-		|| rp.compare("STR_UFO_CONSTRUCTION") == 0
-		|| rp.compare("STR_THE_MARTIAN_SOLUTION") == 0)
+	if (resType.compare("STR_UFO_POWER_SOURCE") == 0
+		|| resType.compare("STR_UFO_CONSTRUCTION") == 0
+		|| resType.compare("STR_THE_MARTIAN_SOLUTION") == 0)
 	{
 		return 0.25;
 	}
 
-	if (rp == "STR_HEAVY_PLASMA"
-		|| rp == "STR_HEAVY_PLASMA_CLIP"
-		|| rp == "STR_PLASMA_RIFLE"
-		|| rp == "STR_PLASMA_RIFLE_CLIP"
-		|| rp == "STR_PLASMA_PISTOL"
-		|| rp == "STR_PLASMA_PISTOL_CLIP"
-		|| rp == "STR_NEW_FIGHTER_CRAFT" // + "STR_IMPROVED_INTERCEPTOR" <- uses Alien Alloys.
-		|| rp == "STR_NEW_FIGHTER_TRANSPORTER"
-		|| rp == "STR_ULTIMATE_CRAFT"
-		|| rp == "STR_PLASMA_CANNON"
-		|| rp == "STR_FUSION_MISSILE") // what about _Defense
-//		|| rp == "hovertank-plasma" // <-
-//		|| rp == "hovertank-fusion" // <-
+	if (resType == "STR_HEAVY_PLASMA"
+		|| resType == "STR_HEAVY_PLASMA_CLIP"
+		|| resType == "STR_PLASMA_RIFLE"
+		|| resType == "STR_PLASMA_RIFLE_CLIP"
+		|| resType == "STR_PLASMA_PISTOL"
+		|| resType == "STR_PLASMA_PISTOL_CLIP"
+		|| resType == "STR_NEW_FIGHTER_CRAFT" // + "STR_IMPROVED_INTERCEPTOR" <- uses Alien Alloys.
+		|| resType == "STR_NEW_FIGHTER_TRANSPORTER"
+		|| resType == "STR_ULTIMATE_CRAFT"
+		|| resType == "STR_PLASMA_CANNON"
+		|| resType == "STR_FUSION_MISSILE") // what about _Defense
+//		|| resType == "hovertank-plasma" // <-
+//		|| resType == "hovertank-fusion" // <-
 	{
 		return 0.2;
 	}
 
-	if (rp.compare("STR_CYDONIA_OR_BUST") == 0
-		|| rp.compare("STR_POWER_SUIT") == 0)
+	if (resType.compare("STR_CYDONIA_OR_BUST") == 0
+		|| resType.compare("STR_POWER_SUIT") == 0)
 	{
 		return 0.15;
 	}
@@ -1647,39 +1648,39 @@ double Base::getNavigatorHelp(const std::string& rp)
  * Gets medic coefficient for Research Help.
  * @return, help coef
  */
-double Base::getMedicHelp(const std::string& rp)
+double Base::getMedicHelp(const std::string& resType)
 {
-	if (rp.compare("STR_ALIEN_FOOD") == 0
-		|| rp.compare("STR_ALIEN_SURGERY") == 0
-		|| rp.compare("STR_EXAMINATION_ROOM") == 0
-		|| rp.compare("STR_ALIEN_REPRODUCTION") == 0)
+	if (resType.compare("STR_ALIEN_FOOD") == 0
+		|| resType.compare("STR_ALIEN_SURGERY") == 0
+		|| resType.compare("STR_EXAMINATION_ROOM") == 0
+		|| resType.compare("STR_ALIEN_REPRODUCTION") == 0)
 	{
 		return 0.8;
 	}
 
-	if (rp.compare("STR_PSI_AMP") == 0
-		|| rp.compare("STR_SMALL_LAUNCHER") == 0
-		|| rp.compare("STR_STUN_BOMB") == 0
-		|| rp.compare("STR_MIND_PROBE") == 0
-		|| rp.compare("STR_MIND_SHIELD") == 0
-		|| rp.compare("STR_PSI_LAB") == 0)
+	if (resType.compare("STR_PSI_AMP") == 0
+		|| resType.compare("STR_SMALL_LAUNCHER") == 0
+		|| resType.compare("STR_STUN_BOMB") == 0
+		|| resType.compare("STR_MIND_PROBE") == 0
+		|| resType.compare("STR_MIND_SHIELD") == 0
+		|| resType.compare("STR_PSI_LAB") == 0)
 	{
 		return 0.6;
 	}
 
-	if (rp.compare(rp.length() - 7, 7, "_CORPSE") == 0)
+	if (resType.compare(resType.length() - 7, 7, "_CORPSE") == 0)
 		return 0.5;
 
-	if (rp == "STR_MEDI_KIT")
+	if (resType == "STR_MEDI_KIT")
 		return 0.4;
 
-	if (rp.compare("STR_ALIEN_ORIGINS") == 0
-		|| rp.compare("STR_ALIEN_ENTERTAINMENT") == 0)
+	if (resType.compare("STR_ALIEN_ORIGINS") == 0
+		|| resType.compare("STR_ALIEN_ENTERTAINMENT") == 0)
 	{
 		return 0.2;
 	}
 
-	if (rp.compare("STR_THE_MARTIAN_SOLUTION") == 0)
+	if (resType.compare("STR_THE_MARTIAN_SOLUTION") == 0)
 		return 0.1;
 
 	return 0.;
@@ -1689,53 +1690,53 @@ double Base::getMedicHelp(const std::string& rp)
  * Gets engineer coefficient for Research Help.
  * @return, help coef
  */
-double Base::getEngineerHelp(const std::string& rp)
+double Base::getEngineerHelp(const std::string& resType)
 {
-	if (rp.compare("STR_BLASTER_LAUNCHER") == 0
-		|| rp.compare("STR_BLASTER_BOMB") == 0)
+	if (resType.compare("STR_BLASTER_LAUNCHER") == 0
+		|| resType.compare("STR_BLASTER_BOMB") == 0)
 	{
 		return 0.7;
 	}
 
-	if (rp.compare("STR_MOTION_SCANNER") == 0
-		|| rp.compare("STR_HEAVY_PLASMA") == 0
-		|| rp.compare("STR_HEAVY_PLASMA_CLIP") == 0
-		|| rp.compare("STR_PLASMA_RIFLE") == 0
-		|| rp.compare("STR_PLASMA_RIFLE_CLIP") == 0
-		|| rp.compare("STR_PLASMA_PISTOL") == 0
-		|| rp.compare("STR_PLASMA_PISTOL_CLIP") == 0
-		|| rp.compare("STR_ALIEN_GRENADE") == 0
-		|| rp.compare("STR_ELERIUM_115") == 0
-		|| rp.compare("STR_UFO_POWER_SOURCE") == 0
-		|| rp.compare("STR_UFO_CONSTRUCTION") == 0
-		|| rp.compare("STR_ALIEN_ALLOYS") == 0
-		|| rp.compare("STR_PLASMA_CANNON") == 0
-		|| rp.compare("STR_FUSION_MISSILE") == 0
-		|| rp.compare("STR_PLASMA_DEFENSE") == 0
-		|| rp.compare("STR_FUSION_DEFENSE") == 0
-		|| rp.compare("STR_GRAV_SHIELD") == 0
-		|| rp.compare("STR_PERSONAL_ARMOR") == 0
-		|| rp.compare("STR_POWER_SUIT") == 0
-		|| rp.compare("STR_FLYING_SUIT") == 0)
+	if (resType.compare("STR_MOTION_SCANNER") == 0
+		|| resType.compare("STR_HEAVY_PLASMA") == 0
+		|| resType.compare("STR_HEAVY_PLASMA_CLIP") == 0
+		|| resType.compare("STR_PLASMA_RIFLE") == 0
+		|| resType.compare("STR_PLASMA_RIFLE_CLIP") == 0
+		|| resType.compare("STR_PLASMA_PISTOL") == 0
+		|| resType.compare("STR_PLASMA_PISTOL_CLIP") == 0
+		|| resType.compare("STR_ALIEN_GRENADE") == 0
+		|| resType.compare("STR_ELERIUM_115") == 0
+		|| resType.compare("STR_UFO_POWER_SOURCE") == 0
+		|| resType.compare("STR_UFO_CONSTRUCTION") == 0
+		|| resType.compare("STR_ALIEN_ALLOYS") == 0
+		|| resType.compare("STR_PLASMA_CANNON") == 0
+		|| resType.compare("STR_FUSION_MISSILE") == 0
+		|| resType.compare("STR_PLASMA_DEFENSE") == 0
+		|| resType.compare("STR_FUSION_DEFENSE") == 0
+		|| resType.compare("STR_GRAV_SHIELD") == 0
+		|| resType.compare("STR_PERSONAL_ARMOR") == 0
+		|| resType.compare("STR_POWER_SUIT") == 0
+		|| resType.compare("STR_FLYING_SUIT") == 0)
 	{
 		return 0.5;
 	}
 
-	if (rp.compare("STR_NEW_FIGHTER_CRAFT") == 0 // + "STR_IMPROVED_INTERCEPTOR" <- uses Alien Alloys.
-		|| rp.compare("STR_NEW_FIGHTER_TRANSPORTER") == 0
-		|| rp.compare("STR_ULTIMATE_CRAFT") == 0)
+	if (resType.compare("STR_NEW_FIGHTER_CRAFT") == 0 // + "STR_IMPROVED_INTERCEPTOR" <- uses Alien Alloys.
+		|| resType.compare("STR_NEW_FIGHTER_TRANSPORTER") == 0
+		|| resType.compare("STR_ULTIMATE_CRAFT") == 0)
 	{
 		return 0.3;
 	}
 
-	if (rp.compare("STR_ALIEN_ORIGINS") == 0
-		|| rp.compare("STR_SMALL_LAUNCHER") == 0
-		|| rp.compare("STR_STUN_BOMB") == 0)
+	if (resType.compare("STR_ALIEN_ORIGINS") == 0
+		|| resType.compare("STR_SMALL_LAUNCHER") == 0
+		|| resType.compare("STR_STUN_BOMB") == 0)
 	{
 		return 0.2;
 	}
 
-	if (rp.compare("STR_THE_MARTIAN_SOLUTION") == 0)
+	if (resType.compare("STR_THE_MARTIAN_SOLUTION") == 0)
 		return 0.1;
 
 	return 0.;
@@ -1745,47 +1746,47 @@ double Base::getEngineerHelp(const std::string& rp)
  * Gets leader coefficient for Research Help.
  * @return, help coef
  */
-double Base::getLeaderHelp(const std::string& rp)
+double Base::getLeaderHelp(const std::string& resType)
 {
-	if (rp.compare("STR_EXAMINATION_ROOM") == 0)
+	if (resType.compare("STR_EXAMINATION_ROOM") == 0)
 		return 0.8;
 
-	if (rp.compare("STR_BLASTER_LAUNCHER") == 0)
+	if (resType.compare("STR_BLASTER_LAUNCHER") == 0)
 		return 0.6;
 
-	if (rp.compare("STR_ALIEN_ORIGINS") == 0)
+	if (resType.compare("STR_ALIEN_ORIGINS") == 0)
 		return 0.5;
 
-	if (rp.compare("STR_THE_MARTIAN_SOLUTION") == 0)
+	if (resType.compare("STR_THE_MARTIAN_SOLUTION") == 0)
 		return 0.3;
 
-	if (rp.compare("STR_PSI_AMP") == 0)
+	if (resType.compare("STR_PSI_AMP") == 0)
 		return 0.25;
 
-	if (rp.compare("STR_HEAVY_PLASMA") == 0
-		|| rp.compare("STR_HEAVY_PLASMA_CLIP") == 0
-		|| rp.compare("STR_PLASMA_RIFLE") == 0
-		|| rp.compare("STR_PLASMA_RIFLE_CLIP") == 0
-		|| rp.compare("STR_PLASMA_PISTOL") == 0
-		|| rp.compare("STR_PLASMA_PISTOL_CLIP") == 0
-		|| rp.compare("STR_BLASTER_BOMB") == 0
-		|| rp.compare("STR_SMALL_LAUNCHER") == 0
-		|| rp.compare("STR_STUN_BOMB") == 0
-		|| rp.compare("STR_ELERIUM_115") == 0
-		|| rp.compare("STR_ALIEN_ALLOYS") == 0
-		|| rp.compare("STR_PLASMA_CANNON") == 0
-		|| rp.compare("STR_FUSION_MISSILE") == 0
-		|| rp.compare("STR_CYDONIA_OR_BUST") == 0
-		|| rp.compare("STR_PERSONAL_ARMOR") == 0
-		|| rp.compare("STR_POWER_SUIT") == 0
-		|| rp.compare("STR_FLYING_SUIT") == 0)
+	if (resType.compare("STR_HEAVY_PLASMA") == 0
+		|| resType.compare("STR_HEAVY_PLASMA_CLIP") == 0
+		|| resType.compare("STR_PLASMA_RIFLE") == 0
+		|| resType.compare("STR_PLASMA_RIFLE_CLIP") == 0
+		|| resType.compare("STR_PLASMA_PISTOL") == 0
+		|| resType.compare("STR_PLASMA_PISTOL_CLIP") == 0
+		|| resType.compare("STR_BLASTER_BOMB") == 0
+		|| resType.compare("STR_SMALL_LAUNCHER") == 0
+		|| resType.compare("STR_STUN_BOMB") == 0
+		|| resType.compare("STR_ELERIUM_115") == 0
+		|| resType.compare("STR_ALIEN_ALLOYS") == 0
+		|| resType.compare("STR_PLASMA_CANNON") == 0
+		|| resType.compare("STR_FUSION_MISSILE") == 0
+		|| resType.compare("STR_CYDONIA_OR_BUST") == 0
+		|| resType.compare("STR_PERSONAL_ARMOR") == 0
+		|| resType.compare("STR_POWER_SUIT") == 0
+		|| resType.compare("STR_FLYING_SUIT") == 0)
 	{
 		return 0.2;
 	}
 
-	if (rp.compare("STR_NEW_FIGHTER_CRAFT") == 0 // + "STR_IMPROVED_INTERCEPTOR" <- uses Alien Alloys.
-		|| rp.compare("STR_NEW_FIGHTER_TRANSPORTER") == 0
-		|| rp.compare("STR_ULTIMATE_CRAFT") == 0)
+	if (resType.compare("STR_NEW_FIGHTER_CRAFT") == 0 // + "STR_IMPROVED_INTERCEPTOR" <- uses Alien Alloys.
+		|| resType.compare("STR_NEW_FIGHTER_TRANSPORTER") == 0
+		|| resType.compare("STR_ULTIMATE_CRAFT") == 0)
 	{
 		return 0.1;
 	}
@@ -1797,49 +1798,49 @@ double Base::getLeaderHelp(const std::string& rp)
  * Gets commander coefficient for Research Help.
  * @return, help coef
  */
-double Base::getCommanderHelp(const std::string& rp)
+double Base::getCommanderHelp(const std::string& resType)
 {
-	if (rp.compare("STR_BLASTER_LAUNCHER") == 0
-		|| rp.compare("STR_EXAMINATION_ROOM") == 0)
+	if (resType.compare("STR_BLASTER_LAUNCHER") == 0
+		|| resType.compare("STR_EXAMINATION_ROOM") == 0)
 	{
 		return 0.8;
 	}
 
-	if (rp.compare("STR_ALIEN_ORIGINS") == 0)
+	if (resType.compare("STR_ALIEN_ORIGINS") == 0)
 		return 0.7;
 
-	if (rp.compare("STR_THE_MARTIAN_SOLUTION") == 0)
+	if (resType.compare("STR_THE_MARTIAN_SOLUTION") == 0)
 		return 0.6;
 
-	if (rp.compare("STR_PSI_AMP") == 0
-		|| rp.compare("STR_CYDONIA_OR_BUST") == 0)
+	if (resType.compare("STR_PSI_AMP") == 0
+		|| resType.compare("STR_CYDONIA_OR_BUST") == 0)
 	{
 		return 0.5;
 	}
 
-	if (rp.compare("STR_BLASTER_BOMB") == 0
-		|| rp.compare("STR_ELERIUM_115") == 0
-		|| rp.compare("STR_ALIEN_ALLOYS") == 0
-		|| rp.compare("STR_PERSONAL_ARMOR") == 0
-		|| rp.compare("STR_POWER_SUIT") == 0
-		|| rp.compare("STR_FLYING_SUIT") == 0)
+	if (resType.compare("STR_BLASTER_BOMB") == 0
+		|| resType.compare("STR_ELERIUM_115") == 0
+		|| resType.compare("STR_ALIEN_ALLOYS") == 0
+		|| resType.compare("STR_PERSONAL_ARMOR") == 0
+		|| resType.compare("STR_POWER_SUIT") == 0
+		|| resType.compare("STR_FLYING_SUIT") == 0)
 	{
 		return 0.25;
 	}
 
-	if (rp.compare("STR_HEAVY_PLASMA") == 0
-		|| rp.compare("STR_HEAVY_PLASMA_CLIP") == 0
-		|| rp.compare("STR_PLASMA_RIFLE") == 0
-		|| rp.compare("STR_PLASMA_RIFLE_CLIP") == 0
-		|| rp.compare("STR_PLASMA_PISTOL") == 0
-		|| rp.compare("STR_PLASMA_PISTOL_CLIP") == 0
-		|| rp.compare("STR_SMALL_LAUNCHER") == 0
-		|| rp.compare("STR_STUN_BOMB") == 0
-		|| rp.compare("STR_NEW_FIGHTER_CRAFT") == 0 // + "STR_IMPROVED_INTERCEPTOR" <- uses Alien Alloys.
-		|| rp.compare("STR_NEW_FIGHTER_TRANSPORTER") == 0
-		|| rp.compare("STR_ULTIMATE_CRAFT") == 0
-		|| rp.compare("STR_PLASMA_CANNON") == 0
-		|| rp.compare("STR_FUSION_MISSILE") == 0)
+	if (resType.compare("STR_HEAVY_PLASMA") == 0
+		|| resType.compare("STR_HEAVY_PLASMA_CLIP") == 0
+		|| resType.compare("STR_PLASMA_RIFLE") == 0
+		|| resType.compare("STR_PLASMA_RIFLE_CLIP") == 0
+		|| resType.compare("STR_PLASMA_PISTOL") == 0
+		|| resType.compare("STR_PLASMA_PISTOL_CLIP") == 0
+		|| resType.compare("STR_SMALL_LAUNCHER") == 0
+		|| resType.compare("STR_STUN_BOMB") == 0
+		|| resType.compare("STR_NEW_FIGHTER_CRAFT") == 0 // + "STR_IMPROVED_INTERCEPTOR" <- uses Alien Alloys.
+		|| resType.compare("STR_NEW_FIGHTER_TRANSPORTER") == 0
+		|| resType.compare("STR_ULTIMATE_CRAFT") == 0
+		|| resType.compare("STR_PLASMA_CANNON") == 0
+		|| resType.compare("STR_FUSION_MISSILE") == 0)
 	{
 		return 0.2;
 	}
@@ -1916,7 +1917,7 @@ bool Base::hasProduction() const
  */
 int Base::getAvailablePsiLabs() const
 {
-	int total = 0;
+	int total (0);
 
 	for (std::vector<BaseFacility*>::const_iterator
 			i = _facilities.begin();
@@ -1936,7 +1937,7 @@ int Base::getAvailablePsiLabs() const
  */
 int Base::getUsedPsiLabs() const
 {
-	int total = 0;
+	int total (0);
 
 	for (std::vector<Soldier*>::const_iterator
 			i = _soldiers.begin();
@@ -1956,7 +1957,7 @@ int Base::getUsedPsiLabs() const
  */
 int Base::getAvailableContainment() const
 {
-	int total = 0;
+	int total (0);
 
 	for (std::vector<BaseFacility*>::const_iterator
 			i = _facilities.begin();
@@ -1976,7 +1977,7 @@ int Base::getAvailableContainment() const
  */
 int Base::getUsedContainment() const
 {
-	int total = 0;
+	int total (0);
 
 	for (std::map<std::string, int>::const_iterator
 			i = _items->getContents()->begin();
@@ -2011,7 +2012,7 @@ int Base::getUsedContainment() const
  */
 int Base::getInterrogatedAliens() const
 {
-	int total = 0;
+	int total (0);
 	const RuleResearch* resRule;
 
 	for (std::vector<ResearchProject*>::const_iterator
@@ -2166,8 +2167,8 @@ int Base::getDetectionChance(
 	}
 
 	int
-		facQty0 = 0,
-		shields0 = 0;
+		facQty0 (0),
+		shields0 (0);
 
 	for (std::vector<BaseFacility*>::const_iterator
 			i = _facilities.begin();
@@ -2206,7 +2207,7 @@ int Base::calcDetChance( // private.
  */
 size_t Base::getGravShields() const
 {
-	size_t total = 0;
+	size_t total (0);
 
 	for (std::vector<BaseFacility*>::const_iterator
 			i = _facilities.begin();
@@ -2283,10 +2284,10 @@ void Base::setupDefenses()
 			i != _items->getContents()->end();
 			)
 	{
-		const std::string itemId = (i)->first;
-		const int itemQty = (i)->second;
+		const std::string itemId ((i)->first);
+		const int itemQty ((i)->second);
 
-		RuleItem* const itRule = _rules->getItem(itemId);
+		RuleItem* const itRule = (_rules->getItem(itemId));
 		if (itRule->isFixed() == true)
 		{
 			int tankSize;
@@ -2311,13 +2312,13 @@ void Base::setupDefenses()
 			}
 			else // this vehicle needs ammo
 			{
-				const RuleItem* const ammoRule = _rules->getItem(itRule->getCompatibleAmmo()->front());
-				const int perVehicle = ammoRule->getClipSize();
+				const RuleItem* const ammoRule (_rules->getItem(itRule->getCompatibleAmmo()->front()));
+				const int perVehicle (ammoRule->getClipSize());
 
-				const int baseQty = _items->getItemQty(ammoRule->getType()) / perVehicle;
+				const int baseQty (_items->getItemQty(ammoRule->getType()) / perVehicle);
 				if (baseQty != 0)
 				{
-					const int qty = std::min(itemQty, baseQty);
+					const int qty (std::min(itemQty, baseQty));
 					for (int
 							j = 0;
 							j != qty;
@@ -2369,7 +2370,7 @@ std::vector<Vehicle*>* Base::getVehicles()
  */
 void Base::destroyDisconnectedFacilities()
 {
-	std::list<std::vector<BaseFacility*>::const_iterator> discoFacs = getDisconnectedFacilities(NULL);
+	std::list<std::vector<BaseFacility*>::const_iterator> discoFacs (getDisconnectedFacilities(NULL));
 	for (std::list<std::vector<BaseFacility*>::const_iterator>::const_reverse_iterator
 			i = discoFacs.rbegin();
 			i != discoFacs.rend();
@@ -2842,16 +2843,15 @@ void Base::cleanupDefenses(bool hwpToStores)
 	{
 		if (hwpToStores == true)
 		{
-			const RuleItem* const itRule = (*i)->getRules();
+			const RuleItem* const itRule ((*i)->getRules());
 			_items->addItem(itRule->getType());
 
 			if (itRule->getCompatibleAmmo()->empty() == false)
 			{
-				const RuleItem* const ammoRule = _rules->getItem(itRule->getCompatibleAmmo()->front());
-				const int ammoPerVehicle = ammoRule->getClipSize();
+				const RuleItem* const ammoRule (_rules->getItem(itRule->getCompatibleAmmo()->front()));
 				_items->addItem(
 							ammoRule->getType(),
-							ammoPerVehicle);
+							ammoRule->getClipSize());
 			}
 		}
 
@@ -2958,7 +2958,7 @@ size_t Base::getRecallRow(RecallType recallType) const
  */
 int Base::calcSoldierBonuses(const Craft* const craft) const
 {
-	int total = 0;
+	int total (0);
 
 	for (std::vector<Soldier*>::const_iterator
 			i = _soldiers.begin();
@@ -2988,13 +2988,11 @@ int Base::soldierExpense(
 		const Soldier* const sol,
 		const bool dead)
 {
-	int cost = sol->getRank() * 1500;
-	if (dead == true)
-		cost /= 2;
+	int cost (sol->getRank() * 1500);
+	if (dead == true) cost /= 2;
 
 	_cashSpent += cost;
-	_rules->getGame()->getSavedGame()->setFunds(_rules->getGame()->getSavedGame()->getFunds()
-												- static_cast<int64_t>(cost));
+	_rules->getGame()->getSavedGame()->setFunds(_rules->getGame()->getSavedGame()->getFunds() - static_cast<int64_t>(cost));
 
 	return cost;
 }
@@ -3026,13 +3024,11 @@ int Base::hwpExpense(
 		const int hwpSize,
 		const bool dead)
 {
-	int cost = hwpSize * 750;
-	if (dead == true)
-		cost /= 2;
+	int cost (hwpSize * 750);
+	if (dead == true) cost /= 2;
 
 	_cashSpent += cost;
-	_rules->getGame()->getSavedGame()->setFunds(_rules->getGame()->getSavedGame()->getFunds()
-												- static_cast<int64_t>(cost));
+	_rules->getGame()->getSavedGame()->setFunds(_rules->getGame()->getSavedGame()->getFunds() - static_cast<int64_t>(cost));
 
 	return cost;
 }
@@ -3045,7 +3041,7 @@ int Base::hwpExpense(
  */
 int Base::craftExpense(const Craft* const craft)
 {
-	const int cost = craft->getRules()->getSoldiers() * 1000;
+	const int cost (craft->getRules()->getSoldiers() * 1000);
 	_cashSpent += cost;
 
 	return cost;
@@ -3089,7 +3085,7 @@ void Base::sortSoldiers()
 		// possibly using a comparoperator functor. /cheers)
 	}
 
-	size_t j = 0;
+	size_t j (0);
 	for (std::multimap<int, Soldier*>::const_iterator
 			i = soldiersOrdered.begin();
 			i != soldiersOrdered.end();

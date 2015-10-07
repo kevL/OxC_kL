@@ -86,7 +86,7 @@ private:
 		bool needsItem() const;
 
 		/// Gets the list of ResearchProjects unlocked by this research.
-		const std::vector<std::string>& getUnlocked() const;
+		const std::vector<std::string>& getUnlocks() const;
 
 		/// Gets the points earned for discovering this ResearchProject.
 		int getPoints() const;

@@ -109,7 +109,7 @@ bool RuleResearch::needsItem() const
  * Gets the list of ResearchProjects unlocked by this ResearchProject.
  * @return, reference to a vector of ID strings
  */
-const std::vector<std::string>& RuleResearch::getUnlocked() const
+const std::vector<std::string>& RuleResearch::getUnlocks() const
 {
 	return _unlocks;
 }

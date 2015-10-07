@@ -318,7 +318,7 @@ private:
 	/// Checks whether a ResearchProject can be started.
 	bool isResearchAvailable(
 			const RuleResearch* const resRule,
-			const std::vector<const RuleResearch*>& unlocked) const;
+			const std::vector<const RuleResearch*>& unlocksList) const;
 	/// Removes a research from the "popped up" array.
 	void removePoppedResearch(const RuleResearch* const resRule);
 	///
@@ -443,12 +443,12 @@ private:
 		/// Sets the current battle save.
 		void setBattleSave(SavedBattleGame* battleSave);
 
+		/// Gets a list of already discovered ResearchProjects.
+		const std::vector<const RuleResearch*>& getDiscoveredResearch() const;
 		/// Adds a finished ResearchProject.
 		void addFinishedResearch(
 				const RuleResearch* const resRule,
 				bool score = true);
-		/// Gets a list of already discovered ResearchProjects.
-		const std::vector<const RuleResearch*>& getDiscoveredResearch() const;
 		/// Gets a list of ResearchProjects that can be started at a particular Base.
 		void getAvailableResearchProjects(
 				std::vector<const RuleResearch*>& availableProjects,
