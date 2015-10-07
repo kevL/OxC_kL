@@ -199,7 +199,7 @@ std::string ResearchProject::getResearchProgress() const
 	return "STR_EXCELLENT"; */
 
 	if (_assigned == 0)
-		return "na."; //"STR_NONE"
+		return "STR_NA"; //"STR_NONE"
 
 	if (static_cast<float>(_spent) / static_cast<float>(_cost) < PROGRESS_LIMIT_UNKNOWN)
 		return "STR_UNKNOWN";

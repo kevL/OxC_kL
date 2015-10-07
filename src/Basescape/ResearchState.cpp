@@ -56,8 +56,8 @@ namespace OpenXcom
  * @param state	- pointer to the BasescapeState (default NULL when geoscape-invoked)
  */
 ResearchState::ResearchState(
-		Base* base,
-		BasescapeState* state)
+		Base* const base,
+		BasescapeState* const state)
 	:
 		_base(base),
 		_state(state),
@@ -196,16 +196,16 @@ void ResearchState::init()
 		_online.push_back(true);
 
 
-		const int assigned = (*i)->getAssigned();
+		const int assigned ((*i)->getAssigned());
 		std::wostringstream woststr;
 		woststr << assigned;
 
 		std::wstring daysLeft;
 		if (assigned != 0)
 		{
-			const int days = static_cast<int>(std::ceil(
-							(static_cast<double>((*i)->getCost() - (*i)->getSpent()))
-						   / static_cast<double>(assigned)));
+			const int days (static_cast<int>(std::ceil(
+						   (static_cast<double>((*i)->getCost() - (*i)->getSpent()))
+						  / static_cast<double>(assigned))));
 			daysLeft = Text::formatNumber(days);
 		}
 		else daysLeft = L"-";
@@ -262,23 +262,25 @@ void ResearchState::btnAliens(Action*)
 void ResearchState::onSelectProject(Action*)
 {
 	size_t
-		sel = _lstResearch->getSelectedRow(),	// original row clicked
-		id = sel,								// test-index of RP vector
-		j = 0;									// break when vector.at[j] meets sel
+		sel (_lstResearch->getSelectedRow()),
+		j (0);
 
 	for (std::vector<bool>::const_iterator
 			i = _online.begin();
 			i != _online.end();
 			++i)
 	{
-		if (*i == false && ++id == j)
+		if (*i == true && sel == j)
 			break;
+
+		if (*i == false)
+			++sel; // advance the 'selected row' to account for offline projects.
 
 		++j;
 	}
 
 	const std::vector<ResearchProject*>& currentProjects (_base->getResearch());
-	_game->pushState(new ResearchInfoState(_base, currentProjects[id]));
+	_game->pushState(new ResearchInfoState(_base, currentProjects[sel]));
 }
 
 /**
@@ -289,11 +291,10 @@ void ResearchState::miniClick(Action*)
 {
 	if (_state != NULL) // cannot switch bases if coming from geoscape.
 	{
-		const size_t baseId = _mini->getHoveredBase();
+		const size_t baseId (_mini->getHoveredBase());
 		if (baseId < _baseList->size())
 		{
-			Base* const base = _baseList->at(baseId);
-
+			Base* const base (_baseList->at(baseId));
 			if (base != _base && base->hasResearch() == true)
 			{
 				_txtHoverBase->setText(L"");
@@ -315,7 +316,7 @@ void ResearchState::miniClick(Action*)
  */
 void ResearchState::viewMouseOver(Action*)
 {
-	const size_t baseId = _mini->getHoveredBase();
+	const size_t baseId (_mini->getHoveredBase());
 	if (baseId < _baseList->size()
 		&& _base != _baseList->at(baseId)
 		&& _baseList->at(baseId)->hasResearch() == true)

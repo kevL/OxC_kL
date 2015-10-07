@@ -97,7 +97,7 @@ void ResearchInfoState::buildUi()
 {
 	_screen = false;
 
-	_window					= new Window(this, 230, 140, 45, 30);
+	_window					= new Window(this, 240, 140, 40, 30);
 
 	_txtTitle				= new Text(198, 16, 61, 40);
 
@@ -238,10 +238,7 @@ void ResearchInfoState::btnCancelClick(Action*)
 		_base->getStorageItems()->addItem(resRule->getType());
 	}
 
-	_base->removeResearch(
-						_project,
-						false,
-						_resRule == NULL);
+	_base->removeResearch(_project, false, _resRule == NULL);
 
 	_game->popState();
 }

@@ -2779,15 +2779,19 @@ void GeoscapeState::time1Day()
 				// ;) <- kL_note: heh i noticed that.
 			}
 
-//			if (liveAlien == true)
-//				getCrackedAlien(
-//							resRule->getType,	// alien type -> needs both race & rank there.
-//							gofCrack,			// navigator spills the beans on a missionType, or engineer spills the beans on a ufoType, or medic spills the beans on a missionType - "getOneFree"
-//							originCrack);		// alien spills the beans on Origins. Or, generally, it's "unlocks" entries.
-// Then I need to prevent the aLien from disappearing from the 'available research' vector(s).
+			bool
+				gofCrack (true),
+				unlocksCrack (true);
+
+			if (liveAlien == true)
+				getAlienCracks(
+							resRule->getType(),
+							gofCrack,
+							unlocksCrack);
 
 			const RuleResearch* gofRule (NULL);
-			if (resRule->getGetOneFree().empty() == false)
+			if (gofCrack == true
+				&& resRule->getGetOneFree().empty() == false)
 			{
 				std::vector<std::string> gofChoices;
 				for (std::vector<std::string>::const_iterator
@@ -3023,6 +3027,61 @@ void GeoscapeState::time1Day()
 }
 
 /**
+ * Assigns whether an aLien cracked under pressure.
+ * @param alienType		-
+ * @param gofCrack		-
+ * @param unlockCrack	-
+ */
+void GeoscapeState::getAlienCracks( // private.
+			const std::string& alienType,
+			bool gof,
+			bool unlocks) const
+{
+	int
+		gofPct (50),
+		unlocksPct (50); // defaults.
+
+	if (alienType.find("_TERRORIST") != std::string::npos)
+	{
+		gofPct = 10;
+//		unlocksPct = 50;
+	}
+	else if (alienType.find("_FLOATER") != std::string::npos)
+	{
+		gofPct = 80;
+		unlocksPct = 30;
+	}
+	else if (alienType.find("_SECTOID") != std::string::npos)
+	{
+		gofPct = 70;
+		unlocksPct = 40;
+	}
+	else if (alienType.find("_SNAKEMAN") != std::string::npos)
+	{
+		gofPct = 60;
+//		unlocksPct = 50;
+	}
+	else if (alienType.find("_MUTON") != std::string::npos)
+	{
+//		gofPct = 50;
+		unlocksPct = 60;
+	}
+	else if (alienType.find("_ETHEREAL") != std::string::npos)
+	{
+		gofPct = 40;
+		unlocksPct = 70;
+	}
+	else if (alienType.find("_WASPITE") != std::string::npos)
+	{
+		gofPct = 30;
+		unlocksPct = 80;
+	}
+
+	gof = RNG::percent(gofPct);
+	unlocks = RNG::percent(unlocksPct);
+}
+
+/**
  * Takes care of any game logic that has to run every game month.
  */
 void GeoscapeState::time1Month()
@@ -3126,7 +3185,7 @@ void GeoscapeState::time1Month()
 	// NOTE: might want to change this to time1day() ...
 	if (_gameSave->getAlienBases()->empty() == false)
 	{
-		const int pct = 20 - (static_cast<int>(_gameSave->getDifficulty()) * 5);
+		const int pct (20 - (static_cast<int>(_gameSave->getDifficulty()) * 5));
 		if (RNG::percent(pct + 50) == true)
 		{
 			for (std::vector<AlienBase*>::const_iterator
@@ -3198,12 +3257,12 @@ Globe* GeoscapeState::getGlobe() const
 void GeoscapeState::globeClick(Action* action)
 {
 	const int
-		mX = static_cast<int>(std::floor(action->getAbsoluteXMouse())),
-		mY = static_cast<int>(std::floor(action->getAbsoluteYMouse()));
+		mX (static_cast<int>(std::floor(action->getAbsoluteXMouse()))),
+		mY (static_cast<int>(std::floor(action->getAbsoluteYMouse())));
 
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		const std::vector<Target*> targets = _globe->getTargets(mX,mY, false);
+		const std::vector<Target*> targets (_globe->getTargets(mX,mY, false));
 		if (targets.empty() == false)
 			_game->pushState(new MultipleTargetsState(targets, NULL, this));
 	}
@@ -3223,16 +3282,16 @@ void GeoscapeState::globeClick(Action* action)
 						&latRad);
 
 		const double
-			lonDeg = lonRad / M_PI * 180.,
-			latDeg = latRad / M_PI * 180.;
+			lonDeg (lonRad / M_PI * 180.),
+			latDeg (latRad / M_PI * 180.);
 
-		std::wostringstream ss;
-		ss << std::fixed << std::setprecision(3)
+		std::wostringstream woststr;
+		woststr << std::fixed << std::setprecision(3)
 			<< L"RAD Lon " << lonRad << L"  Lat " << latRad
 			<< std::endl
 			<< L"DEG Lon " << lonDeg << L"  Lat " << latDeg;
 
-		_txtDebug->setText(ss.str());
+		_txtDebug->setText(woststr.str());
 	}
 }
 
@@ -3574,8 +3633,7 @@ bool GeoscapeState::getDfCCC() const
  */
 size_t GeoscapeState::getMinimizedDfCount() const
 {
-	size_t ret = 0;
-
+	size_t ret (0);
 	for (std::list<DogfightState*>::const_iterator
 			i = _dogfights.begin();
 			i != _dogfights.end();
@@ -3593,7 +3651,7 @@ size_t GeoscapeState::getMinimizedDfCount() const
  */
 void GeoscapeState::thinkDogfights()
 {
-	std::list<DogfightState*>::const_iterator pDf = _dogfights.begin();
+	std::list<DogfightState*>::const_iterator pDf (_dogfights.begin());
 	for (
 			;
 			pDf != _dogfights.end();
@@ -3702,8 +3760,8 @@ void GeoscapeState::resetInterceptPorts()
 		(*i)->setTotalIntercepts(dfQty);
 	}
 
-	const size_t dfOpenTotal = dfQty - getMinimizedDfCount();
-	size_t dfOpen = 0;
+	const size_t dfOpenTotal (dfQty - getMinimizedDfCount());
+	size_t dfOpen (0);
 	for (std::list<DogfightState*>::const_iterator
 			i = _dogfights.begin();
 			i != _dogfights.end();
@@ -3722,7 +3780,7 @@ void GeoscapeState::resetInterceptPorts()
  */
 size_t GeoscapeState::getOpenDfSlot() const
 {
-	size_t slot = 1;
+	size_t slot (1);
 	for (std::list<DogfightState*>::const_iterator
 			i = _dogfights.begin();
 			i != _dogfights.end();
@@ -3775,33 +3833,33 @@ void GeoscapeState::handleBaseDefense(
 /**
  * Determine the alien missions to start this month.
  */
-void GeoscapeState::determineAlienMissions()
+void GeoscapeState::determineAlienMissions() // private.
 {
 	AlienStrategy& strategy (_gameSave->getAlienStrategy());
 	const int month (_game->getSavedGame()->getMonthsPassed());
 	std::vector<RuleMissionScript*> availableMissions;
 	std::map<int, bool> conditions;
 
-	RuleMissionScript* missionCommand;
+	RuleMissionScript* directive;
 
 	for (std::vector<std::string>::const_iterator
 			i = _rules->getMissionScriptList()->begin();
 			i != _rules->getMissionScriptList()->end();
 			++i)
 	{
-		missionCommand = _rules->getMissionScript(*i);
+		directive = _rules->getMissionScript(*i);
 
-		if (missionCommand->getFirstMonth() <= month
-			&& (missionCommand->getLastMonth() >= month
-				|| missionCommand->getLastMonth() == -1)
-			&& (missionCommand->getMaxRuns() == -1
-				|| missionCommand->getMaxRuns() > strategy.getMissionsRun(missionCommand->getVarName()))
-			&& missionCommand->getMinDifficulty() <= _gameSave->getDifficulty())
+		if (directive->getFirstMonth() <= month
+			&& (directive->getLastMonth() >= month
+				|| directive->getLastMonth() == -1)
+			&& (directive->getMaxRuns() == -1
+				|| directive->getMaxRuns() > strategy.getMissionsRun(directive->getVarName()))
+			&& directive->getMinDifficulty() <= _gameSave->getDifficulty())
 		{
 			bool go (true);
 			for (std::map<std::string, bool>::const_iterator
-					j = missionCommand->getResearchTriggers().begin();
-					j != missionCommand->getResearchTriggers().end()
+					j = directive->getResearchTriggers().begin();
+					j != directive->getResearchTriggers().end()
 						&& go == true;
 					++j)
 			{
@@ -3809,7 +3867,7 @@ void GeoscapeState::determineAlienMissions()
 			}
 
 			if (go == true)
-				availableMissions.push_back(missionCommand);
+				availableMissions.push_back(directive);
 		}
 	}
 
@@ -3819,14 +3877,14 @@ void GeoscapeState::determineAlienMissions()
 			i != availableMissions.end();
 			++i)
 	{
-		missionCommand = *i;
+		directive = *i;
 		bool
 			process (true),
 			success (false);
 
 		for (std::vector<int>::const_iterator
-				j = missionCommand->getConditionals().begin();
-				j != missionCommand->getConditionals().end()
+				j = directive->getConditionals().begin();
+				j != directive->getConditionals().end()
 					&& process == true;
 				++j)
 		{
@@ -3836,19 +3894,19 @@ void GeoscapeState::determineAlienMissions()
 				   || (found->second == false && *j < 0));
 		}
 
-		if (missionCommand->getLabel() > 0
-			&& conditions.find(missionCommand->getLabel()) != conditions.end())
+		if (directive->getLabel() > 0
+			&& conditions.find(directive->getLabel()) != conditions.end())
 		{
 			std::stringstream ststr;
 			ststr << "Mission generator encountered an error: multiple commands: ["
-				  << missionCommand->getType() << "] and ";
+				  << directive->getType() << "] and ";
 			for (std::vector<RuleMissionScript*>::const_iterator
 					j = availableMissions.begin();
 					j != availableMissions.end();
 					++j)
 			{
 				if (*j != *i
-					&& missionCommand->getLabel() == (*j)->getLabel())
+					&& directive->getLabel() == (*j)->getLabel())
 				{
 					ststr << "["
 						  << (*j)->getType()
@@ -3856,35 +3914,35 @@ void GeoscapeState::determineAlienMissions()
 				}
 			}
 			ststr << " are sharing the same label: ["
-				  << missionCommand->getLabel()
+				  << directive->getLabel()
 				  << "]";
 			throw Exception(ststr.str());
 		}
 
 		if (process == true
-			&& RNG::percent(missionCommand->getExecutionOdds()) == true)
+			&& RNG::percent(directive->getExecutionOdds()) == true)
 		{
-			success = processCommand(missionCommand);
+			success = processCommand(directive);
 		}
 
-		if (missionCommand->getLabel() > 0)
+		if (directive->getLabel() > 0)
 		{
-			if (conditions.find(missionCommand->getLabel()) != conditions.end())
+			if (conditions.find(directive->getLabel()) != conditions.end())
 			{
-				throw Exception("Error in mission scripts: " + missionCommand->getType()
+				throw Exception("Error in mission scripts: " + directive->getType()
 								+ ". Two or more commands share the same label.");
 			}
-			conditions[missionCommand->getLabel()] = success;
+			conditions[directive->getLabel()] = success;
 		}
 	}
 }
 
 /**
  * Proccesses a directive to start up a mission if possible.
- * @param command - the directive from which to read information
+ * @param directive - the directive from which to read information
  * @return, true if the command successfully produced a new mission
  */
-bool GeoscapeState::processCommand(RuleMissionScript* const missionCommand)
+bool GeoscapeState::processCommand(RuleMissionScript* const directive) // private.
 {
 	AlienStrategy& strategy (_gameSave->getAlienStrategy());
 	const int month (_game->getSavedGame()->getMonthsPassed());
@@ -3895,10 +3953,10 @@ bool GeoscapeState::processCommand(RuleMissionScript* const missionCommand)
 		raceType;
 	size_t targetZone (std::numeric_limits<size_t>::max()); // darn vc++ linker warning ...
 
-	if (missionCommand->getSiteType() == true)
+	if (directive->getSiteType() == true)
 	{
-		missionType = missionCommand->genMissionDatum(month, GT_MISSION);
-		const std::vector<std::string> missions (missionCommand->getMissionTypes(month));
+		missionType = directive->genMissionDatum(month, GT_MISSION);
+		const std::vector<std::string> missions (directive->getMissionTypes(month));
 		size_t
 			missionsTotal (missions.size()),
 			testMission (0);
@@ -3923,8 +3981,8 @@ bool GeoscapeState::processCommand(RuleMissionScript* const missionCommand)
 			targetZone = missionRule->getSpawnZone();
 
 			std::vector<std::string> regions;
-			if (missionCommand->hasRegionWeights() == true)
-				regions = missionCommand->getRegions(month);
+			if (directive->hasRegionWeights() == true)
+				regions = directive->getRegions(month);
 			else
 				regions = _rules->getRegionsList();
 
@@ -3961,7 +4019,7 @@ bool GeoscapeState::processCommand(RuleMissionScript* const missionCommand)
 						{
 							if ((*k).isPoint() == true
 								&& strategy.validateMissionLocation(
-																missionCommand->getVarName(),
+																directive->getVarName(),
 																regionRule->getType(),
 																testZone) == true)
 							{
@@ -3996,15 +4054,15 @@ bool GeoscapeState::processCommand(RuleMissionScript* const missionCommand)
 		targetZone = std::numeric_limits<size_t>::max();
 		while (targetZone == std::numeric_limits<size_t>::max())
 		{
-			if (missionCommand->hasRegionWeights() == true)
-				targetRegion = missionCommand->genMissionDatum(month, GT_REGION);
+			if (directive->hasRegionWeights() == true)
+				targetRegion = directive->genMissionDatum(month, GT_REGION);
 			else
 				targetRegion = _rules->getRegionsList().at(RNG::pick(_rules->getRegionsList().size()));
 
 			int
-				low = -1,
-				high = -1, // avoid vc++ linker warning.
-				testArea = 0;
+				low (-1),
+				high (-1), // avoid vc++ linker warning.
+				testArea (0);
 
 			for (std::vector<std::pair<std::string, size_t> >::const_iterator
 					i = validAreas.begin();
@@ -4027,12 +4085,12 @@ bool GeoscapeState::processCommand(RuleMissionScript* const missionCommand)
 		}
 
 		strategy.addMissionLocation(
-								missionCommand->getVarName(),
+								directive->getVarName(),
 								targetRegion,
 								targetZone,
-								missionCommand->getRepeatAvoidance());
+								directive->getRepeatAvoidance());
 	}
-	else if (RNG::percent(missionCommand->getTargetBaseOdds()) == true)
+	else if (RNG::percent(directive->getTargetBaseOdds()) == true)
 	{
 		std::vector<std::string> regionsMaster;
 		for (std::vector<Base*>::const_iterator
@@ -4043,7 +4101,7 @@ bool GeoscapeState::processCommand(RuleMissionScript* const missionCommand)
 			regionsMaster.push_back(_gameSave->locateRegion(**i)->getRules()->getType());
 		}
 
-		std::vector<std::string> types (missionCommand->getMissionTypes(month));
+		std::vector<std::string> types (directive->getMissionTypes(month));
 		if (types.empty() == true)
 		{
 			for (std::vector<std::string>::const_iterator
@@ -4109,10 +4167,10 @@ bool GeoscapeState::processCommand(RuleMissionScript* const missionCommand)
 			}
 		}
 	}
-	else if (missionCommand->hasRegionWeights() == false)
+	else if (directive->hasRegionWeights() == false)
 		targetRegion = strategy.chooseRandomRegion(_rules);
 	else
-		targetRegion = missionCommand->genMissionDatum(month, GT_REGION);
+		targetRegion = directive->genMissionDatum(month, GT_REGION);
 
 	if (targetRegion.empty() == true)
 		return false;
@@ -4121,17 +4179,17 @@ bool GeoscapeState::processCommand(RuleMissionScript* const missionCommand)
 	if (_rules->getRegion(targetRegion) == NULL)
 	{
 		throw Exception("Error proccessing mission script named: "
-						+ missionCommand->getType()
+						+ directive->getType()
 						+ ", region named: " + targetRegion
 						+ " is not defined");
 	}
 
 	if (missionType.empty() == true)
 	{
-		if (missionCommand->hasMissionWeights() == false)
+		if (directive->hasMissionWeights() == false)
 			missionType = strategy.chooseRandomMission(targetRegion);
 		else
-			missionType = missionCommand->genMissionDatum(month, GT_MISSION);
+			missionType = directive->genMissionDatum(month, GT_MISSION);
 	}
 
 	if (missionType.empty() == true)
@@ -4143,20 +4201,20 @@ bool GeoscapeState::processCommand(RuleMissionScript* const missionCommand)
 	if (missionRule == NULL)
 	{
 		throw Exception("Error proccessing mission script named: "
-						+ missionCommand->getType()
+						+ directive->getType()
 						+ ", mission type: " + missionType +
 						" is not defined");
 	}
 
-	if (missionCommand->hasRaceWeights() == false)
+	if (directive->hasRaceWeights() == false)
 		raceType = missionRule->generateRace(month);
 	else
-		raceType = missionCommand->genMissionDatum(month, GT_RACE);
+		raceType = directive->genMissionDatum(month, GT_RACE);
 
 	if (_rules->getAlienRace(raceType) == NULL)
 	{
 		throw Exception("Error proccessing mission script named: "
-						+ missionCommand->getType()
+						+ directive->getType()
 						+ ", race: " + raceType
 						+ " is not defined");
 	}
@@ -4169,12 +4227,12 @@ bool GeoscapeState::processCommand(RuleMissionScript* const missionCommand)
 	mission->setId(_gameSave->getCanonicalId("ALIEN_MISSIONS"));
 	mission->setRegion(targetRegion, *_rules);
 	mission->setMissionSiteZone(targetZone);
-	strategy.addMissionRun(missionCommand->getVarName());
-	mission->start(missionCommand->getDelay());
+	strategy.addMissionRun(directive->getVarName());
+	mission->start(directive->getDelay());
 
 	_gameSave->getAlienMissions().push_back(mission);
 
-	if (missionCommand->usesTable() == true)
+	if (directive->usesTable() == true)
 		strategy.removeMission(
 							targetRegion,
 							missionType);

@@ -72,8 +72,8 @@ private:
 	public:
 		/// Creates the Research state.
 		ResearchState(
-				Base* base,
-				BasescapeState* state = NULL);
+				Base* const base,
+				BasescapeState* const state = NULL);
 		/// Cleans up the Research state.
 		~ResearchState();
 

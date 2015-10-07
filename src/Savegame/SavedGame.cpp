@@ -1347,9 +1347,7 @@ void SavedGame::getAvailableResearchProjects(
 
 
 	const RuleResearch* resRule;
-	bool
-		liveAlien,
-		cullProject;
+	bool cullProject;
 
 	const std::vector<std::string> researchList (_rules->getResearchList());
 	for (std::vector<std::string>::const_iterator
@@ -1358,13 +1356,13 @@ void SavedGame::getAvailableResearchProjects(
 			++i)
 	{
 		resRule = _rules->getResearch(*i);
-		if (isResearchAvailable(resRule, unlocksList) == true)
+		if (isResearchAvailable(resRule, unlocksList) == true)								// <- resRule is tested there first.
 		{
-			liveAlien = (_rules->getUnit(resRule->getType()) != NULL);
-			if (std::find(
-					_discovered.begin(),
-					_discovered.end(),
-					resRule) != _discovered.end())
+			if (_rules->getUnit(resRule->getType()) == NULL									// kL_add. Always allow aLiens to be researched & re-researched.
+				&& std::find(
+						_discovered.begin(),
+						_discovered.end(),
+						resRule) != _discovered.end())										// if resRule is already discovered ->
 			{
 				cullProject = true;
 				for (std::vector<std::string>::const_iterator
@@ -1377,37 +1375,32 @@ void SavedGame::getAvailableResearchProjects(
 							_discovered.end(),
 							_rules->getResearch(*j)) == _discovered.end())
 					{
-						cullProject = false; // resRule's getOneFree still undiscovered.
+						cullProject = false;												// resRule's getOneFree still undiscovered.
 						break;
 					}
 				}
 
-				if (liveAlien == true || cullProject == false)
+				if ((std::find(
+							_discovered.begin(),
+							_discovered.end(),
+							_rules->getResearch("STR_LEADER_PLUS")) == _discovered.end()	// player still needs LeaderPlus
+						&& std::find(
+								resRule->getUnlocks().begin(),
+								resRule->getUnlocks().end(),
+								"STR_LEADER_PLUS") != resRule->getUnlocks().end())			// and the resRule can unlock LeaderPlus
+					|| (std::find(
+							_discovered.begin(),
+							_discovered.end(),
+							_rules->getResearch("STR_COMMANDER_PLUS")) == _discovered.end()	// player still needs CommanderPlus
+						&& std::find(
+								resRule->getUnlocks().begin(),
+								resRule->getUnlocks().end(),
+								"STR_COMMANDER_PLUS") != resRule->getUnlocks().end()))		// and the resRule can unlock CommanderPlus
 				{
-					if ((std::find(
-								_discovered.begin(),
-								_discovered.end(),
-								_rules->getResearch("STR_LEADER_PLUS")) == _discovered.end()	// player still needs LeaderPlus
-							&& std::find(
-									resRule->getUnlocks().begin(),
-									resRule->getUnlocks().end(),
-									"STR_LEADER_PLUS") != resRule->getUnlocks().end())			// and the resRule can grant LeaderPlus
-						|| (std::find(
-								_discovered.begin(),
-								_discovered.end(),
-								_rules->getResearch("STR_COMMANDER_PLUS")) == _discovered.end()	// player still needs CommanderPlus
-							&& std::find(
-									resRule->getUnlocks().begin(),
-									resRule->getUnlocks().end(),
-									"STR_COMMANDER_PLUS") != resRule->getUnlocks().end()))		// and the resRule can grant CommanderPlus
-					{
-						cullProject = false;													// do NOT cull
-					}
-
-					if (cullProject == true)
-						continue;
+					cullProject = false;													// do NOT cull
 				}
-				else continue; // if (liveAlien=false && cullProject=true)
+
+				if (cullProject == true) continue;
 			}
 
 			if (std::find_if(
@@ -1610,7 +1603,8 @@ bool SavedGame::isResearchAvailable( // private.
 								"STR_COMMANDER_PLUS") != resRule->getUnlocks().end())))		// and the resRule can grant CommanderPlus
 			{
 				return true; // that makes no sense; aLiens that grant LeaderPlus and/or CommanderPlus do not have a getOneFree entry.
-			} */
+			} */	// It only makes sense (kind of) if a non-alien-unit project has Leader/Commander-Plus as a getOneFree AND as an 'unlocks' value ....
+					// Anyway, I'm doing my own thing because it's become obvious how sloppily the research was coded.
 
 
 			const RuleResearch* ruleTest;
@@ -1626,7 +1620,7 @@ bool SavedGame::isResearchAvailable( // private.
 						unlocksList.end(),
 						ruleTest) == unlocksList.end())
 				{
-					return true; // resRule's getOneFree still locked but is available in a getOneFree.
+					return true; // resRule's getOneFree is not yet unlocked by any project.
 				}
 			}
 

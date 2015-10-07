@@ -5097,6 +5097,7 @@ extraStrings:
       STR_WEAPON: "weapon"
       STR_VARIABLE: "str"
       STR_EXECUTE: "execute"
+      STR_NA: "na."
 #      STR_MORE_REPORTS: "> reports >"
 #      STR_PLASMA_BEAM_H: PB
 #New spritesheet Example:
