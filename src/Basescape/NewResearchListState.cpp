@@ -188,8 +188,8 @@ void NewResearchListState::fillProjectList() // private.
 			_lstResearch->addRow(1, tr((*i)->getType()).c_str());
 			++i;
 		}
-		else
-			i = _resRules.erase(i); // erase it so it doesn't show up in ResearchInfoState list.
+		else						// fake project.
+			i = _resRules.erase(i);	// erase it so it doesn't show up in ResearchInfoState list either.
 	}
 }
 

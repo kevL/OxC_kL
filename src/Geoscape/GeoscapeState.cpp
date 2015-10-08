@@ -2849,12 +2849,26 @@ void GeoscapeState::time1Day()
 										resRule,
 										*i);
 
+			for (std::vector<const RuleResearch*>::const_iterator	// -> moved here from NewPossibleResearchState cTor.
+					k = newResearchPossible.begin();
+					k != newResearchPossible.end();
+					)
+			{
+				if ((*k)->getCost() == 0							// no fake projects pls.
+					|| _gameSave->wasResearchPopped(*k) == true		// do not show twice.
+					|| _rules->getUnit((*k)->getType()) != NULL)	// and no aLiens ->
+				{
+					k = newResearchPossible.erase(k);
+				}
+				else ++k;
+			}
+
 			std::vector<const RuleManufacture*> newManufacturePossible;
 			_gameSave->getDependentManufacture(
 											newManufacturePossible,
 											resRule);
 
-			if (resRule0 != NULL) // check for need to research clip before manufacturing weapon allowed.
+			if (resRule0 != NULL) // check for need to research the clip before the weapon itself is allowed to be manufactured.
 			{
 				const RuleItem* const itRule (_rules->getItem(resRule0->getType()));
 				if (itRule != NULL
@@ -2865,13 +2879,13 @@ void GeoscapeState::time1Day()
 					if (manufRule != NULL
 						&& manufRule->getRequirements().empty() == false)
 					{
-						const std::vector<std::string>& req (manufRule->getRequirements());
+						const std::vector<std::string>& prereqs (manufRule->getRequirements());
 						const RuleItem* const aRule (_rules->getItem(itRule->getCompatibleAmmo()->front()));
 						if (aRule != NULL
 							&& std::find(
-										req.begin(),
-										req.end(),
-										aRule->getType()) != req.end()
+									prereqs.begin(),
+									prereqs.end(),
+									aRule->getType()) != prereqs.end()
 							&& _gameSave->isResearched(manufRule->getRequirements()) == false)
 						{
 							resEvents.push_back(new ResearchRequiredState(itRule));
@@ -2880,9 +2894,9 @@ void GeoscapeState::time1Day()
 				}
 			}
 
-			if (newResearchPossible.empty() == false) // only show the "allocate research" button for the last notification
+			if (newResearchPossible.empty() == false)
 			{
-				if (newResEvents.empty() == false)
+				if (newResEvents.empty() == false) // only show the "allocate research" button for the last notification
 					newResEvents.back().showResearchButton = false;
 
 				newResEvents.push_back(NewPossibleResearchInfo(
@@ -2925,16 +2939,11 @@ void GeoscapeState::time1Day()
 		}
 	}
 
-	// if research has been completed but no new research events are triggered
-	// show an empty NewPossibleResearchState so players have a chance to
-	// allocate the now-free scientists
-/*	if (resEvents.empty() == false
-		&& newResEvents.empty() == true)
-	{
-		newResEvents.push_back(NewPossibleResearchInfo(
-												std::vector<const RuleResearch*>(),
-												true));
-	} */
+	// if research has been completed but no new research events are triggered show an empty
+	// NewPossibleResearchState so players have a chance to allocate the now-free scientists.
+	// kL_note: already taken care of. Just reset timer to 5sec and let ResearchCompleteState poke the player.
+/*	if (resEvents.empty() == false && newResEvents.empty() == true)
+		newResEvents.push_back(NewPossibleResearchInfo(std::vector<const RuleResearch*>(), true)); */
 
 	// show events
 	for (std::vector<ProductionCompleteInfo>::const_iterator
@@ -2986,10 +2995,10 @@ void GeoscapeState::time1Day()
 
 
 
-	const RuleAlienMission* const missionRule = _rules->getRandomMission( // handle regional and country points for alien bases
+	const RuleAlienMission* const missionRule (_rules->getRandomMission( // handle regional and country points for alien bases
 																	alm_BASE,
-																	_game->getSavedGame()->getMonthsPassed());
-	const int aLienPts = (missionRule->getPoints() * (static_cast<int>(_gameSave->getDifficulty()) + 1)) / 100;
+																	_game->getSavedGame()->getMonthsPassed()));
+	const int aLienPts ((missionRule->getPoints() * (static_cast<int>(_gameSave->getDifficulty()) + 1)) / 100);
 	if (aLienPts != 0)
 	{
 		for (std::vector<AlienBase*>::const_iterator
@@ -3009,24 +3018,16 @@ void GeoscapeState::time1Day()
 	std::for_each( // handle supply of alien bases.
 			_gameSave->getAlienBases()->begin(),
 			_gameSave->getAlienBases()->end(),
-			GenerateSupplyMission(
-								*_rules,
-								*_gameSave));
+			GenerateSupplyMission(*_rules, *_gameSave));
 
 	// Autosave 3 times a month. kL_note: every day.
 //	int day = _gameSave->getTime()->getDay();
 //	if (day == 10 || day == 20)
 //	{
 	if (_gameSave->isIronman() == true)
-		popup(new SaveGameState(
-							OPT_GEOSCAPE,
-							SAVE_IRONMAN,
-							_palette));
+		popup(new SaveGameState(OPT_GEOSCAPE, SAVE_IRONMAN, _palette));
 	else if (Options::autosave == true)
-		popup(new SaveGameState(
-							OPT_GEOSCAPE,
-							SAVE_AUTO_GEOSCAPE,
-							_palette));
+		popup(new SaveGameState(OPT_GEOSCAPE, SAVE_AUTO_GEOSCAPE, _palette));
 //	}
 	//Log(LOG_INFO) << "GeoscapeState::time1Day() EXIT";
 }

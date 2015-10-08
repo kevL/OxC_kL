@@ -4390,7 +4390,7 @@
 
 1441247516 f:\git\openxcom\src\savegame\target.h
 
-1444198820 f:\git\openxcom\src\savegame\savedgame.h
+1444268756 f:\git\openxcom\src\savegame\savedgame.h
 	"GameTime.h"
 	"Soldier.h"
 	"../Ruleset/RuleAlienMission.h"
@@ -4937,7 +4937,7 @@
 	"../Savegame/Base.h"
 	"../Savegame/SavedGame.h"
 
-1444220591 source:f:\git\openxcom\src\basescape\newresearchliststate.cpp
+1444222740 source:f:\git\openxcom\src\basescape\newresearchliststate.cpp
 	"NewResearchListState.h"
 	"ResearchInfoState.h"
 	"../Engine/Game.h"
@@ -7060,7 +7060,7 @@
 1443908784 f:\git\openxcom\src\geoscape\newpossiblemanufacturestate.h
 	"../Engine/State.h"
 
-1444220022 f:\git\openxcom\src\geoscape\newpossibleresearchstate.h
+1444265108 f:\git\openxcom\src\geoscape\newpossibleresearchstate.h
 	"../Engine/State.h"
 
 1442516522 f:\git\openxcom\src\geoscape\productioncompletestate.h
@@ -8624,7 +8624,7 @@
 	"TerrorSite.h"
 	"../Engine/Language.h"
 
-1443827096 source:f:\git\openxcom\src\savegame\tile.cpp
+1444264855 source:f:\git\openxcom\src\savegame\tile.cpp
 	"Tile.h"
 	"BattleItem.h"
 	"SerializationHelper.h"

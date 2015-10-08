@@ -1261,7 +1261,6 @@ void Tile::addItem(
  */
 void Tile::removeItem(BattleItem* const item)
 {
-	//Log(LOG_INFO) << "Tile::removeItem() id " << item->getId();
 	for (std::vector<BattleItem*>::const_iterator
 			i = _inventory.begin();
 			i != _inventory.end();
@@ -1284,16 +1283,16 @@ void Tile::removeItem(BattleItem* const item)
  */
 int Tile::getCorpseSprite(bool* fired) const
 {
-	int sprite = -1;
+	int sprite (-1);
 
 	if (_inventory.empty() == false)
 	{
 		*fired = false;
 		int
-			weight = -1,
+			weight (-1),
 			weightTest;
 
-		for (std::vector<BattleItem*>::const_iterator
+		for (std::vector<BattleItem*>::const_iterator // 1. soldier body
 				i = _inventory.begin();
 				i != _inventory.end();
 				++i)
@@ -1315,7 +1314,8 @@ int Tile::getCorpseSprite(bool* fired) const
 
 		if (sprite == -1)
 		{
-			for (std::vector<BattleItem*>::const_iterator
+			weight = -1;
+			for (std::vector<BattleItem*>::const_iterator // 2. non-soldier body
 					i = _inventory.begin();
 					i != _inventory.end();
 					++i)
@@ -1336,7 +1336,8 @@ int Tile::getCorpseSprite(bool* fired) const
 
 			if (sprite == -1)
 			{
-				for (std::vector<BattleItem*>::const_iterator
+				weight = -1;
+				for (std::vector<BattleItem*>::const_iterator // 3. corpse
 						i = _inventory.begin();
 						i != _inventory.end();
 						++i)
@@ -1365,11 +1366,11 @@ int Tile::getCorpseSprite(bool* fired) const
  */
 int Tile::getTopSprite(bool* primed) const
 {
-	int sprite = -1;
+	int sprite (-1);
 
 	if (_inventory.empty() == false)
 	{
-		BattleItem* grenade = NULL;
+		const BattleItem* grenade (NULL);
 		*primed = false;
 		BattleType bType;
 
@@ -1398,7 +1399,7 @@ int Tile::getTopSprite(bool* primed) const
 			return grenade->getRules()->getFloorSprite();
 
 		int
-			weight = -1,
+			weight (-1),
 			weightTest;
 
 		for (std::vector<BattleItem*>::const_iterator
@@ -1427,25 +1428,22 @@ int Tile::getTopSprite(bool* primed) const
  */
 int Tile::hasUnconsciousUnit(bool playerOnly) const
 {
-	int ret = 0;
+	int ret (0);
 
 	for (std::vector<BattleItem*>::const_iterator
 			i = _inventory.begin();
 			i != _inventory.end();
 			++i)
 	{
-		const BattleUnit* const bu = (*i)->getUnit();
+		const BattleUnit* const bu ((*i)->getUnit());
 
 		if (bu != NULL
 			&& bu->getUnitStatus() == STATUS_UNCONSCIOUS
 			&& (bu->getOriginalFaction() == FACTION_PLAYER
 				|| playerOnly == false))
 		{
-			if (playerOnly == true
-				&& bu->getFatalWounds() == 0)
-			{
+			if (playerOnly == true && bu->getFatalWounds() == 0)
 				ret = 1;
-			}
 			else
 				return 2;
 		}

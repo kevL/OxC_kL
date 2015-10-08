@@ -310,15 +310,13 @@ private:
 	std::vector<Ufo*> _ufos;
 	std::vector<Waypoint*> _waypoints;
 
+	/// Checks whether a ResearchProject can be started.
+	bool isResearchAvailable(const RuleResearch* const resRule) const;
 	/// Gets the list of newly available ResearchProjects that appear when a project is completed.
 	void getDependentResearchBasic(
 			std::vector<const RuleResearch*>& dependents,
 			const RuleResearch* const resRule,
 			Base* const base) const;
-	/// Checks whether a ResearchProject can be started.
-	bool isResearchAvailable(
-			const RuleResearch* const resRule,
-			const std::vector<const RuleResearch*>& unlocksList) const;
 	/// Removes a research from the "popped up" array.
 	void removePoppedResearch(const RuleResearch* const resRule);
 	///
@@ -441,7 +439,7 @@ private:
 		/// Gets the current battle save.
 		SavedBattleGame* getBattleSave();
 		/// Sets the current battle save.
-		void setBattleSave(SavedBattleGame* battleSave);
+		void setBattleSave(SavedBattleGame* const battleSave);
 
 		/// Gets a list of already discovered ResearchProjects.
 		const std::vector<const RuleResearch*>& getDiscoveredResearch() const;

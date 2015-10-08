@@ -35,7 +35,7 @@ class Window;
 
 
 /**
- * Window which informs the player of new possible research projects.
+ * Window that informs the player of new possible research projects.
  * @note Also allows the player to go to ResearchState to dispatch scientists.
  */
 class NewPossibleResearchState
