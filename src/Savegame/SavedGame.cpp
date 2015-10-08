@@ -1260,7 +1260,8 @@ const std::vector<const RuleResearch*>& SavedGame::getDiscoveredResearch() const
 /**
  * Adds a RuleResearch to the list of already discovered RuleResearch's.
  * @param resRule	- the newly found RuleResearch
- * @param score		- true to score points for research done; false for skirmish battles (default true)
+ * @param score		- true to score points and add dependents for research done;
+ * false for skirmish battles (default true)
  */
 void SavedGame::addFinishedResearch(
 		const RuleResearch* const resRule,

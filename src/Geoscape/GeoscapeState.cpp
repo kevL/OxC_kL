@@ -2767,15 +2767,16 @@ void GeoscapeState::time1Day()
 				++j)
 		{
 			const RuleResearch* const resRule ((*j)->getRules());
+			const std::string& resType (resRule->getType());
 
-			const bool liveAlien (_rules->getUnit(resRule->getType()) != NULL);
+			const bool liveAlien (_rules->getUnit(resType) != NULL);
 			(*i)->removeResearch(*j, liveAlien == true); // interrogation of aLien Unit complete.
 
 			if (liveAlien == true // if the live alien is "researched" its corpse is sent to stores.
 				&& resRule->needsItem() == true
 				&& Options::spendResearchedItems == true)
 			{
-				(*i)->getStorageItems()->addItem(_rules->getArmor(_rules->getUnit(resRule->getType())->getArmor())->getCorpseGeoscape());
+				(*i)->getStorageItems()->addItem(_rules->getArmor(_rules->getUnit(resType)->getArmor())->getCorpseGeoscape());
 				// ;) <- kL_note: heh i noticed that.
 			}
 
@@ -2785,7 +2786,7 @@ void GeoscapeState::time1Day()
 
 			if (liveAlien == true)
 				getAlienCracks(
-							resRule->getType(),
+							resType,
 							gofCrack,
 							unlocksCrack);
 			else
@@ -2826,7 +2827,7 @@ void GeoscapeState::time1Day()
 
 			std::string lookUp = resRule->getLookup(); // UfoPaedia article.
 			if (lookUp.empty() == true)
-				lookUp = resRule->getType();
+				lookUp = resType;
 
 			const RuleResearch* resRule0;
 			if (_gameSave->isResearched(lookUp) == false)
@@ -2900,9 +2901,9 @@ void GeoscapeState::time1Day()
 					newResEvents.back().showResearchButton = false;
 
 				newResEvents.push_back(NewPossibleResearchInfo(
-														*i,
-														newResearchPossible,
-														true));
+															*i,
+															newResearchPossible,
+															true));
 			}
 
 			if (newManufacturePossible.empty() == false)
@@ -2926,7 +2927,7 @@ void GeoscapeState::time1Day()
 						l != (*k)->getResearch().end();
 						++l)
 				{
-					if (resRule->getType() == (*l)->getRules()->getType()
+					if (resType == (*l)->getRules()->getType()
 						&& _rules->getUnit((*l)->getRules()->getType()) == NULL)
 					{
 						(*k)->removeResearch(*l, false);
