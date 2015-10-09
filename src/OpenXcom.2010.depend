@@ -6410,7 +6410,7 @@
 	<SDL.h>
 	"OpenGL.h"
 
-1438168552 source:f:\git\openxcom\src\engine\font.cpp
+1444419804 source:f:\git\openxcom\src\engine\font.cpp
 	"DosFont.h"
 	"Surface.h"
 
@@ -6957,7 +6957,7 @@
 1442441486 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1444411827 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1444418337 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	"AlienBaseState.h"
 	"BaseDefenseState.h"
@@ -7448,7 +7448,7 @@
 	"../Interface/Text.h"
 	"../Interface/TextButton.h"
 
-1442788516 source:f:\git\openxcom\src\interface\text.cpp
+1444419989 source:f:\git\openxcom\src\interface\text.cpp
 	"Text.h"
 	"../Engine/Language.h"
 

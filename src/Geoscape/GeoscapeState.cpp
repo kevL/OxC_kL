@@ -4397,7 +4397,7 @@ void GeoscapeState::keyTimeCompressionPress(Action* action) // private.
  * Handler for clicking a time-compression button.
  * @param action - pointer to an Action
  */
-void GeoscapeState::resetTimeCacheClick(Action* action) // private.
+void GeoscapeState::resetTimeCacheClick(Action* /* action */) // private.
 {
 	//Log(LOG_INFO) << "reset time cache BTN";
 //	if (action->getSender() != _timeComp) //action->getDetails()->button.button == SDL_BUTTON_LEFT

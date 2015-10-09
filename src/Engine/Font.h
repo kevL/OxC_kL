@@ -99,7 +99,7 @@ private:
 		/// Gets the spacing between characters.
 		int getSpacing() const;
 
-		/// Gets the size of a particular character;
+		/// Gets the size of a particular character.
 		SDL_Rect getCharSize(wchar_t fontChar);
 
 		/// Gets the font's surface.

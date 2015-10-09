@@ -430,118 +430,128 @@ void Text::addTextHeight(int pad)
  */
 void Text::processText() // private.
 {
-	if (_font == NULL
-		|| _lang == NULL)
+	if (_font != NULL && _lang != NULL)
 	{
-		return;
-	}
+		std::wstring* wst = &_text;
 
-	std::wstring* wst = &_text;
-
-	if (_wrap == true) // use a separate string for wordwrapping text
-	{
-		_wrappedText = _text;
-		wst = &_wrappedText;
-	}
-
-	_lineWidth.clear();
-	_lineHeight.clear();
-
-	bool start = true;
-	int
-		width = 0,
-		word = 0;
-	size_t space = 0;
-
-	Font* font = _font;
-
-
-	for (size_t // go through the text character by character
-		i = 0;
-		i <= wst->size();
-		++i)
-	{
-		if (i == wst->size() // end of the line
-			|| Font::isLinebreak((*wst)[i]) == true)
+		if (_wrap == true) // use a separate string for wordwrapping text
 		{
-			// add line measurements for alignment later
-			_lineWidth.push_back(width);
-			_lineHeight.push_back(font->getCharSize(L'\n').h);
-
-			width = 0;
-			word = 0;
-			start = true;
-
-			if (i == wst->size())
-				break;
-
-			else if ((*wst)[i] == 2) // \x02 marks start of small text
-				font = _small;
+			_wrappedText = _text;
+			wst = &_wrappedText;
 		}
-		else if (Font::isSpace((*wst)[i]) == true // keep track of spaces for word-wrapping
-			|| Font::isSeparator((*wst)[i]) == true)
-		{
-			space = i;
-			width += font->getCharSize((*wst)[i]).w;
+
+		_lineWidth.clear();
+		_lineHeight.clear();
+
+		bool start = true;
+		int
+			width = 0,
 			word = 0;
-			start = false;
-		}
-		else if ((*wst)[i] != 1) // keep track of the width of the last line and word
+		size_t
+			space = 0,
+			textIndentation = 0;
+
+		Font* font = _font;
+
+
+		for (size_t // go through the text character by character
+			i = 0;
+			i <= wst->size();
+			++i)
 		{
-			if (font->getChar((*wst)[i]) == 0)
-				(*wst)[i] = L'?';
-
-			const int charWidth = font->getCharSize((*wst)[i]).w;
-			width += charWidth;
-			word += charWidth;
-
-			if (_wrap // word-wrap if the last word doesn't fit the line
-				&& width >= getWidth()
-				&& start == false)
+			if (i == wst->size() // end of the line
+				|| Font::isLinebreak((*wst)[i]) == true)
 			{
-				if (_lang->getTextWrapping() == WRAP_WORDS
-					|| Font::isSpace((*wst)[i]) == true)
-				{
-					width -= word; // go back to the last space and put a linebreak there
-
-					size_t indent = space;
-					if (Font::isSpace((*wst)[space]) == true)
-					{
-						width -= font->getCharSize((*wst)[space]).w;
-						(*wst)[space] = L'\n';
-					}
-					else
-					{
-						wst->insert(space + 1, L"\n");
-						++indent;
-					}
-
-					if (_indent == true)
-					{
-						wst->insert(indent + 1, L" \xA0");
-						width += font->getCharSize(L' ').w + font->getCharSize(L'\xA0').w;
-					}
-				}
-				else if (_lang->getTextWrapping() == WRAP_LETTERS) // go back to the last letter and put a linebreak there
-				{
-					wst->insert(i, L"\n");
-					width -= charWidth;
-				}
-
+				// add line measurements for alignment later
 				_lineWidth.push_back(width);
 				_lineHeight.push_back(font->getCharSize(L'\n').h);
 
-				if (_lang->getTextWrapping() == WRAP_WORDS)
-					width = word;
-				else if (_lang->getTextWrapping() == WRAP_LETTERS)
-					width = 0;
-
+				width = 0;
+				word = 0;
 				start = true;
+
+				if (i == wst->size())
+					break;
+
+				else if ((*wst)[i] == 2) // \x02 marks start of small text
+					font = _small;
+			}
+			else if (Font::isSpace((*wst)[i]) == true // keep track of spaces for word-wrapping
+				|| Font::isSeparator((*wst)[i]) == true)
+			{
+				if (i == textIndentation) // store existing indentation
+					++textIndentation;
+
+				space = i;
+				width += font->getCharSize((*wst)[i]).w;
+				word = 0;
+				start = false;
+			}
+			else if ((*wst)[i] != 1) // keep track of the width of the last line and word
+			{
+				if (font->getChar((*wst)[i]) == 0)
+					(*wst)[i] = L'?';
+
+				const int charWidth = font->getCharSize((*wst)[i]).w;
+				width += charWidth;
+				word += charWidth;
+
+				if (_wrap == true // word-wrap if the last word doesn't fit the line
+					&& width >= getWidth()
+					&& start == false)
+				{
+					size_t indentLocation = i;
+
+					if (_lang->getTextWrapping() == WRAP_WORDS
+						|| Font::isSpace((*wst)[i]) == true)
+					{
+						width -= word; // go back to the last space and put a linebreak there
+
+						indentLocation = space;
+						if (Font::isSpace((*wst)[space]) == true)
+						{
+							width -= font->getCharSize((*wst)[space]).w;
+							(*wst)[space] = L'\n';
+						}
+						else
+						{
+							wst->insert(space + 1, L"\n");
+							++indentLocation;
+						}
+					}
+					else if (_lang->getTextWrapping() == WRAP_LETTERS) // go back to the last letter and put a linebreak there
+					{
+						wst->insert(i, L"\n");
+						width -= charWidth;
+					}
+
+					if (textIndentation > 0) // keep initial indentation of text
+					{
+						wst->insert(indentLocation + 1, L" \xA0", textIndentation);
+						indentLocation += textIndentation;
+					}
+
+					if (_indent == true) // indent due to word wrap
+					{
+						wst->insert(indentLocation + 1, L" \xA0");
+						width += font->getCharSize(L' ').w + font->getCharSize(L'\xA0').w;
+					}
+
+					_lineWidth.push_back(width);
+					_lineHeight.push_back(font->getCharSize(L'\n').h);
+
+					if (_lang->getTextWrapping() == WRAP_WORDS)
+						width = word;
+					else if (_lang->getTextWrapping() == WRAP_LETTERS)
+						width = 0;
+
+					start = true;
+				}
 			}
 		}
-	}
 
-	_redraw = true;
+		_redraw = true;
+	}
 }
 
 /**

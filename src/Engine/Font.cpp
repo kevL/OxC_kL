@@ -84,17 +84,13 @@ void Font::load(const YAML::Node& node)
 
 	const std::string image = "Language/" + node["image"].as<std::string>();
 
-	Surface* const fontTemp = new Surface(
-										_width,
-										_height);
+	Surface* const fontTemp = new Surface(_width, _height);
 	fontTemp->loadImage(CrossPlatform::getDataFile(image));
 
 	_surface = new Surface(
 						fontTemp->getWidth(),
 						fontTemp->getHeight());
-	_surface->setPalette(
-					_palette,
-					0,6);
+	_surface->setPalette(_palette, 0,6);
 	fontTemp->blit(_surface);
 
 	delete fontTemp;
@@ -112,9 +108,7 @@ void Font::loadTerminal()
 	_spacing = 0;
 	_monospace = true;
 
-	SDL_RWops* const rw = SDL_RWFromConstMem(
-										dosFont,
-										DOSFONT_SIZE);
+	SDL_RWops* const rw = SDL_RWFromConstMem(dosFont, DOSFONT_SIZE);
 	SDL_Surface* const s = SDL_LoadBMP_RW(rw, 0);
 	SDL_FreeRW(rw);
 
@@ -125,13 +119,9 @@ void Font::loadTerminal()
 		{192, 192, 192, 255}
 	};
 
-	_surface->setPalette(terminal, 0, 2);
+	_surface->setPalette(terminal, 0,2);
 
-	SDL_BlitSurface(
-				s,
-				0,
-				_surface->getSurface(),
-				0);
+	SDL_BlitSurface(s, 0, _surface->getSurface(), 0);
 	SDL_FreeSurface(s);
 
 	const std::wstring temp = _index;
@@ -334,12 +324,8 @@ void Font::fix(
 {
 	Surface* const srf = new Surface(width, 512);
 
-	srf->setPalette(
-				_palette,
-				0,6);
-	_surface->setPalette(
-				_palette,
-				0,6);
+	srf->setPalette(_palette, 0,6);
+	_surface->setPalette(_palette, 0,6);
 
 	int
 		x = 0,
@@ -367,9 +353,7 @@ void Font::fix(
 		}
 	}
 
-	SDL_SaveBMP(
-			srf->getSurface(),
-			file.c_str());
+	SDL_SaveBMP(srf->getSurface(), file.c_str());
 }
 
 }
