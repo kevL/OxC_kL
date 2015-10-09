@@ -349,7 +349,8 @@ GeoscapeState::GeoscapeState()
 		_month(-1),
 		_year(-1),
 		_windowPops(0),
-		_5secIterForMusic(0)
+		_delayMusicDfCheck(0),
+		_timeCache(0)
 {
 	const int
 		screenWidth		= Options::baseXGeoscape,
@@ -440,12 +441,8 @@ GeoscapeState::GeoscapeState()
 		x = _sideTop->getX() + offset_x + 3;
 		y = _sideTop->getY() + height - offset_y - 16;
 
-		_isfUfoBlobs[i] = new InteractiveSurface(
-												13,13,
-												x,y);
-		_numUfoBlobs[i] = new NumberText(
-										11,5,
-										x + 2, y + 8);
+		_isfUfoBlobs[i] = new InteractiveSurface(13, 13, x, y);
+		_numUfoBlobs[i] = new NumberText(11, 5, x + 2, y + 8);
 	}
 
 	_isfTime	= new InteractiveSurface(63, 39, screenWidth - 63, halfHeight - 28);
@@ -464,14 +461,11 @@ GeoscapeState::GeoscapeState()
 
 	_timeComp = _btn5Secs;
 
-	const Uint32
-		geoSpeed = static_cast<Uint32>(Options::geoClockSpeed),
-		dfSpeed = static_cast<Uint32>(Options::dogfightSpeed);
-	_geoTimer		= new Timer(geoSpeed); // <- Volutar smooth_globe, "20"
-	_dfZoomInTimer	= new Timer(geoSpeed);
-	_dfZoomOutTimer	= new Timer(geoSpeed);
-	_dfStartTimer	= new Timer(dfSpeed);
-	_dfTimer		= new Timer(dfSpeed);
+	_geoTimer		= new Timer(static_cast<Uint32>(FAST_GEO_INTERVAL)); // Volutar_smoothGlobe shadows.
+	_dfZoomInTimer	= new Timer(static_cast<Uint32>(Options::geoClockSpeed));
+	_dfZoomOutTimer	= new Timer(static_cast<Uint32>(Options::geoClockSpeed));
+	_dfStartTimer	= new Timer(static_cast<Uint32>(Options::dogfightSpeed));
+	_dfTimer		= new Timer(static_cast<Uint32>(Options::dogfightSpeed));
 
 	_txtDebug = new Text(320, 18);
 
@@ -602,7 +596,7 @@ GeoscapeState::GeoscapeState()
 //	_btn5Secs->setTextColor(Palette::blockOffset(15)+5);
 	_btn5Secs->setText(tr("STR_5_SECONDS"));
 	_btn5Secs->setGroup(&_timeComp);
-	_btn5Secs->onKeyboardPress((ActionHandler)& GeoscapeState::btnTimeCompressionPress, Options::keyGeoSpeed1);
+	_btn5Secs->onKeyboardPress((ActionHandler)& GeoscapeState::keyTimeCompressionPress, Options::keyGeoSpeed1);
 	_btn5Secs->setGeoscapeButton(true);
 
 	_btn1Min->initText(_game->getResourcePack()->getFont("FONT_GEO_BIG"), _game->getResourcePack()->getFont("FONT_GEO_SMALL"), _game->getLanguage());
@@ -611,7 +605,7 @@ GeoscapeState::GeoscapeState()
 //	_btn1Min->setTextColor(Palette::blockOffset(15)+5);
 	_btn1Min->setText(tr("STR_1_MINUTE"));
 	_btn1Min->setGroup(&_timeComp);
-	_btn1Min->onKeyboardPress((ActionHandler)& GeoscapeState::btnTimeCompressionPress, Options::keyGeoSpeed2);
+	_btn1Min->onKeyboardPress((ActionHandler)& GeoscapeState::keyTimeCompressionPress, Options::keyGeoSpeed2);
 	_btn1Min->setGeoscapeButton(true);
 
 	_btn5Mins->initText(_game->getResourcePack()->getFont("FONT_GEO_BIG"), _game->getResourcePack()->getFont("FONT_GEO_SMALL"), _game->getLanguage());
@@ -620,7 +614,7 @@ GeoscapeState::GeoscapeState()
 //	_btn5Mins->setTextColor(Palette::blockOffset(15)+5);
 	_btn5Mins->setText(tr("STR_5_MINUTES"));
 	_btn5Mins->setGroup(&_timeComp);
-	_btn5Mins->onKeyboardPress((ActionHandler)& GeoscapeState::btnTimeCompressionPress, Options::keyGeoSpeed3);
+	_btn5Mins->onKeyboardPress((ActionHandler)& GeoscapeState::keyTimeCompressionPress, Options::keyGeoSpeed3);
 	_btn5Mins->setGeoscapeButton(true);
 
 	_btn30Mins->initText(_game->getResourcePack()->getFont("FONT_GEO_BIG"), _game->getResourcePack()->getFont("FONT_GEO_SMALL"), _game->getLanguage());
@@ -629,7 +623,7 @@ GeoscapeState::GeoscapeState()
 //	_btn30Mins->setTextColor(Palette::blockOffset(15)+5);
 	_btn30Mins->setText(tr("STR_30_MINUTES"));
 	_btn30Mins->setGroup(&_timeComp);
-	_btn30Mins->onKeyboardPress((ActionHandler)& GeoscapeState::btnTimeCompressionPress, Options::keyGeoSpeed4);
+	_btn30Mins->onKeyboardPress((ActionHandler)& GeoscapeState::keyTimeCompressionPress, Options::keyGeoSpeed4);
 	_btn30Mins->setGeoscapeButton(true);
 
 	_btn1Hour->initText(_game->getResourcePack()->getFont("FONT_GEO_BIG"), _game->getResourcePack()->getFont("FONT_GEO_SMALL"), _game->getLanguage());
@@ -638,7 +632,7 @@ GeoscapeState::GeoscapeState()
 //	_btn1Hour->setTextColor(Palette::blockOffset(15)+5);
 	_btn1Hour->setText(tr("STR_1_HOUR"));
 	_btn1Hour->setGroup(&_timeComp);
-	_btn1Hour->onKeyboardPress((ActionHandler)& GeoscapeState::btnTimeCompressionPress, Options::keyGeoSpeed5);
+	_btn1Hour->onKeyboardPress((ActionHandler)& GeoscapeState::keyTimeCompressionPress, Options::keyGeoSpeed5);
 	_btn1Hour->setGeoscapeButton(true);
 
 	_btn1Day->initText(_game->getResourcePack()->getFont("FONT_GEO_BIG"), _game->getResourcePack()->getFont("FONT_GEO_SMALL"), _game->getLanguage());
@@ -647,7 +641,7 @@ GeoscapeState::GeoscapeState()
 //	_btn1Day->setTextColor(Palette::blockOffset(15)+5);
 	_btn1Day->setText(tr("STR_1_DAY"));
 	_btn1Day->setGroup(&_timeComp);
-	_btn1Day->onKeyboardPress((ActionHandler)& GeoscapeState::btnTimeCompressionPress, Options::keyGeoSpeed6);
+	_btn1Day->onKeyboardPress((ActionHandler)& GeoscapeState::keyTimeCompressionPress, Options::keyGeoSpeed6);
 	_btn1Day->setGeoscapeButton(true); */
 
 	// revert to ImageButtons.
@@ -680,9 +674,9 @@ GeoscapeState::GeoscapeState()
 					Options::keyGeoUfopedia);
 
 	_btnOptions->copy(geobord);
-	_btnOptions->onMouseClick((ActionHandler)& GeoscapeState::btnOptionsClick);
-	_btnOptions->onKeyboardPress(
-					(ActionHandler)& GeoscapeState::btnOptionsClick,
+	_btnOptions->onMouseClick((ActionHandler)& GeoscapeState::btnOptionsClick);	// why the f are these buttons calling resetTimeCacheClick() AND EVEN GETTING
+	_btnOptions->onKeyboardPress(												// THE SENDER RIGHT when a true click on a time-compression btn does not.
+					(ActionHandler)& GeoscapeState::btnOptionsClick,			// Note that happens only if the 'resetTimeCache' is on a Press, not a Click! holy diana
 					Options::keyGeoOptions); // Escape key.
 //	_btnOptions->onKeyboardPress( // note: These interfere w/ opening minimized Dogfights.
 //					(ActionHandler)& GeoscapeState::btnOptionsClick,
@@ -712,42 +706,48 @@ GeoscapeState::GeoscapeState()
 	_btn5Secs->copy(geobord);
 	_btn5Secs->setGroup(&_timeComp);
 	_btn5Secs->onKeyboardPress(
-					(ActionHandler)& GeoscapeState::btnTimeCompressionPress,
+					(ActionHandler)& GeoscapeState::keyTimeCompressionPress,
 					Options::keyGeoSpeed1);
+	_btn5Secs->onMouseClick((ActionHandler)& GeoscapeState::resetTimeCacheClick);
 
 	_btn1Min->copy(geobord);
 	_btn1Min->setGroup(&_timeComp);
 	_btn1Min->onKeyboardPress(
-					(ActionHandler)& GeoscapeState::btnTimeCompressionPress,
+					(ActionHandler)& GeoscapeState::keyTimeCompressionPress,
 					Options::keyGeoSpeed2);
+	_btn1Min->onMouseClick((ActionHandler)& GeoscapeState::resetTimeCacheClick);
 
 	_btn5Mins->copy(geobord);
 	_btn5Mins->setGroup(&_timeComp);
 	_btn5Mins->onKeyboardPress(
-					(ActionHandler)& GeoscapeState::btnTimeCompressionPress,
+					(ActionHandler)& GeoscapeState::keyTimeCompressionPress,
 					Options::keyGeoSpeed3);
+	_btn5Mins->onMouseClick((ActionHandler)& GeoscapeState::resetTimeCacheClick);
 
 	_btn30Mins->copy(geobord);
 	_btn30Mins->setGroup(&_timeComp);
 	_btn30Mins->onKeyboardPress(
-					(ActionHandler)& GeoscapeState::btnTimeCompressionPress,
+					(ActionHandler)& GeoscapeState::keyTimeCompressionPress,
 					Options::keyGeoSpeed4);
+	_btn30Mins->onMouseClick((ActionHandler)& GeoscapeState::resetTimeCacheClick);
 
 	_btn1Hour->copy(geobord);
 	_btn1Hour->setGroup(&_timeComp);
 	_btn1Hour->onKeyboardPress(
-					(ActionHandler)& GeoscapeState::btnTimeCompressionPress,
+					(ActionHandler)& GeoscapeState::keyTimeCompressionPress,
 					Options::keyGeoSpeed5);
+	_btn1Hour->onMouseClick((ActionHandler)& GeoscapeState::resetTimeCacheClick);
 
 	_btn1Day->copy(geobord);
 	_btn1Day->setGroup(&_timeComp);
 	_btn1Day->onKeyboardPress(
-					(ActionHandler)& GeoscapeState::btnTimeCompressionPress,
+					(ActionHandler)& GeoscapeState::keyTimeCompressionPress,
 					Options::keyGeoSpeed6);
+	_btn1Day->onMouseClick((ActionHandler)& GeoscapeState::resetTimeCacheClick);
 
 
 	_btnDetail->copy(geobord);
-	_btnDetail->setColor(Palette::blockOffset(15)+9);
+	_btnDetail->setColor(PURPLE_D);
 	_btnDetail->onMousePress((ActionHandler)& GeoscapeState::btnDetailPress);
 
 	_btnDetail->onKeyboardPress(
@@ -916,9 +916,9 @@ GeoscapeState::GeoscapeState()
 	_dfStartTimer->onTimer((StateHandler)& GeoscapeState::startDogfight);
 	_dfTimer->onTimer((StateHandler)& GeoscapeState::thinkDogfights);
 
-	updateTimeDisplay();
+//	updateTimeDisplay();
 
-	kL_geoMusicPlaying = false;
+	kL_geoMusicPlaying =
 	kL_geoMusicReturnState = false;
 }
 
@@ -1055,13 +1055,15 @@ void GeoscapeState::handle(Action* action)
 }
 
 /**
- * Updates the timer display and resets the palette since it's bound to change
- * on other screens.
+ * Updates the timer display and resets the palette and checks for/ plays
+ * geoscape music since these are bound to change on other screens.
+ * @note Also sets up funds and missions at game start.
  */
 void GeoscapeState::init()
 {
 	State::init();
 
+	_timeCache = 0;
 	updateTimeDisplay();
 
 	_globe->onMouseClick((ActionHandler)& GeoscapeState::globeClick);
@@ -1145,7 +1147,6 @@ void GeoscapeState::think()
 				_pause = false;
 				_geoTimer->think(this, NULL);
 			}
-
 			_dfTimer->think(this, NULL);
 		}
 
@@ -1248,15 +1249,15 @@ void GeoscapeState::updateTimeDisplay()
 
 	if (_gameSave->getMonthsPassed() != -1) // update Player's current score
 	{
-		const size_t ent = _gameSave->getFundsList().size() - 1; // use fundsList to determine which entries in other vectors to use for the current month.
+		const size_t id = _gameSave->getFundsList().size() - 1; // use fundsList to determine which entries in other vectors to use for the current month.
 
-		int score = _gameSave->getResearchScores().at(ent);
+		int score = _gameSave->getResearchScores().at(id);
 		for (std::vector<Region*>::const_iterator
 				i = _gameSave->getRegions()->begin();
 				i != _gameSave->getRegions()->end();
 				++i)
 		{
-			score += (*i)->getActivityXCom().at(ent) - (*i)->getActivityAlien().at(ent);
+			score += (*i)->getActivityXCom().at(id) - (*i)->getActivityAlien().at(id);
 		}
 		_txtScore->setText(Text::formatNumber(score));
 	}
@@ -1264,14 +1265,18 @@ void GeoscapeState::updateTimeDisplay()
 		_txtScore->setText(Text::formatNumber(0));
 
 
-	std::wostringstream
-		woststr1,
-		woststr2;
-
 	if (_timeComp != _btn5Secs)
 		_txtSec->setVisible();
 	else
-		_txtSec->setVisible(_gameSave->getTime()->getSecond() % 15 == 0);
+	{
+		const int sec = _gameSave->getTime()->getSecond();
+		_txtSec->setVisible(sec % 15 > 9);
+//		_txtSec->setVisible(_gameSave->getTime()->getSecond() % 15 == 0);
+	}
+
+	std::wostringstream
+		woststr1,
+		woststr2;
 
 	woststr1 << std::setfill(L'0') << std::setw(2) << _gameSave->getTime()->getMinute();
 	_txtMin->setText(woststr1.str());
@@ -1332,59 +1337,62 @@ std::wstring GeoscapeState::convertDateToMonth(int date)
  * @note The game always advances in 5sec cycles regardless of the speed
  * otherwise this will skip important steps. Instead it just keeps advancing the
  * timer until the next compression step - eg. the next day on 1 Day speed - or
- * until an event occurs. Updating the screen on each step would be
- * cumbersomely slow.
+ * until an event occurs.
  */
 void GeoscapeState::timeAdvance()
 {
 	if (_pauseHard == false)
 	{
-		int timeSpan;
-		if		(_timeComp == _btn5Secs)	timeSpan = 1;
-		else if (_timeComp == _btn1Min)		timeSpan = 12;
-		else if (_timeComp == _btn5Mins)	timeSpan = 12 * 5;
-		else if (_timeComp == _btn30Mins)	timeSpan = 12 * 5 * 6;
-		else if (_timeComp == _btn1Hour)	timeSpan = 12 * 5 * 6 * 2;
-		else if (_timeComp == _btn1Day)		timeSpan = 12 * 5 * 6 * 2 * 24;
+		int
+			timeLapse,
+			timeLap_t;
+
+		if		(_timeComp == _btn5Secs)	timeLapse = 1;
+		else if (_timeComp == _btn1Min)		timeLapse = 12;
+		else if (_timeComp == _btn5Mins)	timeLapse = 12 * 5;
+		else if (_timeComp == _btn30Mins)	timeLapse = 12 * 5 * 6;
+		else if (_timeComp == _btn1Hour)	timeLapse = 12 * 5 * 6 * 2;
+		else if (_timeComp == _btn1Day)		timeLapse = 12 * 5 * 6 * 2 * 24;
 		else
-			timeSpan = 0;
+			timeLapse = 0; // what'ver.
 
+		timeLapse *= 5; // true one-second intervals. based on Volutar's smoothGlobe.
 
-/*		// Volutar smooth_globe:
-		static int timeRem;
+		timeLap_t = ((_timeCache + timeLapse) * 4) / Options::geoClockSpeed;
+		_timeCache = ((_timeCache + timeLapse) * 4) % Options::geoClockSpeed;
 
-		timesSpan *= 5;
-
-		int timeSpan_tmp = ((timeRem + timeSpan) * 4) / Options::geoClockSpeed; // kL_options: 132
-				 timeRem = ((timeRem + timeSpan) * 4) % Options::geoClockSpeed;
-
-		timeSpan = timeSpan_tmp;
-		if (timeSpan == 0) return; // no advance. Volutar_end. */
-
-
-		for (int
-				i = 0;
-				i != timeSpan && _pause == false;
-				++i)
+		if (timeLap_t != 0)
 		{
-			const TimeTrigger trigger = _gameSave->getTime()->advance();
-			switch (trigger)
+			bool update = false;
+			for (int
+					i = 0;
+					i != timeLap_t && _pause == false;
+					++i)
 			{
-				case TIME_1MONTH:	time1Month();
-				case TIME_1DAY:		time1Day();
-				case TIME_1HOUR:	time1Hour();
-				case TIME_30MIN:	time30Minutes();
-				case TIME_10MIN:	time10Minutes();
-				case TIME_5SEC:		time5Seconds();
+				const TimeTrigger trigger = _gameSave->getTime()->advance();
+				if (trigger != TIME_1SEC)
+				{
+					update = true;
+					switch (trigger)
+					{
+						case TIME_1MONTH:	time1Month();
+						case TIME_1DAY:		time1Day();
+						case TIME_1HOUR:	time1Hour();
+						case TIME_30MIN:	time30Minutes();
+						case TIME_10MIN:	time10Minutes();
+						case TIME_5SEC:		time5Seconds();
+					}
+				}
 			}
+
+			if (update == true)
+			{
+				_pause = (_dogfightsToStart.empty() == false);
+				updateTimeDisplay();
+			}
+			_globe->draw();
 		}
-
-		_pause = (_dogfightsToStart.empty() == false);
-		updateTimeDisplay();
-
-		_globe->draw();
 	}
-//	_globe->draw();
 }
 
 /**
@@ -1593,7 +1601,8 @@ void GeoscapeState::time5Seconds()
 						(*j)->returnToBase();
 					}
 				}
-				else (*j)->setInDogfight(false); // safety.
+				else
+					(*j)->setInDogfight(false); // safety.
 			}
 
 			if (_dfZoomInTimer->isRunning() == false
@@ -1758,10 +1767,8 @@ void GeoscapeState::time5Seconds()
 	// But now it's also used for resuming Geoscape music on returning from another state ....
 	if (kL_geoMusicPlaying == false)
 	{
-		++_5secIterForMusic;
-
-		if (_5secIterForMusic > 3	// this is because initDfMusic takes uh 2+ passes before the _dogfight vector fills.
-			|| initDfMusic == true	// and if it doesn't fill by that time I want some music playing.
+		if (++_delayMusicDfCheck > 3	// this is because initDfMusic takes uh 2+ passes before the _dogfight vector fills.
+			|| initDfMusic == true		// and if it doesn't fill by that time I want some music playing.
 			|| kL_geoMusicReturnState == true)
 		{
 			kL_geoMusicPlaying = true;	// if there's a dogfight then dogfight music
@@ -4364,17 +4371,40 @@ void GeoscapeState::setupLandMission() // private.
 } */
 
 /**
- * Handler for clicking a time-compression button.
- * @param action - pointer to the mouse Action
+ * Handler for hot-keying a time-compression key.
+ * @note The 0xC_kL build does not accept mouse-clicks here; now that I look at
+ * it neither does the vanilla code.
+ * @param action - pointer to the hot-key Action
  */
-void GeoscapeState::btnTimeCompressionPress(Action* action) // private.
+void GeoscapeState::keyTimeCompressionPress(Action* action) // private.
 {
-	SDL_Event ev;
-	ev.type = SDL_MOUSEBUTTONDOWN;
-	ev.button.button = SDL_BUTTON_LEFT;
+	//Log(LOG_INFO) << "reset time cache KEY";
+	if (action->getSender() != _timeComp)
+	{
+		//Log(LOG_INFO) << ". accepted";
+		_timeCache = 0;
 
-	Action act = Action(&ev, 0.,0., 0,0);
-	action->getSender()->mousePress(&act, this);
+		SDL_Event ev; // so let's fake a mouse-click
+		ev.type = SDL_MOUSEBUTTONDOWN;
+		ev.button.button = SDL_BUTTON_LEFT;
+
+		Action act = Action(&ev, 0.,0., 0,0);
+		action->getSender()->mousePress(&act, this);
+	}
+}
+
+/**
+ * Handler for clicking a time-compression button.
+ * @param action - pointer to an Action
+ */
+void GeoscapeState::resetTimeCacheClick(Action* action) // private.
+{
+	//Log(LOG_INFO) << "reset time cache BTN";
+//	if (action->getSender() != _timeComp) //action->getDetails()->button.button == SDL_BUTTON_LEFT
+//	{
+		//Log(LOG_INFO) << ". accepted";
+	_timeCache = 0;
+//	}
 }
 
 /**

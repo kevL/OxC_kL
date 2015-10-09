@@ -80,11 +80,8 @@ void ImageButton::setGroup(ImageButton** group)
 {
 	_group = group;
 
-	if (_group != NULL
-		&& *_group == this)
-	{
+	if (_group != NULL && *_group == this)
 		invert(_color + 3);
-	}
 }
 
 /**

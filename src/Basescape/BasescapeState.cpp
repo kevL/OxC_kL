@@ -764,9 +764,9 @@ void BasescapeState::miniRightClick(Action*)
 		_game->getSavedGame()->setGlobeLongitude(base->getLongitude());
 		_game->getSavedGame()->setGlobeLatitude(base->getLatitude());
 
-		kL_reCenter =
-		kL_geoMusicReturnState = true;
 		kL_geoMusicPlaying = false;
+		kL_geoMusicReturnState =
+		kL_reCenter = true;
 
 		_game->popState();
 		kL_soundPop->play(Mix_GroupAvailable(0));

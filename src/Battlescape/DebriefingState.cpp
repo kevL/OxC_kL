@@ -198,6 +198,8 @@ DebriefingState::DebriefingState()
 	_lstTotal->setColumns(2, 244,36);
 	_lstTotal->setDot();
 
+	_txtBaseLabel->setAlign(ALIGN_RIGHT);	// note: Text is set in prepareDebriefing() before
+											// a possibly failed BaseDefense dangles '_base' ptr.
 
 	prepareDebriefing(); // <- |-- GATHER ALL DATA HERE <- < ||
 
@@ -922,7 +924,6 @@ void DebriefingState::prepareDebriefing() // private.
 			_base = *i;
 
 			_txtBaseLabel->setText(_base->getName(_game->getLanguage()));
-			_txtBaseLabel->setAlign(ALIGN_RIGHT);
 
 			lon = _base->getLongitude();
 			lat = _base->getLatitude();

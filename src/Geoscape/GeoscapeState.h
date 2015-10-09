@@ -67,14 +67,16 @@ class GeoscapeState
 {
 
 private:
+	static const int FAST_GEO_INTERVAL = 20;
 	static const size_t UFO_HOTBLOBS = 16;
 	static const Uint8
-		BROWN		= 53,
+		BROWN		=  53,
 		GREEN		= 112,
 		RED			= 133,
 		SLATE		= 164,
 		SLATE_D		= 170,
-		GREEN_SEA	= 242;
+		GREEN_SEA	= 242,
+		PURPLE_D	= 249;
 
 	bool
 		_dfCenterCurrentCoords,
@@ -84,10 +86,11 @@ private:
 		_pause,
 		_pauseHard;
 	int
-		_5secIterForMusic,
+		_delayMusicDfCheck,
 		_day,
 		_month,
-		_year;
+		_year,
+		_timeCache;
 	int64_t _windowPops;
 	size_t _dfMinimized;
 	double
@@ -170,8 +173,10 @@ private:
 	/// Process each individual mission script command.
 	bool processCommand(RuleMissionScript* const missionCommand);
 
+	/// Handler for hot-keying a time-compression key.
+	void keyTimeCompressionPress(Action* action);
 	/// Handler for clicking a time-compression button.
-	void btnTimeCompressionPress(Action* action);
+	void resetTimeCacheClick(Action* action);
 	/// Handler for clicking pause.
 	void btnPauseClick(Action* action);
 	/// Handler for clicking a visible UFO button.

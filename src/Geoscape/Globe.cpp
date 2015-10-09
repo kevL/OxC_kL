@@ -1377,7 +1377,8 @@ Cord Globe::getSunDirection(
 }
 
 /**
- *
+ * Shadows the earth according to the sun's direction.
+ * @note Also handles the terminator (noise).
  */
 void Globe::drawShadow()
 {
@@ -1398,9 +1399,7 @@ void Globe::drawShadow()
 	ShaderDraw<CreateShadow>(
 						ShaderSurface(this),
 						earth,
-						ShaderScalar(getSunDirection(
-												_cenLon,
-												_cenLat)),
+						ShaderScalar(getSunDirection(_cenLon, _cenLat)),
 						noise);
 	unlock();
 }

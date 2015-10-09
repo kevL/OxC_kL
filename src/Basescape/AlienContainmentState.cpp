@@ -123,6 +123,9 @@ AlienContainmentState::AlienContainmentState(
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& AlienContainmentState::btnOkClick,
 					Options::keyOk);
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& AlienContainmentState::btnOkClick,
+					Options::keyOkKeypad);
 	_btnOk->setVisible(false);
 
 	_btnCancel->setText(tr("STR_CANCEL"));
