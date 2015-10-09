@@ -176,6 +176,9 @@ DebriefingState::DebriefingState()
 					Options::keyOk);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& DebriefingState::btnOkClick,
+					Options::keyOkKeypad);
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& DebriefingState::btnOkClick,
 					Options::keyCancel);
 
 	_txtTitle->setBig();
@@ -184,23 +187,19 @@ DebriefingState::DebriefingState()
 	_txtQuantity->setText(tr("STR_QUANTITY_UC"));
 	_txtScore->setText(tr("STR_SCORE"));
 
-	_lstStats->setColumns(3, 176, 60, 36);
+	_lstStats->setColumns(3, 176,60,36);
 	_lstStats->setMargin();
 	_lstStats->setDot();
 
-	_lstRecovery->setColumns(3, 176, 60, 36);
+	_lstRecovery->setColumns(3, 176,60,36);
 	_lstRecovery->setMargin();
 	_lstRecovery->setDot();
 
-	_lstTotal->setColumns(2, 244, 36);
+	_lstTotal->setColumns(2, 244,36);
 	_lstTotal->setDot();
 
 
 	prepareDebriefing(); // <- |-- GATHER ALL DATA HERE <- < ||
-
-
-	_txtBaseLabel->setText(_base->getName(_game->getLanguage()));
-	_txtBaseLabel->setAlign(ALIGN_RIGHT);
 
 
 	int
@@ -354,7 +353,7 @@ DebriefingState::DebriefingState()
 		}
 	}
 
-	if (_skirmish == false)
+	if (_skirmish == false && _missionCost != 0)
 	{
 //		_txtCost->setText(tr("STR_COST_").arg(Text::formatFunding(_missionCost)));
 		_txtCost->setText(Text::formatFunding(_missionCost));
@@ -508,9 +507,7 @@ DebriefingState::~DebriefingState()
 void DebriefingState::init()
 {
 	State::init();
-	_game->getResourcePack()->playMusic(
-									_music,
-									"",1);
+	_game->getResourcePack()->playMusic(_music, "", 1);
 }
 
 /**
@@ -765,7 +762,7 @@ void DebriefingState::prepareDebriefing() // private.
 	bool missionAccomplished = !aborted
 							 || battleSave->allObjectivesDestroyed() == true;
 
-	std::vector<Craft*>::const_iterator ptrCraft;
+	std::vector<Craft*>::const_iterator pCraft;
 
 	_missionStatistics->timeStat = *_gameSave->getTime();
 	_missionStatistics->type = battleSave->getTacticalType();
@@ -892,7 +889,7 @@ void DebriefingState::prepareDebriefing() // private.
 
 				_base = *i;
 				_craft = *j;
-				ptrCraft = j;
+				pCraft = j;
 
 				_craft->returnToBase();
 				_craft->setTacticalReturn();
@@ -924,6 +921,9 @@ void DebriefingState::prepareDebriefing() // private.
 		{
 			_base = *i;
 
+			_txtBaseLabel->setText(_base->getName(_game->getLanguage()));
+			_txtBaseLabel->setAlign(ALIGN_RIGHT);
+
 			lon = _base->getLongitude();
 			lat = _base->getLatitude();
 
@@ -946,8 +946,7 @@ void DebriefingState::prepareDebriefing() // private.
 						facDestroyed = true; // not in stockcode
 						_base->destroyFacility(j);
 					}
-					else
-						++j;
+					else ++j;
 				}
 
 				if (facDestroyed == true) // kL_add <-
@@ -1044,20 +1043,16 @@ void DebriefingState::prepareDebriefing() // private.
 			if ((*i)->isInBattlescape() == true)
 			{
 				_txtRecovery->setText(tr("STR_ALIEN_BASE_RECOVERY"));
-
 				missionAccomplished = true;
 
-				if (aborted == true
-					|| soldierLive == 0)
-				{
+				if (aborted == true || soldierLive == 0)
 					missionAccomplished = battleSave->allObjectivesDestroyed();
-				}
 
 				if (missionAccomplished == true)
 				{
 					objectiveCompleteScore = std::max(
 												(objectiveCompleteScore + 9) / 10,
-												objectiveCompleteScore - (_diff * 50));
+												 objectiveCompleteScore - (_diff * 50));
 
 					if (objectiveCompleteText.empty() == false)
 						addStat(
@@ -1145,9 +1140,8 @@ void DebriefingState::prepareDebriefing() // private.
 				if (sol != NULL) // xCom soldier.
 				{
 					if (_skirmish == false)
-						_missionCost += _base->soldierExpense(
-															sol,
-															true);
+						_missionCost += _base->soldierExpense(sol, true);
+
 					addStat(
 						"STR_XCOM_OPERATIVES_KILLED",
 						-value);
@@ -1159,9 +1153,7 @@ void DebriefingState::prepareDebriefing() // private.
 					{
 						if (*j == sol) // the specific soldier at Base..
 						{
-							(*i)->postMissionProcedures(
-													_gameSave,
-													true);
+							(*i)->postMissionProcedures(_gameSave, true);
 							(*j)->die(_gameSave);
 
 							delete *j;
@@ -1297,9 +1289,7 @@ void DebriefingState::prepareDebriefing() // private.
 						{
 							if (*j == sol)
 							{
-								(*i)->postMissionProcedures(
-														_gameSave,
-														true);
+								(*i)->postMissionProcedures(_gameSave, true);
 								(*i)->getStatistics()->MIA = true;
 								(*i)->instaKill();
 
@@ -1318,7 +1308,6 @@ void DebriefingState::prepareDebriefing() // private.
 			else if (faction == FACTION_PLAYER		// This section is for units still standing.
 				&& orgFaction == FACTION_HOSTILE	// ie, MC'd aLiens
 				&& (*i)->isOut_t(OUT_STAT) == false
-//				&& (*i)->isOut() == false
 				&& (aborted == false
 					|| (*i)->isInExitArea() == true))
 				// kL_note: so, this never actually runs unless early psi-exit
@@ -1362,8 +1351,7 @@ void DebriefingState::prepareDebriefing() // private.
 
 	if (_craft != NULL // Craft lost.
 		&& (soldierLive == 0
-			|| (aborted == true
-				&& soldierExit == 0)))
+			|| (aborted == true && soldierExit == 0)))
 	{
 		addStat(
 			"STR_XCOM_CRAFT_LOST",
@@ -1379,8 +1367,7 @@ void DebriefingState::prepareDebriefing() // private.
 				delete *i;
 				i = _base->getSoldiers()->erase(i);
 			}
-			else
-				 ++i;
+			else ++i;
 		}
 
 		// Since this is not a Base Defense tactical the Craft can safely be
@@ -1390,7 +1377,7 @@ void DebriefingState::prepareDebriefing() // private.
 		delete _craft;
 
 		_craft = NULL; // To avoid a crash down there!! uh, not after return; it won't.
-		_base->getCrafts()->erase(ptrCraft);
+		_base->getCrafts()->erase(pCraft);
 		_txtTitle->setText(tr("STR_CRAFT_IS_LOST"));
 
 		return;
@@ -1414,9 +1401,8 @@ void DebriefingState::prepareDebriefing() // private.
 
 	std::string tacResult;
 
-	if ((aborted == false					// Run through all tiles to recover UFO components and items.
-			|| missionAccomplished == true)	// RECOVER UFO:
-		&& soldierLive > 0)
+	if ((aborted == false || missionAccomplished == true)	// Run through all tiles to recover UFO components and items.
+		&& soldierLive > 0)									// RECOVER UFO:
 	{
 		switch (tacType)
 		{
@@ -1521,8 +1507,7 @@ void DebriefingState::prepareDebriefing() // private.
 				objectiveFailedText,
 				objectiveFailedScore);
 
-		if (soldierLive > 0
-			&& _destroyXComBase == false)
+		if (soldierLive > 0 && _destroyXComBase == false)
 		{
 			for (size_t // recover items from the ground
 					i = 0;
@@ -1575,11 +1560,8 @@ void DebriefingState::prepareDebriefing() // private.
 			}
 
 			// recoverable battlescape tiles are now converted to items and put in base inventory
-			if ((*i)->recover == true
-				&& (*i)->qty > 0)
-			{
+			if ((*i)->recover == true && (*i)->qty > 0)
 				_base->getStorageItems()->addItem((*i)->item, (*i)->qty);
-			}
 		}
 
 		// assuming this was a multi-stage mission
@@ -1628,7 +1610,6 @@ void DebriefingState::prepareDebriefing() // private.
 				{
 					delete *i;
 					_gameSave->getBases()->erase(i);
-
 					break;
 				}
 			}
@@ -1649,8 +1630,7 @@ void DebriefingState::prepareDebriefing() // private.
 					delete *i;
 					i = _gameSave->getUfos()->erase(i);
 				}
-				else
-					++i;
+				else ++i;
 			}
 
 			for (std::vector<AlienMission*>::const_iterator
@@ -1662,7 +1642,6 @@ void DebriefingState::prepareDebriefing() // private.
 				{
 					delete *i;
 					_gameSave->getAlienMissions().erase(i);
-
 					break;
 				}
 			}

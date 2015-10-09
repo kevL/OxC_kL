@@ -42,7 +42,7 @@ class BaseDestroyedState
 {
 
 private:
-	Base* _base;
+	const Base* _base;
 	Globe* _globe;
 	Text* _txtMessage;
 	TextButton
@@ -54,7 +54,7 @@ private:
 	public:
 		/// Creates the Base Destroyed state.
 		BaseDestroyedState(
-						Base* const base,
+						const Base* const base,
 						Globe* const globe);
 		/// Cleans up the Base Destroyed state.
 		~BaseDestroyedState();

@@ -133,6 +133,9 @@ CraftPatrolState::CraftPatrolState(
 	_btnRedirect->onKeyboardPress(
 					(ActionHandler)& CraftPatrolState::btnRedirectClick,
 					Options::keyOk);
+	_btnRedirect->onKeyboardPress(
+					(ActionHandler)& CraftPatrolState::btnRedirectClick,
+					Options::keyOkKeypad);
 
 
 	SurfaceSet* const srt = _game->getResourcePack()->getSurfaceSet("INTICON.PCK");
@@ -182,9 +185,7 @@ void CraftPatrolState::btnInfoClick(Action*)
 {
 	_geo->resetTimer();
 	_game->popState();
-	_game->pushState(new GeoscapeCraftState(
-										_craft,
-										_geo));
+	_game->pushState(new GeoscapeCraftState(_craft, _geo));
 }
 
 /**
@@ -229,9 +230,7 @@ void CraftPatrolState::btnRedirectClick(Action*)
 {
 	_geo->resetTimer();
 	_game->popState();
-	_game->pushState(new SelectDestinationState(
-											_craft,
-											_geo->getGlobe()));
+	_game->pushState(new SelectDestinationState(_craft, _geo->getGlobe()));
 }
 
 /**

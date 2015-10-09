@@ -68,6 +68,13 @@ class GeoscapeState
 
 private:
 	static const size_t UFO_HOTBLOBS = 16;
+	static const Uint8
+		BROWN		= 53,
+		GREEN		= 112,
+		RED			= 133,
+		SLATE		= 164,
+		SLATE_D		= 170,
+		GREEN_SEA	= 242;
 
 	bool
 		_dfCenterCurrentCoords,

@@ -467,7 +467,7 @@ GeoscapeState::GeoscapeState()
 	const Uint32
 		geoSpeed = static_cast<Uint32>(Options::geoClockSpeed),
 		dfSpeed = static_cast<Uint32>(Options::dogfightSpeed);
-	_geoTimer		= new Timer(geoSpeed);
+	_geoTimer		= new Timer(geoSpeed); // <- Volutar smooth_globe, "20"
 	_dfZoomInTimer	= new Timer(geoSpeed);
 	_dfZoomOutTimer	= new Timer(geoSpeed);
 	_dfStartTimer	= new Timer(dfSpeed);
@@ -843,7 +843,7 @@ GeoscapeState::GeoscapeState()
 					(ActionHandler)& GeoscapeState::btnZoomOutLeftClick,
 					SDLK_KP_MINUS);
 
-	_ufoDetected->setColor(164); // slate gray
+	_ufoDetected->setColor(SLATE);
 	_ufoDetected->setBig();
 	_ufoDetected->setVisible(false);
 
@@ -886,27 +886,27 @@ GeoscapeState::GeoscapeState()
 		_txtScore->setVisible(false);
 	}
 
-	_txtHour->setColor(242); // sea green
+	_txtHour->setColor(GREEN_SEA);
 	_txtHour->setAlign(ALIGN_RIGHT);
 	_txtHour->setBig();
 
-	_txtColon->setColor(242);
+	_txtColon->setColor(GREEN_SEA);
 	_txtColon->setText(L":");
 	_txtColon->setBig();
 
-	_txtMin->setColor(242);
+	_txtMin->setColor(GREEN_SEA);
 	_txtMin->setBig();
 
-	_txtSec->setColor(242);
+	_txtSec->setColor(GREEN_SEA);
 	_txtSec->setText(L".");
 
-	_txtDay->setColor(242);
+	_txtDay->setColor(GREEN_SEA);
 	_txtDay->setAlign(ALIGN_RIGHT);
 
-	_txtMonth->setColor(242);
+	_txtMonth->setColor(GREEN_SEA);
 	_txtMonth->setAlign(ALIGN_CENTER);
 
-	_txtYear->setColor(242);
+	_txtYear->setColor(GREEN_SEA);
 
 	_geoTimer->onTimer((StateHandler)& GeoscapeState::timeAdvance);
 	_geoTimer->start();
@@ -1078,19 +1078,19 @@ void GeoscapeState::init()
 
 	if (kL_geoMusicPlaying == true)
 	{
-		std::string track;
+		std::string trackType;
 		if (_dogfights.empty() == true
 			&& _dfStartTimer->isRunning() == false)
 		{
-			track = OpenXcom::res_MUSIC_GEO_GLOBE;
+			trackType = OpenXcom::res_MUSIC_GEO_GLOBE;
 		}
 		else
-			track = OpenXcom::res_MUSIC_GEO_INTERCEPT;
+			trackType = OpenXcom::res_MUSIC_GEO_INTERCEPT;
 
-		if (_game->getResourcePack()->isMusicPlaying(track) == false)
+		if (_game->getResourcePack()->isMusicPlaying(trackType) == false)
 		{
 			_game->getResourcePack()->fadeMusic(_game, 425);
-			_game->getResourcePack()->playMusic(track);
+			_game->getResourcePack()->playMusic(trackType);
 		}
 	}
 
@@ -1197,19 +1197,19 @@ void GeoscapeState::drawUfoBlobs()
 			ufoSize = (*i)->getRadius();
 
 			if ((*i)->getTimerTicked() == true)
-				colorBasic = 133; // red (8), all red. TODO: blink
+				colorBasic = RED; // TODO: blink
 			else
 			{
 				switch ((*i)->getUfoStatus())
 				{
 					case Ufo::CRASHED:
-						colorBasic = 53; // brownish (3)
+						colorBasic = BROWN;
 					break;
 					case Ufo::LANDED:
-						colorBasic = 112; // green (7) goes down into (6) still green.
+						colorBasic = GREEN;
 					break;
 					default: // Ufo::FLYING
-						colorBasic = 170; // dark slate (10)+10
+						colorBasic = SLATE_D;
 				}
 			}
 
@@ -1228,8 +1228,8 @@ void GeoscapeState::drawUfoBlobs()
 														[static_cast<size_t>(x)]);
 					if (color != 0)
 						_isfUfoBlobs[j]->setPixelColor(
-														x,y,
-														colorBasic - color);
+													x,y,
+													colorBasic - color);
 				}
 			}
 
@@ -1349,6 +1349,19 @@ void GeoscapeState::timeAdvance()
 		else
 			timeSpan = 0;
 
+
+/*		// Volutar smooth_globe:
+		static int timeRem;
+
+		timesSpan *= 5;
+
+		int timeSpan_tmp = ((timeRem + timeSpan) * 4) / Options::geoClockSpeed; // kL_options: 132
+				 timeRem = ((timeRem + timeSpan) * 4) % Options::geoClockSpeed;
+
+		timeSpan = timeSpan_tmp;
+		if (timeSpan == 0) return; // no advance. Volutar_end. */
+
+
 		for (int
 				i = 0;
 				i != timeSpan && _pause == false;
@@ -1368,9 +1381,10 @@ void GeoscapeState::timeAdvance()
 
 		_pause = (_dogfightsToStart.empty() == false);
 		updateTimeDisplay();
-	}
 
-	_globe->draw();
+		_globe->draw();
+	}
+//	_globe->draw();
 }
 
 /**
@@ -1406,11 +1420,7 @@ void GeoscapeState::time5Seconds()
 						const bool detected = (*i)->getDetected();
 
 						AlienMission* const mission = (*i)->getAlienMission();
-
-						mission->ufoReachedWaypoint( // recomputes 'qtySites' & 'detected'; also sets ufo Status
-												**i,
-												*_rules,
-												*_globe);
+						mission->ufoReachedWaypoint(**i, *_rules, *_globe); // recomputes 'qtySites' & 'detected'; also sets ufo Status
 
 						if ((*i)->getAltitude() == "STR_GROUND")
 						{
@@ -1446,9 +1456,7 @@ void GeoscapeState::time5Seconds()
 							MissionSite* const site = _gameSave->getMissionSites()->back();
 							site->setDetected();
 
-							popup(new MissionDetectedState(
-														site,
-														this));
+							popup(new MissionDetectedState(site, this));
 						}
 
 						if ((*i)->getUfoStatus() == Ufo::DESTROYED) // if UFO was destroyed don't spawn missions
@@ -1463,10 +1471,7 @@ void GeoscapeState::time5Seconds()
 							resetTimer();
 
 							if (base->getDefenses()->empty() == false)
-								popup(new BaseDefenseState(
-														base,
-														*i,
-														this));
+								popup(new BaseDefenseState(base, *i, this));
 							else
 							{
 								handleBaseDefense(base, *i);
@@ -1484,10 +1489,7 @@ void GeoscapeState::time5Seconds()
 				{
 					AlienMission* const mission = (*i)->getAlienMission();
 					const bool detected = (*i)->getDetected();
-					mission->ufoLifting(
-									**i,
-									*_rules,
-									*_globe);
+					mission->ufoLifting(**i, *_rules, *_globe);
 
 					if (detected != (*i)->getDetected()
 						&& (*i)->getFollowers()->empty() == false)
@@ -1526,10 +1528,10 @@ void GeoscapeState::time5Seconds()
 			if ((*j)->isDestroyed() == true)
 			{
 				_gameSave->scorePoints(
-									(*j)->getLongitude(),
-									(*j)->getLatitude(),
-									(*j)->getRules()->getScore(),
-									true);
+								(*j)->getLongitude(),
+								(*j)->getLatitude(),
+								(*j)->getRules()->getScore(),
+								true);
 
 				if ((*j)->getRules()->getSoldiers() != 0) // if a transport craft has been shot down all soldiers aboard are dead.
 				{
@@ -1541,18 +1543,15 @@ void GeoscapeState::time5Seconds()
 						if ((*k)->getCraft() == *j)
 						{
 							(*k)->die(_gameSave);
-
 							delete *k;
 							k = (*i)->getSoldiers()->erase(k);
 						}
-						else
-							++k;
+						else ++k;
 					}
 				}
 
 				delete *j;
 				j = (*i)->getCrafts()->erase(j);
-
 				continue;
 			}
 
@@ -1583,10 +1582,7 @@ void GeoscapeState::time5Seconds()
 							wp->setId(ufo->getId());
 
 							resetTimer();
-							popup(new GeoscapeCraftState(
-													*j,
-													this,
-													wp));
+							popup(new GeoscapeCraftState(*j, this, wp));
 						}
 					}
 					else if (ufo->getUfoStatus() == Ufo::DESTROYED
@@ -1597,8 +1593,7 @@ void GeoscapeState::time5Seconds()
 						(*j)->returnToBase();
 					}
 				}
-				else
-					(*j)->setInDogfight(false); // safety.
+				else (*j)->setInDogfight(false); // safety.
 			}
 
 			if (_dfZoomInTimer->isRunning() == false
@@ -1624,16 +1619,11 @@ void GeoscapeState::time5Seconds()
 								if ((*j)->isInDogfight() == false
 									&& AreSame((*j)->getDistance(ufo), 0.)) // craft ran into a UFO
 								{
-									_dogfightsToStart.push_back(new DogfightState(
-																				_globe,
-																				*j,
-																				ufo,
-																				this));
+									_dogfightsToStart.push_back(new DogfightState(_globe, *j, ufo, this));
 									if (_dfStartTimer->isRunning() == false)
 									{
 										_pause = true;
 										resetTimer();
-
 										storePreDfCoords();	// store current Globe coords & zoom;
 										_globe->center(		// Globe will reset to these after dogfight ends
 													(*j)->getLongitude(),
@@ -1663,15 +1653,13 @@ void GeoscapeState::time5Seconds()
 								if ((*j)->isInDogfight() == false)
 								{
 									resetTimer();
-
 									int // look up polygon's texId + shade
 										texId,
 										shade;
 									_globe->getPolygonTextureAndShade(
 																	ufo->getLongitude(),
 																	ufo->getLatitude(),
-																	&texId,
-																	&shade);
+																	&texId, &shade);
 									popup(new ConfirmLandingState(
 															*j, // countryside Texture; choice of Terrain made in ConfirmLandingState
 															_rules->getGlobe()->getTextureRule(texId),
@@ -1690,7 +1678,6 @@ void GeoscapeState::time5Seconds()
 					if (wp == NULL && (*j)->getNumSoldiers() != 0)
 					{
 						resetTimer();
-
 						if (site != NULL)
 						{
 							const int texId = site->getSiteTextureId();
@@ -1738,8 +1725,7 @@ void GeoscapeState::time5Seconds()
 						delete *j;
 						j = _dogfights.erase(j);
 					}
-					else
-						++j;
+					else ++j;
 				}
 
 				resetInterceptPorts();
@@ -1748,8 +1734,7 @@ void GeoscapeState::time5Seconds()
 			delete *i;
 			i = _gameSave->getUfos()->erase(i);
 		}
-		else
-			++i;
+		else ++i;
 	}
 
 	for (std::vector<Waypoint*>::const_iterator // Clean up unused waypoints
@@ -1762,8 +1747,7 @@ void GeoscapeState::time5Seconds()
 			delete *i;
 			i = _gameSave->getWaypoints()->erase(i);
 		}
-		else
-			++i;
+		else ++i;
 	}
 
 	drawUfoBlobs();
@@ -1782,7 +1766,6 @@ void GeoscapeState::time5Seconds()
 		{
 			kL_geoMusicPlaying = true;	// if there's a dogfight then dogfight music
 										// will play when a SavedGame is loaded
-
 			if (_dogfights.empty() == true
 				&& _dfStartTimer->isRunning() == false)
 			{
@@ -3216,6 +3199,8 @@ void GeoscapeState::time1Month()
  */
 void GeoscapeState::resetTimer()
 {
+	_globe->rotateStop();
+
 	SDL_Event ev;
 	ev.button.button = SDL_BUTTON_LEFT;
 	Action act(
@@ -3811,7 +3796,7 @@ std::list<DogfightState*>& GeoscapeState::getDogfights()
 /**
  * Handle base defense.
  * @param base	- pointer to Base to defend
- * @param ufo	- pointer to Ufo attacking base
+ * @param ufo	- pointer to the attacking Ufo
  */
 void GeoscapeState::handleBaseDefense(
 		Base* const base,

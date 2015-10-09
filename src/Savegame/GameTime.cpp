@@ -98,33 +98,35 @@ YAML::Node GameTime::save(bool memorial) const
 }
 
 /**
- * Advances the ingame time by 5 seconds automatically correcting
- * the other components when necessary and sending out a trigger when
- * a certain time span has elapsed for time-dependent events.
+ * Advances the ingame time by 5 seconds automatically correcting the other
+ * components when necessary and sending out a trigger when a certain time span
+ * has elapsed for time-dependent events.
  * @return, time span trigger
  */
 TimeTrigger GameTime::advance()
 {
-	_second += 5;
-	TimeTrigger trigger = TIME_5SEC;
-
-	int monthDays[] = {31,28,31,30,31,30,31,31,30,31,30,31};
-	if (_year %4 == 0 // leap year
+	int monthDays[12] = {31,28,31,30,31,30,31,31,30,31,30,31};
+	if (_year % 4 == 0 // leap year
 		&& !(_year %100 == 0 && _year %400 != 0))
 	{
 		++monthDays[1];
 	}
 
 
+//	TimeTrigger trigger = TIME_1SEC;				// Volutar smooth_globe
+//	if (++_second % 5 == 0) trigger = TIME_5SEC;	// Volutar.
+	TimeTrigger trigger = TIME_5SEC;
+	_second += 5;
+
 	if (_second > 59)
 	{
 		_second = 0;
 		++_minute;
 
-		if (_minute %10 == 0)
+		if (_minute % 10 == 0)
 			trigger = TIME_10MIN;
 
-		if (_minute %30 == 0)
+		if (_minute % 30 == 0)
 			trigger = TIME_30MIN;
 	}
 
@@ -204,7 +206,7 @@ int GameTime::getWeekday() const
  */
 std::string GameTime::getWeekdayString() const
 {
-	static const std::string weekdays[] =
+	static const std::string weekdays[7] =
 	{
 		"STR_SUNDAY",
 		"STR_MONDAY",
@@ -275,7 +277,7 @@ int GameTime::getMonth() const
  */
 std::string GameTime::getMonthString() const
 {
-	static const std::string months[] =
+	static const std::string months[12] =
 	{
 		"STR_JAN",
 		"STR_FEB",
@@ -312,7 +314,7 @@ int GameTime::getYear() const
 double GameTime::getDaylight() const
 {
 	return static_cast<double>(
-					(((((_hour + 18) %24) * 60) + _minute) * 60) + _second)
+					(((((_hour + 18) % 24) * 60) + _minute) * 60) + _second)
 				/ (60. * 60. * 24.); // kL: Take Two!!!
 }
 

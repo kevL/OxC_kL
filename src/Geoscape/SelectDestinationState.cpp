@@ -200,13 +200,12 @@ SelectDestinationState::~SelectDestinationState()
 void SelectDestinationState::init()
 {
 	State::init();
-//	_globe->rotateStop();
 }
 
-/**
+/*
  * Runs the globe rotation timer.
- */
-/* void SelectDestinationState::think()
+ *
+void SelectDestinationState::think()
 {
 	State::think();
 	_globe->think();

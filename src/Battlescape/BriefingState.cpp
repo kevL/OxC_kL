@@ -29,6 +29,8 @@
 //#include "../Engine/Options.h"
 //#include "../Engine/Screen.h"
 
+#include "../Geoscape/GeoscapeState.h" // kL_geoMusicPlaying
+
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
@@ -111,7 +113,6 @@ BriefingState::BriefingState(
 		else
 			track = dataBrief.music;	// note This currently conflicts w/ UFO Recovery/Assault.
 										// that is, the music assigned to a UFO will be overridden ...
-
 //		_txtBriefing->setY(_txtBriefing->getY() + dataBrief.textOffset);
 //		_txtCraft->setY(_txtCraft->getY() + dataBrief.textOffset);
 //		_txtTarget->setVisible(dataBrief.showTargetText);
@@ -124,10 +125,10 @@ BriefingState::BriefingState(
 			description = dataBrief.desc;
 	}
 	_game->getResourcePack()->playMusic(track);
-
-	setPalette(
-			"PAL_GEOSCAPE",
-			bgColor);
+	kL_geoMusicPlaying = false;	// otherwise the Briefing music switches back to Geoscape
+								// music when on high time-compression (eg, BaseDefense);
+								// although Geoscape::init() *should not even run* after this ......
+	setPalette("PAL_GEOSCAPE", bgColor);
 	_window->setBackground(_game->getResourcePack()->getSurface(bg));
 
 	add(_window,		"window",	"briefing");
@@ -145,6 +146,9 @@ BriefingState::BriefingState(
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& BriefingState::btnOkClick,
 					Options::keyOk);
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& BriefingState::btnOkClick,
+					Options::keyOkKeypad);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& BriefingState::btnOkClick,
 					Options::keyCancel);

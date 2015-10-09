@@ -109,9 +109,9 @@ private:
 		_aliensControlled,
 		_aliensKilled,
 		_aliensStunned,
-		_missionCost,
 		_diff,
-		_limitsEnforced;
+		_limitsEnforced,
+		_missionCost;
 
 	std::string _music;
 

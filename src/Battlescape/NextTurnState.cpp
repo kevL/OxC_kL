@@ -232,15 +232,9 @@ void NextTurnState::nextTurn()
 /*			if (turn == 1 || (turn % Options::autosaveFrequency) == 0)
 			{
 				if (_game->getSavedGame()->isIronman() == true)
-					_game->pushState(new SaveGameState(
-													OPT_BATTLESCAPE,
-													SAVE_IRONMAN,
-													_palette));
+					_game->pushState(new SaveGameState(OPT_BATTLESCAPE, SAVE_IRONMAN, _palette));
 				else if (Options::autosave == true)
-					_game->pushState(new SaveGameState(
-													OPT_BATTLESCAPE,
-													SAVE_AUTO_BATTLESCAPE,
-													_palette));
+					_game->pushState(new SaveGameState(OPT_BATTLESCAPE, SAVE_AUTO_BATTLESCAPE, _palette));
 			} */
 			if (turn != 1)
 				_battleSave->getBattleGame()->setPlayerPanic();
@@ -251,14 +245,10 @@ void NextTurnState::nextTurn()
 				_game->getResourcePack()->fadeMusic(_game, 473);
 
 				std::string
-					music,
-					terrain;
-				_battleSave->calibrateMusic(
-										music,
-										terrain);
-				_game->getResourcePack()->playMusic(
-												music,
-												terrain);
+					trackType,
+					terrainType;
+				_battleSave->calibrateMusic(trackType, terrainType);
+				_game->getResourcePack()->playMusic(trackType, terrainType);
 			}
 			else
 				switchMusic = true;
@@ -274,9 +264,9 @@ void NextTurnState::nextTurn()
 				_battleSave->getBattleGame()->statePushBack(new ExplosionBState(
 																			_battleSave->getBattleGame(),
 																			pos,
-																			NULL,NULL,
+																			NULL, NULL,
 																			tile,
-																			false,false,true));
+																			false, false, true));
 			}
 		}
 		else // start non-Player turn

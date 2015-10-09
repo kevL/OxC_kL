@@ -217,24 +217,23 @@ InventoryState::InventoryState(
 	_txtThrowTU->setHighContrast();
 	_txtPsiTU->setHighContrast();
 
-	_numOrder->setColor(1);
+	_numOrder->setColor(WHITE);
 	_numOrder->setVisible(false);
 
-	_tuCost->setColor(1);
+	_tuCost->setColor(WHITE);
 	_tuCost->setVisible(false);
 
-	const Uint8 color = 38; // red
-	_wndHead->setColor(color);
+	_wndHead->setColor(RED);
 	_wndHead->setVisible(false);
-	_wndTorso->setColor(color);
+	_wndTorso->setColor(RED);
 	_wndTorso->setVisible(false);
-	_wndRightArm->setColor(color);
+	_wndRightArm->setColor(RED);
 	_wndRightArm->setVisible(false);
-	_wndLeftArm->setColor(color);
+	_wndLeftArm->setColor(RED);
 	_wndLeftArm->setVisible(false);
-	_wndRightLeg->setColor(color);
+	_wndRightLeg->setColor(RED);
 	_wndRightLeg->setVisible(false);
-	_wndLeftLeg->setColor(color);
+	_wndLeftLeg->setColor(RED);
 	_wndLeftLeg->setVisible(false);
 
 	_txtItem->setHighContrast();
@@ -828,9 +827,9 @@ void InventoryState::btnPrevClick(Action*)
 	if (_inv->getSelectedItem() == NULL)
 	{
 		if (_parent != NULL)
-			_parent->selectPreviousFactionUnit(false,false,true);
+			_parent->selectPreviousFactionUnit(false, false, true);
 		else
-			_battleSave->selectPreviousFactionUnit(false,false,true);
+			_battleSave->selectPreviousFactionUnit(false, false, true);
 
 		init();
 	}
@@ -845,9 +844,9 @@ void InventoryState::btnNextClick(Action*)
 	if (_inv->getSelectedItem() == NULL)
 	{
 		if (_parent != NULL)
-			_parent->selectNextFactionUnit(false,false,true);
+			_parent->selectNextFactionUnit(false, false, true);
 		else
-			_battleSave->selectNextFactionUnit(false,false,true);
+			_battleSave->selectNextFactionUnit(false, false, true);
 
 		init();
 	}
@@ -899,7 +898,6 @@ void InventoryState::btnSaveLayouts(Action*)
 bool InventoryState::saveAllLayouts() const // private.
 {
 	bool ret = false;
-
 	for (std::vector<BattleUnit*>::const_iterator
 			i = _battleSave->getUnits()->begin();
 			i != _battleSave->getUnits()->end();
@@ -1055,7 +1053,7 @@ void InventoryState::btnRankClick(Action*)
 		_game->pushState(new UnitInfoState(
 										_battleSave->getSelectedUnit(),
 										_parent,
-										true,false,
+										true, false,
 										_tuMode == false));
 }
 

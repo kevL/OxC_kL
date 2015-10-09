@@ -35,19 +35,20 @@ class Language;
  */
 enum TimeTrigger
 {
-	TIME_5SEC,	// 0
-	TIME_10MIN,	// 1
-	TIME_30MIN,	// 2
-	TIME_1HOUR,	// 3
-	TIME_1DAY,	// 4
-	TIME_1MONTH	// 5
+	TIME_1SEC,	// 0 Volutar smooth_globe.
+	TIME_5SEC,	// 1
+	TIME_10MIN,	// 2
+	TIME_30MIN,	// 3
+	TIME_1HOUR,	// 4
+	TIME_1DAY,	// 5
+	TIME_1MONTH	// 6
 };
 
 
 /**
  * Stores the current ingame time/date according to GMT.
- * Takes care of managing and representing each component,
- * as well as common time operations.
+ * @note Takes care of managing and representing each component as well as
+ * common time operations.
  */
 class GameTime
 {

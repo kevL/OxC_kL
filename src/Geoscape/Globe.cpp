@@ -878,12 +878,8 @@ bool Globe::insideLand(
 			i != _rules->getPolygons()->end();
 			++i)
 	{
-		if (insidePolygon(
-						lon,lat,
-						*i) == true)
-		{
+		if (insidePolygon(lon,lat, *i) == true)
 			return true;
-		}
 	}
 
 	return false;

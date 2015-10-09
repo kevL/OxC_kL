@@ -47,6 +47,10 @@ class InventoryState
 {
 
 private:
+	static const Uint8
+		WHITE	= 1,
+		RED		= 38;
+
 /*	std::string _currentTooltip; */
 	const bool _tuMode;
 

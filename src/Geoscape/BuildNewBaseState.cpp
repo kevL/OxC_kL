@@ -181,7 +181,6 @@ void BuildNewBaseState::init()
 	State::init();
 
 	_globe->onMouseOver((ActionHandler)& BuildNewBaseState::globeHover);
-//	_globe->rotateStop();
 	_globe->setNewBaseHover();
 }
 

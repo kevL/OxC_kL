@@ -425,9 +425,7 @@ void GeoscapeCraftState::btnTargetClick(Action*)
 		_game->popState();
 
 	_game->popState();
-	_game->pushState(new SelectDestinationState(
-											_craft,
-											_geo->getGlobe()));
+	_game->pushState(new SelectDestinationState(_craft, _geo->getGlobe()));
 	delete _waypoint;
 }
 

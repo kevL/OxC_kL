@@ -45,8 +45,13 @@
 namespace OpenXcom
 {
 
+/**
+ * Informs player that an undefended Base was destroyed by aLien attack.
+ * @param base	- pointer to the base to destroy
+ * @param globe	- pointer to the geoscape globe
+ */
 BaseDestroyedState::BaseDestroyedState(
-		Base* const base,
+		const Base* const base,
 		Globe* const globe)
 	:
 		_base(base),
@@ -96,34 +101,34 @@ BaseDestroyedState::BaseDestroyedState(
 					Options::keyCancel);
 
 
-	std::vector<Region*>::const_iterator region = _game->getSavedGame()->getRegions()->begin();
+	const double
+		lon = base->getLongitude(),
+		lat = base->getLatitude();
+	const std::vector<Region*>* regionList = _game->getSavedGame()->getRegions();
+	std::vector<Region*>::const_iterator i = regionList->begin();
 	for (
 			;
-			region != _game->getSavedGame()->getRegions()->end();
-			++region)
+			i != regionList->end();
+			++i)
 	{
-		if ((*region)->getRules()->insideRegion(
-											base->getLongitude(),
-											base->getLatitude()))
-		{
+		if ((*i)->getRules()->insideRegion(lon,lat))
 			break;
-		}
 	}
 
-	const AlienMission* const alienMission = _game->getSavedGame()->findAlienMission(
-																				(*region)->getRules()->getType(),
-																				alm_RETAL);
+	const AlienMission* const mission = _game->getSavedGame()->findAlienMission(
+																			(*i)->getRules()->getType(),
+																			alm_RETAL);
+
 	for (std::vector<Ufo*>::const_iterator
 			i = _game->getSavedGame()->getUfos()->begin();
 			i != _game->getSavedGame()->getUfos()->end();)
 	{
-		if ((*i)->getAlienMission() == alienMission)
+		if ((*i)->getAlienMission() == mission)
 		{
 			delete *i;
 			i = _game->getSavedGame()->getUfos()->erase(i);
 		}
-		else
-			++i;
+		else ++i;
 	}
 
 	for (std::vector<AlienMission*>::const_iterator
@@ -131,11 +136,10 @@ BaseDestroyedState::BaseDestroyedState(
 			i != _game->getSavedGame()->getAlienMissions().end();
 			++i)
 	{
-		if (dynamic_cast<AlienMission*>(*i) == alienMission) // is that really necessary ( i doubt it! )
+		if (dynamic_cast<AlienMission*>(*i) == mission) // is that really necessary (i doubt it!)
 		{
 			delete *i;
 			_game->getSavedGame()->getAlienMissions().erase(i);
-
 			break;
 		}
 	}
@@ -148,7 +152,7 @@ BaseDestroyedState::~BaseDestroyedState()
 {}
 
 /**
- *
+ * Scores aLien points and destroys the Base.
  */
 void BaseDestroyedState::finish()
 {
@@ -156,20 +160,21 @@ void BaseDestroyedState::finish()
 
 //	pts = (_game->getRuleset()->getAlienMission("STR_ALIEN_TERROR")->getPoints() * 50) + (diff * 200);
 	_game->getSavedGame()->scorePoints(
-									_base->getLongitude(),
-									_base->getLatitude(),
-									(static_cast<int>(_game->getSavedGame()->getDifficulty()) + 1) * 200,
-									true);
+								_base->getLongitude(),
+								_base->getLatitude(),
+								(static_cast<int>(_game->getSavedGame()->getDifficulty()) + 1) * 200,
+								true);
 
-	for (std::vector<Base*>::iterator
-			i = _game->getSavedGame()->getBases()->begin();
-			i != _game->getSavedGame()->getBases()->end();
+	std::vector<Base*>* const baseList = _game->getSavedGame()->getBases();
+	for (std::vector<Base*>::const_iterator
+			i = baseList->begin();
+			i != baseList->end();
 			++i)
 	{
 		if (*i == _base)
 		{
 			delete *i;
-			_game->getSavedGame()->getBases()->erase(i);
+			baseList->erase(i);
 			break;
 			// SHOULD PUT IN A SECTION FOR TRANSFERRING AIRBORNE CRAFT TO ANOTHER BASE/S
 			// if Option:: transfer airborne craft == true
@@ -197,7 +202,6 @@ void BaseDestroyedState::btnCenterClick(Action*)
 	_globe->center(
 				_base->getLongitude(),
 				_base->getLatitude());
-
 	finish();
 }
 

@@ -226,9 +226,10 @@ void ResourcePack::playMusic(
 		const std::string& terrainType,
 		int loops)
 {
-	if (_playingMusic != trackType
-		&& Options::mute == false)
+	//Log(LOG_INFO) << "rp: playMusic current = " << _playingMusic;
+	if (_playingMusic != trackType && Options::mute == false)
 	{
+		//Log(LOG_INFO) << ". new trak = " << trackType;
 		const Music* const music = getRandomMusic(trackType, terrainType);
 		if (music != _muteMusic) // note: '_muteMusic'= NULL
 		{
