@@ -467,7 +467,7 @@ GeoscapeState::GeoscapeState()
 	_dfStartTimer	= new Timer(static_cast<Uint32>(Options::dogfightSpeed));
 	_dfTimer		= new Timer(static_cast<Uint32>(Options::dogfightSpeed));
 
-	_txtDebug = new Text(320, 18);
+	_txtDebug = new Text(320, 27);
 
 
 	setInterface("geoscape");
@@ -3277,18 +3277,23 @@ void GeoscapeState::globeClick(Action* action)
 		_globe->cartToPolar(
 						static_cast<Sint16>(mX),
 						static_cast<Sint16>(mY),
-						&lonRad,
-						&latRad);
+						&lonRad, &latRad);
 
 		const double
 			lonDeg (lonRad / M_PI * 180.),
 			latDeg (latRad / M_PI * 180.);
+		int
+			texture,
+			shade;
+		_globe->getPolygonTextureAndShade(lonDeg, latDeg, &texture, &shade);
 
 		std::wostringstream woststr;
 		woststr << std::fixed << std::setprecision(3)
 			<< L"RAD Lon " << lonRad << L"  Lat " << latRad
 			<< std::endl
-			<< L"DEG Lon " << lonDeg << L"  Lat " << latDeg;
+			<< L"DEG Lon " << lonDeg << L"  Lat " << latDeg
+			<< std::endl
+			<< L"texture " << texture << L" shade " << shade;
 
 		_txtDebug->setText(woststr.str());
 	}

@@ -482,14 +482,12 @@ void Globe::cartToPolar( // Orthographic Projection
  * @param lat - latitude of the point
  * @return, true if it's on the back, false if it's on the front
  */
-bool Globe::pointBack(
+bool Globe::pointBack( // private.
 		double lon,
 		double lat) const
 {
-	const double c = std::cos(_cenLat) * std::cos(lat) * std::cos(lon - _cenLon)
-				   + std::sin(_cenLat) * std::sin(lat);
-
-	return (c < 0.);
+	return (std::cos(_cenLat) * std::cos(lat) * std::cos(lon - _cenLon)
+		  + std::sin(_cenLat) * std::sin(lat) < 0.);
 }
 
 /*
@@ -505,13 +503,86 @@ double Globe::lastVisibleLat(double lon) const
 } */
 
 /**
+ *
+ * @param lon	- longitude of a point
+ * @param lat	- latitude of a point
+ */
+Polygon* Globe::getPolygonAtCoord( // private.
+		double lon,
+		double lat) const
+{
+	const double discard = 0.75f;
+    double
+		cosLat = cos(lat),
+		sinLat = sin(lat);
+
+	for (std::list<Polygon*>::const_iterator
+			i = _rules->getPolygons()->begin();
+			i != _rules->getPolygons()->end();
+			++i)
+	{
+		double
+			x,y,
+			x2,y2,
+			cLat,cLon;
+
+		bool pass = false;
+		for (size_t
+				j = 0;
+				j != (*i)->getPoints();
+				++j)
+		{
+			if (cosLat * cos((*i)->getLatitude(j)) * cos((*i)->getLongitude(j) - lon) + sinLat * sin((*i)->getLatitude(j)) < discard)
+			{
+				pass = true; // discarded
+				break;
+			}
+		}
+		if (pass == true) continue;
+
+
+		bool odd = false;
+
+		cLat = (*i)->getLatitude(0); // initial point
+		cLon = (*i)->getLongitude(0);
+
+		x = cos(cLat) * sin(cLon - lon);
+		y = cosLat * sin(cLat) - sinLat * cos(cLat) * cos(cLon - lon);
+
+		for (size_t
+				j = 0;
+				j != (*i)->getPoints();
+				++j)
+		{
+			const size_t theSpot = (j + 1) % (*i)->getPoints(); // index of next point in poly
+			cLat = (*i)->getLatitude(theSpot);
+			cLon = (*i)->getLongitude(theSpot);
+
+			x2 = cos(cLat) * sin(cLon - lon);
+			y2 = cosLat * sin(cLat) - sinLat * cos(cLat) * cos(cLon - lon);
+
+			if (((y > 0) != (y2 > 0)) && (0 < (x2 - x) * (0 - y) / (y2 - y) + x))
+				odd = !odd;
+
+			x = x2;
+			y = y2;
+		}
+
+		if (odd == true)
+			return *i;
+	}
+
+	return NULL;
+}
+
+/**
  * Checks if a polar point is inside a certain Polygon.
  * @param lon	- longitude of the point
  * @param lat	- latitude of the point
  * @param poly	- pointer to the polygon
  * @return, true if inside
  */
-bool Globe::insidePolygon(
+bool Globe::insidePolygon( // private. obsolete, see getPolygonAtCoord()
 		double lon,
 		double lat,
 		const Polygon* const poly) const
@@ -551,18 +622,14 @@ bool Globe::insidePolygon(
 		polarToCart(
 				poly->getLongitude(i),
 				poly->getLatitude(i),
-				&x_i,
-				&y_i);
+				&x_i,&y_i);
 		polarToCart(
 				poly->getLongitude(j),
 				poly->getLatitude(j),
-				&x_j,
-				&y_j);
+				&x_j,&y_j);
 		polarToCart(
-				lon,
-				lat,
-				&x,
-				&y);
+				lon,lat,
+				&x,&y);
 
 		if (((		   y_i <  y
 					&& y_j >= y)
@@ -873,16 +940,7 @@ bool Globe::insideLand(
 		double lon,
 		double lat) const
 {
-	for (std::list<Polygon*>::const_iterator
-			i = _rules->getPolygons()->begin();
-			i != _rules->getPolygons()->end();
-			++i)
-	{
-		if (insidePolygon(lon,lat, *i) == true)
-			return true;
-	}
-
-	return false;
+	return (getPolygonAtCoord(lon,lat) != NULL);
 }
 
 /**
@@ -930,7 +988,7 @@ void Globe::toggleRadarLines()
  * @param y			- Y coordinate of point
  * @return, true if near
  */
-bool Globe::targetNear(
+bool Globe::targetNear( // private.
 		const Target* const target,
 		int x,
 		int y) const
@@ -1051,9 +1109,7 @@ std::vector<Target*> Globe::getTargets(
  */
 void Globe::cachePolygons()
 {
-	cache(
-		_rules->getPolygons(),
-		&_cacheLand);
+	cache(_rules->getPolygons(), &_cacheLand);
 }
 
 /**
@@ -1061,7 +1117,7 @@ void Globe::cachePolygons()
  * @param polygons	- pointer to list of polygons
  * @param cache		- pointer to cache list
  */
-void Globe::cache(
+void Globe::cache( // private.
 		std::list<Polygon*>* const polygons,
 		std::list<Polygon*>* const cache)
 {
@@ -1248,8 +1304,7 @@ void Globe::drawOcean()
 void Globe::drawLand()
 {
 	Sint16
-		x[4],
-		y[4];
+		x[4],y[4];
 
 	for (std::list<Polygon*>::const_iterator
 			i = _cacheLand.begin();
@@ -1312,7 +1367,7 @@ void Globe::drawBevel()
  * @param lat - latitude of position
  * @return, position of sun
  */
-Cord Globe::getSunDirection(
+Cord Globe::getSunDirection( // private.
 		double lon,
 		double lat) const
 {
@@ -1415,7 +1470,7 @@ void Globe::drawShadow()
  * @param shade		-
  * @param color		- (default 0)
  */
-void Globe::XuLine(
+void Globe::XuLine( // private.
 		Surface* surface,
 		Surface* src,
 		double x1,
@@ -1640,7 +1695,7 @@ void Globe::drawRadars()
  * @param segments	-
  * @param color		- (default 0)
  */
-void Globe::drawGlobeCircle(
+void Globe::drawGlobeCircle( // private.
 		double lat,
 		double lon,
 		double radius,
@@ -1737,7 +1792,7 @@ void Globe::setNewBaseHoverPos(
  * @param lat2		-
  * @param color		- (default 0)
  */
-void Globe::drawVHLine(
+void Globe::drawVHLine( // private.
 		Surface* surface,
 		double lon1,
 		double lat1,
@@ -2191,7 +2246,7 @@ void Globe::drawDetail()
  * @param lon2		-
  * @param lat2		-
  */
-void Globe::drawPath(
+void Globe::drawPath( // private.
 		Surface* surface,
 		double lon1,
 		double lat1,
@@ -2206,8 +2261,8 @@ void Globe::drawPath(
 	CordPolar
 		p1,p2;
 	Cord
-		a (CordPolar(lon1, lat1)), // init.
-		b (CordPolar(lon2, lat2)); // init.
+		a (CordPolar(lon1, lat1)),
+		b (CordPolar(lon2, lat2));
 
 	if (-b == a)
 		return;
@@ -2298,7 +2353,7 @@ void Globe::drawFlights()
  * @param target	- pointer to globe Target
  * @param surface	- pointer to globe Surface
  */
-void Globe::drawTarget(
+void Globe::drawTarget( // private.
 		const Target* const target,
 		Surface* const surface)
 {
@@ -2685,25 +2740,15 @@ void Globe::getPolygonTextureAndShade(
 
 	*shade = worldshades[CreateShadow::getShadowValue(
 													0,
-													Cord (0.,0.,1.), // init.
+													Cord(0.,0.,1.),
 													getSunDirection(lon,lat),
 													0)];
 
-	*texture = -1;
-	for (std::list<Polygon*>::const_iterator
-			i = _rules->getPolygons()->begin();
-			i != _rules->getPolygons()->end();
-			++i)
-	{
-		if (insidePolygon(
-						lon,
-						lat,
-						*i) == true)
-		{
-			*texture = (*i)->getPolyTexture();
-			break;
-		}
-	}
+	const Polygon* const poly = getPolygonAtCoord(lon,lat);
+	if (poly != NULL)
+		*texture = poly->getPolyTexture();
+	else
+		*texture = -1;
 }
 
 /**
@@ -2717,20 +2762,11 @@ void Globe::getPolygonTexture(
 		double lat,
 		int* texture) const
 {
-	*texture = -1;
-	for (std::list<Polygon*>::const_iterator
-			i = _rules->getPolygons()->begin();
-			i != _rules->getPolygons()->end();
-			++i)
-	{
-		if (insidePolygon(
-						lon,lat,
-						*i) == true)
-		{
-			*texture = (*i)->getPolyTexture();
-			break;
-		}
-	}
+	const Polygon* const poly = getPolygonAtCoord(lon,lat);
+	if (poly != NULL)
+		*texture = poly->getPolyTexture();
+	else
+		*texture = -1;
 }
 
 /**
@@ -2755,7 +2791,7 @@ void Globe::getPolygonShade(
 
 	*shade = worldshades[CreateShadow::getShadowValue(
 													0,
-													Cord (0.,0.,1.), // init.
+													Cord(0.,0.,1.),
 													getSunDirection(lon,lat),
 													0)];
 }

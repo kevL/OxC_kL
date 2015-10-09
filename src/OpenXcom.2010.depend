@@ -4734,7 +4734,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Ufo.h"
 
-1441840291 f:\git\openxcom\src\geoscape\globe.h
+1444423403 f:\git\openxcom\src\geoscape\globe.h
 	"Cord.h"
 	"../Engine/FastLineClip.h"
 	"../Engine/InteractiveSurface.h"
@@ -6957,7 +6957,7 @@
 1442441486 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1444418337 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1444424173 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	"AlienBaseState.h"
 	"BaseDefenseState.h"
@@ -7090,7 +7090,7 @@
 
 1440173244 f:\git\openxcom\src\ufopaedia\ufopaedia.h
 
-1444375604 source:f:\git\openxcom\src\geoscape\globe.cpp
+1444424763 source:f:\git\openxcom\src\geoscape\globe.cpp
 	"Globe.h"
 	"GeoscapeState.h"
 	"../Engine/Action.h"
@@ -7448,7 +7448,7 @@
 	"../Interface/Text.h"
 	"../Interface/TextButton.h"
 
-1444419989 source:f:\git\openxcom\src\interface\text.cpp
+1444420204 source:f:\git\openxcom\src\interface\text.cpp
 	"Text.h"
 	"../Engine/Language.h"
 

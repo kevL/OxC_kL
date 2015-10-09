@@ -139,8 +139,12 @@ private:
 			double lat) const;
 	/// Return latitude of last visible-to-player point on given longitude.
 //	double lastVisibleLat(double lon) const;
+	/// Get polygon pointer (Volutar)
+	Polygon* getPolygonAtCoord(
+			double lon,
+			double lat) const;
 	/// Checks if a point is inside a polygon.
-	bool insidePolygon(
+	bool insidePolygon( // obsolete, see getPolygonAtCoord()
 			double lon,
 			double lat,
 			const Polygon* const poly) const;
