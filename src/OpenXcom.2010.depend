@@ -5013,7 +5013,7 @@
 1436386751 f:\git\openxcom\src\basescape\placestartfacilitystate.h
 	"PlaceFacilityState.h"
 
-1444505495 source:f:\git\openxcom\src\basescape\purchasestate.cpp
+1444509288 source:f:\git\openxcom\src\basescape\purchasestate.cpp
 	"PurchaseState.h"
 	"../Engine/Action.h"
 	"../Engine/Game.h"
@@ -8597,7 +8597,7 @@
 1433868731 source:f:\git\openxcom\src\savegame\serializationhelper.cpp
 	"SerializationHelper.h"
 
-1444502860 source:f:\git\openxcom\src\savegame\soldier.cpp
+1444506906 source:f:\git\openxcom\src\savegame\soldier.cpp
 	"Soldier.h"
 	"Craft.h"
 	"EquipmentLayoutItem.h"

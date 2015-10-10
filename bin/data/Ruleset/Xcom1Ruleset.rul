@@ -4968,7 +4968,7 @@ extraStrings:
       CYBERMITE_WEAPON: ""
       ALIEN_PSI_WEAPON: ""
       STR_FIST: ""
-      NO_UFO: "" #end prevent WARNINGS.
+      NUL_UFO: "" #end prevent WARNINGS.
       WATER: "water"
       CULTA: "RURAL"
       DESERT: "DESERT"

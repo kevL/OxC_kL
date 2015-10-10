@@ -364,12 +364,11 @@ PurchaseState::PurchaseState(Base* const base)
 			&& _game->getSavedGame()->isResearched(itRule->getRequirements()) == true
 			&& isExcluded(*i) == false)
 		{
-			type = itRule->getType();
-
 			_orderQty.push_back(0);
 			_items.push_back(*i);
 
 			int qty = _base->getStorageItems()->getItemQty(*i);
+			type = itRule->getType();
 
 			for (std::vector<Transfer*>::const_iterator // add transfer items
 					j = _base->getTransfers()->begin();
@@ -746,10 +745,10 @@ void PurchaseState::increaseByValue(int qtyDelta)
 	if (qtyDelta < 1)
 		return;
 
-	std::wstring wstError;
+	std::wstring error;
 
 	if (_costTotal + getPrice() > _game->getSavedGame()->getFunds())
-		wstError = tr("STR_NOT_ENOUGH_MONEY");
+		error = tr("STR_NOT_ENOUGH_MONEY");
 	else
 	{
 		switch (getPurchaseType(_sel))
@@ -758,30 +757,30 @@ void PurchaseState::increaseByValue(int qtyDelta)
 			case PST_SCIENTIST:
 			case PST_ENGINEER:
 				if (_qtyPersonnel + 1 > _base->getAvailableQuarters() - _base->getUsedQuarters())
-					wstError = tr("STR_NOT_ENOUGH_LIVING_SPACE");
+					error = tr("STR_NOT_ENOUGH_LIVING_SPACE");
 			break;
 
 			case PST_CRAFT:
 				if (_qtyCraft + 1 > _base->getAvailableHangars() - _base->getUsedHangars())
-					wstError = tr("STR_NO_FREE_HANGARS_FOR_PURCHASE");
+					error = tr("STR_NO_FREE_HANGARS_FOR_PURCHASE");
 			break;
 
 			case PST_ITEM:
 				if (_storeSize + _game->getRuleset()->getItem(_items[getItemIndex(_sel)])->getSize()
 					> static_cast<double>(_base->getAvailableStores()) - _base->getUsedStores() + 0.05)
 				{
-					wstError = tr("STR_NOT_ENOUGH_STORE_SPACE");
+					error = tr("STR_NOT_ENOUGH_STORE_SPACE");
 				}
 		}
 	}
 
-	if (wstError.empty() == false)
+	if (error.empty() == false)
 	{
 		_timerInc->stop();
 
 		const RuleInterface* const uiRule = _game->getRuleset()->getInterface("buyMenu");
 		_game->pushState(new ErrorMessageState(
-											wstError,
+											error,
 											_palette,
 											uiRule->getElement("errorMessage")->color,
 											"BACK13.SCR",
@@ -791,7 +790,7 @@ void PurchaseState::increaseByValue(int qtyDelta)
 	{
 		qtyDelta = std::min(
 						qtyDelta,
-						static_cast<int>(_game->getSavedGame()->getFunds()) - _costTotal) / getPrice(); // note: (int)cast renders int64_t useless.
+						(static_cast<int>(_game->getSavedGame()->getFunds()) - _costTotal) / getPrice()); // note: (int)cast renders int64_t useless.
 
 		switch (getPurchaseType(_sel))
 		{
@@ -832,9 +831,7 @@ void PurchaseState::increaseByValue(int qtyDelta)
 		_costTotal += getPrice() * qtyDelta;
 
 		updateItemStrings();
-		return;
 	}
-
 }
 
 /**
