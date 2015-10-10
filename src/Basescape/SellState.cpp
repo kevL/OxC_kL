@@ -306,8 +306,8 @@ SellState::SellState(Base* const base)
 					craftOrdnance = true;
 
 					const int clipSize = cwRule->getAmmoMax(); // Launcher
-					if (clipSize > 0)
-						item += (L" (" + Text::formatNumber(clipSize) + L")");
+					if (clipSize != 0)
+						item += (L" (" + Text::intWide(clipSize) + L")");
 				}
 				else if (clRule == itRule)
 				{
@@ -315,7 +315,7 @@ SellState::SellState(Base* const base)
 
 					const int clipSize = clRule->getClipSize(); // launcher Ammo
 					if (clipSize > 1)
-						item += (L"s (" + Text::formatNumber(clipSize) + L")");
+						item += (L"s (" + Text::intWide(clipSize) + L")");
 				}
 			}
 
@@ -323,7 +323,7 @@ SellState::SellState(Base* const base)
 
 			if ((itRule->getBattleType() == BT_AMMO			// #2 - weapon clips & HWP rounds
 					|| (itRule->getBattleType() == BT_NONE	// #0 - craft weapon rounds
-						&& itRule->getClipSize() > 0))
+						&& itRule->getClipSize() != 0))
 				&& itRule->getType() != _game->getRuleset()->getAlienFuelType())
 			{
 				if (itRule->getBattleType() == BT_AMMO
@@ -331,7 +331,7 @@ SellState::SellState(Base* const base)
 				{
 					const int clipSize = itRule->getClipSize();
 					if (clipSize > 1)
-						item += (L" (" + Text::formatNumber(clipSize) + L")");
+						item += (L" (" + Text::intWide(clipSize) + L")");
 				}
 				item.insert(0, L"  ");
 
@@ -345,7 +345,7 @@ SellState::SellState(Base* const base)
 					const RuleItem* const aRule = _game->getRuleset()->getItem(itRule->getCompatibleAmmo()->front());
 					const int clipSize = aRule->getClipSize();
 					if (clipSize != 0)
-						item += (L" (" + Text::formatNumber(clipSize) + L")");
+						item += (L" (" + Text::intWide(clipSize) + L")");
                 }
 
 				color = _lstItems->getColor();

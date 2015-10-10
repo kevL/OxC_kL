@@ -48,11 +48,11 @@ class SoldierInfoState
 
 private:
 	static const Uint8
-		GREEN		= 48,
-		PURPLE_OUT	= 73,
-		ORANGE		= 96,
-		YELLOW		= 144,
-		PURPLE		= 246;
+		GREEN			=  48,
+		PURPLE_GHOST	=  73,
+		ORANGE			=  96,
+		YELLOW			= 144,
+		PURPLE			= 246;
 
 	bool _allowExit;
 	size_t _soldierId;

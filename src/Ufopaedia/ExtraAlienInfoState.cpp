@@ -143,7 +143,7 @@ ExtraAlienInfoState::ExtraAlienInfoState(const ArticleDefinitionTextImage* const
 					if (itRule->isStrengthApplied() == true)
 						wstPower = tr("STR_VARIABLE");
 					else
-						wstPower = Text::formatNumber(itRule->getPower());
+						wstPower = Text::intWide(itRule->getPower());
 
 					_lstWeapon->addRow(
 									3,

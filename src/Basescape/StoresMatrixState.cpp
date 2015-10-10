@@ -345,21 +345,21 @@ StoresMatrixState::StoresMatrixState(const Base* base)
 					craftOrdnance = true;
 					int clipSize = cwRule->getAmmoMax(); // Launcher
 					if (clipSize > 0)
-						item = item + L" (" + Text::formatNumber(clipSize) + L")";
+						item = item + L" (" + Text::intWide(clipSize) + L")";
 				}
 				else if (clipRule == itRule)
 				{
 					craftOrdnance = true;
 					int clipSize = clipRule->getClipSize(); // launcher Ammo
 					if (clipSize > 1)
-						item = item + L"s (" + Text::formatNumber(clipSize) + L")";
+						item = item + L"s (" + Text::intWide(clipSize) + L")";
 				} */
 /*			if (itRule->getBattleType() == BT_AMMO
 				&& itRule->getType().substr(0, 8) != "STR_HWP_") // *cuckoo** weapon clips
 			{
 				int clipSize = itRule->getClipSize();
 				if (clipSize > 1)
-					item = item + L" (" + Text::formatNumber(clipSize) + L")";
+					item = item + L" (" + Text::intWide(clipSize) + L")";
 			} */
 /*			if (itRule->isFixed() // tank w/ Ordnance.
 				&& !itRule->getCompatibleAmmo()->empty())
@@ -367,7 +367,7 @@ StoresMatrixState::StoresMatrixState(const Base* base)
 				clipRule = _game->getRuleset()->getItem(itRule->getCompatibleAmmo()->front());
 				int clipSize = clipRule->getClipSize();
 				if (clipSize > 0)
-					item = item + L" (" + Text::formatNumber(clipSize) + L")";
+					item = item + L" (" + Text::intWide(clipSize) + L")";
 			} */
 
 			std::wstring item = tr(*i);

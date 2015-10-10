@@ -114,11 +114,11 @@ private:
 		/// Moves an item to the base.
 		void moveLeft();
 		/// Moves the given number of items to the base.
-		void moveLeftByValue(int change);
+		void moveLeftByValue(int qtyDelta);
 		/// Moves an item to the craft.
 		void moveRight();
 		/// Moves the given number of items to the craft.
-		void moveRightByValue(int change);
+		void moveRightByValue(int qtyDelta);
 
 		/// Empties the contents of the craft, moving all of the items back to the base.
 		void btnClearClick(Action* action);

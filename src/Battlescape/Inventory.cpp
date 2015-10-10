@@ -596,12 +596,12 @@ void Inventory::think()
 		std::wstring activated;
 
 		if (_prime > 0)
-			activated = Text::formatNumber(_prime) + L" ";
+			activated = Text::intWide(_prime) + L" ";
 
 		activated += _game->getLanguage()->getString("STR_GRENADE_IS_ACTIVATED");
 
 		if (_prime > 0)
-			activated += L" " + Text::formatNumber(_prime);
+			activated += L" " + Text::intWide(_prime);
 
 		_warning->showMessage(activated);
 
@@ -791,12 +791,12 @@ void Inventory::mouseClick(Action* action, State* state)
 							std::wstring activated;
 
 							if (explTurn > 0)
-								activated = Text::formatNumber(explTurn) + L" ";
+								activated = Text::intWide(explTurn) + L" ";
 
 							activated += _game->getLanguage()->getString("STR_GRENADE_IS_ACTIVATED");
 
 							if (explTurn > 0)
-								activated += L" " + Text::formatNumber(explTurn);
+								activated += L" " + Text::intWide(explTurn);
 
 							_warning->showMessage(activated);
 						}

@@ -262,9 +262,7 @@ void CraftInfoState::init()
 		hours = static_cast<int>(std::ceil(
 				static_cast<double>(crRule->getMaxFuel() - _craft->getFuel()) / static_cast<double>(crRule->getRefuelRate())
 				/ 2.)); // refuel every half-hour.
-		woststr1 << formatTime(
-							hours,
-							_craft->getWarning() == CW_CANTREFUEL);
+		woststr1 << formatTime(hours, _craft->getWarning() == CW_CANTREFUEL);
 	}
 	_txtFuel->setText(woststr1.str());
 
@@ -277,9 +275,7 @@ void CraftInfoState::init()
 		hours = static_cast<int>(std::ceil(
 				static_cast<double>(_craft->getCraftDamage()) / static_cast<double>(crRule->getRepairRate())
 				/ 2.)); // repair every half-hour.
-		woststr2 << formatTime(
-							hours,
-							false); // ... unless item is required to repair Craft.
+		woststr2 << formatTime(hours, false); // ... unless item is required to repair Craft.
 	}
 	_txtDamage->setText(woststr2.str());
 

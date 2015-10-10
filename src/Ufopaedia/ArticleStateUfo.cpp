@@ -116,7 +116,7 @@ ArticleStateUfo::ArticleStateUfo(const ArticleDefinitionUfo* const defs)
 	_txtInfo->setColor(GEOSCAPE_CYAN);
 	_txtInfo->setWordWrap();
 
-	_lstInfo = new TextList(300, 65, 10, 68);
+	_lstInfo = new TextList(300, 65,10,68);
 	add(_lstInfo);
 
 	centerAllSurfaces();
@@ -130,11 +130,11 @@ ArticleStateUfo::ArticleStateUfo(const ArticleDefinitionUfo* const defs)
 	_lstInfo->addRow(
 				2,
 				tr("STR_DAMAGE_CAPACITY").c_str(),
-				Text::formatNumber(ufo->getMaxDamage()).c_str());
+				Text::intWide(ufo->getMaxDamage()).c_str());
 	_lstInfo->addRow(
 				2,
 				tr("STR_WEAPON_POWER").c_str(),
-				Text::formatNumber(ufo->getWeaponPower()).c_str());
+				Text::intWide(ufo->getWeaponPower()).c_str());
 	_lstInfo->addRow(
 				2,
 				tr("STR_WEAPON_RANGE").c_str(),

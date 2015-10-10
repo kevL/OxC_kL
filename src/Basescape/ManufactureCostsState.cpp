@@ -98,7 +98,7 @@ ManufactureCostsState::ManufactureCostsState()
 	_txtRequired->setText(tr("STR_REQUIRED_LC"));
 	_txtRequired->setColor(color);
 
-	_lstProduction->setColumns(5, 96, 50, 30, 15, 95);
+	_lstProduction->setColumns(5, 96,50,30,15,95);
 	_lstProduction->setMargin(5);
 	_lstProduction->setBackground(_window);
 	_lstProduction->setSelectable();
@@ -185,7 +185,7 @@ void ManufactureCostsState::init()
 				++row;
 			}
 
-			_lstProduction->setRowColor(row, 213); // yellow
+			_lstProduction->setRowColor(row, YELLOW);
 		}
 		// note: Productions that require items show as yellow; those that don't show as blue.
 
@@ -217,7 +217,7 @@ void ManufactureCostsState::init()
 								Text::formatFunding(salesCost).c_str(),
 								qty.str().c_str(),
 								L"",L"");
-			_lstProduction->setRowColor(++row, 48, true); // green
+			_lstProduction->setRowColor(++row, GREEN, true);
 		}
 
 		profit -= (*i)->getManufactureCost();
@@ -233,7 +233,7 @@ void ManufactureCostsState::init()
 							woststr.str().c_str(),
 							L"",L"",
 							Text::formatFunding(profit).c_str());
-		_lstProduction->setRowColor(row + 1, 80, true); // lt.brown
+		_lstProduction->setRowColor(row + 1, BROWN, true);
 
 		_lstProduction->addRow(5, L"",L"",L"",L"",L""); // hori-spacer.
 	}

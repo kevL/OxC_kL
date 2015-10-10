@@ -212,17 +212,17 @@ CraftEquipmentState::CraftEquipmentState(
 			{
 				clipSize = itRule->getClipSize();
 				if (clipSize > 1)
-					wst += (L" (" + Text::formatNumber(clipSize) + L")");
+					wst += (L" (" + Text::intWide(clipSize) + L")");
 
 				wst.insert(0, L"  ");
 			}
 			else if (itRule->isFixed() == true // tank w/ Ordnance.
 				&& itRule->getCompatibleAmmo()->empty() == false)
 			{
-				const RuleItem* const amRule = _game->getRuleset()->getItem(itRule->getCompatibleAmmo()->front());
-				clipSize = amRule->getClipSize();
-				if (clipSize > 0)
-					wst += (L" (" + Text::formatNumber(clipSize) + L")");
+				const RuleItem* const aRule = _game->getRuleset()->getItem(itRule->getCompatibleAmmo()->front());
+				clipSize = aRule->getClipSize();
+				if (clipSize != 0)
+					wst += (L" (" + Text::intWide(clipSize) + L")");
 			}
 
 			_lstEquipment->addRow(
@@ -290,7 +290,6 @@ void CraftEquipmentState::think()
 	_timerLeft->think(this, NULL);
 	_timerRight->think(this, NULL);
 }
-
 
 /**
  * Returns to the previous screen.
@@ -398,16 +397,11 @@ void CraftEquipmentState::updateQuantity()
 	else
 		craftQty = _craft->getCraftItems()->getItemQty(_items[_sel]);
 
-	std::wostringstream
-		woststr1,
-		woststr2;
-
+	std::wostringstream woststr;
 	if (_game->getSavedGame()->getMonthsPassed() != -1)
-		woststr1 << _base->getStorageItems()->getItemQty(_items[_sel]);
+		woststr << _base->getStorageItems()->getItemQty(_items[_sel]);
 	else
-		woststr1 << "-";
-
-	woststr2 << craftQty;
+		woststr << L"-";
 
 	Uint8 color;
 	if (craftQty == 0)
@@ -421,8 +415,8 @@ void CraftEquipmentState::updateQuantity()
 		color = _lstEquipment->getSecondaryColor();
 
 	_lstEquipment->setRowColor(_sel, color);
-	_lstEquipment->setCellText(_sel, 1, woststr1.str());
-	_lstEquipment->setCellText(_sel, 2, woststr2.str());
+	_lstEquipment->setCellText(_sel, 1, woststr.str());
+	_lstEquipment->setCellText(_sel, 2, Text::intWide(craftQty));
 
 	_txtSpace->setText(tr("STR_SPACE_CREW_HWP_FREE_")
 						.arg(_craft->getNumSoldiers())
@@ -448,11 +442,11 @@ void CraftEquipmentState::moveLeft()
 
 /**
  * Moves the given number of items (selected) to the base.
- * @param change - quantity change
+ * @param qtyDelta - quantity change
  */
-void CraftEquipmentState::moveLeftByValue(int change)
+void CraftEquipmentState::moveLeftByValue(int qtyDelta)
 {
-	if (change > 0)
+	if (qtyDelta > 0)
 	{
 		const RuleItem* const itRule = _game->getRuleset()->getItem(_items[_sel]);
 
@@ -464,7 +458,7 @@ void CraftEquipmentState::moveLeftByValue(int change)
 
 		if (craftQty != 0)
 		{
-			change = std::min(change, craftQty);
+			qtyDelta = std::min(qtyDelta, craftQty);
 
 			if (itRule->isFixed() == true) // convert vehicle to item
 			{
@@ -480,29 +474,28 @@ void CraftEquipmentState::moveLeftByValue(int change)
 					{
 						if ((*i)->getRules() == itRule)
 						{
-							if (_game->getSavedGame()->getMonthsPassed() != -1) // kL_add <-
+							if (_game->getSavedGame()->getMonthsPassed() != -1)
 								_base->getStorageItems()->addItem(
-														ammoRule->getType(),
-														(*i)->getAmmo());
+																ammoRule->getType(),
+																(*i)->getAmmo());
 
 							delete *i;
 							i = _craft->getVehicles()->erase(i);
 						}
-						else
-							++i;
+						else ++i;
 					}
 
 					if (_game->getSavedGame()->getMonthsPassed() != -1)
 						_base->getStorageItems()->addItem(_items[_sel], craftQty);
 
 					// now reAdd the count to keep in the craft and distribute the ammo among them
-					if (craftQty > change)
-						moveRightByValue(craftQty - change);
+					if (craftQty > qtyDelta)
+						moveRightByValue(craftQty - qtyDelta);
 				}
 				else
 				{
 					if (_game->getSavedGame()->getMonthsPassed() != -1)
-						_base->getStorageItems()->addItem(_items[_sel], change);
+						_base->getStorageItems()->addItem(_items[_sel], qtyDelta);
 
 					for (std::vector<Vehicle*>::const_iterator
 							i = _craft->getVehicles()->begin();
@@ -514,7 +507,7 @@ void CraftEquipmentState::moveLeftByValue(int change)
 							delete *i;
 							i = _craft->getVehicles()->erase(i);
 
-							if (--change < 1)
+							if (--qtyDelta < 1)
 								break;
 						}
 						else
@@ -524,10 +517,10 @@ void CraftEquipmentState::moveLeftByValue(int change)
 			}
 			else
 			{
-				_craft->getCraftItems()->removeItem(_items[_sel], change);
+				_craft->getCraftItems()->removeItem(_items[_sel], qtyDelta);
 
 				if (_game->getSavedGame()->getMonthsPassed() != -1)
-					_base->getStorageItems()->addItem(_items[_sel], change);
+					_base->getStorageItems()->addItem(_items[_sel], qtyDelta);
 			}
 
 			updateQuantity();
@@ -548,26 +541,26 @@ void CraftEquipmentState::moveRight()
 
 /**
  * Moves the given number of items (selected) to the craft.
- * @param change - quantity change
+ * @param qtyDelta - quantity change
  */
-void CraftEquipmentState::moveRightByValue(int change)
+void CraftEquipmentState::moveRightByValue(int qtyDelta)
 {
-	if (change > 0)
+	if (qtyDelta > 0)
 	{
 		int baseQty;
 		if (_game->getSavedGame()->getMonthsPassed() == -1)
 		{
-			if (change == std::numeric_limits<int>::max())
-				change = 10;
+			if (qtyDelta == std::numeric_limits<int>::max())
+				qtyDelta = 10;
 
-			baseQty = change;
+			baseQty = qtyDelta;
 		}
 		else
 			baseQty = _base->getStorageItems()->getItemQty(_items[_sel]);
 
 		if (baseQty != 0)
 		{
-			change = std::min(change, baseQty);
+			qtyDelta = std::min(qtyDelta, baseQty);
 
 			RuleItem* const itRule = _game->getRuleset()->getItem(_items[_sel]);
 			if (itRule->isFixed() == true) // load vehicle, convert item to a vehicle
@@ -583,9 +576,9 @@ void CraftEquipmentState::moveRightByValue(int change)
 				if (spaceAvailable > 0
 					&& _craft->getLoadCapacity() - _craft->calcLoadCurrent() >= tankSize * 10) // note: 10 is the 'load' that a single 'space' uses.
 				{
-					change = std::min(change, spaceAvailable);
-					change = std::min(
-									change,
+					qtyDelta = std::min(qtyDelta, spaceAvailable);
+					qtyDelta = std::min(
+									qtyDelta,
 									(_craft->getLoadCapacity() - _craft->calcLoadCurrent()) / (tankSize * 10));
 
 					if (itRule->getCompatibleAmmo()->empty() == false)
@@ -600,13 +593,13 @@ void CraftEquipmentState::moveRightByValue(int change)
 						else
 							baseQty = _base->getStorageItems()->getItemQty(ammoRule->getType()) / clipSize;
 
-						change = std::min(change, baseQty); // maximum number of Vehicles w/ full Ammo.
+						qtyDelta = std::min(qtyDelta, baseQty); // maximum number of Vehicles w/ full Ammo.
 
-						if (change > 0)
+						if (qtyDelta > 0)
 						{
 							for (int
 									i = 0;
-									i != change;
+									i != qtyDelta;
 									++i)
 							{
 								if (_game->getSavedGame()->getMonthsPassed() != -1)
@@ -635,7 +628,7 @@ void CraftEquipmentState::moveRightByValue(int change)
 					{
 						for (int
 								i = 0;
-								i != change;
+								i != qtyDelta;
 								++i)
 						{
 							if (_game->getSavedGame()->getMonthsPassed() != -1)
@@ -652,7 +645,7 @@ void CraftEquipmentState::moveRightByValue(int change)
 			else // load item
 			{
 				if (_craft->getRules()->getMaxItems() > 0
-					&& _craft->calcLoadCurrent() + change > _craft->getLoadCapacity())
+					&& _craft->calcLoadCurrent() + qtyDelta > _craft->getLoadCapacity())
 				{
 					_timerRight->stop();
 
@@ -668,15 +661,15 @@ void CraftEquipmentState::moveRightByValue(int change)
 														"BACK04.SCR",
 														2));
 
-					change = _craft->getLoadCapacity() - _craft->calcLoadCurrent();
+					qtyDelta = _craft->getLoadCapacity() - _craft->calcLoadCurrent();
 				}
 
-				if (change > 0)
+				if (qtyDelta > 0)
 				{
-					_craft->getCraftItems()->addItem(_items[_sel], change);
+					_craft->getCraftItems()->addItem(_items[_sel], qtyDelta);
 
 					if (_game->getSavedGame()->getMonthsPassed() != -1)
-						_base->getStorageItems()->removeItem(_items[_sel], change);
+						_base->getStorageItems()->removeItem(_items[_sel], qtyDelta);
 				}
 			}
 
@@ -726,11 +719,11 @@ void CraftEquipmentState::calcCost() // private.
 	_txtCost->setText(tr("STR_COST_").arg(Text::formatFunding(cost)));
 }
 
-/**
+/*
  * Handles the mouse-wheels on the arrow-buttons.
  * @param action, Pointer to an action.
- */
-/*void CraftEquipmentState::lstEquipmentMousePress(Action* action)
+ *
+void CraftEquipmentState::lstEquipmentMousePress(Action* action)
 {
 	_sel = _lstEquipment->getSelectedRow();
 

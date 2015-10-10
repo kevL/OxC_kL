@@ -108,7 +108,7 @@ void RuleSoldier::load(const YAML::Node& node)
  * Returns the Soldier type.
  * @return, type
  */
-std::string RuleSoldier::getType() const
+const std::string& RuleSoldier::getType() const
 {
 	return _type;
 }
@@ -189,7 +189,7 @@ int RuleSoldier::getFloatHeight() const
  * Gets the armor issued to this type of soldier.
  * @return, the armor name
  */
-std::string RuleSoldier::getArmor() const
+const std::string& RuleSoldier::getArmor() const
 {
 	return _armor;
 }

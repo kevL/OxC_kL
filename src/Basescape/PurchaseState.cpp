@@ -276,8 +276,8 @@ PurchaseState::PurchaseState(Base* const base)
 			wst = tr(type);
 
 			clipSize = cwRule->getAmmoMax();
-			if (clipSize > 0)
-				wst += (L" (" + Text::formatNumber(clipSize) + L")");
+			if (clipSize != 0)
+				wst += (L" (" + Text::intWide(clipSize) + L")");
 
 			_lstItems->addRow(
 							4,
@@ -326,7 +326,7 @@ PurchaseState::PurchaseState(Base* const base)
 
 			clipSize = clRule->getClipSize();
 			if (clipSize > 1)
-				wst += (L"s (" + Text::formatNumber(clipSize) + L")");
+				wst += (L"s (" + Text::intWide(clipSize) + L")");
 
 			wst.insert(0, L"  ");
 			_lstItems->addRow(
@@ -424,7 +424,7 @@ PurchaseState::PurchaseState(Base* const base)
 
 			if (itRule->getBattleType() == BT_AMMO			// weapon clips & HWP rounds
 //					|| (itRule->getBattleType() == BT_NONE	// craft weapon rounds - ^HANDLED ABOVE^^
-//						&& itRule->getClipSize() > 0))
+//						&& itRule->getClipSize() != 0))
 				&& itRule->getType() != _game->getRuleset()->getAlienFuelType())
 			{
 				if (itRule->getType().substr(0,8) != "STR_HWP_") // *cuckoo** weapon clips
@@ -450,8 +450,8 @@ PurchaseState::PurchaseState(Base* const base)
                 {
 					amRule = _game->getRuleset()->getItem(itRule->getCompatibleAmmo()->front());
 					clipSize = amRule->getClipSize();
-					if (clipSize > 0)
-						wst += (L" (" + Text::formatNumber(clipSize) + L")");
+					if (clipSize != 0)
+						wst += (L" (" + Text::intWide(clipSize) + L")");
                 }
 
 				_lstItems->addRow(
@@ -539,9 +539,9 @@ void PurchaseState::btnOkClick(Action*)
 			{
 				case PST_SOLDIER:
 				for (int
-						j = 0;
-						j != _orderQty[sel];
-						++j)
+						i = 0;
+						i != _orderQty[sel];
+						++i)
 				{
 					transfer = new Transfer(_game->getRuleset()->getPersonnelTime());
 					transfer->setSoldier(_game->getRuleset()->genSoldier(
@@ -565,9 +565,9 @@ void PurchaseState::btnOkClick(Action*)
 
 				case PST_CRAFT:
 					for (int
-							j = 0;
-							j != _orderQty[sel];
-							++j)
+							i = 0;
+							i != _orderQty[sel];
+							++i)
 					{
 						RuleCraft* const crftRule = _game->getRuleset()->getCraft(_crafts[getCraftIndex(sel)]);
 						transfer = new Transfer(crftRule->getTransferTime());

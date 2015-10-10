@@ -84,7 +84,7 @@ std::wstring Text::intWide(int value) // static.
  * Takes an integer value and formats it as number with separators spacing the
  * thousands.
  * @param value		- a value
- * @param space		- true to insert a space every 3 digits (default false)
+ * @param space		- true to insert a space every 3 digits (default true)
  * @param currency	- reference a currency symbol (default L"")
  * @return, formatted string
  */

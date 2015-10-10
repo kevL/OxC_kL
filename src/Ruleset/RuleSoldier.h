@@ -75,7 +75,7 @@ private:
 		void load(const YAML::Node& node);
 
 		/// Gets the unit's type.
-		std::string getType() const;
+		const std::string& getType() const;
 
 		/// Gets the minimum stats for the random stats generator.
 		UnitStats getMinStats() const;
@@ -97,7 +97,7 @@ private:
 		int getFloatHeight() const;
 
 		/// Gets the armor issued to this type of soldier.
-		std::string getArmor() const;
+		const std::string& getArmor() const;
 
 		/// Gets the gender ratio struct.
 		const RuleGender* const getGenderRatio() const;

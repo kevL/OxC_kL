@@ -86,7 +86,7 @@ ArticleStateCraftWeapon::ArticleStateCraftWeapon(const ArticleDefinitionCraftWea
 	_lstInfo->addRow(
 				2,
 				tr("STR_DAMAGE").c_str(),
-				Text::formatNumber(cwRule->getPower()).c_str());
+				Text::intWide(cwRule->getPower()).c_str());
 
 	_lstInfo->addRow(
 				2,
@@ -96,7 +96,7 @@ ArticleStateCraftWeapon::ArticleStateCraftWeapon(const ArticleDefinitionCraftWea
 	_lstInfo->addRow(
 				2,
 				tr("STR_ACCURACY").c_str(),
-				Text::formatNumber(cwRule->getAccuracy()).c_str());
+				Text::intWide(cwRule->getAccuracy()).c_str());
 
 	std::wostringstream woststr;
 	woststr << cwRule->getAggressiveReload()	<< L" - "
@@ -111,7 +111,7 @@ ArticleStateCraftWeapon::ArticleStateCraftWeapon(const ArticleDefinitionCraftWea
 	_lstInfo->addRow(
 				2,
 				tr("STR_ROUNDS").c_str(),
-				Text::formatNumber(cwRule->getAmmoMax()).c_str());
+				Text::intWide(cwRule->getAmmoMax()).c_str());
 
 	for (size_t
 			i = 0;

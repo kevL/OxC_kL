@@ -195,12 +195,8 @@ void ResearchState::init()
 		}
 		_online.push_back(true);
 
-
-		const int assigned ((*i)->getAssigned());
-		std::wostringstream woststr;
-		woststr << assigned;
-
 		std::wstring daysLeft;
+		const int assigned ((*i)->getAssigned());
 		if (assigned != 0)
 		{
 			const int days (static_cast<int>(std::ceil(
@@ -208,12 +204,13 @@ void ResearchState::init()
 						  / static_cast<double>(assigned))));
 			daysLeft = Text::formatNumber(days);
 		}
-		else daysLeft = L"-";
+		else
+			daysLeft = L"-";
 
 		_lstResearch->addRow(
 						4,
 						tr((*i)->getRules()->getType()).c_str(),
-						woststr.str().c_str(),
+						Text::intWide(assigned).c_str(),
 						tr((*i)->getResearchProgress()).c_str(),
 						daysLeft.c_str());
 	}

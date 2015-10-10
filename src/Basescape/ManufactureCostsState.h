@@ -41,6 +41,11 @@ class ManufactureCostsState
 {
 
 private:
+	static const Uint8
+		GREEN	=  48,
+		BROWN	=  80,
+		YELLOW	= 213;
+
 	Text
 		* _txtTitle,
 		* _txtItem,

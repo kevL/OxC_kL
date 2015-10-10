@@ -1262,7 +1262,7 @@ void GeoscapeState::updateTimeDisplay()
 		_txtScore->setText(Text::formatNumber(score));
 	}
 	else
-		_txtScore->setText(Text::formatNumber(0));
+		_txtScore->setText(Text::intWide(0));
 
 
 	if (_timeComp != _btn5Secs)
@@ -1288,7 +1288,7 @@ void GeoscapeState::updateTimeDisplay()
 	if (_day != date)
 	{
 		_day = date;
-		_txtDay->setText(Text::formatNumber(_day));
+		_txtDay->setText(Text::intWide(_day));
 
 		date = _gameSave->getTime()->getMonth();
 		if (_month != date)
@@ -1300,7 +1300,7 @@ void GeoscapeState::updateTimeDisplay()
 			if (_year != date)
 			{
 				_year = date;
-				_txtYear->setText(Text::formatNumber(_year));
+				_txtYear->setText(Text::intWide(_year));
 			}
 		}
 	}
@@ -2145,7 +2145,7 @@ void GeoscapeState::time10Minutes()
 
 	if (_windowPops > 0)
 	{
-		_ufoDetected->setText(Text::formatNumber(_windowPops));
+		_ufoDetected->setText(Text::intWide(_windowPops));
 		_ufoDetected->setVisible();
 	}
 }
@@ -4528,7 +4528,7 @@ void GeoscapeState::assessUfoPopups()
 	if (--_windowPops == 0)
 		_ufoDetected->setVisible(false);
 	else
-		_ufoDetected->setText(Text::formatNumber(_windowPops));
+		_ufoDetected->setText(Text::intWide(_windowPops));
 }
 
 /**

@@ -122,14 +122,14 @@ ArticleStateItem::ArticleStateItem(const ArticleDefinitionItem* const defs)
 		if (itRule->getAutoTu() != 0)
 		{
 			if (itRule->getFlatRate() == true)
-				tu = Text::formatNumber(itRule->getAutoTu());
+				tu = Text::intWide(itRule->getAutoTu());
 			else
 				tu = Text::formatPct(itRule->getAutoTu());
 
 			_lstInfo->addRow(
 							3,
 							tr("STR_SHOT_TYPE_AUTO").c_str(),
-							Text::formatNumber(itRule->getAccuracyAuto()).c_str(),
+							Text::intWide(itRule->getAccuracyAuto()).c_str(),
 							tu.c_str());
 			_lstInfo->setCellColor(current_row++, 0, uPed_BLUE_SLATE);
 		}
@@ -137,14 +137,14 @@ ArticleStateItem::ArticleStateItem(const ArticleDefinitionItem* const defs)
 		if (itRule->getSnapTu() != 0)
 		{
 			if (itRule->getFlatRate() == true)
-				tu = Text::formatNumber(itRule->getSnapTu());
+				tu = Text::intWide(itRule->getSnapTu());
 			else
 				tu = Text::formatPct(itRule->getSnapTu());
 
 			_lstInfo->addRow(
 							3,
 							tr("STR_SHOT_TYPE_SNAP").c_str(),
-							Text::formatNumber(itRule->getAccuracySnap()).c_str(),
+							Text::intWide(itRule->getAccuracySnap()).c_str(),
 							tu.c_str());
 			_lstInfo->setCellColor(current_row++, 0, uPed_BLUE_SLATE);
 		}
@@ -152,14 +152,14 @@ ArticleStateItem::ArticleStateItem(const ArticleDefinitionItem* const defs)
 		if (itRule->getAimedTu() != 0)
 		{
 			if (itRule->getFlatRate() == true)
-				tu = Text::formatNumber(itRule->getAimedTu());
+				tu = Text::intWide(itRule->getAimedTu());
 			else
 				tu = Text::formatPct(itRule->getAimedTu());
 
 			_lstInfo->addRow(
 							3,
 							tr("STR_SHOT_TYPE_AIMED").c_str(),
-							Text::formatNumber(itRule->getAccuracyAimed()).c_str(),
+							Text::intWide(itRule->getAccuracyAimed()).c_str(),
 							tu.c_str());
 			_lstInfo->setCellColor(current_row++, 0, uPed_BLUE_SLATE);
 		}
@@ -167,7 +167,7 @@ ArticleStateItem::ArticleStateItem(const ArticleDefinitionItem* const defs)
 		if (itRule->getLaunchTu() != 0)
 		{
 			if (itRule->getFlatRate() == true)
-				tu = Text::formatNumber(itRule->getLaunchTu());
+				tu = Text::intWide(itRule->getLaunchTu());
 			else
 				tu = Text::formatPct(itRule->getLaunchTu());
 

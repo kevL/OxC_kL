@@ -317,7 +317,7 @@ DogfightState::DogfightState(
 		srf->blit(_texture);
 	else Log(LOG_INFO) << "ERROR: no texture icon for dogfight";
 
-	_txtDistance->setText(Text::formatNumber(DST_ENGAGE));
+	_txtDistance->setText(Text::intWide(DST_ENGAGE));
 
 	_txtStatus->setAlign(ALIGN_CENTER);
 	_txtStatus->setText(tr("STR_STANDOFF"));

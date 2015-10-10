@@ -121,7 +121,7 @@ MonthlyCostsState::MonthlyCostsState(Base* base)
 							4,
 							tr(*i).c_str(),
 							Text::formatFunding(cost).c_str(),
-							Text::formatNumber(qty).c_str(),
+							Text::intWide(qty).c_str(),
 							Text::formatFunding(qty * cost).c_str());
 		}
 	}

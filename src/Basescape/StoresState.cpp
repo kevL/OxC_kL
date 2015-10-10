@@ -174,15 +174,15 @@ StoresState::StoresState(Base* base)
 					{
 						craftOrdnance = true;
 						clipSize = cwRule->getAmmoMax(); // Launcher capacity
-						if (clipSize > 0)
-							item += (L" (" + Text::formatNumber(clipSize) + L")");
+						if (clipSize != 0)
+							item += (L" (" + Text::intWide(clipSize) + L")");
 					}
 					else if (clRule == itRule)
 					{
 						craftOrdnance = true;
 						clipSize = clRule->getClipSize(); // launcher Ammo quantity
 						if (clipSize > 1)
-							item += (L"s (" + Text::formatNumber(clipSize) + L")");
+							item += (L"s (" + Text::intWide(clipSize) + L")");
 					}
 				}
 
@@ -191,8 +191,8 @@ StoresState::StoresState(Base* base)
 				{
 					clRule = rules->getItem(itRule->getCompatibleAmmo()->front());
 					clipSize = clRule->getClipSize();
-					if (clipSize > 0)
-						item += (L" (" + Text::formatNumber(clipSize) + L")");
+					if (clipSize != 0)
+						item += (L" (" + Text::intWide(clipSize) + L")");
 				}
 
 				if ((itRule->getBattleType() == BT_AMMO
@@ -205,7 +205,7 @@ StoresState::StoresState(Base* base)
 					{
 						clipSize = itRule->getClipSize();
 						if (clipSize > 1)
-							item += (L" (" + Text::formatNumber(clipSize) + L")");
+							item += (L" (" + Text::intWide(clipSize) + L")");
 					}
 					item.insert(0, L"  ");
 

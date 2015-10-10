@@ -503,11 +503,7 @@ void SoldierInfoDeadState::setSoldierId(size_t soldierId)
  */
 void SoldierInfoDeadState::btnDiaryClick(Action*)
 {
-	_game->pushState(new SoldierDiaryOverviewState(
-												NULL,
-												_soldierId,
-												NULL,
-												this));
+	_game->pushState(new SoldierDiaryOverviewState(NULL, _soldierId, NULL, this));
 }
 
 }

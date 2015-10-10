@@ -1244,7 +1244,7 @@ void BattlescapeState::printTileInventory() // private.
 						wst1 += item->getUnit()->getName(_game->getLanguage());
 
 						if (item->getUnit()->getGeoscapeSoldier() != NULL)
-							wst1 += L" (" + Text::formatNumber(item->getUnit()->getHealth() - item->getUnit()->getStun() - 1) + L")";
+							wst1 += L" (" + Text::intWide(item->getUnit()->getHealth() - item->getUnit()->getStun() - 1) + L")";
 					}
 					else
 					{
@@ -1259,18 +1259,18 @@ void BattlescapeState::printTileInventory() // private.
 					wst1 += tr(itRule->getType());
 
 					if (itRule->getBattleType() == BT_AMMO)
-						wst1 += L" (" + Text::formatNumber(item->getAmmoQuantity()) + L")";
+						wst1 += L" (" + Text::intWide(item->getAmmoQuantity()) + L")";
 					else if (itRule->getBattleType() == BT_FIREARM
 						&& item->selfPowered() == false
 						&& item->getAmmoItem() != NULL)
 					{
 						wst = tr(item->getAmmoItem()->getRules()->getType());
-						wst1 += L" | " + wst + L" (" + Text::formatNumber(item->getAmmoItem()->getAmmoQuantity()) + L")";
+						wst1 += L" | " + wst + L" (" + Text::intWide(item->getAmmoItem()->getAmmoQuantity()) + L")";
 					}
 					else if (itRule->isGrenade() == true
 						&& item->getFuse() > -1)
 					{
-						wst1 += L" (" + Text::formatNumber(item->getFuse()) + L")";
+						wst1 += L" (" + Text::intWide(item->getFuse()) + L")";
 					}
 				}
 				else
@@ -1292,7 +1292,7 @@ void BattlescapeState::printTileInventory() // private.
 
 			if (qty > 1)
 			{
-				wst2 += L" * " + Text::formatNumber(qty);
+				wst2 += L" * " + Text::intWide(qty);
 				qty = 1;
 			}
 
@@ -3720,7 +3720,7 @@ void BattlescapeState::updateExperienceInfo()
 				_lstSoldierInfo->addRow(
 									2,
 									xpType.at(i).c_str(),
-									Text::formatNumber(xp[i]).c_str());
+									Text::intWide(xp[i]).c_str());
 
 				if (xp[i] > 10)
 					_lstSoldierInfo->setCellColor(i, 1, BROWN_L, true);
@@ -3825,7 +3825,7 @@ void BattlescapeState::updateTileInfo(const Tile* const tile)
 
 				std::wstring value;
 				if (info[i] != 0)
-					value = Text::formatNumber(info[i]).c_str();
+					value = Text::intWide(info[i]).c_str();
 				else
 					value = L"";
 
@@ -3840,7 +3840,7 @@ void BattlescapeState::updateTileInfo(const Tile* const tile)
 
 				std::wstring cost;
 				if (info[i] < 255)
-					cost = Text::formatNumber(info[i]).c_str();
+					cost = Text::intWide(info[i]).c_str();
 				else
 					cost = L"-";
 

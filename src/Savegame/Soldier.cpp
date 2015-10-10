@@ -168,7 +168,7 @@ void Soldier::load(
 
 	_armorRule = rules->getArmor(node["armor"].as<std::string>());
 	if (_armorRule == NULL)
-		_armorRule = rules->getArmor(rules->getSoldier(rules->getSoldiersList().front())->getArmor());
+		_armorRule = rules->getArmor(_solRule->getArmor());
 
 	if (const YAML::Node& layout = node["equipmentLayout"])
 	{
@@ -339,7 +339,7 @@ std::wstring Soldier::getCraftString(Language* lang) const
 	std::wstring ret;
 
 	if (_recovery > 0)
-		ret = lang->getString("STR_WOUNDED").arg(Text::formatNumber(_recovery));
+		ret = lang->getString("STR_WOUNDED").arg(_recovery);
 	else if (_craft == NULL)
 		ret = lang->getString("STR_NONE_UC");
 	else
