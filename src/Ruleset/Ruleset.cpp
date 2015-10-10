@@ -96,7 +96,8 @@ Ruleset::Ruleset(const Game* const game)
 		_costScientist(0),
 		_timePersonnel(0),
 //		_initialFunding(0), // 6'000(000)
-		_startingTime(6,1,1,1999,12,0,0),
+//		_startingTime(6,1,1,1999,12,0,0),
+		_startingTime(1,1,1999,12,0,0),
 		_modIndex(0),
 		_facilityListOrder(0),
 		_craftListOrder(0),
@@ -114,28 +115,26 @@ Ruleset::Ruleset(const Game* const game)
 
 	const std::string path = CrossPlatform::getDataFolder("SoldierName/"); // Check in which data dir the folder is stored
 
-	const std::vector<std::string> nation = CrossPlatform::getFolderContents(path, "nam"); // Add soldier names
+	const std::vector<std::string> nation = CrossPlatform::getFolderContents(path, "nam"); // add Soldier names
 	for (std::vector<std::string>::const_iterator
 			i = nation.begin();
 			i != nation.end();
 			++i)
 	{
-		const std::string file = CrossPlatform::noExt(*i);
 		SoldierNamePool* const pool = new SoldierNamePool();
-		pool->load(file);
+		pool->load(CrossPlatform::noExt(*i));
 
 		_names.push_back(pool);
 	}
 
-	const std::vector<std::string> operations = CrossPlatform::getFolderContents(path, "opr"); // load Operation Title words
+	const std::vector<std::string> operations = CrossPlatform::getFolderContents(path, "opr"); // add Operation Title words
 	for (std::vector<std::string>::const_iterator
 			i = operations.begin();
 			i != operations.end();
 			++i)
 	{
-		const std::string file = CrossPlatform::noExt(*i);
 		OperationPool* const pool = new OperationPool();
-		pool->load(file);
+		pool->load(CrossPlatform::noExt(*i));
 
 		_operationTitles.push_back(pool);
 	}

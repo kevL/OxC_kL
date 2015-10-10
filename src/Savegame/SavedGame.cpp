@@ -140,7 +140,8 @@ SavedGame::SavedGame(const Ruleset* const rules)
 //		_lastselectedArmor("STR_ARMOR_NONE_UC")
 		_debugArgDone(false)
 {
-	_time = new GameTime(6,1,1,1999,12,0,0);
+//	_time = new GameTime(6,1,1,1999,12,0,0);
+	_time = new GameTime(1,1,1999,12,0,0);
 
 	_alienStrategy = new AlienStrategy();
 
@@ -323,35 +324,35 @@ SaveInfo SavedGame::getSaveInfo( // private. static.
 	const YAML::Node doc (YAML::LoadFile(path));
 
 	SaveInfo save;
-	save.fileName = file;
+	save.file = file;
 
-	if (save.fileName == QUICKSAVE)
+	if (save.file == QUICKSAVE)
 	{
-		save.displayName = lang->getString("STR_QUICK_SAVE_SLOT");
+		save.label = lang->getString("STR_QUICK_SAVE_SLOT");
 		save.reserved = true;
 	}
-	else if (save.fileName == AUTOSAVE_GEOSCAPE)
+	else if (save.file == AUTOSAVE_GEOSCAPE)
 	{
-		save.displayName = lang->getString("STR_AUTO_SAVE_GEOSCAPE_SLOT");
+		save.label = lang->getString("STR_AUTO_SAVE_GEOSCAPE_SLOT");
 		save.reserved = true;
 	}
-	else if (save.fileName == AUTOSAVE_BATTLESCAPE)
+	else if (save.file == AUTOSAVE_BATTLESCAPE)
 	{
-		save.displayName = lang->getString("STR_AUTO_SAVE_BATTLESCAPE_SLOT");
+		save.label = lang->getString("STR_AUTO_SAVE_BATTLESCAPE_SLOT");
 		save.reserved = true;
 	}
 	else
 	{
 		if (doc["name"])
-			save.displayName = Language::utf8ToWstr(doc["name"].as<std::string>());
+			save.label = Language::utf8ToWstr(doc["name"].as<std::string>());
 		else
-			save.displayName = Language::fsToWstr(CrossPlatform::noExt(file));
+			save.label = Language::fsToWstr(CrossPlatform::noExt(file));
 
 		save.reserved = false;
 	}
 
 	save.timestamp = CrossPlatform::getDateModified(path);
-	const std::pair<std::wstring, std::wstring> timePair (CrossPlatform::timeToString(save.timestamp));
+	const std::pair<std::wstring, std::wstring> timePair = CrossPlatform::timeToString(save.timestamp);
 	save.isoDate = timePair.first;
 	save.isoTime = timePair.second;
 
@@ -362,7 +363,7 @@ SaveInfo SavedGame::getSaveInfo( // private. static.
 				<< L" - ";
 	}
 
-	GameTime gt (GameTime(6,1,1,1999,12,0,0));
+	GameTime gt = GameTime(1,1,1999,12,0,0);
 	gt.load(doc["time"]);
 	details << gt.getDayString(lang)
 			<< L" "

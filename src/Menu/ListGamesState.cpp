@@ -64,8 +64,8 @@ struct compareSaveName
 	{
 		if (a.reserved == b.reserved)
 			return CrossPlatform::naturalCompare(
-											a.displayName,
-											b.displayName);
+											a.label,
+											b.label);
 		else
 			return _reverse ? b.reserved : a.reserved;
 	}
@@ -290,12 +290,11 @@ void ListGamesState::updateList()
 	for (std::vector<SaveInfo>::const_iterator
 			i = _saves.begin();
 			i != _saves.end();
-			++i,
-				++row)
+			++i, ++row)
 	{
 		_lstSaves->addRow(
 						3,
-						i->displayName.c_str(),
+						i->label.c_str(),
 						i->isoDate.c_str(),
 						i->isoTime.c_str());
 		if (i->reserved == true
@@ -368,7 +367,7 @@ void ListGamesState::lstSavesPress(Action* action)
 	{
 		_game->pushState(new DeleteGameState(
 										_origin,
-										_saves[_lstSaves->getSelectedRow() - _firstValidRow].fileName));
+										_saves[_lstSaves->getSelectedRow() - _firstValidRow].file));
 	}
 }
 

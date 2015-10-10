@@ -224,36 +224,30 @@ void ListSaveState::saveGame()
 	_game->getSavedGame()->setName(_edtSave->getText());
 
 	std::string
-		oldFile,
-		newFile (CrossPlatform::sanitizeFilename(Language::wstrToFs(_edtSave->getText()))); // init.
+		file = CrossPlatform::sanitizeFilename(Language::wstrToFs(_edtSave->getText())),
+		fileOld;
 
 	if (_selectedRow > 0)
 	{
-		oldFile = _saves[_selectedRow - 1].fileName;
-		if (oldFile != newFile + ".sav")
+		fileOld = _saves[_selectedRow - 1].file;
+		if (fileOld != file + ".sav")
 		{
-			while (CrossPlatform::fileExists(Options::getUserFolder() + newFile + ".sav"))
-				newFile += "_";
+			while (CrossPlatform::fileExists(Options::getUserFolder() + file + ".sav"))
+				file += "_";
 
-			const std::string
-				oldPath = Options::getUserFolder() + oldFile,
-				newPath = Options::getUserFolder() + newFile + ".sav";
 			CrossPlatform::moveFile(
-								oldPath,
-								newPath);
+								Options::getUserFolder() + fileOld,
+								Options::getUserFolder() + file + ".sav");
 		}
 	}
 	else
 	{
-		while (CrossPlatform::fileExists(Options::getUserFolder() + newFile + ".sav"))
-			newFile += "_";
+		while (CrossPlatform::fileExists(Options::getUserFolder() + file + ".sav"))
+			file += "_";
 	}
 
-	newFile += ".sav";
-	_game->pushState(new SaveGameState(
-									_origin,
-									newFile,
-									_palette));
+	file += ".sav";
+	_game->pushState(new SaveGameState(_origin, file, _palette));
 }
 
 /**

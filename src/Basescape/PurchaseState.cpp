@@ -457,7 +457,7 @@ PurchaseState::PurchaseState(Base* const base)
 			if (itRule->getBattleType() == BT_AMMO			// #2, weapon clips & HWP rounds
 //					|| (itRule->getBattleType() == BT_NONE	// #0, craft weapon rounds - ^HANDLED ABOVE^^
 //						&& itRule->getClipSize() > 0))
-				&& itRule->getType() != "STR_ELERIUM_115")
+				&& itRule->getType() != _game->getRuleset()->getAlienFuelType())
 			{
 				if (itRule->getType().substr(0,8) != "STR_HWP_") // *cuckoo** weapon clips
 				{
@@ -564,7 +564,7 @@ void PurchaseState::btnOkClick(Action*)
 			i != _quantities.size();
 			++i)
 	{
-		if (_quantities[i] > 0)
+		if (_quantities[i] != 0)
 		{
 			if (i == 0) // Buy soldiers
 			{

@@ -31,7 +31,7 @@ class Language;
 
 
 /**
- * Enumerator for time periods.
+ * Time periods.
  */
 enum TimeTrigger
 {
@@ -58,23 +58,23 @@ private:
 		_second,
 		_minute,
 		_hour,
-		_weekday,
+//		_weekday,
 		_day,
 		_month,
 		_year;
 
 
 	public:
-		/// Creates a new ingame time at a certain point.
+		/// Creates a new IG time at a certain point.
 		GameTime(
-				int weekday,
+//				int weekday,
 				int day,
 				int month,
 				int year,
 				int hour,
 				int minute,
 				int sec);
-		/// Cleans up the ingame time.
+		/// Cleans up the IG time.
 		~GameTime();
 
 		/// Loads the time from YAML.
@@ -82,35 +82,35 @@ private:
 		/// Saves the time to YAML.
 		YAML::Node save(bool memorial = false) const;
 
-		/// Advances the time by 5 seconds.
+		/// Advances the IG time by 1 second.
 		TimeTrigger advance();
 
-		/// Gets the ingame second.
+		/// Gets the IG second.
 		int getSecond() const;
-		/// Gets the ingame minute.
+		/// Gets the IG minute.
 		int getMinute() const;
-		/// Gets the ingame hour.
+		/// Gets the IG hour.
 		int getHour() const;
 
-		/// Gets the ingame weekday.
-		int getWeekday() const;
-		/// Gets a string version of the ingame weekday.
-		std::string getWeekdayString() const;
+		/// Gets the IG weekday.
+//		int getWeekday() const;
+		/// Gets a string version of the IG weekday.
+//		std::string getWeekdayString() const;
 
-		/// Gets the ingame day.
+		/// Gets the IG day.
 		int getDay() const;
-		/// Gets a string version of the ingame day.
+		/// Gets a string version of the IG day.
 		std::wstring getDayString(const Language* const lang) const;
 
-		/// Gets the ingame month.
+		/// Gets the IG month.
 		int getMonth() const;
-		/// Gets a string version of the ingame month.
+		/// Gets a string version of the IG month.
 		std::string getMonthString() const;
 
-		/// Gets the ingame year.
+		/// Gets the IG year.
 		int getYear() const;
 
-		/// Gets the position of the daylight according to the ingame time.
+		/// Gets the position of the daylight according to the IG time.
 		double getDaylight() const;
 };
 

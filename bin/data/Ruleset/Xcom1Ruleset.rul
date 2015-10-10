@@ -4527,7 +4527,7 @@ startingTime:
   second: 0
   minute: 0
   hour: 12
-  weekday: 6
+#  weekday: 6
   day: 1
   month: 1
   year: 1999

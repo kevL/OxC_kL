@@ -179,7 +179,7 @@ struct MissionStatistics
 	/// cTor.
 	explicit MissionStatistics(const YAML::Node& node)
 		:
-			timeStat(0,0,0,0,0,0,0)
+			timeStat(0,0,0,0,0,0)
 	{
 		load(node);
 	}
@@ -188,7 +188,7 @@ struct MissionStatistics
 	MissionStatistics()
 		:
 			id(0),
-			timeStat(0,0,0,0,0,0,0),
+			timeStat(0,0,0,0,0,0),
 			region("STR_REGION_UNKNOWN"),
 			country("STR_UNKNOWN"),
 			ufo("NUL_UFO"),
@@ -213,10 +213,10 @@ struct SaveInfo
 	int mode;
 	bool reserved;
 	time_t timestamp;
-	std::string fileName;
+	std::string file;
 	std::wstring
+		label,
 		details,
-		displayName,
 		isoDate,
 		isoTime;
 	std::vector<std::string> rulesets;

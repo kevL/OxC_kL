@@ -26,8 +26,8 @@ namespace OpenXcom
 {
 
 /**
- * Initializes a new ingame time with a certain starting point.
- * @param weekday	- starting weekday
+ * Initializes a new IG time with a certain starting point.
+// * @param weekday	- starting weekday
  * @param day		- starting day
  * @param month		- starting month
  * @param year		- starting year
@@ -36,7 +36,7 @@ namespace OpenXcom
  * @param sec		- starting second
  */
 GameTime::GameTime(
-		int weekday,
+//		int weekday,
 		int day,
 		int month,
 		int year,
@@ -47,7 +47,7 @@ GameTime::GameTime(
 		_second(sec),
 		_minute(minute),
 		_hour(hour),
-		_weekday(weekday),
+//		_weekday(weekday),
 		_day(day),
 		_month(month),
 		_year(year)
@@ -68,7 +68,7 @@ void GameTime::load(const YAML::Node& node)
 	_second		= node["second"]	.as<int>(_second);
 	_minute		= node["minute"]	.as<int>(_minute);
 	_hour		= node["hour"]		.as<int>(_hour);
-	_weekday	= node["weekday"]	.as<int>(_weekday);
+//	_weekday	= node["weekday"]	.as<int>(_weekday);
 	_day		= node["day"]		.as<int>(_day);
 	_month		= node["month"]		.as<int>(_month);
 	_year		= node["year"]		.as<int>(_year);
@@ -88,7 +88,7 @@ YAML::Node GameTime::save(bool memorial) const
 		node["second"]	= _second;
 		node["minute"]	= _minute;
 		node["hour"]	= _hour;
-		node["weekday"]	= _weekday;
+//		node["weekday"]	= _weekday;
 	}
 	node["day"]		= _day;
 	node["month"]	= _month;
@@ -98,9 +98,10 @@ YAML::Node GameTime::save(bool memorial) const
 }
 
 /**
- * Advances the ingame time by 5 seconds automatically correcting the other
- * components when necessary and sending out a trigger when a certain time span
- * has elapsed for time-dependent events.
+ * Advances IG time by 1 second.
+ * @note This automatically increments the larger time-components when necessary
+ * and sends out an appropriate trigger if any of those specific time-markers
+ * get reached - for time-dependent events on the Geoscape.
  * @return, time span trigger
  */
 TimeTrigger GameTime::advance()
@@ -138,13 +139,13 @@ TimeTrigger GameTime::advance()
 	if (_hour > 23)
 	{
 		_hour = 0;
-		++_weekday;
+//		++_weekday;
 		++_day;
 		trigger = TIME_1DAY;
 	}
 
-	if (_weekday > 7)
-		_weekday = 1;
+//	if (_weekday > 7)
+//		_weekday = 1;
 
 	if (_day > monthDays[_month - 1])
 	{
@@ -163,7 +164,7 @@ TimeTrigger GameTime::advance()
 }
 
 /**
- * Returns the current ingame second.
+ * Returns the current IG second.
  * @return, second (0-59)
  */
 int GameTime::getSecond() const
@@ -172,7 +173,7 @@ int GameTime::getSecond() const
 }
 
 /**
- * Returns the current ingame minute.
+ * Returns the current IG minute.
  * @return, minute (0-59)
  */
 int GameTime::getMinute() const
@@ -181,7 +182,7 @@ int GameTime::getMinute() const
 }
 
 /**
- * Returns the current ingame hour.
+ * Returns the current IG hour.
  * @return, hour (0-23)
  */
 int GameTime::getHour() const
@@ -189,19 +190,18 @@ int GameTime::getHour() const
 	return _hour;
 }
 
-/**
- * Returns the current ingame weekday.
+/*
+ * Returns the current IG weekday.
  * @return, weekday (1-7) starts on Sunday
- */
+ *
 int GameTime::getWeekday() const
 {
 	return _weekday;
-}
-
-/**
- * Returns a localizable-string representation of the current ingame weekday.
+} */
+/*
+ * Returns a localizable-string representation of the current IG weekday.
  * @return, weekday string ID
- */
+ *
 std::string GameTime::getWeekdayString() const
 {
 	static const std::string weekdays[7] =
@@ -216,10 +216,10 @@ std::string GameTime::getWeekdayString() const
 	};
 
 	return weekdays[static_cast<size_t>(_weekday) - 1];
-}
+} */
 
 /**
- * Returns the current ingame day.
+ * Returns the current IG day.
  * @return, day (1-31)
  */
 int GameTime::getDay() const
@@ -228,8 +228,8 @@ int GameTime::getDay() const
 }
 
 /**
- * Returns the localized representation of the current ingame day with the
- * cardinal operator.
+ * Returns the localized representation of the current IG day with its cardinal
+ * suffix attached.
  * @param lang - pointer to current language
  * @return, localized day string
  */
@@ -260,7 +260,7 @@ std::wstring GameTime::getDayString(const Language* const lang) const
 }
 
 /**
- * Returns the current ingame month.
+ * Returns the current IG month.
  * @return, month (1-12)
  */
 int GameTime::getMonth() const
@@ -269,8 +269,7 @@ int GameTime::getMonth() const
 }
 
 /**
- * Returns a localizable-string representation of
- * the current ingame month.
+ * Returns a localizable-string representation of the current IG month.
  * @return, month string ID
  */
 std::string GameTime::getMonthString() const
@@ -295,7 +294,7 @@ std::string GameTime::getMonthString() const
 }
 
 /**
- * Returns the current ingame year.
+ * Returns the current IG year.
  * @return, year
  */
 int GameTime::getYear() const
@@ -304,9 +303,9 @@ int GameTime::getYear() const
 }
 
 /**
- * Returns the current position of the daylight emitted on the globe
- * according to the current ingame time, so the value is 0 when the light
- * starts at 0º longitude (6h) and 1 when the light ends at 0º longitude (18h).
+ * Returns the current position of the daylight emitted on the globe according
+ * to the current IG time - so the value is 0 when the light starts at 0º
+ * longitude (6h) and 1 when the light ends at 0º longitude (18h).
  * @return, daylight position (0-1)
  */
 double GameTime::getDaylight() const

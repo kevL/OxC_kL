@@ -28,7 +28,7 @@ namespace OpenXcom
  */
 SoldierDeath::SoldierDeath()
 	:
-		_time(0,0,0,0,0,0,0)
+		_time(0,0,0,0,0,0)
 {}
 
 /**

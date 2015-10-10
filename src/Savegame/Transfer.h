@@ -47,8 +47,8 @@ class Soldier;
 
 /**
  * Represents an item transfer.
- * Items are placed "in transit" whenever they are
- * purchased or transferred between bases.
+ * @note Items are placed in transit whenever they are purchased or transfered
+ * between bases.
  */
 class Transfer
 {

@@ -101,13 +101,13 @@ void ListLoadState::lstSavesPress(Action* action)
 			hideElements();
 			_game->pushState(new LoadGameState(
 											_origin,
-											_saves[_lstSaves->getSelectedRow()].fileName,
+											_saves[_lstSaves->getSelectedRow()].file,
 											_palette));
 		}
 		else
 			_game->pushState(new ConfirmLoadState(
 												_origin,
-												_saves[_lstSaves->getSelectedRow()].fileName,
+												_saves[_lstSaves->getSelectedRow()].file,
 												this));
 	}
 	else
