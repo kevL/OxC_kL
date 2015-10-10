@@ -47,6 +47,8 @@ class RuleSoldier
 
 private:
 	int
+		_costBuy,
+		_costSalary,
 		_floatHeight,
 		_kneelHeight,
 		_standHeight;
@@ -81,6 +83,11 @@ private:
 		UnitStats getMaxStats() const;
 		/// Gets the stat caps.
 		UnitStats getStatCaps() const;
+
+		/// Gets the cost of this type of Soldier.
+		int getBuyCost() const;
+		/// Gets the monthly salary of this type of Soldier.
+		int getSalaryCost() const;
 
 		/// Gets the height of the soldier when it's standing.
 		int getStandHeight() const;

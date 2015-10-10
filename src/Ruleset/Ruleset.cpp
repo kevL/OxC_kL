@@ -91,7 +91,6 @@ namespace OpenXcom
 Ruleset::Ruleset(const Game* const game)
 	:
 		_game(game),
-		_costSoldier(0),
 		_costEngineer(0),
 		_costScientist(0),
 		_timePersonnel(0),
@@ -750,7 +749,8 @@ void Ruleset::loadFile(const std::string& file) // protected.
 	{
 		RuleSoldier* const rule = loadRule(
 										*i,
-										&_soldiers);
+										&_soldiers,
+										&_soldiersIndex);
 		if (rule != NULL)
 			rule->load(*i);
 	}
@@ -909,7 +909,6 @@ void Ruleset::loadFile(const std::string& file) // protected.
 	if (doc["startingTime"])
 		_startingTime.load(doc["startingTime"]);
 
-	_costSoldier	= doc["costSoldier"]	.as<int>(_costSoldier);
 	_costEngineer	= doc["costEngineer"]	.as<int>(_costEngineer);
 	_costScientist	= doc["costScientist"]	.as<int>(_costScientist);
 	_timePersonnel	= doc["timePersonnel"]	.as<int>(_timePersonnel);
@@ -1579,15 +1578,6 @@ const std::vector<std::string>& Ruleset::getUfosList() const
 }
 
 /**
- * Returns the list of all terrains provided by the ruleset.
- * @return, reference to a vector of Terrain types
- */
-const std::vector<std::string>& Ruleset::getTerrainList() const
-{
-	return _terrainIndex;
-}
-
-/**
  * Returns the rules for the specified terrain.
  * @param type - reference a Terrain type
  * @return, pointer to Rule for the Terrain
@@ -1600,6 +1590,15 @@ RuleTerrain* Ruleset::getTerrain(const std::string& type) const
 		return i->second;
 
 	return NULL;
+}
+
+/**
+ * Returns the list of all terrains provided by the ruleset.
+ * @return, reference to a vector of Terrain types
+ */
+const std::vector<std::string>& Ruleset::getTerrainList() const
+{
+	return _terrainIndex;
 }
 
 /**
@@ -1641,6 +1640,15 @@ RuleSoldier* Ruleset::getSoldier(const std::string& type) const
 		return i->second;
 
 	return NULL;
+}
+
+/**
+ * Returns the list of all soldiers provided by this Ruleset.
+ * @return, reference to a vector of strings - the list of soldier types
+ */
+const std::vector<std::string>& Ruleset::getSoldiersList() const
+{
+	return _soldiersIndex;
 }
 
 /**
@@ -1724,15 +1732,6 @@ RuleArmor* Ruleset::getArmor(const std::string& name) const
 const std::vector<std::string>& Ruleset::getArmorsList() const
 {
 	return _armorsIndex;
-}
-
-/**
- * Returns the cost of an individual soldier for purchase/maintenance.
- * @return, cost
- */
-int Ruleset::getSoldierCost() const
-{
-	return _costSoldier;
 }
 
 /**
@@ -2293,14 +2292,20 @@ std::vector<std::string> Ruleset::getPsiRequirements() const
 
 /**
  * Creates a new randomly-generated soldier.
- * @param gameSave - pointer to SavedGame
+ * @param gameSave	- pointer to SavedGame
+ * @param type		- the soldier type to generate (default "")
  * @return, pointer to the newly generated Soldier
  */
-Soldier* Ruleset::genSoldier(SavedGame* const gameSave) const
+Soldier* Ruleset::genSoldier(
+		SavedGame* const gameSave,
+		std::string type) const
 {
+	if (type.empty() == true)
+		type = _soldiersIndex.front();
+
 	return new Soldier(
-					getSoldier("XCOM"),
-					getArmor("STR_ARMOR_NONE_UC"),
+					getSoldier(type),
+					getArmor(getSoldier(type)->getArmor()),
 					&_names,
 					gameSave->getCanonicalId("STR_SOLDIER"));
 }

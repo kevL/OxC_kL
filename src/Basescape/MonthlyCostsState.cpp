@@ -34,6 +34,7 @@
 
 #include "../Ruleset/RuleCraft.h"
 #include "../Ruleset/Ruleset.h"
+#include "../Ruleset/RuleSoldier.h"
 
 #include "../Savegame/Base.h"
 #include "../Savegame/SavedGame.h"
@@ -100,7 +101,10 @@ MonthlyCostsState::MonthlyCostsState(Base* base)
 	_txtCost->setText(tr("STR_COST_LC"));
 	_txtRental->setText(tr("STR_CRAFT_RENTAL"));
 
-	_lstCrafts->setColumns(4, 124, 62, 43, 56);
+	int
+		cost, qty;
+
+	_lstCrafts->setColumns(4, 124,62,43,56);
 	_lstCrafts->setDot();
 	const std::vector<std::string>& craftList = _game->getRuleset()->getCraftsList();
 	for (std::vector<std::string>::const_iterator
@@ -108,81 +112,87 @@ MonthlyCostsState::MonthlyCostsState(Base* base)
 			i != craftList.end();
 			++i)
 	{
-		int
-			qty,
-			cost;
-
 		const RuleCraft* const crRule = _game->getRuleset()->getCraft(*i);
-		if (_game->getSavedGame()->isResearched(crRule->getRequirements()) == true
-			&& (cost = crRule->getRentCost()) > 0)
+		if (_game->getSavedGame()->isResearched(crRule->getRequirements()) == true)
 		{
-			std::wostringstream woststr;
-			woststr << (qty = base->getCraftCount(*i));
+			cost = crRule->getRentCost();
+			qty = base->getCraftCount(*i);
 			_lstCrafts->addRow(
 							4,
 							tr(*i).c_str(),
 							Text::formatFunding(cost).c_str(),
-							woststr.str().c_str(),
+							Text::formatNumber(qty).c_str(),
 							Text::formatFunding(qty * cost).c_str());
 		}
 	}
 
-	std::wostringstream
-		woststr1,
-		woststr2,
-		woststr3,
-		woststr4,
-		woststr5;
 
 	_txtSalaries->setText(tr("STR_SALARIES"));
 
-	_lstSalaries->setColumns(4, 124, 62, 43, 56);
+	_lstSalaries->setColumns(4, 124,62,43,56);
 	_lstSalaries->setDot();
-	woststr1 << base->getSoldiers()->size();
-	_lstSalaries->addRow(
-						4,
-						tr("STR_SOLDIERS").c_str(),
-						Text::formatFunding(_game->getRuleset()->getSoldierCost()).c_str(),
-						woststr1.str().c_str(),
-						Text::formatFunding(base->getSoldiers()->size()
-											* _game->getRuleset()->getSoldierCost()
-											+ base->calcSoldierBonuses()).c_str());
-	woststr2 << base->getTotalEngineers();
-	_lstSalaries->addRow(
-						4,
-						tr("STR_ENGINEERS").c_str(),
-						Text::formatFunding(_game->getRuleset()->getEngineerCost()).c_str(),
-						woststr2.str().c_str(),
-						Text::formatFunding(base->getTotalEngineers()
-											* _game->getRuleset()->getEngineerCost()).c_str());
-	woststr3 << base->getTotalScientists();
-	_lstSalaries->addRow(
-						4,
-						tr("STR_SCIENTISTS").c_str(),
-						Text::formatFunding(_game->getRuleset()->getScientistCost()).c_str(),
-						woststr3.str().c_str(),
-						Text::formatFunding(base->getTotalScientists()
-											* _game->getRuleset()->getScientistCost()).c_str());
+	const std::vector<std::string>& soldierList = _game->getRuleset()->getSoldiersList();
+	for (std::vector<std::string>::const_iterator
+			i = soldierList.begin();
+			i != soldierList.end();
+			++i)
+	{
+		std::string type;
+		if (i == soldierList.begin())
+			type = "STR_SOLDIERS";
+		else
+			type = *i;
 
-	_lstMaintenance->setColumns(2, 229, 56);
+		cost = _game->getRuleset()->getSoldier(*i)->getSalaryCost();
+		qty = base->getSoldierCount(*i);
+		_lstSalaries->addRow(
+						4,
+						tr(type).c_str(),
+						Text::formatFunding(cost).c_str(),
+						Text::intWide(qty).c_str(),
+						Text::formatFunding(qty * cost).c_str());
+	}
+
+	cost = _game->getRuleset()->getEngineerCost();
+	qty = base->getTotalEngineers();
+	_lstSalaries->addRow(
+					4,
+					tr("STR_ENGINEERS").c_str(),
+					Text::formatFunding(cost).c_str(),
+					Text::intWide(qty).c_str(),
+					Text::formatFunding(qty * cost).c_str());
+
+	cost = _game->getRuleset()->getScientistCost();
+	qty = base->getTotalScientists();
+	_lstSalaries->addRow(
+					4,
+					tr("STR_SCIENTISTS").c_str(),
+					Text::formatFunding(cost).c_str(),
+					Text::intWide(qty).c_str(),
+					Text::formatFunding(qty * cost).c_str());
+
+	std::wostringstream woststr;
+
+	_lstMaintenance->setColumns(2, 229,56);
 	_lstMaintenance->setDot();
-	woststr4 << L'\x01' << Text::formatFunding(base->getFacilityMaintenance());
+	woststr << L'\x01' << Text::formatFunding(base->getFacilityMaintenance()); // quah
 	_lstMaintenance->addRow(
 						2,
 						tr("STR_BASE_MAINTENANCE").c_str(),
-						woststr4.str().c_str());
+						woststr.str().c_str());
 
-	_lstBaseCost->setColumns(2, 47, 56);
+	_lstBaseCost->setColumns(2, 47,56);
 	_lstBaseCost->setDot();
 	_lstBaseCost->addRow(
 					2,
 					tr("STR_BASE").c_str(),
 					Text::formatFunding(base->getMonthlyMaintenace()).c_str());
 
-	woststr5 << tr("STR_INCOME") << L" " << Text::formatFunding(_game->getSavedGame()->getCountryFunding());
-	_txtIncome->setText(woststr5.str());
+	woststr.str(L"");
+	woststr << tr("STR_INCOME") << L" " << Text::formatFunding(_game->getSavedGame()->getCountryFunding());
+	_txtIncome->setText(woststr.str());
 
-	_lstTotal->setColumns(2, 47, 56);
+	_lstTotal->setColumns(2, 47,56);
 	_lstTotal->setDot();
 	_lstTotal->addRow(
 					2,
@@ -194,6 +204,9 @@ MonthlyCostsState::MonthlyCostsState(Base* base)
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& MonthlyCostsState::btnOkClick,
 					Options::keyOk);
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& MonthlyCostsState::btnOkClick,
+					Options::keyOkKeypad);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& MonthlyCostsState::btnOkClick,
 					Options::keyCancel);

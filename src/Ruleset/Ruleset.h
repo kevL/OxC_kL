@@ -93,7 +93,6 @@ protected:
 
 		_costEngineer,
 		_costScientist,
-		_costSoldier,
 		_timePersonnel,
 		_radarCutoff,
 
@@ -137,6 +136,7 @@ protected:
 		_musicIndex,
 		_regionsIndex,
 		_researchIndex,
+		_soldiersIndex,
 		_terrainIndex,
 		_ufopaediaIndex,
 		_ufosIndex;
@@ -254,10 +254,10 @@ protected:
 		/// Gets the available UFOs.
 		const std::vector<std::string>& getUfosList() const;
 
-		/// Gets the available terrains.
-		const std::vector<std::string>& getTerrainList() const;
 		/// Gets terrains for battlescape games.
 		RuleTerrain* getTerrain(const std::string& type) const;
+		/// Gets the available terrains.
+		const std::vector<std::string>& getTerrainList() const;
 
 		/// Gets mapdatafile for battlescape games.
 		MapDataSet* getMapDataSet(const std::string& name);
@@ -267,6 +267,8 @@ protected:
 
 		/// Gets soldier unit rules.
 		RuleSoldier* getSoldier(const std::string& type) const;
+		/// Returns the list of all soldiers provided by this Ruleset.
+		const std::vector<std::string>& getSoldiersList() const;
 		/// Gets non-soldier unit rules.
 		RuleUnit* getUnit(const std::string& type) const;
 
@@ -294,8 +296,6 @@ protected:
 		/// Gets the ruleset for a specific inventory.
 		RuleInventory* getInventory(const std::string& id) const;
 
-		/// Gets the cost of a soldier.
-		int getSoldierCost() const;
 		/// Gets the cost of an engineer.
 		int getEngineerCost() const;
 		/// Gets the cost of a scientist.
@@ -360,7 +360,9 @@ protected:
 		const std::vector<std::string>& getInvsList() const;
 
 		/// Generates a new soldier.
-		Soldier* genSoldier(SavedGame* const save) const;
+		Soldier* genSoldier(
+				SavedGame* const save,
+				std::string type = "") const;
 
 		/// Gets the item to be used as fuel for ships.
 		const std::string& getAlienFuelType() const;

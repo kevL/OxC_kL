@@ -23,19 +23,11 @@
 //#include <string>
 //#include <yaml-cpp/yaml.h>
 
+#include "Base.h"
+
 
 namespace OpenXcom
 {
-
-enum TransferType
-{
-	TRANSFER_ITEM,		// 0
-	TRANSFER_CRAFT,		// 1
-	TRANSFER_SOLDIER,	// 2
-	TRANSFER_SCIENTIST,	// 3
-	TRANSFER_ENGINEER	// 4
-};
-
 
 class Base;
 class Craft;
@@ -76,8 +68,8 @@ private:
 		/// Loads the transfer from YAML.
 		bool load(
 				const YAML::Node& node,
-				Base* base,
-				const Ruleset* rule);
+				Base* const base,
+				const Ruleset* const rule);
 		/// Saves the transfer to YAML.
 		YAML::Node save() const;
 
@@ -93,9 +85,9 @@ private:
 		/// Gets the craft of the transfer.
 		Craft* getCraft() const;
 
-		/// Gets the items of the transfer.
+		/// Gets the item-types of the transfer.
 		std::string getTransferItems() const;
-		/// Sets the items of the transfer.
+		/// Sets the item-types of the transfer.
 		void setTransferItems(
 				const std::string& id,
 				int qty = 1);
@@ -108,7 +100,7 @@ private:
 		/// Gets the quantity of the transfer.
 		int getQuantity() const;
 		/// Gets the type of the transfer.
-		TransferType getType() const;
+		PurchaseSellTransferType getTransferType() const;
 
 		/// Advances the transfer.
 		void advance(Base* base);

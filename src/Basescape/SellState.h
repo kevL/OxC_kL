@@ -27,18 +27,20 @@
 
 //#include "../Menu/OptionsBaseState.h"
 
+#include "../Savegame/Base.h"
+
 
 namespace OpenXcom
 {
 
-enum SellType
+/* enum SellType
 {
 	SELL_SOLDIER,	// 0
 	SELL_CRAFT,		// 1
 	SELL_ITEM,		// 2
 	SELL_SCIENTIST,	// 3
 	SELL_ENGINEER	// 4
-};
+}; */
 
 
 class Base;
@@ -66,7 +68,6 @@ private:
 	size_t
 		_hasSci,
 		_hasEng,
-		_rowOffset,
 		_sel;
 	Uint8 _colorAmmo;
 	double _spaceChange;
@@ -101,13 +102,13 @@ private:
 	/// Gets selected price.
 	int getPrice();
 	/// Gets selected quantity.
-	int getQuantity();
+	int getBaseQuantity();
 	/// Gets the Type of the selected item.
-	SellType getSellType(const size_t sel) const;
+	PurchaseSellTransferType getSellType(size_t sel) const;
 	/// Gets the index of selected item.
-	size_t getItemIndex(const size_t sel) const;
+	size_t getItemIndex(size_t sel) const;
 	/// Gets the index of the selected craft.
-	size_t getCraftIndex(const size_t sel) const;
+	size_t getCraftIndex(size_t sel) const;
 
 	/// Updates the quantity-strings of the selected item.
 	void updateItemStrings();
@@ -148,7 +149,7 @@ private:
 		void decrease();
 		/// Changes the quantity of an item by the given value.
 		void changeByValue(
-				int change,
+				int qtyDelta,
 				int dir);
 };
 

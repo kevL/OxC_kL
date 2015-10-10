@@ -107,7 +107,7 @@ private:
 		/// Creates a new soldier.
 		Soldier(
 				const RuleSoldier* const solRule,
-				const RuleArmor* const armorRule,
+				const RuleArmor* const armorRule = NULL,
 				const std::vector<SoldierNamePool*>* const names = NULL,
 				int id = 0);
 		/// Cleans up the soldier.
@@ -133,9 +133,7 @@ private:
 
 		/// Gets the soldier's name.
 		std::wstring getName() const;
-/*		std::wstring getName(
-				bool statstring = false,
-				size_t maxLength = 20) const; */
+//		std::wstring getName(bool statstring = false, size_t maxLength = 20) const;
 		/// Sets the soldier's name.
 		void setName(const std::wstring& name);
 
@@ -201,10 +199,7 @@ private:
 		SoldierDiary* getDiary() const;
 
 		/// Calculates a statString.
-//		void calcStatString(
-//				const std::vector<StatString*>& statStrings,
-//				bool psiStrengthEval);
-
+//		void calcStatString(const std::vector<StatString*>& statStrings, bool psiStrengthEval);
 		/// Automatically renames the soldier according to his/her current statistics.
 		void autoStat();
 };

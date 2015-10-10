@@ -25,6 +25,8 @@
 
 #include "../Engine/State.h"
 
+#include "../Savegame/Base.h"
+
 
 namespace OpenXcom
 {
@@ -47,12 +49,10 @@ class PurchaseState
 
 private:
 	int
-		_craftQty,
-		_persQty,
-		_totalCost;
-	size_t
-		_rowOffset,
-		_sel;
+		_qtyCraft,
+		_qtyPersonnel,
+		_costTotal;
+	size_t _sel;
 	Uint8 _colorAmmo;
 	double _storeSize;
 
@@ -75,10 +75,11 @@ private:
 		* _timerInc;
 	Window* _window;
 
-	std::vector<int> _quantities;
+	std::vector<int> _orderQty;
 	std::vector<std::string>
 		_crafts,
-		_items;
+		_items,
+		_soldiers;
 
 	/// Is excluded in the options file.
 	bool isExcluded(const std::string& item);
@@ -87,6 +88,12 @@ private:
 
 	/// Updates the quantity-strings of the selected item.
 	void updateItemStrings();
+	/// Gets the purchase type.
+	PurchaseSellTransferType getPurchaseType(size_t sel) const;
+	/// Gets the index of selected item.
+	size_t getItemIndex(size_t sel) const;
+	/// Gets the index of selected craft.
+	size_t getCraftIndex(size_t sel) const;
 
 
 	public:
@@ -120,11 +127,11 @@ private:
 		/// Increases the quantity of an item by one.
 		void increase();
 		/// Increases the quantity of an item by the given value.
-		void increaseByValue(int change);
+		void increaseByValue(int qtyDelta);
 		/// Decreases the quantity of an item by one.
 		void decrease();
 		/// Decreases the quantity of an item by the given value.
-		void decreaseByValue(int change);
+		void decreaseByValue(int qtyDelta);
 };
 
 }

@@ -232,7 +232,7 @@ void ListSaveState::saveGame()
 		fileOld = _saves[_selectedRow - 1].file;
 		if (fileOld != file + ".sav")
 		{
-			while (CrossPlatform::fileExists(Options::getUserFolder() + file + ".sav"))
+			while (CrossPlatform::fileExists(Options::getUserFolder() + file + ".sav") == true)
 				file += "_";
 
 			CrossPlatform::moveFile(
@@ -242,7 +242,7 @@ void ListSaveState::saveGame()
 	}
 	else
 	{
-		while (CrossPlatform::fileExists(Options::getUserFolder() + file + ".sav"))
+		while (CrossPlatform::fileExists(Options::getUserFolder() + file + ".sav") == true)
 			file += "_";
 	}
 

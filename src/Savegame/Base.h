@@ -39,6 +39,15 @@ enum RecallType
 	REC_SELL		// 3
 };
 
+enum PurchaseSellTransferType
+{
+	PST_SOLDIER,	// 0
+	PST_SCIENTIST,	// 1
+	PST_ENGINEER,	// 2
+	PST_ITEM,		// 3
+	PST_CRAFT		// 4
+};
+
 
 class BaseFacility;
 class Craft;
@@ -115,9 +124,9 @@ private:
 		/// Loads a Base from YAML.
 		void load(
 				const YAML::Node& node,
-				SavedGame* save,
-				bool newGame,
-				bool newBattleGame = false);
+				SavedGame* const gameSave,
+				bool firstBase,
+				bool skirmish = false);
 		/// Saves this Base to YAML.
 		YAML::Node save() const;
 		/// Saves this Base's ID to YAML.
@@ -160,12 +169,8 @@ private:
 		int getAvailableSoldiers(const bool combatReady = false) const;
 		/// Gets this Base's total soldiers.
 		int getTotalSoldiers() const;
-		/// Gets this Base's available scientists.
-//		int getAvailableScientists() const;
 		/// Gets this Base's total scientists.
 		int getTotalScientists() const;
-		/// Gets this Base's available engineers.
-//		int getAvailableEngineers() const;
 		/// Gets this Base's total engineers.
 		int getTotalEngineers() const;
 
@@ -219,8 +224,11 @@ private:
 		/// Gets this Base's long range detection.
 		int getLongRangeTotal() const;
 
+		/// Gets this Base's soldiers of a certain type.
+		int getSoldierCount(const std::string &soldier) const;
 		/// Gets this Base's crafts of a certain type.
 		int getCraftCount(const std::string& craft) const;
+
 		/// Gets this Base's craft maintenance.
 		int getCraftMaintenance() const;
 		/// Gets this Base's personnel maintenance.

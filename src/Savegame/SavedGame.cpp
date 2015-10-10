@@ -258,9 +258,9 @@ std::vector<SaveInfo> SavedGame::getList( // static.
 
 	if (autoquick == true)
 	{
-		const std::vector<std::string> saves (CrossPlatform::getFolderContents(
+		const std::vector<std::string> saves = CrossPlatform::getFolderContents(
 																			Options::getUserFolder(),
-																			"asav"));
+																			"asav");
 		for (std::vector<std::string>::const_iterator
 				i = saves.begin();
 				i != saves.end();
@@ -283,9 +283,9 @@ std::vector<SaveInfo> SavedGame::getList( // static.
 		}
 	}
 
-	const std::vector<std::string> saves (CrossPlatform::getFolderContents(
+	const std::vector<std::string> saves = CrossPlatform::getFolderContents(
 																		Options::getUserFolder(),
-																		"sav"));
+																		"sav");
 	for (std::vector<std::string>::const_iterator
 			i = saves.begin();
 			i != saves.end();
@@ -320,8 +320,8 @@ SaveInfo SavedGame::getSaveInfo( // private. static.
 		const std::string& file,
 		const Language* const lang)
 {
-	const std::string path (Options::getUserFolder() + file);
-	const YAML::Node doc (YAML::LoadFile(path));
+	const std::string path = Options::getUserFolder() + file;
+	const YAML::Node doc = YAML::LoadFile(path);
 
 	SaveInfo save;
 	save.file = file;
@@ -410,8 +410,8 @@ void SavedGame::load(
 		Ruleset* const rules) // <- used only to obviate const if loading battleSave.
 {
 	//Log(LOG_INFO) << "SavedGame::load()";
-	const std::string st (Options::getUserFolder() + file);
-	const std::vector<YAML::Node> nodes (YAML::LoadAllFromFile(st));
+	const std::string st = Options::getUserFolder() + file;
+	const std::vector<YAML::Node> nodes = YAML::LoadAllFromFile(st);
 	if (nodes.empty() == true)
 	{
 		throw Exception(file + " is not a valid save file");
@@ -431,7 +431,7 @@ void SavedGame::load(
 	else
 		_name = Language::fsToWstr(file);
 
-	YAML::Node doc (nodes[1]); // Get full save data
+	YAML::Node doc = nodes[1]; // Get full save data
 
 	if (doc["rng"]
 		&& (Options::reSeedOnLoad == false || _ironman == true))
@@ -441,7 +441,7 @@ void SavedGame::load(
 	else
 		RNG::setSeed(0);
 
-	int diff (doc["difficulty"].as<int>(_difficulty));
+	int diff = doc["difficulty"].as<int>(_difficulty);
 	if (diff < 0) // safety.
 	{
 		diff = 0;
@@ -1736,7 +1736,7 @@ Soldier* SavedGame::getSoldier(int id) const
 /**
  * Handles the higher promotions - not the rookie-squaddie ones.
  * @param participants - a list of soldiers that were actually present at the battle
- * @return, true if some promotions happened - show the promotions screen
+ * @return, true if any promotions happened - so show the promotions screen
  */
 bool SavedGame::handlePromotions(std::vector<Soldier*>& participants)
 {
@@ -1762,7 +1762,7 @@ bool SavedGame::handlePromotions(std::vector<Soldier*>& participants)
 				j != (*i)->getTransfers()->end();
 				++j)
 		{
-			if ((*j)->getType() == TRANSFER_SOLDIER)
+			if ((*j)->getTransferType() == PST_SOLDIER)
 			{
 				soldiers.push_back((*j)->getSoldier());
 				processSoldier((*j)->getSoldier(), data);

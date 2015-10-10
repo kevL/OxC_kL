@@ -103,13 +103,15 @@ private:
 		/// Cleans up the text.
 		~Text();
 
+		/// Quickly converts an integer to a wide-string.
+		static std::wstring intWide(int value);
 		/// Formats an integer value as number with separators.
 		static std::wstring formatNumber(
 				int64_t value,
 				const bool space = false,
 				const std::wstring& currency = L"");
 		/// Formats an integer value as currency.
-		static std::wstring formatFunding(int64_t funds);
+		static std::wstring formatFunding(int64_t value);
 		/// Formats an integer value as percentage.
 		static std::wstring formatPct(int value);
 

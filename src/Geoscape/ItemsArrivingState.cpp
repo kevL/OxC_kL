@@ -151,8 +151,8 @@ ItemsArrivingState::ItemsArrivingState(GeoscapeState* const state)
 			if ((*j)->getHours() == 0)
 			{
 				_bases.push_back(*i);	// a sequential vector of bases w/ transfers-completed to;
-										// will be matched w/ selectedRow on list-clicks for gotoBase.
-				if ((*j)->getType() == TRANSFER_ITEM) // check if there's an automated use for item
+										// it will be matched w/ selectedRow on list-clicks for gotoBase.
+				if ((*j)->getTransferType() == PST_ITEM) // check if there's an automated use for item
 				{
 					const RuleItem* const itRule = _game->getRuleset()->getItem((*j)->getTransferItems());
 

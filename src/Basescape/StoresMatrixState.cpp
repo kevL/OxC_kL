@@ -376,7 +376,7 @@ StoresMatrixState::StoresMatrixState(const Base* base)
 			if ((itRule->getBattleType() == BT_AMMO
 					|| (itRule->getBattleType() == BT_NONE
 						&& itRule->getClipSize() > 0))
-				&& itRule->getType() != "STR_ELERIUM_115")
+				&& itRule->getType() != _game->getRuleset()->getAlienFuelType())
 			{
 				item.insert(0, L"  ");
 				color = PURPLE;

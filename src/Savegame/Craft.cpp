@@ -1226,7 +1226,7 @@ int Craft::getDowntime(bool& delayed)
 								j != _base->getTransfers()->end();
 								++j)
 						{
-							if ((*j)->getType() == TRANSFER_ITEM
+							if ((*j)->getTransferType() == PST_ITEM
 								&& (*j)->getTransferItems() == clip)
 							{
 								baseQty += (*j)->getQuantity();
@@ -1266,7 +1266,7 @@ int Craft::getDowntime(bool& delayed)
 							i != _base->getTransfers()->end();
 							++i)
 					{
-						if ((*i)->getType() == TRANSFER_ITEM
+						if ((*i)->getTransferType() == PST_ITEM
 							&& (*i)->getTransferItems() == fuel)
 						{
 							baseQty += (*i)->getQuantity();

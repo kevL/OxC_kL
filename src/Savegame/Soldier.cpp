@@ -27,7 +27,6 @@
 #include "SoldierDiary.h"
 
 #include "../Engine/Language.h"
-//#include "../Engine/RNG.h"
 
 #include "../Interface/Text.h"
 
@@ -42,9 +41,9 @@ namespace OpenXcom
 {
 
 /**
- * Initializes a new soldier, either blank or randomly generated.
+ * Initializes a new soldier - either blank or randomly generated.
  * @param solRule	- pointer to RuleSoldier
- * @param armorRule	- pointer to RuleArmor
+ * @param armorRule	- pointer to RuleArmor (default NULL)
  * @param names		- pointer to a vector of pointers to SoldierNamePool (default NULL)
  * @param id		- unique soldier ID for soldier generation (default 0)
  */
@@ -167,11 +166,9 @@ void Soldier::load(
 	_recovery		= node["recovery"]					.as<int>(_recovery);
 	_psiTraining	= node["psiTraining"]				.as<bool>(_psiTraining);
 
-	const RuleArmor* armorRule = rules->getArmor(node["armor"].as<std::string>());
-	if (armorRule == NULL)
-		armorRule = rules->getArmor("STR_ARMOR_NONE_UC");
-
-	_armorRule = armorRule;
+	_armorRule = rules->getArmor(node["armor"].as<std::string>());
+	if (_armorRule == NULL)
+		_armorRule = rules->getArmor(rules->getSoldier(rules->getSoldiersList().front())->getArmor());
 
 	if (const YAML::Node& layout = node["equipmentLayout"])
 	{
@@ -204,6 +201,7 @@ YAML::Node Soldier::save() const
 {
 	YAML::Node node;
 
+	node["type"]			= _solRule->getType();
 	node["rank"]			= static_cast<int>(_rank);
 	node["gender"]			= static_cast<int>(_gender);
 	node["look"]			= static_cast<int>(_look);

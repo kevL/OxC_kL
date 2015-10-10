@@ -69,6 +69,18 @@ Text::~Text()
 {}
 
 /**
+ * Quickly converts an integer to a wide-string.
+ * @param value - the value to convert
+ * @return, value as a wide-string
+ */
+std::wstring Text::intWide(int value) // static.
+{
+	std::wostringstream woststr;
+	woststr << value;
+	return woststr.str();
+}
+
+/**
  * Takes an integer value and formats it as number with separators spacing the
  * thousands.
  * @param value		- a value
@@ -76,7 +88,7 @@ Text::~Text()
  * @param currency	- reference a currency symbol (default L"")
  * @return, formatted string
  */
-std::wstring Text::formatNumber(
+std::wstring Text::formatNumber( // static.
 		int64_t value,
 		const bool space,
 		const std::wstring& currency)
@@ -92,7 +104,10 @@ std::wstring Text::formatNumber(
 	std::wostringstream woststr;
 
 	const bool neg = (value < 0);
-	woststr << (neg ? -value : value);
+	if (neg == true)
+		woststr << -value;
+	else
+		woststr << value;
 
 	std::wstring ret = woststr.str();
 
@@ -104,23 +119,16 @@ std::wstring Text::formatNumber(
 		while (spacer > 0
 			&& spacer < ret.size())
 		{
-			ret.insert(
-					spacer,
-					thousands);
-
+			ret.insert(spacer, thousands);
 			spacer -= 3;
 		}
 	}
 
 	if (currency.empty() == false)
-		ret.insert(
-				0,
-				currency);
+		ret.insert(0, currency);
 
 	if (neg == true)
-		ret.insert(
-				0,
-				L"-");
+		ret.insert(0, L"-");
 
 	return ret;
 }
@@ -128,15 +136,12 @@ std::wstring Text::formatNumber(
 /**
  * Takes an integer value and formats it as currency by spacing the thousands
  * and adding a $ sign to the front.
- * @param funds - the funding value
+ * @param value - the funds value
  * @return, the formatted string
  */
-std::wstring Text::formatFunding(int64_t funds)
+std::wstring Text::formatFunding(int64_t value) // static.
 {
-	return formatNumber(
-					funds,
-					true,
-					L"$");
+	return formatNumber(value, true, L"$");
 }
 
 /**
@@ -144,11 +149,10 @@ std::wstring Text::formatFunding(int64_t funds)
  * @param value - the percentage value
  * @return, the formatted string
  */
-std::wstring Text::formatPct(int value)
+std::wstring Text::formatPct(int value) // static.
 {
 	std::wostringstream woststr;
 	woststr << value << L"%";
-
 	return woststr.str();
 }
 

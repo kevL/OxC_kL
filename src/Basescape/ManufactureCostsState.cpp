@@ -147,8 +147,7 @@ void ManufactureCostsState::init()
 	for (std::vector<RuleManufacture*>::const_iterator
 			i = prodRules.begin();
 			i != prodRules.end();
-			++i,
-				row += 3)
+			++i, row += 3)
 	{
 		woststr.str(L"");
 		woststr << L"> " << tr((*i)->getName());
@@ -157,14 +156,14 @@ void ManufactureCostsState::init()
 							5,
 							woststr.str().c_str(),
 							Text::formatFunding((*i)->getManufactureCost()).c_str(),
-							Text::formatNumber((*i)->getManufactureTime()).c_str(),
-							Text::formatNumber((*i)->getRequiredSpace()).c_str(),
+							Text::intWide((*i)->getManufactureTime()).c_str(),
+							Text::intWide((*i)->getRequiredSpace()).c_str(),
 							L"");
 //							tr((*i)->getCategory ()).c_str());
 
 		requiredCosts = 0;
 
-		std::map<std::string, int> required = (*i)->getRequiredItems();
+		const std::map<std::string, int> required = (*i)->getRequiredItems();
 		for (std::map<std::string, int>::const_iterator
 				j = required.begin();
 				j != required.end();
@@ -176,12 +175,7 @@ void ManufactureCostsState::init()
 			woststr << L"(" << (*j).second << L") " << tr((*j).first);
 
 			if (j == required.begin())
-			{
-				_lstProduction->setCellText(
-										row,
-										4,
-										woststr.str());
-			}
+				_lstProduction->setCellText(row, 4, woststr.str());
 			else
 			{
 				_lstProduction->addRow(
@@ -191,15 +185,13 @@ void ManufactureCostsState::init()
 				++row;
 			}
 
-			_lstProduction->setRowColor(
-									row,
-									213); // yellow
+			_lstProduction->setRowColor(row, 213); // yellow
 		}
 		// note: Productions that require items show as yellow; those that don't show as blue.
 
 		profit = 0;
 
-		std::map<std::string, int> producedItems = (*i)->getProducedItems();
+		const std::map<std::string, int> producedItems = (*i)->getProducedItems();
 		for (std::map<std::string, int>::const_iterator
 				j = producedItems.begin();
 				j != producedItems.end();
@@ -225,10 +217,7 @@ void ManufactureCostsState::init()
 								Text::formatFunding(salesCost).c_str(),
 								qty.str().c_str(),
 								L"",L"");
-			_lstProduction->setRowColor(
-									++row,
-									48, // green
-									true);
+			_lstProduction->setRowColor(++row, 48, true); // green
 		}
 
 		profit -= (*i)->getManufactureCost();
@@ -244,10 +233,7 @@ void ManufactureCostsState::init()
 							woststr.str().c_str(),
 							L"",L"",
 							Text::formatFunding(profit).c_str());
-		_lstProduction->setRowColor(
-								row + 1,
-								80, // lt.brown
-								true);
+		_lstProduction->setRowColor(row + 1, 80, true); // lt.brown
 
 		_lstProduction->addRow(5, L"",L"",L"",L"",L""); // hori-spacer.
 	}

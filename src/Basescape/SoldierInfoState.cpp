@@ -362,7 +362,7 @@ void SoldierInfoState::init()
 		* const initial = _soldier->getInitStats(),
 		* const current = _soldier->getCurrentStats();
 
-	UnitStats armored (*current); // init.
+	UnitStats armored = *current;
 	armored += *(_soldier->getArmor()->getStats());
 
 	// Special handling for stats that could go below initial setting.
@@ -545,7 +545,8 @@ void SoldierInfoState::init()
 	{
 		_btnArmor->setColor(PURPLE);
 	}
-	else _btnArmor->setColor(PURPLE_OUT);
+	else
+		_btnArmor->setColor(PURPLE_OUT);
 
 	std::wstring craft;
 	if (_soldier->getCraft() == NULL)

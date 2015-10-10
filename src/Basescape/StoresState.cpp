@@ -198,7 +198,7 @@ StoresState::StoresState(Base* base)
 				if ((itRule->getBattleType() == BT_AMMO
 						|| (itRule->getBattleType() == BT_NONE
 							&& itRule->getClipSize() > 0))
-					&& itRule->getType() != "STR_ELERIUM_115")
+					&& itRule->getType() != _game->getRuleset()->getAlienFuelType())
 				{
 					if (itRule->getBattleType() == BT_AMMO
 						&& itRule->getType().substr(0, 8) != "STR_HWP_") // *cuckoo** weapon clips

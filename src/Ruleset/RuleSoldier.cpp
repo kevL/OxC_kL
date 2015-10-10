@@ -63,8 +63,7 @@ namespace OpenXcom
 
 /**
  * Creates a blank ruleunit for a certain type of soldier.
- * @note The only type is 'XCOM'.
- * @param type - reference defining a type
+ * @param type - reference to type
  */
 RuleSoldier::RuleSoldier(const std::string& type)
 	:
@@ -72,7 +71,9 @@ RuleSoldier::RuleSoldier(const std::string& type)
 		_standHeight(0),
 		_kneelHeight(0),
 		_floatHeight(0),
-		_genderRatio()
+		_genderRatio(),
+		_costBuy(0),
+		_costSalary(0)
 {}
 
 /**
@@ -89,6 +90,8 @@ void RuleSoldier::load(const YAML::Node& node)
 {
 	_type			= node["type"]			.as<std::string>(_type);
 	_armor			= node["armor"]			.as<std::string>(_armor);
+	_costBuy		= node["costBuy"]		.as<int>(_costBuy);
+	_costSalary		= node["costSalary"]	.as<int>(_costSalary);
 	_standHeight	= node["standHeight"]	.as<int>(_standHeight);
 	_kneelHeight	= node["kneelHeight"]	.as<int>(_kneelHeight);
 	_floatHeight	= node["floatHeight"]	.as<int>(_floatHeight);
@@ -135,6 +138,24 @@ UnitStats RuleSoldier::getMaxStats() const
 UnitStats RuleSoldier::getStatCaps() const
 {
 	return _statCaps;
+}
+
+/**
+ * Gets the cost of hiring this type of Soldier.
+ * @return, cost
+ */
+int RuleSoldier::getBuyCost() const
+{
+	return _costBuy;
+}
+
+/**
+ * Gets the cost of this type of Soldier's salary for a month.
+ * @return, cost
+ */
+int RuleSoldier::getSalaryCost() const
+{
+	return _costSalary;
 }
 
 /**

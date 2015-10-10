@@ -54,14 +54,13 @@ private:
 
 	bool _resetAll;
 	int
-		_alienQty,
-		_craftQty,
-		_persQty,
-		_totalCost;
+		_qtyAlien,
+		_qtyCraft,
+		_qtyPersonnel,
+		_costTotal;
 	size_t
 		_hasEng,
 		_hasSci,
-		_rowOffset,
 		_sel;
 	Uint8 _colorAmmo;
 	double
@@ -98,18 +97,20 @@ private:
 	std::vector<Craft*> _crafts;
 	std::vector<Soldier*> _soldiers;
 
-	/// Gets selected cost.
+	/// Gets cost of selected.
 	int getCost() const;
-	/// Gets selected quantity.
-	int getQuantity() const;
+	/// Gets quantity of selected at source Base.
+	int getSourceQuantity() const;
 	/// Gets distance between bases.
 	double getDistance() const;
-	/// Gets type of selected item.
-	TransferType getTransferType(const size_t sel) const;
-	/// Gets item Index.
-	size_t getItemIndex(const size_t sel) const;
+	/// Gets type of selected.
+	PurchaseSellTransferType getTransferType(size_t sel) const;
+	/// Gets index of selected item-type.
+	size_t getItemIndex(size_t sel) const;
+	/// Gets the index of the selected craft.
+	size_t getCraftIndex(size_t sel) const;
 
-	/// Updates the quantity-strings of the selected item.
+	/// Updates the quantity-strings of selected row.
 	void updateItemStrings();
 
 
@@ -152,11 +153,11 @@ private:
 		/// Increases the quantity of an item by one.
 		void increase();
 		/// Increases the quantity of an item by the given value.
-		void increaseByValue(int change);
+		void increaseByValue(int qtyDelta);
 		/// Decreases the quantity of an item by one.
 		void decrease();
 		/// Decreases the quantity of an item by the given value.
-		void decreaseByValue(int change);
+		void decreaseByValue(int qtyDelta);
 
 		/// Gets the total cost of the transfer.
 		int getTotalCost() const;

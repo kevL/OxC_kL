@@ -19,7 +19,6 @@
 
 #include "Transfer.h"
 
-#include "Base.h"
 #include "Craft.h"
 #include "ItemContainer.h"
 #include "Soldier.h"
@@ -68,19 +67,24 @@ Transfer::~Transfer()
  */
 bool Transfer::load(
 		const YAML::Node& node,
-		Base* base,
-		const Ruleset* rules)
+		Base* const base,
+		const Ruleset* const rules)
 {
 	_hours = node["hours"].as<int>(_hours);
 
-	if (const YAML::Node& soldier = node["soldier"])
+	if (const YAML::Node& sol = node["soldier"])
 	{
-		_soldier = new Soldier(
-							rules->getSoldier("XCOM"),
-							rules->getArmor("STR_ARMOR_NONE_UC"));
-		_soldier->load(
-					soldier,
-					rules);
+		const std::string type = sol["type"].as<std::string>(rules->getSoldiersList().front());
+		if (rules->getSoldier(type) != NULL)
+		{
+			_soldier = new Soldier(rules->getSoldier(type));
+			_soldier->load(sol, rules);
+		}
+		else
+		{
+			delete this;
+			return false;
+		}
 	}
 
 	if (const YAML::Node& craft = node["craft"])
@@ -91,10 +95,7 @@ bool Transfer::load(
 			_craft = new Craft(
 							rules->getCraft(craft["type"].as<std::string>()),
 							base);
-			_craft->load(
-						craft,
-						rules,
-						NULL);
+			_craft->load(craft, rules, NULL);
 		}
 		else
 		{
@@ -192,7 +193,7 @@ Craft* Transfer::getCraft() const
 }
 
 /**
- * Returns the items being transferred.
+ * Returns the item-type being transferred.
  * @return, item ID
  */
 std::string Transfer::getTransferItems() const
@@ -201,7 +202,7 @@ std::string Transfer::getTransferItems() const
 }
 
 /**
- * Changes the items being transferred.
+ * Changes the item-type being transferred.
  * @param id	- reference the item ID
  * @param qty	- item quantity (default 1)
  */
@@ -264,23 +265,23 @@ int Transfer::getQuantity() const
 
 /**
  * Returns the type of the contents of the transfer.
- * @return, TransferType enum (Transfer.h)
+ * @return, PurchaseSellTransferType (Base.h)
  */
-TransferType Transfer::getType() const
+PurchaseSellTransferType Transfer::getTransferType() const
 {
 	if (_soldier != NULL)
-		return TRANSFER_SOLDIER;
+		return PST_SOLDIER;
 
 	if (_craft != NULL)
-		return TRANSFER_CRAFT;
+		return PST_CRAFT;
 
 	if (_scientists != 0)
-		return TRANSFER_SCIENTIST;
+		return PST_SCIENTIST;
 
 	if (_engineers != 0)
-		return TRANSFER_ENGINEER;
+		return PST_ENGINEER;
 
-	return TRANSFER_ITEM;
+	return PST_ITEM;
 }
 
 /**
@@ -289,10 +290,10 @@ TransferType Transfer::getType() const
  */
 void Transfer::advance(Base* base)
 {
-	--_hours;
-
-	if (_hours == 0)
+	if (--_hours == 0)
 	{
+		_delivered = true;
+
 		if (_soldier != NULL)
 			base->getSoldiers()->insert(
 									base->getSoldiers()->begin(),
@@ -309,8 +310,6 @@ void Transfer::advance(Base* base)
 			base->setScientists(base->getScientists() + _scientists);
 		else if (_engineers != 0)
 			base->setEngineers(base->getEngineers() + _engineers);
-
-		_delivered = true;
 	}
 }
 

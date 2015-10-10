@@ -246,8 +246,7 @@ AlienContainmentState::AlienContainmentState(
 		_lstAliens->addRow(
 						4,
 						tr(*i).c_str(),
-						L"0",
-						L"0",
+						L"0",L"0",
 						tr("STR_YES").c_str());
 		_lstAliens->setRowColor(
 							_qty.size() - 1,
