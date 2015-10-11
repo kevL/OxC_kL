@@ -47,7 +47,7 @@ namespace OpenXcom
  * Initializes all the elements in the BaseDetection window.
  * @param base - pointer to the Base to get info from
  */
-BaseDetectionState::BaseDetectionState(Base* base)
+BaseDetectionState::BaseDetectionState(const Base* const base)
 	:
 		_base(base)
 {
@@ -184,8 +184,8 @@ BaseDetectionState::BaseDetectionState(Base* base)
  */
 BaseDetectionState::~BaseDetectionState()
 {
-//	if (_base->getBaseExposed() == true)
-	delete _blinkTimer;
+	if (_base->getBaseExposed() == true)
+		delete _blinkTimer;
 }
 
 /**
