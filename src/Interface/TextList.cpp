@@ -1264,7 +1264,7 @@ void TextList::handle(Action* action, State* state)
 }
 
 /**
- * Passes ticks to arrow buttons.
+ * Passes ticks to ArrowButton's and ScrollBar.
  */
 void TextList::think()
 {

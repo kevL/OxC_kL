@@ -50,7 +50,7 @@ ArrowButton::ArrowButton(
 		_shape(shape),
 		_list(NULL)
 {
-	_timer = new Timer(50);
+	_timer = new Timer(88);
 	_timer->onTimer((SurfaceHandler)& ArrowButton::scroll);
 }
 

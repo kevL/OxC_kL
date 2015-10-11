@@ -27,6 +27,7 @@ namespace OpenXcom
 {
 
 class TextList;
+class Timer;
 
 
 /**
@@ -51,6 +52,7 @@ private:
 		* _track,
 		* _thumb;
 	TextList* _list;
+	Timer* _timer;
 
 	/// Draws the scrollbar track.
 	void drawTrack();
@@ -103,8 +105,14 @@ private:
 		/// Special handling for mouse releases.
 		void mouseRelease(Action* action, State* state);
 
-		/// Handles keyboard shortcuts.
+		/// Gives ticks to keyboard press.
+		void think();
+		/// Scrolls the list.
+		void scroll();
+		/// Handles keyboard presses.
 		void keyboardPress(Action* action, State* state);
+		/// Handles keyboard releases.
+		void keyboardRelease(Action* action, State* state);
 
 		/// Draws the scrollbar contents.
 		void draw();

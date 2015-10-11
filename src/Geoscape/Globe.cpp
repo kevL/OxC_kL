@@ -373,7 +373,8 @@ Globe::Globe(
 			i != _randomNoiseData.size();
 			++i)
 	{
-		_randomNoiseData[i] = rand() % 4;
+//		_randomNoiseData[i] = rand() % 4;
+		_randomNoiseData[i] = static_cast<Sint16>(RNG::seedless(0,3));
 	}
 
 	cachePolygons();

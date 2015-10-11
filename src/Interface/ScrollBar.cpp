@@ -63,6 +63,9 @@ ScrollBar::ScrollBar(
 	_thumbRect.y = 0;
 	_thumbRect.w =
 	_thumbRect.h = 0;
+
+	_timer = new Timer(123);
+	_timer->onTimer((SurfaceHandler)& ScrollBar::scroll);
 }
 
 /**
@@ -72,6 +75,7 @@ ScrollBar::~ScrollBar()
 {
 	delete _track;
 	delete _thumb;
+	delete _timer;
 }
 
 /**
@@ -262,47 +266,92 @@ void ScrollBar::mouseRelease(Action* action, State* state)
 }
 
 /**
- * Handles keyboard shortcuts.
+ * Passes ticks to keyboard Actions.
+ */
+void ScrollBar::think()
+{
+	InteractiveSurface::think();
+	_timer->think(NULL, this);
+}
+
+/**
+ * Scrolls the list.
+ */
+void ScrollBar::scroll()
+{
+	Uint8* keystate = SDL_GetKeyState(NULL);
+	if (keystate[SDLK_UP] == 1 || keystate[SDLK_KP8] == 1)
+		_list->scrollUp();											// up 1 line
+	else if (keystate[SDLK_DOWN] == 1 || keystate[SDLK_KP2] == 1)
+		_list->scrollDown();										// down 1 line
+	else if (keystate[SDLK_PAGEUP] == 1 || keystate[SDLK_KP9] == 1)
+		_list->scrollTo(_list->getScroll() - _list->getVisibleRows());	// up 1 page
+	else if (keystate[SDLK_PAGEDOWN] == 1 || keystate[SDLK_KP3] == 1)
+		_list->scrollTo(_list->getScroll() + _list->getVisibleRows());	// down 1 page
+}
+/*	else if (keystate[SDLK_HOME] == 1 || keystate[SDLK_KP7] == 1)
+		_list->scrollUp(true);										// to top
+	else if (keystate[SDLK_END] == 1 || keystate[SDLK_KP1] == 1)
+		_list->scrollDown(true);									// to bottom */
+
+/**
+ * Handles keyboard presses.
  * @param action	- pointer to an Action
  * @param state		- State that the action handlers belong to
  */
 void ScrollBar::keyboardPress(Action* action, State* state)
 {
-	InteractiveSurface::keyboardPress(action, state);
-
 	if (action->getDetails()->type == SDL_KEYDOWN)
 	{
-		if (action->getDetails()->key.keysym.sym == SDLK_UP
-			|| action->getDetails()->key.keysym.sym == SDLK_KP8)
-		{
-			_list->scrollUp();												// up 1 line
-		}
-		else if (action->getDetails()->key.keysym.sym == SDLK_DOWN
-			|| action->getDetails()->key.keysym.sym == SDLK_KP2)
-		{
-			_list->scrollDown();											// down 1 line
-		}
-		else if (action->getDetails()->key.keysym.sym == SDLK_PAGEUP
-			|| action->getDetails()->key.keysym.sym == SDLK_KP9)
-		{
-			_list->scrollTo(_list->getScroll() - _list->getVisibleRows());	// up 1 page
-		}
-		else if (action->getDetails()->key.keysym.sym == SDLK_PAGEDOWN
-			|| action->getDetails()->key.keysym.sym == SDLK_KP3)
-		{
-			_list->scrollTo(_list->getScroll() + _list->getVisibleRows());	// down 1 page
-		}
-		else if (action->getDetails()->key.keysym.sym == SDLK_HOME
+		InteractiveSurface::keyboardPress(action, state);
+
+		if (action->getDetails()->key.keysym.sym == SDLK_HOME
 			|| action->getDetails()->key.keysym.sym == SDLK_KP7)
 		{
-			_list->scrollUp(true);											// to top
+			_list->scrollUp(true);									// to top
 		}
 		else if (action->getDetails()->key.keysym.sym == SDLK_END
 			|| action->getDetails()->key.keysym.sym == SDLK_KP1)
 		{
-			_list->scrollDown(true);										// to bottom
+			_list->scrollDown(true);								// to bottom
+		}
+		else
+		{
+			_timer->start();
+
+			if (action->getDetails()->key.keysym.sym == SDLK_UP
+				|| action->getDetails()->key.keysym.sym == SDLK_KP8)
+			{
+				_list->scrollUp();											// up 1 line
+			}
+			else if (action->getDetails()->key.keysym.sym == SDLK_DOWN
+				|| action->getDetails()->key.keysym.sym == SDLK_KP2)
+			{
+				_list->scrollDown();										// down 1 line
+			}
+			else if (action->getDetails()->key.keysym.sym == SDLK_PAGEUP
+				|| action->getDetails()->key.keysym.sym == SDLK_KP9)
+			{
+				_list->scrollTo(_list->getScroll() - _list->getVisibleRows());	// up 1 page
+			}
+			else if (action->getDetails()->key.keysym.sym == SDLK_PAGEDOWN
+				|| action->getDetails()->key.keysym.sym == SDLK_KP3)
+			{
+				_list->scrollTo(_list->getScroll() + _list->getVisibleRows());	// down 1 page
+			}
 		}
 	}
+}
+
+/**
+ * Handles keyboard releases.
+ * @param action	- pointer to an Action
+ * @param state		- State that the action handlers belong to
+ */
+void ScrollBar::keyboardRelease(Action* action, State* state)
+{
+	InteractiveSurface::keyboardRelease(action, state);
+	_timer->stop();
 }
 
 /**

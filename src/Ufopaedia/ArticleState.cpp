@@ -73,16 +73,10 @@ void ArticleState::think()
 void ArticleState::keyRepeat() // private.
 {
 	Uint8* keystate = SDL_GetKeyState(NULL);
-	if (keystate[Options::keyGeoRight] == 1
-		|| keystate[SDLK_KP6] == 1)
-	{
+	if (keystate[Options::keyGeoRight] == 1 || keystate[SDLK_KP6] == 1)
 		btnNextClick(NULL);
-	}
-	else if (keystate[Options::keyGeoLeft] == 1
-		|| keystate[SDLK_KP4] == 1)
-	{
+	else if (keystate[Options::keyGeoLeft] == 1 || keystate[SDLK_KP4] == 1)
 		btnPrevClick(NULL);
-	}
 }
 
 /**

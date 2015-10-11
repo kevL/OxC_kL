@@ -43,8 +43,8 @@ class Timer;
 
 
 /**
- * Button with an arrow on it. Can be used for
- * scrolling lists, spinners, etc. Contains various
+ * Button with an arrow on it.
+ * @note Can be used for scrolling lists, spinners, etc. Contains various
  * arrow shapes.
  */
 class ArrowButton
