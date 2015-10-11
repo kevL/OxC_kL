@@ -195,7 +195,7 @@ void NewManufactureListState::lstProdClick(Action*)
 			i != _possibleProductions.end();
 			++i)
 	{
-		if ((*i)->getName().c_str() == _displayedStrings[_lstManufacture->getSelectedRow()])
+		if ((*i)->getType().c_str() == _displayedStrings[_lstManufacture->getSelectedRow()])
 		{
 			manufRule = *i;
 			break;
@@ -254,9 +254,9 @@ void NewManufactureListState::fillProductionList()
 		{
 			_lstManufacture->addRow(
 								2,
-								tr((*i)->getName()).c_str(),
+								tr((*i)->getType()).c_str(),
 								tr((*i)->getCategory ()).c_str());
-			_displayedStrings.push_back((*i)->getName().c_str());
+			_displayedStrings.push_back((*i)->getType().c_str());
 		}
 	}
 }

@@ -1350,7 +1350,7 @@ research:
 #------------------------------------------------------------------------------
 manufacture:
 #------------------------------------------------------------------------------
-  - name: STR_REINFORCED_SHOTGUN
+  - type: STR_REINFORCED_SHOTGUN
     listOrder: 1101
     category: STR_WEAPON
     requires:
@@ -1361,7 +1361,7 @@ manufacture:
     requiredItems:
       STR_ALIEN_ALLOYS: 3
 #------------------------------------------------------------------------------
-  - name: STR_ALLOY_SHOTGUN_SHELLS
+  - type: STR_ALLOY_SHOTGUN_SHELLS
     listOrder: 1102
     category: STR_AMMUNITION
     requires:
@@ -1372,7 +1372,7 @@ manufacture:
     requiredItems:
       STR_ALIEN_ALLOYS: 1
 #------------------------------------------------------------------------------
-  - name: STR_ELERIUM_SHOTGUN_SHELLS
+  - type: STR_ELERIUM_SHOTGUN_SHELLS
     listOrder: 1103
     category: STR_AMMUNITION
     requires:

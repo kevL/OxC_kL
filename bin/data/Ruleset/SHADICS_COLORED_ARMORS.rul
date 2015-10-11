@@ -628,7 +628,7 @@ armors:
     isSpacesuit: true
     agility: 2
 manufacture:
-  - name: STR_BLACKSUIT_ARMOR
+  - type: STR_BLACKSUIT_ARMOR
     category: STR_PERSONAL_ARMOR_BA
     listOrder: 2901
     requires:
@@ -641,7 +641,7 @@ manufacture:
     requiredItems:
       STR_ALIEN_ALLOYS: 16
       STR_ELERIUM_115: 9
-  - name: STR_BLUESUIT_ARMOR
+  - type: STR_BLUESUIT_ARMOR
     category: STR_PERSONAL_ARMOR_BA
     listOrder: 2902
     requires:
@@ -654,7 +654,7 @@ manufacture:
     requiredItems:
       STR_ALIEN_ALLOYS: 16
       STR_ELERIUM_115: 9
-  - name: STR_GREENSUIT_ARMOR
+  - type: STR_GREENSUIT_ARMOR
     category: STR_PERSONAL_ARMOR_BA
     listOrder: 2903
     requires:
@@ -667,7 +667,7 @@ manufacture:
     requiredItems:
       STR_ALIEN_ALLOYS: 16
       STR_ELERIUM_115: 9
-  - name: STR_ORANGESUIT_ARMOR
+  - type: STR_ORANGESUIT_ARMOR
     category: STR_PERSONAL_ARMOR_BA
     listOrder: 2904
     requires:
@@ -680,7 +680,7 @@ manufacture:
     requiredItems:
       STR_ALIEN_ALLOYS: 16
       STR_ELERIUM_115: 9
-  - name: STR_PINKSUIT_ARMOR
+  - type: STR_PINKSUIT_ARMOR
     category: STR_PERSONAL_ARMOR_BA
     listOrder: 2905
     requires:
@@ -693,7 +693,7 @@ manufacture:
     requiredItems:
       STR_ALIEN_ALLOYS: 16
       STR_ELERIUM_115: 9
-  - name: STR_PURPLESUIT_ARMOR
+  - type: STR_PURPLESUIT_ARMOR
     category: STR_PERSONAL_ARMOR_BA
     listOrder: 2906
     requires:
@@ -706,7 +706,7 @@ manufacture:
     requiredItems:
       STR_ALIEN_ALLOYS: 16
       STR_ELERIUM_115: 9
-  - name: STR_REDSUIT_ARMOR
+  - type: STR_REDSUIT_ARMOR
     category: STR_PERSONAL_ARMOR_BA
     listOrder: 2907
     requires:
@@ -719,7 +719,7 @@ manufacture:
     requiredItems:
       STR_ALIEN_ALLOYS: 16
       STR_ELERIUM_115: 9
-  - name: STR_BLACK_ARMOR
+  - type: STR_BLACK_ARMOR
     category: STR_PERSONAL_ARMOR_BA
     listOrder: 2801
     requires:
@@ -732,7 +732,7 @@ manufacture:
     requiredItems:
       STR_ALIEN_ALLOYS: 13
       STR_ELERIUM_115: 3
-  - name: STR_BLUE_ARMOR
+  - type: STR_BLUE_ARMOR
     category: STR_PERSONAL_ARMOR_BA
     listOrder: 2802
     requires:
@@ -745,7 +745,7 @@ manufacture:
     requiredItems:
       STR_ALIEN_ALLOYS: 13
       STR_ELERIUM_115: 3
-  - name: STR_GREEN_ARMOR
+  - type: STR_GREEN_ARMOR
     category: STR_PERSONAL_ARMOR_BA
     listOrder: 2803
     requires:
@@ -758,7 +758,7 @@ manufacture:
     requiredItems:
       STR_ALIEN_ALLOYS: 13
       STR_ELERIUM_115: 3
-  - name: STR_ORANGE_ARMOR
+  - type: STR_ORANGE_ARMOR
     category: STR_PERSONAL_ARMOR_BA
     listOrder: 2804
     requires:
@@ -771,7 +771,7 @@ manufacture:
     requiredItems:
       STR_ALIEN_ALLOYS: 13
       STR_ELERIUM_115: 3
-  - name: STR_PINK_ARMOR
+  - type: STR_PINK_ARMOR
     category: STR_PERSONAL_ARMOR_BA
     listOrder: 2805
     requires:
@@ -784,7 +784,7 @@ manufacture:
     requiredItems:
       STR_ALIEN_ALLOYS: 13
       STR_ELERIUM_115: 3
-  - name: STR_PURPLE_ARMOR
+  - type: STR_PURPLE_ARMOR
     category: STR_PERSONAL_ARMOR_BA
     listOrder: 2806
     requires:
@@ -797,7 +797,7 @@ manufacture:
     requiredItems:
       STR_ALIEN_ALLOYS: 13
       STR_ELERIUM_115: 3
-  - name: STR_RED_ARMOR
+  - type: STR_RED_ARMOR
     category: STR_PERSONAL_ARMOR_BA
     listOrder: 2807
     requires:

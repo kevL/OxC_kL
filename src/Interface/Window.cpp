@@ -31,7 +31,7 @@ namespace OpenXcom
 {
 
 // Speed: for high-quality filters & shaders, like 4xHQX, use a faster value
-// like 0.135f - for quicker filters & shaders slow the popup down with a valie
+// like 0.135f - for quicker filters & shaders slow the popup down with a value
 // like 0.076f.
 const float Window::POPUP_SPEED = 0.135f; // larger is faster step.
 

@@ -81,7 +81,7 @@ YAML::Node Production::save() const
 {
 	YAML::Node node;
 
-	node["item"]		= _manufRule->getName();
+	node["item"]		= _manufRule->getType();
 	node["assigned"]	= _engineers;
 	node["spent"]		= _timeSpent;
 	node["amount"]		= _amount;

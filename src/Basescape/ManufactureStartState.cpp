@@ -103,7 +103,7 @@ ManufactureStartState::ManufactureStartState(
 
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK17.SCR"));
 
-	_txtTitle->setText(tr(_manufRule->getName()));
+	_txtTitle->setText(tr(_manufRule->getType()));
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 
@@ -114,20 +114,18 @@ ManufactureStartState::ManufactureStartState(
 	_txtWorkSpace->setText(tr("STR_WORK_SPACE_REQUIRED_")
 							.arg(_manufRule->getRequiredSpace()));
 
-	const std::map<std::string, int>& requiredItems (_manufRule->getRequiredItems()); // init
-	const int availableWorkSpace = _base->getFreeWorkshops();
-	bool showStart (_game->getSavedGame()->getFunds() > _manufRule->getManufactureCost());	// init
-	showStart &= (availableWorkSpace != 0);													// nifty.
-
 	_txtRequiredItems->setText(tr("STR_SPECIAL_MATERIALS_REQUIRED"));
+
 	_txtItemRequired->setText(tr("STR_ITEM_REQUIRED"));
 	_txtUnitsRequired->setText(tr("STR_UNITS_REQUIRED"));
 	_txtUnitsAvailable->setText(tr("STR_UNITS_AVAILABLE"));
 
-	_lstRequiredItems->setColumns(3, 140, 60, 40);
+	_lstRequiredItems->setColumns(3, 140,60,40);
 
-	const ItemContainer* const storage (base->getStorageItems()); // init.
-//	int row = 0;
+	const ItemContainer* const storage = base->getStorageItems();
+	bool showStart = _game->getSavedGame()->getFunds() >= _manufRule->getManufactureCost()
+				  && _base->getFreeWorkshops() != 0;
+	const std::map<std::string, int>& requiredItems = _manufRule->getRequiredItems();
 	for (std::map<std::string, int>::const_iterator
 			i = requiredItems.begin();
 			i != requiredItems.end();
@@ -138,13 +136,12 @@ ManufactureStartState::ManufactureStartState(
 			woststr2;
 		woststr1 << L'\x01' << i->second;
 		woststr2 << L'\x01' << storage->getItemQty(i->first);
-		showStart &= (storage->getItemQty(i->first) >= i->second);
+		showStart = showStart && (storage->getItemQty(i->first) >= i->second);
 		_lstRequiredItems->addRow(
 								3,
 								tr(i->first).c_str(),
 								woststr1.str().c_str(),
 								woststr2.str().c_str());
-//		_lstRequiredItems->setCellColor(row++, 0, Palette::blockOffset(13)+10);
 	}
 
 	const bool vis = (requiredItems.empty() == false);

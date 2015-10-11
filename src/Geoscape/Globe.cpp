@@ -743,17 +743,15 @@ void Globe::setupRadii( // private.
 	_zoomRadii.push_back(3.42 * height_d); // 5 - Zoomed all in
 
 	_radius = _zoomRadii[_zoom];
-	_radiusStep = (_zoomRadii[_zoomRadii.size() - 1] - _zoomRadii[0]) / 10.;
+	_radiusStep = (_zoomRadii[_zoomRadii.size() - 1] - _zoomRadii[0]) / 12.2;
 
-	_earthData.resize(_zoomRadii.size());
-
-	for (size_t // filling normal field for each radius
-			rad = 0;
-			rad != _zoomRadii.size();
-			++rad)
+	_earthData.resize(_zoomRadii.size());	// data for drawing sun-shadow.
+	for (size_t								// filling normal field for each radius
+			radiusId = 0;
+			radiusId != _zoomRadii.size();
+			++radiusId)
 	{
-		_earthData[rad].resize(width * height);
-
+		_earthData[radiusId].resize(width * height);
 		for (size_t
 				j = 0;
 				j != static_cast<size_t>(height);
@@ -764,11 +762,11 @@ void Globe::setupRadii( // private.
 					i != static_cast<size_t>(width);
 					++i)
 			{
-				_earthData[rad]
+				_earthData[radiusId]
 						  [static_cast<size_t>(width) * j + i] = static_data.circle_norm(
 																					static_cast<double>(width) / 2.,
 																					height_d / 2.,
-																					_zoomRadii[rad],
+																					_zoomRadii[radiusId],
 																					static_cast<double>(i) + 0.5,
 																					static_cast<double>(j) + 0.5);
 			}

@@ -208,7 +208,7 @@ void ManufactureState::fillProductionList()
 {
 	_lstManufacture->clearList();
 
-	const std::vector<Production*> baseProds(_base->getProductions());
+	const std::vector<Production*> baseProds = _base->getProductions();
 	for (std::vector<Production*>::const_iterator
 			i = baseProds.begin();
 			i != baseProds.end();
@@ -221,7 +221,7 @@ void ManufactureState::fillProductionList()
 			woststr3,
 			woststr4;
 
-		woststr0 << tr((*i)->getRules()->getName());
+		woststr0 << tr((*i)->getRules()->getType());
 		if ((*i)->getSellItems() == true)
 		{
 			std::streamsize strSize = woststr0.tellp();

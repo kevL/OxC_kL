@@ -19,7 +19,7 @@ crafts:
 #    cost: 400
 #    points: 20
 manufacture:
-  - name: STR_RAVEN
+  - type: STR_RAVEN
     category: STR_CRAFT
     requires:
       - STR_IMPROVED_INTERCEPTOR

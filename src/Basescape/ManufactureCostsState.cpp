@@ -108,6 +108,12 @@ ManufactureCostsState::ManufactureCostsState()
 	_btnCancel->onKeyboardPress(
 							(ActionHandler)& ManufactureCostsState::btnCancelClick,
 							Options::keyCancel);
+	_btnCancel->onKeyboardPress(
+							(ActionHandler)& ManufactureCostsState::btnCancelClick,
+							Options::keyOk);
+	_btnCancel->onKeyboardPress(
+							(ActionHandler)& ManufactureCostsState::btnCancelClick,
+							Options::keyOkKeypad);
 }
 
 /**
@@ -150,7 +156,7 @@ void ManufactureCostsState::init()
 			++i, row += 3)
 	{
 		woststr.str(L"");
-		woststr << L"> " << tr((*i)->getName());
+		woststr << L"> " << tr((*i)->getType());
 
 		_lstProduction->addRow(
 							5,

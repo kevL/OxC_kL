@@ -175,7 +175,7 @@ void ManufactureInfoState::buildUi() // private.
 
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK17.SCR"));
 
-	_txtTitle->setText(tr(_manufRule != NULL ? _manufRule->getName() : _production->getRules()->getName()));
+	_txtTitle->setText(tr(_manufRule != NULL ? _manufRule->getType() : _production->getRules()->getType()));
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 
@@ -396,36 +396,36 @@ static bool _formatProfit( // static.
 		int profit,
 		std::wostringstream& woststr)
 {
-	float fProfit = static_cast<float>(profit);
+	float profit_f = static_cast<float>(profit);
 
 	bool ret;
-	if (fProfit < 0.f)
+	if (profit_f < 0.f)
 	{
-		fProfit = -fProfit;
+		profit_f = -profit_f;
 		ret = false;
 	}
 	else
 		ret = true;
 
 	std::wstring suffix;
-	if (fProfit >= 1000000000.f)
+	if (profit_f >= 1e9f)
 	{
-		fProfit /= 1000000000.f;
+		profit_f /= 1e9f;
 		suffix = L" b";
 	}
-	else if (fProfit >= 1000000.f)
+	else if (profit_f >= 1e6f)
 	{
-		fProfit /= 1000000.f;
+		profit_f /= 1e6f;
 		suffix = L" m";
 	}
-	else if (fProfit > 1000.f)
+	else if (profit_f >= 1e3f)
 	{
-		fProfit /= 1000.f;
+		profit_f /= 1e3f;
 		suffix = L" k";
 	}
 
-//	woststr << (neg ? L"- " : L"+ ") << L"$" << std::fixed << std::setprecision(1) << fProfit << suffix;
-	woststr << L"$" << std::fixed << std::setprecision(1) << fProfit << suffix;
+//	woststr << (neg ? L"- " : L"+ ") << L"$" << std::fixed << std::setprecision(1) << profit_f << suffix;
+	woststr << L"$" << std::fixed << std::setprecision(1) << profit_f << suffix;
 	return ret;
 }
 

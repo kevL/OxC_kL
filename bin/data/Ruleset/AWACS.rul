@@ -57,7 +57,7 @@ crafts:
 #      - STR_UFO_CONSTRUCTION
 #-----------------------------------
 manufacture:
-  - name: STR_DARKSTAR
+  - type: STR_DARKSTAR
     category: STR_CRAFT
     listOrder: 3507
     requires:

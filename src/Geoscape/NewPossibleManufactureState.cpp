@@ -86,7 +86,10 @@ NewPossibleManufactureState::NewPossibleManufactureState(
 	_btnManufacture->onKeyboardPress(
 					(ActionHandler)& NewPossibleManufactureState::btnManufactureClick,
 					Options::keyOk);
-	_btnManufacture->setVisible(showManufactureButton && base->getAvailableWorkshops() != 0);
+	_btnManufacture->onKeyboardPress(
+					(ActionHandler)& NewPossibleManufactureState::btnManufactureClick,
+					Options::keyOkKeypad);
+	_btnManufacture->setVisible(showManufactureButton && (base->getAvailableWorkshops() != 0));
 
 	_txtTitle->setText(tr("STR_WE_CAN_NOW_PRODUCE"));
 	_txtTitle->setAlign(ALIGN_CENTER);
@@ -101,7 +104,7 @@ NewPossibleManufactureState::NewPossibleManufactureState(
 			i != possibilities.end();
 			++i)
 	{
-		_lstPossibilities->addRow(1, tr((*i)->getName()).c_str());
+		_lstPossibilities->addRow(1, tr((*i)->getType()).c_str());
 	}
 }
 

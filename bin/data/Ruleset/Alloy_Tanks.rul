@@ -165,7 +165,7 @@ units:
     mechanical: true
     psiImmune: true
 manufacture:
-  - name: STR_TANK_CANNON_ALLOY
+  - type: STR_TANK_CANNON_ALLOY
     category: STR_HEAVY_WEAPONS_PLATFORM
     requires:
       - STR_ALLOY_TANK_ARMOR
@@ -175,7 +175,7 @@ manufacture:
     requiredItems:
       STR_ALIEN_ALLOYS: 22
     listOrder: 425
-  - name: STR_TANK_ROCKET_LAUNCHER_ALLOY
+  - type: STR_TANK_ROCKET_LAUNCHER_ALLOY
     category: STR_HEAVY_WEAPONS_PLATFORM
     requires:
       - STR_ALLOY_TANK_ARMOR
@@ -185,7 +185,7 @@ manufacture:
     requiredItems:
       STR_ALIEN_ALLOYS: 22
     listOrder: 475
-  - name: STR_TANK_LASER_CANNON_ALLOY
+  - type: STR_TANK_LASER_CANNON_ALLOY
     category: STR_HEAVY_WEAPONS_PLATFORM
     requires:
       - STR_LASER_CANNON

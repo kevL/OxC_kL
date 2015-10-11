@@ -40,7 +40,7 @@ items:
     armor: 5
     listOrder: 3711
 manufacture:
-  - name: STR_FUSION_TORCH
+  - type: STR_FUSION_TORCH
     category: STR_WEAPON
     requires:
       - STR_FUSION_TORCH
@@ -49,7 +49,7 @@ manufacture:
     cost: 200000
     requiredItems:
       STR_ALIEN_ALLOYS: 8
-  - name: STR_FUSION_TORCH_POWER_CELL
+  - type: STR_FUSION_TORCH_POWER_CELL
     category: STR_AMMUNITION
     requires:
       - STR_FUSION_TORCH_POWER_CELL

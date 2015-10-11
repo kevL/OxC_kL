@@ -1385,11 +1385,9 @@ void GeoscapeState::timeAdvance()
 				}
 			}
 
-			if (update == true)
-			{
-				_pause = (_dogfightsToStart.empty() == false);
-				updateTimeDisplay();
-			}
+			if (update == true) updateTimeDisplay();
+
+			_pause = (_dogfightsToStart.empty() == false);
 			_globe->draw();
 		}
 	}
@@ -2506,7 +2504,7 @@ void GeoscapeState::time1Hour()
 
 				events.push_back(ProductionCompleteInfo(
 													*i,
-													tr(j->first->getRules()->getName()),
+													tr(j->first->getRules()->getType()),
 													(arrivals == false),
 													j->second));
 			}

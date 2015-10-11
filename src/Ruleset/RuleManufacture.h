@@ -37,7 +37,7 @@ class RuleManufacture
 private:
 	std::string
 		_category,
-		_name;
+		_type;
 	int
 		_cost,
 		_listOrder,
@@ -53,15 +53,15 @@ private:
 
 	public:
 		/// Creates a new manufacture.
-		explicit RuleManufacture(const std::string& name);
+		explicit RuleManufacture(const std::string& type);
 
 		/// Loads the manufacture from YAML.
 		void load(
 				const YAML::Node& node,
 				int listOrder);
 
-		/// Gets the manufacture name.
-		std::string getName() const;
+		/// Gets the manufacture type.
+		std::string getType() const;
 		/// Gets the manufacture category.
 		std::string getCategory() const;
 

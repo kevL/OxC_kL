@@ -734,7 +734,7 @@ void Ruleset::loadFile(const std::string& file) // protected.
 			rule->load(*i, _researchListOrder);
 
 			if ((*i)["unlockFinalMission"].as<bool>(false))
-				_finalResearch = (*i)["name"].as<std::string>(_finalResearch);
+				_finalResearch = (*i)["type"].as<std::string>(_finalResearch);
 		}
 	}
 
@@ -743,7 +743,7 @@ void Ruleset::loadFile(const std::string& file) // protected.
 			i != doc["manufacture"].end();
 			++i)
 	{
-		RuleManufacture* const rule = loadRule(*i, &_manufacture, &_manufactureIndex, "name");
+		RuleManufacture* const rule = loadRule(*i, &_manufacture, &_manufactureIndex);
 		if (rule != NULL)
 		{
 			_manufactureListOrder += 100;

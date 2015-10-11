@@ -25,17 +25,17 @@ namespace OpenXcom
 
 /**
  * Creates a new Manufacture.
- * @param name - reference a unique manufacture name
+ * @param type - reference a unique manufacture type
  */
-RuleManufacture::RuleManufacture(const std::string& name)
+RuleManufacture::RuleManufacture(const std::string& type)
 	:
-		_name(name),
+		_type(type),
 		_space(0),
 		_time(0),
 		_cost(0),
 		_listOrder(0)
 {
-	_producedItems[name] = 1;
+	_producedItems[type] = 1;
 }
 
 /**
@@ -49,15 +49,15 @@ void RuleManufacture::load(
 {
 	// why ->
 	bool same = _producedItems.size() == 1
-			 && _name == _producedItems.begin()->first;
+			 && _type == _producedItems.begin()->first;
 
-	_name = node["name"].as<std::string>(_name);
+	_type = node["type"].as<std::string>(_type);
 
 	if (same == true)
 	{
 		const int qty = _producedItems.begin()->second;
 		_producedItems.clear();
-		_producedItems[_name] = qty;
+		_producedItems[_type] = qty;
 	} // end_why. Perhaps to overwrite a previous entry with a subsequently loaded ID-string, perhaps.
 
 	_category		= node["category"]		.as<std::string>(_category);
@@ -74,12 +74,12 @@ void RuleManufacture::load(
 }
 
 /**
- * Gets the unique name of the manufacture.
- * @return, the name
+ * Gets the unique type of the manufacture.
+ * @return, the type
  */
-std::string RuleManufacture::getName() const
+std::string RuleManufacture::getType() const
 {
-	return _name;
+	return _type;
 }
 
 /**
