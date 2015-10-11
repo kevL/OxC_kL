@@ -42,6 +42,11 @@ class BaseDetectionState
 {
 
 private:
+	static const Uint8
+		YELLOW	=   9,
+		RED		=  32,
+		PURPLE	= 246;
+
 	Base* _base;
 	Text // TODO: add base defenses
 //		* _txtDifficulty,

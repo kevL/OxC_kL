@@ -59,7 +59,7 @@ private:
 	static const float POPUP_SPEED;
 	static const int
 		POP_START	= 0,
-		POP_CURRENT	= 1,
+		POP_GO		= 1,
 		POP_HALT	= 2;
 
 	bool
@@ -101,13 +101,13 @@ private:
 		/// Cleans up the window.
 		~Window();
 
-		/// Sets the background surface.
-		void setBackground(
-				Surface* const bg,
-				int dx = 0,
-				int dy = 0);
-		/// Sets the background to a solid color instead of transparent.
-		void setBackgroundFill(Uint8 color);
+		/// Handles the timers.
+		void think();
+		/// Gets if this window has finished popping up.
+		bool isPopupDone() const;
+
+		/// Draws the window.
+		void draw();
 
 		/// Sets the border color.
 		void setColor(Uint8 color);
@@ -117,13 +117,13 @@ private:
 		/// Sets the high contrast color setting.
 		void setHighContrast(bool contrast = true);
 
-		/// Handles the timers.
-		void think();
-		/// Gets if this window has finished popping up.
-		bool isPopupDone() const;
-
-		/// Draws the window.
-		void draw();
+		/// Sets the background surface.
+		void setBackground(
+				Surface* const bg,
+				int dx = 0,
+				int dy = 0);
+		/// Sets the background to a solid color instead of transparent.
+		void setBackgroundFill(Uint8 color);
 
 		/// sets the X delta.
 		void setDX(int dx);

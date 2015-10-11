@@ -4553,7 +4553,7 @@
 	"Text.h"
 	"../Engine/InteractiveSurface.h"
 
-1444553982 f:\git\openxcom\src\interface\window.h
+1444577537 f:\git\openxcom\src\interface\window.h
 	"../Engine/Surface.h"
 
 1444476128 f:\git\openxcom\src\ruleset\ruleset.h
@@ -4805,7 +4805,7 @@
 
 1443846053 f:\git\openxcom\src\savegame\researchproject.h
 
-1444562772 source:f:\git\openxcom\src\basescape\manufactureinfostate.cpp
+1444574917 source:f:\git\openxcom\src\basescape\manufactureinfostate.cpp
 	"ManufactureInfoState.h"
 	"../Interface/ArrowButton.h"
 	"../Interface/Text.h"
@@ -10848,7 +10848,7 @@
 	"../Savegame/BaseFacility.h"
 	"../Savegame/SavedGame.h"
 
-1435514260 f:\git\openxcom\src\basescape\basedetectionstate.h
+1444578530 f:\git\openxcom\src\basescape\basedetectionstate.h
 	"../Engine/State.h"
 
 1442990975 source:f:\git\openxcom\src\ruleset\sounddefinition.cpp

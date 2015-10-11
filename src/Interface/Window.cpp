@@ -105,65 +105,6 @@ Window::~Window()
 }
 
 /**
- * Sets the surface used to draw the background of the window.
- * @param bg - background
- * @param dx - x offset (default 0)
- * @param dy - y offset (default 0)
- */
-void Window::setBackground(
-		Surface* const bg,
-		int dx,
-		int dy)
-{
-	_bg = bg;
-
-	_bgX = dx;
-	_bgY = dy;
-
-	_redraw = true;
-}
-
-/**
- * Sets the background to a solid color instead of transparent.
- * @note A background picture will override a background fill.
- * @param color - fill color (0 is transparent)
- */
-void Window::setBackgroundFill(Uint8 color)
-{
-	_colorFill = color;
-}
-
-/**
- * Changes the color used to draw the shaded border.
- * @param color - color value
- */
-void Window::setColor(Uint8 color)
-{
-	_color = color;
-	_redraw = true;
-}
-
-/**
- * Returns the color used to draw the shaded border.
- * @return, color value
- */
-Uint8 Window::getColor() const
-{
-	return _color;
-}
-
-/**
- * Enables/disables high contrast color.
- * @note Mostly used for Battlescape UI.
- * @param contrast - high contrast setting (default true)
- */
-void Window::setHighContrast(bool contrast)
-{
-	_contrast = contrast;
-	_redraw = true;
-}
-
-/**
  * Keeps the animation timers running.
  */
 void Window::think()
@@ -184,16 +125,17 @@ void Window::popup() // private.
 {
 	if (_popProgress == POP_START)
 	{
-		_popProgress = POP_CURRENT;
+		_popProgress = POP_GO;
 		soundPopup[static_cast<size_t>(RNG::seedless(1,2))]->play(Mix_GroupAvailable(0));
 	}
 
-	if (_popProgress == POP_CURRENT)
+	if (_popProgress == POP_GO)
 	{
 		if ((_popStep += POPUP_SPEED) > 1.f)
 			_popProgress = POP_HALT;
 	}
-	else // done ->
+
+	if (_popProgress == POP_HALT)
 	{
 		if (_screen == true && _toggle == true)
 			_state->toggleScreen();
@@ -351,6 +293,65 @@ void Window::draw()
 		else
 			drawRect(&rect, _colorFill);
 	}
+}
+
+/**
+ * Changes the color used to draw the shaded border.
+ * @param color - color value
+ */
+void Window::setColor(Uint8 color)
+{
+	_color = color;
+	_redraw = true;
+}
+
+/**
+ * Returns the color used to draw the shaded border.
+ * @return, color value
+ */
+Uint8 Window::getColor() const
+{
+	return _color;
+}
+
+/**
+ * Enables/disables high contrast color.
+ * @note Mostly used for Battlescape UI.
+ * @param contrast - high contrast setting (default true)
+ */
+void Window::setHighContrast(bool contrast)
+{
+	_contrast = contrast;
+	_redraw = true;
+}
+
+/**
+ * Sets the surface used to draw the background of the window.
+ * @param bg - background
+ * @param dx - x offset (default 0)
+ * @param dy - y offset (default 0)
+ */
+void Window::setBackground(
+		Surface* const bg,
+		int dx,
+		int dy)
+{
+	_bg = bg;
+
+	_bgX = dx;
+	_bgY = dy;
+
+	_redraw = true;
+}
+
+/**
+ * Sets the background to a solid color instead of transparent.
+ * @note A background picture will override a background fill.
+ * @param color - fill color (0 is transparent)
+ */
+void Window::setBackgroundFill(Uint8 color)
+{
+	_colorFill = color;
 }
 
 /**

@@ -224,8 +224,8 @@ void CraftInfoState::init()
 		if (status == "STR_READY")
 		{
 			color = GREEN;
-			if (_blinkTimer->isRunning() == true)
-				_blinkTimer->stop();
+//			if (_blinkTimer->isRunning() == true)
+//				_blinkTimer->stop();
 		}
 		else
 		{
