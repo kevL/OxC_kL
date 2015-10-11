@@ -84,13 +84,13 @@ std::wstring Text::intWide(int value) // static.
  * Takes an integer value and formats it as number with separators spacing the
  * thousands.
  * @param value		- a value
- * @param space		- true to insert a space every 3 digits (default true)
+ * @param useSpace		- true to insert a space every 3 digits (default true)
  * @param currency	- reference a currency symbol (default L"")
  * @return, formatted string
  */
 std::wstring Text::formatNumber( // static.
 		int64_t value,
-		const bool space,
+		const bool useSpace,
 		const std::wstring& currency)
 {
 	// In the future, the whole setlocale thing should be removed from here.
@@ -111,16 +111,16 @@ std::wstring Text::formatNumber( // static.
 
 	std::wstring ret = woststr.str();
 
-	if (space == true)
+	if (useSpace == true)
 	{
-		const std::wstring thousands = L"\xA0"; // Language::cpToWstr(lc->mon_thousands_sep);
+//		const std::wstring thousands = L"\xA0"; // Language::cpToWstr(lc->mon_thousands_sep);
+		const std::wstring thousands = L"'";
 
-		size_t spacer = ret.size() - 3;
-		while (spacer > 0
-			&& spacer < ret.size())
+		size_t place = ret.size() - 3;
+		while (place > 0 && place < ret.size())
 		{
-			ret.insert(spacer, thousands);
-			spacer -= 3;
+			ret.insert(place, thousands);
+			place -= 3;
 		}
 	}
 

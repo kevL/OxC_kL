@@ -4373,7 +4373,7 @@
 1442273113 f:\git\openxcom\src\interface\bar.h
 	"../Engine/Surface.h"
 
-1444502928 f:\git\openxcom\src\interface\text.h
+1444513341 f:\git\openxcom\src\interface\text.h
 	"../Engine/Surface.h"
 
 1430149550 f:\git\openxcom\src\interface\textbutton.h
@@ -5013,7 +5013,7 @@
 1436386751 f:\git\openxcom\src\basescape\placestartfacilitystate.h
 	"PlaceFacilityState.h"
 
-1444509288 source:f:\git\openxcom\src\basescape\purchasestate.cpp
+1444509827 source:f:\git\openxcom\src\basescape\purchasestate.cpp
 	"PurchaseState.h"
 	"../Engine/Action.h"
 	"../Engine/Game.h"
@@ -7451,7 +7451,7 @@
 	"../Interface/Text.h"
 	"../Interface/TextButton.h"
 
-1444502948 source:f:\git\openxcom\src\interface\text.cpp
+1444513452 source:f:\git\openxcom\src\interface\text.cpp
 	"Text.h"
 	"../Engine/Language.h"
 

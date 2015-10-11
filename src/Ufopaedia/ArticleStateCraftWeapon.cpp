@@ -78,7 +78,7 @@ ArticleStateCraftWeapon::ArticleStateCraftWeapon(const ArticleDefinitionCraftWea
 	_lstInfo = new TextList(310, 113, 5, 80);
 	add(_lstInfo);
 
-	_lstInfo->setColumns(2, 180, 130);
+	_lstInfo->setColumns(2, 180,130);
 	_lstInfo->setColor(uPed_BLUE_SLATE);
 	_lstInfo->setBig();
 	_lstInfo->setDot();
@@ -99,8 +99,10 @@ ArticleStateCraftWeapon::ArticleStateCraftWeapon(const ArticleDefinitionCraftWea
 				Text::intWide(cwRule->getAccuracy()).c_str());
 
 	std::wostringstream woststr;
-	woststr << cwRule->getAggressiveReload()	<< L" - "
-			<< cwRule->getStandardReload()		<< L" - "
+	woststr << cwRule->getAggressiveReload()
+			<< L"-"
+			<< cwRule->getStandardReload()
+			<< L"-"
 			<< cwRule->getCautiousReload();
 
 	_lstInfo->addRow(

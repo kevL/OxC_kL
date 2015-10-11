@@ -108,7 +108,7 @@ private:
 		/// Formats an integer value as number with separators.
 		static std::wstring formatNumber(
 				int64_t value,
-				const bool space = true,
+				const bool useSpace = true,
 				const std::wstring& currency = L"");
 		/// Formats an integer value as currency.
 		static std::wstring formatFunding(int64_t value);
