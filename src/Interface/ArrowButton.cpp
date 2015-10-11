@@ -350,9 +350,9 @@ void ArrowButton::think()
 void ArrowButton::scroll()
 {
 	if (_shape == ARROW_BIG_UP)
-		_list->scrollUp(false);
+		_list->scrollUp();
 	else if (_shape == ARROW_BIG_DOWN)
-		_list->scrollDown(false);
+		_list->scrollDown();
 }
 
 /**

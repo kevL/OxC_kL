@@ -150,7 +150,7 @@ MonthlyReportState::MonthlyReportState()
 
 	std::string music = OpenXcom::res_MUSIC_GEO_MONTHLYREPORT;
 
-	std::wstring wst; // do rating
+	std::wstring wst;
 	if (_ratingTotal > 10000)
 		wst = tr("STR_RATING_STUPENDOUS");
 	else if (_ratingTotal > 5000)
@@ -167,7 +167,7 @@ MonthlyReportState::MonthlyReportState()
 		music = OpenXcom::res_MUSIC_GEO_MONTHLYREPORT_BAD;
 	}
 
-	_txtRating->setText(tr("STR_MONTHLY_RATING").arg(_ratingTotal).arg(wst));
+	_txtRating->setText(tr("STR_MONTHLY_RATING").arg(Text::formatNumber(_ratingTotal)).arg(wst));
 
 /*	std::wostringstream ss; // ADD:
 	ss << tr("STR_INCOME") << L"> \x01" << Text::formatFunding(_game->getSavedGame()->getCountryFunding());
@@ -328,10 +328,10 @@ void MonthlyReportState::calculateChanges() // private.
 	_ratingLast = 0;
 
 	int
-		total (0),
-		aLienTotal (0);
+		total = 0,
+		aLienTotal = 0;
 
-	const size_t lastMonth (_gameSave->getFundsList().size() - 2);
+	const size_t lastMonth = _gameSave->getFundsList().size() - 2;
 
 	for (std::vector<Region*>::const_iterator
 			i = _gameSave->getRegions()->begin();
@@ -349,14 +349,14 @@ void MonthlyReportState::calculateChanges() // private.
 	}
 
 
-	const int diff (static_cast<int>(_gameSave->getDifficulty()));
+	const int diff = static_cast<int>(_gameSave->getDifficulty());
 
 	for (std::vector<Country*>::const_iterator
 			i = _gameSave->getCountries()->begin();
 			i != _gameSave->getCountries()->end();
 			++i)
 	{
-		std::string st ((*i)->getRules()->getType());
+		std::string st = (*i)->getRules()->getType();
 
 		if ((*i)->getNewPact() == true)
 			_pactList.push_back(st);
@@ -380,85 +380,8 @@ void MonthlyReportState::calculateChanges() // private.
 		_ratingLast += _gameSave->getResearchScores().at(lastMonth - 1);
 
 	total += _gameSave->getResearchScores().at(lastMonth);
-	_ratingTotal = total - aLienTotal; // total RATING
+	_ratingTotal = total - aLienTotal;
 }
-/*	_ratingLast = 0;
-
-	int
-		total = 0,
-		subTotal = 0,
-		aLienTotal = 0,
-
-		offset = static_cast<int>(_gameSave->getFundsList().size()) - 2,
-		offset_pre = offset - 1;
-
-	if (offset_pre < 0)
-		offset_pre += 2;
-
-	// update activity meters, calculate a total score based
-	// on regional activity and gather last month's score
-	for (std::vector<Region*>::const_iterator
-			i = _gameSave->getRegions()->begin();
-			i != _gameSave->getRegions()->end();
-			++i)
-	{
-		(*i)->newMonth();
-
-		if ((*i)->getActivityXCom().size() > 2)
-			_ratingLast += (*i)->getActivityXCom().at(offset_pre)
-						 - (*i)->getActivityAlien().at(offset_pre);
-
-		subTotal += (*i)->getActivityXCom().at(offset);
-		aLienTotal += (*i)->getActivityAlien().at(offset);
-	}
-
-	// apply research bonus AFTER calculating total, because this bonus applies
-	// to the council ONLY, and shouldn't influence each country's decision.
-	// kL_note: And yet you _do_ add it in to country->newMonth() decisions...!
-	// So, hey, I'll take it out for you.. just a sec.
-	total = _gameSave->getResearchScores().at(offset) + subTotal;
-
-	// the council is more lenient after the first month
-//	if (_gameSave->getMonthsPassed() > 1)
-//		_gameSave->getResearchScores().at(offset) += 400;
-
-	if (_gameSave->getResearchScores().size() > 2)
-		_ratingLast += _gameSave->getResearchScores().at(offset_pre);
-
-
-	// now that we have our totals we can send the relevant info to the countries
-	// and have them make their decisions weighted on the council's perspective.
-	for (std::vector<Country*>::const_iterator
-			i = _gameSave->getCountries()->begin();
-			i != _gameSave->getCountries()->end();
-			++i)
-	{
-		// add them to the list of new pact members; this is done BEFORE initiating
-		// a new month because the _newPact flag will be reset in the process <-
-		if ((*i)->getNewPact())
-			_pactList.push_back((*i)->getRules()->getType());
-
-		// determine satisfaction level, sign pacts, adjust funding, and update activity meters
-		(*i)->newMonth(
-					subTotal, // There. done
-					aLienTotal,
-					static_cast<int>(_gameSave->getDifficulty()));
-
-		// and after they've made their decisions, calculate the difference;
-		// and add them to the appropriate lists.
-		_deltaFunds += (*i)->getFunding().back()
-					 - (*i)->getFunding().at((*i)->getFunding().size() - 2);
-
-		switch ((*i)->getSatisfaction())
-		{
-			case 1:
-				_sadList.push_back((*i)->getRules()->getType());
-			break;
-			case 3:
-				_happyList.push_back((*i)->getRules()->getType());
-		}
-	}
-	_ratingTotal = total - aLienTotal; // total RATING */
 
 /**
  * Returns to the previous screen.
@@ -528,7 +451,6 @@ std::wstring MonthlyReportState::countryList( // private.
 		const std::string& plural) const
 {
 	std::wostringstream woststr;
-
 	if (countries.empty() == false)
 	{
 		woststr << "\n\n";
@@ -536,7 +458,7 @@ std::wstring MonthlyReportState::countryList( // private.
 			woststr << tr(singular).arg(tr(countries.front()));
 		else
 		{
-			LocalizedText countryList (tr(countries.front()));
+			LocalizedText countryList = tr(countries.front());
 
 			std::vector<std::string>::const_iterator i;
 			for (

@@ -56,8 +56,7 @@ ScrollBar::ScrollBar(
 		_offset(0),
 		_bg(0)
 {
-//	_track = new Surface(width - 2, height + 1, x, y);
-	_track = new Surface(width - 2, height, x, y); // kL
+	_track = new Surface(width - 2, height, x, y);
 	_thumb = new Surface(width, height, x, y);
 
 	_thumbRect.x =
@@ -177,25 +176,25 @@ void ScrollBar::setPalette(
 
 /**
  * Automatically updates the scrollbar when the mouse moves.
- * @param action - pointer to an Action
- * @param state - state that the action handlers belong to
+ * @param action	- pointer to an Action
+ * @param state		- State that the action handlers belong to
  */
 void ScrollBar::handle(Action* action, State* state)
 {
 	InteractiveSurface::handle(action, state); // kL_note: screw it. Okay, try it again ... nah Screw it.
 
-	if (_pressed
+	if (_pressed == true
 		&& (action->getDetails()->type == SDL_MOUSEMOTION
 			|| action->getDetails()->type == SDL_MOUSEBUTTONDOWN))
 	{
 		const int y = std::min(
 							getHeight() - static_cast<int>(_thumbRect.h) + 1,
 							std::max(
-								0,
-								static_cast<int>(action->getAbsoluteYMouse()) - getY() + _offset));
+									0,
+									static_cast<int>(action->getAbsoluteYMouse()) - getY() + _offset));
 
-		double scale = static_cast<double>(_list->getRows()) / static_cast<double>(getHeight());
-		size_t scroll = static_cast<size_t>(Round(static_cast<double>(y) * scale));
+		const double scale = static_cast<double>(_list->getRows()) / static_cast<double>(getHeight());
+		const size_t scroll = static_cast<size_t>(Round(static_cast<double>(y) * scale));
 
 		_list->scrollTo(scroll);
 	}
@@ -209,8 +208,7 @@ void ScrollBar::blit(Surface* surface)
 {
 	Surface::blit(surface);
 
-	if (_visible == true
-		&& _hidden == false)
+	if (_visible == true && _hidden == false)
 	{
 		_track->blit(surface);
 		_thumb->blit(surface);
@@ -221,8 +219,8 @@ void ScrollBar::blit(Surface* surface)
 
 /**
  * The scrollbar only moves while the button is pressed.
- * @param action - pointer to an Action
- * @param state - state that the action handlers belong to
+ * @param action	- pointer to an Action
+ * @param state		- State that the action handlers belong to
  */
 void ScrollBar::mousePress(Action* action, State* state)
 {
@@ -230,16 +228,16 @@ void ScrollBar::mousePress(Action* action, State* state)
 
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
+		_pressed = true;
+
 		const int cursorY = static_cast<int>(action->getAbsoluteYMouse()) - getY();
 		if (cursorY >= static_cast<int>(_thumbRect.y)
 			&& cursorY < static_cast<int>(_thumbRect.y) + static_cast<int>(_thumbRect.h))
 		{
-			_offset = static_cast<int>(_thumbRect.y) - cursorY;
+			_offset = static_cast<int>(_thumbRect.y) - cursorY; // a press on thumb
 		}
 		else
 			_offset = -(static_cast<int>(_thumbRect.h) / 2);
-
-		_pressed = true;
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
 		_list->scrollUp(false, true);
@@ -249,8 +247,8 @@ void ScrollBar::mousePress(Action* action, State* state)
 
 /**
  * The scrollbar stops moving when the button is released.
- * @param action - pointer to an Action
- * @param state - state that the action handlers belong to
+ * @param action	- pointer to an Action
+ * @param state		- State that the action handlers belong to
  */
 void ScrollBar::mouseRelease(Action* action, State* state)
 {
@@ -260,6 +258,50 @@ void ScrollBar::mouseRelease(Action* action, State* state)
 	{
 		_pressed = false;
 		_offset = 0;
+	}
+}
+
+/**
+ * Handles keyboard shortcuts.
+ * @param action	- pointer to an Action
+ * @param state		- State that the action handlers belong to
+ */
+void ScrollBar::keyboardPress(Action* action, State* state)
+{
+	InteractiveSurface::keyboardPress(action, state);
+
+	if (action->getDetails()->type == SDL_KEYDOWN)
+	{
+		if (action->getDetails()->key.keysym.sym == SDLK_UP
+			|| action->getDetails()->key.keysym.sym == SDLK_KP8)
+		{
+			_list->scrollUp();												// up 1 line
+		}
+		else if (action->getDetails()->key.keysym.sym == SDLK_DOWN
+			|| action->getDetails()->key.keysym.sym == SDLK_KP2)
+		{
+			_list->scrollDown();											// down 1 line
+		}
+		else if (action->getDetails()->key.keysym.sym == SDLK_PAGEUP
+			|| action->getDetails()->key.keysym.sym == SDLK_KP9)
+		{
+			_list->scrollTo(_list->getScroll() - _list->getVisibleRows());	// up 1 page
+		}
+		else if (action->getDetails()->key.keysym.sym == SDLK_PAGEDOWN
+			|| action->getDetails()->key.keysym.sym == SDLK_KP3)
+		{
+			_list->scrollTo(_list->getScroll() + _list->getVisibleRows());	// down 1 page
+		}
+		else if (action->getDetails()->key.keysym.sym == SDLK_HOME
+			|| action->getDetails()->key.keysym.sym == SDLK_KP7)
+		{
+			_list->scrollUp(true);											// to top
+		}
+		else if (action->getDetails()->key.keysym.sym == SDLK_END
+			|| action->getDetails()->key.keysym.sym == SDLK_KP1)
+		{
+			_list->scrollDown(true);										// to bottom
+		}
 	}
 }
 

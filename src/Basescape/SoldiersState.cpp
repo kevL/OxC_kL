@@ -355,7 +355,7 @@ void SoldiersState::lstLeftArrowClick(Action* action)
 				_base->setRecallRow(
 								REC_SOLDIER,
 								_lstSoldiers->getScroll() - 1);
-				_lstSoldiers->scrollUp(false);
+				_lstSoldiers->scrollUp();
 			}
 		}
 		else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
@@ -410,7 +410,7 @@ void SoldiersState::lstRightArrowClick(Action* action)
 				_base->setRecallRow(
 								REC_SOLDIER,
 								_lstSoldiers->getScroll() + 1);
-				_lstSoldiers->scrollDown(false);
+				_lstSoldiers->scrollDown();
 			}
 		}
 		else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)

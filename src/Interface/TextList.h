@@ -267,11 +267,11 @@ private:
 
 		/// Scrolls the list up.
 		void scrollUp(
-				bool toMax,
+				bool toMax = false,
 				bool scrollByWheel = false);
 		/// Scrolls the list down.
 		void scrollDown(
-				bool toMax,
+				bool toMax = false,
 				bool scrollByWheel = false);
 		/// Sets the list scrollable.
 		void setScrollable(

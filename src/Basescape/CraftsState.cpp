@@ -366,7 +366,7 @@ void CraftsState::lstLeftArrowClick(Action* action)
 												- static_cast<int>(8. * action->getYScale())));
 			}
 			else
-				_lstCrafts->scrollUp(false);
+				_lstCrafts->scrollUp();
 		}
 		else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 		{
@@ -408,7 +408,7 @@ void CraftsState::lstRightArrowClick(Action* action)
 												+ static_cast<int>(8. * action->getYScale())));
 			}
 			else
-				_lstCrafts->scrollDown(false);
+				_lstCrafts->scrollDown();
 		}
 		else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 		{

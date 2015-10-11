@@ -299,8 +299,7 @@ void Slider::blit(Surface* surface)
 {
 	Surface::blit(surface);
 
-	if (_visible
-		&& !_hidden)
+	if (_visible == true && _hidden == false)
 	{
 		_txtMinus->blit(surface);
 		_txtPlus->blit(surface);
@@ -323,7 +322,7 @@ void Slider::mousePress(Action* action, State* state)
 	{
 		_pressed = true;
 
-		int cursorX = static_cast<int>(action->getAbsoluteXMouse());
+		const int cursorX = static_cast<int>(action->getAbsoluteXMouse());
 		if (cursorX >= _button->getX()
 			&& cursorX < _button->getX() + _button->getWidth())
 		{

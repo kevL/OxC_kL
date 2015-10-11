@@ -954,7 +954,7 @@ bool SoldierDiary::manageAwards(const Ruleset* const rules)
 										&& (*kill)->getUnitStatusString() != *detail
 										&& (*kill)->getUnitFactionString() != *detail
 										&& rules->getItem((*kill)->_weaponAmmo)->getDamageType() != dType
-										&& rules->getItem((*kill)->_weapon)->getBattleType() != bType)) // kL_note: *kill's _points value might want in there somehow ...
+										&& rules->getItem((*kill)->_weapon)->getBattleType() != bType))
 								{
 									found = false;
 									break;

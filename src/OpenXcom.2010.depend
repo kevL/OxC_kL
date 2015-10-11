@@ -4549,7 +4549,7 @@
 1436388109 f:\git\openxcom\src\basescape\placefacilitystate.h
 	"../Engine/State.h"
 
-1432688041 f:\git\openxcom\src\interface\textlist.h
+1444583949 f:\git\openxcom\src\interface\textlist.h
 	"Text.h"
 	"../Engine/InteractiveSurface.h"
 
@@ -4562,7 +4562,7 @@
 
 1444449287 f:\git\openxcom\src\savegame\gametime.h
 
-1443773128 source:f:\git\openxcom\src\basescape\craftarmorstate.cpp
+1444584100 source:f:\git\openxcom\src\basescape\craftarmorstate.cpp
 	"CraftArmorState.h"
 	"SoldierArmorState.h"
 	"SoldierInfoState.h"
@@ -4658,7 +4658,7 @@
 
 1440096185 f:\git\openxcom\src\savegame\vehicle.h
 
-1444504578 source:f:\git\openxcom\src\basescape\craftinfostate.cpp
+1444578050 source:f:\git\openxcom\src\basescape\craftinfostate.cpp
 	"CraftInfoState.h"
 	"CraftArmorState.h"
 	"CraftEquipmentState.h"
@@ -4695,7 +4695,7 @@
 
 1442236036 f:\git\openxcom\src\savegame\craftweapon.h
 
-1443774233 source:f:\git\openxcom\src\basescape\craftsoldiersstate.cpp
+1444584100 source:f:\git\openxcom\src\basescape\craftsoldiersstate.cpp
 	"CraftSoldiersState.h"
 	"SoldierInfoState.h"
 	"../Battlescape/BattlescapeGenerator.h"
@@ -4718,7 +4718,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Soldier.h"
 
-1442788646 source:f:\git\openxcom\src\basescape\craftsstate.cpp
+1444584100 source:f:\git\openxcom\src\basescape\craftsstate.cpp
 	"CraftsState.h"
 	"CraftInfoState.h"
 	"SellState.h"
@@ -5214,7 +5214,7 @@
 1431492838 f:\git\openxcom\src\savegame\soldierdeath.h
 	"GameTime.h"
 
-1443773267 source:f:\git\openxcom\src\basescape\soldiersstate.cpp
+1444584100 source:f:\git\openxcom\src\basescape\soldiersstate.cpp
 	"SoldiersState.h"
 	"CraftArmorState.h"
 	"PsiTrainingState.h"
@@ -6455,7 +6455,7 @@
 1431479061 f:\git\openxcom\src\engine\gmcat.h
 	"CatFile.h"
 
-1441514184 source:f:\git\openxcom\src\engine\interactivesurface.cpp
+1444589206 source:f:\git\openxcom\src\engine\interactivesurface.cpp
 	"InteractiveSurface.h"
 	"Action.h"
 
@@ -7216,7 +7216,7 @@
 	"../Resource/ResourcePack.h"
 	"../Savegame/Craft.h"
 
-1444152069 source:f:\git\openxcom\src\geoscape\monthlyreportstate.cpp
+1444580120 source:f:\git\openxcom\src\geoscape\monthlyreportstate.cpp
 	"MonthlyReportState.h"
 	"DefeatState.h"
 	"../Battlescape/CeremonyState.h"
@@ -7413,7 +7413,7 @@
 	"../Resource/XcomResourcePack.h"
 	"../Savegame/SavedGame.h"
 
-1430149550 source:f:\git\openxcom\src\interface\arrowbutton.cpp
+1444584100 source:f:\git\openxcom\src\interface\arrowbutton.cpp
 	"ArrowButton.h"
 	"TextList.h"
 	"../Engine/Action.h"
@@ -7442,7 +7442,7 @@
 1441236147 source:f:\git\openxcom\src\interface\numbertext.cpp
 	"NumberText.h"
 
-1441882663 source:f:\git\openxcom\src\interface\slider.cpp
+1444584549 source:f:\git\openxcom\src\interface\slider.cpp
 	"Slider.h"
 	<algorithm>
 	"../fmath.h"
@@ -7467,7 +7467,7 @@
 	"../Engine/Action.h"
 	"../Engine/Timer.h"
 
-1442282637 source:f:\git\openxcom\src\interface\textlist.cpp
+1444587658 source:f:\git\openxcom\src\interface\textlist.cpp
 	"TextList.h"
 	"ArrowButton.h"
 	"ComboBox.h"
@@ -7483,7 +7483,7 @@
 	"NumberText.h"
 	"../Engine/Palette.h"
 
-1444557488 source:f:\git\openxcom\src\interface\window.cpp
+1444578938 source:f:\git\openxcom\src\interface\window.cpp
 	"Window.h"
 	"../Engine/Sound.h"
 	"../Engine/Timer.h"
@@ -10657,12 +10657,12 @@
 	<math.h>
 	"fmopl.h"
 
-1433306729 source:f:\git\openxcom\src\interface\scrollbar.cpp
+1444589104 source:f:\git\openxcom\src\interface\scrollbar.cpp
 	"ScrollBar.h"
 	"../Engine/Action.h"
 	"../Interface/TextList.h"
 
-1430149550 f:\git\openxcom\src\interface\scrollbar.h
+1444589569 f:\git\openxcom\src\interface\scrollbar.h
 	"../Engine/InteractiveSurface.h"
 
 1431487562 f:\git\openxcom\src\menu\optionsnoaudiostate.h
@@ -10767,7 +10767,7 @@
 	"../Savegame/SoldierDead.h"
 	"../Savegame/SoldierDiary.h"
 
-1444148698 source:f:\git\openxcom\src\savegame\soldierdiary.cpp
+1444582047 source:f:\git\openxcom\src\savegame\soldierdiary.cpp
 	"SoldierDiary.h"
 	"../Ruleset/RuleAward.h"
 	"../Ruleset/Ruleset.h"
@@ -10834,7 +10834,7 @@
 	"../Savegame/SoldierDead.h"
 	"../Savegame/SoldierDeath.h"
 
-1442206768 source:f:\git\openxcom\src\basescape\basedetectionstate.cpp
+1444578791 source:f:\git\openxcom\src\basescape\basedetectionstate.cpp
 	"BaseDetectionState.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
@@ -11309,7 +11309,7 @@
 1442645806 f:\git\openxcom\src\basescape\psitrainingstate.h
 	"../Engine/State.h"
 
-1442649783 source:f:\git\openxcom\src\basescape\psitrainingstate.cpp
+1444584100 source:f:\git\openxcom\src\basescape\psitrainingstate.cpp
 	"PsiTrainingState.h"
 	"../Basescape/SoldierInfoState.h"
 	"../Engine/Action.h"

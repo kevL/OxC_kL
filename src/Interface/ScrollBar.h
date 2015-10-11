@@ -30,7 +30,7 @@ class TextList;
 
 
 /**
- * Horizontal scrollbar control to select from a range of values.
+ * Vertical scrollbar control to select from a range of values.
  */
 class ScrollBar
 	:
@@ -102,6 +102,9 @@ private:
 		void mousePress(Action* action, State* state);
 		/// Special handling for mouse releases.
 		void mouseRelease(Action* action, State* state);
+
+		/// Handles keyboard shortcuts.
+		void keyboardPress(Action* action, State* state);
 
 		/// Draws the scrollbar contents.
 		void draw();
