@@ -66,7 +66,7 @@ private:
 		* _txtWeapons;
 	TextButton
 		* _btnCancel,
-		* _btnGotoBase;
+		* _btnGoto;
 	TextList* _lstCrafts;
 	Window* _window;
 

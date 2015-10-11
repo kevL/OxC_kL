@@ -32,9 +32,9 @@ class Timer;
 
 
 /**
- * Enumeration for the type of animation when a window pops up.
+ * The direction-type of animation when a window pops up.
  */
-enum WindowPopup
+enum PopupType
 {
 	POPUP_NONE,			// 0
 	POPUP_HORIZONTAL,	// 1
@@ -56,7 +56,11 @@ class Window
 {
 
 private:
-	static const double POPUP_SPEED;
+	static const float POPUP_SPEED;
+	static const int
+		POP_START	= 0,
+		POP_CURRENT	= 1,
+		POP_HALT	= 2;
 
 	bool
 		_contrast,
@@ -65,8 +69,9 @@ private:
 		_toggle;
 	int
 		_dx,_dy,
-		_bgX,_bgY;
-	double _popupStep;
+		_bgX,_bgY,
+		_popProgress;
+	float _popStep;
 
 	Uint8
 		_color,
@@ -76,7 +81,10 @@ private:
 	Surface* _bg;
 	Timer* _timer;
 
-	WindowPopup _popup;
+	PopupType _popType;
+
+	/// Popups the window.
+	void popup();
 
 
 	public:
@@ -88,7 +96,7 @@ private:
 				int height,
 				int x = 0,
 				int y = 0,
-				WindowPopup popup = POPUP_NONE,
+				PopupType popType = POPUP_NONE,
 				bool toggle = true);
 		/// Cleans up the window.
 		~Window();
@@ -111,8 +119,6 @@ private:
 
 		/// Handles the timers.
 		void think();
-		/// Popups the window.
-		void popup();
 		/// Gets if this window has finished popping up.
 		bool isPopupDone() const;
 

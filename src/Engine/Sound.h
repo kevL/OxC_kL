@@ -29,7 +29,7 @@ namespace OpenXcom
 
 /**
  * Container for sound effects.
- * Handles loading and playing various formats through SDL_mixer.
+ * @note Handles loading and playing various formats through SDL_mixer.
  */
 class Sound
 {

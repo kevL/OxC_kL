@@ -71,14 +71,19 @@ UfopaediaStartState::UfopaediaStartState(bool tactical)
 		toggle = true;
 	}
 
+	int dX; // x - 32 to center on Globe
+	if (Options::baseXResolution > 320 + 32)
+		dX = -32;
+	else
+		dX = 0;
+
 	_window = new Window( // this is almost too tall for 320x200, note.
 					this,
 					256,194,
-					32,6,
+					32 + dX, 6,
 					POPUP_BOTH,
 					toggle);
-
-	_txtTitle = new Text(224, 17, 48, 16);
+	_txtTitle = new Text(224, 17, 48 + dX, 16);
 
 	setInterface("ufopaedia");
 
@@ -91,7 +96,7 @@ UfopaediaStartState::UfopaediaStartState(bool tactical)
 			i != ped_SECTIONS;
 			++i)
 	{
-		_btnSection[i] = new TextButton(224, 12, 48, y);
+		_btnSection[i] = new TextButton(224, 12, 48 + dX, y);
 		add(_btnSection[i], "button1", "ufopaedia");
 		_btnSection[i]->setText(tr(ped_TITLES[i]));
 		_btnSection[i]->onMouseClick((ActionHandler)& UfopaediaStartState::btnSectionClick);
@@ -99,13 +104,13 @@ UfopaediaStartState::UfopaediaStartState(bool tactical)
 		y += 13;
 	}
 
-	_btnOk = new TextButton(112, 16, 104, y + 4);
+	_btnOk = new TextButton(112, 16, 104 + dX, y + 4);
 	add(_btnOk, "button1", "ufopaedia");
 
 	centerAllSurfaces();
 
 
-	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
+	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"), dX);
 
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);

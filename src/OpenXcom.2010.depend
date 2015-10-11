@@ -4553,7 +4553,7 @@
 	"Text.h"
 	"../Engine/InteractiveSurface.h"
 
-1442671642 f:\git\openxcom\src\interface\window.h
+1444553982 f:\git\openxcom\src\interface\window.h
 	"../Engine/Surface.h"
 
 1444476128 f:\git\openxcom\src\ruleset\ruleset.h
@@ -5545,7 +5545,7 @@
 	"BattlescapeGame.h"
 	"BattleState.h"
 
-1442986319 f:\git\openxcom\src\engine\sound.h
+1444545355 f:\git\openxcom\src\engine\sound.h
 
 1443592617 f:\git\openxcom\src\interface\cursor.h
 	"../Engine/Surface.h"
@@ -6550,7 +6550,7 @@
 	<assert.h>
 	<stdlib.h>
 
-1440458313 source:f:\git\openxcom\src\engine\screen.cpp
+1444555298 source:f:\git\openxcom\src\engine\screen.cpp
 	"Screen.h"
 	"Action.h"
 	"CrossPlatform.h"
@@ -6561,7 +6561,7 @@
 	"Timer.h"
 	"Zoom.h"
 
-1442986329 source:f:\git\openxcom\src\engine\sound.cpp
+1444545377 source:f:\git\openxcom\src\engine\sound.cpp
 	"Sound.h"
 	"Language.h"
 
@@ -6655,7 +6655,7 @@
 1420130453 f:\git\openxcom\src\geoscape\alienterrorstate.h
 	"../Engine/State.h"
 
-1432347198 f:\git\openxcom\src\geoscape\interceptstate.h
+1444556554 f:\git\openxcom\src\geoscape\interceptstate.h
 	"../Engine/State.h"
 
 1442635058 source:f:\git\openxcom\src\geoscape\allocatepsitrainingstate.cpp
@@ -6920,7 +6920,7 @@
 1444103079 f:\git\openxcom\src\savegame\alienstrategy.h
 	"WeightedOptions.h"
 
-1441091164 source:f:\git\openxcom\src\geoscape\fundingstate.cpp
+1444555749 source:f:\git\openxcom\src\geoscape\fundingstate.cpp
 	"FundingState.h"
 	"../Engine/Game.h"
 	"../Interface/Text.h"
@@ -7162,7 +7162,7 @@
 1441327705 f:\git\openxcom\src\interface\toggletextbutton.h
 	"TextButton.h"
 
-1442789421 source:f:\git\openxcom\src\geoscape\interceptstate.cpp
+1444554528 source:f:\git\openxcom\src\geoscape\interceptstate.cpp
 	"InterceptState.h"
 	"ConfirmDestinationState.h"
 	"GeoscapeCraftState.h"
@@ -7483,7 +7483,7 @@
 	"NumberText.h"
 	"../Engine/Palette.h"
 
-1442671475 source:f:\git\openxcom\src\interface\window.cpp
+1444553870 source:f:\git\openxcom\src\interface\window.cpp
 	"Window.h"
 	"../Engine/Sound.h"
 	"../Engine/Timer.h"
@@ -7501,7 +7501,7 @@
 1434584973 f:\git\openxcom\src\menu\startstate.h
 	"../Engine/State.h"
 
-1438734425 source:f:\git\openxcom\src\menu\abandongamestate.cpp
+1444544058 source:f:\git\openxcom\src\menu\abandongamestate.cpp
 	"AbandonGameState.h"
 	"MainMenuState.h"
 	"SaveGameState.h"
@@ -8192,7 +8192,7 @@
 	"../Engine/SurfaceSet.h"
 	"../Resource/XcomResourcePack.h"
 
-1443901914 source:f:\git\openxcom\src\resource\xcomresourcepack.cpp
+1444547551 source:f:\git\openxcom\src\resource\xcomresourcepack.cpp
 	"XcomResourcePack.h"
 	"../Engine/Language.h"
 	"../Engine/Sound.h"
@@ -8292,7 +8292,7 @@
 1444220981 source:f:\git\openxcom\src\ruleset\ruleresearch.cpp
 	"RuleResearch.h"
 
-1444476062 source:f:\git\openxcom\src\ruleset\ruleset.cpp
+1444550942 source:f:\git\openxcom\src\ruleset\ruleset.cpp
 	"Ruleset.h"
 	"AlienRace.h"
 	"AlienDeployment.h"
@@ -8714,7 +8714,7 @@
 	"../Ruleset/RuleCraft.h"
 	"../Ruleset/Ruleset.h"
 
-1444502646 source:f:\git\openxcom\src\ufopaedia\articlestatecraftweapon.cpp
+1444541848 source:f:\git\openxcom\src\ufopaedia\articlestatecraftweapon.cpp
 	"ArticleStateCraftWeapon.h"
 	"../Engine/Game.h"
 	"../Engine/Surface.h"

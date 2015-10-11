@@ -65,21 +65,27 @@ InterceptState::InterceptState(
 {
 	_screen = false;
 
-	_window			= new Window(
-								this,
-								320,176,
-								0,14,
-								POPUP_HORIZONTAL);
-	_txtBase		= new Text(288, 17, 16, 24); // might do getRegion in here also.
+	int dX; // x - 32 to center on Globe
+	if (Options::baseXResolution > 320 + 32)
+		dX = -32;
+	else
+		dX = 0;
 
-	_txtCraft		= new Text(86, 9, 16, 40);
-	_txtStatus		= new Text(53, 9, 115, 40);
-	_txtWeapons		= new Text(50, 27, 241, 24);
+	_window		= new Window(
+							this,
+							320,176,
+							0 + dX, 14,
+							POPUP_HORIZONTAL);
+	_txtBase	= new Text(288, 17, 16, 24); // might do getRegion in here also.
 
-	_lstCrafts		= new TextList(285, 113, 16, 50);
+	_txtCraft	= new Text(86,  9,  16 + dX, 40);
+	_txtStatus	= new Text(53,  9, 115 + dX, 40);
+	_txtWeapons	= new Text(50, 27, 241 + dX, 24);
 
-	_btnGotoBase	= new TextButton(142, 16, 16, 167);
-	_btnCancel		= new TextButton(142, 16, 162, 167);
+	_lstCrafts	= new TextList(285, 113, 16 + dX, 50);
+
+	_btnGoto	= new TextButton(142, 16,  16 + dX, 167);
+	_btnCancel	= new TextButton(142, 16, 162 + dX, 167);
 
 	setInterface("geoCraftScreens");
 
@@ -89,17 +95,17 @@ InterceptState::InterceptState(
 	add(_txtStatus,		"text2",	"geoCraftScreens");
 	add(_txtWeapons,	"text2",	"geoCraftScreens");
 	add(_lstCrafts,		"list",		"geoCraftScreens");
-	add(_btnGotoBase,	"button",	"geoCraftScreens");
+	add(_btnGoto,		"button",	"geoCraftScreens");
 	add(_btnCancel,		"button",	"geoCraftScreens");
 
 	centerAllSurfaces();
 
 
-	_window->setBackground(_game->getResourcePack()->getSurface("BACK12.SCR"));
+	_window->setBackground(_game->getResourcePack()->getSurface("BACK12.SCR"), dX);
 
-	_btnGotoBase->setText(tr("STR_GO_TO_BASE"));
-	_btnGotoBase->onMouseClick((ActionHandler)& InterceptState::btnGotoBaseClick);
-	_btnGotoBase->setVisible(_base != NULL);
+	_btnGoto->setText(tr("STR_GO_TO_BASE"));
+	_btnGoto->onMouseClick((ActionHandler)& InterceptState::btnGotoBaseClick);
+	_btnGoto->setVisible(_base != NULL);
 
 	_btnCancel->setText(tr("STR_CANCEL"));
 	_btnCancel->onMouseClick((ActionHandler)& InterceptState::btnCancelClick);
@@ -119,7 +125,7 @@ InterceptState::InterceptState(
 
 	_txtWeapons->setText(tr("STR_WEAPONS_CREW_HWPS"));
 
-	_lstCrafts->setColumns(5, 91, 126, 25, 15, 15);
+	_lstCrafts->setColumns(5, 91,126,25,15,15);
 	_lstCrafts->setBackground(_window);
 	_lstCrafts->setSelectable();
 	_lstCrafts->setMargin();
@@ -180,12 +186,7 @@ InterceptState::InterceptState(
 								woststr1.str().c_str(),
 								woststr2.str().c_str(),
 								woststr3.str().c_str());
-
-				_lstCrafts->setCellColor(
-										row++,
-										1,
-										_cellColor,
-										true);
+				_lstCrafts->setCellColor(row++, 1, _cellColor, true);
 			}
 		}
 	}
@@ -330,9 +331,7 @@ void InterceptState::btnGotoBaseClick(Action*)
 	_geo->resetTimer();
 
 	_game->popState();
-	_game->pushState(new BasescapeState(
-									_base,
-									_geo->getGlobe()));
+	_game->pushState(new BasescapeState(_base, _geo->getGlobe()));
 }
 
 /**
@@ -342,11 +341,7 @@ void InterceptState::btnGotoBaseClick(Action*)
 void InterceptState::lstCraftsLeftClick(Action*)
 {
 	Craft* const craft = _crafts[_lstCrafts->getSelectedRow()];
-	_game->pushState(new GeoscapeCraftState(
-										craft,
-										_geo,
-										NULL,
-										true));
+	_game->pushState(new GeoscapeCraftState(craft, _geo, NULL, true));
 }
 
 /**

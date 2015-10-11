@@ -2145,7 +2145,7 @@ void GeoscapeState::time10Minutes()
 
 	if (_windowPops > 0)
 	{
-		_ufoDetected->setText(Text::intWide(_windowPops));
+		_ufoDetected->setText(Text::intWide(static_cast<int>(_windowPops)));
 		_ufoDetected->setVisible();
 	}
 }
@@ -4528,7 +4528,7 @@ void GeoscapeState::assessUfoPopups()
 	if (--_windowPops == 0)
 		_ufoDetected->setVisible(false);
 	else
-		_ufoDetected->setText(Text::intWide(_windowPops));
+		_ufoDetected->setText(Text::intWide(static_cast<int>(_windowPops)));
 }
 
 /**

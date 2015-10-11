@@ -23,7 +23,6 @@
 //#include <SDL_mixer.h>
 //#include "../fmath.h"
 
-//#include "../Engine/RNG.h"
 #include "../Engine/Sound.h"
 #include "../Engine/Timer.h"
 
@@ -31,10 +30,12 @@
 namespace OpenXcom
 {
 
-//const double Window::POPUP_SPEED = 0.076; // higher is faster
-const double Window::POPUP_SPEED = 0.135; // for high-quality filters & shaders, like 4xHQX
+// Speed: for high-quality filters & shaders, like 4xHQX, use a faster value
+// like 0.135f - for quicker filters & shaders slow the popup down with a valie
+// like 0.076f.
+const float Window::POPUP_SPEED = 0.135f; // larger is faster step.
 
-Sound* Window::soundPopup[3] = {0,0,0};
+Sound* Window::soundPopup[3] = {0,0,0}; // static.
 
 
 /**
@@ -44,7 +45,7 @@ Sound* Window::soundPopup[3] = {0,0,0};
  * @param height	- height in pixels
  * @param x			- X position in pixels (default 0)
  * @param y			- Y position in pixels (default 0)
- * @param popup		- popup animation (default POPUP_NONE)
+ * @param popType	- popup animation type (default POPUP_NONE)
  * @param toggle	- true to toggle screen before & after popup (default true)
  */
 Window::Window(
@@ -53,7 +54,7 @@ Window::Window(
 		int height,
 		int x,
 		int y,
-		WindowPopup popup,
+		PopupType popType,
 		bool toggle)
 	:
 		Surface(
@@ -61,25 +62,26 @@ Window::Window(
 			height,
 			x,y),
 		_state(state),
-		_popup(popup),
+		_popType(popType),
 		_toggle(toggle),
 		_bg(NULL),
 		_dx(-x),
 		_dy(-y),
 		_color(0),
-		_popupStep(0.),
+		_popStep(0.f),
 		_contrast(false),
 		_screen(false),
 		_thinBorder(false),
 		_bgX(0),
 		_bgY(0),
-		_colorFill(0)
+		_colorFill(0),
+		_popProgress(POP_START)
 {
-	_timer = new Timer(13);
+	_timer = new Timer(15);
 	_timer->onTimer((SurfaceHandler)& Window::popup);
 
-	if (_popup == POPUP_NONE)
-		_popupStep = 1.;
+	if (_popType == POPUP_NONE)
+		_popProgress = POP_HALT;
 	else
 	{
 		_hidden = true;
@@ -88,11 +90,8 @@ Window::Window(
 		if (_state != NULL)
 		{
 			_screen = _state->isScreen();
-			if (_screen == true
-				&& _toggle == true) // <- for opening UfoPaedia in battlescape w/ black BG.
-			{
+			if (_screen == true && _toggle == true) // <- for opening UfoPaedia in battlescape w/ black BG.
 				_state->toggleScreen();
-			}
 		}
 	}
 }
@@ -169,8 +168,7 @@ void Window::setHighContrast(bool contrast)
  */
 void Window::think()
 {
-	if (_hidden == true
-		&& _popupStep < 1.)
+	if (_hidden == true && _popProgress != POP_HALT)
 	{
 		_state->hideAll();
 		_hidden = false;
@@ -182,23 +180,23 @@ void Window::think()
 /**
  * Plays the window popup animation.
  */
-void Window::popup()
+void Window::popup() // private.
 {
-	if (AreSame(_popupStep, 0.) == true)
-		soundPopup[static_cast<size_t>(RNG::seedless(1,2))]->play(Mix_GroupAvailable(0));
-//		soundPopup[(SDL_GetTicks() % 2) + 1]->play(Mix_GroupAvailable(0));
-
-	if (_popupStep < 1.)
-		_popupStep += POPUP_SPEED;
-	else
+	if (_popProgress == POP_START)
 	{
-		if (_screen == true
-			&& _toggle == true)
-		{
-			_state->toggleScreen();
-		}
+		_popProgress = POP_CURRENT;
+		soundPopup[static_cast<size_t>(RNG::seedless(1,2))]->play(Mix_GroupAvailable(0));
+	}
 
-		_popupStep = 1.;
+	if (_popProgress == POP_CURRENT)
+	{
+		if ((_popStep += POPUP_SPEED) > 1.f)
+			_popProgress = POP_HALT;
+	}
+	else // done ->
+	{
+		if (_screen == true && _toggle == true)
+			_state->toggleScreen();
 
 		_state->showAll();
 		_timer->stop();
@@ -213,7 +211,7 @@ void Window::popup()
  */
 bool Window::isPopupDone() const
 {
-	return (AreSame(_popupStep, 1.) == true);
+	return (_popProgress == POP_HALT);
 }
 
 /**
@@ -226,13 +224,12 @@ void Window::draw()
 	Surface::draw();
 	SDL_Rect rect;
 
-	if (_popup == POPUP_HORIZONTAL
-		|| _popup == POPUP_BOTH)
+	if (_popType == POPUP_HORIZONTAL || _popType == POPUP_BOTH)
 	{
 		rect.x = static_cast<Sint16>(
-				(static_cast<double>(getWidth()) - (static_cast<double>(getWidth()) * _popupStep))) / 2;
+				(static_cast<float>(getWidth()) - (static_cast<float>(getWidth()) * _popStep))) / 2;
 		rect.w = static_cast<Uint16>(
-				 static_cast<double>(getWidth()) * _popupStep);
+				 static_cast<float>(getWidth()) * _popStep);
 	}
 	else
 	{
@@ -240,13 +237,12 @@ void Window::draw()
 		rect.w = static_cast<Uint16>(getWidth());
 	}
 
-	if (_popup == POPUP_VERTICAL
-		|| _popup == POPUP_BOTH)
+	if (_popType == POPUP_VERTICAL || _popType == POPUP_BOTH)
 	{
 		rect.y = static_cast<Sint16>(
-				(static_cast<double>(getHeight()) - (static_cast<double>(getHeight()) * _popupStep))) / 2;
+				(static_cast<float>(getHeight()) - (static_cast<float>(getHeight()) * _popStep))) / 2;
 		rect.h = static_cast<Uint16>(
-				 static_cast<double>(getHeight()) * _popupStep);
+				 static_cast<float>(getHeight()) * _popStep);
 	}
 	else
 	{
@@ -273,9 +269,8 @@ void Window::draw()
 				i != 5;
 				++i)
 		{
-			drawRect(
-					&rect,
-					color);
+			if (rect.w > 0 && rect.h > 0)
+				drawRect(&rect, color);
 
 			if (i % 2 == 0)
 			{
@@ -316,9 +311,8 @@ void Window::draw()
 				i != 5;
 				++i)
 		{
-			drawRect(
-					&rect,
-					color);
+			if (rect.w > 0 && rect.h > 0)
+				drawRect(&rect, color);
 
 			if (i < 2)
 				color -= gradient;
@@ -328,32 +322,35 @@ void Window::draw()
 			++rect.x;
 			++rect.y;
 
-			if (rect.w >= 2)
+			if (rect.w > 1)
 				rect.w -= 2;
 			else
-				rect.w = 1;
+				rect.w = 0;
 
-			if (rect.h >= 2)
+			if (rect.h > 1)
 				rect.h -= 2;
 			else
-				rect.h = 1;
+				rect.h = 0;
 		}
 	}
 
-	if (_bg != NULL)
+	if (rect.w != 0 && rect.h != 0)
 	{
-		_bg->getCrop()->x = static_cast<Sint16>(static_cast<int>(rect.x) - _dx - _bgX);
-		_bg->getCrop()->y = static_cast<Sint16>(static_cast<int>(rect.y) - _dy - _bgY);
-		_bg->getCrop()->w = rect.w;
-		_bg->getCrop()->h = rect.h;
+		if (_bg != NULL)
+		{
+			_bg->getCrop()->x = static_cast<Sint16>(static_cast<int>(rect.x) - _dx - _bgX);
+			_bg->getCrop()->y = static_cast<Sint16>(static_cast<int>(rect.y) - _dy - _bgY);
+			_bg->getCrop()->w = rect.w;
+			_bg->getCrop()->h = rect.h;
 
-		_bg->setX(static_cast<int>(rect.x));
-		_bg->setY(static_cast<int>(rect.y));
+			_bg->setX(static_cast<int>(rect.x));
+			_bg->setY(static_cast<int>(rect.y));
 
-		_bg->blit(this);
+			_bg->blit(this);
+		}
+		else
+			drawRect(&rect, _colorFill);
 	}
-	else
-		drawRect(&rect, _colorFill);
 }
 
 /**

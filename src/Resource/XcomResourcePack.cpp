@@ -108,7 +108,7 @@ struct HairXCOM2
 			int,
 			int)
 	{
-		if (   src >= WomanHairColor
+		if (src >= WomanHairColor
 			&& src <= WomanHairColor + ShadeMax)
 		{
 			src = ManHairColor + (src & ShadeMax);
@@ -132,7 +132,7 @@ struct FaceXCOM2
 			int,
 			int)
 	{
-		if (   src >= FaceColor
+		if (src >= FaceColor
 			&& src <= FaceColor + ShadeMax)
 		{
 			src = PinkColor + (src & ShadeMax);
@@ -163,7 +163,7 @@ struct BodyXCOM2
 		else if (src == 147)
 			src = IonArmorColor + 2;
 		else if (src >= HairXCOM2::WomanHairColor
-			&&   src <= HairXCOM2::WomanHairColor + ShadeMax)
+			&& src <= HairXCOM2::WomanHairColor + ShadeMax)
 		{
 			src = IonArmorColor + (src & ShadeMax);
 		}
@@ -187,7 +187,7 @@ struct FallXCOM2
 		if (src == RoguePixel)
 			src = FaceXCOM2::PinkColor + (src & ShadeMax) + 2;
 		else if (src >= BodyXCOM2::IonArmorColor
-			&&   src <= BodyXCOM2::IonArmorColor + ShadeMax)
+			&& src <= BodyXCOM2::IonArmorColor + ShadeMax)
 		{
 			src = FaceXCOM2::PinkColor + (src & ShadeMax);
 		}
@@ -654,10 +654,10 @@ XcomResourcePack::XcomResourcePack(const Ruleset* const rules)
 
 	// define GUI sound Fx
 	TextButton::soundPress		= getSound("GEO.CAT", ResourcePack::BUTTON_PRESS);		// #0 bleep
-//	Window::soundPopup[0]		= getSound("GEO.CAT", ResourcePack::WINDOW_POPUP[0]);	// #1 wahahahah
+	kL_soundPop					= getSound("GEO.CAT", ResourcePack::WINDOW_POPUP[0]);	// wahahahah <- global.
+	Window::soundPopup[0]		= getSound("GEO.CAT", ResourcePack::WINDOW_POPUP[0]);	// #1 wahahahah // not used - but leave it. The sound itself is also defined as 'kL_soundPop' above^
 	Window::soundPopup[1]		= getSound("GEO.CAT", ResourcePack::WINDOW_POPUP[1]);	// #2 swish1
 	Window::soundPopup[2]		= getSound("GEO.CAT", ResourcePack::WINDOW_POPUP[2]);	// #3 swish2
-	kL_soundPop					= getSound("GEO.CAT", ResourcePack::WINDOW_POPUP[0]);	// global.
 
 	/* BATTLESCAPE RESOURCES */
 	Log(LOG_INFO) << "Loading battlescape resources ...";

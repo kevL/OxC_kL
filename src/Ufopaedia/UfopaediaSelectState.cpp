@@ -48,10 +48,16 @@ UfopaediaSelectState::UfopaediaSelectState(const std::string& section)
 {
 	_screen = false;
 
-	_window			= new Window(this, 256, 194, 32, 6);
-	_txtTitle		= new Text(224, 17, 48, 15);
-	_lstSelection	= new TextList(224, 137, 40, 35);
-	_btnOk			= new TextButton(224, 16, 48, 177);
+	int dX; // x - 32 to center on Globe
+	if (Options::baseXResolution > 320 + 32)
+		dX = -32;
+	else
+		dX = 0;
+
+	_window			= new Window(this, 256, 194, 32 + dX, 6);
+	_txtTitle		= new Text(224, 17, 48 + dX, 15);
+	_lstSelection	= new TextList(224, 137, 40 + dX, 35);
+	_btnOk			= new TextButton(224, 16, 48 + dX, 177);
 
 	setInterface("ufopaedia");
 
@@ -63,7 +69,7 @@ UfopaediaSelectState::UfopaediaSelectState(const std::string& section)
 	centerAllSurfaces();
 
 
-	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
+	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"), dX);
 
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);

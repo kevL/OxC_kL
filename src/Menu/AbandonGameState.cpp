@@ -56,7 +56,7 @@ AbandonGameState::AbandonGameState(OptionsOrigin origin)
 	else
 		x = 52;
 
-	_window		= new Window(this, 216, 160, x, 20, POPUP_BOTH);
+	_window		= new Window(this, 216, 158, x, 20, POPUP_BOTH);
 
 	_txtTitle	= new Text(206, 33, x + 5, 73);
 

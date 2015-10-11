@@ -49,23 +49,29 @@ FundingState::FundingState()
 {
 	_screen = false;
 
-	_window			= new Window(this, 320, 200, 0,0, POPUP_BOTH);
+	int dX; // x - 32 to center on Globe
+	if (Options::baseXResolution > 320 + 32)
+		dX = -32;
+	else
+		dX = 0;
 
-	_txtTitle		= new Text(300, 17, 10, 9);
+	_window			= new Window(this, 320, 200, 0 + dX, 0, POPUP_BOTH);
 
-	_txtCountry		= new Text(102, 9,  16, 25);
-	_txtFunding		= new Text( 60, 9, 118, 25);
-	_txtChange		= new Text( 60, 9, 178, 25);
-	_txtScore		= new Text( 60, 9, 238, 25);
+	_txtTitle		= new Text(300, 17, 10 + dX, 9);
 
-	_lstCountries	= new TextList(277, 121, 24,  34);
-	_lstTotal		= new TextList(285,  17, 16, 157);
+	_txtCountry		= new Text(102, 9,  16 + dX, 25);
+	_txtFunding		= new Text( 60, 9, 118 + dX, 25);
+	_txtChange		= new Text( 60, 9, 178 + dX, 25);
+	_txtScore		= new Text( 60, 9, 238 + dX, 25);
 
-	_btnOk			= new TextButton(288, 16, 16, 177);
+	_lstCountries	= new TextList(277, 121, 24 + dX,  34);
+	_lstTotal		= new TextList(285,  17, 16 + dX, 157);
+
+	_btnOk			= new TextButton(288, 16, 16 + dX, 177);
 
 	setInterface("fundingWindow");
 
-	add(_window, "window", "fundingWindow");
+	add(_window,		"window",	"fundingWindow");
 	add(_txtTitle,		"text1",	"fundingWindow");
 	add(_txtCountry,	"text2",	"fundingWindow");
 	add(_txtFunding,	"text2",	"fundingWindow");
@@ -78,13 +84,16 @@ FundingState::FundingState()
 	centerAllSurfaces();
 
 
-	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
+	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"), dX);
 
 	_btnOk->setText(tr("STR_CANCEL"));
 	_btnOk->onMouseClick((ActionHandler)& FundingState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& FundingState::btnOkClick,
 					Options::keyOk);
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& FundingState::btnOkClick,
+					Options::keyOkKeypad);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& FundingState::btnOkClick,
 					Options::keyCancel);
@@ -104,7 +113,7 @@ FundingState::FundingState()
 
 	_txtScore->setText(tr("STR_SCORE"));
 
-	_lstCountries->setColumns(6, 94, 60, 6, 54, 6, 54);
+	_lstCountries->setColumns(6, 94,60,6,54,6,54);
 	_lstCountries->setDot();
 	for (std::vector<Country*>::const_iterator
 			i = _game->getSavedGame()->getCountries()->begin();
@@ -193,7 +202,7 @@ FundingState::FundingState()
 		net = -net;
 	}
 
-	_lstTotal->setColumns(4, 122, 92, 6, 54);
+	_lstTotal->setColumns(4, 122,92,6,54);
 	_lstTotal->setMargin();
 	_lstTotal->setDot();
 	_lstTotal->addRow(

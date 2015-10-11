@@ -47,7 +47,7 @@ const int
 /**
  * Sets up all the internal display flags depending on the current video settings.
  */
-void Screen::makeVideoFlags()
+void Screen::makeVideoFlags() // private.
 {
 	_flags = SDL_HWSURFACE | SDL_DOUBLEBUF | SDL_HWPALETTE;
 
