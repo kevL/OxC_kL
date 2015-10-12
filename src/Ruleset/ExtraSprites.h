@@ -20,7 +20,7 @@
 #ifndef OPENXCOM_EXTRASPRITES_H
 #define OPENXCOM_EXTRASPRITES_H
 
-#include <yaml-cpp/yaml.h>
+//#include <yaml-cpp/yaml.h>
 
 
 namespace OpenXcom
@@ -63,7 +63,7 @@ public:
 	/// Gets the height of the surfaces (used for single images and new spritesets).
 	int getHeight() const;
 
-	/// Checks if this is a single surface, or a set of surfaces.
+	/// Checks if this is a single surface or a set of surfaces.
 	bool getSingleImage() const;
 
 	/// Gets the mod index for this external sprite set.

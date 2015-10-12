@@ -4556,7 +4556,7 @@
 1444577537 f:\git\openxcom\src\interface\window.h
 	"../Engine/Surface.h"
 
-1444476128 f:\git\openxcom\src\ruleset\ruleset.h
+1444681729 f:\git\openxcom\src\ruleset\ruleset.h
 	"../Ruleset/RuleAlienMission.h"
 	"../Savegame/GameTime.h"
 
@@ -5214,7 +5214,7 @@
 1431492838 f:\git\openxcom\src\savegame\soldierdeath.h
 	"GameTime.h"
 
-1444671015 source:f:\git\openxcom\src\basescape\soldiersstate.cpp
+1444676274 source:f:\git\openxcom\src\basescape\soldiersstate.cpp
 	"SoldiersState.h"
 	"CraftArmorState.h"
 	"PsiTrainingState.h"
@@ -5233,8 +5233,6 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 	"../Savegame/Soldier.h"
-	"../Ruleset/RuleAward.h"
-	"../Ruleset/Ruleset.h"
 
 1444504000 source:f:\git\openxcom\src\basescape\storesstate.cpp
 	"StoresState.h"
@@ -5908,7 +5906,7 @@
 	"../Interface/Frame.h"
 	"../Interface/Text.h"
 
-1444503900 source:f:\git\openxcom\src\battlescape\inventory.cpp
+1444679561 source:f:\git\openxcom\src\battlescape\inventory.cpp
 	"Inventory.h"
 	"PrimeGrenadeState.h"
 	"TileEngine.h"
@@ -6469,10 +6467,7 @@
 
 1431828334 f:\git\openxcom\src\engine\languageplurality.h
 
-1430149550 f:\git\openxcom\src\ruleset\extrastrings.h
-	<map>
-	<string>
-	<yaml-cpp/yaml.h>
+1444681421 f:\git\openxcom\src\ruleset\extrastrings.h
 
 1433863298 source:f:\git\openxcom\src\engine\languageplurality.cpp
 	"LanguagePlurality.h"
@@ -7218,7 +7213,7 @@
 	"../Resource/ResourcePack.h"
 	"../Savegame/Craft.h"
 
-1444627341 source:f:\git\openxcom\src\geoscape\monthlyreportstate.cpp
+1444675954 source:f:\git\openxcom\src\geoscape\monthlyreportstate.cpp
 	"MonthlyReportState.h"
 	"DefeatState.h"
 	"../Battlescape/CeremonyState.h"
@@ -8195,7 +8190,7 @@
 	"../Engine/SurfaceSet.h"
 	"../Resource/XcomResourcePack.h"
 
-1444547551 source:f:\git\openxcom\src\resource\xcomresourcepack.cpp
+1444682161 source:f:\git\openxcom\src\resource\xcomresourcepack.cpp
 	"XcomResourcePack.h"
 	"../Engine/Language.h"
 	"../Engine/Sound.h"
@@ -8209,8 +8204,7 @@
 	"../Ruleset/RuleMusic.h"
 	"../Ruleset/Ruleset.h"
 
-1430149550 f:\git\openxcom\src\ruleset\extrasprites.h
-	<yaml-cpp/yaml.h>
+1444681287 f:\git\openxcom\src\ruleset\extrasprites.h
 
 1442985958 f:\git\openxcom\src\ruleset\extrasounds.h
 
@@ -8234,10 +8228,10 @@
 1442986066 source:f:\git\openxcom\src\ruleset\extrasounds.cpp
 	"ExtraSounds.h"
 
-1430149550 source:f:\git\openxcom\src\ruleset\extrasprites.cpp
+1444681546 source:f:\git\openxcom\src\ruleset\extrasprites.cpp
 	"ExtraSprites.h"
 
-1430149550 source:f:\git\openxcom\src\ruleset\extrastrings.cpp
+1444681537 source:f:\git\openxcom\src\ruleset\extrastrings.cpp
 	"ExtraStrings.h"
 
 1440637975 source:f:\git\openxcom\src\ruleset\mapblock.cpp
@@ -8280,7 +8274,7 @@
 	"RuleInventory.h"
 	"RuleItem.h"
 
-1444630636 source:f:\git\openxcom\src\ruleset\ruleitem.cpp
+1444679566 source:f:\git\openxcom\src\ruleset\ruleitem.cpp
 	"RuleItem.h"
 	"RuleInventory.h"
 	"../Engine/SurfaceSet.h"
@@ -10770,7 +10764,7 @@
 	"../Savegame/SoldierDead.h"
 	"../Savegame/SoldierDiary.h"
 
-1444631857 source:f:\git\openxcom\src\savegame\soldierdiary.cpp
+1444676038 source:f:\git\openxcom\src\savegame\soldierdiary.cpp
 	"SoldierDiary.h"
 	"../Ruleset/RuleAward.h"
 	"../Ruleset/Ruleset.h"

@@ -532,8 +532,6 @@ XcomResourcePack::XcomResourcePack(const Ruleset* const rules)
 		/* SOUNDS fx */
 		Log(LOG_INFO) << "Loading sound FX ...";
 
-//		if (rules->getSoundDefinitions()->empty() == true) // Load sounds.
-//		{
 		const std::string
 			catsId[] =
 			{
@@ -606,38 +604,6 @@ XcomResourcePack::XcomResourcePack(const Ruleset* const rules)
 			else
 				_sounds[catsId[i]] = sound;
 		}
-/*		}
-		else
-		{
-			for (std::map<std::string, SoundDefinition*>::const_iterator
-					i = rules->getSoundDefinitions()->begin();
-					i != rules->getSoundDefinitions()->end();
-					++i)
-			{
-				oststr.str("");
-				oststr << "SOUND/" << (*i).second->getCatFile();
-				st = CrossPlatform::getDataFile(oststr.str());
-
-				if (CrossPlatform::fileExists(st) == true)
-				{
-					if (_sounds.find((*i).first) == _sounds.end())
-						_sounds[(*i).first] = new SoundSet();
-
-					for (std::vector<int>::const_iterator
-							j = (*i).second->getSoundList().begin();
-							j != (*i).second->getSoundList().end();
-							++j)
-					{
-						_sounds[(*i).first]->loadCatByIndex(st, *j);
-					}
-				}
-				else
-				{
-					oststr << " not found";
-					throw Exception(oststr.str());
-				}
-			}
-		} */
 
 		if (CrossPlatform::fileExists(CrossPlatform::getDataFile("SOUND/INTRO.CAT")) == true)
 		{
@@ -784,7 +750,7 @@ XcomResourcePack::XcomResourcePack(const Ruleset* const rules)
 
 			//if (subdivision == true)
 			//{
-				//const int frames = (spritePack->getWidth() / spritePack->getSubX()) * (spritePack->getHeight() / spritePack->getSubY());
+			//	const int frames = (spritePack->getWidth() / spritePack->getSubX()) * (spritePack->getHeight() / spritePack->getSubY());
 				//Log(LOG_VERBOSE) << "Subdividing into " << frames << " frames.";
 				//Log(LOG_INFO) << "Subdividing into " << frames << " frames.";
 			//}

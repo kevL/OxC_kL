@@ -295,8 +295,6 @@ void Inventory::drawItems()
 
 	if (_selUnit != NULL)
 	{
-		const Uint8 color = static_cast<Uint8>(_game->getRuleset()->getInterface("inventory")->getElement("numStack")->color);
-
 		SurfaceSet* const srt = _game->getResourcePack()->getSurfaceSet("BIGOBS.PCK");
 		Surface* srf;
 
@@ -331,12 +329,14 @@ void Inventory::drawItems()
 					if ((*i)->getFuse() > -1) // grenade primer indicators
 						_grenadeFuses.push_back(std::make_pair(srf->getX(), srf->getY()));
 				}
-				//else Log(LOG_INFO) << "ERROR: bigob not found #" << (*i)->getRules()->getBigSprite();
+				else Log(LOG_INFO) << "ERROR: bigob not found [1] #" << (*i)->getRules()->getBigSprite(); // see also RuleItem::drawHandSprite()
 			}
 		}
 
 		Surface* const stackLayer = new Surface(getWidth(), getHeight());
 		stackLayer->setPalette(getPalette());
+
+		const Uint8 color = static_cast<Uint8>(_game->getRuleset()->getInterface("inventory")->getElement("numStack")->color);
 
 		for (std::vector<BattleItem*>::const_iterator // Ground items
 				i = _selUnit->getTile()->getInventory()->begin();
@@ -364,7 +364,7 @@ void Inventory::drawItems()
 					if ((*i)->getFuse() > -1) // grenade primer indicators
 						_grenadeFuses.push_back(std::make_pair(srf->getX(), srf->getY()));
 				}
-				//else Log(LOG_INFO) << "ERROR : bigob not found #" << (*i)->getRules()->getBigSprite();
+				else Log(LOG_INFO) << "ERROR: bigob not found [2] #" << (*i)->getRules()->getBigSprite(); // see also RuleItem::drawHandSprite()
 
 				if (_stackLevel[(*i)->getSlotX()]
 							   [(*i)->getSlotY()] > 1) // item stacking
@@ -383,7 +383,7 @@ void Inventory::drawItems()
 					_stackNumber->setValue(_stackLevel[(*i)->getSlotX()]
 													  [(*i)->getSlotY()]);
 					_stackNumber->draw();
-					_stackNumber->setColor(color); // Palette::blockOffset(4)+2
+					_stackNumber->setColor(color);
 					_stackNumber->blit(stackLayer);
 				}
 			}
@@ -482,7 +482,7 @@ bool Inventory::overlapItems( // static.
 				++i)
 		{
 			if ((*i)->getSlot() == slot
-				&& (*i)->occupiesSlot(x,y, item))
+				&& (*i)->occupiesSlot(x,y, item) == true)
 			{
 				return true;
 			}
@@ -495,7 +495,7 @@ bool Inventory::overlapItems( // static.
 				i != unit->getTile()->getInventory()->end();
 				++i)
 		{
-			if ((*i)->occupiesSlot(x,y, item))
+			if ((*i)->occupiesSlot(x,y, item) == true)
 				return true;
 		}
 	}
@@ -518,7 +518,7 @@ RuleInventory* Inventory::getSlotInPosition( // private.
 			i != _game->getRuleset()->getInventories()->end();
 			++i)
 	{
-		if (i->second->checkSlotInPosition(x,y))
+		if (i->second->checkSlotInPosition(x,y) == true)
 			return i->second;
 	}
 
@@ -540,8 +540,7 @@ BattleItem* Inventory::getSelectedItem() const
  */
 void Inventory::setSelectedItem(BattleItem* const item)
 {
-	if (item != NULL
-		&& item->getRules()->isFixed() == false)
+	if (item != NULL && item->getRules()->isFixed() == false)
 	{
 		_selItem = item;
 
@@ -577,11 +576,8 @@ BattleItem* Inventory::getMouseOverItem() const
  */
 void Inventory::setMouseOverItem(BattleItem* const item)
 {
-	if (item != NULL
-		&& item->getRules()->isFixed() == false)
-	{
+	if (item != NULL && item->getRules()->isFixed() == false)
 		_mouseOverItem = item;
-	}
 	else
 		_mouseOverItem = NULL;
 }
@@ -645,45 +641,45 @@ void Inventory::mouseOver(Action* action, State* state)
 	_selection->setY(static_cast<int>(std::floor(
 					action->getAbsoluteYMouse())) - (_selection->getHeight() / 2) - getY());
 
-	if (_selUnit == NULL)
-		return;
-
-	int
-		x = static_cast<int>(std::floor(action->getAbsoluteXMouse())) - getX(),
-		y = static_cast<int>(std::floor(action->getAbsoluteYMouse())) - getY();
-
-	RuleInventory* const slot = getSlotInPosition(&x,&y);
-	if (slot != NULL)
+	if (_selUnit != NULL)
 	{
-		if (_tuMode == true
-			&& _selItem != NULL
-			&& fitItem(slot, _selItem, true) == true)
+		int
+			x = static_cast<int>(std::floor(action->getAbsoluteXMouse())) - getX(),
+			y = static_cast<int>(std::floor(action->getAbsoluteYMouse())) - getY();
+
+		RuleInventory* const slot = getSlotInPosition(&x,&y);
+		if (slot != NULL)
 		{
-			_tuCost = _selItem->getSlot()->getCost(slot);
+			if (_tuMode == true
+				&& _selItem != NULL
+				&& fitItem(slot, _selItem, true) == true)
+			{
+				_tuCost = _selItem->getSlot()->getCost(slot);
+			}
+			else
+			{
+				_tuCost = -1;
+
+				if (slot->getType() == INV_GROUND)
+					x += _groundOffset;
+
+				BattleItem* const item = _selUnit->getItem(slot, x,y);
+				setMouseOverItem(item);
+			}
 		}
 		else
 		{
 			_tuCost = -1;
-
-			if (slot->getType() == INV_GROUND)
-				x += _groundOffset;
-
-			BattleItem* const item = _selUnit->getItem(slot, x,y);
-			setMouseOverItem(item);
+			setMouseOverItem(NULL);
 		}
-	}
-	else
-	{
-		_tuCost = -1;
-		setMouseOverItem(NULL);
-	}
 
-	_selection->setX(static_cast<int>(std::floor(
-					action->getAbsoluteXMouse())) - (_selection->getWidth() / 2) - getX());
-	_selection->setY(static_cast<int>(std::floor(
-					action->getAbsoluteYMouse())) - (_selection->getHeight() / 2) - getY());
+		_selection->setX(static_cast<int>(std::floor(
+						action->getAbsoluteXMouse())) - (_selection->getWidth() / 2) - getX());
+		_selection->setY(static_cast<int>(std::floor(
+						action->getAbsoluteYMouse())) - (_selection->getHeight() / 2) - getY());
 
-	InteractiveSurface::mouseOver(action, state);
+		InteractiveSurface::mouseOver(action, state);
+	}
 }
 
 /**
@@ -997,11 +993,7 @@ void Inventory::mouseClick(Action* action, State* state)
 											_warning->showMessage(activated);
 										}
 										else // This is where activation warning for nonProxy preBattle grenades goes.
-											_game->pushState(new PrimeGrenadeState(
-																				NULL,
-																				true,
-																				item,
-																				this));
+											_game->pushState(new PrimeGrenadeState(NULL, true, item, this));
 									}
 									else // deFuse grenade
 									{
@@ -1379,8 +1371,7 @@ void Inventory::drawPrimers()
 					(*i).first,
 					(*i).second,
 					pulse[_fuseFrame],
-					false,
-					3); // red
+					false, 3); // red
 	}
 
 	++_fuseFrame;

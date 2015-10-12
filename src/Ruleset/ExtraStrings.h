@@ -20,10 +20,9 @@
 #ifndef OPENXCOM_EXTRASTRINGS_H
 #define OPENXCOM_EXTRASTRINGS_H
 
-#include <map>
-#include <string>
-
-#include <yaml-cpp/yaml.h>
+//#include <map>
+//#include <string>
+//#include <yaml-cpp/yaml.h>
 
 
 namespace OpenXcom

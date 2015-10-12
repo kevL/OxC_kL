@@ -34,37 +34,35 @@ ExtraSprites::ExtraSprites()
 		_modIndex(0),
 		_subX(0),
 		_subY(0)
-{
-}
+{}
 
 /**
  * Cleans up the extra sprite set.
  */
-ExtraSprites::~ExtraSprites()
-{
-}
+ExtraSprites::~ExtraSprites() // virtual.
+{}
 
 /**
  * Loads the extra sprite set from YAML.
- * @param node YAML node.
- * @param modIndex the internal index of the associated mod.
+ * @param node		- reference a YAML node
+ * @param modIndex	- the internal index of the associated mod
  */
 void ExtraSprites::load(
 		const YAML::Node& node,
 		int modIndex)
 {
-	_sprites		= node["files"].as< std::map<int, std::string> >(_sprites);
-	_width			= node["width"].as<int>(_width);
-	_height			= node["height"].as<int>(_height);
-	_singleImage	= node["singleImage"].as<bool>(_singleImage);
-	_subX			= node["subX"].as<int>(_subX);
-	_subY			= node["subY"].as<int>(_subY);
+	_sprites		= node["files"]			.as< std::map<int, std::string> >(_sprites);
+	_width			= node["width"]			.as<int>(_width);
+	_height			= node["height"]		.as<int>(_height);
+	_singleImage	= node["singleImage"]	.as<bool>(_singleImage);
+	_subX			= node["subX"]			.as<int>(_subX);
+	_subY			= node["subY"]			.as<int>(_subY);
 	_modIndex		= modIndex;
 }
 
 /**
- * Gets the list of sprites defined my this mod.
- * @return, The list of sprites.
+ * Gets the list of sprites defined by this mod.
+ * @return, the list of sprites
  */
 std::map<int, std::string>* ExtraSprites::getSprites()
 {
@@ -73,7 +71,7 @@ std::map<int, std::string>* ExtraSprites::getSprites()
 
 /**
  * Gets the width of the surfaces (used for single images and new spritesets).
- * @return, The width of the surfaces.
+ * @return, the width of the surfaces
  */
 int ExtraSprites::getWidth() const
 {
@@ -82,7 +80,7 @@ int ExtraSprites::getWidth() const
 
 /**
  * Gets the height of the surfaces (used for single images and new spritesets).
- * @return, The height of the surfaces.
+ * @return, the height of the surfaces
  */
 int ExtraSprites::getHeight() const
 {
@@ -91,7 +89,7 @@ int ExtraSprites::getHeight() const
 
 /**
  * Returns whether this is a single surface as opposed to a set of surfaces.
- * @return, True if this is a single surface.
+ * @return, true if this is a single surface
  */
 bool ExtraSprites::getSingleImage() const
 {
@@ -100,7 +98,7 @@ bool ExtraSprites::getSingleImage() const
 
 /**
  * Gets the mod index for this external sprite set.
- * @return, The mod index.
+ * @return, the mod index
  */
 int ExtraSprites::getModIndex() const
 {
@@ -109,7 +107,7 @@ int ExtraSprites::getModIndex() const
 
 /**
  * Gets the x subdivision.
- * @return, The x subdivision.
+ * @return, the x subdivision
  */
 int ExtraSprites::getSubX() const
 {
@@ -118,7 +116,7 @@ int ExtraSprites::getSubX() const
 
 /**
  * Gets the y subdivision.
- * @return, The y subdivision.
+ * @return, the y subdivision
  */
 int ExtraSprites::getSubY() const
 {

@@ -51,8 +51,8 @@
 #include "../Savegame/Soldier.h"
 
 
-#include "../Ruleset/RuleAward.h" // debug SoldierDiary.
-#include "../Ruleset/Ruleset.h" // debug SoldierDiary.
+//#include "../Ruleset/RuleAward.h" // debug SoldierDiary.
+//#include "../Ruleset/Ruleset.h" // debug SoldierDiary.
 
 
 namespace OpenXcom

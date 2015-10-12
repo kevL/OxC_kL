@@ -20,7 +20,7 @@
 #ifndef OPENXCOM_EXTRAMUSIC_H
 #define OPENXCOM_EXTRAMUSIC_H
 
-#include <yaml-cpp/yaml.h>
+//#include <yaml-cpp/yaml.h>
 
 
 namespace OpenXcom

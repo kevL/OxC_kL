@@ -522,20 +522,20 @@ void Ruleset::validateMissionScripts() const
 }
 
 /**
- * Loads a ruleset's contents from the given source.
- * @param source - reference the source to use
+ * Loads a ruleset's contents from the given source file.
+ * @param src - reference the source file
  */
-void Ruleset::load(const std::string& source)
+void Ruleset::load(const std::string& src)
 {
-	const std::string dir = CrossPlatform::getDataFolder("Ruleset/" + source + '/');
+	const std::string dir = CrossPlatform::getDataFolder("Ruleset/" + src + '/');
 
 	if (CrossPlatform::folderExists(dir) == false)
-		loadFile(CrossPlatform::getDataFile("Ruleset/" + source + ".rul"));
+		loadFile(CrossPlatform::getDataFile("Ruleset/" + src + ".rul"));
 	else
 		loadFiles(dir);
 
-	_modIndex += 1000;
-}
+//	_modIndex += 1000;	// note: This prevents extraSprites (etc) from overwriting the indices of original resources.
+}						// See also, load() rules ....
 
 /**
  * Loads the contents of all the rule files in the given directory.

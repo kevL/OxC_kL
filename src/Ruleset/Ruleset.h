@@ -211,7 +211,7 @@ protected:
 		void validateMissionScripts() const;
 
 		/// Loads a ruleset from the given source.
-		void load(const std::string& source);
+		void load(const std::string& src);
 
 		/// Generates the starting saved game.
 		SavedGame* newSave() const;

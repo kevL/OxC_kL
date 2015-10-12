@@ -28,20 +28,14 @@ namespace OpenXcom
  */
 ExtraMusic::ExtraMusic()
 	:
-//		_media(""),
-//		_overrides(""),
-//		_extends(""),
 		_modIndex(0)
-//		_terrains()
-{
-}
+{}
 
 /**
  * Cleans up the extra music set.
  */
-ExtraMusic::~ExtraMusic()
-{
-}
+ExtraMusic::~ExtraMusic() // virtual.
+{}
 
 /**
  * Loads the extra music set from YAML.
