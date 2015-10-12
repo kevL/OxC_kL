@@ -495,8 +495,8 @@ void MonthlyReportState::awards() // private.
 		{
 			(*j)->getDiary()->addMonthlyService();
 
-			Log(LOG_INFO) << "";
-			Log(LOG_INFO) << "end MONTH report: " << Language::wstrToCp((*j)->getName());
+			//Log(LOG_INFO) << "";
+			//Log(LOG_INFO) << "end MONTH report: " << Language::wstrToCp((*j)->getName());
 			if ((*j)->getDiary()->manageAwards(_game->getRuleset()) == true)
 				_soldiersMedalled.push_back(*j);
 		}

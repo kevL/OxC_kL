@@ -51,6 +51,10 @@
 #include "../Savegame/Soldier.h"
 
 
+#include "../Ruleset/RuleAward.h" // debug SoldierDiary.
+#include "../Ruleset/Ruleset.h" // debug SoldierDiary.
+
+
 namespace OpenXcom
 {
 
@@ -140,7 +144,7 @@ SoldiersState::SoldiersState(Base* base)
 	_txtRank->setText(tr("STR_RANK"));
 	_txtCraft->setText(tr("STR_CRAFT"));
 
-	_lstSoldiers->setColumns(3, 117, 93, 71);
+	_lstSoldiers->setColumns(3, 117,93,71);
 	_lstSoldiers->setArrowColumn(193, ARROW_VERTICAL);
 	_lstSoldiers->setBackground(_window);
 	_lstSoldiers->setSelectable();
@@ -148,6 +152,43 @@ SoldiersState::SoldiersState(Base* base)
 	_lstSoldiers->onMousePress((ActionHandler)& SoldiersState::lstSoldiersPress);
 	_lstSoldiers->onLeftArrowClick((ActionHandler)& SoldiersState::lstLeftArrowClick);
 	_lstSoldiers->onRightArrowClick((ActionHandler)& SoldiersState::lstRightArrowClick);
+
+
+	// DEBUG for Soldier Diary:
+/*	const std::map<std::string, RuleAward*> awardsList = _game->getRuleset()->getAwardsList(); // loop over all possible RuleAwards.
+	for (std::map<std::string, RuleAward*>::const_iterator
+			i = awardsList.begin();
+			i != awardsList.end();
+			++i)
+	{
+		Log(LOG_INFO) << (*i).first;
+		int iter = 0;
+
+		const std::vector<std::map<int, std::vector<std::string> > >* killCriteriaList = (*i).second->getKillCriteria(); // fetch the killCriteria list.
+		for (std::vector<std::map<int, std::vector<std::string> > >::const_iterator // loop over the OR vectors.
+				orCriteria = killCriteriaList->begin();
+				orCriteria != killCriteriaList->end();
+				++orCriteria)
+		{
+			Log(LOG_INFO) << "iter = " << iter++;
+
+			for (std::map<int, std::vector<std::string> >::const_iterator // loop over the AND vectors.
+					andCriteria = orCriteria->begin();
+					andCriteria != orCriteria->end();
+					++andCriteria)
+			{
+				Log(LOG_INFO) << ". int = " << (*andCriteria).first;
+
+				for (std::vector<std::string>::const_iterator
+						detail = andCriteria->second.begin();
+						detail != andCriteria->second.end();
+						++detail)
+				{
+					Log(LOG_INFO) << ". string = " << *detail;
+				}
+			}
+		}
+	} */
 }
 
 /**

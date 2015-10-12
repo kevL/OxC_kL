@@ -5214,7 +5214,7 @@
 1431492838 f:\git\openxcom\src\savegame\soldierdeath.h
 	"GameTime.h"
 
-1444584100 source:f:\git\openxcom\src\basescape\soldiersstate.cpp
+1444671015 source:f:\git\openxcom\src\basescape\soldiersstate.cpp
 	"SoldiersState.h"
 	"CraftArmorState.h"
 	"PsiTrainingState.h"
@@ -5233,6 +5233,8 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 	"../Savegame/Soldier.h"
+	"../Ruleset/RuleAward.h"
+	"../Ruleset/Ruleset.h"
 
 1444504000 source:f:\git\openxcom\src\basescape\storesstate.cpp
 	"StoresState.h"
@@ -5467,7 +5469,7 @@
 1443707949 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1444097318 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1444630637 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	"AlienBAIState.h"
 	"BattlescapeState.h"
@@ -5525,7 +5527,7 @@
 1441664422 f:\git\openxcom\src\battlescape\nextturnstate.h
 	"../Engine/State.h"
 
-1440469582 f:\git\openxcom\src\battlescape\unitdiebstate.h
+1444630637 f:\git\openxcom\src\battlescape\unitdiebstate.h
 	"BattleState.h"
 	"../Ruleset/RuleItem.h"
 
@@ -5870,7 +5872,7 @@
 1443409027 f:\git\openxcom\src\battlescape\explosion.h
 	"Position.h"
 
-1443303339 source:f:\git\openxcom\src\battlescape\explosionbstate.cpp
+1444630636 source:f:\git\openxcom\src\battlescape\explosionbstate.cpp
 	"ExplosionBState.h"
 	"BattlescapeState.h"
 	"Camera.h"
@@ -6208,7 +6210,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1443826658 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1444630637 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	"AlienBAIState.h"
 	"BattlescapeState.h"
@@ -6231,7 +6233,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1443759770 source:f:\git\openxcom\src\battlescape\unitdiebstate.cpp
+1444630636 source:f:\git\openxcom\src\battlescape\unitdiebstate.cpp
 	"UnitDieBState.h"
 	"BattlescapeState.h"
 	"Camera.h"
@@ -8242,7 +8244,7 @@
 	"MapBlock.h"
 	"../Battlescape/Position.h"
 
-1440429890 source:f:\git\openxcom\src\ruleset\mapdata.cpp
+1444630637 source:f:\git\openxcom\src\ruleset\mapdata.cpp
 	"MapData.h"
 	"MapDataSet.h"
 
@@ -8278,7 +8280,7 @@
 	"RuleInventory.h"
 	"RuleItem.h"
 
-1443832617 source:f:\git\openxcom\src\ruleset\ruleitem.cpp
+1444630636 source:f:\git\openxcom\src\ruleset\ruleitem.cpp
 	"RuleItem.h"
 	"RuleInventory.h"
 	"../Engine/SurfaceSet.h"
@@ -8441,7 +8443,7 @@
 	"../Ruleset/RuleItem.h"
 	"../Savegame/SavedBattleGame.h"
 
-1444100659 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1444630637 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	"BattleItem.h"
 	"SavedGame.h"
@@ -8673,14 +8675,14 @@
 1444101302 source:f:\git\openxcom\src\savegame\weightedoptions.cpp
 	"WeightedOptions.h"
 
-1444593314 source:f:\git\openxcom\src\ufopaedia\articlestate.cpp
+1444630637 source:f:\git\openxcom\src\ufopaedia\articlestate.cpp
 	"ArticleState.h"
 	"Ufopaedia.h"
 	"../Engine/Game.h"
 	"../Engine/Surface.h"
 	"../Interface/TextButton.h"
 
-1444451731 source:f:\git\openxcom\src\ufopaedia\articlestatearmor.cpp
+1444630637 source:f:\git\openxcom\src\ufopaedia\articlestatearmor.cpp
 	"ArticleStateArmor.h"
 	"../Engine/Game.h"
 	"../Engine/Surface.h"
@@ -10768,7 +10770,7 @@
 	"../Savegame/SoldierDead.h"
 	"../Savegame/SoldierDiary.h"
 
-1444582047 source:f:\git\openxcom\src\savegame\soldierdiary.cpp
+1444631857 source:f:\git\openxcom\src\savegame\soldierdiary.cpp
 	"SoldierDiary.h"
 	"../Ruleset/RuleAward.h"
 	"../Ruleset/Ruleset.h"
@@ -11150,7 +11152,7 @@
 	"RuleTexture.h"
 	"../Savegame/Target.h"
 
-1440908674 source:f:\git\openxcom\src\ruleset\rulearmor.cpp
+1444630636 source:f:\git\openxcom\src\ruleset\rulearmor.cpp
 	"RuleArmor.h"
 	"../Savegame/Soldier.h"
 
@@ -11227,7 +11229,7 @@
 1435040264 f:\git\openxcom\src\ufopaedia\extraalieninfo.h
 	"../Engine/State.h"
 
-1444502511 source:f:\git\openxcom\src\ufopaedia\extraalieninfostate.cpp
+1444630637 source:f:\git\openxcom\src\ufopaedia\extraalieninfostate.cpp
 	"ExtraAlienInfoState.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"

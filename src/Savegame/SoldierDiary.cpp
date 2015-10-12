@@ -672,8 +672,8 @@ std::vector<SoldierAward*>* SoldierDiary::getSoldierAwards()
  */
 bool SoldierDiary::manageAwards(const Ruleset* const rules)
 {
-	Log(LOG_INFO) << "";
-	Log(LOG_INFO) << "Diary: manageAwards()";
+	//Log(LOG_INFO) << "";
+	//Log(LOG_INFO) << "Diary: manageAwards()";
 	bool
 		doCeremony (false),	// this value is returned TRUE if at least one award is given.
 		grantAward;			// this value determines if an award will be given.
@@ -687,7 +687,7 @@ bool SoldierDiary::manageAwards(const Ruleset* const rules)
 			i != awardsList.end();
 			)
 	{
-		Log(LOG_INFO) << ". [1] iter awardList - " << (*i).first;
+		//Log(LOG_INFO) << ". [1] iter awardList - " << (*i).first;
 		qualifiedAwards.clear();
 		levelReq.clear();
 		levelReq["noQual"] = 0;
@@ -701,7 +701,7 @@ bool SoldierDiary::manageAwards(const Ruleset* const rules)
 		{
 			if ((*j)->getType() == type)
 			{
-				Log(LOG_INFO) << ". . set Level[" << ((*j)->getClassLevel() + 1)  << "] req'd for Qualifier \"" << (*j)->getQualifier() << "\"";
+				//Log(LOG_INFO) << ". . set Level[" << ((*j)->getClassLevel() + 1)  << "] req'd for Qualifier \"" << (*j)->getQualifier() << "\"";
 				levelReq[(*j)->getQualifier()] = (*j)->getClassLevel() + 1;
 			}
 		}
@@ -716,13 +716,13 @@ bool SoldierDiary::manageAwards(const Ruleset* const rules)
 				j != criteriaList->end();
 				++j)
 		{
-			Log(LOG_INFO) << ". . [2] iter Criteria " << (*j).first;
+			//Log(LOG_INFO) << ". . [2] iter Criteria " << (*j).first;
 			// skip a "noQual" award if its max award level has been reached
 			// or if it has a qualifier skip it if it has 0 total levels (which ain't gonna happen);
 			// you see, Rules can't be positively examined for nouns - only awards already given to soldiers can.
 			if ((*j).second.size() <= levelReq["noQual"])
 			{
-				Log(LOG_INFO) << ". . . max \"noQual\" Level reached (or, Criteria has no vector)";
+				//Log(LOG_INFO) << ". . . max \"noQual\" Level reached (or, Criteria has no vector)";
 				grantAward = false;
 				break;
 			}
@@ -764,7 +764,7 @@ bool SoldierDiary::manageAwards(const Ruleset* const rules)
 					|| (criteriaType == "totalRevives"				&& _revivedUnitTotal < val)
 					|| (criteriaType == "isMIA"						&& _MIA < val))
 			{
-				Log(LOG_INFO) << ". . . no Award w/ \"noQual\"";
+				//Log(LOG_INFO) << ". . . no Award w/ \"noQual\"";
 				grantAward = false;
 				break;
 			}
@@ -773,7 +773,7 @@ bool SoldierDiary::manageAwards(const Ruleset* const rules)
 				|| criteriaType == "totalKillsByRace"
 				|| criteriaType == "totalKillsByRank")
 			{
-				Log(LOG_INFO) << ". . . try Award w/ weapon,region,race,rank";
+				//Log(LOG_INFO) << ". . . try Award w/ weapon,region,race,rank";
 				std::map<std::string, int> total;
 				if (criteriaType == "totalKillsWithAWeapon")
 					total = getWeaponTotal();
@@ -789,30 +789,30 @@ bool SoldierDiary::manageAwards(const Ruleset* const rules)
 						k != total.end();
 						++k)
 				{
-					Log(LOG_INFO) << ". . . . [3] " << (*k).first << " - " << (*k).second;
+					//Log(LOG_INFO) << ". . . . [3] " << (*k).first << " - " << (*k).second;
 					int threshold = -1;
 					const std::string qualifier = (*k).first;
 					if (levelReq.count(qualifier) == 0)					// if there is no matching Qualifier get the first criteria
 					{
-						Log(LOG_INFO) << ". . . . . no relevant qualifier yet, threshold = " << (*j).second.front();
+						//Log(LOG_INFO) << ". . . . . no relevant qualifier yet, threshold = " << (*j).second.front();
 						threshold = (*j).second.front();
 					}
 					else if (levelReq[qualifier] != (*j).second.size())	// otherwise get the criteria per the soldier's award Level.
 					{
-						Log(LOG_INFO) << ". . . . . qualifier found, next level available, threshold = " << (*j).second.at(levelReq[qualifier]);
+						//Log(LOG_INFO) << ". . . . . qualifier found, next level available, threshold = " << (*j).second.at(levelReq[qualifier]);
 						threshold = (*j).second.at(levelReq[qualifier]);
 					}
 
 					if (threshold != -1 && threshold <= (*k).second)	// if a criteria was set AND the stat's count exceeds that criteria ...
 					{
-						Log(LOG_INFO) << ". . . . . threshold good, add to qualifiedAwards vector";
+						//Log(LOG_INFO) << ". . . . . threshold good, add to qualifiedAwards vector";
 						qualifiedAwards.push_back(qualifier);
 					}
 				}
 
 				if (qualifiedAwards.empty() == true) // if 'qualifiedAwards' is still empty soldier did not get an award.
 				{
-					Log(LOG_INFO) << ". . . . no Award w/ weapon,region,race,rank";
+					//Log(LOG_INFO) << ". . . . no Award w/ weapon,region,race,rank";
 					grantAward = false;
 					break;
 				}
@@ -821,39 +821,39 @@ bool SoldierDiary::manageAwards(const Ruleset* const rules)
 				|| criteriaType == "killsWithCriteriaMission"
 				|| criteriaType == "killsWithCriteriaTurn")
 			{
-				Log(LOG_INFO) << ". . . try Award w/ career,mission,turn";
+				//Log(LOG_INFO) << ". . . try Award w/ career,mission,turn";
 				const std::vector<std::map<int, std::vector<std::string> > >* killCriteriaList = (*i).second->getKillCriteria(); // fetch the killCriteria list.
 				for (std::vector<std::map<int, std::vector<std::string> > >::const_iterator // loop over the OR vectors.
 						orCriteria = killCriteriaList->begin();
 						orCriteria != killCriteriaList->end();
 						++orCriteria)
 				{
-					Log(LOG_INFO) << ". . . . [3] iter killCriteria OR list";// << (*orCriteria)->;
+					//Log(LOG_INFO) << ". . . . [3] iter killCriteria OR list";// << (*orCriteria)->;
 					for (std::map<int, std::vector<std::string> >::const_iterator // loop over the AND vectors.
 							andCriteria = orCriteria->begin();
 							andCriteria != orCriteria->end();
 							++andCriteria)
 					{
-						Log(LOG_INFO) << ". . . . . [4] iter killCriteria AND list";// << *andCriteria->second.begin();
+						//Log(LOG_INFO) << ". . . . . [4] iter killCriteria AND list";// << *andCriteria->second.begin();
 						int qty = 0; // how many AND vectors (list of DETAILs) have been successful.
 						if (criteriaType != "killsWithCriteriaCareer")
 						{
 							++qty; // "killsWith..." Turns or Missions start at 1 because of how thisIter and lastIter work.
 						}
-						Log(LOG_INFO) << ". . . . . start Qty = " << qty;
+						//Log(LOG_INFO) << ". . . . . start Qty = " << qty;
 
 						bool skip = false;
 						int
 							thisIter = -1, // being a turn or a mission
 							lastIter = -1;
-						Log(LOG_INFO) << ". . . . . init skip= false, thisIter/lastIter= -1";
+						//Log(LOG_INFO) << ". . . . . init skip= false, thisIter/lastIter= -1";
 
 						for (std::vector<BattleUnitKill*>::const_iterator // loop over the KILLS vector.
 								kill = _killList.begin();
 								kill != _killList.end();
 								++kill)
 						{
-							Log(LOG_INFO) << ". . . . . . [5] iter KILLS";
+							//Log(LOG_INFO) << ". . . . . . [5] iter KILLS";
 							if (criteriaType == "killsWithCriteriaMission")
 							{
 								thisIter = (*kill)->_mission;
@@ -876,16 +876,16 @@ bool SoldierDiary::manageAwards(const Ruleset* const rules)
 //									++kill;
 								}
 							}
-							Log(LOG_INFO) << ". . . . . . " << criteriaType;
-							Log(LOG_INFO) << ". . . . . . skip = " << skip;
-							Log(LOG_INFO) << ". . . . . . thisIter = " << thisIter;
-							Log(LOG_INFO) << ". . . . . . lastIter = " << lastIter;
+							//Log(LOG_INFO) << ". . . . . . " << criteriaType;
+							//Log(LOG_INFO) << ". . . . . . skip = " << skip;
+							//Log(LOG_INFO) << ". . . . . . thisIter = " << thisIter;
+							//Log(LOG_INFO) << ". . . . . . lastIter = " << lastIter;
 
 							if (criteriaType != "killsWithCriteriaCareer"	// skip kill-groups that soldier already got an award
 								&& thisIter == lastIter						// for and skip kills that are inbetween turns.
 								&& skip == true)
 							{
-								Log(LOG_INFO) << ". . . . . . . continue [1]";
+								//Log(LOG_INFO) << ". . . . . . . continue [1]";
 								continue;
 							}
 
@@ -893,7 +893,7 @@ bool SoldierDiary::manageAwards(const Ruleset* const rules)
 							{
 								qty = 1; // reset.
 								skip = false;
-								Log(LOG_INFO) << ". . . . . . . continue [2]";
+								//Log(LOG_INFO) << ". . . . . . . continue [2]";
 								continue;
 							}
 
@@ -904,7 +904,7 @@ bool SoldierDiary::manageAwards(const Ruleset* const rules)
 									detail != andCriteria->second.end();
 									++detail)
 							{
-								Log(LOG_INFO) << ". . . . . . . [6] iter DETAIL = " << (*detail);
+								//Log(LOG_INFO) << ". . . . . . . [6] iter DETAIL = " << (*detail);
 								static const std::string bType_array[] =
 								{
 									"BT_NONE","BT_FIREARM","BT_AMMO","BT_MELEE","BT_GRENADE","BT_PROXYGRENADE","BT_MEDIKIT","BT_SCANNER","BT_MINDPROBE","BT_PSIAMP","BT_FLARE","BT_CORPSE","BT_END"
@@ -917,10 +917,10 @@ bool SoldierDiary::manageAwards(const Ruleset* const rules)
 										bType != bType_vect.size();
 										++bType)
 								{
-									Log(LOG_INFO) << ". . . . . . . . [7] iter bType";
+									//Log(LOG_INFO) << ". . . . . . . . [7] iter bType";
 									if (*detail == bType_vect[bType])
 									{
-										Log(LOG_INFO) << ". . . . . . . . . bType = " << (*detail);
+										//Log(LOG_INFO) << ". . . . . . . . . bType = " << (*detail);
 										break;
 									}
 								}
@@ -937,10 +937,10 @@ bool SoldierDiary::manageAwards(const Ruleset* const rules)
 										dType != dType_vect.size();
 										++dType)
 								{
-									Log(LOG_INFO) << ". . . . . . . . [7] iter dType";
+									//Log(LOG_INFO) << ". . . . . . . . [7] iter dType";
 									if (*detail == dType_vect[dType])
 									{
-										Log(LOG_INFO) << ". . . . . . . . . dType = " << (*detail);
+										//Log(LOG_INFO) << ". . . . . . . . . dType = " << (*detail);
 										break;
 									}
 								}
@@ -956,7 +956,7 @@ bool SoldierDiary::manageAwards(const Ruleset* const rules)
 										&& rules->getItem((*kill)->_weapon)->getBattleType() != static_cast<BattleType>(bType)
 										&& rules->getItem((*kill)->_weaponAmmo)->getDamageType() != static_cast<DamageType>(dType)))
 								{
-									Log(LOG_INFO) << ". . . . . . . . no more Matching - break DETAIL";
+									//Log(LOG_INFO) << ". . . . . . . . no more Matching - break DETAIL";
 									found = false;
 									break;
 								}
@@ -965,35 +965,35 @@ bool SoldierDiary::manageAwards(const Ruleset* const rules)
 							if (found == true)
 							{
 								++qty;
-								Log(LOG_INFO) << ". . . . . . . found Qty = " << qty;
+								//Log(LOG_INFO) << ". . . . . . . found Qty = " << qty;
 								if (qty == (*andCriteria).first)
 								{
-									Log(LOG_INFO) << ". . . . . . . . andCriteria qty is GOOD";
+									//Log(LOG_INFO) << ". . . . . . . . andCriteria qty is GOOD";
 									skip = true; // criteria met so move to next mission/turn.
 								}
 							}
 						}
 
 						const int multiCriteria = (*andCriteria).first; // if one of the AND criteria fail stop looking.
-						Log(LOG_INFO) << ". . . . . qty = " << qty;
-						Log(LOG_INFO) << ". . . . . multiCriteria = " << multiCriteria;
-						Log(LOG_INFO) << ". . . . . \"noQual\" Levels required = " << (*j).second.at(levelReq["noQual"]);
+						//Log(LOG_INFO) << ". . . . . qty = " << qty;
+						//Log(LOG_INFO) << ". . . . . multiCriteria = " << multiCriteria;
+						//Log(LOG_INFO) << ". . . . . \"noQual\" Levels required = " << (*j).second.at(levelReq["noQual"]);
 						if (multiCriteria == 0 || qty / multiCriteria < (*j).second.at(levelReq["noQual"]))
 						{
-							Log(LOG_INFO) << ". . . . . . no Award w/ career,mission,turn - BREAK andCriteria";
+							//Log(LOG_INFO) << ". . . . . . no Award w/ career,mission,turn - BREAK andCriteria";
 							grantAward = false;
 							break;
 						}
 						else
 						{
-							Log(LOG_INFO) << ". . . . . . grant Award w/ career,mission,turn";
+							//Log(LOG_INFO) << ". . . . . . grant Award w/ career,mission,turn";
 							grantAward = true;
 						}
 					}
 
 					if (grantAward == true) // stop looking because soldier is getting one regardless.
 					{
-						Log(LOG_INFO) << ". . . . . grant Award w/ career,mission,turn - BREAK orCriteria";
+						//Log(LOG_INFO) << ". . . . . grant Award w/ career,mission,turn - BREAK orCriteria";
 						break;
 					}
 				}
@@ -1003,12 +1003,12 @@ bool SoldierDiary::manageAwards(const Ruleset* const rules)
 
 		if (grantAward == true)
 		{
-			Log(LOG_INFO) << ". do Award";
+			//Log(LOG_INFO) << ". do Award";
 			doCeremony = true;
 
 			if (qualifiedAwards.empty() == true)		// if there are NO qualified awards but the soldier *is*
 			{											// being awarded an award its qualifier will be "noQual".
-				Log(LOG_INFO) << ". . add \"noQual\" type";
+				//Log(LOG_INFO) << ". . add \"noQual\" type";
 				qualifiedAwards.push_back("noQual");
 			}
 
@@ -1017,7 +1017,7 @@ bool SoldierDiary::manageAwards(const Ruleset* const rules)
 					j != qualifiedAwards.end();
 					++j)
 			{
-				Log(LOG_INFO) << ". . . iter Qualifier = \"" << (*j) << "\"";
+				//Log(LOG_INFO) << ". . . iter Qualifier = \"" << (*j) << "\"";
 				bool firstOfType = true;
 				for (std::vector<SoldierAward*>::const_iterator
 						k = _solAwards.begin();
@@ -1026,7 +1026,7 @@ bool SoldierDiary::manageAwards(const Ruleset* const rules)
 				{
 					if ((*k)->getType() == type && (*k)->getQualifier() == *j)
 					{
-						Log(LOG_INFO) << ". . . . found = " << type;
+						//Log(LOG_INFO) << ". . . . found = " << type;
 						firstOfType = false;
 						(*k)->addClassLevel();
 						break;
@@ -1039,13 +1039,13 @@ bool SoldierDiary::manageAwards(const Ruleset* const rules)
 		}
 		else
 		{
-			Log(LOG_INFO) << ". do NOT Award -> iterate to top";
-			Log(LOG_INFO) << "";
+			//Log(LOG_INFO) << ". do NOT Award -> iterate to top";
+			//Log(LOG_INFO) << "";
 			++i;
 		}
 	}
 
-	Log(LOG_INFO) << "Diary: manageAwards() EXIT w/ Ceremony = " << doCeremony;
+	//Log(LOG_INFO) << "Diary: manageAwards() EXIT w/ Ceremony = " << doCeremony;
 	return doCeremony;
 }
 

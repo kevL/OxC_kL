@@ -72,12 +72,12 @@ ufopaedia:
     image_id: HELLRAISER
     text: STR_MEDAL_HELLRAISER_MEDAL_UFOPEDIA
     text_width: 182
-  - id: STR_MEDAL_DISTINGUISHED_SERVICE_NAME
-    type_id: 10
-    section: STR_AWARDS
-    image_id: DISTINGUISHED_SERVICE
-    text: STR_MEDAL_DISTINGUISHED_SERVICE_MEDAL_UFOPEDIA
-    text_width: 182
+#  - id: STR_MEDAL_DISTINGUISHED_SERVICE_NAME
+#    type_id: 10
+#    section: STR_AWARDS
+#    image_id: DISTINGUISHED_SERVICE
+#    text: STR_MEDAL_DISTINGUISHED_SERVICE_MEDAL_UFOPEDIA
+#    text_width: 182
   - id: STR_MEDAL_BOLTS_CROSS_NAME
     type_id: 10
     section: STR_AWARDS
@@ -512,7 +512,7 @@ extraStrings:
       STR_MEDAL_CAMPAIGN_RIBBON_MEDAL_UFOPEDIA: "We need to thank all of our troops, and particularly those for whom we can never express enough gratitude ... for they have given their lives so that all of us may be free.{NEWLINE}   - Virgil Goode{NEWLINE}{NEWLINE}{ALT}The countries of a given region recognize the skill and valor by which this trooper has protected their lives and property in this war against the aLien Menace." #{NEWLINE}{NEWLINE}This medal is awarded for 10, 20 and 30 missions in a given region."
       STR_MEDAL_WEAPON_PROFICIENCY_MEDAL_NAME: "Weapon Proficiency"
       STR_MEDAL_WEAPON_PROFICIENCY_MEDAL_UFOPEDIA: "Anything worth shooting is worth shooting twice. Ammo is cheap. Life is expensive.{NEWLINE}   - US Ranger Rules for Gunfighting{NEWLINE}{NEWLINE}{ALT}This medal is awarded to recognize a soldier's extreme prociency with a given weapon. They have become a true expert in their field and a master at their craft." #{NEWLINE}{NEWLINE}This medal is awarded for 10, 20 and 30 kills with a specific weapon."
-      STR_MEDAL_DISTINGUISHED_SERVICE_MEDAL_UFOPEDIA: "Don't fear them, my child. We are going to kill them all.{NEWLINE}   - The Kingdom{NEWLINE}{NEWLINE}{ALT}This medal recognizes the soldier who has mastered the art of killing aLiens in all forms. No aLien race is immune to their predations.{NEWLINE}{NEWLINE}This award is presented for killing a soldier of all the primary races." # Further awards are given for 5, 10, and 15 more specimens of each race."
+#      STR_MEDAL_DISTINGUISHED_SERVICE_MEDAL_UFOPEDIA: "Don't fear them, my child. We are going to kill them all.{NEWLINE}   - The Kingdom{NEWLINE}{NEWLINE}{ALT}This medal recognizes the soldier who has mastered the art of killing aLiens in all forms. No aLien race is immune to their predations.{NEWLINE}{NEWLINE}This award is presented for killing a soldier of all the primary races." # Further awards are given for 5, 10, and 15 more specimens of each race."
       STR_MEDAL_HELLRAISER_MEDAL_UFOPEDIA: "Of the four classical elements, fire is by far the most primal. The most challenging. The most dangerous. The most transforming. The most visceral. The most fun. Seriously, which enemies would cower in their tracks if you appeared in front of them and proclaimed yourself to be a great water wizard?{NEWLINE}   - The Rant{NEWLINE}{NEWLINE}{ALT}This award is presented to those who have mastered the art of destroying the enemy with fire." #{NEWLINE}{NEWLINE}The award is given for every five torched aLiens, up to four times."
       STR_MEDAL_LUCKYSHOT_MEDAL_UFOPEDIA: "The best luck of all is the luck you make for yourself.{NEWLINE}   - Douglas MacArthur{NEWLINE}{NEWLINE}{ALT}When a soldier repeatedly defies the odds and lands incredible shots they become eligible for this award." #{NEWLINE}{NEWLINE}Presented for every three lucky shots, this citation has four levels."
       STR_MEDAL_IRON_MAN_MEDAL_UFOPEDIA: "If you're short of everything but the enemy, you're in a combat zone.{NEWLINE}   - Murphy's Laws of Combat{NEWLINE}{NEWLINE}{ALT}This award is presented to soldiers who take on the foe single-handedly. Only the hardcore attempt this and fewer survive." #{NEWLINE}{NEWLINE}The award has only one level."

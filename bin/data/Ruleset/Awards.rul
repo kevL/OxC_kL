@@ -52,8 +52,8 @@ extraStrings:
       STR_MEDAL_MEDAL_OF_HEROISM_DESCRIPTION: "Given to a soldier who has fought to the last ounce of strength - and survived."
       STR_MEDAL_HELLRAISER_MEDAL_NAME: "Infernal Starific"
       STR_MEDAL_HELLRAISER_MEDAL_DESCRIPTION: "Given to a soldier who has used incendiary weapons to kill aLiens."
-      STR_MEDAL_DISTINGUISHED_SERVICE_NAME: "Ordum du Thor"
-      STR_MEDAL_DISTINGUISHED_SERVICE_DESCRIPTION: "Given to a soldier who has killed aLien soldiers of all races."
+#      STR_MEDAL_DISTINGUISHED_SERVICE_NAME: "Ordum du Thor"
+#      STR_MEDAL_DISTINGUISHED_SERVICE_DESCRIPTION: "Given to a soldier who has killed aLien soldiers of all races."
       STR_MEDAL_BOLTS_CROSS_NAME: "Boltus Maximus"
       STR_MEDAL_BOLTS_CROSS_DESCRIPTION: "Given to a soldier who has used non-lethal force to take down important targets."
       STR_MEDAL_GRENADIERS_MEDAL_NAME: "Grenadium Medallia"
@@ -311,19 +311,19 @@ awards:
     killCriteria:
       -
         1: ["DT_IN","FACTION_HOSTILE","STATUS_DEAD"]
-  - type: STR_MEDAL_DISTINGUISHED_SERVICE_NAME
-    description: STR_MEDAL_DISTINGUISHED_SERVICE_DESCRIPTION
-    sprite: 12
-    criteria:
-      killsWithCriteriaCareer: [5,10,15,20,25,30,35,40,45,50]
-    killCriteria:
-      -
-        1: ["STR_SECTOID","STR_LIVE_SOLDIER","FACTION_HOSTILE","STATUS_DEAD"]
-        1: ["STR_FLOATER","STR_LIVE_SOLDIER","FACTION_HOSTILE","STATUS_DEAD"]
-        1: ["STR_SNAKEMAN","STR_LIVE_SOLDIER","FACTION_HOSTILE","STATUS_DEAD"]
-        1: ["STR_MUTON","STR_LIVE_SOLDIER","FACTION_HOSTILE","STATUS_DEAD"]
-        1: ["STR_ETHEREAL","STR_LIVE_SOLDIER","FACTION_HOSTILE","STATUS_DEAD"]
-        1: ["STR_WASPITE","STR_LIVE_SOLDIER","FACTION_HOSTILE","STATUS_DEAD"]
+#  - type: STR_MEDAL_DISTINGUISHED_SERVICE_NAME
+#    description: STR_MEDAL_DISTINGUISHED_SERVICE_DESCRIPTION
+#    sprite: 12
+#    criteria:
+#      killsWithCriteriaCareer: [5,10,15,20,25,30,35,40,45,50]
+#    killCriteria:
+#      -
+#        1: ["STR_SECTOID","STR_LIVE_SOLDIER","FACTION_HOSTILE","STATUS_DEAD"] #not legal in YAML, legal in JSON.
+#        1: ["STR_FLOATER","STR_LIVE_SOLDIER","FACTION_HOSTILE","STATUS_DEAD"] #see 4th para, http://www.yaml.org/spec/1.2/spec.html#id2759572
+#        1: ["STR_SNAKEMAN","STR_LIVE_SOLDIER","FACTION_HOSTILE","STATUS_DEAD"]
+#        1: ["STR_MUTON","STR_LIVE_SOLDIER","FACTION_HOSTILE","STATUS_DEAD"]
+#        1: ["STR_ETHEREAL","STR_LIVE_SOLDIER","FACTION_HOSTILE","STATUS_DEAD"]
+#        1: ["STR_WASPITE","STR_LIVE_SOLDIER","FACTION_HOSTILE","STATUS_DEAD"]
   - type: STR_MEDAL_BOLTS_CROSS_NAME
     description: STR_MEDAL_BOLTS_CROSS_DESCRIPTION
     sprite: 13
@@ -414,7 +414,7 @@ awards:
       killsWithCriteriaMission: [1,2,3,4,5,6,7,8,9,10]
     killCriteria:
       -
-        6: ["STATUS_DEAD","FACTION_HOSTILE"]
+        5: ["STATUS_DEAD","FACTION_HOSTILE"]
   - type: STR_MEDAL_VALIANT_CRUX_NAME
     description: STR_MEDAL_VALIANT_CRUX_DESCRIPTION
     sprite: 28
