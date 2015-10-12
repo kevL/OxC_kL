@@ -116,7 +116,7 @@ ExtraAlienInfoState::ExtraAlienInfoState(const ArticleDefinitionTextImage* const
 				i != RuleArmor::DAMAGE_TYPES;
 				++i)
 		{
-			const ItemDamageType dType = static_cast<ItemDamageType>(i);
+			const DamageType dType = static_cast<DamageType>(i);
 			const std::string st = ArticleState::getDamageTypeText(dType);
 			if (st != "STR_UNKNOWN")
 			{
@@ -135,7 +135,7 @@ ExtraAlienInfoState::ExtraAlienInfoState(const ArticleDefinitionTextImage* const
 			const RuleItem* const itRule = _game->getRuleset()->getItem(terrorWeapon);
 			if (itRule != NULL)
 			{
-				const ItemDamageType dType = itRule->getDamageType();
+				const DamageType dType = itRule->getDamageType();
 				const std::string stType = ArticleState::getDamageTypeText(dType);
 				if (stType != "STR_UNKNOWN")
 				{

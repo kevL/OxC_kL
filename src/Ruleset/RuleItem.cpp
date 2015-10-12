@@ -210,7 +210,7 @@ void RuleItem::load(
 			_meleeHitSound += modIndex;
 	}
 
-	_damageType			= static_cast<ItemDamageType>(node["damageType"].as<int>(_damageType));
+	_damageType			= static_cast<DamageType>(node["damageType"].as<int>(_damageType));
 	_battleType			= static_cast<BattleType>(node["battleType"]	.as<int>(_battleType));
 
 	_power				= node["power"]				.as<int>(_power);
@@ -591,7 +591,7 @@ const std::vector<std::string>* RuleItem::getCompatibleAmmo() const
  * Gets the item's damage type.
  * @return, the damage type
  */
-ItemDamageType RuleItem::getDamageType() const
+DamageType RuleItem::getDamageType() const
 {
 	return _damageType;
 }

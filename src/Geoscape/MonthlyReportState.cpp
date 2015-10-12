@@ -28,6 +28,7 @@
 #include "../Battlescape/CeremonyState.h"
 
 #include "../Engine/Game.h"
+#include "../Engine/Language.h" // TEST, for soldier name.
 //#include "../Engine/LocalizedText.h"
 //#include "../Engine/Options.h"
 
@@ -494,6 +495,8 @@ void MonthlyReportState::awards() // private.
 		{
 			(*j)->getDiary()->addMonthlyService();
 
+			Log(LOG_INFO) << "";
+			Log(LOG_INFO) << "end MONTH report: " << Language::wstrToCp((*j)->getName());
 			if ((*j)->getDiary()->manageAwards(_game->getRuleset()) == true)
 				_soldiersMedalled.push_back(*j);
 		}

@@ -22,7 +22,7 @@
 
 #include "BattleState.h"
 
-#include "../Ruleset/RuleItem.h" // ItemDamageType
+#include "../Ruleset/RuleItem.h" // DamageType
 
 
 namespace OpenXcom
@@ -50,7 +50,7 @@ private:
 	BattleUnit* _unit;
 	SavedBattleGame* _battleSave;
 
-	ItemDamageType _dType;
+	DamageType _dType;
 
 	/// Converts a unit to a corpse.
 	void convertToCorpse();
@@ -61,7 +61,7 @@ private:
 		UnitDieBState(
 				BattlescapeGame* const parent,
 				BattleUnit* const unit,
-				const ItemDamageType dType,
+				const DamageType dType,
 				const bool noSound = false);
 		/// Cleans up the UnitDieBState.
 		~UnitDieBState();

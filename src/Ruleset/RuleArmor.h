@@ -151,7 +151,7 @@ private:
 		int getSize() const;
 
 		/// Gets damage modifier.
-		float getDamageModifier(ItemDamageType dType) const;
+		float getDamageModifier(DamageType dType) const;
 
 		/// Gets loftSet.
 		const std::vector<size_t>& getLoftSet() const;

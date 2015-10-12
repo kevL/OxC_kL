@@ -81,10 +81,10 @@ void ArticleState::keyRepeat() // private.
 
 /**
  * Gets damage type as a string.
- * @param dType - the ItemDamageType (RuleItem.h)
+ * @param dType - the DamageType (RuleItem.h)
  * @return, type string
  */
-std::string ArticleState::getDamageTypeText(ItemDamageType dType) // static.
+std::string ArticleState::getDamageTypeText(DamageType dType) // static.
 {
 	switch (dType)
 	{

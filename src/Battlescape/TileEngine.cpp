@@ -1994,7 +1994,7 @@ std::map<int, Position>* TileEngine::getRfShotList()
 BattleUnit* TileEngine::hit(
 		const Position& targetVoxel,
 		int power,
-		ItemDamageType dType,
+		DamageType dType,
 		BattleUnit* const attacker,
 		bool melee,
 		bool shotgun)
@@ -2248,7 +2248,7 @@ BattleUnit* TileEngine::hit(
 void TileEngine::explode(
 			const Position& targetVoxel,
 			int power,
-			ItemDamageType dType,
+			DamageType dType,
 			int maxRadius,
 			BattleUnit* const attacker,
 			bool grenade,
@@ -3013,7 +3013,7 @@ void TileEngine::explode(
 int TileEngine::horizontalBlockage(
 		const Tile* const startTile,
 		const Tile* const endTile,
-		const ItemDamageType dType) const
+		const DamageType dType) const
 {
 	//Log(LOG_INFO) << "TileEngine::horizontalBlockage()";
 	bool visLike = dType == DT_NONE
@@ -3580,7 +3580,7 @@ int TileEngine::horizontalBlockage(
  * Can cross more than one level (used for lighting). Only floor & object tiles are taken into account ... not really!
  * @param startTile	- pointer to Tile where the power starts
  * @param endTile	- pointer to adjacent Tile where the power ends
- * @param dType		- ItemDamageType of power (RuleItem.h)
+ * @param dType		- DamageType of power (RuleItem.h)
  * @return, (int)block	-99 special case for Content-objects to block vision, and for invalid tiles
  *						-1 hardblock power / vision (can be less than -1)
  *						 0 no block
@@ -3589,7 +3589,7 @@ int TileEngine::horizontalBlockage(
 int TileEngine::verticalBlockage(
 		const Tile* const startTile,
 		const Tile* const endTile,
-		const ItemDamageType dType) const
+		const DamageType dType) const
 {
 	//Log(LOG_INFO) << "TileEngine::verticalBlockage()";
 	if (startTile == NULL // safety check
@@ -3728,7 +3728,7 @@ int TileEngine::verticalBlockage(
  * @param skipObject
  * @return Amount of blockage of this power.
  */
-/* int TileEngine::verticalBlockage(Tile *startTile, Tile *endTile, ItemDamageType dType, bool skipObject)
+/* int TileEngine::verticalBlockage(Tile *startTile, Tile *endTile, DamageType dType, bool skipObject)
 {
 	int block = 0;
 
@@ -3799,7 +3799,7 @@ int TileEngine::verticalBlockage(
 int TileEngine::blockage(
 		const Tile* const tile,
 		const MapDataType part,
-		const ItemDamageType dType,
+		const DamageType dType,
 		const int dir,
 		const bool originTest,
 		const bool trueDir) const

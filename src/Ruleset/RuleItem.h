@@ -30,7 +30,7 @@
 namespace OpenXcom
 {
 
-enum ItemDamageType
+enum DamageType
 {
 	DT_NONE,	// 0
 	DT_AP,		// 1
@@ -165,7 +165,7 @@ private:
 		_zombieUnit;
 
 	BattleType _battleType;
-	ItemDamageType _damageType;
+	DamageType _damageType;
 
 	std::vector<std::string>
 		_compatibleAmmo,
@@ -263,7 +263,7 @@ private:
 		const std::vector<std::string>* getCompatibleAmmo() const;
 
 		/// Gets the item's damage type.
-		ItemDamageType getDamageType() const;
+		DamageType getDamageType() const;
 		/// Gets the item's type.
 		BattleType getBattleType() const;
 

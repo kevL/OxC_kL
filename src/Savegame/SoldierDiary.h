@@ -79,7 +79,7 @@ private:
 		void setOld();
 
 		/// Increments decoration level and sets '_new' true.
-		void addDecoration();
+		void addClassLevel();
 };
 
 
@@ -126,7 +126,7 @@ private:
 		_MIA;
 
 	std::vector<int> _missionIdList;
-	std::vector<SoldierAward*> _awards;
+	std::vector<SoldierAward*> _solAwards;
 	std::vector<BattleUnitKill*> _killList;
 
 	std::map<std::string, int>

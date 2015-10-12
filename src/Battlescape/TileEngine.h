@@ -85,7 +85,7 @@ private:
 	int blockage(
 			const Tile* const tile,
 			const MapDataType part,
-			const ItemDamageType dType,
+			const DamageType dType,
 			const int dir = -1,
 			const bool originTest = false,
 			const bool trueDir = false) const;
@@ -184,7 +184,7 @@ private:
 		BattleUnit* hit(
 				const Position& targetPos_voxel,
 				int power,
-				ItemDamageType dType,
+				DamageType dType,
 				BattleUnit* const attacker,
 				bool melee = false,
 				bool shotgun = false);
@@ -192,7 +192,7 @@ private:
 		void explode(
 				const Position& targetVoxel,
 				int power,
-				ItemDamageType dType,
+				DamageType dType,
 				int maxRadius,
 				BattleUnit* const attacker = NULL,
 				bool grenade = false,
@@ -201,12 +201,12 @@ private:
 		int horizontalBlockage(
 				const Tile* const startTile,
 				const Tile* const endTile,
-				const ItemDamageType dType) const;
+				const DamageType dType) const;
 		/// Checks the vertical blockage of a tile.
 		int verticalBlockage(
 				const Tile* const startTile,
 				const Tile* const endTile,
-				const ItemDamageType dType) const;
+				const DamageType dType) const;
 		/// Sets the final direction from which a missile or thrown-object came.
 		void setProjectileDirection(const int dir);
 		/// Blows this tile up.

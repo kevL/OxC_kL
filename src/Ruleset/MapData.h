@@ -192,7 +192,7 @@ private:
 				bool baseModule);
 
 		/// Gets the amount of blockage of a certain type.
-		int getBlock(ItemDamageType type) const;
+		int getBlock(DamageType type) const;
 		/// Sets the amount of blockage for all types.
 		void setBlock(
 				int lightBlock,

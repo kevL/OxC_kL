@@ -716,7 +716,7 @@ private:
 		int damage(
 				const Position& voxelRel,
 				int power,
-				ItemDamageType dType,
+				DamageType dType,
 				const bool ignoreArmor = false);
 
 		/// Sets this unit as having cried out from a shotgun blast to the face.

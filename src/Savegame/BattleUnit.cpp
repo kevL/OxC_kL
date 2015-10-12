@@ -1430,7 +1430,7 @@ int BattleUnit::getStrength() const
  * @param voxelRel		- reference a position in voxel-space that defines which
  *						  part of armor and/or body gets hit
  * @param power			- the amount of damage to inflict
- * @param dType			- the ItemDamageType being inflicted (RuleItem.h)
+ * @param dType			- the DamageType being inflicted (RuleItem.h)
  * @param ignoreArmor	- true for stun & smoke & inc damage; no armor reduction
  *						  although vulnerability is still factored in
  * @return, damage done to this BattleUnit after adjustments
@@ -1438,7 +1438,7 @@ int BattleUnit::getStrength() const
 int BattleUnit::damage(
 		const Position& voxelRel,
 		int power,
-		ItemDamageType dType,
+		DamageType dType,
 		const bool ignoreArmor)
 {
 	//Log(LOG_INFO) << "BattleUnit::damage() " << getId() << " power[0] = " << power;

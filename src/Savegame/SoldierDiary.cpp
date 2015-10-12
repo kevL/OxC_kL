@@ -166,16 +166,16 @@ SoldierDiary::SoldierDiary(const SoldierDiary& copyThis)
 
 	for (size_t
 			i = 0;
-			i != copyThis._awards.size();
+			i != copyThis._solAwards.size();
 			++i)
 	{
-		if (copyThis._awards.at(i) != NULL)
+		if (copyThis._solAwards.at(i) != NULL)
 		{
 			std::string
-				type = copyThis._awards.at(i)->getType(),
-				noun = copyThis._awards.at(i)->getQualifier();
+				type = copyThis._solAwards.at(i)->getType(),
+				noun = copyThis._solAwards.at(i)->getQualifier();
 
-			_awards.push_back(new SoldierAward(type, noun));
+			_solAwards.push_back(new SoldierAward(type, noun));
 		}
 	}
 
@@ -219,8 +219,8 @@ SoldierDiary::SoldierDiary(const SoldierDiary& copyThis)
 SoldierDiary::~SoldierDiary()
 {
 	for (std::vector<SoldierAward*>::const_iterator
-			i = _awards.begin();
-			i != _awards.end();
+			i = _solAwards.begin();
+			i != _solAwards.end();
 			++i)
 	{
 		delete *i;
@@ -329,8 +329,8 @@ SoldierDiary& SoldierDiary::operator= (const SoldierDiary& assignThis)
 
 
 		for (std::vector<SoldierAward*>::const_iterator
-				i = _awards.begin();
-				i != _awards.end();
+				i = _solAwards.begin();
+				i != _solAwards.end();
 				++i)
 		{
 			delete *i;
@@ -346,16 +346,16 @@ SoldierDiary& SoldierDiary::operator= (const SoldierDiary& assignThis)
 
 		for (size_t
 				i = 0;
-				i != assignThis._awards.size();
+				i != assignThis._solAwards.size();
 				++i)
 		{
-			if (assignThis._awards.at(i) != NULL)
+			if (assignThis._solAwards.at(i) != NULL)
 			{
 				std::string
-					type = assignThis._awards.at(i)->getType(),
-					noun = assignThis._awards.at(i)->getQualifier();
+					type = assignThis._solAwards.at(i)->getType(),
+					noun = assignThis._solAwards.at(i)->getQualifier();
 
-				_awards.push_back(new SoldierAward(type, noun));
+				_solAwards.push_back(new SoldierAward(type, noun));
 			}
 		}
 
@@ -409,7 +409,7 @@ void SoldierDiary::load(const YAML::Node& node)
 				i != awards.end();
 				++i)
 		{
-			_awards.push_back(new SoldierAward(*i));
+			_solAwards.push_back(new SoldierAward(*i));
 		}
 	}
 
@@ -477,8 +477,8 @@ YAML::Node SoldierDiary::save() const
 	YAML::Node node;
 
 	for (std::vector<SoldierAward*>::const_iterator
-			i = _awards.begin();
-			i != _awards.end();
+			i = _solAwards.begin();
+			i != _solAwards.end();
 			++i)
 	{
 		node["awards"].push_back((*i)->save());
@@ -662,7 +662,7 @@ void SoldierDiary::updateDiary(
  */
 std::vector<SoldierAward*>* SoldierDiary::getSoldierAwards()
 {
-	return &_awards;
+	return &_solAwards;
 }
 
 /**
@@ -672,64 +672,65 @@ std::vector<SoldierAward*>* SoldierDiary::getSoldierAwards()
  */
 bool SoldierDiary::manageAwards(const Ruleset* const rules)
 {
-	//Log(LOG_INFO) << "Diary: manageAwards()";
+	Log(LOG_INFO) << "";
+	Log(LOG_INFO) << "Diary: manageAwards()";
 	bool
 		doCeremony (false),	// this value is returned TRUE if at least one award is given.
-		doAward;			// this value determines if an award will be given.
+		grantAward;			// this value determines if an award will be given.
 
 	std::vector<std::string> qualifiedAwards;	// <types>
 	std::map<std::string, size_t> levelReq;		// <noun, qtyLevels required>
 
-	const std::map<std::string, RuleAward*> awardsList (rules->getAwardsList()); // loop over all possible RuleAwards.
+	const std::map<std::string, RuleAward*> awardsList = rules->getAwardsList(); // loop over all possible RuleAwards.
 	for (std::map<std::string, RuleAward*>::const_iterator
 			i = awardsList.begin();
 			i != awardsList.end();
 			)
 	{
-		//Log(LOG_INFO) << ". iter awardList";
+		Log(LOG_INFO) << ". [1] iter awardList - " << (*i).first;
 		qualifiedAwards.clear();
 		levelReq.clear();
 		levelReq["noQual"] = 0;
 
 		// loop over all of soldier's current Awards; map the award's qualifier w/ next-required level.
-		const std::string type ((*i).first);
+		const std::string type = (*i).first;
 		for (std::vector<SoldierAward*>::const_iterator
-				j = _awards.begin();
-				j != _awards.end();
+				j = _solAwards.begin();
+				j != _solAwards.end();
 				++j)
 		{
 			if ((*j)->getType() == type)
 			{
-				//Log(LOG_INFO) << ". . set Level [" << ((*j)->getClassLevel() + 1)  << "] req'd for Qualifier " << (*j)->getQualifier();
+				Log(LOG_INFO) << ". . set Level[" << ((*j)->getClassLevel() + 1)  << "] req'd for Qualifier \"" << (*j)->getQualifier() << "\"";
 				levelReq[(*j)->getQualifier()] = (*j)->getClassLevel() + 1;
 			}
 		}
 
 		// go through each possible criteria. Assume the award is awarded, set to FALSE if not;
 		// ie, as soon as an award criteria that *fails to be achieved* is found, then no award.
-		doAward = true;
+		grantAward = true;
 
-		const std::map<std::string, std::vector<int> >* criteriaList ((*i).second->getCriteria());
+		const std::map<std::string, std::vector<int> >* criteriaList = (*i).second->getCriteria();
 		for (std::map<std::string, std::vector<int> >::const_iterator
 				j = criteriaList->begin();
 				j != criteriaList->end();
 				++j)
 		{
-			//Log(LOG_INFO) << ". . iter Criteria";
+			Log(LOG_INFO) << ". . [2] iter Criteria " << (*j).first;
 			// skip a "noQual" award if its max award level has been reached
 			// or if it has a qualifier skip it if it has 0 total levels (which ain't gonna happen);
 			// you see, Rules can't be positively examined for nouns - only awards already given to soldiers can.
 			if ((*j).second.size() <= levelReq["noQual"])
 			{
-				//Log(LOG_INFO) << ". . . max 'noQual' level reached, or criteria has no vector";
-				doAward = false;
+				Log(LOG_INFO) << ". . . max \"noQual\" Level reached (or, Criteria has no vector)";
+				grantAward = false;
 				break;
 			}
 
-			const std::string criteriaType ((*j).first); // vector of (ints) mapped to a (string). Eg, "totalByNoun" incl. "noQual".
+			const std::string criteriaType = (*j).first; // vector of (ints) mapped to a (string). Eg, "totalByNoun" incl. "noQual".
 
 			// these criteria have no nouns, so only the levelReq["noQual"] will ever be compared
-			const int val ((*j).second.at(levelReq["noQual"]));
+			const int val = (*j).second.at(levelReq["noQual"]);
 			if ( //levelReq.count("noQual") == 1 && // <- this is relevant only if entry "noQual" were removed from the map in the sections following this one.
 				(criteriaType == "totalKills"						&& static_cast<int>(_killList.size()) < val)
 					|| (criteriaType == "totalMissions"				&& static_cast<int>(_missionIdList.size()) < val)
@@ -763,8 +764,8 @@ bool SoldierDiary::manageAwards(const Ruleset* const rules)
 					|| (criteriaType == "totalRevives"				&& _revivedUnitTotal < val)
 					|| (criteriaType == "isMIA"						&& _MIA < val))
 			{
-				//Log(LOG_INFO) << ". . . no Award w/ NO Qualifier";
-				doAward = false;
+				Log(LOG_INFO) << ". . . no Award w/ \"noQual\"";
+				grantAward = false;
 				break;
 			}
 			else if (criteriaType == "totalKillsWithAWeapon"	// awards with the following criteria are unique because they need a qualifier
@@ -772,7 +773,7 @@ bool SoldierDiary::manageAwards(const Ruleset* const rules)
 				|| criteriaType == "totalKillsByRace"
 				|| criteriaType == "totalKillsByRank")
 			{
-				//Log(LOG_INFO) << ". . . try Award w/ weapon,region,race,rank";
+				Log(LOG_INFO) << ". . . try Award w/ weapon,region,race,rank";
 				std::map<std::string, int> total;
 				if (criteriaType == "totalKillsWithAWeapon")
 					total = getWeaponTotal();
@@ -783,37 +784,36 @@ bool SoldierDiary::manageAwards(const Ruleset* const rules)
 				else if (criteriaType == "totalKillsByRank")
 					total = getAlienRankTotal();
 
-				for (std::map<std::string, int>::const_iterator // loop over the 'total' map and match qualifiers with levels.
+				for (std::map<std::string, int>::const_iterator // loop over the 'total' map and match Qualifiers with Levels.
 						k = total.begin();
 						k != total.end();
 						++k)
 				{
-					//Log(LOG_INFO) << ". . . . " << (*k).first << " " << (*k).second;
-					int threshold (-1);
-					const std::string qualifier ((*k).first);
-
-					if (levelReq.count(qualifier) == 0)					// if there is no matching qualifier get the first criteria
+					Log(LOG_INFO) << ". . . . [3] " << (*k).first << " - " << (*k).second;
+					int threshold = -1;
+					const std::string qualifier = (*k).first;
+					if (levelReq.count(qualifier) == 0)					// if there is no matching Qualifier get the first criteria
 					{
-						//Log(LOG_INFO) << ". . . . . no relevant qualifier yet, threshold = " << (*j).second.front();
+						Log(LOG_INFO) << ". . . . . no relevant qualifier yet, threshold = " << (*j).second.front();
 						threshold = (*j).second.front();
 					}
-					else if (levelReq[qualifier] != (*j).second.size())	// otherwise get the criteria per the soldier's award level.
+					else if (levelReq[qualifier] != (*j).second.size())	// otherwise get the criteria per the soldier's award Level.
 					{
-						//Log(LOG_INFO) << ". . . . . qualifier found, next level available, threshold = " << (*j).second.at(levelReq[qualifier]);
+						Log(LOG_INFO) << ". . . . . qualifier found, next level available, threshold = " << (*j).second.at(levelReq[qualifier]);
 						threshold = (*j).second.at(levelReq[qualifier]);
 					}
 
 					if (threshold != -1 && threshold <= (*k).second)	// if a criteria was set AND the stat's count exceeds that criteria ...
 					{
-						//Log(LOG_INFO) << "threshold good, add to qualifiedAwards vector";
+						Log(LOG_INFO) << ". . . . . threshold good, add to qualifiedAwards vector";
 						qualifiedAwards.push_back(qualifier);
 					}
 				}
 
 				if (qualifiedAwards.empty() == true) // if 'qualifiedAwards' is still empty soldier did not get an award.
 				{
-					//Log(LOG_INFO) << ". . . no Award w/ weapon,region,race,rank";
-					doAward = false;
+					Log(LOG_INFO) << ". . . . no Award w/ weapon,region,race,rank";
+					grantAward = false;
 					break;
 				}
 			}
@@ -821,32 +821,39 @@ bool SoldierDiary::manageAwards(const Ruleset* const rules)
 				|| criteriaType == "killsWithCriteriaMission"
 				|| criteriaType == "killsWithCriteriaTurn")
 			{
-				//Log(LOG_INFO) << ". . . try Award w/ career,mission,turn";
-				const std::vector<std::map<int, std::vector<std::string> > >* killCriteriaList ((*i).second->getKillCriteria()); // fetch the kill criteria list.
+				Log(LOG_INFO) << ". . . try Award w/ career,mission,turn";
+				const std::vector<std::map<int, std::vector<std::string> > >* killCriteriaList = (*i).second->getKillCriteria(); // fetch the killCriteria list.
 				for (std::vector<std::map<int, std::vector<std::string> > >::const_iterator // loop over the OR vectors.
 						orCriteria = killCriteriaList->begin();
 						orCriteria != killCriteriaList->end();
 						++orCriteria)
 				{
+					Log(LOG_INFO) << ". . . . [3] iter killCriteria OR list";// << (*orCriteria)->;
 					for (std::map<int, std::vector<std::string> >::const_iterator // loop over the AND vectors.
 							andCriteria = orCriteria->begin();
 							andCriteria != orCriteria->end();
 							++andCriteria)
 					{
-						int qty (0); // how many AND vectors (list of DETAILs) have been successful.
+						Log(LOG_INFO) << ". . . . . [4] iter killCriteria AND list";// << *andCriteria->second.begin();
+						int qty = 0; // how many AND vectors (list of DETAILs) have been successful.
 						if (criteriaType != "killsWithCriteriaCareer")
+						{
 							++qty; // "killsWith..." Turns or Missions start at 1 because of how thisIter and lastIter work.
+						}
+						Log(LOG_INFO) << ". . . . . start Qty = " << qty;
 
-						bool skip (false);
+						bool skip = false;
 						int
-							thisIter (-1), // being a turn or a mission
-							lastIter (-1);
+							thisIter = -1, // being a turn or a mission
+							lastIter = -1;
+						Log(LOG_INFO) << ". . . . . init skip= false, thisIter/lastIter= -1";
 
 						for (std::vector<BattleUnitKill*>::const_iterator // loop over the KILLS vector.
 								kill = _killList.begin();
 								kill != _killList.end();
 								++kill)
 						{
+							Log(LOG_INFO) << ". . . . . . [5] iter KILLS";
 							if (criteriaType == "killsWithCriteriaMission")
 							{
 								thisIter = (*kill)->_mission;
@@ -869,11 +876,16 @@ bool SoldierDiary::manageAwards(const Ruleset* const rules)
 //									++kill;
 								}
 							}
+							Log(LOG_INFO) << ". . . . . . " << criteriaType;
+							Log(LOG_INFO) << ". . . . . . skip = " << skip;
+							Log(LOG_INFO) << ". . . . . . thisIter = " << thisIter;
+							Log(LOG_INFO) << ". . . . . . lastIter = " << lastIter;
 
 							if (criteriaType != "killsWithCriteriaCareer"	// skip kill-groups that soldier already got an award
 								&& thisIter == lastIter						// for and skip kills that are inbetween turns.
 								&& skip == true)
 							{
+								Log(LOG_INFO) << ". . . . . . . continue [1]";
 								continue;
 							}
 
@@ -881,71 +893,59 @@ bool SoldierDiary::manageAwards(const Ruleset* const rules)
 							{
 								qty = 1; // reset.
 								skip = false;
+								Log(LOG_INFO) << ". . . . . . . continue [2]";
 								continue;
 							}
 
-							bool found (true);
+							bool found = true;
 
 							for (std::vector<std::string>::const_iterator // loop over the DETAILs of the AND vector.
 									detail = andCriteria->second.begin();
 									detail != andCriteria->second.end();
 									++detail)
 							{
-								const std::string bType_array[] =
+								Log(LOG_INFO) << ". . . . . . . [6] iter DETAIL = " << (*detail);
+								static const std::string bType_array[] =
 								{
-									"BT_NONE",
-									"BT_FIREARM",
-									"BT_AMMO",
-									"BT_MELEE",
-									"BT_GRENADE",
-									"BT_PROXYGRENADE",
-									"BT_MEDIKIT",
-									"BT_SCANNER",
-									"BT_MINDPROBE",
-									"BT_PSIAMP",
-									"BT_FLARE",
-									"BT_CORPSE",
-									"BT_END"
+									"BT_NONE","BT_FIREARM","BT_AMMO","BT_MELEE","BT_GRENADE","BT_PROXYGRENADE","BT_MEDIKIT","BT_SCANNER","BT_MINDPROBE","BT_PSIAMP","BT_FLARE","BT_CORPSE","BT_END"
 								};
+								static const std::vector<std::string> bType_vect (bType_array, bType_array + 13);
 
-								const std::vector<std::string> bType_vect (bType_array, bType_array + 13);
-								int bType (0);
+								size_t bType = 0;
 								for (
 										;
-										bType != static_cast<int>(bType_vect.size());
+										bType != bType_vect.size();
 										++bType)
 								{
+									Log(LOG_INFO) << ". . . . . . . . [7] iter bType";
 									if (*detail == bType_vect[bType])
+									{
+										Log(LOG_INFO) << ". . . . . . . . . bType = " << (*detail);
 										break;
+									}
 								}
 
-								const std::string dType_array[] =
+								static const std::string dType_array[] =
 								{
-									"DT_NONE",
-									"DT_AP",
-									"DT_IN",
-									"DT_HE",
-									"DT_LASER",
-									"DT_PLASMA",
-									"DT_STUN",
-									"DT_MELEE",
-									"DT_ACID",
-									"DT_SMOKE",
-									"DT_END"
+									"DT_NONE","DT_AP","DT_IN","DT_HE","DT_LASER","DT_PLASMA","DT_STUN","DT_MELEE","DT_ACID","DT_SMOKE","DT_END"
 								};
+								static const std::vector<std::string> dType_vect (dType_array, dType_array + 11);
 
-								const std::vector<std::string> dType_vect (dType_array, dType_array + 11);
-								int dType (0);
+								size_t dType = 0;
 								for (
 										;
-										dType != static_cast<int>(dType_vect.size());
+										dType != dType_vect.size();
 										++dType)
 								{
+									Log(LOG_INFO) << ". . . . . . . . [7] iter dType";
 									if (*detail == dType_vect[dType])
+									{
+										Log(LOG_INFO) << ". . . . . . . . . dType = " << (*detail);
 										break;
+									}
 								}
 
-								if ((*kill)->_weapon == "STR_WEAPON_UNKNOWN" // if there are NO matches with any criteria break and try the next Criteria.
+								if ((*kill)->_weapon == "STR_WEAPON_UNKNOWN" // if there are NO matches break and try the next Criteria.
 									|| (*kill)->_weaponAmmo == "STR_WEAPON_UNKNOWN"
 									|| ((*kill)->_rank != *detail
 										&& (*kill)->_race != *detail
@@ -953,9 +953,10 @@ bool SoldierDiary::manageAwards(const Ruleset* const rules)
 										&& (*kill)->_weaponAmmo != *detail
 										&& (*kill)->getUnitStatusString() != *detail
 										&& (*kill)->getUnitFactionString() != *detail
-										&& rules->getItem((*kill)->_weaponAmmo)->getDamageType() != dType
-										&& rules->getItem((*kill)->_weapon)->getBattleType() != bType))
+										&& rules->getItem((*kill)->_weapon)->getBattleType() != static_cast<BattleType>(bType)
+										&& rules->getItem((*kill)->_weaponAmmo)->getDamageType() != static_cast<DamageType>(dType)))
 								{
+									Log(LOG_INFO) << ". . . . . . . . no more Matching - break DETAIL";
 									found = false;
 									break;
 								}
@@ -964,67 +965,87 @@ bool SoldierDiary::manageAwards(const Ruleset* const rules)
 							if (found == true)
 							{
 								++qty;
+								Log(LOG_INFO) << ". . . . . . . found Qty = " << qty;
 								if (qty == (*andCriteria).first)
+								{
+									Log(LOG_INFO) << ". . . . . . . . andCriteria qty is GOOD";
 									skip = true; // criteria met so move to next mission/turn.
+								}
 							}
 						}
 
-						const int multiCriteria ((*andCriteria).first); // if one of the AND criteria fail stop looking.
+						const int multiCriteria = (*andCriteria).first; // if one of the AND criteria fail stop looking.
+						Log(LOG_INFO) << ". . . . . qty = " << qty;
+						Log(LOG_INFO) << ". . . . . multiCriteria = " << multiCriteria;
+						Log(LOG_INFO) << ". . . . . \"noQual\" Levels required = " << (*j).second.at(levelReq["noQual"]);
 						if (multiCriteria == 0 || qty / multiCriteria < (*j).second.at(levelReq["noQual"]))
 						{
-							//Log(LOG_INFO) << ". . . no Award w/ career,mission,turn";
-							doAward = false;
+							Log(LOG_INFO) << ". . . . . . no Award w/ career,mission,turn - BREAK andCriteria";
+							grantAward = false;
 							break;
 						}
-						else doAward = true;
+						else
+						{
+							Log(LOG_INFO) << ". . . . . . grant Award w/ career,mission,turn";
+							grantAward = true;
+						}
 					}
 
-					if (doAward == true) // stop looking because soldier is getting one regardless.
+					if (grantAward == true) // stop looking because soldier is getting one regardless.
+					{
+						Log(LOG_INFO) << ". . . . . grant Award w/ career,mission,turn - BREAK orCriteria";
 						break;
+					}
 				}
 			}
 		}
 
 
-		if (doAward == true)
+		if (grantAward == true)
 		{
-			//Log(LOG_INFO) << ". do Award";
+			Log(LOG_INFO) << ". do Award";
 			doCeremony = true;
 
 			if (qualifiedAwards.empty() == true)		// if there are NO qualified awards but the soldier *is*
-				qualifiedAwards.push_back("noQual");	// awarded a different award its qualifier will be "noQual".
+			{											// being awarded an award its qualifier will be "noQual".
+				Log(LOG_INFO) << ". . add \"noQual\" type";
+				qualifiedAwards.push_back("noQual");
+			}
 
 			for (std::vector<std::string>::const_iterator
 					j = qualifiedAwards.begin();
 					j != qualifiedAwards.end();
 					++j)
 			{
-				bool newAward (true);
+				Log(LOG_INFO) << ". . . iter Qualifier = \"" << (*j) << "\"";
+				bool firstOfType = true;
 				for (std::vector<SoldierAward*>::const_iterator
-						k = _awards.begin();
-						k != _awards.end();
+						k = _solAwards.begin();
+						k != _solAwards.end();
 						++k)
 				{
 					if ((*k)->getType() == type && (*k)->getQualifier() == *j)
 					{
-						newAward = false;
-						(*k)->addDecoration();
+						Log(LOG_INFO) << ". . . . found = " << type;
+						firstOfType = false;
+						(*k)->addClassLevel();
 						break;
 					}
 				}
 
-				if (newAward == true)
-					_awards.push_back(new SoldierAward(type, *j));
+				if (firstOfType == true)
+					_solAwards.push_back(new SoldierAward(type, *j));
 			}
 		}
 		else
 		{
-			//Log(LOG_INFO) << ". do NOT Award -> iterate to top";
+			Log(LOG_INFO) << ". do NOT Award -> iterate to top";
+			Log(LOG_INFO) << "";
 			++i;
 		}
 	}
 
-	//Log(LOG_INFO) << "Diary: manageAwards() EXIT";
+	Log(LOG_INFO) << "Diary: manageAwards() EXIT w/ Ceremony = " << doCeremony;
 	return doCeremony;
 }
 
@@ -1060,18 +1081,18 @@ void SoldierDiary::awardCommendation(
 		const std::string& noun)
 {
 	bool newAward = true;
-	for (std::vector<SoldierAward*>::const_iterator i = _awards.begin(); i != _awards.end(); ++i)
+	for (std::vector<SoldierAward*>::const_iterator i = _solAwards.begin(); i != _solAwards.end(); ++i)
 	{
 		if ((*i)->getType() == type && (*i)->getQualifier() == noun)
 		{
-			(*i)->addDecoration();
+			(*i)->addClassLevel();
 			newAward = false;
 			break;
 		}
 	}
 
 	if (newAward == true)
-		_awards.push_back(new SoldierAward(type, noun));
+		_solAwards.push_back(new SoldierAward(type, noun));
 } */
 
 /**
@@ -1294,7 +1315,7 @@ void SoldierDiary::addMonthlyService()
  */
 void SoldierDiary::awardOriginalEight()
 {
-	_awards.push_back(new SoldierAward("STR_MEDAL_ORIGINAL8_NAME"));
+	_solAwards.push_back(new SoldierAward("STR_MEDAL_ORIGINAL8_NAME"));
 }
 
 
@@ -1444,7 +1465,7 @@ void SoldierAward::setOld()
 /**
  * Adds a level of decoration to this SoldierAward.
  */
-void SoldierAward::addDecoration()
+void SoldierAward::addClassLevel()
 {
 	++_level;
 	_new = true;

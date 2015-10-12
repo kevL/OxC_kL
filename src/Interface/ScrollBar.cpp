@@ -56,15 +56,15 @@ ScrollBar::ScrollBar(
 		_offset(0),
 		_bg(0)
 {
-	_track = new Surface(width - 2, height, x, y);
-	_thumb = new Surface(width, height, x, y);
+	_track = new Surface(width - 2, height, x,y);
+	_thumb = new Surface(width, height, x,y);
 
 	_thumbRect.x =
 	_thumbRect.y = 0;
 	_thumbRect.w =
 	_thumbRect.h = 0;
 
-	_timer = new Timer(123);
+	_timer = new Timer(122);
 	_timer->onTimer((SurfaceHandler)& ScrollBar::scroll);
 }
 

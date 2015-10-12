@@ -295,7 +295,7 @@ int RuleArmor::getSize() const
  * @param dt - the damageType
  * @return, damage modifier (0.f to 1.f+)
  */
-float RuleArmor::getDamageModifier(ItemDamageType dType) const
+float RuleArmor::getDamageModifier(DamageType dType) const
 {
 	return _damageModifier[static_cast<size_t>(dType)];
 }

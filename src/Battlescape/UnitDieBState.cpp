@@ -55,7 +55,7 @@ namespace OpenXcom
 UnitDieBState::UnitDieBState(
 		BattlescapeGame* const parent,
 		BattleUnit* const unit,
-		const ItemDamageType dType,
+		const DamageType dType,
 		const bool noSound)
 	:
 		BattleState(parent),

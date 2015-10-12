@@ -110,7 +110,7 @@ ArticleStateArmor::ArticleStateArmor(const ArticleDefinitionArmor* const defs)
 			i != RuleArmor::DAMAGE_TYPES;
 			++i)
 	{
-		const ItemDamageType dType = static_cast<ItemDamageType>(i);
+		const DamageType dType = static_cast<DamageType>(i);
 		const std::string st = getDamageTypeText(dType);
 		if (st != "STR_UNKNOWN")
 		{

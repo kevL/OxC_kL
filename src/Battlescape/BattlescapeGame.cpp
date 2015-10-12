@@ -1935,7 +1935,7 @@ void BattlescapeGame::checkForCasualties(
 
 					if (converted == false)
 					{
-						ItemDamageType dType;
+						DamageType dType;
 						bool noSound;
 
 						if (weapon != NULL) // This is where units get sent to DEATH!

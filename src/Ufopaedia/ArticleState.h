@@ -94,7 +94,7 @@ protected:
 		void think();
 
 		/// converts damage type to string
-		static std::string getDamageTypeText(ItemDamageType dType);
+		static std::string getDamageTypeText(DamageType dType);
 
 		/// returns the article id
 		std::string getId() const

@@ -479,7 +479,7 @@ void ExplosionBState::explode() // private.
 		else
 		{
 			//Log(LOG_INFO) << "ExplosionBState::explode() point te::hit";
-			ItemDamageType dType = itRule->getDamageType();
+			DamageType dType = itRule->getDamageType();
 			if (_pistolWhip == true)
 				dType = DT_STUN;
 
@@ -508,7 +508,7 @@ void ExplosionBState::explode() // private.
 
 	if (_tile != NULL)
 	{
-		ItemDamageType dType;
+		DamageType dType;
 
 		switch (_tile->getExplosiveType())
 		{
