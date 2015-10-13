@@ -130,7 +130,7 @@ private:
 //	void keyRepeat(); // <- too twitchy.
 
 	/// Handler for exiting the state.
-	void exitClick(Action* action);
+	void exitClick(Action* action = NULL);
 
 
 	public:

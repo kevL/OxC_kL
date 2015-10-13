@@ -808,7 +808,7 @@ void UnitInfoState::handle(Action* action)
 	if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN)
 	{
 //		if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
-//			exitClick(action); else
+//			exitClick(); else
 		if (_mindProbe == false)
 		{
 			if (action->getDetails()->button.button == SDL_BUTTON_X1)
@@ -821,9 +821,9 @@ void UnitInfoState::handle(Action* action)
 
 /**
 * Selects the previous unit.
-* @param action Pointer to an action.
+ * @param action - pointer to an Action
 */
-void UnitInfoState::btnPrevClick(Action* action)
+void UnitInfoState::btnPrevClick(Action*)
 {
 	if (_parent != NULL) // so you are here from a Battlescape Game
 		_parent->selectPreviousFactionUnit(
@@ -841,14 +841,14 @@ void UnitInfoState::btnPrevClick(Action* action)
 	if (_unit != NULL)
 		init();
 	else
-		exitClick(action);
+		exitClick();
 }
 
 /**
  * Selects the next unit.
  * @param action - pointer to an Action
  */
-void UnitInfoState::btnNextClick(Action* action)
+void UnitInfoState::btnNextClick(Action*)
 {
 	if (_parent != NULL) // this is from a Battlescape Game
 		_parent->selectNextFactionUnit(
@@ -866,12 +866,12 @@ void UnitInfoState::btnNextClick(Action* action)
 	if (_unit != NULL)
 		init();
 	else
-		exitClick(action);
+		exitClick();
 }
 
 /**
  * Exits the screen.
- * @param action - pointer to an Action
+ * @param action - pointer to an Action (default NULL)
  */
 void UnitInfoState::exitClick(Action*) // private.
 {
@@ -883,7 +883,6 @@ void UnitInfoState::exitClick(Action*) // private.
 			_game->getScreen()->resetDisplay(false);
 		}
 	} else */
-
 	if (_mindProbe == true
 		|| _unit->hasInventory() == true)
 	{

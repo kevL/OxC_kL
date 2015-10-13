@@ -1079,7 +1079,7 @@ void BattlescapeState::mapOver(Action* action)
 		// the mouse-release event is missed for any reason.
 		// (checking: is the dragScroll-mouse-button still pressed?)
 		// However if the SDL is also missed the release event, then it is to no avail :(
-		if ((SDL_GetMouseState(0,0) & SDL_BUTTON(Options::battleDragScrollButton)) == 0)
+		if ((SDL_GetMouseState(NULL,NULL) & SDL_BUTTON(Options::battleDragScrollButton)) == 0)
 		{
 			// so we missed again the mouse-release :(
 			// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
@@ -1414,7 +1414,7 @@ void BattlescapeState::mapClick(Action* action)
 	if (_isMouseScrolling == true)
 	{
 		if (action->getDetails()->button.button != Options::battleDragScrollButton
-			&& (SDL_GetMouseState(0,0) & SDL_BUTTON(Options::battleDragScrollButton)) == 0)
+			&& (SDL_GetMouseState(NULL,NULL) & SDL_BUTTON(Options::battleDragScrollButton)) == 0)
 		{
 			// so we missed again the mouse-release :(
 			// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
@@ -1897,8 +1897,28 @@ void BattlescapeState::btnCenterClick(Action*)
 	if (playableUnitSelected() == true)
 	{
 		_map->getCamera()->centerOnPosition(_battleSave->getSelectedUnit()->getPosition());
-		_map->refreshSelectorPosition();
+		refreshMousePosition();
 	}
+}
+
+/**
+ * Forces a transparent SDL mouse-motion event.
+ * @note This is required to create an artificial mouseOver event if the Map is
+ * repositioned under the cursor but the cursor itself doesn't necessarily move
+ * on the screen.
+ */
+void BattlescapeState::refreshMousePosition() const
+{
+	int // doesn't do shit. FIXED.
+		x,y;
+	SDL_GetMouseState(&x,&y);
+	SDL_WarpMouse(
+			static_cast<Uint16>(x + 1),
+			static_cast<Uint16>(y));
+	SDL_GetMouseState(&x,&y);
+	SDL_WarpMouse(
+			static_cast<Uint16>(x - 1),
+			static_cast<Uint16>(y));
 }
 
 /**
@@ -1908,7 +1928,10 @@ void BattlescapeState::btnCenterClick(Action*)
 void BattlescapeState::btnNextSoldierClick(Action*)
 {
 	if (allowButtons() == true)
+	{
 		selectNextFactionUnit(true);
+		refreshMousePosition();
+	}
 }
 
 /**
@@ -1918,7 +1941,10 @@ void BattlescapeState::btnNextSoldierClick(Action*)
 void BattlescapeState::btnNextStopClick(Action*)
 {
 	if (allowButtons() == true)
+	{
 		selectNextFactionUnit(true, true);
+		refreshMousePosition();
+	}
 }
 
 /**
@@ -1928,7 +1954,10 @@ void BattlescapeState::btnNextStopClick(Action*)
 void BattlescapeState::btnPrevSoldierClick(Action*)
 {
 	if (allowButtons() == true)
+	{
 		selectPreviousFactionUnit(true);
+		refreshMousePosition();
+	}
 }
 
 /**
@@ -1938,7 +1967,10 @@ void BattlescapeState::btnPrevSoldierClick(Action*)
 void BattlescapeState::btnPrevStopClick(Action*)
 {
 	if (allowButtons() == true)
+	{
 		selectPreviousFactionUnit(true, true);
+		refreshMousePosition();
+	}
 }
 
 /**

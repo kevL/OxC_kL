@@ -54,7 +54,7 @@ private:
 	void animate();
 
 	/// Handler for exiting the state.
-	void exitClick(Action* action);
+	void exitClick(Action* action = NULL);
 
 
 	public:

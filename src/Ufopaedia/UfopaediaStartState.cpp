@@ -62,27 +62,20 @@ UfopaediaStartState::UfopaediaStartState(bool tactical)
 	:
 		_tactical(tactical)
 {
-	bool toggle;
-	if (_tactical == true)
-		toggle = false;
-	else
+	int dX = 0; // x - 32 to center on Globe
+	if (_tactical == false)
 	{
 		_screen = false;
-		toggle = true;
+		if (Options::baseXResolution > 320 + 32)
+			dX = -32;
 	}
 
-	int dX; // x - 32 to center on Globe
-	if (Options::baseXResolution > 320 + 32)
-		dX = -32;
-	else
-		dX = 0;
-
-	_window = new Window( // this is almost too tall for 320x200, note.
+	_window = new Window( // note, this is almost too tall for 320x200.
 					this,
 					256,194,
 					32 + dX, 6,
 					POPUP_BOTH,
-					toggle);
+					_tactical == false);
 	_txtTitle = new Text(224, 17, 48 + dX, 16);
 
 	setInterface("ufopaedia");
@@ -166,7 +159,9 @@ void UfopaediaStartState::btnSectionClick(Action* action)
 	{
 		if (action->getSender() == _btnSection[i])
 		{
-			_game->pushState(new UfopaediaSelectState(ped_TITLES[i]));
+			_game->pushState(new UfopaediaSelectState(
+													ped_TITLES[i],
+													_tactical == true));
 			break;
 		}
 	}

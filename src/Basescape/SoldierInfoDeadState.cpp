@@ -414,9 +414,6 @@ void SoldierInfoDeadState::init()
 	_txtMissions->setText(tr("STR_MISSIONS").arg(_soldier->getMissions()));
 	_txtKills->setText(tr("STR_KILLS").arg(_soldier->getKills()));
 
-//	const int minPsi = _game->getRuleset()->getSoldier("XCOM")->getMinStats().psiSkill;
-//		|| (Options::psiStrengthEval == true // for determination to show psiStrength
-//			&& _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements()) == true))
 	if (current->psiSkill != 0)
 	{
 		woststr.str(L"");

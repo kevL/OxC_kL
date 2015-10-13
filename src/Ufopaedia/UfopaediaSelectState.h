@@ -67,7 +67,9 @@ protected:
 
 	public:
 		///
-		explicit UfopaediaSelectState(const std::string& section);
+		UfopaediaSelectState(
+				const std::string& section,
+				bool tactical);
 		///
 		virtual ~UfopaediaSelectState();
 

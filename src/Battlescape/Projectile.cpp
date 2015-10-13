@@ -497,14 +497,14 @@ void Projectile::applyAccuracy( // private.
 			accuracy = std::max(ACU_MIN, accuracy);
 
 			if (_action.actor->getGeoscapeSoldier() != NULL)
-				perfect = static_cast<double>(_battleSave->getBattleGame()->getRuleset()->getSoldier("XCOM")->getStatCaps().firing);
+				perfect = static_cast<double>(_battleSave->getBattleGame()->getRuleset()->getSoldier("STR_SOLDIER")->getStatCaps().firing);
 			else
 				perfect = 150.; // higher value makes aLien less accurate at spitting/arcing shot.
 		}
 		else // Throw
 		{
 			if (_action.actor->getGeoscapeSoldier() != NULL)
-				perfect = static_cast<double>(_battleSave->getBattleGame()->getRuleset()->getSoldier("XCOM")->getStatCaps().throwing);
+				perfect = static_cast<double>(_battleSave->getBattleGame()->getRuleset()->getSoldier("STR_SOLDIER")->getStatCaps().throwing);
 			else
 				perfect = 150.; // higher value makes aLien less accurate at throwing.
 		}

@@ -57,8 +57,8 @@ Action::~Action()
 {}
 
 /**
- * Returns the X scaling factor used by the Screen when
- * this action was fired (used to correct mouse input).
+ * Returns the X scaling factor used by the Screen when this action was fired.
+ * @note Used to correct mouse input.
  * @return, screen's X scaling factor
  */
 double Action::getXScale() const
@@ -67,8 +67,8 @@ double Action::getXScale() const
 }
 
 /**
- * Returns the Y scaling factor used by the Screen when
- * this action was fired (used to correct mouse input).
+ * Returns the Y scaling factor used by the Screen when this action was fired.
+ * @note Used to correct mouse input.
  * @return, screen's Y scaling factor
  */
 double Action::getYScale() const
@@ -124,8 +124,8 @@ int Action::getLeftBlackBand() const
 }
 
 /**
- * Returns the X position of the mouse cursor relative to the
- * game window or -1 if this isn't a mouse-related action.
+ * Returns the X position of the mouse cursor relative to the game window or -1
+ * if this isn't a mouse-related action.
  * @return, mouse's X position
  */
 int Action::getXMouse() const
@@ -134,8 +134,8 @@ int Action::getXMouse() const
 }
 
 /**
- * Returns the Y position of the mouse cursor relative to the
- * game window or -1 if this isn't a mouse-related action.
+ * Returns the Y position of the mouse cursor relative to the game window or -1
+ * if this isn't a mouse-related action.
  * @return, mouse's Y position
  */
 int Action::getYMouse() const
@@ -144,8 +144,8 @@ int Action::getYMouse() const
 }
 
 /**
- * Returns the absolute X position of the mouse cursor relative
- * to the game window corrected for Screen scaling.
+ * Returns the absolute X position of the mouse cursor relative to the game
+ * window corrected for Screen scaling.
  * @return, mouse's absolute X position
  */
 double Action::getAbsoluteXMouse() const
@@ -157,8 +157,8 @@ double Action::getAbsoluteXMouse() const
 }
 
 /**
- * Returns the absolute Y position of the mouse cursor relative
- * to the game window corrected for Screen scaling.
+ * Returns the absolute Y position of the mouse cursor relative to the game
+ * window corrected for Screen scaling.
  * @return, mouse's absolute X position
  */
 double Action::getAbsoluteYMouse() const
@@ -170,8 +170,8 @@ double Action::getAbsoluteYMouse() const
 }
 
 /**
- * Returns the X position of the mouse cursor relative to the
- * surface that triggered the action corrected for Screen scaling.
+ * Returns the X position of the mouse cursor relative to the surface that
+ * triggered the action corrected for Screen scaling.
  * @return, mouse's relative X position
  */
 double Action::getRelativeXMouse() const
@@ -183,8 +183,8 @@ double Action::getRelativeXMouse() const
 }
 
 /**
- * Returns the Y position of the mouse cursor relative to the
- * surface that triggered the action corrected for Screen scaling.
+ * Returns the Y position of the mouse cursor relative to the surface that
+ * triggered the action corrected for Screen scaling.
  * @return, mouse's relative Y position
  */
 double Action::getRelativeYMouse() const
@@ -214,7 +214,7 @@ void Action::setSender(InteractiveSurface* sender)
 }
 
 /**
- * Returns the details about this action.
+ * Returns details about this action.
  * @return, pointer to SDL_event
  */
 SDL_Event* Action::getDetails() const

@@ -2076,7 +2076,8 @@ void Map::mouseOver(Action* action, State* state)
 
 	_mX = static_cast<int>(action->getAbsoluteXMouse());
 	_mY = static_cast<int>(action->getAbsoluteYMouse());
-	setSelectorPosition(_mX,_mY);
+	setSelectorPosition();
+//	setSelectorPosition(_mX,_mY);
 }
 
 /**
@@ -2123,36 +2124,50 @@ void Map::animateMap(bool redraw)
 	if (redraw == true) _redraw = true;
 }
 
-/**
+/*
  * Updates the selector to the last-known mouse position.
- */
+ *
 void Map::refreshSelectorPosition()
 {
 	setSelectorPosition(_mX,_mY);
-}
-
-/**
+} */
+/*
  * Sets the rectangular selector to a certain tile.
  * @param x - mouse x position
  * @param y - mouse y position
+ *
+void Map::setSelectorPosition(int x, int y)
+{
+	const int
+		pre_X = _selectorX,
+		pre_Y = _selectorY;
+	_camera->convertScreenToMap(
+							x,
+							y + _spriteHeight / 4,
+							&_selectorX,
+							&_selectorY);
+	if (pre_X != _selectorX || pre_Y != _selectorY)
+		_redraw = true;
+} */
+/**
+ * Sets the rectangular selector to the current mouse-position.
  */
-void Map::setSelectorPosition(
-		int x,
-		int y)
+void Map::setSelectorPosition()
 {
 	const int
 		pre_X = _selectorX,
 		pre_Y = _selectorY;
 
 	_camera->convertScreenToMap(
-							x,
-							y + _spriteHeight / 4,
+							_mX,
+							_mY + _spriteHeight / 4,
 							&_selectorX,
 							&_selectorY);
 
 	if (pre_X != _selectorX || pre_Y != _selectorY)
 		_redraw = true;
 }
+
 
 /**
  * Gets the position of the rectangular selector.

@@ -2142,7 +2142,7 @@ Soldier* Ruleset::genSoldier(
 	{
 		delete soldier;
 		soldier = new Soldier(
-							getSoldier("XCOM"),
+							getSoldier("STR_SOLDIER"),
 							getArmor("STR_ARMOR_NONE_UC"),
 							&_names,
 							newId);

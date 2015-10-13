@@ -587,7 +587,7 @@ void InventoryState::init()
 
 	updateStats();
 	updateWounds();
-	refreshMouse();
+	_battleSave->getBattleState()->refreshMousePosition();
 }
 
 /**
@@ -764,22 +764,22 @@ void InventoryState::updateWounds() // private.
 	}
 }
 
-/**
+/*
  * Jogs the mouse cursor to refresh appearances.
- */
+ *
 void InventoryState::refreshMouse() // private.
 {
 	int
 		x,y;
 	SDL_GetMouseState(&x,&y);
-
 	SDL_WarpMouse(
 			static_cast<Uint16>(x + 1),
-			static_cast<Uint16>(y));	// send a mouse motion event to refresh any hover actions
+			static_cast<Uint16>(y));
+	SDL_GetMouseState(&x,&y);
 	SDL_WarpMouse(
-			static_cast<Uint16>(x),
-			static_cast<Uint16>(y));	// move the mouse back to avoid cursor creep
-}
+			static_cast<Uint16>(x - 1),
+			static_cast<Uint16>(y));
+} */
 
 /**
  * Returns to the previous screen.
@@ -1006,7 +1006,7 @@ void InventoryState::btnUnequipUnitClick(Action*)
 
 		_inv->arrangeGround(false);
 		updateStats();
-		refreshMouse();
+		_battleSave->getBattleState()->refreshMousePosition();
 
 		_game->getResourcePack()->getSound("BATTLE.CAT", ResourcePack::ITEM_DROP)->play();
 	}

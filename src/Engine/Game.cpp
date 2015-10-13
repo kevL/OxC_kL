@@ -233,7 +233,6 @@ void Game::run()
 			ev.type = SDL_MOUSEMOTION;
 			ev.motion.x = static_cast<Uint16>(x);
 			ev.motion.y = static_cast<Uint16>(y);
-
 			Action action = Action(
 								&ev,
 								_screen->getXScale(),
@@ -326,7 +325,7 @@ void Game::run()
 //					if (_inputActive == false) // Skip [ie. postpone] mouse events if they're disabled. Moved below_
 //						continue;
 					runningState = RUNNING;	// re-gain focus on mouse-over or keypress.
-											// Go on, feed the event to others
+											// Go on, feed the event to others ->>>
 				default:
 					Action action = Action(
 										&_event,
@@ -339,8 +338,8 @@ void Game::run()
 					_fpsCounter->handle(&action);
 					_states.back()->handle(&action);
 
-					if (action.getDetails()->type == SDL_KEYDOWN
-						&& (SDL_GetModState() & KMOD_CTRL) != 0)
+					if ((SDL_GetModState() & KMOD_CTRL) != 0
+						&& action.getDetails()->type == SDL_KEYDOWN)
 					{
 						if (action.getDetails()->key.keysym.sym == SDLK_g)			// "ctrl-g" grab input
 						{
@@ -459,7 +458,7 @@ void Game::run()
 //	Options::save();	// kL_note: why this work here but not at main() EXIT,
 						// where it clears & rewrites my options.cfg
 						// Ps. why are they even doing Options::save() twice
-						// ... now they both fuck up.
+						// ... now they both fuck up. BYE !
 }
 
 /**

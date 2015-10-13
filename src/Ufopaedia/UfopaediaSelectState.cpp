@@ -42,14 +42,16 @@ namespace OpenXcom
  * cTor.
  * @param section - reference the section desired
  */
-UfopaediaSelectState::UfopaediaSelectState(const std::string& section)
+UfopaediaSelectState::UfopaediaSelectState(
+		const std::string& section,
+		bool tactical)
 	:
 		_section(section)
 {
 	_screen = false;
 
 	int dX; // x - 32 to center on Globe
-	if (Options::baseXResolution > 320 + 32)
+	if (tactical == false && Options::baseXResolution > 320 + 32)
 		dX = -32;
 	else
 		dX = 0;
@@ -103,7 +105,7 @@ UfopaediaSelectState::UfopaediaSelectState(const std::string& section)
 /**
  * dTor.
  */
-UfopaediaSelectState::~UfopaediaSelectState()
+UfopaediaSelectState::~UfopaediaSelectState() // virtual.
 {}
 
 /**
@@ -118,7 +120,7 @@ void UfopaediaSelectState::init()
  * Returns to the previous screen.
  * @param action - pointer to an Action
  */
-void UfopaediaSelectState::btnOkClick(Action*)
+void UfopaediaSelectState::btnOkClick(Action*) // private.
 {
 	_game->popState();
 }
@@ -127,7 +129,7 @@ void UfopaediaSelectState::btnOkClick(Action*)
  *
  * @param action - pointer to an Action
  */
-void UfopaediaSelectState::lstSelectionClick(Action*)
+void UfopaediaSelectState::lstSelectionClick(Action*) // private.
 {
 	Ufopaedia::openArticle(
 						_game,
@@ -137,7 +139,7 @@ void UfopaediaSelectState::lstSelectionClick(Action*)
 /**
  *
  */
-void UfopaediaSelectState::loadSelectionList()
+void UfopaediaSelectState::loadSelectionList() // private.
 {
 	_article_list.clear();
 

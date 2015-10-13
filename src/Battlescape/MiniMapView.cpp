@@ -387,7 +387,7 @@ void MiniMapView::mouseClick(Action* action, State* state) // private.
 	if (_isMouseScrolling == true)
 	{
 		if (action->getDetails()->button.button != Options::battleDragScrollButton
-			&& (SDL_GetMouseState(0,0) & SDL_BUTTON(Options::battleDragScrollButton)) == 0)
+			&& (SDL_GetMouseState(NULL,NULL) & SDL_BUTTON(Options::battleDragScrollButton)) == 0)
 		{
 			// so we missed again the mouse-release :(
 			// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
@@ -468,7 +468,7 @@ void MiniMapView::mouseOver(Action* action, State* state) // private.
 		// the mouse-release event is missed for any reason.
 		// However if the SDL is also missed the release event, then it is to no avail :(
 		// (checking: is the dragScroll-mouse-button still pressed?)
-		if ((SDL_GetMouseState(0,0) & SDL_BUTTON(Options::battleDragScrollButton)) == 0)
+		if ((SDL_GetMouseState(NULL,NULL) & SDL_BUTTON(Options::battleDragScrollButton)) == 0)
 		{
 			// so we missed again the mouse-release :(
 			// Check if we have to revoke the scrolling, because it was too short in time, so it was a click

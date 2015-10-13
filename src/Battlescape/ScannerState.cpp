@@ -116,7 +116,7 @@ void ScannerState::handle(Action* action)
 	if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN
 		&& action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
-		exitClick(action);
+		exitClick();
 	}
 }
 
@@ -147,7 +147,7 @@ void ScannerState::think()
 
 /**
  * Exits the screen.
- * @param action - pointer to an Action
+ * @param action - pointer to an Action (default NULL)
  */
 void ScannerState::exitClick(Action*) // private.
 {

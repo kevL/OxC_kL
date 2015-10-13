@@ -206,11 +206,11 @@ private:
 		void animateMap(bool redraw = true);
 
 		/// Refreshes the battlescape selector after scrolling.
-		void refreshSelectorPosition();
+//		void refreshSelectorPosition();
 		/// Sets the battlescape selector position relative to mouseposition.
-		void setSelectorPosition(
-				int x,
-				int y);
+//		void setSelectorPosition(int x, int y);
+		/// Sets the battlescape selector position relative to current mouseposition.
+		void setSelectorPosition();
 		/// Gets the currently selected position.
 		void getSelectorPosition(Position* const pos) const;
 

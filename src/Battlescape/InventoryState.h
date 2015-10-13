@@ -111,7 +111,7 @@ private:
 	void updateWounds();
 
 	/// Refresh the hover status of the mouse.
-	void refreshMouse();
+//	void refreshMouse();
 
 	/// Saves all soldiers' equipment-layouts.
 	bool saveAllLayouts() const;

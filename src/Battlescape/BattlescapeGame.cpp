@@ -626,6 +626,8 @@ void BattlescapeGame::popState()
 			setupCursor();
 			_parentState->getGame()->getCursor()->setHidden(false);
 //			_parentState->getGame()->getCursor()->setVisible(); // might not be needed here anymore. But safety.
+
+			_parentState->refreshMousePosition(); // update tile data on the HUD.
 		}
 	}
 	//Log(LOG_INFO) << "BattlescapeGame::popState() EXIT";
@@ -645,11 +647,8 @@ bool BattlescapeGame::noActionsPending(const BattleUnit* const unit) const // pr
 				i != _states.end();
 				++i)
 		{
-			if (*i != NULL
-				&& (*i)->getAction().actor == unit)
-			{
+			if (*i != NULL && (*i)->getAction().actor == unit)
 				return false;
-			}
 		}
 	}
 
@@ -1189,7 +1188,8 @@ void BattlescapeGame::executeUnit() // private.
  */
 void BattlescapeGame::setupCursor()
 {
-	getMap()->refreshSelectorPosition();
+	getMap()->setSelectorPosition();
+//	getMap()->refreshSelectorPosition();
 
 	CursorType cType;
 	int quadrants = 1;
