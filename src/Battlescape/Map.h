@@ -135,7 +135,8 @@ private:
 	bool checkWest(
 			const Tile* const tile6,
 			const Tile* const tile5,
-			const BattleUnit* unit = NULL) const;
+			const BattleUnit* unit = NULL,
+			bool* halfRight = NULL) const;
 	 /// Checks if a northeasterly wall should suppress unit-sprite drawing.
 	bool checkNorth(
 			const Tile* const tile0,

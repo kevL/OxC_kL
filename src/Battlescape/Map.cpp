@@ -416,8 +416,8 @@ void Map::setPalette(
 /**
  * Draw the battlefield.
  * @note Keep this function as optimised as possible - it's big and needs to be
- * fast so minimize overhead of function calls.
- * @param surface - the surface to draw on
+ * fast so minimize overhead of function calls. Etc.
+ * @param surface - the surface on which to draw the entire battlefield
  */
 void Map::drawTerrain(Surface* const surface) // private.
 {
@@ -645,8 +645,8 @@ void Map::drawTerrain(Surface* const surface) // private.
 		quadrant;	// The quadrant is 0 for small units; large units have quadrants 1,2 & 3 also; describes		0|1
 					// the relative x/y Position of the unit's primary quadrant vs. the current tile's Position.	2|3
 	bool
-		hasUnit,
-		hasFloor, // these denote characteristics of 'tile' as in the current Tile of the loop.
+		hasUnit, // these denote characteristics of 'tile' as in the current Tile of the loop.
+		hasFloor,
 		hasObject,
 		trueLoc;
 
@@ -1136,9 +1136,15 @@ void Map::drawTerrain(Surface* const surface) // private.
 // Main Draw BattleUnit ->
 					if (hasUnit == true)
 					{
-						bool draw = true;
-						if (_unit->getUnitStatus() == STATUS_WALKING
-							|| _unit->getUnitStatus() == STATUS_FLYING)
+						bool
+							halfRight = false,
+							draw = true;
+
+						if ((_unit->getWalkPhase() != 0
+								|| _unit->getDirection() == 1
+								|| _unit->getDirection() == 2) // weird.
+							&& (_unit->getUnitStatus() == STATUS_WALKING
+								|| _unit->getUnitStatus() == STATUS_FLYING))
 						{
 							switch (_unit->getDirection())
 							{
@@ -1155,10 +1161,11 @@ void Map::drawTerrain(Surface* const surface) // private.
 								case 2:
 								case 6:
 								{
+
 									const Tile
 										* const tileWest = _battleSave->getTile(posField + Position(-1,0,0)),
 										* const tileSouthWest = _battleSave->getTile(posField + Position(-1,1,0));
-									draw = checkWest(tileWest, tileSouthWest);
+									draw = checkWest(tileWest, tileSouthWest, NULL, &halfRight);
 								}
 								break;
 
@@ -1169,6 +1176,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 										* const tileSouthWest = _battleSave->getTile(posField + Position(-1,1,0)),
 										* const tileSouthSouthWest = _battleSave->getTile(posField + Position(-1,2,0));
 									draw = checkWest(tileSouthWest, tileSouthSouthWest);
+// not needed, i guess				draw = checkWest(tileSouthWest, tileSouthSouthWest, NULL, &halfRight);
 
 									const Tile
 										* const tileNorthEast = _battleSave->getTile(posField + Position(1,-1,0)),
@@ -1199,7 +1207,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 										surface,
 										posScreen.x + walkOffset.x,
 										posScreen.y + walkOffset.y,
-										shade);
+										shade, halfRight);
 
 								if (_unit->getFireUnit() != 0)
 								{
@@ -1208,7 +1216,8 @@ void Map::drawTerrain(Surface* const surface) // private.
 										sprite->blitNShade(
 												surface,
 												posScreen.x + walkOffset.x,
-												posScreen.y + walkOffset.y);
+												posScreen.y + walkOffset.y,
+												0, halfRight);
 								}
 
 								// kL_begin #3 of 3:
@@ -1296,8 +1305,8 @@ void Map::drawTerrain(Surface* const surface) // private.
 // Draw Unconscious Soldier icon - might want to redundant this, like rankIcons.
 					if (_unit == NULL)
 					{
-						const int status = _tile->hasUnconsciousUnit();
-						if (status != 0)
+						const int hurt = _tile->hasUnconsciousUnit();
+						if (hurt != 0)
 						{
 							sprite = _res->getSurface("RANK_ROOKIE"); // background panel for red cross icon.
 							if (sprite != NULL)
@@ -1307,7 +1316,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 										posScreen.y);
 
 							Uint8 color;
-							if (status == 2)
+							if (hurt == 2)
 								color = 3; // red, wounded unconscious soldier
 							else
 								color = 1; // white, unconscious soldier here
@@ -1469,7 +1478,8 @@ void Map::drawTerrain(Surface* const surface) // private.
 								{
 									frame = 3 + (_animFrame % 2);	// yellow flashing box
 								}
-								else frame = 3;						// red static box
+								else
+									frame = 3;						// red static box
 							}
 							else // CT_AIM ->
 							{
@@ -1852,18 +1862,18 @@ void Map::drawTerrain(Surface* const surface) // private.
 				}
 			}
 		}
-//		if (numWp != NULL) numWp->setBordered(false); // remove the border in case it's used for missile waypoints. -> uh, you're going to delete it the next line:
 	}
 
 	delete numWp;
 	// end Path Preview.
 
-	if (_explosionInFOV == true) // check if they got hit or explosion animations
+	if (_explosionInFOV == true) // check if hit or explosion animations
 	{
 /*		// big explosions cause the screen to flash as bright as possible before any explosions
 		// are actually drawn. This causes everything to look like EGA for a single frame.
 		if (_flashScreen == true)
 		{
+			_flashScreen = false;
 			Uint8 color;
 			for (int x = 0, y = 0; x < surface->getWidth() && y < surface->getHeight();)
 			{
@@ -1871,7 +1881,6 @@ void Map::drawTerrain(Surface* const surface) // private.
 				color = (surface->getPixelColor(x,y) / 16) * 16; // get the brightest color in each colorgroup.
 				surface->setPixelIterative(&x,&y, color);
 			}
-			_flashScreen = false;
 		}
 		else { */
 		for (std::list<Explosion*>::const_iterator
@@ -1921,7 +1930,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 				}
 			}
 		}
-//		}
+/*		} */
 	}
 	surface->unlock();
 }
@@ -1929,15 +1938,17 @@ void Map::drawTerrain(Surface* const surface) // private.
 /**
  * Checks if a southwesterly wall should suppress unit-sprite drawing.
  * @note When a unit moves west it can clip through a previously drawn wall.
- * @param tile6	- pointer to the tile west of current
- * @param tile5	- pointer to the tile southwest of current
- * @param unit	- pointer to BattleUnit not '_unit' (default NULL)
+ * @param tile6		- pointer to the tile west of current
+ * @param tile5		- pointer to the tile southwest of current
+ * @param unit		- pointer to BattleUnit not '_unit' (default NULL)
+ * @param halfRight	- pointer to store whether to draw halfRight only (used for large units) (default NULL)
  * @return, true to allow drawing the unit's sprite
  */
 bool Map::checkWest( // private.
 		const Tile* const tile6,
 		const Tile* const tile5,
-		const BattleUnit* unit) const
+		const BattleUnit* unit,
+		bool* halfRight) const
 {
 	bool ret;
 
@@ -1954,11 +1965,11 @@ bool Map::checkWest( // private.
 			&& (tile5 == NULL
 				|| (tile5->getMapData(O_NORTHWALL) == NULL
 					&& (tile5->getMapData(O_OBJECT) == NULL
-						|| tile5->getMapData(O_OBJECT)->getBigWall() != BIGWALL_NESW
-						|| tile5->getMapData(O_OBJECT)->getBigWall() != BIGWALL_BLOCK))));
-//						|| tile5->getMapData(O_OBJECT)->getBigWall() != BIGWALL_NORTH
+						|| (tile5->getMapData(O_OBJECT)->getBigWall() != BIGWALL_NESW
+							&& tile5->getMapData(O_OBJECT)->getBigWall() != BIGWALL_BLOCK)))));
+//							&& tile5->getMapData(O_OBJECT)->getBigWall() != BIGWALL_NORTH // not in UFO.
 
-	if (ret == false) // unit is too far away from wall to clip - now don't let the floor clip it
+	if (ret == false) // unit might actually be too far away from wall to clip despite above conditions - now don't let the floor clip it
 	{
 		if (unit == NULL) unit = _unit;
 		switch (unit->getDirection())
@@ -1967,6 +1978,17 @@ bool Map::checkWest( // private.
 			case 2: ret = unit->getPosition() == unit->getDestination(); break;
 			case 5:
 			case 6: ret = unit->getPosition() == unit->getLastPosition();
+		}
+
+		if (halfRight != NULL && unit->getArmor()->getSize() == 2)
+		{
+			if (ret == true)
+				*halfRight = true;
+			else if (unit->getDirection() == 1 || unit->getDirection() == 2)
+			{
+				*halfRight = true;
+				ret = true;
+			}
 		}
 	}
 
@@ -2001,11 +2023,11 @@ bool Map::checkNorth( // private.
 			&& (tile1 == NULL
 				|| (tile1->getMapData(O_WESTWALL) == NULL
 					&& (tile1->getMapData(O_OBJECT) == NULL
-						|| tile1->getMapData(O_OBJECT)->getBigWall() != BIGWALL_NESW
-						|| tile1->getMapData(O_OBJECT)->getBigWall() != BIGWALL_BLOCK))));
-//						|| tile1->getMapData(O_OBJECT)->getBigWall() != BIGWALL_WEST
+						|| (tile1->getMapData(O_OBJECT)->getBigWall() != BIGWALL_NESW
+							&& tile1->getMapData(O_OBJECT)->getBigWall() != BIGWALL_BLOCK)))));
+//							&& tile1->getMapData(O_OBJECT)->getBigWall() != BIGWALL_WEST // not in UFO.
 
-	if (ret == false) // unit is too far away from wall to clip - now don't let the floor clip it
+	if (ret == false) // unit might actually be too far away from wall to clip despite above conditions - now don't let the floor clip it
 	{
 		if (unit == NULL) unit = _unit;
 		switch (unit->getDirection())
@@ -2077,7 +2099,6 @@ void Map::mouseOver(Action* action, State* state)
 	_mX = static_cast<int>(action->getAbsoluteXMouse());
 	_mY = static_cast<int>(action->getAbsoluteYMouse());
 	refreshSelectorPosition();
-//	setSelectorPosition(_mX,_mY);
 }
 
 /**

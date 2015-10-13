@@ -187,6 +187,17 @@ void UnitWalkBState::think()
 			//Log(LOG_INFO) << "STATUS_STANDING_end in UnitWalkBState _WALKING or _FLYING !!!" ;
 			clearTilesLink(true);
 
+/*			Log(LOG_INFO) << "";
+			for (size_t // DEBUG ->
+					i = 0;
+					i != _battleSave->getMapSizeXYZ();
+					++i)
+			{
+				Tile* tile = _battleSave->getTiles()[i];
+				if (tile->getUnit() != NULL && tile->getUnit()->getId() == 1000001)
+					Log(LOG_INFO) << "end " << tile->getPosition();
+			} */
+
 //			if (_unit->getVisible())
 			if (_onScreen == true)
 			{
@@ -538,7 +549,7 @@ bool UnitWalkBState::doStatusStand() // private.
 																	// That is to say this should kick in *only* when player has actively
 		{															// clicked to move but tries to go further than TUs allow; because
 			//Log(LOG_INFO) << ". . checkReservedTu(_unit, tuCost) == false";	// either the AI or the panic-code should not try to
-			_unit->clearCache();												// move a unit farther than its [reserved] TUs allow
+			_unit->clearCache();												// move a unit farther than its [reserved] TUs would allow
 			_parent->getMap()->cacheUnit(_unit);
 
 			_pf->abortPath();
@@ -647,14 +658,35 @@ bool UnitWalkBState::doStatusStand() // private.
 			_preStepTurn = false;
 			_playFly = false;
 
+/*			Log(LOG_INFO) << "";
+			for (size_t // DEBUG ->
+					i = 0;
+					i != _battleSave->getMapSizeXYZ();
+					++i)
+			{
+				Tile* tile = _battleSave->getTiles()[i];
+				if (tile->getUnit() != NULL && tile->getUnit()->getId() == 1000001)
+					Log(LOG_INFO) << "pre " << tile->getPosition();
+			} */
+
 			//Log(LOG_INFO) << ". . WalkBState: startWalking()";
 			_unit->startWalking(
-							dir,
-							dest,
+							dir, dest,
 							_battleSave->getTile(_unit->getPosition() + Position(0,0,-1)));
 
 			//Log(LOG_INFO) << ". . WalkBState: establishTilesLink()";
 			establishTilesLink();
+
+/*			Log(LOG_INFO) << "";
+			for (size_t // DEBUG ->
+					i = 0;
+					i != _battleSave->getMapSizeXYZ();
+					++i)
+			{
+				Tile* tile = _battleSave->getTiles()[i];
+				if (tile->getUnit() != NULL && tile->getUnit()->getId() == 1000001)
+					Log(LOG_INFO) << "post " << tile->getPosition();
+			} */
 		}
 		//Log(LOG_INFO) << ". EXIT (dir!=-1) : " << _unit->getId();
 	}

@@ -987,7 +987,7 @@ void BattleUnit::keepWalking(
 		}
 
 		// motion points calculation for the motion scanner blips
-		if (_armor->getSize() > 1)
+		if (_armor->getSize() == 2)
 			_motionPoints += 30;
 		else
 		{
