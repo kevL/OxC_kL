@@ -210,7 +210,7 @@ private:
 		/// Sets the battlescape selector position relative to mouseposition.
 //		void setSelectorPosition(int x, int y);
 		/// Sets the battlescape selector position relative to current mouseposition.
-		void setSelectorPosition();
+		void refreshSelectorPosition();
 		/// Gets the currently selected position.
 		void getSelectorPosition(Position* const pos) const;
 

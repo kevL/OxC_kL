@@ -62,13 +62,15 @@ UfopaediaStartState::UfopaediaStartState(bool tactical)
 	:
 		_tactical(tactical)
 {
-	int dX = 0; // x - 32 to center on Globe
+	int dX; // x - 32 to center on Globe
 	if (_tactical == false)
 	{
 		_screen = false;
-		if (Options::baseXResolution > 320 + 32)
-			dX = -32;
+//		if (Options::baseXResolution > 320 + 32)
+		dX = -32;
 	}
+	else
+		dX = 0;
 
 	_window = new Window( // note, this is almost too tall for 320x200.
 					this,

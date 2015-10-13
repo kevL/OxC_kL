@@ -480,8 +480,7 @@ void Camera::scrollXY(
 	}
 	while (stop == false);
 
-	_map->setSelectorPosition();
-//	_map->refreshSelectorPosition();
+	_map->refreshSelectorPosition();
 
 	if (redraw == true)
 		_map->draw(); // kL, old code.

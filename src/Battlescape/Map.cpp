@@ -2076,7 +2076,7 @@ void Map::mouseOver(Action* action, State* state)
 
 	_mX = static_cast<int>(action->getAbsoluteXMouse());
 	_mY = static_cast<int>(action->getAbsoluteYMouse());
-	setSelectorPosition();
+	refreshSelectorPosition();
 //	setSelectorPosition(_mX,_mY);
 }
 
@@ -2152,7 +2152,7 @@ void Map::setSelectorPosition(int x, int y)
 /**
  * Sets the rectangular selector to the current mouse-position.
  */
-void Map::setSelectorPosition()
+void Map::refreshSelectorPosition()
 {
 	const int
 		pre_X = _selectorX,

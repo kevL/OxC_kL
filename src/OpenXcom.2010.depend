@@ -5443,7 +5443,7 @@
 1440092817 f:\git\openxcom\src\battlescape\battlestate.h
 	"BattlescapeGame.h"
 
-1444734286 f:\git\openxcom\src\battlescape\map.h
+1444757864 f:\git\openxcom\src\battlescape\map.h
 	"Position.h"
 	"../Engine/InteractiveSurface.h"
 
@@ -5469,7 +5469,7 @@
 1443707949 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1444740888 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1444757884 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	"AlienBAIState.h"
 	"BattlescapeState.h"
@@ -5773,7 +5773,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Ufo.h"
 
-1444734434 source:f:\git\openxcom\src\battlescape\camera.cpp
+1444757857 source:f:\git\openxcom\src\battlescape\camera.cpp
 	"Camera.h"
 	"BattlescapeState.h"
 	"Map.h"
@@ -5966,7 +5966,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1444734496 source:f:\git\openxcom\src\battlescape\map.cpp
+1444757874 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	"BattlescapeMessage.h"
 	"BattlescapeState.h"

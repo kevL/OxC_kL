@@ -51,7 +51,7 @@ UfopaediaSelectState::UfopaediaSelectState(
 	_screen = false;
 
 	int dX; // x - 32 to center on Globe
-	if (tactical == false && Options::baseXResolution > 320 + 32)
+	if (tactical == false)// && Options::baseXResolution > 320 + 32)
 		dX = -32;
 	else
 		dX = 0;

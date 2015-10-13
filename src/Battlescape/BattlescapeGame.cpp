@@ -1188,8 +1188,7 @@ void BattlescapeGame::executeUnit() // private.
  */
 void BattlescapeGame::setupCursor()
 {
-	getMap()->setSelectorPosition();
-//	getMap()->refreshSelectorPosition();
+	getMap()->refreshSelectorPosition();
 
 	CursorType cType;
 	int quadrants = 1;

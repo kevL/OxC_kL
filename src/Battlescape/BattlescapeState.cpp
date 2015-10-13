@@ -1903,9 +1903,9 @@ void BattlescapeState::btnCenterClick(Action*)
 
 /**
  * Forces a transparent SDL mouse-motion event.
- * @note This is required to create an artificial mouseOver event if the Map is
- * repositioned under the cursor but the cursor itself doesn't necessarily move
- * on the screen.
+ * @note This is required to create an arbitrary mouseOver event for when the
+ * Map is repositioned under the cursor but the cursor itself doesn't
+ * necessarily move on the screen.
  */
 void BattlescapeState::refreshMousePosition() const
 {
