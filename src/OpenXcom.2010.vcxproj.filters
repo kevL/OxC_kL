@@ -793,9 +793,6 @@
     <ClCompile Include="Basescape\StoresMatrixState.cpp">
       <Filter>Basescape</Filter>
     </ClCompile>
-    <ClCompile Include="Ruleset\ExtraMusic.cpp">
-      <Filter>Ruleset</Filter>
-    </ClCompile>
     <ClCompile Include="Ruleset\RuleMusic.cpp">
       <Filter>Ruleset</Filter>
     </ClCompile>
@@ -1709,9 +1706,6 @@
     </ClInclude>
     <ClInclude Include="Basescape\StoresMatrixState.h">
       <Filter>Basescape</Filter>
-    </ClInclude>
-    <ClInclude Include="Ruleset\ExtraMusic.h">
-      <Filter>Ruleset</Filter>
     </ClInclude>
     <ClInclude Include="Ruleset\RuleMusic.h">
       <Filter>Ruleset</Filter>

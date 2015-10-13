@@ -21,6 +21,7 @@
 
 #include "BattlescapeState.h"
 #include "Inventory.h"
+#include "Map.h"
 #include "TileEngine.h"
 #include "UnitInfoState.h"
 
@@ -80,6 +81,9 @@ InventoryState::InventoryState(
 		_flarePower(0)
 {
 	_battleSave = _game->getSavedGame()->getBattleSave();
+
+	if (_battleSave->getBattleGame() != NULL)
+		_battleSave->getBattleGame()->getMap()->setNoDraw();
 
 /*	if (Options::maximizeInfoScreens)
 	{
@@ -383,7 +387,6 @@ InventoryState::~InventoryState()
 {
 //	_clearInventoryTemplate(_curInventoryTemplate);
 //	delete _timer;
-
 	if (_parent != NULL)
 	{
 		Tile* const tile = _battleSave->getSelectedUnit()->getTile();
@@ -409,6 +412,8 @@ InventoryState::~InventoryState()
 			tileEngine->calculateTerrainLighting();
 			tileEngine->recalculateFOV(true); // <- done in BattlescapeGame::init() -> but without 'spotSound'
 		}
+
+		_battleSave->getBattleGame()->getMap()->setNoDraw(false);
 	}
 }
 //	if (_battleSave->getTileEngine())
@@ -485,9 +490,9 @@ void InventoryState::init()
 	else if (unit->hasInventory() == false) // skip to the first unit with inventory
 	{
 		if (_parent != NULL)
-			_parent->selectNextFactionUnit(false,false,true);
+			_parent->selectNextFactionUnit(false, false, true);
 		else
-			_battleSave->selectNextFactionUnit(false,false,true);
+			_battleSave->selectNextFactionUnit(false, false, true);
 
 		if (_battleSave->getSelectedUnit() == NULL
 			 || _battleSave->getSelectedUnit()->hasInventory() == false)

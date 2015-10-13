@@ -4599,7 +4599,7 @@
 1444630637 f:\git\openxcom\src\ruleset\ruleitem.h
 	"../Battlescape/BattlescapeGame.h"
 
-1444713426 source:f:\git\openxcom\src\basescape\craftequipmentstate.cpp
+1444718172 source:f:\git\openxcom\src\basescape\craftequipmentstate.cpp
 	"CraftEquipmentState.h"
 	"../Battlescape/BattlescapeGenerator.h"
 	"../Battlescape/InventoryState.h"
@@ -4624,7 +4624,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Vehicle.h"
 
-1444717920 f:\git\openxcom\src\basescape\craftequipmentstate.h
+1444718172 f:\git\openxcom\src\basescape\craftequipmentstate.h
 	"../Engine/State.h"
 
 1443574926 f:\git\openxcom\src\battlescape\battlescapegenerator.h
@@ -4658,7 +4658,7 @@
 
 1440096185 f:\git\openxcom\src\savegame\vehicle.h
 
-1444716958 source:f:\git\openxcom\src\basescape\craftinfostate.cpp
+1444718115 source:f:\git\openxcom\src\basescape\craftinfostate.cpp
 	"CraftInfoState.h"
 	"CraftArmorState.h"
 	"CraftEquipmentState.h"
@@ -4683,7 +4683,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1444717920 f:\git\openxcom\src\basescape\craftsoldiersstate.h
+1444718172 f:\git\openxcom\src\basescape\craftsoldiersstate.h
 	"../Engine/State.h"
 
 1443928621 f:\git\openxcom\src\basescape\craftweaponsstate.h
@@ -4696,7 +4696,7 @@
 
 1442236036 f:\git\openxcom\src\savegame\craftweapon.h
 
-1444714017 source:f:\git\openxcom\src\basescape\craftsoldiersstate.cpp
+1444718172 source:f:\git\openxcom\src\basescape\craftsoldiersstate.cpp
 	"CraftSoldiersState.h"
 	"SoldierInfoState.h"
 	"../Battlescape/BattlescapeGenerator.h"
@@ -5965,7 +5965,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1443765005 source:f:\git\openxcom\src\battlescape\map.cpp
+1444723044 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	"BattlescapeMessage.h"
 	"BattlescapeState.h"
@@ -6593,7 +6593,7 @@
 1430149550 f:\git\openxcom\src\interface\slider.h
 	"../Engine/InteractiveSurface.h"
 
-1444591193 source:f:\git\openxcom\src\engine\surface.cpp
+1444721492 source:f:\git\openxcom\src\engine\surface.cpp
 	"Surface.h"
 	"Language.h"
 	<malloc.h>
@@ -6676,13 +6676,14 @@
 1432064076 f:\git\openxcom\src\geoscape\psitrainingstate.h
 	"../Engine/State.h"
 
-1443319285 source:f:\git\openxcom\src\geoscape\basedefensestate.cpp
+1444721081 source:f:\git\openxcom\src\geoscape\basedefensestate.cpp
 	"BaseDefenseState.h"
 	"GeoscapeState.h"
 	"../Engine/Action.h"
 	"../Engine/Game.h"
 	"../Engine/Sound.h"
 	"../Engine/Timer.h"
+	"../Interface/Cursor.h"
 	"../Interface/Text.h"
 	"../Interface/TextButton.h"
 	"../Interface/TextList.h"

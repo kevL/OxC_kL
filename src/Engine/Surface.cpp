@@ -124,7 +124,6 @@ inline void DeleteAligned(void* buffer)
 		free(buffer);
 #endif
 	} }
-
 }
 
 
@@ -364,7 +363,7 @@ void Surface::loadSpk(const std::string& file)
 
 			for (int
 					i = 0;
-					i < flag * 2;
+					i != flag * 2;
 					++i)
 			{
 				setPixelIterative(&x,&y, 0);
@@ -379,7 +378,7 @@ void Surface::loadSpk(const std::string& file)
 
 			for (int
 					i = 0;
-					i < flag * 2;
+					i != flag * 2;
 					++i)
 			{
 				imgFile.read(
@@ -432,7 +431,7 @@ void Surface::loadBdy(const std::string& file)
 			currentRow = y;
 			for (int
 					i = 0;
-					i < pixelCnt;
+					i != pixelCnt;
 					++i)
 			{
 				if (currentRow == y) // avoid overscan into next row
@@ -446,7 +445,7 @@ void Surface::loadBdy(const std::string& file)
 			currentRow = y;
 			for (int
 					i = 0;
-					i < pixelCnt;
+					i != pixelCnt;
 					++i)
 			{
 				imgFile.read(
@@ -499,10 +498,8 @@ void Surface::offset(
 	{
 		lock();
 		for (int
-				x = 0,
-					y = 0;
-				x < getWidth()
-					&& y < getHeight();
+				x = 0, y = 0;
+				x < getWidth() && y < getHeight();
 				)
 		{
 			const int pixel = static_cast<int>(getPixelColor(x,y));	// the old color
@@ -542,10 +539,8 @@ void Surface::invert(Uint8 mid)
 {
 	lock();
 	for (int
-			x = 0,
-				y = 0;
-			x < getWidth()
-				&& y < getHeight();
+			x = 0, y = 0;
+			x < getWidth() && y < getHeight();
 			)
 	{
 		Uint8 color = getPixelColor(x,y);
@@ -584,8 +579,7 @@ void Surface::draw() // virtual.
  */
 void Surface::blit(Surface* surface) // virtual.
 {
-	if (_visible == true
-		&& _hidden == false)
+	if (_visible == true && _hidden == false)
 	{
 		if (_redraw == true)
 			draw();
@@ -593,11 +587,8 @@ void Surface::blit(Surface* surface) // virtual.
 		SDL_Rect* crop;
 		SDL_Rect target;
 
-		if (_crop.w == 0
-			&& _crop.h == 0)
-		{
+		if (_crop.w == 0 && _crop.h == 0)
 			crop = NULL;
-		}
 		else
 			crop = &_crop;
 
@@ -642,18 +633,14 @@ void Surface::copy(Surface* surface)
 
 	lock();
 	for (int
-			x = 0,
-				y = 0;
-			x < getWidth()
-				&& y < getHeight();
+			x = 0, y = 0;
+			x < getWidth() && y < getHeight();
 			)
 	{
 		const Uint8 pixel = surface->getPixelColor(
 												from_x + x,
 												from_y + y);
-		setPixelIterative(
-						&x,&y,
-						pixel);
+		setPixelIterative(&x,&y, pixel);
 	}
 	unlock();
 }
@@ -720,9 +707,7 @@ void Surface::drawLine(
 			_surface,
 			x1,y1,
 			x2,y2,
-			Palette::getRGBA(
-						getPalette(),
-						color));
+			Palette::getRGBA(getPalette(), color));
 }
 
 /**
@@ -742,9 +727,7 @@ void Surface::drawCircle(
 					_surface,
 					x,y,
 					r,
-					Palette::getRGBA(
-								getPalette(),
-								color));
+					Palette::getRGBA(getPalette(), color));
 }
 
 /**
@@ -764,9 +747,7 @@ void Surface::drawPolygon(
 					_surface,
 					x,y,
 					static_cast<int>(n),
-					Palette::getRGBA(
-								getPalette(),
-								color));
+					Palette::getRGBA(getPalette(), color));
 }
 
 /**
@@ -811,9 +792,7 @@ void Surface::drawString(
 			_surface,
 			x,y,
 			s,
-			Palette::getRGBA(
-						getPalette(),
-						color));
+			Palette::getRGBA(getPalette(), color));
 }
 
 /**
@@ -1026,17 +1005,17 @@ void Surface::blitNShade(
 		int colorGroup,
 		bool halfLeft)
 {
-	ShaderMove<Uint8> src (this, x,y); // init.
+	ShaderMove<Uint8> src (this, x,y);
 
 	if (halfRight == true)
 	{
-		GraphSubset graph (src.getDomain()); // init.
+		GraphSubset graph (src.getDomain());
 		graph.beg_x = graph.end_x / 2;
 		src.setDomain(graph);
 	}
 	else if (halfLeft == true) // kL_add->
 	{
-		GraphSubset graph (src.getDomain()); // init.
+		GraphSubset graph (src.getDomain());
 		graph.end_x = graph.end_x / 2;
 		src.setDomain(graph);
 	}

@@ -313,7 +313,7 @@ void Map::draw()
 	clear(15); // black
 	static bool delayHiddenScreen;
 
-	if (_noDraw == false) // don't draw if MiniMap is open.
+	if (_noDraw == false) // don't draw if MiniMap is open. Or if Inventory is open.
 	{
 		const Tile* tile;
 

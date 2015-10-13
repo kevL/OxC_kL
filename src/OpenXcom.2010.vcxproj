@@ -452,7 +452,6 @@
     </ClCompile>
     <ClCompile Include="Resource\ResourcePack.cpp" />
     <ClCompile Include="Resource\XcomResourcePack.cpp" />
-    <ClCompile Include="Ruleset\ExtraMusic.cpp" />
     <ClCompile Include="Ruleset\ExtraSounds.cpp" />
     <ClCompile Include="Ruleset\ExtraSprites.cpp" />
     <ClCompile Include="Ruleset\ExtraStrings.cpp" />
@@ -773,7 +772,6 @@
     <ClInclude Include="Resource\ResourcePack.h" />
     <ClInclude Include="Resource\XcomResourcePack.h" />
     <ClInclude Include="Ruleset\ArticleDefinition.h" />
-    <ClInclude Include="Ruleset\ExtraMusic.h" />
     <ClInclude Include="Ruleset\ExtraSounds.h" />
     <ClInclude Include="Ruleset\ExtraSprites.h" />
     <ClInclude Include="Ruleset\ExtraStrings.h" />

@@ -29,6 +29,7 @@
 #include "../Engine/Sound.h"
 #include "../Engine/Timer.h"
 
+#include "../Interface/Cursor.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/TextList.h"
@@ -128,6 +129,7 @@ BaseDefenseState::BaseDefenseState(
 	_defenses = _base->getDefenses()->size();
 
 	_game->getResourcePack()->fadeMusic(_game, 863);
+//	_game->getCursor()->setVisible(false);
 }
 
 /**
@@ -194,6 +196,7 @@ void BaseDefenseState::nextStep()
 
 				case BD_END:
 					_thinkCycles = -1;
+//					_game->getCursor()->setVisible();
 					_btnOk->setVisible();
 				return;
 			} // end switch()
