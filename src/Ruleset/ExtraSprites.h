@@ -73,7 +73,6 @@ public:
 	int getSubX() const;
 	/// Gets the y subdivision.
 	int getSubY() const;
-
 };
 
 }

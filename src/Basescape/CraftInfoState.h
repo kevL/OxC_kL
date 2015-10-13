@@ -90,7 +90,7 @@ private:
 			const int time,
 			const bool delayed) const;
 	/// Sets current cost to send the Craft on a mission.
-	void calcCost();
+	void calculateTacticalCost();
 
 
 	public:

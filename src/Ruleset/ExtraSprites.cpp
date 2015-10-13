@@ -39,7 +39,7 @@ ExtraSprites::ExtraSprites()
 /**
  * Cleans up the extra sprite set.
  */
-ExtraSprites::~ExtraSprites() // virtual.
+ExtraSprites::~ExtraSprites() // virtual. why
 {}
 
 /**

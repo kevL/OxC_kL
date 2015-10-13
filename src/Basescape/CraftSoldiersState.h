@@ -67,7 +67,9 @@ private:
 	Window* _window;
 
 	/// Sets current cost to send the Craft on a mission.
-	void calcCost();
+	void calculateTacticalCost();
+	/// Decides whether to show extra buttons - Unload and Inventory.
+	void displayExtraButtons() const;
 
 
 	public:

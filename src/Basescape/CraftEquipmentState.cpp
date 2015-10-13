@@ -77,19 +77,19 @@ CraftEquipmentState::CraftEquipmentState(
 
 	_txtCost		= new Text(150, 9, 24, -10);
 
-	_txtTitle		= new Text(300, 17, 16, 8);
-	_txtBaseLabel	= new Text(80, 9, 224, 8);
+	_txtTitle		= new Text(300, 17,  16, 8);
+	_txtBaseLabel	= new Text( 80,  9, 224, 8);
 
-	_txtSpace		= new Text(110, 9, 16, 26);
+	_txtSpace		= new Text(110, 9,  16, 26);
 	_txtLoad		= new Text(110, 9, 171, 26);
 
-	_txtItem		= new Text(144, 9, 16, 36);
-	_txtStores		= new Text(50, 9, 171, 36);
-	_txtCraft		= new Text(50, 9, 256, 36);
+	_txtItem		= new Text(144, 9,  16, 36);
+	_txtStores		= new Text( 50, 9, 171, 36);
+	_txtCraft		= new Text( 50, 9, 256, 36);
 
 	_lstEquipment	= new TextList(285, 129, 16, 45);
 
-	_btnClear		= new TextButton(94, 16, 16, 177);
+	_btnClear		= new TextButton(94, 16,  16, 177);
 	_btnInventory	= new TextButton(94, 16, 113, 177);
 	_btnOk			= new TextButton(94, 16, 210, 177);
 
@@ -118,17 +118,27 @@ CraftEquipmentState::CraftEquipmentState(
 
 	_btnClear->setText(tr("STR_UNLOAD_CRAFT"));
 	_btnClear->onMouseClick((ActionHandler)& CraftEquipmentState::btnClearClick);
+	_btnClear->onKeyboardPress(
+					(ActionHandler)& CraftEquipmentState::btnClearClick,
+					SDLK_u);
 
 	_btnInventory->setText(tr("STR_LOADOUT"));
 	_btnInventory->onMouseClick((ActionHandler)& CraftEquipmentState::btnInventoryClick);
-	_btnInventory->setVisible(_craft->getNumSoldiers() > 0
-						   && _game->getSavedGame()->getMonthsPassed() != -1);
+	_btnInventory->onKeyboardPress(
+					(ActionHandler)& CraftEquipmentState::btnInventoryClick,
+					SDLK_i);
 
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& CraftEquipmentState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& CraftEquipmentState::btnOkClick,
 					Options::keyCancel);
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& CraftEquipmentState::btnOkClick,
+					Options::keyOk);
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& CraftEquipmentState::btnOkClick,
+					Options::keyOkKeypad);
 
 	_txtTitle->setText(tr("STR_EQUIPMENT_FOR_CRAFT").arg(_craft->getName(_game->getLanguage())));
 	_txtTitle->setBig();
@@ -192,8 +202,7 @@ CraftEquipmentState::CraftEquipmentState(
 			&& itRule->getBattleType() != BT_NONE
 			&& itRule->getBattleType() != BT_CORPSE
 			&& _game->getSavedGame()->isResearched(itRule->getRequirements()) == true
-			&& (_base->getStorageItems()->getItemQty(*i) != 0
-				|| craftQty != 0))
+			&& (_base->getStorageItems()->getItemQty(*i) != 0 || craftQty != 0))
 		{
 			_items.push_back(*i);
 
@@ -268,8 +277,6 @@ void CraftEquipmentState::init()
 {
 	State::init();
 
-	calcCost();
-
 	// Reset stuff when coming back from pre-battle Inventory.
 	const SavedBattleGame* const battleSave = _game->getSavedGame()->getBattleSave();
 	if (battleSave != NULL)
@@ -278,6 +285,9 @@ void CraftEquipmentState::init()
 		_game->getSavedGame()->setBattleSave(NULL);
 		_craft->setInBattlescape(false);
 	}
+
+	displayExtraButtons();
+	calculateTacticalCost();
 }
 
 /**
@@ -389,10 +399,10 @@ void CraftEquipmentState::lstEquipmentRightArrowClick(Action* action)
  */
 void CraftEquipmentState::updateQuantity()
 {
-	const RuleItem* const itemRule = _game->getRuleset()->getItem(_items[_sel]);
+	const RuleItem* const itRule = _game->getRuleset()->getItem(_items[_sel]);
 
 	int craftQty;
-	if (itemRule->isFixed() == true)
+	if (itRule->isFixed() == true)
 		craftQty = _craft->getVehicleCount(_items[_sel]);
 	else
 		craftQty = _craft->getCraftItems()->getItemQty(_items[_sel]);
@@ -406,7 +416,7 @@ void CraftEquipmentState::updateQuantity()
 	Uint8 color;
 	if (craftQty == 0)
 	{
-		if (itemRule->getBattleType() == BT_AMMO)
+		if (itRule->getBattleType() == BT_AMMO)
 			color = _ammoColor;
 		else
 			color = _lstEquipment->getColor();
@@ -426,7 +436,8 @@ void CraftEquipmentState::updateQuantity()
 						.arg(_craft->getLoadCapacity())
 						.arg(_craft->getLoadCapacity() - _craft->calcLoadCurrent()));
 
-	calcCost();
+	displayExtraButtons();
+	calculateTacticalCost();
 }
 
 /**
@@ -465,7 +476,7 @@ void CraftEquipmentState::moveLeftByValue(int qtyDelta)
 				if (itRule->getCompatibleAmmo()->empty() == false)
 				{
 					// first remove all vehicles to redistribute the ammo
-					const RuleItem* const ammoRule = _game->getRuleset()->getItem(itRule->getCompatibleAmmo()->front());
+					const RuleItem* const aRule = _game->getRuleset()->getItem(itRule->getCompatibleAmmo()->front());
 
 					for (std::vector<Vehicle*>::const_iterator
 							i = _craft->getVehicles()->begin();
@@ -476,7 +487,7 @@ void CraftEquipmentState::moveLeftByValue(int qtyDelta)
 						{
 							if (_game->getSavedGame()->getMonthsPassed() != -1)
 								_base->getStorageItems()->addItem(
-																ammoRule->getType(),
+																aRule->getType(),
 																(*i)->getAmmo());
 
 							delete *i;
@@ -510,8 +521,7 @@ void CraftEquipmentState::moveLeftByValue(int qtyDelta)
 							if (--qtyDelta < 1)
 								break;
 						}
-						else
-							++i;
+						else ++i;
 					}
 				}
 			}
@@ -583,15 +593,15 @@ void CraftEquipmentState::moveRightByValue(int qtyDelta)
 
 					if (itRule->getCompatibleAmmo()->empty() == false)
 					{
-						const RuleItem* const ammoRule = _game->getRuleset()->getItem(itRule->getCompatibleAmmo()->front());
-						int clipSize = ammoRule->getClipSize();
+						const RuleItem* const aRule = _game->getRuleset()->getItem(itRule->getCompatibleAmmo()->front());
+						int clipSize = aRule->getClipSize();
 						if (clipSize > 0 && itRule->getClipSize() > 0)
 							clipSize = itRule->getClipSize() / clipSize;
 
 						if (_game->getSavedGame()->getMonthsPassed() == -1)
 							baseQty = 1;
 						else
-							baseQty = _base->getStorageItems()->getItemQty(ammoRule->getType()) / clipSize;
+							baseQty = _base->getStorageItems()->getItemQty(aRule->getType()) / clipSize;
 
 						qtyDelta = std::min(qtyDelta, baseQty); // maximum number of Vehicles w/ full Ammo.
 
@@ -604,7 +614,7 @@ void CraftEquipmentState::moveRightByValue(int qtyDelta)
 							{
 								if (_game->getSavedGame()->getMonthsPassed() != -1)
 								{
-									_base->getStorageItems()->removeItem(ammoRule->getType(), clipSize);
+									_base->getStorageItems()->removeItem(aRule->getType(), clipSize);
 									_base->getStorageItems()->removeItem(_items[_sel]);
 								}
 
@@ -615,7 +625,7 @@ void CraftEquipmentState::moveRightByValue(int qtyDelta)
 						{
 							_timerRight->stop();
 							LocalizedText msg(tr("STR_NOT_ENOUGH_AMMO_TO_ARM_HWP")
-												.arg(tr(ammoRule->getType())));
+												.arg(tr(aRule->getType())));
 							_game->pushState(new ErrorMessageState(
 																msg,
 																_palette,
@@ -712,11 +722,22 @@ void CraftEquipmentState::btnInventoryClick(Action*)
 /**
  * Sets current cost to send the Craft on a mission.
  */
-void CraftEquipmentState::calcCost() // private.
+void CraftEquipmentState::calculateTacticalCost() // private.
 {
 	const int cost = _base->calcSoldierBonuses(_craft)
 				   + _craft->getRules()->getSoldiers() * 1000;
 	_txtCost->setText(tr("STR_COST_").arg(Text::formatFunding(cost)));
+}
+
+/**
+ * Decides whether to show extra buttons - Unload and Inventory.
+ */
+void CraftEquipmentState::displayExtraButtons() const // private.
+{
+	const bool hasItem = _craft->getCraftItems()->getTotalQuantity() != 0;
+	_btnClear->setVisible(hasItem);
+	_btnInventory->setVisible(hasItem && _craft->getNumSoldiers() != 0
+						   && _game->getSavedGame()->getMonthsPassed() != -1);
 }
 
 /*

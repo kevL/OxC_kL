@@ -137,7 +137,7 @@ void Craft::load(
 	_fuel		= node["fuel"]	.as<int>(_fuel);
 	_damage		= node["damage"].as<int>(_damage);
 
-	_warning	= static_cast<CraftWarning>(node["warning"].as<int>(_warning));
+	_warning = static_cast<CraftWarning>(node["warning"].as<int>(_warning));
 
 	size_t j = 0;
 	for (YAML::const_iterator
@@ -503,7 +503,7 @@ std::string Craft::getAltitude() const
 
 	switch (RNG::generate(0,3))
 	{
-		default:
+		default: // avoid vc++ linker warnings.
 		case 0:
 		case 1: return "STR_LOW_UC";
 		case 2: return "STR_HIGH_UC";
@@ -536,18 +536,17 @@ void Craft::setDestination(Target* const dest)
  */
 int Craft::getNumWeapons() const
 {
-	if (_crRule->getWeapons() == 0)
-		return 0;
-
 	int ret = 0;
-
-	for (std::vector<CraftWeapon*>::const_iterator
-			i = _weapons.begin();
-			i != _weapons.end();
-			++i)
+	if (_crRule->getWeapons() != 0)
 	{
-		if (*i != NULL)
-			++ret;
+		for (std::vector<CraftWeapon*>::const_iterator
+				i = _weapons.begin();
+				i != _weapons.end();
+				++i)
+		{
+			if (*i != NULL)
+				++ret;
+		}
 	}
 
 	return ret;
@@ -563,7 +562,6 @@ int Craft::getNumSoldiers() const
 		return 0;
 
 	int ret = 0;
-
 	for (std::vector<Soldier*>::const_iterator
 			i = _base->getSoldiers()->begin();
 			i != _base->getSoldiers()->end();
@@ -595,7 +593,6 @@ int Craft::getNumVehicles(bool tiles) const
 	if (tiles == true)
 	{
 		int ret = 0;
-
 		for (std::vector<Vehicle*>::const_iterator
 				i = _vehicles.begin();
 				i != _vehicles.end();

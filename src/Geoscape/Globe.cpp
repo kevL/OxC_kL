@@ -373,7 +373,6 @@ Globe::Globe(
 			i != _randomNoiseData.size();
 			++i)
 	{
-//		_randomNoiseData[i] = rand() % 4;
 		_randomNoiseData[i] = static_cast<Sint16>(RNG::seedless(0,3));
 	}
 
@@ -1479,9 +1478,9 @@ void Globe::XuLine( // private.
 		int shade,
 		Uint8 color)
 {
-	if (_clipper->LineClip(
+	if (_clipper->LineClip( // empty line
 						&x1,&y1,
-						&x2,&y2) != 1) // empty line
+						&x2,&y2) != 1)
 	{
 		return;
 	}

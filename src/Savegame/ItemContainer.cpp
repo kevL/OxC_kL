@@ -86,8 +86,7 @@ void ItemContainer::removeItem(
 		const std::string& type,
 		int qty)
 {
-	if (type.empty() == false
-		&& _contents.find(type) != _contents.end())
+	if (type.empty() == false && _contents.find(type) != _contents.end())
 	{
 		if (qty < _contents[type])
 			_contents[type] -= qty;
@@ -120,7 +119,6 @@ int ItemContainer::getItemQty(const std::string& type) const
 int ItemContainer::getTotalQuantity() const
 {
 	int total = 0;
-
 	for (std::map<std::string, int>::const_iterator
 			i = _contents.begin();
 			i != _contents.end();
@@ -133,20 +131,19 @@ int ItemContainer::getTotalQuantity() const
 }
 
 /**
- * Returns the total size of the items in the container.
- * @param rule - pointer to Ruleset
+ * Returns the total size (storage units) of the items in the container.
+ * @param rules - pointer to Ruleset
  * @return, total item size
  */
-double ItemContainer::getTotalSize(const Ruleset* const rule) const
+double ItemContainer::getTotalSize(const Ruleset* const rules) const
 {
 	double total = 0;
-
 	for (std::map<std::string, int>::const_iterator
 			i = _contents.begin();
 			i != _contents.end();
 			++i)
 	{
-		total += rule->getItem(i->first)->getSize() * i->second;
+		total += rules->getItem(i->first)->getSize() * i->second;
 	}
 
 	return total;

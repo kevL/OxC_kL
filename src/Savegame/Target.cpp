@@ -163,7 +163,7 @@ std::vector<Target*>* Target::getFollowers()
 double Target::getDistance(const Target* const target) const
 {
 	return std::acos(
-			std::cos(_lat)
+				std::cos(_lat)
 				* std::cos(target->getLatitude())
 				* std::cos(target->getLongitude() - _lon)
 			+ std::sin(_lat)

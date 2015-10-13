@@ -4447,7 +4447,7 @@
 1436387299 f:\git\openxcom\src\basescape\buildfacilitiesstate.h
 	"../Engine/State.h"
 
-1442263754 f:\git\openxcom\src\basescape\craftinfostate.h
+1444718115 f:\git\openxcom\src\basescape\craftinfostate.h
 	"../Engine/State.h"
 
 1431912709 f:\git\openxcom\src\basescape\craftsstate.h
@@ -4599,7 +4599,7 @@
 1444630637 f:\git\openxcom\src\ruleset\ruleitem.h
 	"../Battlescape/BattlescapeGame.h"
 
-1444504945 source:f:\git\openxcom\src\basescape\craftequipmentstate.cpp
+1444713426 source:f:\git\openxcom\src\basescape\craftequipmentstate.cpp
 	"CraftEquipmentState.h"
 	"../Battlescape/BattlescapeGenerator.h"
 	"../Battlescape/InventoryState.h"
@@ -4624,7 +4624,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Vehicle.h"
 
-1444504870 f:\git\openxcom\src\basescape\craftequipmentstate.h
+1444717920 f:\git\openxcom\src\basescape\craftequipmentstate.h
 	"../Engine/State.h"
 
 1443574926 f:\git\openxcom\src\battlescape\battlescapegenerator.h
@@ -4658,7 +4658,7 @@
 
 1440096185 f:\git\openxcom\src\savegame\vehicle.h
 
-1444578050 source:f:\git\openxcom\src\basescape\craftinfostate.cpp
+1444716958 source:f:\git\openxcom\src\basescape\craftinfostate.cpp
 	"CraftInfoState.h"
 	"CraftArmorState.h"
 	"CraftEquipmentState.h"
@@ -4679,10 +4679,11 @@
 	"../Savegame/Base.h"
 	"../Savegame/Craft.h"
 	"../Savegame/CraftWeapon.h"
+	"../Savegame/ItemContainer.h"
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1443772969 f:\git\openxcom\src\basescape\craftsoldiersstate.h
+1444717920 f:\git\openxcom\src\basescape\craftsoldiersstate.h
 	"../Engine/State.h"
 
 1443928621 f:\git\openxcom\src\basescape\craftweaponsstate.h
@@ -4695,7 +4696,7 @@
 
 1442236036 f:\git\openxcom\src\savegame\craftweapon.h
 
-1444584100 source:f:\git\openxcom\src\basescape\craftsoldiersstate.cpp
+1444714017 source:f:\git\openxcom\src\basescape\craftsoldiersstate.cpp
 	"CraftSoldiersState.h"
 	"SoldierInfoState.h"
 	"../Battlescape/BattlescapeGenerator.h"
@@ -4714,6 +4715,7 @@
 	"../Ruleset/Ruleset.h"
 	"../Savegame/Base.h"
 	"../Savegame/Craft.h"
+	"../Savegame/ItemContainer.h"
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 	"../Savegame/Soldier.h"
@@ -7090,7 +7092,7 @@
 
 1440173244 f:\git\openxcom\src\ufopaedia\ufopaedia.h
 
-1444591851 source:f:\git\openxcom\src\geoscape\globe.cpp
+1444686317 source:f:\git\openxcom\src\geoscape\globe.cpp
 	"Globe.h"
 	"GeoscapeState.h"
 	"../Engine/Action.h"
@@ -8204,7 +8206,7 @@
 	"../Ruleset/RuleMusic.h"
 	"../Ruleset/Ruleset.h"
 
-1444681287 f:\git\openxcom\src\ruleset\extrasprites.h
+1444684302 f:\git\openxcom\src\ruleset\extrasprites.h
 
 1442985958 f:\git\openxcom\src\ruleset\extrasounds.h
 
@@ -8225,13 +8227,13 @@
 	"City.h"
 	"../Engine/Language.h"
 
-1442986066 source:f:\git\openxcom\src\ruleset\extrasounds.cpp
+1444684377 source:f:\git\openxcom\src\ruleset\extrasounds.cpp
 	"ExtraSounds.h"
 
-1444681546 source:f:\git\openxcom\src\ruleset\extrasprites.cpp
+1444684354 source:f:\git\openxcom\src\ruleset\extrasprites.cpp
 	"ExtraSprites.h"
 
-1444681537 source:f:\git\openxcom\src\ruleset\extrastrings.cpp
+1444684396 source:f:\git\openxcom\src\ruleset\extrastrings.cpp
 	"ExtraStrings.h"
 
 1440637975 source:f:\git\openxcom\src\ruleset\mapblock.cpp
@@ -8289,7 +8291,7 @@
 1444220981 source:f:\git\openxcom\src\ruleset\ruleresearch.cpp
 	"RuleResearch.h"
 
-1444560277 source:f:\git\openxcom\src\ruleset\ruleset.cpp
+1444681912 source:f:\git\openxcom\src\ruleset\ruleset.cpp
 	"Ruleset.h"
 	"AlienRace.h"
 	"AlienDeployment.h"
@@ -8463,7 +8465,7 @@
 	"Country.h"
 	"../Ruleset/RuleCountry.h"
 
-1444453178 source:f:\git\openxcom\src\savegame\craft.cpp
+1444716435 source:f:\git\openxcom\src\savegame\craft.cpp
 	"Craft.h"
 	"AlienBase.h"
 	"Base.h"
@@ -8504,7 +8506,7 @@
 	"GameTime.h"
 	"../Engine/Language.h"
 
-1432464761 source:f:\git\openxcom\src\savegame\itemcontainer.cpp
+1444711402 source:f:\git\openxcom\src\savegame\itemcontainer.cpp
 	"ItemContainer.h"
 	"../Ruleset/RuleItem.h"
 	"../Ruleset/Ruleset.h"
@@ -8617,7 +8619,7 @@
 1444450664 source:f:\git\openxcom\src\savegame\soldierdeath.cpp
 	"SoldierDeath.h"
 
-1441247574 source:f:\git\openxcom\src\savegame\target.cpp
+1444684745 source:f:\git\openxcom\src\savegame\target.cpp
 	"Target.h"
 	"Craft.h"
 	"SerializationHelper.h"

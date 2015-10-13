@@ -34,7 +34,7 @@ ExtraSounds::ExtraSounds()
 /**
  * Cleans up the extra sound set.
  */
-ExtraSounds::~ExtraSounds()
+ExtraSounds::~ExtraSounds() // virtual. why
 {}
 
 /**

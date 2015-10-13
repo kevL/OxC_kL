@@ -34,7 +34,7 @@ ExtraMusic::ExtraMusic()
 /**
  * Cleans up the extra music set.
  */
-ExtraMusic::~ExtraMusic() // virtual.
+ExtraMusic::~ExtraMusic() // virtual. why
 {}
 
 /**

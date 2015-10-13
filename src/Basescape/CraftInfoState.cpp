@@ -48,6 +48,7 @@
 #include "../Savegame/Base.h"
 #include "../Savegame/Craft.h"
 #include "../Savegame/CraftWeapon.h"
+#include "../Savegame/ItemContainer.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/SavedGame.h"
 
@@ -148,8 +149,7 @@ CraftInfoState::CraftInfoState(
 
 	_txtRadar->setAlign(ALIGN_CENTER);
 
-	if (_craft->getRules()->getWeapons() != 0
-		&& _craft->getKills() != 0)
+	if (_craft->getRules()->getWeapons() != 0 && _craft->getKills() != 0)
 	{
 		_txtKills->setText(tr("STR_KILLS_LC_").arg(_craft->getKills()));
 		_txtKills->setAlign(ALIGN_CENTER);
@@ -159,27 +159,51 @@ CraftInfoState::CraftInfoState(
 
 	_btnW1->setText(L"1");
 	_btnW1->onMouseClick((ActionHandler)& CraftInfoState::btnW1Click);
+	_btnW1->onKeyboardPress(
+					(ActionHandler)& CraftInfoState::btnW1Click,
+					SDLK_1);
 
 	_btnW2->setText(L"2");
 	_btnW2->onMouseClick((ActionHandler)& CraftInfoState::btnW2Click);
+	_btnW2->onKeyboardPress(
+					(ActionHandler)& CraftInfoState::btnW2Click,
+					SDLK_2);
 
 	_btnCrew->setText(tr("STR_CREW"));
 	_btnCrew->onMouseClick((ActionHandler)& CraftInfoState::btnCrewClick);
+	_btnCrew->onKeyboardPress(
+					(ActionHandler)& CraftInfoState::btnCrewClick,
+					SDLK_s);
 
 	_btnEquip->setText(tr("STR_EQUIPMENT_UC"));
 	_btnEquip->onMouseClick((ActionHandler)& CraftInfoState::btnEquipClick);
+	_btnEquip->onKeyboardPress(
+					(ActionHandler)& CraftInfoState::btnEquipClick,
+					SDLK_e);
 
 	_btnArmor->setText(tr("STR_ARMOR"));
 	_btnArmor->onMouseClick((ActionHandler)& CraftInfoState::btnArmorClick);
+	_btnArmor->onKeyboardPress(
+					(ActionHandler)& CraftInfoState::btnArmorClick,
+					SDLK_a);
 
 	_btnInventory->setText(tr("STR_LOADOUT"));
 	_btnInventory->onMouseClick((ActionHandler)& CraftInfoState::btnInventoryClick);
+	_btnInventory->onKeyboardPress(
+					(ActionHandler)& CraftInfoState::btnInventoryClick,
+					SDLK_i);
 
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& CraftInfoState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& CraftInfoState::btnOkClick,
 					Options::keyCancel);
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& CraftInfoState::btnOkClick,
+					Options::keyOk);
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& CraftInfoState::btnOkClick,
+					Options::keyOkKeypad);
 
 
 	_blinkTimer = new Timer(325);
@@ -208,10 +232,11 @@ void CraftInfoState::init()
 		_craft->setInBattlescape(false);
 	}
 
-
 	const bool skirmish = _game->getSavedGame()->getMonthsPassed() == -1;
-	_btnInventory->setVisible(_craft->getNumSoldiers() > 0
-							  && skirmish == false);
+
+	_btnInventory->setVisible(_craft->getNumSoldiers() != 0
+							&& _craft->getCraftItems()->getTotalQuantity() != 0
+							&& skirmish == false);
 
 	_edtCraft->setText(_craft->getName(_game->getLanguage()));
 	if (skirmish == true)
@@ -342,7 +367,7 @@ void CraftInfoState::init()
 		}
 
 		if (skirmish == false)
-			calcCost();
+			calculateTacticalCost();
 		else
 			_txtCost->setVisible(false);
 	}
@@ -595,7 +620,7 @@ void CraftInfoState::edtCraftChange(Action* action)
 /**
  * Sets current cost to send the Craft on a mission.
  */
-void CraftInfoState::calcCost() // private.
+void CraftInfoState::calculateTacticalCost() // private.
 {
 	const int cost = _base->calcSoldierBonuses(_craft)
 				   + _craft->getRules()->getSoldiers() * 1000;

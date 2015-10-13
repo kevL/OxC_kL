@@ -32,7 +32,7 @@ ExtraStrings::ExtraStrings()
 /**
  * Cleans up the extra strings set.
  */
-ExtraStrings::~ExtraStrings() // virtual.
+ExtraStrings::~ExtraStrings() // virtual. why
 {}
 
 /**

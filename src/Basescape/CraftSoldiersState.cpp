@@ -46,6 +46,7 @@
 
 #include "../Savegame/Base.h"
 #include "../Savegame/Craft.h"
+#include "../Savegame/ItemContainer.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Soldier.h"
@@ -129,9 +130,15 @@ CraftSoldiersState::CraftSoldiersState(
 
 	_btnUnload->setText(_game->getLanguage()->getString("STR_UNLOAD_CRAFT"));
 	_btnUnload->onMouseClick((ActionHandler)& CraftSoldiersState::btnUnloadClick);
+	_btnUnload->onKeyboardPress(
+					(ActionHandler)& CraftSoldiersState::btnUnloadClick,
+					SDLK_u);
 
 	_btnInventory->setText(tr("STR_LOADOUT"));
 	_btnInventory->onMouseClick((ActionHandler)& CraftSoldiersState::btnInventoryClick);
+	_btnInventory->onKeyboardPress(
+					(ActionHandler)& CraftSoldiersState::btnInventoryClick,
+					SDLK_i);
 
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& CraftSoldiersState::btnOkClick);
@@ -211,10 +218,6 @@ void CraftSoldiersState::init()
 		}
 	}
 
-	_btnInventory->setVisible(
-							_craft->getNumSoldiers() != 0
-							&& _game->getSavedGame()->getMonthsPassed() != -1);
-
 	_txtSpace->setText(tr("STR_SPACE_CREW_HWP_FREE_")
 					.arg(_craft->getNumSoldiers())
 					.arg(_craft->getNumVehicles())
@@ -223,7 +226,8 @@ void CraftSoldiersState::init()
 					.arg(_craft->getLoadCapacity())
 					.arg(_craft->getLoadCapacity() - _craft->calcLoadCurrent()));
 
-	calcCost();
+	displayExtraButtons();
+	calculateTacticalCost();
 
 	_lstSoldiers->scrollTo(_base->getRecallRow(REC_SOLDIER));
 	_lstSoldiers->draw();
@@ -235,7 +239,9 @@ void CraftSoldiersState::init()
  */
 void CraftSoldiersState::btnOkClick(Action*)
 {
-	_base->setRecallRow(REC_SOLDIER, _lstSoldiers->getScroll());
+	_base->setRecallRow(
+					REC_SOLDIER,
+					_lstSoldiers->getScroll());
 	_game->popState();
 }
 
@@ -254,8 +260,9 @@ void CraftSoldiersState::btnUnloadClick(Action*)
 			(*i)->setCraft(NULL);
 	}
 
-	_base->setRecallRow(REC_SOLDIER, _lstSoldiers->getScroll());
-
+	_base->setRecallRow(
+					REC_SOLDIER,
+					_lstSoldiers->getScroll());
 	init();
 }
 
@@ -311,10 +318,6 @@ void CraftSoldiersState::lstSoldiersPress(Action* action)
 		}
 		_lstSoldiers->setRowColor(row, color);
 
-		_btnInventory->setVisible(
-								_craft->getNumSoldiers() != 0
-								&& _game->getSavedGame()->getMonthsPassed() != -1);
-
 		_txtSpace->setText(tr("STR_SPACE_CREW_HWP_FREE_")
 						.arg(_craft->getNumSoldiers())
 						.arg(_craft->getNumVehicles())
@@ -323,11 +326,14 @@ void CraftSoldiersState::lstSoldiersPress(Action* action)
 						.arg(_craft->getLoadCapacity())
 						.arg(_craft->getLoadCapacity() - _craft->calcLoadCurrent()));
 
-		calcCost();
+		displayExtraButtons();
+		calculateTacticalCost();
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
-		_base->setRecallRow(REC_SOLDIER, _lstSoldiers->getScroll());
+		_base->setRecallRow(
+						REC_SOLDIER,
+						_lstSoldiers->getScroll());
 		_game->pushState(new SoldierInfoState(_base, row));
 		kL_soundPop->play(Mix_GroupAvailable(0));
 	}
@@ -339,7 +345,9 @@ void CraftSoldiersState::lstSoldiersPress(Action* action)
  */
 void CraftSoldiersState::lstLeftArrowClick(Action* action)
 {
-	_base->setRecallRow(REC_SOLDIER, _lstSoldiers->getScroll());
+	_base->setRecallRow(
+					REC_SOLDIER,
+					_lstSoldiers->getScroll());
 
 	const size_t row = _lstSoldiers->getSelectedRow();
 	if (row > 0)
@@ -360,13 +368,17 @@ void CraftSoldiersState::lstLeftArrowClick(Action* action)
 			}
 			else
 			{
-				_base->setRecallRow(REC_SOLDIER, _lstSoldiers->getScroll() - 1);
+				_base->setRecallRow(
+								REC_SOLDIER,
+								_lstSoldiers->getScroll() - 1);
 				_lstSoldiers->scrollUp();
 			}
 		}
 		else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 		{
-			_base->setRecallRow(REC_SOLDIER, _lstSoldiers->getScroll() + 1);
+			_base->setRecallRow(
+							REC_SOLDIER,
+							_lstSoldiers->getScroll() + 1);
 
 			_base->getSoldiers()->erase(_base->getSoldiers()->begin() + row);
 			_base->getSoldiers()->insert(
@@ -384,7 +396,9 @@ void CraftSoldiersState::lstLeftArrowClick(Action* action)
  */
 void CraftSoldiersState::lstRightArrowClick(Action* action)
 {
-	_base->setRecallRow(REC_SOLDIER, _lstSoldiers->getScroll());
+	_base->setRecallRow(
+					REC_SOLDIER,
+					_lstSoldiers->getScroll());
 
 	const size_t
 		qtySoldiers = _base->getSoldiers()->size(),
@@ -409,7 +423,9 @@ void CraftSoldiersState::lstRightArrowClick(Action* action)
 			}
 			else
 			{
-				_base->setRecallRow(REC_SOLDIER, _lstSoldiers->getScroll() + 1);
+				_base->setRecallRow(
+								REC_SOLDIER,
+								_lstSoldiers->getScroll() + 1);
 				_lstSoldiers->scrollDown();
 			}
 		}
@@ -431,7 +447,9 @@ void CraftSoldiersState::lstRightArrowClick(Action* action)
 */
 void CraftSoldiersState::btnInventoryClick(Action*)
 {
-	_base->setRecallRow(REC_SOLDIER, _lstSoldiers->getScroll());
+	_base->setRecallRow(
+					REC_SOLDIER,
+					_lstSoldiers->getScroll());
 
 	SavedBattleGame* const battleSave = new SavedBattleGame();
 	_game->getSavedGame()->setBattleSave(battleSave);
@@ -448,11 +466,22 @@ void CraftSoldiersState::btnInventoryClick(Action*)
 /**
  * Sets current cost to send the Craft on a mission.
  */
-void CraftSoldiersState::calcCost() // private.
+void CraftSoldiersState::calculateTacticalCost() // private.
 {
 	const int cost = _base->calcSoldierBonuses(_craft)
 				   + _craft->getRules()->getSoldiers() * 1000;
 	_txtCost->setText(tr("STR_COST_").arg(Text::formatFunding(cost)));
+}
+
+/**
+ * Decides whether to show extra buttons - Unload and Inventory.
+ */
+void CraftSoldiersState::displayExtraButtons() const // private.
+{
+	const bool hasSoldier = _craft->getNumSoldiers() != 0;
+	_btnUnload->setVisible(hasSoldier);
+	_btnInventory->setVisible(hasSoldier && _craft->getCraftItems()->getTotalQuantity() != 0
+						   && _game->getSavedGame()->getMonthsPassed() != -1);
 }
 
 }
