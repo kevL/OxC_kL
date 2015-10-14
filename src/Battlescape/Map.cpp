@@ -1983,7 +1983,25 @@ bool Map::checkWest( // private.
 		if (halfRight != NULL && unit->getArmor()->getSize() == 2)
 		{
 			if (ret == true)
-				*halfRight = true;
+			{
+				//if (dir != 2) *halfRight = true; // could allow this. Maybe !=1 also ...
+
+				Position pos = tile6->getPosition() + Position(1,0,0);
+				Tile
+					* tile = _battleSave->getTile(pos),
+					* tileSouth = _battleSave->getTile(pos + Position(0,1,0));
+				if (!
+					((tile->getMapData(O_OBJECT) == NULL
+						|| tile->getMapData(O_OBJECT)->getBigWall() != BIGWALL_SOUTH)
+					&& (tileSouth == NULL
+						|| (tileSouth->getMapData(O_NORTHWALL) == NULL
+							&& (tileSouth->getMapData(O_OBJECT) == NULL
+								|| (tileSouth->getMapData(O_OBJECT)->getBigWall() != BIGWALL_NESW			// all that causes clipping when the large unit moves out eastward from along the northern side
+									&& tileSouth->getMapData(O_OBJECT)->getBigWall() != BIGWALL_BLOCK))))))	// of an EW barrier but it's better than leaving a big hole in the 3rd quadrant as it moves out
+				{
+					*halfRight = true; // but only if a wall is directly south
+				}
+			}
 			else if (unit->getDirection() == 1 || unit->getDirection() == 2)
 			{
 				*halfRight = true;
