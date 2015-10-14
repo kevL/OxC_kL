@@ -90,7 +90,7 @@ void UnitTurnBState::init()
 
 	// if the unit has a turret and it's turning during targeting then only the turret turns
 	_turret = _unit->getTurretType() != -1
-		   && (_action.strafe || _action.targeting);
+		   && (_action.strafe == true || _action.targeting == true);
 
 	if (_unit->getPosition().x != _action.target.x
 		|| _unit->getPosition().y != _action.target.y)
@@ -174,8 +174,7 @@ void UnitTurnBState::think()
 
 		if (_unit->getFaction() == FACTION_PLAYER)
 		{
-			if (_chargeTu == true
-				&& vis == true)
+			if (_chargeTu == true && vis == true)
 			{
 				_unit->setUnitStatus(STATUS_STANDING);
 

@@ -416,7 +416,7 @@ void BattlescapeGame::popState()
 					// unless he/she is out of tu's and/or ammo
 					if (actionFailed == false)
 					{
-						const int curTu = action.actor->getTimeUnits();
+						const int tuActor = action.actor->getTimeUnits();
 
 						switch (action.type)
 						{
@@ -428,7 +428,7 @@ void BattlescapeGame::popState()
 
 							case BA_SNAPSHOT:
 								//Log(LOG_INFO) << ". SnapShot, TU percent = " << (float)action.weapon->getRules()->getSnapTu();
-								if (curTu < action.actor->getActionTu(
+								if (tuActor < action.actor->getActionTu(
 																	BA_SNAPSHOT,
 																	action.weapon)
 									|| action.weapon->getAmmoItem() == NULL)
@@ -442,7 +442,7 @@ void BattlescapeGame::popState()
 
 							case BA_AUTOSHOT:
 								//Log(LOG_INFO) << ". AutoShot, TU percent = " << (float)action.weapon->getRules()->getAutoTu();
-								if (curTu < action.actor->getActionTu(
+								if (tuActor < action.actor->getActionTu(
 																	BA_AUTOSHOT,
 																	action.weapon)
 									|| action.weapon->getAmmoItem() == NULL)
@@ -456,7 +456,7 @@ void BattlescapeGame::popState()
 
 							case BA_AIMEDSHOT:
 								//Log(LOG_INFO) << ". AimedShot, TU percent = " << (float)action.weapon->getRules()->getAimedTu();
-								if (curTu < action.actor->getActionTu(
+								if (tuActor < action.actor->getActionTu(
 																	BA_AIMEDSHOT,
 																	action.weapon)
 									|| action.weapon->getAmmoItem() == NULL)
@@ -468,17 +468,19 @@ void BattlescapeGame::popState()
 								}
 							break;
 
+/*							case BA_USE: // uh USE->UnitInfoState is not a true battle state.
+								if (action.weapon->getRules()->getBattleType() == BT_MINDPROBE
+									&& tuActor < action.actor->getActionTu(BA_USE, action.weapon))
+								{
+									cancelCurrentAction(true);
+								} */
+
 /*							case BA_PSIPANIC:
-								if (curTu < action.actor->getActionTu(BA_PSIPANIC, action.weapon))
+								if (tuActor < action.actor->getActionTu(BA_PSIPANIC, action.weapon))
 									cancelCurrentAction(true);
 							break;
 							case BA_PSICONTROL:
-								if (curTu < action.actor->getActionTu(BA_PSICONTROL, action.weapon))
-									cancelCurrentAction(true);
-							break; */
-/*							case BA_USE:
-								if (action.weapon->getRules()->getBattleType() == BT_MINDPROBE
-									&& curTu < action.actor->getActionTu(BA_PSICONTROL, action.weapon))
+								if (tuActor < action.actor->getActionTu(BA_PSICONTROL, action.weapon))
 									cancelCurrentAction(true);
 							break; */
 						}
@@ -2451,8 +2453,7 @@ bool BattlescapeGame::cancelCurrentAction(bool force)
 	if (_battleSave->getPathfinding()->removePreview() == false
 		|| Options::battlePreviewPath == PATH_NONE)
 	{
-		if (_states.empty() == true
-			|| force == true)
+		if (_states.empty() == true || force == true)
 		{
 			if (_currentAction.targeting == true)
 			{
@@ -2484,11 +2485,8 @@ bool BattlescapeGame::cancelCurrentAction(bool force)
 			else
 				return false;
 		}
-		else if (_states.empty() == false
-			&& _states.front() != NULL)
-		{
+		else if (_states.empty() == false && _states.front() != NULL)
 			_states.front()->cancel();
-		}
 		else
 			return false;
 	}
@@ -2724,8 +2722,7 @@ void BattlescapeGame::primaryAction(const Position& pos)
 
 		if (targetUnit != NULL // select unit
 			&& targetUnit != _currentAction.actor
-			&& (targetUnit->getUnitVisible() == true
-				|| _debugPlay == true))
+			&& (targetUnit->getUnitVisible() == true || _debugPlay == true))
 		{
 			if (targetUnit->getFaction() == _battleSave->getSide())
 			{
@@ -2738,7 +2735,7 @@ void BattlescapeGame::primaryAction(const Position& pos)
 				_currentAction.actor = targetUnit;
 			}
 		}
-		else if (playableUnitSelected() == true) // spin 180 degrees
+		else if (playableUnitSelected() == true) // spin or Move.
 		{
 			Pathfinding* const pf = _battleSave->getPathfinding();
 			pf->setPathingUnit(_currentAction.actor);
@@ -2747,37 +2744,38 @@ void BattlescapeGame::primaryAction(const Position& pos)
 				ctrl = (SDL_GetModState() & KMOD_CTRL) != 0,
 				alt = (SDL_GetModState() & KMOD_ALT) != 0;
 
-			if (targetUnit != NULL
+			if (targetUnit != NULL // spin 180 degrees
 				&& targetUnit == _currentAction.actor
-				&& ctrl == false
-				&& alt == false
-				&& (_currentAction.actor->getGeoscapeSoldier() != NULL
-					|| _currentAction.actor->getUnitRules()->isMechanical() == false)
-				&& _currentAction.actor->getArmor()->getSize() == 1)
+				&& _currentAction.actor->getArmor()->getSize() == 1) // reasons: let click on large unit fallthrough to Move below_
 			{
-				if (allowPreview == true)
-					pf->removePreview();
+				if (ctrl == true
+					&& (_currentAction.actor->getGeoscapeSoldier() != NULL
+						|| _currentAction.actor->getUnitRules()->isMechanical() == false))
+				{
+					if (allowPreview == true)
+						pf->removePreview();
 
-				Position screenPixel;
-				getMap()->getCamera()->convertMapToScreen(pos, &screenPixel);
-				screenPixel += getMap()->getCamera()->getMapOffset();
+					Position screenPixel;
+					getMap()->getCamera()->convertMapToScreen(pos, &screenPixel);
+					screenPixel += getMap()->getCamera()->getMapOffset();
 
-				Position mousePixel;
-				getMap()->findMousePosition(mousePixel);
+					Position mousePixel;
+					getMap()->findMousePosition(mousePixel);
 
-				if (mousePixel.x > screenPixel.x + 16)
-					_currentAction.actor->setTurnDirection(-1);
-				else
-					_currentAction.actor->setTurnDirection(1);
+					if (mousePixel.x > screenPixel.x + 16)
+						_currentAction.actor->setTurnDirection(-1);
+					else
+						_currentAction.actor->setTurnDirection(1);
 
-				Pathfinding::directionToVector(
-											(_currentAction.actor->getDirection() + 4) % 8,
-											&_currentAction.target);
-				_currentAction.target += pos;
+					Pathfinding::directionToVector(
+												(_currentAction.actor->getDirection() + 4) % 8,
+												&_currentAction.target);
+					_currentAction.target += pos;
 
-				statePushBack(new UnitTurnBState(this, _currentAction));
+					statePushBack(new UnitTurnBState(this, _currentAction));
+				}
 			}
-			else // handle pathPreview and MOVE
+			else // handle pathPreview and MOVE ->
 			{
 				if (allowPreview == true
 					&& (_currentAction.target != pos

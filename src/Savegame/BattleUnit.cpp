@@ -1072,7 +1072,7 @@ void BattleUnit::lookAt(
 	{
 		if (dir != _dirTurret)
 		{
-			_dirTurret = dir;
+			_dirToTurret = dir;
 			_status = STATUS_TURNING;
 		}
 	}
@@ -1380,7 +1380,7 @@ int BattleUnit::directionTo(const Position& pos) const
 }
 
 /**
- * Returns the soldier's amount of time units.
+ * Returns the soldier's current time units.
  * @return, current time units
  */
 int BattleUnit::getTimeUnits() const
@@ -1389,7 +1389,7 @@ int BattleUnit::getTimeUnits() const
 }
 
 /**
- * Returns the soldier's amount of energy.
+ * Returns the soldier's current energy.
  * @return, current stamina
  */
 int BattleUnit::getEnergy() const
@@ -1398,7 +1398,7 @@ int BattleUnit::getEnergy() const
 }
 
 /**
- * Returns the soldier's amount of health.
+ * Returns the soldier's current health.
  * @return, current health
  */
 int BattleUnit::getHealth() const
@@ -1407,7 +1407,7 @@ int BattleUnit::getHealth() const
 }
 
 /**
- * Returns the soldier's amount of morale.
+ * Returns the soldier's current morale.
  * @return, current morale
  */
 int BattleUnit::getMorale() const
@@ -1416,7 +1416,7 @@ int BattleUnit::getMorale() const
 }
 
 /**
- * Gets this unit's effective strength.
+ * Gets this unit's current effective strength.
  * @return, current strength
  */
 int BattleUnit::getStrength() const

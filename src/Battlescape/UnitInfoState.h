@@ -74,7 +74,7 @@ private:
 	const BattleUnit* _unit;
 	InteractiveSurface* _exit;
 	NumberText* _numOrder;
-	SavedBattleGame *_battleGame;
+	SavedBattleGame *_battleSave;
 	Surface
 		* _bg,
 		* _gender;
@@ -130,7 +130,7 @@ private:
 //	void keyRepeat(); // <- too twitchy.
 
 	/// Handler for exiting the state.
-	void exitClick(Action* action = NULL);
+	void exitClick(Action* action = NULL) const;
 
 
 	public:

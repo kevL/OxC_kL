@@ -1963,7 +1963,7 @@ bool Map::checkWest( // private.
 		|| ((tile6->getMapData(O_OBJECT) == NULL
 				|| tile6->getMapData(O_OBJECT)->getBigWall() != BIGWALL_SOUTH)
 			&& (tile5 == NULL
-				|| (tile5->getMapData(O_NORTHWALL) == NULL // or is and open UFO door ...
+				|| (tile5->getMapData(O_NORTHWALL) == NULL // or is an open UFO door ...
 					&& (tile5->getMapData(O_OBJECT) == NULL
 						|| (tile5->getMapData(O_OBJECT)->getBigWall() != BIGWALL_NESW
 							&& tile5->getMapData(O_OBJECT)->getBigWall() != BIGWALL_BLOCK)))));
@@ -1994,7 +1994,7 @@ bool Map::checkWest( // private.
 					((tile->getMapData(O_OBJECT) == NULL
 						|| tile->getMapData(O_OBJECT)->getBigWall() != BIGWALL_SOUTH)
 					&& (tileSouth == NULL
-						|| (tileSouth->getMapData(O_NORTHWALL) == NULL // or is and open UFO door ...
+						|| (tileSouth->getMapData(O_NORTHWALL) == NULL // or is an open UFO door ...
 							&& (tileSouth->getMapData(O_OBJECT) == NULL
 								|| (tileSouth->getMapData(O_OBJECT)->getBigWall() != BIGWALL_NESW			// all that causes clipping when the large unit moves out eastward from along the northern side
 									&& tileSouth->getMapData(O_OBJECT)->getBigWall() != BIGWALL_BLOCK))))))	// of an EW barrier but it's better than leaving a big hole in the 3rd quadrant as it moves out
@@ -2039,7 +2039,7 @@ bool Map::checkNorth( // private.
 		|| ((tile0->getMapData(O_OBJECT) == NULL
 				|| tile0->getMapData(O_OBJECT)->getBigWall() != BIGWALL_EAST)
 			&& (tile1 == NULL
-				|| (tile1->getMapData(O_WESTWALL) == NULL // or is and open UFO door ...
+				|| (tile1->getMapData(O_WESTWALL) == NULL // or is an open UFO door ...
 					&& (tile1->getMapData(O_OBJECT) == NULL
 						|| (tile1->getMapData(O_OBJECT)->getBigWall() != BIGWALL_NESW
 							&& tile1->getMapData(O_OBJECT)->getBigWall() != BIGWALL_BLOCK)))));

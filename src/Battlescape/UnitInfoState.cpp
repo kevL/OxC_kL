@@ -72,7 +72,7 @@ UnitInfoState::UnitInfoState(
 		_fromInventory(fromInventory),
 		_mindProbe(mindProbe),
 		_preBattle(preBattle),
-		_battleGame(_game->getSavedGame()->getBattleSave())
+		_battleSave(_game->getSavedGame()->getBattleSave())
 {
 /*	if (Options::maximizeInfoScreens)
 	{
@@ -793,9 +793,9 @@ void UnitInfoState::btnPrevClick(Action*)
 	if (_parent != NULL)	// so you are here from a Battlescape Game
 		_parent->selectPreviousFactionUnit(false,false);
 	else					// so you are here from the Craft Equipment screen
-		_battleGame->selectPreviousFactionUnit(false,false,true); // no tanks.
+		_battleSave->selectPreviousFactionUnit(false,false,true); // no tanks.
 
-	_unit = _battleGame->getSelectedUnit();
+	_unit = _battleSave->getSelectedUnit();
 
 	if (_unit != NULL)
 		init();
@@ -812,9 +812,9 @@ void UnitInfoState::btnNextClick(Action*)
 	if (_parent != NULL)	// this is from a Battlescape Game
 		_parent->selectNextFactionUnit(false,false);
 	else					// this is from the Craft Equipment screen
-		_battleGame->selectNextFactionUnit(false,false,true); // no tanks.
+		_battleSave->selectNextFactionUnit(false,false,true); // no tanks.
 
-	_unit = _battleGame->getSelectedUnit();
+	_unit = _battleSave->getSelectedUnit();
 
 	if (_unit != NULL)
 		init();
@@ -826,8 +826,19 @@ void UnitInfoState::btnNextClick(Action*)
  * Exits the screen.
  * @param action - pointer to an Action (default NULL)
  */
-void UnitInfoState::exitClick(Action*) // private.
+void UnitInfoState::exitClick(Action*) const // private.
 {
+	if (_mindProbe == true)
+	{
+		const BattleUnit* const unit (_battleSave->getSelectedUnit());
+		if (unit->getTimeUnits() < unit->getActionTu(
+												BA_USE,
+												_game->getRuleset()->getItem("STR_MIND_PROBE")))
+		{
+			_battleSave->getBattleGame()->cancelCurrentAction();
+		}
+	}
+
 /*	if (_fromInventory == false)
 	{
 		if (Options::maximizeInfoScreens)
