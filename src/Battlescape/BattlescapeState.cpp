@@ -2839,26 +2839,30 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 								_btnRightHandItem);
 			_btnRightHandItem->setVisible();
 
-			if (itRule->getBattleType() == BT_FIREARM
-				&& (rtItem->selfPowered() == false
-					|| itRule->getClipSize() != 0))
+			switch (itRule->getBattleType())
 			{
-				_numAmmoRight->setVisible();
-				if (rtItem->getAmmoItem() != NULL)
-					_numAmmoRight->setValue(static_cast<unsigned>(rtItem->getAmmoItem()->getAmmoQuantity()));
-				else
-					_numAmmoRight->setValue(0);
-			}
-			else if (itRule->getBattleType() == BT_AMMO)
-			{
-				_numAmmoRight->setVisible();
-				_numAmmoRight->setValue(static_cast<unsigned>(rtItem->getAmmoQuantity()));
-			}
-			else if (itRule->getBattleType() == BT_GRENADE
-				&& rtItem->getFuse() > 0)
-			{
-				_numAmmoRight->setVisible();
-				_numAmmoRight->setValue(static_cast<unsigned>(rtItem->getFuse()));
+				case BT_FIREARM:
+					if (rtItem->selfPowered() == false || itRule->getClipSize() > 0)
+					{
+						_numAmmoRight->setVisible();
+						if (rtItem->getAmmoItem() != NULL)
+							_numAmmoRight->setValue(static_cast<unsigned>(rtItem->getAmmoItem()->getAmmoQuantity()));
+						else
+							_numAmmoRight->setValue(0);
+					}
+				break;
+
+				case BT_AMMO:
+					_numAmmoRight->setVisible();
+					_numAmmoRight->setValue(static_cast<unsigned>(rtItem->getAmmoQuantity()));
+				break;
+
+				case BT_GRENADE:
+					if (rtItem->getFuse() > 0)
+					{
+						_numAmmoRight->setVisible();
+						_numAmmoRight->setValue(static_cast<unsigned>(rtItem->getFuse()));
+					}
 			}
 		}
 
@@ -2870,26 +2874,30 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 								_btnLeftHandItem);
 			_btnLeftHandItem->setVisible();
 
-			if (itRule->getBattleType() == BT_FIREARM
-				&& (ltItem->selfPowered() == false
-					|| itRule->getClipSize() != 0))
+			switch (itRule->getBattleType())
 			{
-				_numAmmoLeft->setVisible();
-				if (ltItem->getAmmoItem() != NULL)
-					_numAmmoLeft->setValue(static_cast<unsigned>(ltItem->getAmmoItem()->getAmmoQuantity()));
-				else
-					_numAmmoLeft->setValue(0);
-			}
-			else if (itRule->getBattleType() == BT_AMMO)
-			{
-				_numAmmoRight->setVisible();
-				_numAmmoRight->setValue(static_cast<unsigned>(ltItem->getAmmoQuantity()));
-			}
-			else if (itRule->getBattleType() == BT_GRENADE
-				&& ltItem->getFuse() > 0)
-			{
-				_numAmmoLeft->setVisible();
-				_numAmmoLeft->setValue(static_cast<unsigned>(ltItem->getFuse()));
+				case BT_FIREARM:
+					if (ltItem->selfPowered() == false || itRule->getClipSize() > 0)
+					{
+						_numAmmoLeft->setVisible();
+						if (ltItem->getAmmoItem() != NULL)
+							_numAmmoLeft->setValue(static_cast<unsigned>(ltItem->getAmmoItem()->getAmmoQuantity()));
+						else
+							_numAmmoLeft->setValue(0);
+					}
+				break;
+
+				case BT_AMMO:
+					_numAmmoLeft->setVisible();
+					_numAmmoLeft->setValue(static_cast<unsigned>(ltItem->getAmmoQuantity()));
+				break;
+
+				case BT_GRENADE:
+					if (ltItem->getFuse() > 0)
+					{
+						_numAmmoLeft->setVisible();
+						_numAmmoLeft->setValue(static_cast<unsigned>(ltItem->getFuse()));
+					}
 			}
 		}
 
