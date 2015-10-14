@@ -220,14 +220,14 @@ MedikitState::MedikitState(BattleAction* action)
 	const int hp = _action->targetUnit->getBaseStats()->health;
 	_numTotalHP->setValue(static_cast<unsigned>(hp));
 
-	_barHealth->setScale();
-	_barEnergy->setScale();
-	_barMorale->setScale();
-	_barTimeUnits->setScale();
-	_barHealth->setMax();
-	_barEnergy->setMax();
-	_barMorale->setMax();
-	_barTimeUnits->setMax();
+//	_barHealth->setScale();
+//	_barEnergy->setScale();
+//	_barMorale->setScale();
+//	_barTimeUnits->setScale();
+//	_barHealth->setMaxValue();
+//	_barEnergy->setMaxValue();
+//	_barMorale->setMaxValue();
+//	_barTimeUnits->setMaxValue();
 
 	_barHealth->offsetSecond(-2);
 

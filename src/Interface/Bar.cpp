@@ -45,8 +45,8 @@ Bar::Bar(
 		_color(0),
 		_color2(0),
 		_borderColor(0),
-		_scale(0.),
-		_max(0.),
+		_scale(1.),
+		_maxVal(100.),
 		_value(0.),
 		_value2(0.),
 		_invert(false),
@@ -121,9 +121,9 @@ double Bar::getScale() const
  * Changes the maximum value used to draw the outer border.
  * @param maxVal - maximum value (default 100.)
  */
-void Bar::setMax(double maxVal)
+void Bar::setMaxValue(double maxVal)
 {
-	_max = maxVal;
+	_maxVal = maxVal;
 	_redraw = true;
 }
 
@@ -131,10 +131,10 @@ void Bar::setMax(double maxVal)
  * Returns the maximum value used to draw the outer border.
  * @return, maximum value
  */
-double Bar::getMax() const
+/* double Bar::getMax() const
 {
-	return _max;
-}
+	return _maxVal;
+} */
 
 /**
  * Changes the value used to draw the inner contents.
@@ -142,7 +142,9 @@ double Bar::getMax() const
  */
 void Bar::setValue(double value)
 {
-	_value = (value < 0.) ? 0. : value;
+	if (value < 0.) value = 0.;
+
+	_value = value;
 	_redraw = true;
 }
 
@@ -161,7 +163,9 @@ double Bar::getValue() const
  */
 void Bar::setValue2(double value)
 {
-	_value2 = (value < 0.) ? 0. : value;
+	if (value < 0.) value = 0.;
+
+	_value2 = value;
 	_redraw = true;
 }
 
@@ -214,7 +218,7 @@ void Bar::draw()
 	SDL_Rect rect;
 	rect.x =
 	rect.y = 0;
-	rect.w = static_cast<Uint16>(Round(_scale * _max)) + 1;
+	rect.w = static_cast<Uint16>(Round(_scale * _maxVal)) + 1;
 	rect.h = static_cast<Uint16>(getHeight());
 
 	if (_invert == true)

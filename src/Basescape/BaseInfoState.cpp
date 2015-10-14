@@ -207,7 +207,7 @@ BaseInfoState::BaseInfoState(
 		add(_barPsiLabs, "facilityBars",	"baseInfo");
 
 		_txtPsiLabs->setText(tr("STR_PSILABS"));
-		_barPsiLabs->setScale();
+//		_barPsiLabs->setScale();
 	}
 
 	centerAllSurfaces();
@@ -245,15 +245,30 @@ BaseInfoState::BaseInfoState(
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& BaseInfoState::btnOkClick,
 					Options::keyCancel);
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& BaseInfoState::btnOkClick,
+					Options::keyOk);
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& BaseInfoState::btnOkClick,
+					Options::keyOkKeypad);
 
 	_btnTransfers->setText(tr("STR_TRANSFERS"));
 	_btnTransfers->onMouseClick((ActionHandler)& BaseInfoState::btnTransfersClick);
+	_btnTransfers->onKeyboardPress(
+					(ActionHandler)& BaseInfoState::btnOkClick,
+					SDLK_t);
 
 	_btnStores->setText(tr("STR_STORES_UC"));
 	_btnStores->onMouseClick((ActionHandler)& BaseInfoState::btnStoresClick);
+	_btnStores->onKeyboardPress(
+					(ActionHandler)& BaseInfoState::btnStoresClick,
+					SDLK_s);
 
 	_btnMonthlyCosts->setText(tr("STR_MONTHLY_COSTS"));
 	_btnMonthlyCosts->onMouseClick((ActionHandler)& BaseInfoState::btnMonthlyCostsClick);
+	_btnMonthlyCosts->onKeyboardPress(
+					(ActionHandler)& BaseInfoState::btnMonthlyCostsClick,
+					SDLK_c);
 
 //	_txtPersonnel->setText(tr("STR_PERSONNEL_AVAILABLE_PERSONNEL_TOTAL"));
 
@@ -261,13 +276,11 @@ BaseInfoState::BaseInfoState(
 	_txtHoverRegion->setAlign(ALIGN_RIGHT);
 
 	_txtSoldiers->setText(tr("STR_SOLDIERS"));
-	_barSoldiers->setScale();
-
+//	_barSoldiers->setScale();
 	_txtScientists->setText(tr("STR_SCIENTISTS"));
-	_barScientists->setScale();
-
+//	_barScientists->setScale();
 	_txtEngineers->setText(tr("STR_ENGINEERS"));
-	_barEngineers->setScale();
+//	_barEngineers->setScale();
 
 
 //	_txtSpace->setText(tr("STR_SPACE_USED_SPACE_AVAILABLE"));
@@ -290,7 +303,7 @@ BaseInfoState::BaseInfoState(
 	if (Options::storageLimitsEnforced == true)
 	{
 		_txtContainment->setText(tr("STR_ALIEN_CONTAINMENT"));
-		_barContainment->setScale(); //0.5
+//		_barContainment->setScale(); //0.5
 	}
 
 
@@ -336,20 +349,7 @@ void BaseInfoState::init()
 	_btnTransfers->setVisible(_base->getTransfers()->empty() == false);
 	_btnStores->setVisible(_base->getStorageItems()->getTotalQuantity() != 0);
 
-	std::wostringstream
-		woststr1,
-		woststr2,
-		woststr3,
-		woststr4,
-		woststr5,
-		woststr6,
-		woststr7,
-		woststr8,
-		woststr9,
-		woststr10,
-		woststr11,
-		woststr12,
-		woststr13;
+	std::wostringstream woststr;
 
 	int
 		var,
@@ -360,15 +360,15 @@ void BaseInfoState::init()
 	if (var != 0)
 	{
 		var2 = _base->getAvailableSoldiers(true);
-		woststr1 << var2 << ":" << var;
-		_numSoldiers->setText(woststr1.str());
-		_barSoldiers->setMax(var);
+		woststr.str(L"");
+		woststr << var2 << L":" << var;
+		_numSoldiers->setText(woststr.str());
+		_barSoldiers->setMaxValue(var);
 		_barSoldiers->setValue(var2);
 		vis = true;
 	}
 	else
 		vis = false;
-
 	_numSoldiers->setVisible(vis);
 	_barSoldiers->setVisible(vis);
 
@@ -376,15 +376,15 @@ void BaseInfoState::init()
 	if (var != 0)
 	{
 		var2 = _base->getScientists();
-		woststr3 << var2 << ":" << var;
-		_numScientists->setText(woststr3.str());
-		_barScientists->setMax(var);
+		woststr.str(L"");
+		woststr << var2 << L":" << var;
+		_numScientists->setText(woststr.str());
+		_barScientists->setMaxValue(var);
 		_barScientists->setValue(var2);
 		vis = true;
 	}
 	else
 		vis = false;
-
 	_numScientists->setVisible(vis);
 	_barScientists->setVisible(vis);
 
@@ -392,15 +392,15 @@ void BaseInfoState::init()
 	if (var != 0)
 	{
 		var2 = _base->getEngineers();
-		woststr2 << var2 << ":" << var;
-		_numEngineers->setText(woststr2.str());
-		_barEngineers->setMax(var);
+		woststr.str(L"");
+		woststr << var2 << L":" << var;
+		_numEngineers->setText(woststr.str());
+		_barEngineers->setMaxValue(var);
 		_barEngineers->setValue(var2);
 		vis = true;
 	}
 	else
 		vis = false;
-
 	_numEngineers->setVisible(vis);
 	_barEngineers->setVisible(vis);
 
@@ -409,15 +409,15 @@ void BaseInfoState::init()
 	if (var != 0)
 	{
 		var2 = static_cast<int>(std::floor(_base->getUsedStores() + 0.05));
-		woststr5 << var2 << ":" << var;
-		_numStores->setText(woststr5.str());
-		_barStores->setMax(var);
+		woststr.str(L"");
+		woststr << var2 << L":" << var;
+		_numStores->setText(woststr.str());
+		_barStores->setMaxValue(var);
 		_barStores->setValue(var2);
 		vis = true;
 	}
 	else
 		vis = false;
-
 	_numStores->setVisible(vis);
 	_barStores->setVisible(vis);
 
@@ -425,15 +425,15 @@ void BaseInfoState::init()
 	if (var != 0)
 	{
 		var2 = _base->getUsedQuarters();
-		woststr4 << var2 << ":" << var;
-		_numQuarters->setText(woststr4.str());
-		_barQuarters->setMax(var);
+		woststr.str(L"");
+		woststr << var2 << L":" << var;
+		_numQuarters->setText(woststr.str());
+		_barQuarters->setMaxValue(var);
 		_barQuarters->setValue(var2);
 		vis = true;
 	}
 	else
 		vis = false;
-
 	_numQuarters->setVisible(vis);
 	_barQuarters->setVisible(vis);
 
@@ -441,15 +441,15 @@ void BaseInfoState::init()
 	if (var != 0)
 	{
 		var2 = _base->getUsedLaboratories();
-		woststr6 << var2 << ":" << var;
-		_numLaboratories->setText(woststr6.str());
-		_barLaboratories->setMax(var);
+		woststr.str(L"");
+		woststr << var2 << L":" << var;
+		_numLaboratories->setText(woststr.str());
+		_barLaboratories->setMaxValue(var);
 		_barLaboratories->setValue(var2);
 		vis = true;
 	}
 	else
 		vis = false;
-
 	_numLaboratories->setVisible(vis);
 	_barLaboratories->setVisible(vis);
 
@@ -457,15 +457,15 @@ void BaseInfoState::init()
 	if (var != 0)
 	{
 		var2 = _base->getUsedWorkshops();
-		woststr7 << var2 << ":" << var;
-		_numWorkshops->setText(woststr7.str());
-		_barWorkshops->setMax(var);
+		woststr.str(L"");
+		woststr << var2 << L":" << var;
+		_numWorkshops->setText(woststr.str());
+		_barWorkshops->setMaxValue(var);
 		_barWorkshops->setValue(var2);
 		vis = true;
 	}
 	else
 		vis = false;
-
 	_numWorkshops->setVisible(vis);
 	_barWorkshops->setVisible(vis);
 
@@ -473,15 +473,15 @@ void BaseInfoState::init()
 	if (var != 0)
 	{
 		var2 = _base->getUsedHangars();
-		woststr9 << var2 << ":" << var;
-		_numHangars->setText(woststr9.str());
-		_barHangars->setMax(var);
+		woststr.str(L"");
+		woststr << var2 << L":" << var;
+		_numHangars->setText(woststr.str());
+		_barHangars->setMaxValue(var);
 		_barHangars->setValue(var2);
 		vis = true;
 	}
 	else
 		vis = false;
-
 	_numHangars->setVisible(vis);
 	_barHangars->setVisible(vis);
 
@@ -491,15 +491,15 @@ void BaseInfoState::init()
 		if (var != 0)
 		{
 			var2 = _base->getUsedContainment();
-			woststr8 << var2 << ":" << var;
-			_numContainment->setText(woststr8.str());
-			_barContainment->setMax(var);
+			woststr.str(L"");
+			woststr << var2 << L":" << var;
+			_numContainment->setText(woststr.str());
+			_barContainment->setMaxValue(var);
 			_barContainment->setValue(var2);
 			vis = true;
 		}
 		else
 			vis = false;
-
 		_numContainment->setVisible(vis);
 		_barContainment->setVisible(vis);
 	}
@@ -508,39 +508,40 @@ void BaseInfoState::init()
 	var = _base->getDefenseTotal();
 	if (var != 0)
 	{
-		woststr10 << var;
-		_numDefense->setText(woststr10.str());
-		_barDefense->setMax(var);
+		woststr.str(L"");
+		woststr << var;
+		_numDefense->setText(woststr.str());
+		_barDefense->setMaxValue(var);
 		_barDefense->setValue(var);
 		vis = true;
 	}
 	else
 		vis = false;
-
 	_numDefense->setVisible(vis);
 	_barDefense->setVisible(vis);
 
 	var = _base->getShortRangeTotal();
 	if (var != 0)
 	{
-		woststr11 << var;
-		_numShortRange->setText(woststr11.str());
-		_barShortRange->setMax(var);
+		woststr.str(L"");
+		woststr << var;
+		_numShortRange->setText(woststr.str());
+		_barShortRange->setMaxValue(var);
 		_barShortRange->setValue(var);
 		vis = true;
 	}
 	else
 		vis = false;
-
 	_numShortRange->setVisible(vis);
 	_barShortRange->setVisible(vis);
 
 	var = _base->getLongRangeTotal();
 	if (var != 0)
 	{
-		woststr12 << var;
-		_numLongRange->setText(woststr12.str());
-		_barLongRange->setMax(var);
+		woststr.str(L"");
+		woststr << var;
+		_numLongRange->setText(woststr.str());
+		_barLongRange->setMaxValue(var);
 		_barLongRange->setValue(var);
 		if (_base->getHyperDetection() == true)
 			_barLongRange->setColor(68); // lavender
@@ -550,7 +551,6 @@ void BaseInfoState::init()
 	}
 	else
 		vis = false;
-
 	_numLongRange->setVisible(vis);
 	_barLongRange->setVisible(vis);
 
@@ -561,15 +561,15 @@ void BaseInfoState::init()
 		if (var != 0)
 		{
 			var2 = _base->getUsedPsiLabs();
-			woststr13 << var2 << ":" << var;
-			_numPsiLabs->setText(woststr13.str());
-			_barPsiLabs->setMax(var);
+			woststr.str(L"");
+			woststr << var2 << L":" << var;
+			_numPsiLabs->setText(woststr.str());
+			_barPsiLabs->setMaxValue(var);
 			_barPsiLabs->setValue(var2);
 			vis = true;
 		}
 		else
 			vis = false;
-
 		_numPsiLabs->setVisible(vis);
 		_barPsiLabs->setVisible(vis);
 	}
@@ -592,7 +592,7 @@ void BaseInfoState::handleKeyPress(Action* action)
 {
 	if (action->getDetails()->type == SDL_KEYDOWN)
 	{
-		const SDLKey baseKeys[] =
+		static const SDLKey baseKeys[8] =
 		{
 			Options::keyBaseSelect1,
 			Options::keyBaseSelect2,

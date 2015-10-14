@@ -47,7 +47,7 @@ private:
 		_borderColor;
 	double
 		_scale,
-		_max,
+		_maxVal,
 		_value,
 		_value2;
 
@@ -77,9 +77,9 @@ private:
 		double getScale() const;
 
 		/// Sets the bar's maximum value.
-		void setMax(double maxVal = 100.);
+		void setMaxValue(double maxVal = 100.);
 		/// Gets the bar's maximum value.
-		double getMax() const;
+//		double getMax() const;
 
 		/// Sets the bar's current value.
 		void setValue(double value);

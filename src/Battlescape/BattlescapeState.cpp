@@ -918,17 +918,17 @@ BattlescapeState::BattlescapeState()
 	_numTUAuto->setColor(GRAY);
 	_numTUSnap->setColor(GRAY);
 
-	_barTimeUnits->setScale();
-	_barTimeUnits->setMax();
+//	_barTimeUnits->setScale();
+//	_barTimeUnits->setMaxValue();
 
-	_barEnergy->setScale();
-	_barEnergy->setMax();
+//	_barEnergy->setScale();
+//	_barEnergy->setMaxValue();
 
-	_barHealth->setScale();
-	_barHealth->setMax();
+//	_barHealth->setScale();
+//	_barHealth->setMaxValue();
 
-	_barMorale->setScale();
-	_barMorale->setMax();
+//	_barMorale->setScale();
+//	_barMorale->setMaxValue();
 
 /*	_btnReserveNone->setGroup(&_reserve);
 	_btnReserveSnap->setGroup(&_reserve);

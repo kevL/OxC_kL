@@ -283,37 +283,37 @@ SoldierInfoState::SoldierInfoState(
 
 
 	_txtTimeUnits->setText(tr("STR_TIME_UNITS"));
-	_barTimeUnits->setScale();
+//	_barTimeUnits->setScale();
 
 	_txtStamina->setText(tr("STR_STAMINA"));
-	_barStamina->setScale();
+//	_barStamina->setScale();
 
 	_txtHealth->setText(tr("STR_HEALTH"));
-	_barHealth->setScale();
+//	_barHealth->setScale();
 
 	_txtBravery->setText(tr("STR_BRAVERY"));
-	_barBravery->setScale();
+//	_barBravery->setScale();
 
 	_txtReactions->setText(tr("STR_REACTIONS"));
-	_barReactions->setScale();
+//	_barReactions->setScale();
 
 	_txtFiring->setText(tr("STR_FIRING_ACCURACY"));
-	_barFiring->setScale();
+//	_barFiring->setScale();
 
 	_txtThrowing->setText(tr("STR_THROWING_ACCURACY"));
-	_barThrowing->setScale();
+//	_barThrowing->setScale();
 
 	_txtMelee->setText(tr("STR_MELEE_ACCURACY"));
-	_barMelee->setScale();
+//	_barMelee->setScale();
 
 	_txtStrength->setText(tr("STR_STRENGTH"));
-	_barStrength->setScale();
+//	_barStrength->setScale();
 
 	_txtPsiStrength->setText(tr("STR_PSIONIC_STRENGTH"));
-	_barPsiStrength->setScale();
+//	_barPsiStrength->setScale();
 
 	_txtPsiSkill->setText(tr("STR_PSIONIC_SKILL"));
-	_barPsiSkill->setScale();
+//	_barPsiSkill->setScale();
 }
 
 /**
@@ -372,9 +372,9 @@ void SoldierInfoState::init()
 	_numTimeUnits->setText(woststr.str());
 	_barTimeUnits->setValue(armored.tu);
 	if (initial->tu > current->tu)
-		_barTimeUnits->setMax(initial->tu);
+		_barTimeUnits->setMaxValue(initial->tu);
 	else
-		_barTimeUnits->setMax(current->tu);
+		_barTimeUnits->setMaxValue(current->tu);
 
 	if (armored.tu > initial->tu)
 		_barTimeUnits->setValue2(initial->tu);
@@ -391,9 +391,9 @@ void SoldierInfoState::init()
 	_numStamina->setText(woststr.str());
 	_barStamina->setValue(armored.stamina);
 	if (initial->stamina > current->stamina)
-		_barStamina->setMax(initial->stamina);
+		_barStamina->setMaxValue(initial->stamina);
 	else
-		_barStamina->setMax(current->stamina);
+		_barStamina->setMaxValue(current->stamina);
 
 	if (armored.stamina > initial->stamina)
 		_barStamina->setValue2(initial->stamina);
@@ -410,9 +410,9 @@ void SoldierInfoState::init()
 	_numHealth->setText(woststr.str());
 	_barHealth->setValue(armored.health);
 	if (initial->health > current->health)
-		_barHealth->setMax(initial->health);
+		_barHealth->setMaxValue(initial->health);
 	else
-		_barHealth->setMax(current->health);
+		_barHealth->setMaxValue(current->health);
 
 	if (armored.health > initial->health)
 		_barHealth->setValue2(initial->health);
@@ -429,9 +429,9 @@ void SoldierInfoState::init()
 	_numBravery->setText(woststr.str());
 	_barBravery->setValue(armored.bravery);
 	if (initial->bravery > current->bravery)
-		_barBravery->setMax(initial->bravery);
+		_barBravery->setMaxValue(initial->bravery);
 	else
-		_barBravery->setMax(current->bravery);
+		_barBravery->setMaxValue(current->bravery);
 
 	if (armored.bravery > initial->bravery)
 		_barBravery->setValue2(initial->bravery);
@@ -448,9 +448,9 @@ void SoldierInfoState::init()
 	_numReactions->setText(woststr.str());
 	_barReactions->setValue(armored.reactions);
 	if (initial->reactions > current->reactions)
-		_barReactions->setMax(initial->reactions);
+		_barReactions->setMaxValue(initial->reactions);
 	else
-		_barReactions->setMax(current->reactions);
+		_barReactions->setMaxValue(current->reactions);
 
 	if (armored.reactions > initial->reactions)
 		_barReactions->setValue2(initial->reactions);
@@ -467,9 +467,9 @@ void SoldierInfoState::init()
 	_numFiring->setText(woststr.str());
 	_barFiring->setValue(armored.firing);
 	if (initial->firing > current->firing)
-		_barFiring->setMax(initial->firing);
+		_barFiring->setMaxValue(initial->firing);
 	else
-		_barFiring->setMax(current->firing);
+		_barFiring->setMaxValue(current->firing);
 
 	if (armored.firing > initial->firing)
 		_barFiring->setValue2(initial->firing);
@@ -486,9 +486,9 @@ void SoldierInfoState::init()
 	_numThrowing->setText(woststr.str());
 	_barThrowing->setValue(armored.throwing);
 	if (initial->throwing > current->throwing)
-		_barThrowing->setMax(initial->throwing);
+		_barThrowing->setMaxValue(initial->throwing);
 	else
-		_barThrowing->setMax(current->throwing);
+		_barThrowing->setMaxValue(current->throwing);
 
 	if (armored.throwing > initial->throwing)
 		_barThrowing->setValue2(initial->throwing);
@@ -505,9 +505,9 @@ void SoldierInfoState::init()
 	_numMelee->setText(woststr.str());
 	_barMelee->setValue(armored.melee);
 	if (initial->melee > current->melee)
-		_barMelee->setMax(initial->melee);
+		_barMelee->setMaxValue(initial->melee);
 	else
-		_barMelee->setMax(current->melee);
+		_barMelee->setMaxValue(current->melee);
 
 	if (armored.melee > initial->melee)
 		_barMelee->setValue2(initial->melee);
@@ -524,9 +524,9 @@ void SoldierInfoState::init()
 	_numStrength->setText(woststr.str());
 	_barStrength->setValue(armored.strength);
 	if (initial->strength > current->strength)
-		_barStrength->setMax(initial->strength);
+		_barStrength->setMaxValue(initial->strength);
 	else
-		_barStrength->setMax(current->strength);
+		_barStrength->setMaxValue(current->strength);
 
 	if (armored.strength > initial->strength)
 		_barStrength->setValue2(initial->strength);
@@ -601,9 +601,9 @@ void SoldierInfoState::init()
 		_numPsiStrength->setText(woststr.str());
 		_barPsiStrength->setValue(armored.psiStrength);
 		if (initial->psiStrength > current->psiStrength)
-			_barPsiStrength->setMax(initial->psiStrength);
+			_barPsiStrength->setMaxValue(initial->psiStrength);
 		else
-			_barPsiStrength->setMax(current->psiStrength);
+			_barPsiStrength->setMaxValue(current->psiStrength);
 
 		if (armored.psiStrength > initial->psiStrength)
 			_barPsiStrength->setValue2(initial->psiStrength);
@@ -623,9 +623,9 @@ void SoldierInfoState::init()
 		_numPsiSkill->setText(woststr.str());
 		_barPsiSkill->setValue(armored.psiSkill);
 		if (initial->psiSkill > current->psiSkill)
-			_barPsiSkill->setMax(initial->psiSkill);
+			_barPsiSkill->setMaxValue(initial->psiSkill);
 		else
-			_barPsiSkill->setMax(current->psiSkill);
+			_barPsiSkill->setMaxValue(current->psiSkill);
 
 		if (armored.psiSkill > initial->psiSkill)
 			_barPsiSkill->setValue2(initial->psiSkill);

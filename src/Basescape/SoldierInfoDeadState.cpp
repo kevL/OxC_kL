@@ -226,37 +226,37 @@ SoldierInfoDeadState::SoldierInfoDeadState(size_t soldierId)
 
 
 	_txtTimeUnits->setText(tr("STR_TIME_UNITS"));
-	_barTimeUnits->setScale();
+//	_barTimeUnits->setScale();
 
 	_txtStamina->setText(tr("STR_STAMINA"));
-	_barStamina->setScale();
+//	_barStamina->setScale();
 
 	_txtHealth->setText(tr("STR_HEALTH"));
-	_barHealth->setScale();
+//	_barHealth->setScale();
 
 	_txtBravery->setText(tr("STR_BRAVERY"));
-	_barBravery->setScale();
+//	_barBravery->setScale();
 
 	_txtReactions->setText(tr("STR_REACTIONS"));
-	_barReactions->setScale();
+//	_barReactions->setScale();
 
 	_txtFiring->setText(tr("STR_FIRING_ACCURACY"));
-	_barFiring->setScale();
+//	_barFiring->setScale();
 
 	_txtThrowing->setText(tr("STR_THROWING_ACCURACY"));
-	_barThrowing->setScale();
+//	_barThrowing->setScale();
 
 	_txtMelee->setText(tr("STR_MELEE_ACCURACY"));
-	_barMelee->setScale();
+//	_barMelee->setScale();
 
 	_txtStrength->setText(tr("STR_STRENGTH"));
-	_barStrength->setScale();
+//	_barStrength->setScale();
 
 	_txtPsiStrength->setText(tr("STR_PSIONIC_STRENGTH"));
-	_barPsiStrength->setScale();
+//	_barPsiStrength->setScale();
 
 	_txtPsiSkill->setText(tr("STR_PSIONIC_SKILL"));
-	_barPsiSkill->setScale();
+//	_barPsiSkill->setScale();
 }
 
 /**
@@ -319,12 +319,12 @@ void SoldierInfoDeadState::init()
 	_numTimeUnits->setText(woststr.str());
 	if (current->tu > initial->tu)
 	{
-		_barTimeUnits->setMax(current->tu);
+		_barTimeUnits->setMaxValue(current->tu);
 		_barTimeUnits->setValue2(initial->tu);
 	}
 	else
 	{
-		_barTimeUnits->setMax(initial->tu);
+		_barTimeUnits->setMaxValue(initial->tu);
 		_barTimeUnits->setValue2(current->tu);
 	}
 	_barTimeUnits->setValue(current->tu);
@@ -334,12 +334,12 @@ void SoldierInfoDeadState::init()
 	_numStamina->setText(woststr.str());
 	if (current->stamina > initial->stamina)
 	{
-		_barStamina->setMax(current->stamina);
+		_barStamina->setMaxValue(current->stamina);
 		_barStamina->setValue2(initial->stamina);
 	}
 	else
 	{
-		_barStamina->setMax(initial->stamina);
+		_barStamina->setMaxValue(initial->stamina);
 		_barStamina->setValue2(current->stamina);
 	}
 	_barStamina->setValue(current->stamina);
@@ -349,12 +349,12 @@ void SoldierInfoDeadState::init()
 	_numHealth->setText(woststr.str());
 	if (current->health > initial->health)
 	{
-		_barHealth->setMax(current->health);
+		_barHealth->setMaxValue(current->health);
 		_barHealth->setValue2(initial->health);
 	}
 	else
 	{
-		_barHealth->setMax(initial->health);
+		_barHealth->setMaxValue(initial->health);
 		_barHealth->setValue2(current->health);
 	}
 	_barHealth->setValue(current->health);
@@ -362,35 +362,35 @@ void SoldierInfoDeadState::init()
 	woststr.str(L"");
 	woststr << current->bravery;
 	_numBravery->setText(woststr.str());
-	_barBravery->setMax(current->bravery);
+	_barBravery->setMaxValue(current->bravery);
 	_barBravery->setValue(current->bravery);
 	_barBravery->setValue2(initial->bravery);
 
 	woststr.str(L"");
 	woststr << current->reactions;
 	_numReactions->setText(woststr.str());
-	_barReactions->setMax(current->reactions);
+	_barReactions->setMaxValue(current->reactions);
 	_barReactions->setValue(current->reactions);
 	_barReactions->setValue2(initial->reactions);
 
 	woststr.str(L"");
 	woststr << current->firing;
 	_numFiring->setText(woststr.str());
-	_barFiring->setMax(current->firing);
+	_barFiring->setMaxValue(current->firing);
 	_barFiring->setValue(current->firing);
 	_barFiring->setValue2(initial->firing);
 
 	woststr.str(L"");
 	woststr << current->throwing;
 	_numThrowing->setText(woststr.str());
-	_barThrowing->setMax(current->throwing);
+	_barThrowing->setMaxValue(current->throwing);
 	_barThrowing->setValue(current->throwing);
 	_barThrowing->setValue2(initial->throwing);
 
 	woststr.str(L"");
 	woststr << current->melee;
 	_numMelee->setText(woststr.str());
-	_barMelee->setMax(current->melee);
+	_barMelee->setMaxValue(current->melee);
 	_barMelee->setValue(current->melee);
 	_barMelee->setValue2(initial->melee);
 
@@ -399,12 +399,12 @@ void SoldierInfoDeadState::init()
 	_numStrength->setText(woststr.str());
 	if (current->strength > initial->strength)
 	{
-		_barStrength->setMax(current->strength);
+		_barStrength->setMaxValue(current->strength);
 		_barStrength->setValue2(initial->strength);
 	}
 	else
 	{
-		_barStrength->setMax(initial->strength);
+		_barStrength->setMaxValue(initial->strength);
 		_barStrength->setValue2(current->strength);
 	}
 	_barStrength->setValue(current->strength);
@@ -419,7 +419,7 @@ void SoldierInfoDeadState::init()
 		woststr.str(L"");
 		woststr << current->psiStrength;
 		_numPsiStrength->setText(woststr.str());
-		_barPsiStrength->setMax(current->psiStrength);
+		_barPsiStrength->setMaxValue(current->psiStrength);
 		_barPsiStrength->setValue(current->psiStrength);
 		_barPsiStrength->setValue2(initial->psiStrength);
 
@@ -429,7 +429,7 @@ void SoldierInfoDeadState::init()
 		woststr.str(L"");
 		woststr << current->psiSkill;
 		_numPsiSkill->setText(woststr.str());
-		_barPsiSkill->setMax(current->psiSkill);
+		_barPsiSkill->setMaxValue(current->psiSkill);
 		_barPsiSkill->setValue(current->psiSkill);
 		_barPsiSkill->setValue2(initial->psiSkill);
 

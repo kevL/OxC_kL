@@ -314,8 +314,7 @@ UnitInfoState::UnitInfoState(
 
 	_numTimeUnits->setColor(color2);
 	_numTimeUnits->setHighContrast();
-
-	_barTimeUnits->setScale();
+//	_barTimeUnits->setScale();
 
 
 	_txtEnergy->setText(tr("STR_ENERGY"));
@@ -324,8 +323,7 @@ UnitInfoState::UnitInfoState(
 
 	_numEnergy->setColor(color2);
 	_numEnergy->setHighContrast();
-
-	_barEnergy->setScale();
+//	_barEnergy->setScale();
 
 
 	_txtHealth->setText(tr("STR_HEALTH"));
@@ -338,8 +336,7 @@ UnitInfoState::UnitInfoState(
 	_numStun->setColor(80); // brown
 	_numStun->setHighContrast();
 	_numStun->setAlign(ALIGN_RIGHT);
-
-	_barHealth->setScale();
+//	_barHealth->setScale();
 
 
 	_txtFatalWounds->setText(tr("STR_FATAL_WOUNDS"));
@@ -348,8 +345,7 @@ UnitInfoState::UnitInfoState(
 
 	_numFatalWounds->setColor(color2);
 	_numFatalWounds->setHighContrast();
-
-	_barFatalWounds->setScale();
+//	_barFatalWounds->setScale();
 
 
 	_txtBravery->setText(tr("STR_BRAVERY"));
@@ -358,8 +354,7 @@ UnitInfoState::UnitInfoState(
 
 	_numBravery->setColor(color2);
 	_numBravery->setHighContrast();
-
-	_barBravery->setScale();
+//	_barBravery->setScale();
 
 
 	_txtMorale->setText(tr("STR_MORALE"));
@@ -368,8 +363,7 @@ UnitInfoState::UnitInfoState(
 
 	_numMorale->setColor(color2);
 	_numMorale->setHighContrast();
-
-	_barMorale->setScale();
+//	_barMorale->setScale();
 
 
 	_txtReactions->setText(tr("STR_REACTIONS"));
@@ -378,8 +372,7 @@ UnitInfoState::UnitInfoState(
 
 	_numReactions->setColor(color2);
 	_numReactions->setHighContrast();
-
-	_barReactions->setScale();
+//	_barReactions->setScale();
 
 
 	_txtFiring->setText(tr("STR_FIRING_ACCURACY"));
@@ -388,8 +381,7 @@ UnitInfoState::UnitInfoState(
 
 	_numFiring->setColor(color2);
 	_numFiring->setHighContrast();
-
-	_barFiring->setScale();
+//	_barFiring->setScale();
 
 
 	_txtThrowing->setText(tr("STR_THROWING_ACCURACY"));
@@ -398,8 +390,7 @@ UnitInfoState::UnitInfoState(
 
 	_numThrowing->setColor(color2);
 	_numThrowing->setHighContrast();
-
-	_barThrowing->setScale();
+//	_barThrowing->setScale();
 
 
 	_txtMelee->setText(tr("STR_MELEE_ACCURACY"));
@@ -408,8 +399,7 @@ UnitInfoState::UnitInfoState(
 
 	_numMelee->setColor(color2);
 	_numMelee->setHighContrast();
-
-	_barMelee->setScale();
+//	_barMelee->setScale();
 
 
 	_txtStrength->setText(tr("STR_STRENGTH"));
@@ -418,8 +408,7 @@ UnitInfoState::UnitInfoState(
 
 	_numStrength->setColor(color2);
 	_numStrength->setHighContrast();
-
-	_barStrength->setScale();
+//	_barStrength->setScale();
 
 
 	_txtPsiStrength->setText(tr("STR_PSIONIC_STRENGTH"));
@@ -428,8 +417,7 @@ UnitInfoState::UnitInfoState(
 
 	_numPsiStrength->setColor(color2);
 	_numPsiStrength->setHighContrast();
-
-	_barPsiStrength->setScale();
+//	_barPsiStrength->setScale();
 
 
 	_txtPsiSkill->setText(tr("STR_PSIONIC_SKILL"));
@@ -438,8 +426,7 @@ UnitInfoState::UnitInfoState(
 
 	_numPsiSkill->setColor(color2);
 	_numPsiSkill->setHighContrast();
-
-	_barPsiSkill->setScale();
+//	_barPsiSkill->setScale();
 
 
 	_txtFrontArmor->setText(tr("STR_FRONT_ARMOR_UC"));
@@ -448,8 +435,7 @@ UnitInfoState::UnitInfoState(
 
 	_numFrontArmor->setColor(color2);
 	_numFrontArmor->setHighContrast();
-
-	_barFrontArmor->setScale();
+//	_barFrontArmor->setScale();
 
 
 	_txtLeftArmor->setText(tr("STR_LEFT_ARMOR_UC"));
@@ -458,8 +444,7 @@ UnitInfoState::UnitInfoState(
 
 	_numLeftArmor->setColor(color2);
 	_numLeftArmor->setHighContrast();
-
-	_barLeftArmor->setScale();
+//	_barLeftArmor->setScale();
 
 
 	_txtRightArmor->setText(tr("STR_RIGHT_ARMOR_UC"));
@@ -468,8 +453,7 @@ UnitInfoState::UnitInfoState(
 
 	_numRightArmor->setColor(color2);
 	_numRightArmor->setHighContrast();
-
-	_barRightArmor->setScale();
+//	_barRightArmor->setScale();
 
 
 	_txtRearArmor->setText(tr("STR_REAR_ARMOR_UC"));
@@ -478,8 +462,7 @@ UnitInfoState::UnitInfoState(
 
 	_numRearArmor->setColor(color2);
 	_numRearArmor->setHighContrast();
-
-	_barRearArmor->setScale();
+//	_barRearArmor->setScale();
 
 
 	_txtUnderArmor->setText(tr("STR_UNDER_ARMOR_UC"));
@@ -488,8 +471,7 @@ UnitInfoState::UnitInfoState(
 
 	_numUnderArmor->setColor(color2);
 	_numUnderArmor->setHighContrast();
-
-	_barUnderArmor->setScale();
+//	_barUnderArmor->setScale();
 
 
 	if (_mindProbe == false)
@@ -563,16 +545,16 @@ void UnitInfoState::keyRepeat() // private.
 void UnitInfoState::init()
 {
 	State::init();
-
 	_gender->clear();
 
 	std::wostringstream woststr;
 
+	// Sprites & Order ->
 	const Soldier* const sol = _unit->getGeoscapeSoldier();
 	if (sol != NULL)
 	{
-		woststr << tr(_unit->getRankString());
-		woststr << L" ";
+		woststr << tr(_unit->getRankString())
+				<< L" ";
 
 		Surface* gender = NULL;
 		if (sol->getGender() == GENDER_MALE)
@@ -595,39 +577,33 @@ void UnitInfoState::init()
 	else
 		_numOrder->setVisible(false);
 
+	// NAME ->
 	woststr << _unit->getName(_game->getLanguage(), BattlescapeGame::_debugPlay);
-	_txtName->setBig();
 	_txtName->setText(woststr.str());
+	_txtName->setBig();
 
+	// TU, Health, & Bravery ->
 	int stat = _unit->getTimeUnits();
-	woststr.str(L"");
-	woststr << stat;
-	_numTimeUnits->setText(woststr.str());
-	_barTimeUnits->setMax(static_cast<double>(_unit->getBaseStats()->tu));
+	_numTimeUnits->setText(Text::intWide(stat));
+	_barTimeUnits->setMaxValue(static_cast<double>(_unit->getBaseStats()->tu));
 	_barTimeUnits->setValue(static_cast<double>(stat));
 
 	stat = _unit->getEnergy();
-	woststr.str(L"");
-	woststr << stat;
-	_numEnergy->setText(woststr.str());
-	_barEnergy->setMax(static_cast<double>(_unit->getBaseStats()->stamina));
+	_numEnergy->setText(Text::intWide(stat));
+	_barEnergy->setMaxValue(static_cast<double>(_unit->getBaseStats()->stamina));
 	_barEnergy->setValue(static_cast<double>(stat));
 
 	stat = _unit->getHealth();
-	woststr.str(L"");
-	woststr << stat;
-	_numHealth->setText(woststr.str());
-	int stat2 = _unit->getStun();
+	_numHealth->setText(Text::intWide(stat));
+	const int stat2 = _unit->getStun();
 	if (stat2 != 0)
 	{
-		woststr.str(L"");
-		woststr << stat2;
-		_numStun->setText(woststr.str());
+		_numStun->setText(Text::intWide(stat2));
 		_numStun->setVisible();
 	}
 	else
 		_numStun->setVisible(false);
-	_barHealth->setMax(static_cast<double>(_unit->getBaseStats()->health));
+	_barHealth->setMaxValue(static_cast<double>(_unit->getBaseStats()->health));
 	_barHealth->setValue(static_cast<double>(stat));
 	_barHealth->setValue2(static_cast<double>(stat2));
 
@@ -637,7 +613,7 @@ void UnitInfoState::init()
 		stat = _unit->getFatalWounds();
 		woststr << stat;
 
-		_barFatalWounds->setMax(static_cast<double>(stat));
+		_barFatalWounds->setMaxValue(static_cast<double>(stat));
 		_barFatalWounds->setValue(static_cast<double>(stat));
 		_barFatalWounds->setVisible();
 	}
@@ -648,82 +624,84 @@ void UnitInfoState::init()
 	}
 	_numFatalWounds->setText(woststr.str());
 
+	woststr.str(L"");
+//	std::wostringstream woststr1;
 	stat = _unit->getBaseStats()->bravery;
-	woststr.str(L"");
-	woststr << stat;
+	if (stat != 110)
+	{
+		woststr << stat;
+		_barBravery->setMaxValue(static_cast<double>(stat));
+		_barBravery->setValue(static_cast<double>(stat));
+		_barBravery->setVisible();
+
+//		stat = _unit->getMorale();
+//		woststr1 << stat;
+//		_barMorale->setValue(static_cast<double>(stat));
+//		_barMorale->setVisible();
+	}
+	else
+	{
+		woststr << L"oo";
+//		woststr1 << L"-";
+		_barBravery->setVisible(false);
+//		_barMorale->setVisible(false);
+	}
 	_numBravery->setText(woststr.str());
-	_barBravery->setMax(static_cast<double>(stat));
-	_barBravery->setValue(static_cast<double>(stat));
-
+//	_numMorale->setText(woststr1.str());
+	// note Let Morale show until further tested to ensure it never goes down
+	// for units w/ 110 Bravery. (I think it might/should when they get damaged)
 	stat = _unit->getMorale();
-	woststr.str(L"");
-	woststr << stat;
-	_numMorale->setText(woststr.str());
-	_barMorale->setMax(100.);
 	_barMorale->setValue(static_cast<double>(stat));
+	_numMorale->setText(Text::intWide(stat));
 
+	// Primary Abilities ->
 	const double acuModi = _unit->getAccuracyModifier();
 
 	double arbitraryVariable = static_cast<double>(_unit->getBaseStats()->reactions);
-	_barReactions->setMax(arbitraryVariable);
+	_barReactions->setMaxValue(arbitraryVariable);
 	arbitraryVariable *= acuModi;
 	_barReactions->setValue(arbitraryVariable);
 	stat = static_cast<int>(Round(arbitraryVariable));
-	woststr.str(L"");
-	woststr << stat;
-	_numReactions->setText(woststr.str());
+	_numReactions->setText(Text::intWide(stat));
 
 	arbitraryVariable = static_cast<double>(_unit->getBaseStats()->firing);
-	_barFiring->setMax(arbitraryVariable);
+	_barFiring->setMaxValue(arbitraryVariable);
 	arbitraryVariable *= acuModi;
 	_barFiring->setValue(arbitraryVariable);
 	stat = static_cast<int>(Round(arbitraryVariable));
-	woststr.str(L"");
-	woststr << stat;
-	_numFiring->setText(woststr.str());
+	_numFiring->setText(Text::intWide(stat));
 
 	arbitraryVariable = static_cast<double>(_unit->getBaseStats()->throwing);
-	_barThrowing->setMax(arbitraryVariable);
+	_barThrowing->setMaxValue(arbitraryVariable);
 	arbitraryVariable *= acuModi;
 	_barThrowing->setValue(arbitraryVariable);
 	stat = static_cast<int>(Round(arbitraryVariable));
-	woststr.str(L"");
-	woststr << stat;
-	_numThrowing->setText(woststr.str());
+	_numThrowing->setText(Text::intWide(stat));
 
 	arbitraryVariable = static_cast<double>(_unit->getBaseStats()->melee);
-	_barMelee->setMax(arbitraryVariable);
+	_barMelee->setMaxValue(arbitraryVariable);
 	arbitraryVariable *= acuModi;
 	_barMelee->setValue(arbitraryVariable);
 	stat = static_cast<int>(Round(arbitraryVariable));
-	woststr.str(L"");
-	woststr << stat;
-	_numMelee->setText(woststr.str());
+	_numMelee->setText(Text::intWide(stat));
 
 	arbitraryVariable = static_cast<double>(_unit->getBaseStats()->strength);
-	_barStrength->setMax(arbitraryVariable);
+	_barStrength->setMaxValue(arbitraryVariable);
 	arbitraryVariable *= acuModi / 2. + 0.5;
 	_barStrength->setValue(arbitraryVariable);
 	stat = static_cast<int>(Round(arbitraryVariable));
-	woststr.str(L"");
-	woststr << stat;
-	_numStrength->setText(woststr.str());
+	_numStrength->setText(Text::intWide(stat));
 
-
+	// Psionics ->
 	const int psiSkill = _unit->getBaseStats()->psiSkill;
-	if (psiSkill > 0
-		|| sol == NULL)
-//		|| (Options::psiStrengthEval == true
-//			&& _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements())))
+	if (psiSkill > 0 || sol == NULL)
 	{
 		woststr.str(L"");
-
 		if (_unit->isFearable() == true)
 		{
 			stat = _unit->getBaseStats()->psiStrength;
 			woststr << stat;
-
-			_barPsiStrength->setMax(static_cast<double>(stat));
+			_barPsiStrength->setMaxValue(static_cast<double>(stat));
 			_barPsiStrength->setValue(static_cast<double>(stat));
 			_barPsiStrength->setVisible();
 		}
@@ -732,16 +710,13 @@ void UnitInfoState::init()
 			woststr << L"oo";
 			_barPsiStrength->setVisible(false);
 		}
-
 		_numPsiStrength->setText(woststr.str());
 		_numPsiStrength->setVisible();
 
 		if (psiSkill > 0)
 		{
-			woststr.str(L"");
-			woststr << psiSkill;
-			_numPsiSkill->setText(woststr.str());
-			_barPsiSkill->setMax(static_cast<double>(psiSkill));
+			_numPsiSkill->setText(Text::intWide(psiSkill));
+			_barPsiSkill->setMaxValue(static_cast<double>(psiSkill));
 			_barPsiSkill->setValue(static_cast<double>(psiSkill));
 
 			_numPsiSkill->setVisible();
@@ -759,41 +734,31 @@ void UnitInfoState::init()
 		_barPsiStrength->setVisible(false);
 	}
 
-
+	// Armor ->
 	stat = _unit->getArmor(SIDE_FRONT);
-	woststr.str(L"");
-	woststr << stat;
-	_numFrontArmor->setText(woststr.str());
-	_barFrontArmor->setMax(static_cast<double>(_unit->getArmor()->getFrontArmor()));
+	_numFrontArmor->setText(Text::intWide(stat));
+	_barFrontArmor->setMaxValue(static_cast<double>(_unit->getArmor()->getFrontArmor()));
 	_barFrontArmor->setValue(static_cast<double>(stat));
 
 	arbitraryVariable = _unit->getArmor()->getSideArmor(); // haha!!
 	stat = _unit->getArmor(SIDE_LEFT);
-	woststr.str(L"");
-	woststr << stat;
-	_numLeftArmor->setText(woststr.str());
-	_barLeftArmor->setMax(arbitraryVariable);
+	_numLeftArmor->setText(Text::intWide(stat));
+	_barLeftArmor->setMaxValue(arbitraryVariable);
 	_barLeftArmor->setValue(static_cast<double>(stat));
 
 	stat = _unit->getArmor(SIDE_RIGHT);
-	woststr.str(L"");
-	woststr << stat;
-	_numRightArmor->setText(woststr.str());
-	_barRightArmor->setMax(arbitraryVariable);
+	_numRightArmor->setText(Text::intWide(stat));
+	_barRightArmor->setMaxValue(arbitraryVariable);
 	_barRightArmor->setValue(static_cast<double>(stat));
 
 	stat = _unit->getArmor(SIDE_REAR);
-	woststr.str(L"");
-	woststr << stat;
-	_numRearArmor->setText(woststr.str());
-	_barRearArmor->setMax(_unit->getArmor()->getRearArmor());
+	_numRearArmor->setText(Text::intWide(stat));
+	_barRearArmor->setMaxValue(_unit->getArmor()->getRearArmor());
 	_barRearArmor->setValue(static_cast<double>(stat));
 
 	stat = _unit->getArmor(SIDE_UNDER);
-	woststr.str(L"");
-	woststr << stat;
-	_numUnderArmor->setText(woststr.str());
-	_barUnderArmor->setMax(_unit->getArmor()->getUnderArmor());
+	_numUnderArmor->setText(Text::intWide(stat));
+	_barUnderArmor->setMaxValue(_unit->getArmor()->getUnderArmor());
 	_barUnderArmor->setValue(static_cast<double>(stat));
 }
 
@@ -825,16 +790,10 @@ void UnitInfoState::handle(Action* action)
 */
 void UnitInfoState::btnPrevClick(Action*)
 {
-	if (_parent != NULL) // so you are here from a Battlescape Game
-		_parent->selectPreviousFactionUnit(
-										false,
-										false);
-//										_fromInventory);
-	else // so you are here from the Craft Equipment screen
-		_battleGame->selectPreviousFactionUnit(
-											false,
-											false,
-											true); // no tanks.
+	if (_parent != NULL)	// so you are here from a Battlescape Game
+		_parent->selectPreviousFactionUnit(false,false);
+	else					// so you are here from the Craft Equipment screen
+		_battleGame->selectPreviousFactionUnit(false,false,true); // no tanks.
 
 	_unit = _battleGame->getSelectedUnit();
 
@@ -850,16 +809,10 @@ void UnitInfoState::btnPrevClick(Action*)
  */
 void UnitInfoState::btnNextClick(Action*)
 {
-	if (_parent != NULL) // this is from a Battlescape Game
-		_parent->selectNextFactionUnit(
-									false,
-									false);
-//									_fromInventory);
-	else // this is from the Craft Equipment screen
-		_battleGame->selectNextFactionUnit(
-										false,
-										false,
-										true); // no tanks.
+	if (_parent != NULL)	// this is from a Battlescape Game
+		_parent->selectNextFactionUnit(false,false);
+	else					// this is from the Craft Equipment screen
+		_battleGame->selectNextFactionUnit(false,false,true); // no tanks.
 
 	_unit = _battleGame->getSelectedUnit();
 
@@ -883,11 +836,8 @@ void UnitInfoState::exitClick(Action*) // private.
 			_game->getScreen()->resetDisplay(false);
 		}
 	} else */
-	if (_mindProbe == true
-		|| _unit->hasInventory() == true)
-	{
+	if (_mindProbe == true || _unit->hasInventory() == true)
 		_game->popState();
-	}
 	else if (_preBattle == false)
 	{
 		if (_fromInventory == true)
