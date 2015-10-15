@@ -807,7 +807,7 @@ Surface* Projectile::getThrowSprite() const
  * Gets the BattleAction associated with this Projectile.
  * @return, pointer to the BattleAction
  */
-BattleAction* Projectile::getActionPrj()
+BattleAction* Projectile::getBattleAction()
 {
 	return &_action;
 }

@@ -486,15 +486,14 @@ void Map::drawTerrain(Surface* const surface) // private.
 				_bulletStart = false;
 
 				const Position posFinal = _projectile->getFinalPosition();
+				BattleAction* const action = _projectile->getBattleAction();
 
-				BattleAction* const prjAction = _projectile->getActionPrj();
-				if (prjAction->actor->getFaction() != _battleSave->getSide()
-					|| bullet.x < 0
-					|| bullet.x > surface->getWidth() - 1
+				if (   bullet.x < 0 // if bullet starts offScreen
+					|| bullet.x >= surface->getWidth()
 					|| bullet.y < 0
-					|| bullet.y > _playableHeight - 1)
+					|| bullet.y >= _playableHeight)
 				{
-					_camera->centerOnPosition( // note that this centers each reaction-shooter.
+					_camera->centerOnPosition(
 											Position(
 												bulletLowX,
 												bulletLowY,
@@ -503,22 +502,23 @@ void Map::drawTerrain(Surface* const surface) // private.
 					_camera->convertVoxelToScreen(
 											_projectile->getPosition(),
 											&bullet);
-
-					if (prjAction->actor->getFaction() != _battleSave->getSide()	// moved here from TileEngine::reactionShot()
-						&& _camera->isOnScreen(posFinal) == false)					// because this is the (accurate) position of the bullet-shot-actor's Camera mapOffset.
-					{
-						//Log(LOG_INFO) << "Map add rfActor " << prjAction->actor->getId() << " " << _camera->getMapOffset() << " final Pos offScreen";
-						std::map<int, Position>* const rfShotList (_battleSave->getTileEngine()->getRfShotList());
-						rfShotList->insert(std::pair<int, Position>(
-																prjAction->actor->getId(),
-																_camera->getMapOffset()));
-					}
 				}
 
-				if (_camera->isOnScreen(posFinal) == false
+				const bool offScreen_final (_camera->isOnScreen(posFinal) == false);
+				if (action->actor->getFaction() != _battleSave->getSide()	// moved here from TileEngine::reactionShot()
+					&& offScreen_final == true)								// because this is the (accurate) position of the bullet-shot-actor's Camera mapOffset.
+				{
+					//Log(LOG_INFO) << "Map add rfActor " << action->actor->getId() << " " << _camera->getMapOffset() << " final Pos offScreen";
+					std::map<int, Position>* const rfShotList (_battleSave->getTileEngine()->getReactionPositions());
+					rfShotList->insert(std::pair<int, Position>(
+															action->actor->getId(),
+															_camera->getMapOffset()));
+				}
+
+				if (offScreen_final == true
 					|| (_projectile->getThrowItem() != NULL
 						&& TileEngine::distance(
-											prjAction->actor->getPosition(),
+											action->actor->getPosition(),
 											posFinal) > 8)) // no smoothing unless throw > 8 tiles
 				{
 					_smoothingEngaged = true;

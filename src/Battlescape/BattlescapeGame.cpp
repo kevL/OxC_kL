@@ -171,7 +171,7 @@ void BattlescapeGame::think()
 	if (_states.empty() == true)
 	{
 		//Log(LOG_INFO) << "BattlescapeGame::think() - _states is Empty. Clear rfShotList";
-		_battleSave->getTileEngine()->getRfShotList()->clear(); // TODO: move that to end of popState()
+		_battleSave->getTileEngine()->getReactionPositions()->clear(); // TODO: move that to end of popState()
 
 		if (_battleSave->getSide() != FACTION_PLAYER) // it's a non player side (ALIENS or CIVILIANS)
 		{

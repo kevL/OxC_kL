@@ -316,9 +316,7 @@ void UnitDieBState::convertToCorpse() // private.
 				i != _unit->getInventory()->end();
 				++i)
 		{
-			_parent->dropItem(
-							pos,
-							*i);
+			_parent->dropItem(pos, *i);
 
 			if ((*i)->getRules()->isFixed() == false)
 				(*i)->setOwner();

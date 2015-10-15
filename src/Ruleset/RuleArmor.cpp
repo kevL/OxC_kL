@@ -123,8 +123,7 @@ void RuleArmor::load(const YAML::Node& node)
 	{
 		for (size_t
 				i = 0;
-				i < vuln.size()
-					&& i < DAMAGE_TYPES;
+				i != vuln.size() && i != DAMAGE_TYPES;
 				++i)
 		{
 			_damageModifier[i] = vuln[i].as<float>();

@@ -1881,7 +1881,7 @@ bool TileEngine::reactionShot(
  * Selects a fire method based on range & time units.
  * @param action - reference a BattleAction struct
  */
-void TileEngine::selectFireMethod(BattleAction& action) // <- TODO: this action needs to be replaced w/ _rfAction, i think.
+void TileEngine::selectFireMethod(BattleAction& action) // <- TODO: this action ought be replaced w/ _rfAction, i think.
 {
 	const RuleItem* const itRule = action.weapon->getRules();
 	const int dist = _battleSave->getTileEngine()->distance(
@@ -1966,18 +1966,18 @@ void TileEngine::selectFireMethod(BattleAction& action) // <- TODO: this action 
  * Gets the unique reaction fire BattleAction struct.
  * @return, rf action struct
  */
-BattleAction* TileEngine::getRfAction()
+/* BattleAction* TileEngine::getRfAction()
 {
 	return _rfAction;
-}
+} */
 
 /**
  * Gets the reaction fire shot list.
  * @return, pointer to a map of unit-IDs & Positions
  */
-std::map<int, Position>* TileEngine::getRfShotList()
+std::map<int, Position>* TileEngine::getReactionPositions()
 {
-	return &_rfShotList;
+	return &_rfShotPos;
 }
 
 /**
@@ -2185,7 +2185,7 @@ BattleUnit* TileEngine::hit(
 					// I mean, shouldn't that be checking that the thing actually DIES?
 					// And, probly don't have to state if killed by aLiens: probly assumed in DebriefingState.
 
-					if (targetUnit->getSpecialAbility() == SPECAB_EXPLODE // cyberdiscs, usually.
+					if (targetUnit->getSpecialAbility() == SPECAB_EXPLODE // cyberdiscs, usually. Also, cybermites ... (and Zombies, on fire).
 						&& targetUnit->isOut_t(OUT_HLTH_STUN) == true
 						&& (targetUnit->isZombie() == true
 							|| (dType != DT_STUN		// don't explode if stunned. Maybe... see above.

@@ -128,7 +128,7 @@ void ExplosionBState::init()
 
 				_power += RNG::generate( // add 10% to 100% of extPower
 									(extraPower + 9) / 10,
-									extraPower);
+									 extraPower);
 			}
 
 			// HE, incendiary, smoke or stun bombs create AOE explosions;
@@ -147,12 +147,8 @@ void ExplosionBState::init()
 		const int
 			power1 = _power * 2 / 3,
 			power2 = _power * 3 / 2;
-		_power = (RNG::generate(
-							power1,
-							power2)
-				+ RNG::generate(
-							power1,
-							power2));
+		_power = (RNG::generate(power1, power2)
+				+ RNG::generate(power1, power2));
 		_power /= 2;
 	}
 	else // unhandled cyberdisc!!!
@@ -180,8 +176,7 @@ void ExplosionBState::init()
 			{
 				start = _item->getRules()->getHitAnimation();
 				radius = _item->getRules()->getExplosionRadius();
-				if (radius == -1)
-					radius = 0;
+				if (radius == -1) radius = 0;
 
 				if (_item->getRules()->getDamageType() == DT_SMOKE
 					|| _item->getRules()->getDamageType() == DT_STUN)
@@ -200,11 +195,8 @@ void ExplosionBState::init()
 			offset = radius * 6; // voxelspace
 //			qty = static_cast<int>(sqrt(static_cast<double>(radius) * static_cast<double>(qty))) / 3;
 			qty = radius * qty / 100;
-			if (qty < 1
-				|| offset == 0)
-			{
+			if (qty < 1 || offset == 0)
 				qty = 1;
-			}
 
 //			if (_parent->getDepth() > 0)
 //				start -= Explosion::FRAMES_EXPLODE;

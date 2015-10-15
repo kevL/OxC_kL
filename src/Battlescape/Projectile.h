@@ -120,7 +120,7 @@ private:
 		Surface* getThrowSprite() const;
 
 		/// Gets the BattleAction associated with this projectile.
-		BattleAction* getActionPrj();
+		BattleAction* getBattleAction();
 
 		/// Gets the ACTUAL target-position for this projectile.
 		Position getFinalPosition() const;

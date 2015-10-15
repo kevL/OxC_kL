@@ -688,13 +688,13 @@ void ProjectileFlyBState::think()
 				&& Options::battleSmoothCamera == true)					// but he/she will be on the same Side, doing a reaction shot.
 			{
 				//Log(LOG_INFO) << "reset Camera for " << _action.actor->getId();
-				const std::map<int, Position>* const rfShotList (_battleSave->getTileEngine()->getRfShotList()); // init.
-				std::map<int, Position>::const_iterator i = rfShotList->find(_action.actor->getId());
+				const std::map<int, Position>* const rfShotPos (_battleSave->getTileEngine()->getReactionPositions());
+				std::map<int, Position>::const_iterator i = rfShotPos->find(_action.actor->getId());
 
-				//for (std::map<int, Position>::const_iterator j = rfShotList->begin(); j != rfShotList->end(); ++j)
+				//for (std::map<int, Position>::const_iterator j = rfShotPos->begin(); j != rfShotPos->end(); ++j)
 				//{ Log(LOG_INFO) << ". . shotList"; Log(LOG_INFO) << ". . " << j->first << " " << j->second; }
 
-				if (i != rfShotList->end()) // note The shotList vector will be cleared in BattlescapeGame::think() after all BattleStates have popped.
+				if (i != rfShotPos->end()) // note The shotList vector will be cleared in BattlescapeGame::think() after all BattleStates have popped.
 				{
 					_action.cameraPosition = i->second;
 					//Log(LOG_INFO) << ". to " << _action.cameraPosition;
