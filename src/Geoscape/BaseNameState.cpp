@@ -54,7 +54,7 @@ BaseNameState::BaseNameState(
 		_globe(globe),
 		_firstBase(firstBase)
 {
-	_globe->onMouseOver(0);
+	_globe->onMouseOver(NULL);
 
 	_screen = false;
 
@@ -76,20 +76,19 @@ BaseNameState::BaseNameState(
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
 	_btnOk->setText(tr("STR_OK"));
+	_btnOk->setVisible(false); // something must be in the name before it is acceptable
 	_btnOk->onMouseClick((ActionHandler)& BaseNameState::btnOkClick);
 //	_btnOk->onKeyboardPress((ActionHandler)& BaseNameState::btnOkClick, Options::keyOk);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& BaseNameState::btnOkClick,
 					Options::keyCancel);
 
-	_btnOk->setVisible(false); // something must be in the name before it is acceptable
-
+	_txtTitle->setText(tr("STR_BASE_NAME"));
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
-	_txtTitle->setText(tr("STR_BASE_NAME"));
 
 	_edtName->setBig();
-	_edtName->setFocus(true, false);
+	_edtName->setFocus(true,false);
 	_edtName->onChange((ActionHandler)& BaseNameState::edtNameChange);
 }
 
@@ -134,10 +133,7 @@ void BaseNameState::btnOkClick(Action*)
 			if (_firstBase == false)
 				_game->popState();
 
-			_game->pushState(new PlaceLiftState(
-											_base,
-											_globe,
-											_firstBase));
+			_game->pushState(new PlaceLiftState(_base, _globe, _firstBase));
 		}
 	}
 }

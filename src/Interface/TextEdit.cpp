@@ -57,11 +57,12 @@ TextEdit::TextEdit(
 {
 	_isFocused = false;
 
-	_text	= new Text(width, height);
-	_timer	= new Timer(100);
+	_text = new Text(width, height);
+
+	_timer = new Timer(100);
 	_timer->onTimer((SurfaceHandler)& TextEdit::blink);
 
-	_caret	= new Text(17,17);
+	_caret = new Text(17,17);
 	_caret->setText(L"|");
 }
 
@@ -74,17 +75,14 @@ TextEdit::~TextEdit()
 	delete _caret;
 	delete _timer;
 
-	SDL_EnableKeyRepeat( // in case it was left focused
-					0,
-					SDL_DEFAULT_REPEAT_INTERVAL);
-
+	SDL_EnableKeyRepeat(0, SDL_DEFAULT_REPEAT_INTERVAL); // in case it was left focused
 	_state->setModal(NULL);
 }
 
 /**
  * Passes events to internal components.
- * @param action - pointer to an Action
- * @param state - state that the action handlers belong to
+ * @param action	- pointer to an Action
+ * @param state		- State that the ActionHandler's belong to
  */
 void TextEdit::handle(Action* action, State* state)
 {
@@ -93,9 +91,9 @@ void TextEdit::handle(Action* action, State* state)
 	if (_isFocused == true
 		&& _modal == true
 		&& action->getDetails()->type == SDL_MOUSEBUTTONDOWN
-		&& (   action->getAbsoluteXMouse() < getX()
+		&& (   action->getAbsoluteXMouse() <  getX()
 			|| action->getAbsoluteXMouse() >= getX() + getWidth()
-			|| action->getAbsoluteYMouse() < getY()
+			|| action->getAbsoluteYMouse() <  getY()
 			|| action->getAbsoluteYMouse() >= getY() + getHeight()))
 	{
 		setFocus(false);
@@ -103,7 +101,7 @@ void TextEdit::handle(Action* action, State* state)
 }
 
 /**
- * Controls the blinking animation when the text edit is focused.
+ * Controls the blinking animation when this TextEdit is focused.
  * @param focus - true if focused
  * @param modal - true to lock input to this control (default true)
  */
@@ -116,7 +114,6 @@ void TextEdit::setFocus(
 	if (focus != _isFocused)
 	{
 		_redraw = true;
-
 		InteractiveSurface::setFocus(focus);
 
 		if (_isFocused == true)
@@ -137,9 +134,7 @@ void TextEdit::setFocus(
 			_blink = false;
 			_timer->stop();
 
-			SDL_EnableKeyRepeat(
-							0,
-							SDL_DEFAULT_REPEAT_INTERVAL);
+			SDL_EnableKeyRepeat(0, SDL_DEFAULT_REPEAT_INTERVAL);
 
 			if (_modal == true)
 				_state->setModal(NULL);
@@ -353,6 +348,7 @@ void TextEdit::setPalette(
  */
 void TextEdit::think()
 {
+	Log(LOG_INFO) << "Edit: think()";
 	_timer->think(NULL, this);
 }
 
@@ -361,6 +357,7 @@ void TextEdit::think()
  */
 void TextEdit::blink()
 {
+	Log(LOG_INFO) << "Edit: blink()";
 	_blink = !_blink;
 	_redraw = true;
 }
@@ -376,14 +373,8 @@ void TextEdit::draw()
 
 	if (Options::keyboardMode == KEYBOARD_OFF)
 	{
-		std::wstring newValue = _value;
-
-		if (_isFocused == true
-			&& _blink == true)
-		{
-			newValue += _ascii;
-			_text->setText(newValue);
-		}
+		if (_isFocused == true && _blink == true)
+			_text->setText(_value + _ascii);
 	}
 
 	clear();
@@ -391,13 +382,12 @@ void TextEdit::draw()
 
 	if (Options::keyboardMode == KEYBOARD_ON)
 	{
-		if (_isFocused == true
-			&& _blink == true)
+		if (_isFocused == true && _blink == true)
 		{
-			int x = 0;
-
+			int x;
 			switch (_text->getAlign())
 			{
+				default:
 				case ALIGN_LEFT:
 					x = 0;
 				break;
@@ -425,18 +415,17 @@ void TextEdit::draw()
 }
 
 /**
- * Checks if adding a certain character to
- * the text edit will exceed the maximum width.
- * Used to make sure user input stays within bounds.
+ * Checks if adding a certain character to the text edit will exceed the maximum
+ * width.
+ * @note Used to make sure user input stays within bounds.
  * @param fontChar - character to add
  * @return, true if it exceeds
  */
-bool TextEdit::exceedsMaxWidth(wchar_t fontChar)
+bool TextEdit::exceedsMaxWidth(wchar_t fontChar) // private.
 {
 	int width = 0;
-	std::wstring wst = _value;
 
-	wst += fontChar;
+	std::wstring wst (_value + fontChar);
 	for (std::wstring::const_iterator
 			i = wst.begin();
 			i != wst.end();
@@ -557,16 +546,13 @@ void TextEdit::keyboardPress(Action* action, State* state)
 			break;
 
 			default:
-				const Uint16 key = action->getDetails()->key.keysym.unicode;
-
+				const Uint16 keyId = action->getDetails()->key.keysym.unicode;
 				if (((_numerical == true
-						&& key >= L'0'
-						&& key <= L'9')
-					|| (_numerical == false
-						&& ((key >= L' '
-								&& key <= L'~')
-							|| key >= 160)))
-					&& exceedsMaxWidth(static_cast<wchar_t>(key)) == false)
+							&& keyId >= L'0' && keyId <= L'9')
+						|| (_numerical == false
+							&& ((keyId >= L' ' && keyId <= L'~')
+								|| keyId >= 160)))
+					&& exceedsMaxWidth(static_cast<wchar_t>(keyId)) == false)
 				{
 					_value.insert(
 								_caretPos,
@@ -579,7 +565,7 @@ void TextEdit::keyboardPress(Action* action, State* state)
 
 	_redraw = true;
 
-	if (_change)
+	if (_change != NULL)
 		(state->*_change)(action);
 
 	InteractiveSurface::keyboardPress(action, state);

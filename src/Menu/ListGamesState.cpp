@@ -103,19 +103,19 @@ struct compareSaveTimestamp
 /**
  * Initializes all the elements in the Saved Game screen.
  * @param origin		- game section that originated this state
- * @param firstValidRow	- first row containing saves
+ * @param firstValid	- first row containing saves
  * @param autoquick		- true to show auto/quick saved games
  */
 ListGamesState::ListGamesState(
 		OptionsOrigin origin,
-		size_t firstValidRow,
+		size_t firstValid,
 		bool autoquick)
 	:
 		_origin(origin),
-		_firstValidRow(firstValidRow),
+		_firstValid(firstValid),
 		_autoquick(autoquick),
 		_sortable(true),
-		_inEditMode(false)
+		_editMode(false)
 {
 	_screen = false;
 
@@ -197,7 +197,7 @@ ListGamesState::ListGamesState(
 /**
  * dTor.
  */
-ListGamesState::~ListGamesState()
+ListGamesState::~ListGamesState() // virtual.
 {}
 
 /**
@@ -319,7 +319,7 @@ void ListGamesState::sortList(SaveSort order)
 /**
  * Updates the save game list with a current list of available savegames.
  */
-void ListGamesState::updateList()
+void ListGamesState::updateList() // virtual.
 {
 	size_t row = 0;
 	Uint8 color = _lstSaves->getSecondaryColor();
@@ -357,8 +357,8 @@ void ListGamesState::btnCancelClick(Action*)
  */
 void ListGamesState::btnCancelKeypress(Action*)
 {
-	if (_inEditMode == true) // revert TextEdit first onEscape, see ListSaveState::edtSaveKeyPress()
-		_inEditMode = false;
+	if (_editMode == true) // revert TextEdit first onEscape, see ListSaveState::edtSaveKeyPress()
+		_editMode = false;
 	else
 		_game->popState(); // 2nd Escape releases state
 }
@@ -369,11 +369,11 @@ void ListGamesState::btnCancelKeypress(Action*)
  */
 void ListGamesState::lstSavesMouseOver(Action*)
 {
-	if (_inEditMode == false)
+	if (_editMode == false)
 	{
 		std::wstring wst;
 
-		const int sel = static_cast<int>(_lstSaves->getSelectedRow()) - static_cast<int>(_firstValidRow);
+		const int sel = static_cast<int>(_lstSaves->getSelectedRow()) - static_cast<int>(_firstValid);
 		if (sel > -1
 			&& sel < static_cast<int>(_saves.size()))
 		{
@@ -389,7 +389,7 @@ void ListGamesState::lstSavesMouseOver(Action*)
  */
 void ListGamesState::lstSavesMouseOut(Action*)
 {
-	if (_inEditMode == false)
+	if (_editMode == false)
 		_txtDetails->setText(tr("STR_DETAILS").arg(L""));
 }
 
@@ -397,14 +397,14 @@ void ListGamesState::lstSavesMouseOut(Action*)
  * Deletes the selected save.
  * @param action - pointer to an Action
  */
-void ListGamesState::lstSavesPress(Action* action)
+void ListGamesState::lstSavesPress(Action* action) // virtual.
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT
-		&& _lstSaves->getSelectedRow() >= _firstValidRow)
+		&& _lstSaves->getSelectedRow() >= _firstValid)
 	{
 		_game->pushState(new DeleteGameState(
 										_origin,
-										_saves[_lstSaves->getSelectedRow() - _firstValidRow].file));
+										_saves[_lstSaves->getSelectedRow() - _firstValid].file));
 	}
 }
 

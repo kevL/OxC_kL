@@ -42,10 +42,10 @@ class ListSaveState
 
 private:
 	int
-		_selectedRowPre,
-		_selectedRow;
+		_selectedPre,
+		_selected;
 
-	std::wstring _selected;
+	std::wstring _label;
 
 	TextButton* _btnSaveGame;
 	TextEdit* _edtSave;

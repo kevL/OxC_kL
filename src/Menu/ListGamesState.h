@@ -53,9 +53,9 @@ class ListGamesState
 protected:
 	bool
 		_autoquick,
-		_inEditMode,
+		_editMode,
 		_sortable;
-	size_t _firstValidRow;
+	size_t _firstValid;
 
 	OptionsOrigin _origin;
 
@@ -86,7 +86,7 @@ protected:
 		/// Creates the Saved Game state.
 		ListGamesState(
 				OptionsOrigin origin,
-				size_t firstValidRow,
+				size_t firstValid,
 				bool autoquick);
 		/// Cleans up the Saved Game state.
 		virtual ~ListGamesState();

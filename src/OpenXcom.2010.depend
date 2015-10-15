@@ -4361,10 +4361,7 @@
 
 1432068221 f:\git\openxcom\src\ruleset\unit.h
 
-1430149550 f:\git\openxcom\src\engine\options.h
-	<string>
-	<vector>
-	<SDL.h>
+1444938097 f:\git\openxcom\src\engine\options.h
 	"OptionInfo.h"
 	"Options.inc.h"
 
@@ -4525,7 +4522,7 @@
 	"../Savegame/Craft.h"
 	"../Savegame/ItemContainer.h"
 
-1444934704 f:\git\openxcom\src\engine\timer.h
+1444937574 f:\git\openxcom\src\engine\timer.h
 	"State.h"
 	"Surface.h"
 
@@ -5336,7 +5333,7 @@
 1441843552 f:\git\openxcom\src\battlescape\abortmissionstate.h
 	"../Engine/State.h"
 
-1444934517 f:\git\openxcom\src\battlescape\battlescapestate.h
+1444937638 f:\git\openxcom\src\battlescape\battlescapestate.h
 	"Position.h"
 	"../Engine/State.h"
 
@@ -5635,7 +5632,7 @@
 1430149550 f:\git\openxcom\src\battlescape\battlescapemessage.h
 	"../Engine/Surface.h"
 
-1444934968 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1444937596 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	"AbortMissionState.h"
 	"ActionMenuState.h"
@@ -6486,7 +6483,7 @@
 	"OpenGL.h"
 	"Surface.h"
 
-1444903425 source:f:\git\openxcom\src\engine\options.cpp
+1444937688 source:f:\git\openxcom\src\engine\options.cpp
 	"Options.h"
 	"Options.inc.h"
 	"TargetConditionals.h"
@@ -6604,7 +6601,7 @@
 	"SurfaceSet.h"
 	"Surface.h"
 
-1444936232 source:f:\git\openxcom\src\engine\timer.cpp
+1444938849 source:f:\git\openxcom\src\engine\timer.cpp
 	"Timer.h"
 	"Game.h"
 
@@ -6730,7 +6727,7 @@
 	"../Resource/ResourcePack.h"
 	"../Savegame/Base.h"
 
-1431629381 f:\git\openxcom\src\geoscape\basenamestate.h
+1444942811 f:\git\openxcom\src\geoscape\basenamestate.h
 	"../Engine/State.h"
 	"Globe.h"
 
@@ -6961,7 +6958,7 @@
 1442441486 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1444731155 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1444935833 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	"AlienBaseState.h"
 	"BaseDefenseState.h"
@@ -10389,9 +10386,9 @@
 
 1430149550 f:\git\openxcom\src\engine\optioninfo.h
 
-1443681490 f:\git\openxcom\src\engine\options.inc.h
+1444937707 f:\git\openxcom\src\engine\options.inc.h
 
-1432287660 source:f:\git\openxcom\src\engine\optioninfo.cpp
+1444937728 source:f:\git\openxcom\src\engine\optioninfo.cpp
 	"OptionInfo.h"
 
 1442612274 f:\git\openxcom\src\interface\combobox.h
@@ -10537,12 +10534,12 @@
 1441663918 f:\git\openxcom\src\menu\listloadstate.h
 	"ListGamesState.h"
 
-1444898921 f:\git\openxcom\src\menu\listgamesstate.h
+1444946494 f:\git\openxcom\src\menu\listgamesstate.h
 	"OptionsBaseState.h"
 	"../Engine/State.h"
 	"../Savegame/SavedGame.h"
 
-1431487428 f:\git\openxcom\src\menu\listsavestate.h
+1444947349 f:\git\openxcom\src\menu\listsavestate.h
 	"ListGamesState.h"
 
 1444899336 source:f:\git\openxcom\src\menu\listgamesstate.cpp

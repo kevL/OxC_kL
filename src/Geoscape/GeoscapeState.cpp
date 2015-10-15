@@ -1067,7 +1067,7 @@ void GeoscapeState::init()
 	updateTimeDisplay();
 
 	_globe->onMouseClick((ActionHandler)& GeoscapeState::globeClick);
-	_globe->onMouseOver(0);
+	_globe->onMouseOver(NULL);
 //	_globe->rotateStop();
 	_globe->setFocus(true);
 	_globe->draw();

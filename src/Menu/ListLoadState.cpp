@@ -106,9 +106,9 @@ void ListLoadState::lstSavesPress(Action* action)
 		}
 		else
 			_game->pushState(new ConfirmLoadState(
-												_origin,
-												_saves[_lstSaves->getSelectedRow()].file,
-												this));
+											_origin,
+											_saves[_lstSaves->getSelectedRow()].file,
+											this));
 	}
 	else
 		ListGamesState::lstSavesPress(action); // RMB -> delete file

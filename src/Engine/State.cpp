@@ -135,9 +135,7 @@ void State::setInterface(
 	else if (pal.empty() == true)
 		pal = "PAL_GEOSCAPE";
 
-	setPalette(
-			pal,
-			backPal);
+	setPalette(pal, backPal);
 }
 
 /**
@@ -152,14 +150,11 @@ void State::add(Surface* surface)
 {
 	surface->setPalette(_palette);
 
-	if (_game->getLanguage() != NULL
-		&& _game->getResourcePack() != NULL)
-	{
+	if (_game->getLanguage() != NULL && _game->getResourcePack() != NULL)
 		surface->initText(
 					_game->getResourcePack()->getFont("FONT_BIG"),
 					_game->getResourcePack()->getFont("FONT_SMALL"),
 					_game->getLanguage());
-	}
 
 	_surfaces.push_back(surface);
 }
