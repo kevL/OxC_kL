@@ -509,8 +509,8 @@ void Map::drawTerrain(Surface* const surface) // private.
 					&& offScreen_final == true)								// because this is the (accurate) position of the bullet-shot-actor's Camera mapOffset.
 				{
 					//Log(LOG_INFO) << "Map add rfActor " << action->actor->getId() << " " << _camera->getMapOffset() << " final Pos offScreen";
-					std::map<int, Position>* const rfShotList (_battleSave->getTileEngine()->getReactionPositions());
-					rfShotList->insert(std::pair<int, Position>(
+					std::map<int, Position>* const rfShotPos (_battleSave->getTileEngine()->getReactionPositions());
+					rfShotPos->insert(std::pair<int, Position>(
 															action->actor->getId(),
 															_camera->getMapOffset()));
 				}

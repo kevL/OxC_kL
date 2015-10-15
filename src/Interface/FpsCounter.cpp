@@ -123,8 +123,8 @@ void FpsCounter::think()
  */
 void FpsCounter::update()
 {
-	const int fps = static_cast<int>(std::floor(static_cast<double>(_frames * 1000 / _timer->getTime())));
-	_text->setValue(fps);
+	const Uint32 fps = static_cast<int>(std::floor(static_cast<double>(_frames * 1000 / _timer->getTimerElapsed())));
+	_text->setValue(static_cast<unsigned>(fps));
 
 	_frames = 0;
 	_redraw = true;

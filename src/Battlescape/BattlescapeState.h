@@ -190,8 +190,8 @@ private:
 		* _lstSoldierInfo,
 		* _lstTileInfo;
 	Timer
-		* _animTimer,
-		* _battleTimer;
+		* _aniTimer,
+		* _tacticalTimer;
 //	TurnCounter* _turnCounter;
 	WarningMessage* _warning;
 
@@ -225,7 +225,7 @@ private:
 
 	public:
 //		static const Uint32 STATE_INTERVAL_STANDARD = 89; // for fast shaders - Raw, Quillez, etc.
-		static const Uint32 STATE_INTERVAL_STANDARD = 79; // for slow shaders - 4xHQX & above.
+		static const Uint32 STATE_INTERVAL_STANDARD = 76; // for slow shaders - 4xHQX & above.
 
 		/// Creates a BattlescapeState.
 		BattlescapeState();

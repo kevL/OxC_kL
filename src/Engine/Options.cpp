@@ -82,7 +82,6 @@ void create()
 	_info.push_back(OptionInfo("keyboardMode", (int*)&keyboardMode, KEYBOARD_ON));
 #endif
 
-	_info.push_back(OptionInfo("maxFrameSkip", &maxFrameSkip, 0));
 	_info.push_back(OptionInfo("traceAI", &traceAI, false));
 	_info.push_back(OptionInfo("verboseLogging", &verboseLogging, false));
 	_info.push_back(OptionInfo("StereoSound", &StereoSound, true));
@@ -375,7 +374,7 @@ void loadArgs(
 					_commandLine[argname] = argv[i + 1];
 			}
 			else
-				Log(LOG_WARNING) << "Unknown option : " << argname;
+				Log(LOG_WARNING) << "Unknown option: " << argname;
 		}
 	}
 }
@@ -479,13 +478,13 @@ bool init(
 	std::fflush(file);
 	std::fclose(file);
 
-	Log(LOG_INFO) << "Data search -";
+	Log(LOG_INFO) << "Data search:";
 	for (std::vector<std::string>::const_iterator
 			i = _dataList.begin();
 			i != _dataList.end();
 			++i)
 	{
-		Log(LOG_INFO) << "    " << *i;
+		Log(LOG_INFO) << "- " << *i;
 	}
 
 	Log(LOG_INFO) << "Data folder: " << _dataFolder;

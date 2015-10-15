@@ -75,7 +75,8 @@ Game::Game(const std::string& title)
 		_quit(false),
 		_init(false),
 		_inputActive(true),
-		_timeUntilNextFrame(0),
+		_ticksTillNextSlice(0),
+		_tickOfLastSlice(0),
 		_debugCycle(-1),
 		_debugCycle_b(-1)
 {
@@ -141,8 +142,6 @@ Game::Game(const std::string& title)
 
 	// Create blank language
 	_lang = new Language();
-
-	_timeOfLastFrame = 0;
 }
 
 /**
@@ -188,8 +187,7 @@ void Game::run()
 		RUNNING	= 0,
 		SLOWED	= 1,
 		PAUSED	= 2
-	}
-	runningState = RUNNING;
+	} runningState = RUNNING;
 
 	static const ApplicationState kbFocusRun[4] =
 	{
@@ -392,30 +390,26 @@ void Game::run()
 
 		if (runningState != PAUSED) // Process rendering
 		{
-//			if (_pauseTillClick == false) // <- kL
 			_states.back()->think(); // Process logic
 
 			_fpsCounter->think();
 
-			if (Options::FPS > 0
-				&& !(
-					Options::useOpenGL && Options::vSyncForOpenGL))
+			if (!(Options::useOpenGL && Options::vSyncForOpenGL)
+				&& Options::FPS > 0)
 			{
 				// Update FPS delay time based on the time of the last draw.
 				int fps = (SDL_GetAppState() & SDL_APPINPUTFOCUS) ? Options::FPS : Options::FPSInactive;
 				if (fps < 1) fps = 1;
-				_timeUntilNextFrame = static_cast<int>(
-									 (1000.f / static_cast<float>(fps))
-									 - static_cast<float>(SDL_GetTicks() - static_cast<Uint32>(_timeOfLastFrame)));
+				_ticksTillNextSlice = static_cast<int>(
+									 1000.f / static_cast<float>(fps)
+										- static_cast<float>(SDL_GetTicks() - _tickOfLastSlice));
 			}
 			else
-				_timeUntilNextFrame = 0;
+				_ticksTillNextSlice = 0;
 
-			if (_init == true
-				&& _timeUntilNextFrame < 1)
+			if (_ticksTillNextSlice < 1 && _init == true)
 			{
-				// make a note of when this frame update occurred.
-				_timeOfLastFrame = SDL_GetTicks();
+				_tickOfLastSlice = SDL_GetTicks(); // store when this slice occurred.
 				_fpsCounter->addFrame();
 
 				_screen->clear();
@@ -425,8 +419,7 @@ void Game::run()
 				{
 					--i; // find top underlying fullscreen state,
 				}
-				while (i != _states.begin()
-					&& (*i)->isScreen() == false);
+				while (i != _states.begin() && (*i)->isScreen() == false);
 
 				for (
 						;

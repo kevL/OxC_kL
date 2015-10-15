@@ -163,13 +163,13 @@ void Screen::handle(Action* action)
 #ifdef _WIN32
 		MessageBeep(MB_OK);
 #endif
-		switch (Timer::gameSlowSpeed)
+		switch (Timer::coreInterval)
 		{
-			case 1: Timer::gameSlowSpeed = 5;	break;
-			case 5: Timer::gameSlowSpeed = 13;	break;
+			case 1: Timer::coreInterval = 6;	break;
+			case 5: Timer::coreInterval = 14;	break;
 
 			default:
-				Timer::gameSlowSpeed = 1;
+				Timer::coreInterval = 1;
 		}
 	}
 //	}

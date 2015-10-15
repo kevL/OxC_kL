@@ -20,10 +20,9 @@
 #ifndef OPENXCOM_OPTIONS_H
 #define OPENXCOM_OPTIONS_H
 
-#include <string>
-#include <vector>
-
-#include <SDL.h>
+//#include <string>
+//#include <vector>
+//#include <SDL.h>
 
 #include "OptionInfo.h"
 
@@ -119,7 +118,7 @@ namespace Options
 {
 
 #define OPT extern
-	#include "Options.inc.h"
+#include "Options.inc.h"
 #undef OPT
 
 	/// Creates the options info.
@@ -131,9 +130,9 @@ namespace Options
 			int argc,
 			char* argv[]);
 	/// Loads options from YAML.
-	void load(const std::string& filename = "options");
+	void load(const std::string& file = "options");
 	/// Saves options to YAML.
-	void save(const std::string& filename = "options");
+	void save(const std::string& file = "options");
 	/// Gets the game's data folder.
 	std::string getDataFolder();
 	/// Sets the game's data folder.

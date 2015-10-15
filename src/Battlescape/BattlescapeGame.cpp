@@ -238,6 +238,7 @@ void BattlescapeGame::think()
 
 /**
  * Gives a time slice to the front state.
+ * @note The period is controlled by '_tacticalTimer' in BattlescapeState.
  */
 void BattlescapeGame::handleState()
 {
@@ -247,7 +248,6 @@ void BattlescapeGame::handleState()
 		{
 			_states.pop_front();
 			endTurnPhase();
-
 			return;
 		}
 

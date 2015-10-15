@@ -40,7 +40,7 @@ class FpsCounter
 {
 
 private:
-	int _frames;
+	Uint32 _frames;
 
 	NumberText* _text;
 	Timer* _timer;

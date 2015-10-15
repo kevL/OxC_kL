@@ -58,8 +58,8 @@ private:
 	int
 		_debugCycle,	// for debugging country areas.
 		_debugCycle_b,	// for debugging country areas.
-		_timeUntilNextFrame;
-	unsigned int _timeOfLastFrame;
+		_ticksTillNextSlice;
+	Uint32 _tickOfLastSlice;
 
 	Cursor* _cursor;
 	FpsCounter* _fpsCounter;

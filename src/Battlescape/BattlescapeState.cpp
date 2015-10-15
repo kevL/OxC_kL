@@ -918,32 +918,18 @@ BattlescapeState::BattlescapeState()
 	_numTUAuto->setColor(GRAY);
 	_numTUSnap->setColor(GRAY);
 
-//	_barTimeUnits->setScale();
-//	_barTimeUnits->setMaxValue();
-
-//	_barEnergy->setScale();
-//	_barEnergy->setMaxValue();
-
-//	_barHealth->setScale();
-//	_barHealth->setMaxValue();
-
-//	_barMorale->setScale();
-//	_barMorale->setMaxValue();
-
 /*	_btnReserveNone->setGroup(&_reserve);
 	_btnReserveSnap->setGroup(&_reserve);
 	_btnReserveAimed->setGroup(&_reserve);
 	_btnReserveAuto->setGroup(&_reserve); */
 
-	_animTimer = new Timer(STATE_INTERVAL_STANDARD); // setStateInterval() does NOT set this <-
-	_animTimer->onTimer((StateHandler)& BattlescapeState::animate);
+	_aniTimer = new Timer(STATE_INTERVAL_STANDARD); // setStateInterval() does NOT change this <-
+	_aniTimer->onTimer((StateHandler)& BattlescapeState::animate);
 
-	_battleTimer = new Timer(STATE_INTERVAL_STANDARD); // setStateInterval() does set this <-
-	_battleTimer->onTimer((StateHandler)& BattlescapeState::handleState);
+	_tacticalTimer = new Timer(STATE_INTERVAL_STANDARD); // setStateInterval() will change this <-
+	_tacticalTimer->onTimer((StateHandler)& BattlescapeState::handleState);
 
-	_battleGame = new BattlescapeGame(
-									_battleSave,
-									this);
+	_battleGame = new BattlescapeGame(_battleSave, this);
 	//Log(LOG_INFO) << "Create BattlescapeState EXIT";
 }
 
@@ -953,8 +939,8 @@ BattlescapeState::BattlescapeState()
 BattlescapeState::~BattlescapeState()
 {
 	//Log(LOG_INFO) << "Delete BattlescapeState";
-	delete _animTimer;
-	delete _battleTimer;
+	delete _aniTimer;
+	delete _tacticalTimer;
 	delete _battleGame;
 }
 
@@ -965,8 +951,8 @@ void BattlescapeState::init()
 {
 	State::init();
 
-	_animTimer->start();
-	_battleTimer->start();
+	_aniTimer->start();
+	_tacticalTimer->start();
 
 	_map->setFocus(true);
 	_map->cacheUnits();
@@ -987,22 +973,17 @@ void BattlescapeState::init()
 		default: _reserve = _btnReserveNone; break;
 	} */
 
-	if (_firstInit == true
-		&& playableUnitSelected() == true)
+	if (_firstInit == true && playableUnitSelected() == true)
 	{
 		_firstInit = false;
 		_battleGame->setupCursor();
 		_map->getCamera()->centerOnPosition(_battleSave->getSelectedUnit()->getPosition());
 
 		std::string
-			music,
+			track,
 			terrain;
-		_battleSave->calibrateMusic(
-								music,
-								terrain);
-		_game->getResourcePack()->playMusic(
-										music,
-										terrain);
+		_battleSave->calibrateMusic(track, terrain);
+		_game->getResourcePack()->playMusic(track, terrain);
 
 /*		_btnReserveNone->setGroup(&_reserve);
 		_btnReserveSnap->setGroup(&_reserve);
@@ -1010,13 +991,10 @@ void BattlescapeState::init()
 		_btnReserveAuto->setGroup(&_reserve); */
 	}
 
-	_numLayers->setValue(static_cast<unsigned int>(_map->getCamera()->getViewLevel()) + 1);
+	_numLayers->setValue(static_cast<unsigned>(_map->getCamera()->getViewLevel()) + 1);
 
-	if (_iconsHidden == false
-		&& _battleSave->getControlDestroyed() == true)
-	{
+	if (_battleSave->getControlDestroyed() == true && _iconsHidden == false)
 		_txtControlDestroyed->setVisible();
-	}
 	else
 		_txtControlDestroyed->setVisible(false);
 
@@ -1034,7 +1012,7 @@ void BattlescapeState::init()
 void BattlescapeState::think()
 {
 	//Log(LOG_INFO) << "BattlescapeState::think()";
-	if (_battleTimer->isRunning() == true)
+	if (_tacticalTimer->isRunning() == true)
 	{
 		static bool popped; // inits to false.
 
@@ -1044,10 +1022,10 @@ void BattlescapeState::think()
 
 			//Log(LOG_INFO) << "BattlescapeState::think() -> _battleGame.think()";
 			_battleGame->think();
-			//Log(LOG_INFO) << "BattlescapeState::think() -> _animTimer.think()";
-			_animTimer->think(this, NULL);
-			//Log(LOG_INFO) << "BattlescapeState::think() -> _battleTimer.think()";
-			_battleTimer->think(this, NULL);
+			//Log(LOG_INFO) << "BattlescapeState::think() -> _aniTimer.think()";
+			_aniTimer->think(this, NULL);
+			//Log(LOG_INFO) << "BattlescapeState::think() -> _tacticalTimer.think()";
+			_tacticalTimer->think(this, NULL);
 			//Log(LOG_INFO) << "BattlescapeState::think() -> back from thinks";
 
 			if (popped == true)
@@ -3251,12 +3229,12 @@ void BattlescapeState::handleState()
 }
 
 /**
- * Sets the '_battleTimer' interval for think() calls of the state.
+ * Sets the '_tacticalTimer' interval for think() calls of the state.
  * @param interval - an interval in ms
  */
 void BattlescapeState::setStateInterval(Uint32 interval)
 {
-	_battleTimer->setInterval(interval);
+	_tacticalTimer->setInterval(interval);
 }
 
 /**
@@ -3406,8 +3384,8 @@ void BattlescapeState::finishBattle(
 	else
 	{
 		_popups.clear();
-		_animTimer->stop();
-		_battleTimer->stop();
+		_aniTimer->stop();
+		_tacticalTimer->stop();
 		_game->popState();
 
 		if (abort == true		// abort was done or no player is still alive

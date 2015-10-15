@@ -27,6 +27,7 @@
 #include "../Engine/Game.h"
 //#include "../Engine/LocalizedText.h"
 //#include "../Engine/Options.h"
+#include "../Engine/Timer.h"
 
 #include "../Interface/ArrowButton.h"
 #include "../Interface/Text.h"
@@ -118,7 +119,7 @@ ListGamesState::ListGamesState(
 {
 	_screen = false;
 
-	_window		= new Window(this, 320, 200, 0,0, POPUP_BOTH);
+	_window		= new Window(this, 320, 200, 0, 0, POPUP_BOTH);
 
 	_txtTitle	= new Text(310, 16, 5,  8);
 	_txtDelete	= new Text(310,  9, 5, 24);
@@ -170,7 +171,7 @@ ListGamesState::ListGamesState(
 	_txtDate->setText(tr("STR_DATE"));
 
 	_lstSaves->setBackground(_window);
-	_lstSaves->setColumns(3, 188, 60, 29);
+	_lstSaves->setColumns(3, 188,60,29);
 	_lstSaves->setSelectable();
 	_lstSaves->setMargin();
 	_lstSaves->onMouseOver((ActionHandler)& ListGamesState::lstSavesMouseOver);
@@ -185,6 +186,10 @@ ListGamesState::ListGamesState(
 
 	_sortDate->setX(_sortDate->getX() + _txtDate->getTextWidth() + 5);
 	_sortDate->onMouseClick((ActionHandler)& ListGamesState::sortDateClick);
+
+	_timer = new Timer(80);
+	_timer->onTimer((StateHandler)& ListGamesState::refreshMouse);
+	_timer->start();
 
 	updateArrows();
 }
@@ -220,9 +225,41 @@ void ListGamesState::init()
 }
 
 /**
+ * Checks when popup is done.
+ */
+void ListGamesState::think()
+{
+	if (_window->isPopupDone() == false)
+		_window->think();
+	else
+	{
+		_timer->think(this, NULL);	// Things go a bit whacky if a call directly to
+		_timer->stop();				// refreshMouse() is made here. Etc (you do the math).
+	}
+}
+
+/**
+ * Forces a transparent SDL mouse-motion event that highlights the selector -
+ * otherwise it won't unless the mouse is jiggled.
+ */
+void ListGamesState::refreshMouse() const // private.
+{
+	int
+		x,y;
+	SDL_GetMouseState(&x,&y);
+	SDL_WarpMouse(
+			static_cast<Uint16>(x + 1),
+			static_cast<Uint16>(y));
+	SDL_GetMouseState(&x,&y);
+	SDL_WarpMouse(
+			static_cast<Uint16>(x - 1),
+			static_cast<Uint16>(y));
+}
+
+/**
  * Updates the sorting arrows based on the current setting.
  */
-void ListGamesState::updateArrows()
+void ListGamesState::updateArrows() // private.
 {
 	_sortName->setShape(ARROW_NONE);
 	_sortDate->setShape(ARROW_NONE);

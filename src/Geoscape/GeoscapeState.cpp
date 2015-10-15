@@ -2770,8 +2770,8 @@ void GeoscapeState::time1Day()
 
 			bool
 				gofCrack,
-				unlocksCrack;
-
+				unlocksCrack;	// TODO: that. The issue is that the 'unlocks' are not an independent vector, but instead are
+								// redetermined on-the-fly from the player's 'discovered' vector every time they're examined.
 			if (liveAlien == true)
 				getAlienCracks(
 							resType,

@@ -42,26 +42,20 @@ class Timer
 {
 
 private:
-	bool
-		_frameSkipping,
-		_running;
+	bool _running;
 	Uint32
-		_frameSkipStart,
 		_interval,
-		_start;
+		_startTick;
 
 	StateHandler _state;
 	SurfaceHandler _surface;
 
 
 	public:
-		static int maxFrameSkip;
-		static Uint32 gameSlowSpeed;
+		static Uint32 coreInterval;
 
 		/// Creates a stopped timer.
-		Timer(
-				Uint32 interval,
-				bool frameSkipping = false);
+		Timer(Uint32 interval);
 		/// Cleans up the timer.
 		~Timer();
 
@@ -71,15 +65,15 @@ private:
 		void stop();
 
 		/// Gets the current time interval.
-		Uint32 getTime() const;
+		Uint32 getTimerElapsed() const;
 
 		/// Gets if the timer is running.
 		bool isRunning() const;
 
 		/// Advances the timer.
 		void think(
-				State* state,
-				Surface* surface);
+				State* const state,
+				Surface* const surface);
 
 		/// Sets the timer's interval.
 		void setInterval(Uint32 interval);
@@ -88,9 +82,6 @@ private:
 		void onTimer(StateHandler handler);
 		/// Hooks a surface action handler to the timer interval.
 		void onTimer(SurfaceHandler handler);
-
-		/// Turns frame skipping on or off.
-		void setFrameSkipping(bool skip);
 };
 
 }

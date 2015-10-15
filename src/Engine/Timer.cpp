@@ -20,7 +20,6 @@
 #include "Timer.h"
 
 #include "Game.h"
-//#include "Options.h"
 
 
 namespace OpenXcom
@@ -29,57 +28,39 @@ namespace OpenXcom
 namespace
 {
 
-const Uint32 accurate = 4;
+const Uint32 ACCURATE = 4;
 
 Uint32 slowTick()
 {
-/*	static Uint32 old_time = SDL_GetTicks();
-	static Uint64 false_time = static_cast<Uint64>(old_time) << accurate;
-	Uint64 new_time = ((Uint64)SDL_GetTicks()) << accurate;
-	false_time += (new_time - old_time) / Timer::gameSlowSpeed;
-	old_time = new_time;
-
-	return false_time >> accurate; */
-
-	// kL_begin: slowTick() counts.
 	static Uint32
-		old_time = SDL_GetTicks(),
-		false_time = old_time << accurate;
+		tickOld (SDL_GetTicks()),
+		tickFalse (tickOld << ACCURATE);
 
-	Uint32 new_time = SDL_GetTicks() << accurate;
+	Uint32 tickNew (SDL_GetTicks() << ACCURATE);
 
-	false_time += (new_time - old_time) / Timer::gameSlowSpeed;
-	old_time = new_time;
+	tickFalse += (tickNew - tickOld) / Timer::coreInterval;
+	tickOld = tickNew;
 
-	return (false_time >> accurate);
-	// kL_end.
+	return (tickFalse >> ACCURATE);
 }
 
 }
 
-
-Uint32 Timer::gameSlowSpeed = 1;
-int Timer::maxFrameSkip = 8; // this is a pretty good default at 60FPS.
+Uint32 Timer::coreInterval = 1;
 
 
 /**
  * Initializes a new timer with a set interval.
- * @param interval		- time interval in milliseconds
- * @param frameSkipping - true to use frameskipping (default false)
+ * @param interval - time interval in milliseconds
  */
-Timer::Timer(
-		Uint32 interval,
-		bool frameSkipping)
+Timer::Timer(Uint32 interval)
 	:
-		_start(0),
+		_startTick(0),
 		_interval(interval),
 		_running(false),
-		_frameSkipping(frameSkipping),
-		_state(0),
-		_surface(0)
-{
-	Timer::maxFrameSkip = Options::maxFrameSkip;
-}
+		_state(NULL),
+		_surface(NULL)
+{}
 
 /**
  * dTor.
@@ -92,9 +73,7 @@ Timer::~Timer()
  */
 void Timer::start()
 {
-	_frameSkipStart =
-	_start = slowTick();
-
+	_startTick = slowTick();
 	_running = true;
 }
 
@@ -103,18 +82,19 @@ void Timer::start()
  */
 void Timer::stop()
 {
-	_start = 0;
+	_startTick = 0;
 	_running = false;
 }
 
 /**
- * Returns the time passed since the last interval/ since this Timer started.
+ * Returns the time passed since the last interval.
+ * @note Used only for the FPS counter.
  * @return, time in milliseconds
  */
-Uint32 Timer::getTime() const
+Uint32 Timer::getTimerElapsed() const
 {
 	if (_running == true)
-		return slowTick() - _start;
+		return slowTick() - _startTick; // WARNING: this will give a single erroneous reading @ ~49 days RT.
 
 	return 0;
 }
@@ -129,66 +109,32 @@ bool Timer::isRunning() const
 }
 
 /**
- * The timer keeps calculating the passed time while it's running calling the
- * respective action handler whenever the set interval passes.
+ * The timer keeps calculating passed-time while it's running - calling the
+ * respective Handler (State and/or Surface) at each set-interval-pass.
  * @param state		- State that the action handler belongs to
  * @param surface	- Surface that the action handler belongs to
  */
 void Timer::think(
-		State* state,
-		Surface* surface)
+		State* const state,
+		Surface* const surface)
 {
-	// must be signed to permit negative numbers
-	Sint64 current = static_cast<Sint64>(slowTick());
-
-	// this is used to make sure it stops calling *_state on *state
-	// in the loop once *state has been popped and deallocated:
-	const Game* game;
-	if (state != NULL)
-		game = state->_game;
-	else
-		game = NULL;
-//	assert(!game || game->isState(state));
-
 	if (_running == true)
 	{
-		if (current - static_cast<Sint64>(_frameSkipStart) >= static_cast<Sint64>(_interval))
+		Uint32 ticks (slowTick());
+		if (ticks >= _startTick + _interval)
 		{
-			for (int
-					i = 0;
-					i <= maxFrameSkip
-						&& _running == true
-						&& current - static_cast<Sint64>(_frameSkipStart) >= static_cast<Sint64>(_interval);
-					++i)
+			if (state != NULL && _state != NULL)
 			{
-				if (state != NULL
-					&& _state != 0)
-				{
-					(state->*_state)();
-				}
-
-				_frameSkipStart += _interval;
-
-				// breaking here after one iteration effectively returns this function to its old functionality:
-				if (game == NULL
-					|| _frameSkipping == false
-					|| game->isState(state) == false) // if game isn't set, can't verify *state
-				{
-					break;
-				}
+				(state->*_state)();		// call to *StateHandler.
 			}
 
-			if (_running == true
-				&& surface != NULL
-				&& _surface != 0)
+			if (_running == true &&
+				surface != NULL && _surface != NULL)
 			{
-				(surface->*_surface)();
+				(surface->*_surface)();	// call to *SurfaceHandler.
 			}
 
-			_start = slowTick();
-
-			if (_start > _frameSkipStart)
-				_frameSkipStart = _start; // don't play animations in ffwd to catch up :P
+			_startTick = ticks;
 		}
 	}
 }
@@ -218,15 +164,6 @@ void Timer::onTimer(StateHandler handler)
 void Timer::onTimer(SurfaceHandler handler)
 {
 	_surface = handler;
-}
-
-/**
- * Sets frame skipping on or off.
- * @param skip - true to enable frameskipping
- */
-void Timer::setFrameSkipping(bool skip)
-{
-	_frameSkipping = skip;
 }
 
 }
