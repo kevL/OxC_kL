@@ -52,23 +52,18 @@ UnitFallBState::UnitFallBState(BattlescapeGame* const parent)
  * Deletes the UnitWalkBState.
  */
 UnitFallBState::~UnitFallBState()
-{
-	_parent->setStateInterval(BattlescapeState::STATE_INTERVAL_STANDARD); // kL
-}
+{}
 
 /**
  * Initializes the state.
  */
 void UnitFallBState::init()
 {
-//	_terrain = _parent->getTileEngine();
-
 	Uint32 interval;
 	if (_battleSave->getSide() == FACTION_PLAYER)
 		interval = static_cast<Uint32>(Options::battleXcomSpeed);
 	else
 		interval = static_cast<Uint32>(Options::battleAlienSpeed);
-
 	_parent->setStateInterval(interval);
 }
 

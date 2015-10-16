@@ -84,9 +84,7 @@ ExplosionBState::ExplosionBState(
  * Deletes the ExplosionBState.
  */
 ExplosionBState::~ExplosionBState()
-{
-	_parent->setStateInterval(BattlescapeState::STATE_INTERVAL_STANDARD); // kL
-}
+{}
 
 /**
  * Initializes the explosion.
@@ -227,7 +225,6 @@ void ExplosionBState::init()
 				_parent->getMap()->getExplosions()->push_back(explosion);
 			}
 
-			_parent->setStateInterval(BattlescapeState::STATE_INTERVAL_STANDARD); // * 10 / 7);
 //			_parent->getMap()->setBlastFlash(true);
 
 
@@ -293,14 +290,17 @@ void ExplosionBState::init()
 			Explosion* const explosion = new Explosion(
 													_center,
 													start,
-													0,false,
+													0, false,
 													result);
 			_parent->getMap()->getExplosions()->push_back(explosion);
 
-			Uint32 interval = BattlescapeState::STATE_INTERVAL_STANDARD * 5 / 7;
-			interval -= static_cast<Uint32>(_item->getRules()->getExplosionSpeed()) * 10;
-			if (interval < 1) interval = 1;
-			_parent->setStateInterval(interval);
+			const int speedExpl = _item->getRules()->getExplosionSpeed(); // can be negative to prolong the explosion.
+			if (speedExpl != 0)
+			{
+				Uint32 interval = BattlescapeState::STATE_INTERVAL_STANDARD - static_cast<Uint32>(speedExpl * 10);
+				if (interval < 1) interval = 1;
+				_parent->setStateInterval(interval);
+			}
 		}
 
 		Camera* const exploCam = _parent->getMap()->getCamera();

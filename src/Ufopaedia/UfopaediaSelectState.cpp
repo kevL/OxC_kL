@@ -58,7 +58,6 @@ UfopaediaSelectState::UfopaediaSelectState(
 
 	_window			= new Window(this, 256, 194, 32 + dX, 6);
 	_txtTitle		= new Text(224, 17, 48 + dX, 15);
-//	_lstSelection	= new TextList(224, 137, 40 + dX, 35);
 	_lstSelection	= new TextList(208, 137, 56 + dX, 35);
 	_btnOk			= new TextButton(224, 16, 48 + dX, 177);
 

@@ -82,10 +82,7 @@ UnitDieBState::UnitDieBState(
 			_parent->getMap()->setUnitDying();
 
 		if (_unit->getSpawnUnit().empty() == false)
-		{
-			_parent->setStateInterval(BattlescapeState::STATE_INTERVAL_STANDARD * 8 / 7);
 			_unit->lookAt(3); // inits STATUS_TURNING if not facing correctly. Else STATUS_STANDING
-		}
 		else
 			_unit->initDeathSpin(); // inits STATUS_TURNING
 	}
@@ -123,9 +120,7 @@ UnitDieBState::UnitDieBState(
  * Deletes the UnitDieBState.
  */
 UnitDieBState::~UnitDieBState()
-{
-	_parent->setStateInterval(BattlescapeState::STATE_INTERVAL_STANDARD); // kL
-}
+{}
 
 /**
  * Initializes this state.
@@ -140,8 +135,7 @@ UnitDieBState::~UnitDieBState()
 void UnitDieBState::think()
 {
 // #0
-	if (_noSound == false
-		&& _doneScream == false)
+	if (_noSound == false && _doneScream == false)
 	{
 		_doneScream = true;
 
@@ -176,7 +170,6 @@ void UnitDieBState::think()
 		_unit->keepFalling(); // -> STATUS_DEAD or STATUS_UNCONSCIOUS ( ie. isOut() )
 	}
 // #2
-//	else if (_unit->isOut() == false) // this ought be Status_Standing/Disabled also.
 	else if (_unit->isOut_t(OUT_STAT) == false) // this ought be Status_Standing/Disabled also.
 	{
 		_parent->setStateInterval(BattlescapeState::STATE_INTERVAL_STANDARD);

@@ -121,7 +121,7 @@ void Timer::think(
 		State* const state,
 		Surface* const surface)
 {
-	//if (_debug) Log(LOG_INFO) << "Timer: think() [" << _stDebugObject << "]";
+	//if (_debug) Log(LOG_INFO) << "Timer: think() [" << _stDebugObject << "]" << " interval = " << _interval;
 	if (_running == true)
 	{
 		Uint32 ticks (slowTick());

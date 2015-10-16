@@ -922,6 +922,7 @@ BattlescapeState::BattlescapeState()
 
 	_tacticalTimer = new Timer(STATE_INTERVAL_STANDARD); // setStateInterval() will change this <-
 	_tacticalTimer->onTimer((StateHandler)& BattlescapeState::handleState);
+//	_tacticalTimer->debug("BattlescapeState");
 
 	_battleGame = new BattlescapeGame(_battleSave, this);
 	//Log(LOG_INFO) << "Create BattlescapeState EXIT";
@@ -1595,7 +1596,6 @@ inline void BattlescapeState::handle(Action* action)
 								{
 									if ((*i)->getOriginalFaction() == FACTION_HOSTILE
 										&& (*i)->isOut_t(OUT_HLTH) == false)
-//										&& (*i)->isOut() == false)
 									{
 										checkCasualties = true;
 										(*i)->setStun((*i)->getHealth() + 100);
@@ -1606,8 +1606,8 @@ inline void BattlescapeState::handle(Action* action)
 
 							if (checkCasualties == true)
 							{
-								_battleSave->getBattleGame()->checkForCasualties(NULL, NULL, true);
-								_battleSave->getBattleGame()->handleState();
+								_battleGame->checkForCasualties(NULL, NULL, true);
+								_battleGame->handleState();
 							}
 						}
 					}
@@ -4142,7 +4142,7 @@ void BattlescapeState::saveVoxelView()
 	std::vector<Position> trj;
 
 	Position
-		originVoxel = getBattleGame()->getTileEngine()->getSightOriginVoxel(selUnit),
+		originVoxel = _battleGame->getTileEngine()->getSightOriginVoxel(selUnit),
 		targetVoxel,
 		pos;
 	const Tile* tile = NULL;

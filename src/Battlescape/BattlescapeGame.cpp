@@ -323,6 +323,8 @@ void BattlescapeGame::popState()
 //		<< (_battleSave->getSelectedUnit()? _battleSave->getSelectedUnit()->getTimeUnits(): -9999) << " TU";
 //	}
 
+	setStateInterval(BattlescapeState::STATE_INTERVAL_STANDARD);
+
 	if (_states.empty() == false)
 	{
 		//Log(LOG_INFO) << ". states NOT Empty";
@@ -506,7 +508,6 @@ void BattlescapeGame::popState()
 					if (_AIActionCounter > 2
 						|| selUnit == NULL
 						|| selUnit->isOut_t() == true)
-//						|| selUnit->isOut(true, true) == true)
 					{
 						if (selUnit != NULL)
 						{

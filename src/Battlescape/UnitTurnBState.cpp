@@ -60,21 +60,17 @@ UnitTurnBState::UnitTurnBState(
  * Deletes the UnitTurnBState.
  */
 UnitTurnBState::~UnitTurnBState()
-{
-	_parent->setStateInterval(BattlescapeState::STATE_INTERVAL_STANDARD); // kL
-}
+{}
 
 /**
  * Initializes the state.
  */
 void UnitTurnBState::init()
 {
-//	if (_unit->isOut(true, true))
 	if (_unit->isOut_t(OUT_STAT) == true)
 	{
 		_unit->setTurnDirection(0);
 		_parent->popState();
-
 		return;
 	}
 
@@ -95,9 +91,7 @@ void UnitTurnBState::init()
 	if (_unit->getPosition().x != _action.target.x
 		|| _unit->getPosition().y != _action.target.y)
 	{
-		_unit->lookAt( // -> STATUS_TURNING
-					_action.target,
-					_turret);
+		_unit->lookAt(_action.target, _turret); // -> STATUS_TURNING
 	}
 
 

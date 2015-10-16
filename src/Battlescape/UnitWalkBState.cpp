@@ -82,9 +82,7 @@ UnitWalkBState::UnitWalkBState(
  * Deletes the UnitWalkBState.
  */
 UnitWalkBState::~UnitWalkBState()
-{
-	_parent->setStateInterval(BattlescapeState::STATE_INTERVAL_STANDARD); // kL
-}
+{}
 
 /**
  * Initializes the state.
@@ -1185,25 +1183,25 @@ bool UnitWalkBState::visForUnits() const // private.
  */
 void UnitWalkBState::setWalkSpeed(bool gravLift) const // private.
 {
-	int interval;
+	Uint32 interval;
 	if (_unit->getFaction() == FACTION_PLAYER)
 	{
 		if (_action.dash == true
 			|| (_unit->getUnitRules() != NULL
 				&& _unit->getUnitRules()->isDog() == true))
 		{
-			interval = Options::battleXcomSpeed * 2 / 3;
+			interval = static_cast<Uint32>(Options::battleXcomSpeed * 2 / 3);
 		}
 		else
-			interval = Options::battleXcomSpeed;
+			interval = static_cast<Uint32>(Options::battleXcomSpeed);
 	}
 	else
-		interval = Options::battleAlienSpeed;
+		interval = static_cast<Uint32>(Options::battleAlienSpeed);
 
 	if (gravLift == true)
-		interval = interval * 2;
+		interval *= 2;
 
-	_parent->setStateInterval(static_cast<Uint32>(interval));
+	_parent->setStateInterval(interval);
 }
 
 /**
