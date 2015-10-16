@@ -567,17 +567,17 @@ private:
 		std::vector<SoldierDead*>* getDeadSoldiers();
 
 		/// Gets the last selected player base.
-//		Base* getSelectedBase();
+//		Base* getRecallBase();
 		/// Set the last selected player base.
-//		void setSelectedBase(size_t base);
+//		void setRecallBase(size_t base);
 
 		/// Evaluate the score of a soldier based on all of his stats, missions and kills.
 		int getSoldierScore(Soldier* soldier);
 
 		/// Sets the last selected armour
-//		void setLastSelectedArmor(const std::string& value);
+//		void setRecallArmor(const std::string& value);
 		/// Gets the last selected armour
-//		std::string getLastSelectedArmor();
+//		std::string getRecallArmor();
 
 		/// Sets the current Matrix row.
 		void setCurrentRowMatrix(size_t row);

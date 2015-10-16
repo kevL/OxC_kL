@@ -88,8 +88,8 @@ State::~State()
 
 /**
  * Sets interface data from the ruleset - also sets the palette for the state.
- * @param category		- reference the name of the interface from the Interfaces ruleset
- * @param alterPal		- true to swap out the backpal colors (default false)
+ * @param category	- reference the name of the interface from the Interfaces ruleset
+ * @param alterPal	- true to swap out the backpal colors (default false)
  * @param battle	- true to use battlescape palette (applies only to options screens) (default false)
  */
 void State::setInterface(

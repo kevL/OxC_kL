@@ -104,7 +104,7 @@ private:
 		size_t getHoveredBase() const;
 
 		/// Sets the selected base for the mini base view.
-		void setSelectedBase(size_t base);
+		void setSelectedBase(size_t baseId);
 
 		/// Draws the mini base view.
 		void draw();

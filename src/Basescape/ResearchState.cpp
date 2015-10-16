@@ -320,7 +320,8 @@ void ResearchState::viewMouseOver(Action*)
 	{
 		_txtHoverBase->setText(_baseList->at(baseId)->getName(_game->getLanguage()).c_str());
 	}
-	else _txtHoverBase->setText(L"");
+	else
+		_txtHoverBase->setText(L"");
 }
 
 /**

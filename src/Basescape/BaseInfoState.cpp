@@ -238,7 +238,7 @@ BaseInfoState::BaseInfoState(
 	_mini->onMouseOut((ActionHandler)& BaseInfoState::viewMouseOut);
 
 	_edtBase->setBig();
-	_edtBase->onChange((ActionHandler)& BaseInfoState::edtBaseChange);
+	_edtBase->onChange((ActionHandler)& BaseInfoState::edtLabelChange);
 
 	_btnOk->setText(tr("STR_OK"));
 	_btnOk->onMouseClick((ActionHandler)& BaseInfoState::btnOkClick);
@@ -576,16 +576,16 @@ void BaseInfoState::init()
 }
 
 /**
- * Changes the base name.
+ * Changes the Base's name.
  * @param action - pointer to an Action
  */
-void BaseInfoState::edtBaseChange(Action*)
+void BaseInfoState::edtLabelChange(Action*)
 {
 	_base->setName(_edtBase->getText());
 }
 
 /**
- * Selects a new base to display.
+ * Selects a different Base to display.
  * @param action - pointer to an Action
  */
 void BaseInfoState::handleKeyPress(Action* action)
@@ -604,20 +604,23 @@ void BaseInfoState::handleKeyPress(Action* action)
 			Options::keyBaseSelect8
 		};
 
-		const SDLKey key = action->getDetails()->key.keysym.sym;
-
-		for (size_t
-				i = 0;
-				i != _baseList->size();
-				++i)
+		const SDLKey keyId (action->getDetails()->key.keysym.sym);
+		size_t baseId (0);
+		for (std::vector<Base*>::const_iterator
+				i = _baseList->begin();
+				i != _baseList->end();
+				++i, ++baseId)
 		{
-			if (key == baseKeys[i])
+			if (*i == _base && static_cast<SDLKey>(baseId) == keyId)
+				return;
+
+			if (baseKeys[baseId] == keyId)
 			{
 				_txtHoverBase->setText(L"");
 				_txtHoverRegion->setText(L"");
 
-				_mini->setSelectedBase(i);
-				_base = _baseList->at(i);
+				_mini->setSelectedBase(baseId);
+				_base = _baseList->at(baseId);
 				_state->setBase(_base);
 
 				_state->resetStoresWarning();
@@ -666,13 +669,12 @@ void BaseInfoState::btnMonthlyCostsClick(Action*)
 }
 
 /**
- * Selects a new Base to display.
+ * Selects a different Base to display.
  * @param action - pointer to an Action
  */
 void BaseInfoState::miniClick(Action*)
 {
 	const size_t baseId = _mini->getHoveredBase();
-
 	if (baseId < _baseList->size()
 		&& _base != _baseList->at(baseId))
 	{
@@ -696,7 +698,6 @@ void BaseInfoState::viewMouseOver(Action*)
 {
 	const size_t baseId = _mini->getHoveredBase();
 	const Base* const hoverBase = _baseList->at(baseId);
-
 	if (baseId < _baseList->size()
 		&& hoverBase != _base)
 	{

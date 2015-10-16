@@ -38,7 +38,6 @@ class ArrowButton;
 class Text;
 class TextButton;
 class TextList;
-class Timer;
 class Window;
 
 
@@ -54,6 +53,7 @@ protected:
 	bool
 		_autoquick,
 		_editMode,
+		_refresh,
 		_sortable;
 	size_t _firstValid;
 
@@ -70,14 +70,11 @@ protected:
 		* _txtDetails;
 	TextButton* _btnCancel;
 	TextList* _lstSaves;
-	Timer* _timer;
 	Window* _window;
 
 	std::vector<SaveInfo> _saves;
 
 
-	/// Refreshes the mouse position.
-	void refreshMouse() const;
 	/// Updates the list-order arrows.
 	void updateArrows();
 

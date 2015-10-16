@@ -43,7 +43,7 @@ SDL_Color Font::_palette[] =
 
 
 /**
- * Initializes the font with a blank surface.
+ * Initializes this Font with a blank surface.
  */
 Font::Font()
 	:
@@ -55,7 +55,7 @@ Font::Font()
 {}
 
 /**
- * Deletes the font's surface.
+ * Deletes this Font's surface.
  */
 Font::~Font()
 {
@@ -63,16 +63,17 @@ Font::~Font()
 }
 
 /**
- * Loads the characters contained in each font from a UTF-8 string to use as the index.
+ * Loads the characters contained in each font from a UTF-8 string to use as the
+ * index.
  * @param index - reference a string of characters
  */
-void Font::setIndex(const std::wstring& index)
+void Font::setIndex(const std::wstring& index) // static.
 {
 	_index = index;
 }
 
 /**
- * Loads the font from a YAML file.
+ * Loads this Font from a YAML file.
  * @param node - refrence a YAML node
  */
 void Font::load(const YAML::Node& node)
@@ -152,7 +153,7 @@ void Font::init()
 			SDL_Rect rect;
 
 			const int
-				startX = static_cast<int>(i) %len * _width,
+				startX = static_cast<int>(i) % len * _width,
 				startY = static_cast<int>(i) / len * _height;
 
 			rect.x = static_cast<Sint16>(startX);
@@ -173,7 +174,7 @@ void Font::init()
 			SDL_Rect rect;
 
 			const int
-				startX = static_cast<int>(i) %len * _width,
+				startX = static_cast<int>(i) % len * _width,
 				startY = static_cast<int>(i) / len * _height;
 			int
 				left = -1,
@@ -224,9 +225,9 @@ void Font::init()
 }
 
 /**
- * Returns a particular character from the set stored in the font.
+ * Returns a particular character from the set stored in this Font.
  * @param fontChar - character to use for size/position
- * @return, pointer to the font's surface with the respective cropping rectangle set up
+ * @return, pointer to this Font's surface with the respective cropping rectangle set up
  */
 Surface* Font::getChar(wchar_t fontChar)
 {
@@ -241,7 +242,7 @@ Surface* Font::getChar(wchar_t fontChar)
 	return _surface;
 }
 /**
- * Returns the maximum width for any character in the font.
+ * Returns the maximum width for any character in this Font.
  * @return, width in pixels
  */
 int Font::getWidth() const
@@ -250,7 +251,7 @@ int Font::getWidth() const
 }
 
 /**
- * Returns the maximum height for any character in the font.
+ * Returns the maximum height for any character in this Font.
  * @return, height in pixels
  */
 int Font::getHeight() const
@@ -259,7 +260,7 @@ int Font::getHeight() const
 }
 
 /**
- * Returns the spacing for any character in the font.
+ * Returns the spacing for any character in this Font.
  * @return, spacing in pixels
  * @note This does not refer to character spacing within the surface
  * but to the spacing used between multiple characters in a line.
@@ -270,7 +271,7 @@ int Font::getSpacing() const
 }
 
 /**
- * Returns the dimensions of a particular character in the font.
+ * Returns the dimensions of a particular character in this Font.
  * @param fontChar - font character
  * @return, width and height dimensions (X and Y are ignored)
  */
@@ -304,8 +305,8 @@ SDL_Rect Font::getCharSize(wchar_t fontChar)
 }
 
 /**
- * Returns the surface stored within the font.
- * Used for loading the actual graphic into the font.
+ * Returns the surface stored within this Font.
+ * @note Used for loading the actual graphic into this Font.
  * @return, pointer to the internal surface
  */
 Surface* Font::getSurface() const
@@ -333,7 +334,7 @@ void Font::fix(
 
 	for (size_t
 			i = 0;
-			i < _index.length();
+			i != _index.length();
 			++i)
 	{
 		SDL_Rect rect = _chars[_index[i]];

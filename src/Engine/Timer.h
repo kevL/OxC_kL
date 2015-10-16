@@ -47,6 +47,9 @@ private:
 		_interval,
 		_startTick;
 
+	bool _debug;
+	std::string _stDebugObject;
+
 	StateHandler _state;
 	SurfaceHandler _surface;
 
@@ -82,6 +85,9 @@ private:
 		void onTimer(StateHandler handler);
 		/// Hooks a surface action handler to the timer interval.
 		void onTimer(SurfaceHandler handler);
+
+		/// Debugs.
+		void debug(const std::string& stDebug);
 };
 
 }

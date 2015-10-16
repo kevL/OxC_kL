@@ -35,8 +35,8 @@ class Window;
 
 /**
  * Options window shown for loading/saving/quitting the game.
- * Not to be confused with the Game Options window
- * for changing game settings during runtime.
+ * @note Not to be confused with the Game Options window for changing game
+ * settings during runtime.
  */
 class PauseState
 	:

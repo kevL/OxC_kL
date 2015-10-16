@@ -2273,7 +2273,7 @@ std::vector<SoldierDead*>* SavedGame::getDeadSoldiers()
  * Returns the last selected player base.
  * @return, pointer to base
  *
-Base* SavedGame::getSelectedBase()
+Base* SavedGame::getRecallBase()
 {
 	// in case a base was destroyed or something...
 	if (_selectedBase < _bases.size())
@@ -2285,7 +2285,7 @@ Base* SavedGame::getSelectedBase()
  * Sets the last selected player base.
  * @param base - # of the base
  *
-void SavedGame::setSelectedBase(size_t base)
+void SavedGame::setRecallBase(size_t base)
 {
 	_selectedBase = base;
 } */
@@ -2293,7 +2293,7 @@ void SavedGame::setSelectedBase(size_t base)
  * Sets the last selected armour.
  * @param value - the new value for last selected armor - Armor type string
  *
-void SavedGame::setLastSelectedArmor(const std::string& value)
+void SavedGame::setRecallArmor(const std::string& value)
 {
 	_lastselectedArmor = value;
 } */
@@ -2301,7 +2301,7 @@ void SavedGame::setLastSelectedArmor(const std::string& value)
  * Gets the last selected armour.
  * @return, last used armor type string
  *
-std::string SavedGame::getLastSelectedArmor()
+std::string SavedGame::getRecallArmor()
 {
 	return _lastselectedArmor;
 } */

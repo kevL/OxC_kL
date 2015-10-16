@@ -130,7 +130,7 @@ private:
 		void init();
 
 		/// Handler for changing the text on the Name edit.
-		void edtBaseChange(Action* action);
+		void edtLabelChange(Action* action);
 
 		/// Handler for selecting bases.
 		void handleKeyPress(Action* action);

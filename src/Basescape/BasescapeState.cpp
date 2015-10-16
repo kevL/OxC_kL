@@ -168,7 +168,7 @@ BasescapeState::BasescapeState(
 	_mini->onMouseOut((ActionHandler)& BasescapeState::viewMouseOut);
 
 	_edtBase->setBig();
-	_edtBase->onChange((ActionHandler)& BasescapeState::edtBaseChange);
+	_edtBase->onChange((ActionHandler)& BasescapeState::edtLabelChange);
 
 	_txtRegion->setAlign(ALIGN_RIGHT);
 
@@ -369,15 +369,14 @@ void BasescapeState::init()
 }
 
 /**
- * Changes the base currently displayed on screen.
+ * Changes the Base currently displayed on screen.
  * @param base - pointer to new base to display
  */
-void BasescapeState::setBase(Base* base)
+void BasescapeState::setBase(Base* const base)
 {
 	if (_baseList->empty() == false)
 	{
 		bool exists = false; // check if base still exists
-
 		for (size_t
 				i = 0;
 				i != _baseList->size();
@@ -387,7 +386,7 @@ void BasescapeState::setBase(Base* base)
 			{
 				_base = base;
 				_mini->setSelectedBase(i);
-//				_game->getSavedGame()->setSelectedBase(i);
+//				_game->getSavedGame()->setRecallBase(i);
 
 				exists = true;
 				break;
@@ -398,14 +397,14 @@ void BasescapeState::setBase(Base* base)
 		{
 			_base = _baseList->front();
 			_mini->setSelectedBase(0);
-//			_game->getSavedGame()->setSelectedBase(0);
+//			_game->getSavedGame()->setRecallBase(0);
 		}
 	}
 	else
 	{
 		_base = new Base(_game->getRuleset());
 		_mini->setSelectedBase(0);
-//		_game->getSavedGame()->setSelectedBase(0);
+//		_game->getSavedGame()->setRecallBase(0);
 	}
 }
 
@@ -669,15 +668,13 @@ void BasescapeState::viewRightClick(Action*)
 											_game->getResourcePack()->getRandomBackground(),
 											_game->getRuleset()->getInterface("basescape")->getElement("errorPalette")->color));
 		else
-			_game->pushState(new DismantleFacilityState(
-													_base,
-													_view,
-													fac));
+			_game->pushState(new DismantleFacilityState(_base, _view, fac));
 	}
 }
 
 /**
- * Displays the name of the facility the mouse is over.
+ * Displays either the name of the Facility the mouse is over or the name of the
+ * Base the mouse is over.
  * @param action - pointer to an Action
  */
 void BasescapeState::viewMouseOver(Action*)
@@ -697,7 +694,6 @@ void BasescapeState::viewMouseOver(Action*)
 	else
 	{
 		const size_t baseId = _mini->getHoveredBase();
-
 		if (baseId < _baseList->size()
 			&& _base != _baseList->at(baseId))
 		{
@@ -710,7 +706,7 @@ void BasescapeState::viewMouseOver(Action*)
 }
 
 /**
- * Clears the facility name.
+ * Clears the Facility or other Base's name.
  * @param action - pointer to an Action
  */
 void BasescapeState::viewMouseOut(Action*)
@@ -719,20 +715,18 @@ void BasescapeState::viewMouseOut(Action*)
 }
 
 /**
- * Selects a new base to display. Also builds a new Base on the globe.
+ * Selects a different Base to display. Also builds a new Base on the globe.
  * @param action - pointer to an Action
  */
 void BasescapeState::miniLeftClick(Action*)
 {
 	const size_t baseId = _mini->getHoveredBase();
-
 	if (baseId < _baseList->size()
 		&& _base != _baseList->at(baseId))
 	{
-		_base = _baseList->at(baseId);
-		_txtFacility->setText(L"");
-
 		_allowStoresWarning = true;
+		_txtFacility->setText(L"");
+		_base = _baseList->at(baseId);
 		init();
 	}
 	else if (baseId == _baseList->size()
@@ -741,9 +735,7 @@ void BasescapeState::miniLeftClick(Action*)
 		kL_geoMusicPlaying = false;
 		kL_geoMusicReturnState = true;
 
-		// aka: btnNewBaseClick();
-		// courtesy kkmic, http://openxcom.org/forum/index.php?topic=1558.msg32461#msg32461
-		Base* const base = new Base(_game->getRuleset());
+		Base* const base (new Base(_game->getRuleset()));
 
 		_game->popState();
 		_game->pushState(new BuildNewBaseState(base, _globe));
@@ -751,16 +743,15 @@ void BasescapeState::miniLeftClick(Action*)
 }
 
 /**
- * Pops to globe with selected base centered.
+ * Pops to globe with selected Base centered.
  * @param action - pointer to an Action
  */
 void BasescapeState::miniRightClick(Action*)
 {
 	const size_t baseId = _mini->getHoveredBase();
-
 	if (baseId < _baseList->size())
 	{
-		const Base* const base = _baseList->at(baseId);
+		const Base* const base (_baseList->at(baseId));
 		_game->getSavedGame()->setGlobeLongitude(base->getLongitude());
 		_game->getSavedGame()->setGlobeLatitude(base->getLatitude());
 
@@ -774,14 +765,14 @@ void BasescapeState::miniRightClick(Action*)
 }
 
 /**
- * Selects a new base to display.
+ * Selects a different Base to display.
  * @param action - pointer to an Action
  */
 void BasescapeState::handleKeyPress(Action* action)
 {
 	if (action->getDetails()->type == SDL_KEYDOWN)
 	{
-		SDLKey baseKeys[] =
+		static const SDLKey baseKeys[8] =
 		{
 			Options::keyBaseSelect1,
 			Options::keyBaseSelect2,
@@ -793,17 +784,22 @@ void BasescapeState::handleKeyPress(Action* action)
 			Options::keyBaseSelect8
 		};
 
-		const int key = action->getDetails()->key.keysym.sym;
-		for (size_t
-				i = 0;
-				i != _baseList->size();
-				++i)
+		const SDLKey keyId (action->getDetails()->key.keysym.sym);
+		size_t baseId (0);
+		for (std::vector<Base*>::const_iterator
+				i = _baseList->begin();
+				i != _baseList->end();
+				++i, ++baseId)
 		{
-			if (key == baseKeys[i])
-			{
-				_base = _baseList->at(i);
-				init();
+			if (*i == _base && static_cast<SDLKey>(baseId) == keyId)
+				return;
 
+			if (baseKeys[baseId] == keyId)
+			{
+				_allowStoresWarning = true;
+				_txtFacility->setText(L"");
+				_base = _baseList->at(baseId);
+				init();
 				break;
 			}
 		}
@@ -814,7 +810,7 @@ void BasescapeState::handleKeyPress(Action* action)
  * Changes the Base name.
  * @param action - pointer to an Action
  */
-void BasescapeState::edtBaseChange(Action*)
+void BasescapeState::edtLabelChange(Action*)
 {
 	_base->setName(_edtBase->getText());
 }

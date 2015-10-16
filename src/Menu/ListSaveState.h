@@ -64,9 +64,9 @@ private:
 		void updateList();
 
 		/// Handler for pressing a key on the Save edit.
-		void edtSaveKeyPress(Action* action);
-		/// Handler for clicking on the Save Game button.
-		void btnSaveGameClick(Action *action);
+		void keySavePress(Action* action);
+		/// Handler for clicking on the Save button.
+		void btnSaveClick(Action *action);
 		/// Handler for clicking the Saves list.
 		void lstSavesPress(Action* action);
 

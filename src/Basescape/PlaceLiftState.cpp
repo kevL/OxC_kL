@@ -100,27 +100,20 @@ PlaceLiftState::~PlaceLiftState()
  */
 void PlaceLiftState::viewClick(Action*)
 {
-	BaseFacility* const fac = new BaseFacility(
-											_lift,
-											_base);
+	BaseFacility* const fac = new BaseFacility(_lift, _base);
 	fac->setX(_view->getGridX());
 	fac->setY(_view->getGridY());
 
 	_base->getFacilities()->push_back(fac);
 
 	_game->popState();
-	BasescapeState* const bState = new BasescapeState(
-													_base,
-													_globe);
-//	_game->getSavedGame()->setSelectedBase(_game->getSavedGame()->getBases()->size() - 1);
+	BasescapeState* const baseState = new BasescapeState(_base, _globe);
+//	_game->getSavedGame()->setRecallBase(_game->getSavedGame()->getBases()->size() - 1);
 
-	_game->pushState(bState);
+	_game->pushState(baseState);
 
 	if (_firstBase == true)
-		_game->pushState(new SelectStartFacilityState(
-													_base,
-													bState,
-													_globe));
+		_game->pushState(new SelectStartFacilityState(_base, baseState, _globe));
 }
 
 }

@@ -30,7 +30,7 @@ namespace OpenXcom
 
 /**
  * Sets up a blank text edit with the specified size and position.
- * @param state		- pointer to state the text edit belongs to
+ * @param state		- pointer to state this TextEdit belongs to
  * @param width		- width in pixels
  * @param height	- height in pixels
  * @param x			- X position in pixels (default 0)
@@ -50,7 +50,7 @@ TextEdit::TextEdit(
 		_blink(true),
 		_modal(true),
 		_ascii(L'A'),
-		_caretPos(0),
+		_caretPlace(0),
 		_numerical(false),
 		_change(0),
 		_state(state)
@@ -122,7 +122,7 @@ void TextEdit::setFocus(
 							SDL_DEFAULT_REPEAT_DELAY,
 							SDL_DEFAULT_REPEAT_INTERVAL);
 
-			_caretPos = _value.length();
+			_caretPlace = _edit.length();
 			_blink = true;
 			_timer->start();
 
@@ -152,7 +152,7 @@ void TextEdit::setFocus(
 } */
 
 /**
- * Changes the text edit to use the big-size font.
+ * Changes this TextEdit to use the big-size font.
  */
 void TextEdit::setBig()
 {
@@ -161,7 +161,7 @@ void TextEdit::setBig()
 }
 
 /**
- * Changes the text edit to use the small-size font.
+ * Changes this TextEdit to use the small-size font.
  */
 void TextEdit::setSmall()
 {
@@ -170,7 +170,7 @@ void TextEdit::setSmall()
 }
 
 /**
- * Changes the various fonts for the text edit to use.
+ * Changes the various fonts for this TextEdit to use.
  * The different fonts need to be passed in advance since the
  * text size can change mid-text.
  * @param big	- pointer to large-size font
@@ -192,8 +192,8 @@ void TextEdit::initText(
  */
 void TextEdit::setText(const std::wstring& text)
 {
-	_value = text;
-	_caretPos = _value.length();
+	_edit = text;
+	_caretPlace = _edit.length();
 	_redraw = true;
 }
 
@@ -203,27 +203,27 @@ void TextEdit::setText(const std::wstring& text)
  */
 std::wstring TextEdit::getText() const
 {
-	return _value;
+	return _edit;
 }
 
 /**
- * Sets the previous string value (before editing) so that it may be retrieved
- * if/when an edit-operation is cancelled.
+ * Stores the previous string value (before editing) so that it can be retrieved
+ * if the editing operation is cancelled.
  * @param text - reference the text string
  */
-void TextEdit::setTextStored(const std::wstring& text)
+void TextEdit::storeText(const std::wstring& text)
 {
-	_valueStored = text;
+	_editStored = text;
 }
 
 /**
- * Gets the previous string value so that it may be reinstated if an editing
+ * Gets the previous string value so that it can be reinstated if the editing
  * operation is cancelled.
  * @return, text string
  */
-std::wstring TextEdit::getTextStored() const
+std::wstring TextEdit::getStoredText() const
 {
-	return _valueStored;
+	return _editStored;
 }
 
 /**
@@ -327,7 +327,7 @@ Uint8 TextEdit::getSecondaryColor() const
 }
 
 /**
- * Replaces a certain amount of colors in the text edit's palette.
+ * Replaces a certain amount of colors in this TextEdit's palette.
  * @param colors		- pointer to the set of colors
  * @param firstcolor	- offset of the first color to replace (default 0)
  * @param ncolors		- amount of colors to replace (default 256)
@@ -348,33 +348,31 @@ void TextEdit::setPalette(
  */
 void TextEdit::think()
 {
-	Log(LOG_INFO) << "Edit: think()";
 	_timer->think(NULL, this);
 }
 
 /**
- * Plays the blinking animation when the text edit is focused.
+ * Plays the blinking animation when this TextEdit is focused.
  */
 void TextEdit::blink()
 {
-	Log(LOG_INFO) << "Edit: blink()";
 	_blink = !_blink;
 	_redraw = true;
 }
 
 /**
- * Adds a flashing | caret to the text to show when this is focused and editable.
+ * Adds a blinking '|' caret to the text to show when this TextEdit is focused and
+ * editable.
  */
 void TextEdit::draw()
 {
 	Surface::draw();
-
-	_text->setText(_value);
+	_text->setText(_edit);
 
 	if (Options::keyboardMode == KEYBOARD_OFF)
 	{
 		if (_isFocused == true && _blink == true)
-			_text->setText(_value + _ascii);
+			_text->setText(_edit + _ascii);
 	}
 
 	clear();
@@ -402,10 +400,10 @@ void TextEdit::draw()
 
 			for (size_t
 					i = 0;
-					i != _caretPos;
+					i != _caretPlace;
 					++i)
 			{
-				x += _text->getFont()->getCharSize(_value[i]).w;
+				x += _text->getFont()->getCharSize(_edit[i]).w;
 			}
 
 			_caret->setX(x);
@@ -415,7 +413,7 @@ void TextEdit::draw()
 }
 
 /**
- * Checks if adding a certain character to the text edit will exceed the maximum
+ * Checks if adding a certain character to this TextEdit will exceed the maximum
  * width.
  * @note Used to make sure user input stays within bounds.
  * @param fontChar - character to add
@@ -424,8 +422,7 @@ void TextEdit::draw()
 bool TextEdit::exceedsMaxWidth(wchar_t fontChar) // private.
 {
 	int width = 0;
-
-	std::wstring wst (_value + fontChar);
+	std::wstring wst (_edit + fontChar);
 	for (std::wstring::const_iterator
 			i = wst.begin();
 			i != wst.end();
@@ -438,7 +435,7 @@ bool TextEdit::exceedsMaxWidth(wchar_t fontChar) // private.
 }
 
 /**
- * Focuses the text edit when it's pressed on.
+ * Focuses this TextEdit when it's pressed on; position caret otherwise.
  * @param action	- pointer to an Action
  * @param state		- State that the action handlers belong to
  */
@@ -450,29 +447,27 @@ void TextEdit::mousePress(Action* action, State* state)
 			setFocus(true);
 		else
 		{
-			const double
-				mouseX = action->getRelativeXMouse(),
-				scaleX = action->getXScale();
-			double width = 0.;
-			size_t caret = 0;
-
-			for (std::wstring::const_iterator
-					i = _value.begin();
-					i != _value.end();
-					++i)
+			const double mX = action->getRelativeXMouse();
+			double pixelPlace = 0.;
+			if (mX > pixelPlace)
 			{
-				if (mouseX <= width)
-					break;
+				size_t caret = 0;
+				const double scale (action->getXScale());
 
-				width += static_cast<double>(_text->getFont()->getCharSize(*i).w / 2) * scaleX;
-				if (mouseX <= width)
-					break;
+				for (std::wstring::const_iterator
+						i = _edit.begin();
+						i != _edit.end();
+						++i)
+				{
+					pixelPlace += static_cast<double>(_text->getFont()->getCharSize(*i).w) * scale;
+					if (mX < pixelPlace)
+						break;
 
-				++caret;
-				width += static_cast<double>(_text->getFont()->getCharSize(*i).w / 2) * scaleX;
+					++caret;
+				}
+
+				_caretPlace = caret;
 			}
-
-			_caretPos = caret;
 		}
 	}
 
@@ -480,7 +475,7 @@ void TextEdit::mousePress(Action* action, State* state)
 }
 
 /**
- * Changes the text edit according to keyboard input and unfocuses the text if
+ * Changes this TextEdit according to keyboard input and unfocuses the text if
  * Enter is pressed.
  * @param action	- pointer to an Action
  * @param state		- State that the action handlers belong to
@@ -502,12 +497,12 @@ void TextEdit::keyboardPress(Action* action, State* state)
 					_ascii = L'~';
 			break;
 			case SDLK_LEFT:
-				if (_value.length() > 0)
-					_value.resize(_value.length() - 1);
+				if (_edit.length() > 0)
+					_edit.resize(_edit.length() - 1);
 			break;
 			case SDLK_RIGHT:
 				if (exceedsMaxWidth(_ascii) == false)
-					_value += _ascii;
+					_edit += _ascii;
 		}
 	}
 	else if (Options::keyboardMode == KEYBOARD_ON)
@@ -515,33 +510,33 @@ void TextEdit::keyboardPress(Action* action, State* state)
 		switch (action->getDetails()->key.keysym.sym)
 		{
 			case SDLK_LEFT:
-				if (_caretPos > 0)
-					--_caretPos;
+				if (_caretPlace > 0)
+					--_caretPlace;
 			break;
 			case SDLK_RIGHT:
-				if (_caretPos < _value.length())
-					++_caretPos;
+				if (_caretPlace < _edit.length())
+					++_caretPlace;
 			break;
 			case SDLK_HOME:
-				_caretPos = 0;
+				_caretPlace = 0;
 			break;
 			case SDLK_END:
-				_caretPos = _value.length();
+				_caretPlace = _edit.length();
 			break;
 			case SDLK_BACKSPACE:
-				if (_caretPos > 0)
+				if (_caretPlace > 0)
 				{
-					_value.erase(_caretPos - 1, 1);
-					--_caretPos;
+					_edit.erase(_caretPlace - 1, 1);
+					--_caretPlace;
 				}
 			break;
 			case SDLK_DELETE:
-				if (_caretPos < _value.length())
-					_value.erase(_caretPos, 1);
+				if (_caretPlace < _edit.length())
+					_edit.erase(_caretPlace, 1);
 			break;
 			case SDLK_RETURN:
 			case SDLK_KP_ENTER:
-				if (_value.empty() == false)
+				if (_edit.empty() == false)
 					setFocus(false);
 			break;
 
@@ -554,11 +549,11 @@ void TextEdit::keyboardPress(Action* action, State* state)
 								|| keyId >= 160)))
 					&& exceedsMaxWidth(static_cast<wchar_t>(keyId)) == false)
 				{
-					_value.insert(
-								_caretPos,
+					_edit.insert(
+								_caretPlace,
 								1,
 								static_cast<wchar_t>(action->getDetails()->key.keysym.unicode));
-					++_caretPos;
+					++_caretPlace;
 				}
 		}
 	}

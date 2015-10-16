@@ -91,7 +91,7 @@ void MiniBaseView::setBases(std::vector<Base*>* bases)
 }
 
 /**
- * Changes the texture to use for drawing the various base elements.
+ * Changes the texture to use for drawing the Base's various elements.
  * @param texture - pointer to a SurfaceSet to use
  */
 void MiniBaseView::setTexture(SurfaceSet* texture)
@@ -100,7 +100,7 @@ void MiniBaseView::setTexture(SurfaceSet* texture)
 }
 
 /**
- * Returns the base the mouse cursor is currently over.
+ * Returns the Base the mouse cursor is currently over.
  * @return, ID of the base
  */
 size_t MiniBaseView::getHoveredBase() const
@@ -109,19 +109,19 @@ size_t MiniBaseView::getHoveredBase() const
 }
 
 /**
- * Changes the base that is currently selected on the mini base view.
- * @param base - ID of the base
+ * Changes the Base that is currently selected on the MiniBaseView.
+ * @param baseId - ID of the base
  */
-void MiniBaseView::setSelectedBase(size_t base)
+void MiniBaseView::setSelectedBase(size_t baseId)
 {
-	_baseId =
-	kL_curBase = base;
+	kL_curBase =
+	_baseId = baseId;
 
 	_redraw = true;
 }
 
 /**
- * Draws the view of all the bases with facilities in varying colors.
+ * Draws the view of all the Base's with facilities in varying colors.
  */
 void MiniBaseView::draw()
 {

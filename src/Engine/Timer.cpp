@@ -59,7 +59,8 @@ Timer::Timer(Uint32 interval)
 		_interval(interval),
 		_running(false),
 		_state(NULL),
-		_surface(NULL)
+		_surface(NULL),
+		_debug(false)
 {}
 
 /**
@@ -73,6 +74,7 @@ Timer::~Timer()
  */
 void Timer::start()
 {
+	//if (_debug) Log(LOG_INFO) << "Timer: start() [" << _stDebugObject << "]";
 	_startTick = slowTick();
 	_running = true;
 }
@@ -82,6 +84,7 @@ void Timer::start()
  */
 void Timer::stop()
 {
+	//if (_debug) Log(LOG_INFO) << "Timer: stop() [" << _stDebugObject << "]";
 	_startTick = 0;
 	_running = false;
 }
@@ -118,22 +121,28 @@ void Timer::think(
 		State* const state,
 		Surface* const surface)
 {
+	//if (_debug) Log(LOG_INFO) << "Timer: think() [" << _stDebugObject << "]";
 	if (_running == true)
 	{
 		Uint32 ticks (slowTick());
+		//if (_debug) Log(LOG_INFO) << ". ticks = " << ticks;
 		if (ticks >= _startTick + _interval)
 		{
+			//if (_debug) Log(LOG_INFO) << ". . ticks > " << _startTick + _interval;
 			if (state != NULL && _state != NULL)
 			{
+				//if (_debug) Log(LOG_INFO) << ". . . call StateHandler";
 				(state->*_state)();		// call to *StateHandler.
 			}
 
 			if (_running == true &&
 				surface != NULL && _surface != NULL)
 			{
+				//if (_debug) Log(LOG_INFO) << ". . . call SurfaceHandler";
 				(surface->*_surface)();	// call to *SurfaceHandler.
 			}
 
+			//if (_debug) Log(LOG_INFO) << ". . reset _startTick";
 			_startTick = ticks;
 		}
 	}
@@ -164,6 +173,15 @@ void Timer::onTimer(StateHandler handler)
 void Timer::onTimer(SurfaceHandler handler)
 {
 	_surface = handler;
+}
+
+/**
+ * Debugs.
+ */
+void Timer::debug(const std::string& stDebug)
+{
+	_debug = true;
+	_stDebugObject = stDebug;
 }
 
 }

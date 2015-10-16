@@ -33,7 +33,7 @@ class Timer;
 
 /**
  * Editable version of Text.
- * Receives keyboard input to allow the player to change the text.
+ * @note Receives keyboard input to allow the player to change the text.
  */
 class TextEdit
 	:
@@ -45,12 +45,12 @@ private:
 		_blink,
 		_modal,
 		_numerical;
-	size_t _caretPos;
+	size_t _caretPlace;
 	wchar_t _ascii;
 
 	std::wstring
-		_value,
-		_valueStored;
+		_edit,
+		_editStored;
 
 	ActionHandler _change;
 	State* _state;
@@ -99,9 +99,9 @@ private:
 		/// Gets the text edit's string.
 		std::wstring getText() const;
 		/// Sets the original text's string.
-		void setTextStored(const std::wstring& text);
+		void storeText(const std::wstring& text);
 		/// Gets the original text edit's string.
-		std::wstring getTextStored() const;
+		std::wstring getStoredText() const;
 
 		/// Sets the text edit's wordwrap setting.
 		void setWordWrap(bool wrap = true);

@@ -42,15 +42,13 @@ namespace OpenXcom
  */
 ListSaveState::ListSaveState(OptionsOrigin origin)
 	:
-		ListGamesState(
-			origin,
-			1, false),
-		_selectedPre(-1),
-		_selected(-1)
+		ListGamesState(origin, 1, false),
+		_selected(-1),
+		_selectedPre(-1)
 {
 	_edtSave		= new TextEdit(this, 168, 9);
 	_btnSaveGame	= new TextButton(134, 16, 170, 177);
-//	_btnSaveGame	= new TextButton(_game->getSavedGame()->isIronman()? 200: 80, 16, 60, 172);
+//	_btnSaveGame	= new TextButton(_game->getSavedGame()->isIronman() ? 200 : 80, 16, 60, 172);
 
 	add(_edtSave);
 	add(_btnSaveGame, "button", "saveMenus");
@@ -66,10 +64,11 @@ ListSaveState::ListSaveState(OptionsOrigin origin)
 	_edtSave->setColor(Palette::blockOffset(10)); // geo:SLATE
 	_edtSave->setHighContrast();
 	_edtSave->setVisible(false);
-	_edtSave->onKeyboardPress((ActionHandler)& ListSaveState::edtSaveKeyPress);
+	_edtSave->onKeyboardPress((ActionHandler)& ListSaveState::keySavePress);
+	// note: BasescapeState, eg, uses onChange handler.
 
 	_btnSaveGame->setText(tr("STR_OK"));
-	_btnSaveGame->onMouseClick((ActionHandler)& ListSaveState::btnSaveGameClick);
+	_btnSaveGame->onMouseClick((ActionHandler)& ListSaveState::btnSaveClick);
 	_btnSaveGame->setVisible(false);
 
 	centerAllSurfaces();
@@ -107,70 +106,69 @@ void ListSaveState::lstSavesPress(Action* action)
 		_edtSave->setFocus(false, false);
 		_lstSaves->setScrolling(true);
 	} */
-	if (_editMode == true)
-		return;
 
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+	if (_editMode == false)
 	{
-		_editMode = true;					// kL
-		_btnSaveGame->setVisible();			// kL
-		_lstSaves->setSelectable(false);	// kL
-		_lstSaves->setScrollable(false);
-
-
-		_selectedPre = _selected;
-		_selected = _lstSaves->getSelectedRow();
-
-		switch (_selectedPre)
+		if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 		{
-			case -1: // first click on the savegame list
-			break;
+			_editMode = true;
+			_btnSaveGame->setVisible();
+			_lstSaves->setSelectable(false);
+			_lstSaves->setScrollable(false);
 
-			case 0:
-				_lstSaves->setCellText(_selectedPre, 0, tr("STR_NEW_SAVED_GAME_SLOT"));
-			break;
+			_selectedPre = _selected;
+			_selected = _lstSaves->getSelectedRow();
 
-			default:
-				_lstSaves->setCellText(_selectedPre, 0, _label);
+			switch (_selectedPre)
+			{
+				case -1: // first click on the savegame list
+				break;
+
+				case 0:
+					_lstSaves->setCellText(_selectedPre, 0, tr("STR_NEW_SAVED_GAME_SLOT"));
+				break;
+
+				default:
+					_lstSaves->setCellText(_selectedPre, 0, _label);
+			}
+
+			_label = _lstSaves->getCellText(_lstSaves->getSelectedRow(), 0);
+			_lstSaves->setCellText(_lstSaves->getSelectedRow(), 0, L"");
+
+			_edtSave->storeText(_label);
+
+			if (_lstSaves->getSelectedRow() == 0)
+				_label = L"";
+
+			_edtSave->setText(_label);
+
+			_edtSave->setX(_lstSaves->getColumnX(0));
+			_edtSave->setY(_lstSaves->getRowY(_selected));
+			_edtSave->setVisible();
+			_edtSave->setFocus(true,false);
+
+			ListGamesState::disableSort();
 		}
-
-		_label = _lstSaves->getCellText(_lstSaves->getSelectedRow(), 0);
-		_lstSaves->setCellText(_lstSaves->getSelectedRow(), 0, L"");
-
-		_edtSave->setTextStored(_label);
-
-		if (_lstSaves->getSelectedRow() == 0)
-			_label = L"";
-
-		_edtSave->setText(_label);
-
-		_edtSave->setX(_lstSaves->getColumnX(0));
-		_edtSave->setY(_lstSaves->getRowY(_selected));
-		_edtSave->setVisible();
-		_edtSave->setFocus(true,false);
-
-		ListGamesState::disableSort();
+		else
+			ListGamesState::lstSavesPress(action); // RMB -> delete file
 	}
-	else
-		ListGamesState::lstSavesPress(action); // RMB -> delete file
 }
 
 /**
  * Saves the selected slot or cancels it.
  * @param action - pointer to an Action
  */
-void ListSaveState::edtSaveKeyPress(Action* action)
+void ListSaveState::keySavePress(Action* action)
 {
 	if (_editMode == true)
 	{
-		if (action->getDetails()->key.keysym.sym == Options::keyOk// SDLK_RETURN
-			|| action->getDetails()->key.keysym.sym == Options::keyOkKeypad)// SDLK_KP_ENTER)
+		if (action->getDetails()->key.keysym.sym == Options::keyOk
+			|| action->getDetails()->key.keysym.sym == Options::keyOkKeypad)
 		{
 			saveGame();
 		}
-		else if (action->getDetails()->key.keysym.sym == Options::keyCancel)// SDLK_ESCAPE)
+		else if (action->getDetails()->key.keysym.sym == Options::keyCancel)
 		{
-//			_editMode = false; // done in ListGamesState::btnCancelKeypress()
 			_btnSaveGame->setVisible(false);
 			_lstSaves->setSelectable();
 			_lstSaves->setScrollable();
@@ -181,7 +179,7 @@ void ListSaveState::edtSaveKeyPress(Action* action)
 			_lstSaves->setCellText(
 								_lstSaves->getSelectedRow(),
 								0,
-								_edtSave->getTextStored());
+								_edtSave->getStoredText());
 		}
 	}
 }
@@ -190,7 +188,7 @@ void ListSaveState::edtSaveKeyPress(Action* action)
  * Saves the selected slot.
  * @param action - pointer to an Action
  */
-void ListSaveState::btnSaveGameClick(Action*)
+void ListSaveState::btnSaveClick(Action*)
 {
 	if (_editMode == true && _selected != -1)
 		saveGame();
