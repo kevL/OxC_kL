@@ -128,7 +128,6 @@ InterceptState::InterceptState(
 	_lstCrafts->setColumns(5, 91,126,25,15,15);
 	_lstCrafts->setBackground(_window);
 	_lstCrafts->setSelectable();
-	_lstCrafts->setMargin();
 	_lstCrafts->onMouseClick((ActionHandler)& InterceptState::lstCraftsLeftClick);
 	_lstCrafts->onMouseClick(
 					(ActionHandler)& InterceptState::lstCraftsRightClick,

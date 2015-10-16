@@ -79,7 +79,6 @@ NewResearchListState::NewResearchListState(
 	_lstResearch->setColumns(1, 180);
 	_lstResearch->setBackground(_window);
 	_lstResearch->setSelectable();
-	_lstResearch->setMargin();
 	_lstResearch->setAlign(ALIGN_CENTER);
 	_lstResearch->onMouseClick((ActionHandler)& NewResearchListState::onSelectProject);
 

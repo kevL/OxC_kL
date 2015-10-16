@@ -238,7 +238,7 @@ private:
 		size_t getSelectedRow() const;
 
 		/// Sets the margin of the text list.
-		void setMargin(int margin = 8);
+		void setMargin(int margin = 0);
 		/// Gets the margin of the text list.
 		int getMargin() const;
 

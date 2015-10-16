@@ -178,12 +178,11 @@ SoldierDiaryOverviewState::SoldierDiaryOverviewState(
 	_txtDate->setText(tr("STR_DATE_MISSION"));
 	_txtDate->setColor(PINK);
 
-	_lstDiary->setColumns(5, 94, 108, 25, 22, 30);
+	_lstDiary->setColumns(5, 94,108,25,22,30);
 	_lstDiary->setColor(WHITE);
 	_lstDiary->setArrowColor(PINK);
 	_lstDiary->setBackground(_window);
 	_lstDiary->setSelectable();
-	_lstDiary->setMargin();
 	_lstDiary->onMouseClick((ActionHandler)& SoldierDiaryOverviewState::lstDiaryInfoClick);
 
 
@@ -205,6 +204,12 @@ SoldierDiaryOverviewState::SoldierDiaryOverviewState(
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& SoldierDiaryOverviewState::btnOkClick,
 					Options::keyCancel);
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& SoldierDiaryOverviewState::btnOkClick,
+					Options::keyOk);
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& SoldierDiaryOverviewState::btnOkClick,
+					Options::keyOkKeypad);
 }
 
 /**

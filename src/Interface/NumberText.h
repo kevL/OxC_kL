@@ -56,7 +56,7 @@ private:
 		~NumberText();
 
 		/// Sets the number text's value.
-		void setValue(unsigned value);
+		void setValue(unsigned value = 0);
 		/// Gets the number text's value.
 		unsigned getValue() const;
 

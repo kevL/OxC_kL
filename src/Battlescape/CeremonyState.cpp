@@ -76,7 +76,6 @@ CeremonyState::CeremonyState(std::vector<Soldier*> soldiersMedalled)
 	_lstSoldiers->setColumns(2, 200,77);
 	_lstSoldiers->setBackground(_window);
 	_lstSoldiers->setSelectable();
-	_lstSoldiers->setMargin();
 	_lstSoldiers->onMouseOver((ActionHandler)& CeremonyState::lstInfoMouseOver);
 	_lstSoldiers->onMouseOut((ActionHandler)& CeremonyState::lstInfoMouseOut);
 

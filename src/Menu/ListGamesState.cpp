@@ -173,7 +173,6 @@ ListGamesState::ListGamesState(
 	_lstSaves->setBackground(_window);
 	_lstSaves->setColumns(3, 188,60,29);
 	_lstSaves->setSelectable();
-	_lstSaves->setMargin();
 	_lstSaves->onMouseOver((ActionHandler)& ListGamesState::lstSavesMouseOver);
 	_lstSaves->onMouseOut((ActionHandler)& ListGamesState::lstSavesMouseOut);
 	_lstSaves->onMousePress((ActionHandler)& ListGamesState::lstSavesPress);

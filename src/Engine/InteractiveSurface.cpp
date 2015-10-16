@@ -25,7 +25,7 @@
 namespace OpenXcom
 {
 
-const SDLKey InteractiveSurface::SDLK_ANY = (SDLKey)-1; // using an unused keycode to represent an "any key"
+const SDLKey InteractiveSurface::SDLK_ANY = static_cast<SDLKey>(-1); // using an unused keycode to represent an "any key"
 
 
 /**
@@ -68,8 +68,8 @@ bool InteractiveSurface::isButtonPressed(Uint8 btn) // virtual.
 {
 	if (btn == 0)
 		return (_buttonsPressed != 0);
-	else
-		return (_buttonsPressed & SDL_BUTTON(btn)) != 0;
+
+	return (_buttonsPressed & SDL_BUTTON(btn)) != 0;
 }
 
 /**

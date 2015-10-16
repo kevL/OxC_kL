@@ -134,7 +134,6 @@ ItemsArrivingState::ItemsArrivingState(GeoscapeState* const state)
 	_lstTransfers->setColumns(3, 144,53,80);
 	_lstTransfers->setBackground(_window);
 	_lstTransfers->setSelectable();
-	_lstTransfers->setMargin();
 	_lstTransfers->onMousePress((ActionHandler)& ItemsArrivingState::lstGoToBasePress);
 
 

@@ -86,12 +86,11 @@ BuildFacilitiesState::BuildFacilitiesState(
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_INSTALLATION"));
 
-	_lstFacilities->setArrowColor(Palette::blockOffset(13)+5);
+	_lstFacilities->setArrowColor(YELLOW);
 	_lstFacilities->setColumns(1, 99);
 	_lstFacilities->setBackground(_window);
 	_lstFacilities->setSelectable();
 	_lstFacilities->setMargin(2);
-//	_lstFacilities->setWordWrap();
 	_lstFacilities->onMouseClick((ActionHandler)& BuildFacilitiesState::lstFacilitiesClick);
 
 	PopulateBuildList();

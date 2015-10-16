@@ -160,7 +160,6 @@ ResearchState::ResearchState(
 	_lstResearch->setBackground(_window);
 	_lstResearch->setColumns(4, 137,58,48,34);
 	_lstResearch->setSelectable();
-	_lstResearch->setMargin();
 	_lstResearch->onMouseClick((ActionHandler)& ResearchState::onSelectProject);
 }
 

@@ -99,10 +99,9 @@ TransfersState::TransfersState(Base* base)
 
 	_txtArrivalTime->setText(tr("STR_ARRIVAL_TIME_HOURS"));
 
-	_lstTransfers->setColumns(3, 155, 75, 28);
+	_lstTransfers->setColumns(3, 155,75,28);
 	_lstTransfers->setBackground(_window);
 	_lstTransfers->setSelectable();
-	_lstTransfers->setMargin();
 
 	for (std::vector<Transfer*>::const_iterator
 			i = _base->getTransfers()->begin();

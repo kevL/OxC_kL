@@ -237,7 +237,7 @@ NumberText::~NumberText()
 
 /**
  * Changes the value used to render the number.
- * @param value - number value
+ * @param value - number value (default 0)
  */
 void NumberText::setValue(unsigned value)
 {
@@ -293,24 +293,15 @@ void NumberText::setPalette(
 		int firstcolor,
 		int ncolors)
 {
-	Surface::setPalette(
-					colors,
-					firstcolor,
-					ncolors);
+	Surface::setPalette(colors, firstcolor, ncolors);
 
 	for (size_t
 			i = 0;
 			i != 10;
 			++i)
 	{
-		_chars[i]->setPalette(
-							colors,
-							firstcolor,
-							ncolors);
-		_borderedChars[i]->setPalette(
-									colors,
-									firstcolor,
-									ncolors);
+		_chars[i]->setPalette(colors, firstcolor, ncolors);
+		_borderedChars[i]->setPalette(colors, firstcolor, ncolors);
 	}
 }
 

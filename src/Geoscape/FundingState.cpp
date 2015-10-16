@@ -203,7 +203,6 @@ FundingState::FundingState()
 	}
 
 	_lstTotal->setColumns(4, 122,92,6,54);
-	_lstTotal->setMargin();
 	_lstTotal->setDot();
 	_lstTotal->addRow(
 					4,

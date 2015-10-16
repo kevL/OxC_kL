@@ -76,6 +76,8 @@ private:
 
 
 	public:
+		static const SDLKey baseKeys[8];
+
 		/// Creates the Basescape state.
 		BasescapeState(
 				Base* const base,

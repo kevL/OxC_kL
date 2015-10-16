@@ -188,11 +188,9 @@ DebriefingState::DebriefingState()
 	_txtScore->setText(tr("STR_SCORE"));
 
 	_lstStats->setColumns(3, 176,60,36);
-	_lstStats->setMargin();
 	_lstStats->setDot();
 
 	_lstRecovery->setColumns(3, 176,60,36);
-	_lstRecovery->setMargin();
 	_lstRecovery->setDot();
 
 	_lstTotal->setColumns(2, 244,36);

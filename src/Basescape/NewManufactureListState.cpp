@@ -97,10 +97,9 @@ NewManufactureListState::NewManufactureListState(
 
 	_txtCategory->setText(tr("STR_CATEGORY"));
 
-	_lstManufacture->setColumns(2, 132, 145);
+	_lstManufacture->setColumns(2, 132,145);
 	_lstManufacture->setBackground(_window);
 	_lstManufacture->setSelectable();
-	_lstManufacture->setMargin(8);
 	_lstManufacture->onMouseClick((ActionHandler)& NewManufactureListState::lstProdClick);
 
 	_btnCostTable->setText(tr("STR_PRODUCTION_COSTS"));

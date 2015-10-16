@@ -171,7 +171,6 @@ TransferItemsState::TransferItemsState(
 	_lstItems->setArrowColumn(172, ARROW_VERTICAL);
 	_lstItems->setColumns(4, 136,56,31,20);
 	_lstItems->setSelectable();
-	_lstItems->setMargin();
 //	_lstItems->setAllowScrollOnArrowButtons(!_allowChangeListValuesByMouseWheel);
 //	_lstItems->onMousePress((ActionHandler)& TransferItemsState::lstItemsMousePress);
 	_lstItems->onLeftArrowPress((ActionHandler)& TransferItemsState::lstItemsLeftArrowPress);

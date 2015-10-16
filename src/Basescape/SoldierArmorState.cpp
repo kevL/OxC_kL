@@ -88,6 +88,12 @@ SoldierArmorState::SoldierArmorState(
 	_btnCancel->onKeyboardPress(
 					(ActionHandler)& SoldierArmorState::btnCancelClick,
 					Options::keyCancel);
+	_btnCancel->onKeyboardPress(
+					(ActionHandler)& SoldierArmorState::btnCancelClick,
+					Options::keyOk);
+	_btnCancel->onKeyboardPress(
+					(ActionHandler)& SoldierArmorState::btnCancelClick,
+					Options::keyOkKeypad);
 
 	_txtSoldier->setText(_soldier->getName());
 	_txtSoldier->setAlign(ALIGN_CENTER);
@@ -96,10 +102,9 @@ SoldierArmorState::SoldierArmorState(
 
 	_txtQuantity->setText(tr("STR_QUANTITY_UC"));
 
-	_lstArmor->setColumns(2, 110, 35);
+	_lstArmor->setColumns(2, 110,35);
 	_lstArmor->setBackground(_window);
 	_lstArmor->setSelectable();
-	_lstArmor->setMargin();
 
 	RuleArmor* armorRule;
 	const std::vector<std::string>& armorList = _game->getRuleset()->getArmorsList();

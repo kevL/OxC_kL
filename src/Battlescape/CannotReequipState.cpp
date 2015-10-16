@@ -76,6 +76,9 @@ CannotReequipState::CannotReequipState(std::vector<ReequipStat> missingItems)
 					Options::keyOk);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& CannotReequipState::btnOkClick,
+					Options::keyOkKeypad);
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& CannotReequipState::btnOkClick,
 					Options::keyCancel);
 
 	_txtTitle->setText(tr("STR_NOT_ENOUGH_EQUIPMENT_TO_FULLY_RE_EQUIP_SQUAD"));
@@ -89,10 +92,9 @@ CannotReequipState::CannotReequipState(std::vector<ReequipStat> missingItems)
 	_txtCraft->setText(tr("STR_CRAFT"));
 
 
-	_lstItems->setColumns(3, 154, 46, 80);
+	_lstItems->setColumns(3, 154,46,80);
 	_lstItems->setBackground(_window);
 	_lstItems->setSelectable();
-	_lstItems->setMargin();
 
 	for (std::vector<ReequipStat>::const_iterator
 			i = missingItems.begin();

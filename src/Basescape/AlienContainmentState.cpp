@@ -158,7 +158,6 @@ AlienContainmentState::AlienContainmentState(
 	_lstAliens->setArrowColumn(158, ARROW_HORIZONTAL);
 	_lstAliens->setBackground(_window);
 	_lstAliens->setSelectable();
-	_lstAliens->setMargin();
 //	_lstAliens->setAllowScrollOnArrowButtons(!_allowChangeListValuesByMouseWheel);
 //	_lstAliens->onMousePress((ActionHandler)& AlienContainmentState::lstItemsMousePress);
 	_lstAliens->onLeftArrowPress((ActionHandler)& AlienContainmentState::lstItemsLeftArrowPress);

@@ -45,6 +45,8 @@ class BuildFacilitiesState
 {
 
 protected:
+	static const Uint8 YELLOW = 213;
+
 	Base* _base;
 	State* _state;
 	std::vector<RuleBaseFacility*> _facilities;

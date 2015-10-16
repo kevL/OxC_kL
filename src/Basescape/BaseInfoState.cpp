@@ -592,18 +592,6 @@ void BaseInfoState::handleKeyPress(Action* action)
 {
 	if (action->getDetails()->type == SDL_KEYDOWN)
 	{
-		static const SDLKey baseKeys[8] =
-		{
-			Options::keyBaseSelect1,
-			Options::keyBaseSelect2,
-			Options::keyBaseSelect3,
-			Options::keyBaseSelect4,
-			Options::keyBaseSelect5,
-			Options::keyBaseSelect6,
-			Options::keyBaseSelect7,
-			Options::keyBaseSelect8
-		};
-
 		const SDLKey keyId (action->getDetails()->key.keysym.sym);
 		size_t baseId (0);
 		for (std::vector<Base*>::const_iterator
@@ -614,7 +602,7 @@ void BaseInfoState::handleKeyPress(Action* action)
 			if (*i == _base && static_cast<SDLKey>(baseId) == keyId)
 				return;
 
-			if (baseKeys[baseId] == keyId)
+			if (BasescapeState::baseKeys[baseId] == keyId)
 			{
 				_txtHoverBase->setText(L"");
 				_txtHoverRegion->setText(L"");

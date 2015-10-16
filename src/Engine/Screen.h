@@ -75,8 +75,8 @@ private:
 
 	public:
 		static const int
-			ORIGINAL_WIDTH,
-			ORIGINAL_HEIGHT;
+			ORIGINAL_WIDTH	= 320,
+			ORIGINAL_HEIGHT	= 200;
 
 		/// Creates a new display screen.
 		Screen();

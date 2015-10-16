@@ -161,7 +161,6 @@ SellState::SellState(Base* const base)
 	_lstItems->setArrowColumn(182, ARROW_VERTICAL);
 	_lstItems->setColumns(4, 142,60,22,53);
 	_lstItems->setSelectable();
-	_lstItems->setMargin();
 //	_lstItems->setAllowScrollOnArrowButtons(!_allowChangeListValuesByMouseWheel);
 //	_lstItems->onMousePress((ActionHandler)& SellState::lstItemsMousePress);
 	_lstItems->onLeftArrowPress((ActionHandler)& SellState::lstItemsLeftArrowPress);

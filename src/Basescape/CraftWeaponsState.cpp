@@ -95,6 +95,12 @@ CraftWeaponsState::CraftWeaponsState(
 	_btnCancel->onKeyboardPress(
 					(ActionHandler)& CraftWeaponsState::btnCancelClick,
 					Options::keyCancel);
+	_btnCancel->onKeyboardPress(
+					(ActionHandler)& CraftWeaponsState::btnCancelClick,
+					Options::keyOk);
+	_btnCancel->onKeyboardPress(
+					(ActionHandler)& CraftWeaponsState::btnCancelClick,
+					Options::keyOkKeypad);
 
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
@@ -106,10 +112,9 @@ CraftWeaponsState::CraftWeaponsState(
 
 	_txtAmmunition->setText(tr("STR_AMMUNITION_AVAILABLE"));
 
-	_lstWeapons->setColumns(3, 98, 30, 50);
+	_lstWeapons->setColumns(3, 98,30,50);
 	_lstWeapons->setBackground(_window);
 	_lstWeapons->setSelectable();
-	_lstWeapons->setMargin();
 	_lstWeapons->addRow(1, tr("STR_NONE_UC").c_str());
 
 	_cwRules.push_back(NULL); // no weapon/disarm.

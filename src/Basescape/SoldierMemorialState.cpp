@@ -114,9 +114,8 @@ SoldierMemorialState::SoldierMemorialState()
 	_txtLost->setText(tr("STR_SOLDIERS_LOST").arg(lost));
 
 	_lstSoldiers->setBackground(_window);
-	_lstSoldiers->setColumns(5, 124, 70, 26, 23, 33);
+	_lstSoldiers->setColumns(5, 124,70,26,23,33);
 	_lstSoldiers->setSelectable();
-	_lstSoldiers->setMargin();
 	_lstSoldiers->onMousePress((ActionHandler)& SoldierMemorialState::lstSoldiersPress);
 
 	for (std::vector<SoldierDead*>::const_reverse_iterator

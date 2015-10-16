@@ -163,7 +163,6 @@ PurchaseState::PurchaseState(Base* const base)
 	_lstItems->setColumns(4, 142,55,46,32);
 	_lstItems->setSelectable();
 	_lstItems->setBackground(_window);
-	_lstItems->setMargin();
 //	_lstItems->setAllowScrollOnArrowButtons(!_allowChangeListValuesByMouseWheel);
 //	_lstItems->onMousePress((ActionHandler)& PurchaseState::lstItemsMousePress); // mousewheel
 	_lstItems->onLeftArrowPress((ActionHandler)& PurchaseState::lstItemsLeftArrowPress);

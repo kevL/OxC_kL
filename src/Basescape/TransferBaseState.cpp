@@ -109,9 +109,8 @@ TransferBaseState::TransferBaseState(Base* base)
 	_txtArea->setBig();
 
 	_lstBases->setBackground(_window);
-	_lstBases->setColumns(2, 128, 80);
+	_lstBases->setColumns(2, 128,80);
 	_lstBases->setSelectable();
-	_lstBases->setMargin();
 	_lstBases->onMouseClick((ActionHandler)& TransferBaseState::lstBasesClick);
 
 	for (std::vector<Base*>::const_iterator

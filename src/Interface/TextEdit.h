@@ -96,38 +96,38 @@ private:
 
 		/// Sets the text's string.
 		void setText(const std::wstring& text);
-		/// Gets the text edit's string.
+		/// Gets the text's string.
 		std::wstring getText() const;
-		/// Sets the original text's string.
+		/// Stores the original string.
 		void storeText(const std::wstring& text);
-		/// Gets the original text edit's string.
+		/// Gets the original string.
 		std::wstring getStoredText() const;
 
-		/// Sets the text edit's wordwrap setting.
+		/// Sets the wordwrap setting.
 		void setWordWrap(bool wrap = true);
 
-		/// Sets the text edit's color invert setting.
+		/// Sets the color invert setting.
 		void setInvert(bool invert = true);
-		/// Sets the text edit's high contrast color setting.
+		/// Sets the high contrast color setting.
 		void setHighContrast(bool contrast = true);
 
-		/// Sets the text edit's horizontal alignment.
+		/// Sets the horizontal alignment.
 		void setAlign(TextHAlign align);
-		/// Sets the text edit's vertical alignment.
+		/// Sets the vertical alignment.
 		void setVerticalAlign(TextVAlign valign);
 
-		/// Sets the text edit to numerical input.
+		/// Sets the edit to numerical input.
 		void setNumerical(bool numerical = true);
 
-		/// Sets the text edit's color.
+		/// Sets the color.
 		void setColor(Uint8 color);
-		/// Gets the text edit's color.
+		/// Gets the color.
 		Uint8 getColor() const;
-		/// Sets the text edit's secondary color.
+		/// Sets the secondary color.
 		void setSecondaryColor(Uint8 color);
-		/// Gets the text edit's secondary color.
+		/// Gets the secondary color.
 		Uint8 getSecondaryColor() const;
-		/// Sets the text edit's palette.
+		/// Sets the palette.
 		void setPalette(
 				SDL_Color* colors,
 				int firstcolor = 0,
@@ -135,16 +135,16 @@ private:
 
 		/// Handles the timers.
 		void think();
-		/// Plays the blinking animation.
+		/// Plays the blinking caret.
 		void blink();
-		/// Draws the text edit.
+		/// Draws the text.
 		void draw();
 
-		/// Special handling for mouse presses.
+		/// Handling for mouse-presses.
 		void mousePress(Action* action, State* state);
-		/// Special handling for keyboard presses.
+		/// Handling for keyboard-presses.
 		void keyboardPress(Action* action, State* state);
-		/// Hooks an action handler to when the slider changes.
+		/// Hooks an ActionHandler to the editing.
 		void onChange(ActionHandler handler);
 };
 

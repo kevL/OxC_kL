@@ -159,10 +159,9 @@ ManufactureState::ManufactureState(
 	_txtCost->setText(tr("STR_COST_PER_UNIT"));
 	_txtTimeLeft->setText(tr("STR_DAYS_HOURS_LEFT"));
 
-	_lstManufacture->setColumns(5, 121, 29, 41, 56, 30);
+	_lstManufacture->setColumns(5, 121,29,41,56,30);
 	_lstManufacture->setSelectable();
 	_lstManufacture->setBackground(_window);
-	_lstManufacture->setMargin();
 	_lstManufacture->onMouseClick((ActionHandler)& ManufactureState::lstManufactureClick);
 }
 

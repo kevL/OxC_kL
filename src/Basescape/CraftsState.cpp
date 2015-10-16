@@ -92,6 +92,12 @@ CraftsState::CraftsState(Base* base)
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& CraftsState::btnOkClick,
 					Options::keyCancel);
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& CraftsState::btnOkClick,
+					Options::keyOk);
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& CraftsState::btnOkClick,
+					Options::keyOkKeypad);
 
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
@@ -109,11 +115,10 @@ CraftsState::CraftsState(Base* base)
 //	_txtCrew->setText(tr("STR_CREW"));
 //	_txtHwp->setText(tr("STR_HWPS"));
 
-	_lstCrafts->setColumns(5, 91, 120, 25, 15, 14);
+	_lstCrafts->setColumns(5, 91,120,25,15,14);
 	_lstCrafts->setArrowColumn(274, ARROW_VERTICAL);
 	_lstCrafts->setBackground(_window);
 	_lstCrafts->setSelectable();
-	_lstCrafts->setMargin();
 	_lstCrafts->onMousePress((ActionHandler)& CraftsState::lstCraftsPress);
 	_lstCrafts->onLeftArrowClick((ActionHandler)& CraftsState::lstLeftArrowClick);
 	_lstCrafts->onRightArrowClick((ActionHandler)& CraftsState::lstRightArrowClick);

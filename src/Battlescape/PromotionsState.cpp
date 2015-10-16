@@ -89,10 +89,9 @@ PromotionsState::PromotionsState()
 
 	_txtBase->setText(tr("STR_BASE"));
 
-	_lstSoldiers->setColumns(3, 126, 70, 81);
+	_lstSoldiers->setColumns(3, 126,70,81);
 	_lstSoldiers->setBackground(_window);
 	_lstSoldiers->setSelectable();
-	_lstSoldiers->setMargin();
 
 	for (std::vector<Base*>::const_iterator
 			i = _game->getSavedGame()->getBases()->begin();

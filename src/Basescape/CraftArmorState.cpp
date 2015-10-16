@@ -118,10 +118,9 @@ CraftArmorState::CraftArmorState(
 	_txtArmor->setText(tr("STR_ARMOR"));
 
 	_lstSoldiers->setArrowColumn(193, ARROW_VERTICAL);
-	_lstSoldiers->setColumns(3, 90, 120, 73);
+	_lstSoldiers->setColumns(3, 90,120,73);
 	_lstSoldiers->setBackground(_window);
 	_lstSoldiers->setSelectable();
-	_lstSoldiers->setMargin();
 	_lstSoldiers->onMousePress((ActionHandler)& CraftArmorState::lstSoldiersPress);
 	_lstSoldiers->onLeftArrowClick((ActionHandler)& CraftArmorState::lstLeftArrowClick);
 	_lstSoldiers->onRightArrowClick((ActionHandler)& CraftArmorState::lstRightArrowClick);

@@ -620,7 +620,8 @@ BattlescapeState::BattlescapeState()
 	_txtOrder->setHighContrast();
 
 	_lstSoldierInfo->setHighContrast();
-	_lstSoldierInfo->setColumns(2, 10, 15);
+	_lstSoldierInfo->setColumns(2, 10,15);
+	_lstSoldierInfo->setMargin(0);
 
 	Surface* const srfMark = _game->getResourcePack()->getSurface("ALIENINSIGNIA");
 	srfMark->blit(_alienMark);
@@ -628,10 +629,7 @@ BattlescapeState::BattlescapeState()
 
 
 	_numDir->setColor(BROWN_D);
-	_numDir->setValue(0);
-
 	_numDirTur->setColor(BROWN_D);
-	_numDirTur->setValue(0);
 
 	_rank->setVisible(false);
 
@@ -645,11 +643,7 @@ BattlescapeState::BattlescapeState()
 	_btnWounds->onMousePress((ActionHandler)& BattlescapeState::btnWoundedPress);
 
 	_numWounds->setColor(YELLOW);
-	_numWounds->setValue(0);
 	_numWounds->setVisible(false);
-
-	_numAmmoLeft->setValue(0);
-	_numAmmoRight->setValue(0);
 
 	_icons->onMouseIn((ActionHandler)& BattlescapeState::mouseInIcons);
 	_icons->onMouseOut((ActionHandler)& BattlescapeState::mouseOutIcons);
@@ -2826,7 +2820,7 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 						if (rtItem->getAmmoItem() != NULL)
 							_numAmmoRight->setValue(static_cast<unsigned>(rtItem->getAmmoItem()->getAmmoQuantity()));
 						else
-							_numAmmoRight->setValue(0);
+							_numAmmoRight->setValue();
 					}
 				break;
 
@@ -2861,7 +2855,7 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 						if (ltItem->getAmmoItem() != NULL)
 							_numAmmoLeft->setValue(static_cast<unsigned>(ltItem->getAmmoItem()->getAmmoQuantity()));
 						else
-							_numAmmoLeft->setValue(0);
+							_numAmmoLeft->setValue();
 					}
 				break;
 

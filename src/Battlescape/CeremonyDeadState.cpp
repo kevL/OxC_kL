@@ -82,13 +82,11 @@ CeremonyDeadState::CeremonyDeadState(std::vector<SoldierDead*> soldiersLost)
 	_lstLost->setColumns(2, 200,77);
 	_lstLost->setBackground(_window);
 	_lstLost->setSelectable();
-	_lstLost->setMargin();
 
 	_lstSoldiers->setColor(GREEN); // note, is Olive in CeremonyState
 	_lstSoldiers->setColumns(2, 200,77);
 	_lstSoldiers->setBackground(_window);
 	_lstSoldiers->setSelectable();
-	_lstSoldiers->setMargin();
 	_lstSoldiers->onMouseOver((ActionHandler)& CeremonyDeadState::lstInfoMouseOver);
 	_lstSoldiers->onMouseOut((ActionHandler)& CeremonyDeadState::lstInfoMouseOut);
 

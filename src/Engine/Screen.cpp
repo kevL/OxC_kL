@@ -39,11 +39,6 @@
 namespace OpenXcom
 {
 
-const int
-	Screen::ORIGINAL_WIDTH	= 320,
-	Screen::ORIGINAL_HEIGHT	= 200;
-
-
 /**
  * Sets up all the internal display flags depending on the current video settings.
  */

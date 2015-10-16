@@ -119,10 +119,9 @@ StoresState::StoresState(Base* base)
 //	_txtSpaceUsed->setText(tr("STR_SPACE_USED_UC"));
 	_txtSpaceUsed->setText(tr("STR_VOLUME"));
 
-	_lstStores->setColumns(3, 154, 84, 26);
+	_lstStores->setColumns(3, 154,84,26);
 	_lstStores->setBackground(_window);
 	_lstStores->setSelectable();
-	_lstStores->setMargin();
 
 
 	const SavedGame* const gameSave = _game->getSavedGame();

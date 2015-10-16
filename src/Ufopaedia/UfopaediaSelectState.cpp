@@ -58,7 +58,8 @@ UfopaediaSelectState::UfopaediaSelectState(
 
 	_window			= new Window(this, 256, 194, 32 + dX, 6);
 	_txtTitle		= new Text(224, 17, 48 + dX, 15);
-	_lstSelection	= new TextList(224, 137, 40 + dX, 35);
+//	_lstSelection	= new TextList(224, 137, 40 + dX, 35);
+	_lstSelection	= new TextList(208, 137, 56 + dX, 35);
 	_btnOk			= new TextButton(224, 16, 48 + dX, 177);
 
 	setInterface("ufopaedia");
@@ -92,10 +93,9 @@ UfopaediaSelectState::UfopaediaSelectState(
 					(ActionHandler)& UfopaediaSelectState::btnOkClick,
 					Options::keyGeoUfopedia);
 
-	_lstSelection->setColumns(1, 206);
+	_lstSelection->setColumns(1, 190);
 	_lstSelection->setBackground(_window);
 	_lstSelection->setSelectable();
-	_lstSelection->setMargin(18);
 	_lstSelection->setAlign(ALIGN_CENTER);
 	_lstSelection->onMouseClick((ActionHandler)& UfopaediaSelectState::lstSelectionClick);
 

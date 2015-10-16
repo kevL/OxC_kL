@@ -163,7 +163,6 @@ CraftEquipmentState::CraftEquipmentState(
 	_lstEquipment->setColumns(3, 147,85,41);
 	_lstEquipment->setBackground(_window);
 	_lstEquipment->setSelectable();
-	_lstEquipment->setMargin();
 //	_lstEquipment->setAllowScrollOnArrowButtons(!_allowChangeListValuesByMouseWheel);
 //	_lstEquipment->onMousePress((ActionHandler)& CraftEquipmentState::lstEquipmentMousePress);
 	_lstEquipment->onLeftArrowPress((ActionHandler)& CraftEquipmentState::lstEquipmentLeftArrowPress);
