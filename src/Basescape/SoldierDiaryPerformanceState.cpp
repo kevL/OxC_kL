@@ -284,22 +284,22 @@ SoldierDiaryPerformanceState::SoldierDiaryPerformanceState(
 	_lstLocation->setColor(WHITE);
 	_lstLocation->setArrowColor(PINK);
 	_lstLocation->setColumns(2, 80,12);
-//	_lstLocation->setBackground(_window);
+	_lstLocation->setMargin();
 
 	_lstType->setColor(WHITE);
 	_lstType->setArrowColor(PINK);
 	_lstType->setColumns(2, 100,14);
-//	_lstType->setBackground(_window);
+	_lstType->setMargin();
 
 	_lstUFO->setColor(WHITE);
 	_lstUFO->setArrowColor(PINK);
 	_lstUFO->setColumns(2, 80,12);
-//	_lstUFO->setBackground(_window);
+	_lstUFO->setMargin();
 
 	_lstMissionTotals->setColor(YELLOW);
 	_lstMissionTotals->setSecondaryColor(WHITE);
 	_lstMissionTotals->setColumns(4, 70,70,70,78);
-//	_lstMissionTotals->setBackground(_window);
+	_lstMissionTotals->setMargin();
 
 
 	// Kill stats ->
@@ -315,22 +315,22 @@ SoldierDiaryPerformanceState::SoldierDiaryPerformanceState(
 	_lstRace->setColor(WHITE);
 	_lstRace->setArrowColor(PINK);
 	_lstRace->setColumns(2, 80,18);
-//	_lstRace->setBackground(_window);
+	_lstRace->setMargin();
 
 	_lstRank->setColor(WHITE);
 	_lstRank->setArrowColor(PINK);
 	_lstRank->setColumns(2, 80,18);
-//	_lstRank->setBackground(_window);
+	_lstRank->setMargin();
 
 	_lstWeapon->setColor(WHITE);
 	_lstWeapon->setArrowColor(PINK);
 	_lstWeapon->setColumns(2, 80,18);
-//	_lstWeapon->setBackground(_window);
+	_lstWeapon->setMargin();
 
 	_lstKillTotals->setColor(YELLOW);
 	_lstKillTotals->setSecondaryColor(WHITE);
 	_lstKillTotals->setColumns(3, 70,70,70);
-//	_lstKillTotals->setBackground(_window);
+	_lstKillTotals->setMargin();
 
 
 	// Award stats ->
@@ -346,8 +346,9 @@ SoldierDiaryPerformanceState::SoldierDiaryPerformanceState(
 	_lstAwards->setColor(WHITE);
 	_lstAwards->setArrowColor(PINK);
 	_lstAwards->setColumns(3, 148,52,40);
-	_lstAwards->setSelectable();
 	_lstAwards->setBackground(_window);
+	_lstAwards->setSelectable();
+	_lstAwards->setMargin();
 	_lstAwards->onMouseOver((ActionHandler)& SoldierDiaryPerformanceState::lstInfoMouseOver);
 	_lstAwards->onMouseOut((ActionHandler)& SoldierDiaryPerformanceState::lstInfoMouseOut);
 	_lstAwards->onMousePress((ActionHandler)& SoldierDiaryPerformanceState::handle);

@@ -54,7 +54,7 @@
 namespace OpenXcom
 {
 
-static size_t rowCurrent = 0;
+static size_t recallRow = 0;
 
 
 /**
@@ -193,7 +193,7 @@ GraphsState::GraphsState(int curGraph)
 	for (std::vector<Region*>::const_iterator
 			i = _game->getSavedGame()->getRegions()->begin();
 			i != _game->getSavedGame()->getRegions()->end();
-			++i)
+			++i, ++colorOffset, ++btnOffset)
 	{
 		if (colorOffset == 17) colorOffset = 0;
 
@@ -262,10 +262,6 @@ GraphsState::GraphsState(int curGraph)
 
 		_xcomRegionLines.push_back(new Surface(320,200));
 		add(_xcomRegionLines.at(btnOffset));
-
-
-		++btnOffset;
-		++colorOffset;
 	}
 
 
@@ -310,7 +306,7 @@ GraphsState::GraphsState(int curGraph)
 	for (std::vector<Country*>::const_iterator
 			i = _game->getSavedGame()->getCountries()->begin();
 			i != _game->getSavedGame()->getCountries()->end();
-			++i)
+			++i, ++colorOffset, ++btnOffset)
 	{
 		if (colorOffset == 17) colorOffset = 0;
 
@@ -382,10 +378,6 @@ GraphsState::GraphsState(int curGraph)
 
 		_incomeLines.push_back(new Surface(320,200));
 		add(_incomeLines.at(btnOffset));
-
-
-		++btnOffset;
-		++colorOffset;
 	}
 
 
@@ -749,7 +741,7 @@ void GraphsState::initButtons() // private.
 				_blinkCountryAlien,
 				_blinkCountryXCom,
 				_btnCountriesOffset,
-				static_cast<int>(rowCurrent),
+				static_cast<int>(recallRow),
 				true);
 
 	for (std::vector<GraphBtnInfo*>::const_iterator
@@ -2109,9 +2101,9 @@ void GraphsState::scrollButtons( // private.
 			--btnOffset;
 
 		if (init == true)
-			btnOffset = rowCurrent;
+			btnOffset = recallRow;
 		else
-			rowCurrent = btnOffset; // aka _btnCountriesOffset (note: would conflict w/ _btnRegionsOffset if/when regions are scrollable.)
+			recallRow = btnOffset; // aka _btnCountriesOffset (note: would conflict w/ _btnRegionsOffset if/when regions are scrollable.)
 
 		std::vector<ToggleTextButton*>::const_iterator btn = buttons.begin();
 		std::vector<Text*>::const_iterator actA_iter = actA_vect.begin();
@@ -2136,10 +2128,10 @@ void GraphsState::scrollButtons( // private.
 				++blingX;
 
 				updateButton(
-							*i,
-							*btn++,
-							*actA_iter++,
-							*actX_iter++);
+						*i,
+						*btn++,
+						*actA_iter++,
+						*actX_iter++);
 			}
 			else
 				return;

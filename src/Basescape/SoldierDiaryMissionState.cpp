@@ -46,16 +46,12 @@ namespace OpenXcom
  * Initializes all the elements in the Soldier Diary Mission-description window.
  * @param base		- pointer to the Base to get info from
  * @param soldierId	- ID of the selected soldier
- * @param rowEntry	- listrow to get mission info from
+ * @param entry		- listrow to get mission info from
  */
 SoldierDiaryMissionState::SoldierDiaryMissionState(
 		Base* const base,
-		const size_t soldierId,
-		const size_t rowEntry)
-	:
-		_base(base),
-		_soldierId(soldierId),
-		_rowEntry(rowEntry)
+		size_t soldierId,
+		size_t entry)
 {
 	_screen = false;
 
@@ -72,7 +68,8 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(
 	_txtKills		= new Text(80, 9, 188, 78);
 	_txtPoints		= new Text(80, 9, 188, 87);
 
-	_lstKills		= new TextList(217, 49, 50, 99);
+	_srfLine		= new Surface(120, 1, 100, 99);
+	_lstKills		= new TextList(217, 49, 50, 101);
 
 	_btnOk			= new TextButton(180, 16, 70, 152);
 
@@ -88,61 +85,50 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(
 	add(_txtDaylight);
 	add(_txtKills);
 	add(_txtDaysWounded);
+	add(_srfLine);
 	add(_lstKills);
 	add(_btnOk);
 
 	centerAllSurfaces();
 
 
-	const std::vector<MissionStatistics*>* const missionStatistics (_game->getSavedGame()->getMissionStatistics());
+	const std::vector<MissionStatistics*>* const stats (_game->getSavedGame()->getMissionStatistics());
 	size_t missionId;
 	int daysWounded;
 
 	SoldierDiary* diary;
 
-	if (_base == NULL)
+	if (base == NULL)
 	{
 		const std::vector<SoldierDead*>* const deadList (_game->getSavedGame()->getDeadSoldiers());
 
-/*		if (deadList->empty() == true)
-		{
-			_game->popState();
-			return;
-		} */ // should never happen. Btn won't be visible if listDead is empty.
+		if (soldierId >= deadList->size())
+			soldierId = 0;
 
-		if (_soldierId >= deadList->size())
-			_soldierId = 0;
+		const SoldierDead* const solDead (deadList->at(soldierId));
+		diary = solDead->getDiary();
 
-		const SoldierDead* const deadSoldier (deadList->at(_soldierId));
-		diary = deadSoldier->getDiary();
-
-		missionId = diary->getMissionIdList().at(_rowEntry);
-		if (missionId > missionStatistics->size())
+		missionId = diary->getMissionIdList().at(entry);
+		if (missionId > stats->size())
 			missionId = 0;
 
-		daysWounded = missionStatistics->at(missionId)->injuryList[deadSoldier->getId()];
+		daysWounded = stats->at(missionId)->injuryList[solDead->getId()];
 	}
 	else
 	{
-		const std::vector<Soldier*>* const liveList (_base->getSoldiers());
+		const std::vector<Soldier*>* const liveList (base->getSoldiers());
 
-/*		if (liveList->empty() == true)
-		{
-			_game->popState();
-			return;
-		} */ // should never happen. Btn won't be visible unless viewing at least one soldier.
+		if (soldierId >= liveList->size())
+			soldierId = 0;
 
-		if (_soldierId >= liveList->size())
-			_soldierId = 0;
+		const Soldier* const sol (liveList->at(soldierId));
+		diary = sol->getDiary();
 
-		const Soldier* const soldier (liveList->at(_soldierId));
-		diary = soldier->getDiary();
-
-		missionId = diary->getMissionIdList().at(_rowEntry);
-		if (missionId > missionStatistics->size())
+		missionId = diary->getMissionIdList().at(entry);
+		if (missionId > stats->size())
 			missionId = 0;
 
-		daysWounded = missionStatistics->at(missionId)->injuryList[soldier->getId()];
+		daysWounded = stats->at(missionId)->injuryList[sol->getId()];
 	}
 
 
@@ -155,6 +141,12 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(
 	_btnOk->onKeyboardPress(
 			(ActionHandler)& SoldierDiaryMissionState::btnOkClick,
 			Options::keyCancel);
+	_btnOk->onKeyboardPress(
+			(ActionHandler)& SoldierDiaryMissionState::btnOkClick,
+			Options::keyOk);
+	_btnOk->onKeyboardPress(
+			(ActionHandler)& SoldierDiaryMissionState::btnOkClick,
+			Options::keyOkKeypad);
 
 	_txtTitle->setColor(YELLOW);
 	_txtTitle->setAlign(ALIGN_CENTER);
@@ -163,30 +155,38 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(
 
 	_txtScore->setColor(YELLOW);
 	_txtScore->setSecondaryColor(WHITE);
-	_txtScore->setText(tr("STR_SCORE_VALUE").arg(missionStatistics->at(missionId)->score));
+	_txtScore->setText(tr("STR_SCORE_VALUE").arg(stats->at(missionId)->score));
 
 	_txtMissionType->setColor(YELLOW);
 	_txtMissionType->setSecondaryColor(WHITE);
-	_txtMissionType->setText(tr("STR_MISSION_TYPE").arg(tr(missionStatistics->at(missionId)->getMissionTypeLowerCase())));
+	_txtMissionType->setText(tr("STR_MISSION_TYPE").arg(tr(stats->at(missionId)->getMissionTypeLowerCase())));
 
 	_txtUFO->setColor(YELLOW);
 	_txtUFO->setSecondaryColor(WHITE);
-	_txtUFO->setText(tr("STR_UFO_TYPE").arg(tr(missionStatistics->at(missionId)->ufo)));
-	if (missionStatistics->at(missionId)->ufo == "NUL_UFO")
+	_txtUFO->setText(tr("STR_UFO_TYPE").arg(tr(stats->at(missionId)->ufo)));
+	if (stats->at(missionId)->ufo == "NUL_UFO")
 		_txtUFO->setVisible(false);
 
 	_txtRace->setColor(YELLOW);
 	_txtRace->setSecondaryColor(WHITE);
-	_txtRace->setText(tr("STR_RACE_TYPE").arg(tr(missionStatistics->at(missionId)->alienRace)));
-	if (missionStatistics->at(missionId)->alienRace == "STR_UNKNOWN")
+	_txtRace->setText(tr("STR_RACE_TYPE").arg(tr(stats->at(missionId)->alienRace)));
+	if (stats->at(missionId)->alienRace == "STR_UNKNOWN")
 		_txtRace->setVisible(false);
 
-	_txtDaylight->setColor(YELLOW);
-	_txtDaylight->setSecondaryColor(WHITE);
-	if (missionStatistics->at(missionId)->shade < 9)
-		_txtDaylight->setText(tr("STR_DAYLIGHT_TYPE").arg(tr("STR_DAY")));
+	if (stats->at(missionId)->type == "STR_BASE_DEFENSE"
+		|| stats->at(missionId)->type == "STR_ALIEN_BASE_ASSAULT")
+	{
+		_txtDaylight->setVisible(false);
+	}
 	else
-		_txtDaylight->setText(tr("STR_DAYLIGHT_TYPE").arg(tr("STR_NIGHT")));
+	{
+		_txtDaylight->setColor(YELLOW);
+		_txtDaylight->setSecondaryColor(WHITE);
+		if (stats->at(missionId)->shade < 9)
+			_txtDaylight->setText(tr("STR_DAYLIGHT_TYPE").arg(tr("STR_DAY")));
+		else
+			_txtDaylight->setText(tr("STR_DAYLIGHT_TYPE").arg(tr("STR_NIGHT")));
+	}
 
 	if (daysWounded == 0)
 		_txtDaysWounded->setVisible(false);
@@ -194,7 +194,6 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(
 	{
 		_txtDaysWounded->setColor(YELLOW);
 		_txtDaysWounded->setSecondaryColor(WHITE);
-
 		if (daysWounded == -1)
 			_txtDaysWounded->setText(tr("STR_DAYS_WOUNDED").arg(tr("STR_KIA")).arg(L""));
 		else if (daysWounded == -2)
@@ -203,11 +202,12 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(
 			_txtDaysWounded->setText(tr("STR_DAYS_WOUNDED").arg(daysWounded).arg(L" dy"));
 	}
 
+	_srfLine->drawLine(0,0, 120,0, YELLOW + 1);
+
 	_lstKills->setColor(WHITE);
 	_lstKills->setArrowColor(YELLOW);
 	_lstKills->setColumns(3, 27,96,94);
-//	_lstKills->setBackground(_window);
-//	_lstKills->setSelectable(false);
+	_lstKills->setMargin();
 
 	int
 		killQty (0),

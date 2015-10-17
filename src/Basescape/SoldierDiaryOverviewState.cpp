@@ -183,6 +183,7 @@ SoldierDiaryOverviewState::SoldierDiaryOverviewState(
 	_lstDiary->setArrowColor(PINK);
 	_lstDiary->setBackground(_window);
 	_lstDiary->setSelectable();
+	_lstDiary->setMargin();
 	_lstDiary->onMouseClick((ActionHandler)& SoldierDiaryOverviewState::lstDiaryInfoClick);
 
 

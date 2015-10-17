@@ -376,7 +376,7 @@ void SoldiersState::lstLeftArrowClick(Action* action)
 	const size_t row = _lstSoldiers->getSelectedRow();
 	if (row > 0)
 	{
-		Soldier* soldier = _base->getSoldiers()->at(row);
+		Soldier* const soldier = _base->getSoldiers()->at(row);
 
 		if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 		{

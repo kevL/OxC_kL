@@ -59,15 +59,13 @@ PsiTrainingState::PsiTrainingState(Base* base)
 {
 	_window			= new Window(this, 320, 200);
 
-	_txtTitle		= new Text(300, 17,  10, 8);
-	_txtBaseLabel	= new Text( 80,  9, 230, 8);
-
-	_txtRemaining	= new Text(100, 9, 12, 20);
-
-	_txtName		= new Text(114, 9,  16, 31);
-	_txtPsiStrength	= new Text( 48, 9, 134, 31);
-	_txtPsiSkill	= new Text( 48, 9, 182, 31);
-	_txtTraining	= new Text( 34, 9, 260, 31);
+	_txtTitle		= new Text(300, 17,  10,  8);
+	_txtBaseLabel	= new Text( 80,  9, 230,  8);
+	_txtSpaceFree	= new Text(100,  9,  16, 20);
+	_txtName		= new Text(114,  9,  16, 31);
+	_txtPsiStrength	= new Text( 48,  9, 134, 31);
+	_txtPsiSkill	= new Text( 48,  9, 182, 31);
+	_txtTraining	= new Text( 34,  9, 260, 31);
 
 	_lstSoldiers	= new TextList(293, 129, 8, 42);
 
@@ -78,7 +76,7 @@ PsiTrainingState::PsiTrainingState(Base* base)
 	add(_window,			"window",	"allocatePsi");
 	add(_txtTitle,			"text",		"allocatePsi");
 	add(_txtBaseLabel,		"text",		"allocatePsi");
-	add(_txtRemaining,		"text",		"allocatePsi");
+	add(_txtSpaceFree,		"text",		"allocatePsi");
 	add(_txtName,			"text",		"allocatePsi");
 	add(_txtPsiStrength,	"text",		"allocatePsi");
 	add(_txtPsiSkill,		"text",		"allocatePsi");
@@ -111,8 +109,8 @@ PsiTrainingState::PsiTrainingState(Base* base)
 	_txtBaseLabel->setAlign(ALIGN_RIGHT);
 
 	_labSpace = base->getAvailablePsiLabs() - base->getUsedPsiLabs();
-	_txtRemaining->setText(tr("STR_REMAINING_PSI_LAB_CAPACITY").arg(_labSpace));
-	_txtRemaining->setSecondaryColor(Palette::blockOffset(13));
+	_txtSpaceFree->setText(tr("STR_REMAINING_PSI_LAB_CAPACITY").arg(_labSpace));
+	_txtSpaceFree->setSecondaryColor(Palette::blockOffset(13));
 
 	_txtName->setText(tr("STR_NAME"));
 	_txtPsiStrength->setText(tr("STR_PSIONIC_STRENGTH_HEADER"));
@@ -237,7 +235,7 @@ void PsiTrainingState::lstSoldiersPress(Action* action)
 										_lstSoldiers->getSecondaryColor());
 
 				--_labSpace;
-				_txtRemaining->setText(tr("STR_REMAINING_PSI_LAB_CAPACITY").arg(_labSpace));
+				_txtSpaceFree->setText(tr("STR_REMAINING_PSI_LAB_CAPACITY").arg(_labSpace));
 
 				_base->getSoldiers()->at(_sel)->togglePsiTraining();
 			}
@@ -252,7 +250,7 @@ void PsiTrainingState::lstSoldiersPress(Action* action)
 									_sel,
 									_lstSoldiers->getColor());
 			++_labSpace;
-			_txtRemaining->setText(tr("STR_REMAINING_PSI_LAB_CAPACITY").arg(_labSpace));
+			_txtSpaceFree->setText(tr("STR_REMAINING_PSI_LAB_CAPACITY").arg(_labSpace));
 			_base->getSoldiers()->at(_sel)->togglePsiTraining();
 		}
 	}

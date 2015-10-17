@@ -258,9 +258,9 @@ std::vector<SaveInfo> SavedGame::getList( // static.
 
 	if (autoquick == true)
 	{
-		const std::vector<std::string> saves = CrossPlatform::getFolderContents(
+		const std::vector<std::string> saves (CrossPlatform::getFolderContents(
 																			Options::getUserFolder(),
-																			"asav");
+																			"asav"));
 		for (std::vector<std::string>::const_iterator
 				i = saves.begin();
 				i != saves.end();
@@ -283,9 +283,9 @@ std::vector<SaveInfo> SavedGame::getList( // static.
 		}
 	}
 
-	const std::vector<std::string> saves = CrossPlatform::getFolderContents(
+	const std::vector<std::string> saves (CrossPlatform::getFolderContents(
 																		Options::getUserFolder(),
-																		"sav");
+																		"sav"));
 	for (std::vector<std::string>::const_iterator
 			i = saves.begin();
 			i != saves.end();
@@ -316,7 +316,7 @@ std::vector<SaveInfo> SavedGame::getList( // static.
  * @param lang - pointer to the loaded Language
  * @return, the SaveInfo (SavedGame.h)
  */
-SaveInfo SavedGame::getSaveInfo( // private. static.
+SaveInfo SavedGame::getSaveInfo( // private/static.
 		const std::string& file,
 		const Language* const lang)
 {

@@ -130,6 +130,7 @@ StoresMatrixState::StoresMatrixState(const Base* base)
 	_lstMatrix->setColor(BLUE);
 	_lstMatrix->setBackground(_window);
 	_lstMatrix->setSelectable();
+	_lstMatrix->setMargin();
 
 
 	const SavedGame* const gameSave = _game->getSavedGame();

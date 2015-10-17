@@ -52,7 +52,7 @@ private:
 		* _txtName,
 		* _txtPsiSkill,
 		* _txtPsiStrength,
-		* _txtRemaining,
+		* _txtSpaceFree,
 		* _txtTitle,
 		* _txtTraining;
 	TextButton* _btnOk;

@@ -29,6 +29,7 @@ namespace OpenXcom
 {
 
 class Base;
+class Surface;
 class Text;
 class TextButton;
 class TextList;
@@ -49,14 +50,7 @@ private:
 		YELLOW	= 213,
 		BLUE	= 218;
 
-	size_t
-		_rowEntry,
-		_soldierId;
-
-	Base* _base;
-
-	TextButton* _btnOk;
-	Window* _window;
+	Surface* _srfLine;
 	Text
 		* _txtTitle,
 		* _txtScore,
@@ -67,16 +61,17 @@ private:
 		* _txtDaylight,
 		* _txtDaysWounded,
 		* _txtPoints;
+	TextButton* _btnOk;
 	TextList* _lstKills;
-
+	Window* _window;
 
 
 	public:
 		/// Creates the Soldier Diary Mission state.
 		SoldierDiaryMissionState(
 				Base* const base,
-				const size_t soldierId,
-				const size_t rowEntry);
+				size_t soldierId,
+				size_t entry);
 		/// Cleans up the Soldier Diary Mission state.
 		~SoldierDiaryMissionState();
 

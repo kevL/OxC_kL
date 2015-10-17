@@ -283,37 +283,16 @@ SoldierInfoState::SoldierInfoState(
 
 
 	_txtTimeUnits->setText(tr("STR_TIME_UNITS"));
-//	_barTimeUnits->setScale();
-
 	_txtStamina->setText(tr("STR_STAMINA"));
-//	_barStamina->setScale();
-
 	_txtHealth->setText(tr("STR_HEALTH"));
-//	_barHealth->setScale();
-
 	_txtBravery->setText(tr("STR_BRAVERY"));
-//	_barBravery->setScale();
-
 	_txtReactions->setText(tr("STR_REACTIONS"));
-//	_barReactions->setScale();
-
 	_txtFiring->setText(tr("STR_FIRING_ACCURACY"));
-//	_barFiring->setScale();
-
 	_txtThrowing->setText(tr("STR_THROWING_ACCURACY"));
-//	_barThrowing->setScale();
-
 	_txtMelee->setText(tr("STR_MELEE_ACCURACY"));
-//	_barMelee->setScale();
-
 	_txtStrength->setText(tr("STR_STRENGTH"));
-//	_barStrength->setScale();
-
 	_txtPsiStrength->setText(tr("STR_PSIONIC_STRENGTH"));
-//	_barPsiStrength->setScale();
-
 	_txtPsiSkill->setText(tr("STR_PSIONIC_SKILL"));
-//	_barPsiSkill->setScale();
 }
 
 /**
