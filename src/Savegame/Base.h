@@ -114,7 +114,9 @@ private:
 
 
 	public:
-		static const size_t BASE_SIZE = 6;
+		static const size_t
+			MAX_BASES = 8,
+			BASE_SIZE = 6;
 
 		/// Creates a new Base.
 		explicit Base(const Ruleset* const rules);

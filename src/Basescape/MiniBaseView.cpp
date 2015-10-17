@@ -134,7 +134,7 @@ void MiniBaseView::draw()
 
 	for (size_t
 			i = 0;
-			i != MAX_BASES;
+			i != Base::MAX_BASES;
 			++i)
 	{
 		if (i == _baseId) // Draw white border.
@@ -312,8 +312,8 @@ void MiniBaseView::mouseOver(Action* action, State* state)
 	_hoverBase = static_cast<size_t>(std::floor(
 				 action->getRelativeXMouse()) / (static_cast<double>(MINI_SIZE + 2) * action->getXScale()));
 
-	if (_hoverBase > MAX_BASES - 1)
-		_hoverBase = MAX_BASES - 1;
+	if (_hoverBase > Base::MAX_BASES - 1)
+		_hoverBase = Base::MAX_BASES - 1;
 
 	InteractiveSurface::mouseOver(action, state);
 }
@@ -325,7 +325,7 @@ void MiniBaseView::mouseOver(Action* action, State* state)
  */
 void MiniBaseView::mouseOut(Action* action, State* state)
 {
-	_hoverBase = MAX_BASES;
+	_hoverBase = Base::MAX_BASES;
 	InteractiveSurface::mouseOut(action, state);
 }
 

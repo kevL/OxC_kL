@@ -44,8 +44,8 @@ enum MiniBaseViewType
 
 /**
  * Mini view of a base.
- * Takes all the bases and displays their layout
- * and allows players to swap between them.
+ * @note Takes all the bases and displays their layouts and allows the player to
+ * switch between them.
  */
 class MiniBaseView
 	:
@@ -82,8 +82,6 @@ private:
 
 
 	public:
-		static const size_t MAX_BASES = 8;
-
 		/// Creates a new mini base view at the specified position and size.
 		MiniBaseView(
 				int width,

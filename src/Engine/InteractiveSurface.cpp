@@ -358,7 +358,7 @@ void InteractiveSurface::mouseClick(Action* action, State* state) // virtual
  */
 void InteractiveSurface::mouseIn(Action* action, State* state) // virtual
 {
-	if (_in != 0)
+	if (_in != NULL)
 		(state->*_in)(action);
 }
 
@@ -371,7 +371,7 @@ void InteractiveSurface::mouseIn(Action* action, State* state) // virtual
  */
 void InteractiveSurface::mouseOver(Action* action, State* state) // virtual
 {
-	if (_over != 0)
+	if (_over != NULL)
 		(state->*_over)(action);
 }
 
@@ -384,7 +384,7 @@ void InteractiveSurface::mouseOver(Action* action, State* state) // virtual
  */
 void InteractiveSurface::mouseOut(Action* action, State* state) // virtual
 {
-	if (_out != 0)
+	if (_out != NULL)
 		(state->*_out)(action);
 }
 
@@ -449,7 +449,7 @@ void InteractiveSurface::onMouseClick(
 		ActionHandler handler,
 		Uint8 btn)
 {
-	if (handler != 0)
+	if (handler != NULL)
 		_click[btn] = handler;
 	else
 		_click.erase(btn);
@@ -464,7 +464,7 @@ void InteractiveSurface::onMousePress(
 		ActionHandler handler,
 		Uint8 btn)
 {
-	if (handler != 0)
+	if (handler != NULL)
 		_press[btn] = handler;
 	else
 		_press.erase(btn);
@@ -479,7 +479,7 @@ void InteractiveSurface::onMouseRelease(
 		ActionHandler handler,
 		Uint8 btn)
 {
-	if (handler != 0)
+	if (handler != NULL)
 		_release[btn] = handler;
 	else
 		_release.erase(btn);
@@ -516,38 +516,38 @@ void InteractiveSurface::onMouseOut(ActionHandler handler)
  * Sets a function to be called every time a key is pressed.
  * @note The surface must be focused.
  * @param handler	- ActionHandler
- * @param key		- keyboard button to check for (note: ignores key modifiers).
+ * @param keyPress	- keyboard key to check for (note: ignores modifiers)
  *					  Set to 0 for any key (default SDLK_ANY)
  */
-void InteractiveSurface::onKeyboardPress(
+void InteractiveSurface::onKeyboardPress( // Note: this fires somehow on mouse button also ....
 		ActionHandler handler,
-		SDLKey key)
+		SDLKey keyPress)
 {
-	if (handler != 0)
-		_keyPress[key] = handler;
+	if (handler != NULL)
+		_keyPress[keyPress] = handler;
 	else
-		_keyPress.erase(key);
+		_keyPress.erase(keyPress);
 }
 
 /**
  * Sets a function to be called every time a key is released.
  * @note The surface must be focused.
- * @param handler	- ActionHandler
- * @param key		- keyboard button to check for (note: ignores key modifiers).
- *					  Set to 0 for any key (default SDLK_ANY)
+ * @param handler		- ActionHandler
+ * @param keyRelease	- keyboard key to check for (note: ignores modifiers)
+ *						  Set to 0 for any key (default SDLK_ANY)
  */
 void InteractiveSurface::onKeyboardRelease(
 		ActionHandler handler,
-		SDLKey key)
+		SDLKey keyRelease)
 {
-	if (handler != 0)
-		_keyRelease[key] = handler;
+	if (handler != NULL)
+		_keyRelease[keyRelease] = handler;
 	else
-		_keyRelease.erase(key);
+		_keyRelease.erase(keyRelease);
 }
 
 /**
- * Sets a flag for this button to say "i'm a member of a textList" to true.
+ * Sets a flag for this button to say "member of a TextList" to true.
  */
 void InteractiveSurface::setListButton()
 {

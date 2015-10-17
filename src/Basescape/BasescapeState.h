@@ -76,8 +76,6 @@ private:
 
 
 	public:
-		static const SDLKey baseKeys[8];
-
 		/// Creates the Basescape state.
 		BasescapeState(
 				Base* const base,
@@ -135,7 +133,10 @@ private:
 		void miniRightClick(Action* action);
 		/// Handler for pressing a base selection hotkey.
 		void handleKeyPress(Action* action);
-		/// Handler for changing the text on the Name edit.
+		/// Returns the baseId for a keypress.
+		size_t getKeyedBaseId(SDLKey keyId) const;
+
+		/// Handler for changing the text in the base-name editor.
 		void edtLabelChange(Action* action);
 
 		/// Resets the '_allowStoresWarning' flag.

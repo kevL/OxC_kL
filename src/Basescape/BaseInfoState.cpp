@@ -592,30 +592,18 @@ void BaseInfoState::handleKeyPress(Action* action)
 {
 	if (action->getDetails()->type == SDL_KEYDOWN)
 	{
-		const SDLKey keyId (action->getDetails()->key.keysym.sym);
-		size_t baseId (0);
-		for (std::vector<Base*>::const_iterator
-				i = _baseList->begin();
-				i != _baseList->end();
-				++i, ++baseId)
+		const size_t baseId = _state->getKeyedBaseId(action->getDetails()->key.keysym.sym);
+		if (baseId != Base::MAX_BASES)
 		{
-			if (*i == _base && static_cast<SDLKey>(baseId) == keyId)
-				return;
+			_txtHoverBase->setText(L"");
+			_txtHoverRegion->setText(L"");
 
-			if (BasescapeState::baseKeys[baseId] == keyId)
-			{
-				_txtHoverBase->setText(L"");
-				_txtHoverRegion->setText(L"");
+			_mini->setSelectedBase(baseId);
+			_base = _baseList->at(baseId);
+			_state->setBase(_base);
 
-				_mini->setSelectedBase(baseId);
-				_base = _baseList->at(baseId);
-				_state->setBase(_base);
-
-				_state->resetStoresWarning();
-				init();
-
-				break;
-			}
+			_state->resetStoresWarning();
+			init();
 		}
 	}
 }

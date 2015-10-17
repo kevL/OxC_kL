@@ -75,19 +75,6 @@
 namespace OpenXcom
 {
 
-const SDLKey BasescapeState::baseKeys[8] =
-{
-	Options::keyBaseSelect1,
-	Options::keyBaseSelect2,
-	Options::keyBaseSelect3,
-	Options::keyBaseSelect4,
-	Options::keyBaseSelect5,
-	Options::keyBaseSelect6,
-	Options::keyBaseSelect7,
-	Options::keyBaseSelect8
-};
-
-
 /**
  * Initializes all the elements in the Basescape screen.
  * @param base	- pointer to the Base to get info from
@@ -282,7 +269,7 @@ void BasescapeState::init()
 	_txtFunds->setText(tr("STR_FUNDS")
 						.arg(Text::formatFunding(_game->getSavedGame()->getFunds())));
 
-//	_btnNewBase->setVisible(_baseList->size() < MiniBaseView::MAX_BASES);
+//	_btnNewBase->setVisible(_baseList->size() < Base::MAX_BASES);
 
 	bool
 		hasFunds		= (_game->getSavedGame()->getFunds() > 0),
@@ -743,7 +730,7 @@ void BasescapeState::miniLeftClick(Action*)
 		init();
 	}
 	else if (baseId == _baseList->size()
-		&& baseId < MiniBaseView::MAX_BASES - 1)
+		&& baseId < Base::MAX_BASES - 1)
 	{
 		kL_geoMusicPlaying = false;
 		kL_geoMusicReturnState = true;
@@ -785,26 +772,54 @@ void BasescapeState::handleKeyPress(Action* action)
 {
 	if (action->getDetails()->type == SDL_KEYDOWN)
 	{
-		const SDLKey keyId (action->getDetails()->key.keysym.sym);
-		size_t baseId (0);
-		for (std::vector<Base*>::const_iterator
-				i = _baseList->begin();
-				i != _baseList->end();
-				++i, ++baseId)
+		const size_t baseId = getKeyedBaseId(action->getDetails()->key.keysym.sym);
+		if (baseId != Base::MAX_BASES)
 		{
-			if (*i == _base && static_cast<SDLKey>(baseId) == keyId)
-				return;
-
-			if (baseKeys[baseId] == keyId)
-			{
-				_allowStoresWarning = true;
-				_txtFacility->setText(L"");
-				_base = _baseList->at(baseId);
-				init();
-				break;
-			}
+			_allowStoresWarning = true;
+			_txtFacility->setText(L"");
+			_base = _baseList->at(baseId);
+			init();
 		}
 	}
+}
+
+/**
+ * Returns the baseId that player chooses or MAX_BASES if the current Base is
+ * re-chosen.
+ * @param keyId	- SDL key pressed
+ * @param base	- current base
+ * @return, baseId of the base to switch to (0 to MAX_BASES-1)
+ */
+size_t BasescapeState::getKeyedBaseId(SDLKey keyId) const
+{
+	static const SDLKey baseKeys[8] =	// note that 'static' means these keys will not be
+	{									// changed (in Options) while the program is running.
+		Options::keyBaseSelect1,
+		Options::keyBaseSelect2,
+		Options::keyBaseSelect3,
+		Options::keyBaseSelect4,
+		Options::keyBaseSelect5,
+		Options::keyBaseSelect6,
+		Options::keyBaseSelect7,
+		Options::keyBaseSelect8
+	};
+
+	size_t baseId (0);
+	for (std::vector<Base*>::const_iterator
+			i = _baseList->begin();
+			i != _baseList->end();
+			++i, ++baseId)
+	{
+		if (baseKeys[baseId] == keyId)
+		{
+			if (*i != _base)
+				return baseId;
+
+			break;
+		}
+	}
+
+	return Base::MAX_BASES;
 }
 
 /**

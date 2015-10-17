@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1444989007 source:f:\git\openxcom\src\basescape\baseinfostate.cpp
+1445079587 source:f:\git\openxcom\src\basescape\baseinfostate.cpp
 	"BaseInfoState.h"
 	"BasescapeState.h"
 	"MiniBaseView.h"
@@ -238,10 +238,10 @@
 	"begin_code.h"
 	"close_code.h"
 
-1444988972 f:\git\openxcom\src\basescape\basescapestate.h
+1445079483 f:\git\openxcom\src\basescape\basescapestate.h
 	"../Engine/State.h"
 
-1444984001 f:\git\openxcom\src\basescape\minibaseview.h
+1445076724 f:\git\openxcom\src\basescape\minibaseview.h
 	"../Engine/InteractiveSurface.h"
 
 1440463028 f:\git\openxcom\src\engine\interactivesurface.h
@@ -4382,7 +4382,7 @@
 
 1442988766 f:\git\openxcom\src\resource\resourcepack.h
 
-1444488424 f:\git\openxcom\src\savegame\base.h
+1445076741 f:\git\openxcom\src\savegame\base.h
 	"Target.h"
 
 1441247516 f:\git\openxcom\src\savegame\target.h
@@ -4392,7 +4392,7 @@
 	"Soldier.h"
 	"../Ruleset/RuleAlienMission.h"
 
-1444988976 source:f:\git\openxcom\src\basescape\basescapestate.cpp
+1445079806 source:f:\git\openxcom\src\basescape\basescapestate.cpp
 	"BasescapeState.h"
 	"AlienContainmentState.h"
 	"BaseDetectionState.h"
@@ -4895,7 +4895,7 @@
 	<windows.h>
 	<stddef.h>
 
-1444984366 source:f:\git\openxcom\src\basescape\minibaseview.cpp
+1445076797 source:f:\git\openxcom\src\basescape\minibaseview.cpp
 	"MiniBaseView.h"
 	"../Engine/Action.h"
 	"../Engine/SurfaceSet.h"
@@ -6150,7 +6150,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1445028949 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
+1445042323 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
 	"ProjectileFlyBState.h"
 	"AlienBAIState.h"
 	"BattlescapeState.h"
@@ -6208,7 +6208,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1444893004 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1445045099 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	"AlienBAIState.h"
 	"BattlescapeState.h"
