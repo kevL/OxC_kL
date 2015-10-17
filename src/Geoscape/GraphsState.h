@@ -116,11 +116,34 @@ private:
 		_btnFinances,
 		_btnRegions;
 
+	/// Recalls buttons to their pre-Graph cTor row.
+	void initButtons();
+
 	/// Blinks recent activity-values.
 	void blink();
-	/// Shifts buttons to their pre-Graph cTor row.
-	void initButtons();
-	/// Scroll button lists: scroll and repaint buttons' functions.
+
+	/// Resets aLien/xCom activity and the blink indicators.
+	void btnResetPress(Action* action);
+
+	/// Resets all the elements on screen.
+	void resetScreen();
+	/// Updates the scale.
+	void updateScale(
+			float valLow,
+			float valHigh);
+
+	/// Decides which line-drawing-routine to call.
+	void drawLines();
+	/// Draws Region lines.
+	void drawRegionLines();
+	/// Draws Country lines.
+	void drawCountryLines();
+	/// Draws Finances lines.
+	void drawFinanceLines();
+
+	/// Mouse-wheel handler for shifting up/down the buttons.
+	void shiftButtons(Action* action);
+	/// Scrolls button lists - scroll and repaint buttons' functions.
 	void scrollButtons(
 			std::vector<GraphBtnInfo*>& toggles,
 			std::vector<ToggleTextButton*>& buttons,
@@ -168,28 +191,6 @@ private:
 		void btnCountryListClick(Action* action);
 		/// Handler for clicking  on a finances button.
 		void btnFinanceListClick(Action* action);
-		/// Resets aLien/xCom activity and the blink indicators.
-		void btnResetPress(Action* action);
-
-		/// Resets all the elements on screen.
-		void resetScreen();
-		/// Updates the scale.
-		void updateScale(
-				double lowerLimit,
-				double upperLimit,
-				int grid = 9);
-
-		/// Decides which lines to draw.
-		void drawLines();
-		/// Draws Region Lines.
-		void drawRegionLines();
-		/// Draws Country Lines.
-		void drawCountryLines();
-		/// Draws Finances Lines.
-		void drawFinanceLines();
-
-		/// Mouse-wheel handler for shifting up/down the buttons.
-		void shiftButtons(Action* action);
 };
 
 }
