@@ -289,10 +289,6 @@ void ScrollBar::scroll()
 	else if (keystate[SDLK_PAGEDOWN] == 1 || keystate[SDLK_KP3] == 1)
 		_list->scrollTo(_list->getScroll() + _list->getVisibleRows());	// down 1 page
 }
-/*	else if (keystate[SDLK_HOME] == 1 || keystate[SDLK_KP7] == 1)
-		_list->scrollUp(true);										// to top
-	else if (keystate[SDLK_END] == 1 || keystate[SDLK_KP1] == 1)
-		_list->scrollDown(true);									// to bottom */
 
 /**
  * Handles keyboard presses.

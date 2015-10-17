@@ -80,8 +80,8 @@ private:
 		* _txtTitle;
 	TextButton* _btnReset;
 	TextList
-		* _txtMonths,
-		* _txtYears;
+		* _lstMonths,
+		* _lstYears;
 	ToggleTextButton
 		* _btnCountryTotal,
 		* _btnRegionTotal;
@@ -116,8 +116,8 @@ private:
 		_btnFinances,
 		_btnRegions;
 
-	/// Blinks recent activity.
-	void blinkButtons();
+	/// Blinks recent activity-values.
+	void blink();
 	/// Shifts buttons to their pre-Graph cTor row.
 	void initButtons();
 	/// Scroll button lists: scroll and repaint buttons' functions.
@@ -145,7 +145,7 @@ private:
 		/// Cleans up the Graphs state.
 		~GraphsState();
 
-		/// Handles the blink timer.
+		/// Handles state thinking.
 		void think();
 
 		/// Handler for clicking the Geoscape icon.
@@ -171,24 +171,24 @@ private:
 		/// Resets aLien/xCom activity and the blink indicators.
 		void btnResetPress(Action* action);
 
-		/// Reset all the elements on screen.
+		/// Resets all the elements on screen.
 		void resetScreen();
-		/// Update the scale
+		/// Updates the scale.
 		void updateScale(
 				double lowerLimit,
 				double upperLimit,
 				int grid = 9);
 
-		/// Decide which lines to draw
+		/// Decides which lines to draw.
 		void drawLines();
-		/// Draw Region Lines.
+		/// Draws Region Lines.
 		void drawRegionLines();
-		/// Draw Country Lines.
+		/// Draws Country Lines.
 		void drawCountryLines();
-		/// Draw Finances Lines.
+		/// Draws Finances Lines.
 		void drawFinanceLines();
 
-		/// Mouse wheel handler for shifting up/down the buttons
+		/// Mouse-wheel handler for shifting up/down the buttons.
 		void shiftButtons(Action* action);
 };
 

@@ -119,8 +119,8 @@ void TextEdit::setFocus(
 		if (_isFocused == true)
 		{
 			SDL_EnableKeyRepeat(
-							SDL_DEFAULT_REPEAT_DELAY,
-							SDL_DEFAULT_REPEAT_INTERVAL);
+							180, //SDL_DEFAULT_REPEAT_DELAY,
+							60); //SDL_DEFAULT_REPEAT_INTERVAL);
 
 			_caretPlace = _edit.length();
 			_blink = true;

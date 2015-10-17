@@ -787,7 +787,6 @@ void BasescapeState::handleKeyPress(Action* action)
  * Returns the baseId that player chooses or MAX_BASES if the current Base is
  * re-chosen.
  * @param keyId	- SDL key pressed
- * @param base	- current base
  * @return, baseId of the base to switch to (0 to MAX_BASES-1)
  */
 size_t BasescapeState::getKeyedBaseId(SDLKey keyId) const

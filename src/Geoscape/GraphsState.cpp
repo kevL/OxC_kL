@@ -115,6 +115,22 @@ GraphsState::GraphsState(int curGraph)
 	_bg->onMousePress(
 				(ActionHandler)& GraphsState::shiftButtons,
 				SDL_BUTTON_WHEELDOWN);
+	_bg->onKeyboardPress(
+				(ActionHandler)& GraphsState::shiftButtons,
+				SDLK_UP);
+	_bg->onKeyboardPress(
+				(ActionHandler)& GraphsState::shiftButtons,
+				SDLK_KP8);
+	_bg->onKeyboardPress(
+				(ActionHandler)& GraphsState::shiftButtons,
+				SDLK_DOWN);
+	_bg->onKeyboardPress(
+				(ActionHandler)& GraphsState::shiftButtons,
+				SDLK_KP2);
+
+	SDL_EnableKeyRepeat(
+					180, //SDL_DEFAULT_REPEAT_DELAY,
+					60); //SDL_DEFAULT_REPEAT_INTERVAL);
 
 	_btnUfoRegion	= new InteractiveSurface(31, 24,  97);
 	_btnXcomRegion	= new InteractiveSurface(31, 24, 129);
@@ -129,8 +145,8 @@ GraphsState::GraphsState(int curGraph)
 	_txtTitle		= new Text(220, 17, 100, 28);
 	_txtFactor		= new Text( 35,  9,  96, 28);
 
-	_txtMonths		= new TextList(205, 9, 115, 183);
-	_txtYears		= new TextList(200, 9, 121, 191);
+	_lstMonths		= new TextList(215, 9, 117, 182); // note These go beyond 320px.
+	_lstYears		= new TextList(215, 9, 117, 191);
 
 	_txtScore		= new Text(36, 9, 46, 82);
 
@@ -146,8 +162,8 @@ GraphsState::GraphsState(int curGraph)
 	add(_btnFinance);
 	add(_btnGeoscape);
 	add(_btnReset,	"button",	"graphs");
-	add(_txtMonths,	"scale",	"graphs");
-	add(_txtYears,	"scale",	"graphs");
+	add(_lstMonths,	"scale",	"graphs");
+	add(_lstYears,	"scale",	"graphs");
 	add(_txtTitle,	"text",		"graphs");
 	add(_txtFactor,	"text",		"graphs");
 	add(_txtScore);
@@ -400,13 +416,13 @@ GraphsState::GraphsState(int curGraph)
 
 	add(_btnCountryTotal, "button", "graphs");
 
-	_alienCountryLines.push_back(new Surface(320, 200));
+	_alienCountryLines.push_back(new Surface(320,200));
 	add(_alienCountryLines.at(btnOffset));
 
-	_xcomCountryLines.push_back(new Surface(320, 200));
+	_xcomCountryLines.push_back(new Surface(320,200));
 	add(_xcomCountryLines.at(btnOffset));
 
-	_incomeLines.push_back(new Surface(320, 200));
+	_incomeLines.push_back(new Surface(320,200));
 	add(_incomeLines.at(btnOffset));
 
 
@@ -435,7 +451,7 @@ GraphsState::GraphsState(int curGraph)
 
 		add(_btnFinances.at(i), "button", "graphs");
 
-		_financeLines.push_back(new Surface(320, 200));
+		_financeLines.push_back(new Surface(320,200));
 		add(_financeLines.at(i));
 	}
 
@@ -567,47 +583,34 @@ GraphsState::GraphsState(int curGraph)
 
 	// i know using textlist for this is ugly and brutal, but YOU try getting this damn text to line up.
 	// also, there's nothing wrong with being ugly or brutal, you should learn tolerance. kL_note: and C++
-	_txtMonths->setColumns(12,17,17,17,17,17,17,17,17,17,17,17,17);
-	_txtMonths->addRow(12,L" ",L" ",L" ",L" ",L" ",L" ",L" ",L" ",L" ",L" ",L" ",L" ");
+	_lstMonths->setColumns(12, 17,17,17,17,17,17,17,17,17,17,17,17); // 204 total
+	_lstMonths->addRow(12, L" ",L" ",L" ",L" ",L" ",L" ",L" ",L" ",L" ",L" ",L" ",L" ");
+	_lstMonths->setMargin();
 
-	_txtYears->setColumns(6,34,34,34,34,34,34);
-	_txtYears->addRow(6,L" ",L" ",L" ",L" ",L" ",L" ");
+	_lstYears->setColumns(6, 34,34,34,34,34,34); // 204 total
+	_lstYears->addRow(6, L" ",L" ",L" ",L" ",L" ",L" ");
+	_lstYears->setMargin();
 
 
 	const GameTime* const gt = _game->getSavedGame()->getTime();
-	const int yr = gt->getYear();
-	size_t mth = static_cast<size_t>(gt->getMonth());
+	const int year = gt->getYear();
+	size_t month = static_cast<size_t>(gt->getMonth());
 
-	std::wostringstream woststr;
 	for (size_t
 			i = 0;
 			i != 12;
 			++i)
 	{
-		if (mth > 11)
+		if (month > 11)
 		{
-			mth = 0;
-			woststr.str(L"");
-			woststr << yr;
-			_txtYears->setCellText(
-								0,
-								i / 2,
-								woststr.str());
+			month = 0;
+			_lstYears->setCellText(0, i / 2, Text::intWide(year));
 
 			if (i > 2)
-			{
-				woststr.str(L"");
-				woststr << (yr - 1);
-				_txtYears->setCellText(
-									0,0,
-									woststr.str());
-			}
+				_lstYears->setCellText(0, 0, Text::intWide(year - 1));
 		}
 
-		_txtMonths->setCellText(
-							0,
-							i,
-							tr(months[mth++]));
+		_lstMonths->setCellText(0, i, tr(months[month++]));
 	}
 
 	for (std::vector<Text*>::const_iterator // set up the vertical measurement units
@@ -658,13 +661,19 @@ GraphsState::GraphsState(int curGraph)
 					Options::keyCancel);
 	_btnGeoscape->onKeyboardPress(
 					(ActionHandler)& GraphsState::btnGeoscapeClick,
+					Options::keyOk);
+	_btnGeoscape->onKeyboardPress(
+					(ActionHandler)& GraphsState::btnGeoscapeClick,
+					Options::keyOkKeypad);
+	_btnGeoscape->onKeyboardPress(
+					(ActionHandler)& GraphsState::btnGeoscapeClick,
 					Options::keyGeoGraphs);
 
 	centerAllSurfaces();
 
 
 	_blinkTimer = new Timer(250);
-	_blinkTimer->onTimer((StateHandler)& GraphsState::blinkButtons);
+	_blinkTimer->onTimer((StateHandler)& GraphsState::blink);
 
 	initButtons();
 
@@ -745,8 +754,7 @@ void GraphsState::initButtons() // private.
 			i != _regionToggles.end();
 			++i)
 	{
-		if ((*i)->_blinkA == true
-			|| (*i)->_blinkX == true)
+		if ((*i)->_blinkA == true || (*i)->_blinkX == true)
 		{
 			_blinkTimer->start();
 			return;
@@ -757,8 +765,7 @@ void GraphsState::initButtons() // private.
 			i != _countryToggles.end();
 			++i)
 	{
-		if ((*i)->_blinkA == true
-			|| (*i)->_blinkX == true)
+		if ((*i)->_blinkA == true || (*i)->_blinkX == true)
 		{
 			_blinkTimer->start();
 			return;
@@ -767,7 +774,7 @@ void GraphsState::initButtons() // private.
 }
 
 /**
- * Blinks current activity.
+ * Handles state thinking.
  */
 void GraphsState::think()
 {
@@ -777,7 +784,7 @@ void GraphsState::think()
 /**
  * Makes recent activity Text blink.
  */
-void GraphsState::blinkButtons() // private.
+void GraphsState::blink() // private.
 {
 	static bool vis (true);
 
@@ -876,6 +883,8 @@ void GraphsState::blinkButtons() // private.
  */
 void GraphsState::btnGeoscapeClick(Action*)
 {
+	SDL_EnableKeyRepeat(0, SDL_DEFAULT_REPEAT_INTERVAL);
+
 	_game->popState();
 	kL_soundPop->play(Mix_GroupAvailable(0));
 }
@@ -2075,11 +2084,21 @@ void GraphsState::shiftButtons(Action* action)
 		{
 			if (_countryToggles.size() > GRAPH_BUTTONS)
 			{
-				int dir = 0;
-				if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
+				int dir;
+				if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP
+					|| action->getDetails()->key.keysym.sym == SDLK_UP
+					|| action->getDetails()->key.keysym.sym == SDLK_KP8)
+				{
 					dir = -1;
-				else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN)
+				}
+				else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN
+					|| action->getDetails()->key.keysym.sym == SDLK_DOWN
+					|| action->getDetails()->key.keysym.sym == SDLK_KP2)
+				{
 					dir = 1;
+				}
+				else
+					dir = 0;
 
 				if (dir != 0)
 					scrollButtons(
@@ -2147,7 +2166,7 @@ void GraphsState::scrollButtons( // private.
 			+ static_cast<int>(GRAPH_BUTTONS) < static_cast<int>(toggles.size()))
 	{
 		_forceVis = true;
-		blinkButtons(); // turn all buttons on before & during scrolling ...
+		blink(); // show all activity-values before & during scrolling ...
 
 		// set the next btnOffset - cheaper to do it from starters
 		// This changes either '_btnCountriesOffset' or '_btnRegionsOffset' throughout this class-object:
