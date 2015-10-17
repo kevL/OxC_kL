@@ -224,8 +224,8 @@ private:
 
 
 	public:
-//		static const Uint32 STATE_INTERVAL_STANDARD = 89; // for fast shaders - Raw, Quillez, etc.
-		static const Uint32 STATE_INTERVAL_STANDARD = 76; // for slow shaders - 4xHQX & above.
+//		static const Uint32 STATE_INTERVAL_STANDARD = 90; // for fast shaders - Raw, Quillez, etc.
+		static const Uint32 STATE_INTERVAL_STANDARD = 75; // for slow shaders - 4xHQX & above.
 
 		/// Creates a BattlescapeState.
 		BattlescapeState();

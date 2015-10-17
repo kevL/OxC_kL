@@ -72,7 +72,7 @@ private:
 			const Position& originVoxel,
 			Position* const targetVoxel,
 			double accuracy,
-			const Tile* const tileTarget = NULL);
+			const Tile* const tileTarget);
 	/// Gets distance modifiers to accuracy.
 	double rangeAccuracy( // private.
 			const RuleItem* const itRule,

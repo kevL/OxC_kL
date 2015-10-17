@@ -782,16 +782,13 @@ bool TileEngine::visible(
 
 	const Position originVoxel = getSightOriginVoxel(unit);
 	Position scanVoxel;
-	std::vector<Position> trj;
-
 	if (canTargetUnit(
 					&originVoxel,
 					tile,
 					&scanVoxel,
 					unit) == true)
 	{
-		trj.clear();
-
+		std::vector<Position> trj;
 		plotLine(
 				originVoxel,
 				scanVoxel,
@@ -820,6 +817,29 @@ bool TileEngine::visible(
 	}
 
 	return false;
+}
+
+/**
+ * Gets a valid target-unit given a Tile.
+ * @param tile - pointer to a tile
+ * @return, pointer to a unit (NULL if none)
+ */
+BattleUnit* TileEngine::getTargetUnit(const Tile* const tile) const
+{
+	if (tile != NULL)
+	{
+		if (tile->getUnit() != NULL) // warning: Careful not to use this when UnitWalkBState has transient units placed.
+			return tile->getUnit();
+
+		if (tile->hasNoFloor() == true && tile->getPosition().z > 0)
+		{
+			const Tile* const tileBelow = _battleSave->getTile(tile->getPosition() + Position(0,0,-1));
+			if (tileBelow->getUnit() != NULL)
+				return tileBelow->getUnit();
+		}
+	}
+
+	return NULL;
 }
 
 /**
@@ -910,17 +930,20 @@ bool TileEngine::canTargetUnit(
 		const BattleUnit* targetUnit) const
 {
 	//Log(LOG_INFO) << "TileEngine::canTargetUnit()";
-	const bool hypothetical = (targetUnit != NULL);
-
+	bool hypothetical;
 	if (targetUnit == NULL)
 	{
+		hypothetical = false;
+
 		targetUnit = tileTarget->getUnit();
 		if (targetUnit == NULL)
 		{
 			//Log(LOG_INFO) << ". no Unit, ret FALSE";
-			return false; // no unit in this tileTarget, even if it's elevated and appearing in it.
+			return false; // no unit in the tileTarget, even if it's elevated and appearing in it.
 		}
 	}
+	else
+		hypothetical = true;
 
 	if (targetUnit == excludeUnit) // skip self
 	{
@@ -1034,8 +1057,8 @@ bool TileEngine::canTargetUnit(
 							++y)
 					{
 						//Log(LOG_INFO) << ". . . iterate y-Size";
-						if (trj.at(0).x / 16 == (scanVoxel->x / 16) + x + xOffset
-							&& trj.at(0).y / 16 == (scanVoxel->y / 16) + y + yOffset
+						if (   (trj.at(0).x >> 4) == (scanVoxel->x >> 4) + x + xOffset
+							&& (trj.at(0).y >> 4) == (scanVoxel->y >> 4) + y + yOffset
 							&& trj.at(0).z >= targetMinHeight
 							&& trj.at(0).z <= targetMaxHeight)
 						{
@@ -6352,29 +6375,6 @@ void TileEngine::setDangerZone(
 void TileEngine::setTrueTile(Tile* const tile)
 {
 	_trueTile = tile;
-}
-
-/**
- * Gets a valid target-unit given a Tile.
- * @param tile - pointer to a tile
- * @return, pointer to a unit (NULL if none)
- */
-BattleUnit* TileEngine::getTargetUnit(const Tile* const tile) const
-{
-	if (tile != NULL)
-	{
-		if (tile->getUnit() != NULL) // warning: Careful not to use this when UnitWalkBState has transient units placed.
-			return tile->getUnit();
-
-		if (tile->hasNoFloor() == true && tile->getPosition().z > 0)
-		{
-			const Tile* const tileBelow = _battleSave->getTile(tile->getPosition() - Position(0,0,-1));
-			if (tileBelow->getUnit() != NULL) // no safety.
-				return tileBelow->getUnit();
-		}
-	}
-
-	return NULL;
 }
 
 }

@@ -191,8 +191,6 @@ VoxelType Projectile::calculateShot(
 		const Position& originVoxel)
 {
 	//Log(LOG_INFO) << "Projectile::calculateShot() accuracy = " << accuracy;
-	const Tile* const tileTarget = _battleSave->getTile(_action.target);
-
 	// test for LoF
 	if (_action.actor->getFaction() == FACTION_PLAYER // aLiens don't even get in here!
 		&& _action.autoShotCount == 1
@@ -233,7 +231,7 @@ VoxelType Projectile::calculateShot(
 					originVoxel,
 					&_targetVoxel,
 					accuracy,
-					tileTarget);
+					_battleSave->getTile(_action.target));
 //					false,
 		//Log(LOG_INFO) << ". postAcu target = " << _targetVoxel << " tSpace " << (_targetVoxel / Position(16,16,24));
 	}
@@ -337,9 +335,9 @@ VoxelType Projectile::calculateThrow(double accuracy)
 /**
  * Calculates the new target in voxel space based on a given accuracy modifier.
  * @param originVoxel	- reference the start position of the trajectory in voxelspace
- * @param targetVoxel	- pointer to an end position of the trajectory in voxelspace
+ * @param targetVoxel	- pointer to a position to store the end of the trajectory in voxelspace
  * @param accuracy		- accuracy modifier
- * @param tileTarget	- pointer to tile of the target (default = NULL)
+ * @param tileTarget	- pointer to tile of the target
  */
 void Projectile::applyAccuracy( // private.
 		const Position& originVoxel,
@@ -368,19 +366,19 @@ void Projectile::applyAccuracy( // private.
 	{
 		if (_action.autoShotCount == 1)
 		{
-			if (_action.actor->getFaction() == FACTION_PLAYER	// kL: only for xCom heheh ->
-				&& Options::battleUFOExtenderAccuracy == true)	// not so sure that this should be Player only
+			if (_action.actor->getFaction() == FACTION_PLAYER)	// kL: only for xCom heheh ->
+//				&& Options::battleUFOExtenderAccuracy == true)	// not so sure that this should be Player only
 			{													// if not the problem is that the AI does not adequately consider weapon ranges.
 				accuracy += rangeAccuracy(
-										itRule,
-										static_cast<int>(Round(targetDist / 16.)));
+									itRule,
+									static_cast<int>(Round(targetDist / 16.)));
 			}
 
-			if (Options::battleRangeBasedAccuracy == true)
-				accuracy += targetAccuracy(
-										_battleSave->getTileEngine()->getTargetUnit(tileTarget),
-										targetVoxel->z - originVoxel.z,
-										tileTarget);
+//			if (Options::battleRangeBasedAccuracy == true)
+			accuracy += targetAccuracy(
+								tileTarget->getUnit(), //_battleSave->getTileEngine()->getTargetUnit(tileTarget),
+								targetVoxel->z - originVoxel.z,
+								tileTarget);
 
 			accuracy = std::max(ACU_MIN, accuracy);
 			//Log(LOG_INFO) << "accu = " << accuracy;
@@ -491,7 +489,7 @@ void Projectile::applyAccuracy( // private.
 									itRule,
 									static_cast<int>(Round(targetDist / 16.)));
 			accuracy += targetAccuracy(
-									_battleSave->getTileEngine()->getTargetUnit(tileTarget),
+									tileTarget->getUnit(), //_battleSave->getTileEngine()->getTargetUnit(tileTarget),
 									targetVoxel->z - originVoxel.z,
 									tileTarget);
 			accuracy = std::max(ACU_MIN, accuracy);
@@ -528,10 +526,10 @@ void Projectile::applyAccuracy( // private.
 		//Log(LOG_INFO) << "Proj: applyAccuracy target[2] " << *targetVoxel;
 
 		targetVoxel->x = std::max(0,
-							std::min(_battleSave->getMapSizeX() * 16 + 15,
+							std::min((_battleSave->getMapSizeX() << 4) + 15,
 								targetVoxel->x));
 		targetVoxel->y = std::max(0,
-							std::min(_battleSave->getMapSizeY() * 16 + 15,
+							std::min((_battleSave->getMapSizeY() << 4) + 15,
 								targetVoxel->y));
 		targetVoxel->z = std::max(0,
 							std::min(_battleSave->getMapSizeZ() * 24 + 23,
@@ -686,11 +684,10 @@ bool Projectile::verifyTarget(const Position& originVoxel) // private.
 		{
 			const Tile* const tileTest = _battleSave->getTile(posTest);
 			if (tileTest != NULL && tileTest->getUnit() == NULL) // must be poking head up from tileBelow
-				posTest -= Position(0,0,-1);
+				posTest += Position(0,0,-1);
 		}
 
-		if (posTest != _action.target
-			&& _action.result.empty() == true)
+		if (posTest != _action.target && _action.result.empty() == true)
 		{
 			switch (voxelType)
 			{
