@@ -2098,8 +2098,8 @@ void GraphsState::shiftButtons(Action* action) // private.
 
 /**
  * Helper for shiftButtons().
- * @param dirVal		-
- * @param init		- (default false)
+ * @param dirVal	- quantity of rows and direction to shift by (neg. up/ pos. down)
+ * @param init		- true to shift buttons to the recall-row (default false)
  */
 void GraphsState::scrollButtons( // private.
 		int dirVal,
@@ -2116,6 +2116,7 @@ void GraphsState::scrollButtons( // private.
 		if (init == true)
 			_btnCountryOffset = recallRow;
 		else
+			recallRow =
 			_btnCountryOffset = static_cast<size_t>(static_cast<int>(_btnCountryOffset) + dirVal);
 
 		std::vector<ToggleTextButton*>::const_iterator pBtn = _btnCountries.begin();
