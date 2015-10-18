@@ -102,8 +102,8 @@ struct GraphBtnInfo
  */
 GraphsState::GraphsState(int curGraph)
 	:
-		_btnRegionsOffset(0),
-		_btnCountriesOffset(0),
+		_btnRegionOffset(0),
+		_btnCountryOffset(0),
 		_current(-1),
 		_reset(false),
 		_forceVis(true)
@@ -127,6 +127,30 @@ GraphsState::GraphsState(int curGraph)
 	_bg->onKeyboardPress(
 				(ActionHandler)& GraphsState::shiftButtons,
 				SDLK_KP2);
+	_bg->onKeyboardPress(
+				(ActionHandler)& GraphsState::shiftButtons,
+				SDLK_PAGEUP);
+	_bg->onKeyboardPress(
+				(ActionHandler)& GraphsState::shiftButtons,
+				SDLK_KP9);
+	_bg->onKeyboardPress(
+				(ActionHandler)& GraphsState::shiftButtons,
+				SDLK_PAGEDOWN);
+	_bg->onKeyboardPress(
+				(ActionHandler)& GraphsState::shiftButtons,
+				SDLK_KP3);
+	_bg->onKeyboardPress(
+				(ActionHandler)& GraphsState::shiftButtons,
+				SDLK_HOME);
+	_bg->onKeyboardPress(
+				(ActionHandler)& GraphsState::shiftButtons,
+				SDLK_KP7);
+	_bg->onKeyboardPress(
+				(ActionHandler)& GraphsState::shiftButtons,
+				SDLK_END);
+	_bg->onKeyboardPress(
+				(ActionHandler)& GraphsState::shiftButtons,
+				SDLK_KP1);
 
 	SDL_EnableKeyRepeat(
 					180, //SDL_DEFAULT_REPEAT_DELAY,
@@ -230,7 +254,6 @@ GraphsState::GraphsState(int curGraph)
 			_btnRegions.at(btnOffset)->onMousePress(
 							(ActionHandler)& GraphsState::shiftButtons,
 							SDL_BUTTON_WHEELDOWN); */
-
 			add(_btnRegions.at(btnOffset), "button", "graphs");
 
 			_txtRegionActivityAlien.push_back(new Text(
@@ -239,12 +262,7 @@ GraphsState::GraphsState(int curGraph)
 													(static_cast<int>(btnOffset) * 10) + 1));
 			_txtRegionActivityAlien.at(btnOffset)->setColor(colorOffset * 8 + 16);
 			_txtRegionActivityAlien.at(btnOffset)->setText(Text::formatNumber(actA));
-
 			add(_txtRegionActivityAlien.at(btnOffset));
-
-			_blinkRegionAlien.push_back(blinkA);
-			_blinkRegionXCom.push_back(blinkX);
-
 
 			_txtRegionActivityXCom.push_back(new Text(
 													24,10,
@@ -252,10 +270,11 @@ GraphsState::GraphsState(int curGraph)
 													(static_cast<int>(btnOffset) * 10) + 1));
 			_txtRegionActivityXCom.at(btnOffset)->setColor(colorOffset * 8 + 16);
 			_txtRegionActivityXCom.at(btnOffset)->setText(Text::formatNumber(actX));
-
 			add(_txtRegionActivityXCom.at(btnOffset));
-		}
 
+			_blinkRegionAlien.push_back(blinkA);
+			_blinkRegionXCom.push_back(blinkX);
+		}
 
 		_alienRegionLines.push_back(new Surface(320,200));
 		add(_alienRegionLines.at(btnOffset));
@@ -343,7 +362,6 @@ GraphsState::GraphsState(int curGraph)
 			_btnCountries.at(btnOffset)->onMousePress(
 							(ActionHandler)& GraphsState::shiftButtons,
 							SDL_BUTTON_WHEELDOWN); */
-
 			add(_btnCountries.at(btnOffset), "button", "graphs");
 
 			_txtCountryActivityAlien.push_back(new Text(
@@ -352,12 +370,7 @@ GraphsState::GraphsState(int curGraph)
 													(static_cast<int>(btnOffset) * 10) + 1));
 			_txtCountryActivityAlien.at(btnOffset)->setColor(colorOffset * 8 + 16);
 			_txtCountryActivityAlien.at(btnOffset)->setText(Text::formatNumber(actA));
-
 			add(_txtCountryActivityAlien.at(btnOffset));
-
-			_blinkCountryAlien.push_back(blinkA);
-			_blinkCountryXCom.push_back(blinkX);
-
 
 			_txtCountryActivityXCom.push_back(new Text(
 													24,10,
@@ -365,8 +378,10 @@ GraphsState::GraphsState(int curGraph)
 													(static_cast<int>(btnOffset) * 10) + 1));
 			_txtCountryActivityXCom.at(btnOffset)->setColor(colorOffset * 8 + 16);
 			_txtCountryActivityXCom.at(btnOffset)->setText(Text::formatNumber(actX));
-
 			add(_txtCountryActivityXCom.at(btnOffset));
+
+			_blinkCountryAlien.push_back(blinkA);
+			_blinkCountryXCom.push_back(blinkX);
 		}
 
 
@@ -732,17 +747,8 @@ GraphsState::~GraphsState()
  */
 void GraphsState::initButtons() // private.
 {
-	if (_countryToggles.size() > GRAPH_BUTTONS)
-		scrollButtons(
-				_countryToggles,
-				_btnCountries,
-				_txtCountryActivityAlien,
-				_txtCountryActivityXCom,
-				_blinkCountryAlien,
-				_blinkCountryXCom,
-				_btnCountriesOffset,
-				static_cast<int>(recallRow),
-				true);
+//	if (_countryToggles.size() > GRAPH_BUTTONS)
+	scrollButtons(static_cast<int>(recallRow), true);
 
 	for (std::vector<GraphBtnInfo*>::const_iterator
 			i = _regionToggles.begin();
@@ -1118,7 +1124,7 @@ void GraphsState::btnRegionListClick(Action* action)
 	else
 	{
 		btn = _btnRegions.at(row);
-		id = row + _btnRegionsOffset;
+		id = row + _btnRegionOffset;
 	}
 
 	_regionToggles.at(id)->_pushed = btn->getPressed();
@@ -1148,7 +1154,7 @@ void GraphsState::btnCountryListClick(Action* action)
 	else
 	{
 		btn = _btnCountries.at(row);
-		id = row + _btnCountriesOffset;
+		id = row + _btnCountryOffset;
 	}
 
 	_countryToggles.at(id)->_pushed = btn->getPressed();
@@ -2009,45 +2015,73 @@ void GraphsState::shiftButtons(Action* action) // private.
 		{
 			if (_countryToggles.size() > GRAPH_BUTTONS)
 			{
-				int dir;
+				int dirVal;
 				if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP
 					|| action->getDetails()->key.keysym.sym == SDLK_UP
 					|| action->getDetails()->key.keysym.sym == SDLK_KP8)
 				{
-					dir = -1;
+					dirVal = -1;
+					if (static_cast<int>(_btnCountryOffset) + dirVal < 0)
+						return;
 				}
 				else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN
 					|| action->getDetails()->key.keysym.sym == SDLK_DOWN
 					|| action->getDetails()->key.keysym.sym == SDLK_KP2)
 				{
-					dir = 1;
+					dirVal = 1;
+					if (static_cast<int>(_btnCountryOffset + GRAPH_BUTTONS) + dirVal >= static_cast<int>(_countryToggles.size()))
+						return;
+				}
+				else if (action->getDetails()->key.keysym.sym == SDLK_PAGEUP
+					|| action->getDetails()->key.keysym.sym == SDLK_KP9)
+				{
+					dirVal = std::max(
+								-(static_cast<int>(GRAPH_BUTTONS)),
+								-(static_cast<int>(_btnCountryOffset)));
+				}
+				else if (action->getDetails()->key.keysym.sym == SDLK_PAGEDOWN
+					|| action->getDetails()->key.keysym.sym == SDLK_KP3)
+				{
+					dirVal = std::min(
+								static_cast<int>(GRAPH_BUTTONS),
+								static_cast<int>(_countryToggles.size()) - static_cast<int>(GRAPH_BUTTONS) - static_cast<int>(_btnCountryOffset) - 1);
+				}
+				else if (action->getDetails()->key.keysym.sym == SDLK_HOME
+					|| action->getDetails()->key.keysym.sym == SDLK_KP7)
+				{
+					dirVal = -(static_cast<int>(_btnCountryOffset));
+				}
+				else if (action->getDetails()->key.keysym.sym == SDLK_END
+					|| action->getDetails()->key.keysym.sym == SDLK_KP1)
+				{
+					dirVal = static_cast<int>(_countryToggles.size()) - static_cast<int>(GRAPH_BUTTONS) - static_cast<int>(_btnCountryOffset) - 1;
 				}
 				else
-					dir = 0;
+					dirVal = 0;
 
-				if (dir != 0)
+				if (dirVal != 0)
 					scrollButtons(
-							_countryToggles,
-							_btnCountries,
-							_txtCountryActivityAlien,
-							_txtCountryActivityXCom,
-							_blinkCountryAlien,
-							_blinkCountryXCom,
-							_btnCountriesOffset,
-							dir);
+//							_countryToggles,
+//							_btnCountries,
+//							_txtCountryActivityAlien,
+//							_txtCountryActivityXCom,
+//							_blinkCountryAlien,
+//							_blinkCountryXCom,
+//							_btnCountryOffset,
+							dirVal);
 			}
 		}
 /*		else // _region -> not needed unless quantity of Regions increases over GRAPH_BUTTONS. Ain't likely to happen.
 		{
 			if (_regionToggles.size() > GRAPH_BUTTONS)
 			{
-				int dir = 0;
+				int dirVal = 0;
 				if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
-					dir = -1;
+					dirVal = -1;
 				else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN)
-					dir = 1;
+					dirVal = 1;
 
-				if (dir != 0)
+				if (dirVal != 0)
 					scrollButtons(
 							_regionToggles,
 							_btnRegions,
@@ -2055,14 +2089,89 @@ void GraphsState::shiftButtons(Action* action) // private.
 							_txtRegionActivityXCom,
 							_blinkRegionAlien,
 							_blinkRegionXCom,
-							_btnRegionsOffset,
-							dir);
+							_btnRegionOffset,
+							dirVal);
 			}
 		} */
 	}
 }
 
 /**
+ * Helper for shiftButtons().
+ * @param dirVal		-
+ * @param init		- (default false)
+ */
+void GraphsState::scrollButtons( // private.
+		int dirVal,
+		bool init)
+{
+	if (dirVal + static_cast<int>(_btnCountryOffset) > -1 // -> final safety.
+		&& dirVal
+			+ static_cast<int>(_btnCountryOffset)
+			+ static_cast<int>(GRAPH_BUTTONS) < static_cast<int>(_countryToggles.size()))
+	{
+		_forceVis = true; // do not blink while scrolling.
+		blink();
+
+		if (init == true)
+			_btnCountryOffset = recallRow;
+		else
+			_btnCountryOffset = static_cast<size_t>(static_cast<int>(_btnCountryOffset) + dirVal);
+
+		std::vector<ToggleTextButton*>::const_iterator pBtn = _btnCountries.begin();
+		std::vector<Text*>::const_iterator pActA = _txtCountryActivityAlien.begin();
+		std::vector<Text*>::const_iterator pActX = _txtCountryActivityXCom.begin();
+		std::vector<bool>::iterator pBlinkA = _blinkCountryAlien.begin();
+		std::vector<bool>::iterator pBlinkX = _blinkCountryXCom.begin();
+
+		size_t row = 0;
+		for (std::vector<GraphBtnInfo*>::const_iterator
+				i = _countryToggles.begin();
+				i != _countryToggles.end();
+				++i, ++row)
+		{
+			if (row >= _btnCountryOffset)
+			{
+				if (row < _btnCountryOffset + GRAPH_BUTTONS)
+				{
+					*pBlinkA = (*i)->_blinkA;
+					*pBlinkX = (*i)->_blinkX;
+					++pBlinkA; // note that all these incrementors are for the iterators - not their values.
+					++pBlinkX;
+
+					updateButton(
+							*i,
+							*pBtn++,
+							*pActA++,
+							*pActX++);
+				}
+				else
+					return;
+			}
+		}
+	}
+}
+
+/**
+ * Helper for scrollButtons().
+ */
+void GraphsState::updateButton( // private.
+		GraphBtnInfo* info,
+		ToggleTextButton* btn,
+		Text* aLiens,
+		Text* xCom)
+{
+	btn->setText(info->_name);
+	btn->setInvertColor(info->_color);
+	btn->setPressed(info->_pushed);
+
+	aLiens->setText(Text::formatNumber(info->_actA));
+	aLiens->setColor(info->_colorTxt);
+
+	xCom->setText(Text::formatNumber(info->_actX));
+	xCom->setColor(info->_colorTxt);
+}
+/*
  * Helper for shiftButtons().
  * @param toggles	-
  * @param buttons	-
@@ -2073,7 +2182,7 @@ void GraphsState::shiftButtons(Action* action) // private.
  * @param btnOffset	-
  * @param dir		-
  * @param init		- (default false)
- */
+ *
 void GraphsState::scrollButtons( // private.
 		std::vector<GraphBtnInfo*>& toggles,
 		std::vector<ToggleTextButton*>& buttons,
@@ -2094,16 +2203,20 @@ void GraphsState::scrollButtons( // private.
 		blink(); // show all activity-values before & during scrolling ...
 
 		// set the next btnOffset - cheaper to do it from starters
-		// This changes either '_btnCountriesOffset' or '_btnRegionsOffset' throughout this class-object:
+		// This changes either '_btnCountryOffset' or '_btnRegionOffset' throughout this class-object:
 		if (dir == 1)
 			++btnOffset;
 		else if (dir == -1)
 			--btnOffset;
+		else if (dir == static_cast<int>(GRAPH_BUTTONS))
+			btnOffset += GRAPH_BUTTONS;
+		else if (dir == -(static_cast<int>(GRAPH_BUTTONS)))
+			btnOffset -= GRAPH_BUTTONS;
 
 		if (init == true)
 			btnOffset = recallRow;
 		else
-			recallRow = btnOffset; // aka _btnCountriesOffset (note: would conflict w/ _btnRegionsOffset if/when regions are scrollable.)
+			recallRow = btnOffset; // aka _btnCountryOffset (note: would conflict w/ _btnRegionOffset if/when regions are scrollable.)
 
 		std::vector<ToggleTextButton*>::const_iterator btn = buttons.begin();
 		std::vector<Text*>::const_iterator actA_iter = actA_vect.begin();
@@ -2137,26 +2250,6 @@ void GraphsState::scrollButtons( // private.
 				return;
 		}
 	}
-}
-
-/**
- * Helper for scrollButtons().
- */
-void GraphsState::updateButton( // private.
-		GraphBtnInfo* info,
-		ToggleTextButton* btn,
-		Text* aliens,
-		Text* xcom)
-{
-	btn->setText(info->_name);
-	btn->setInvertColor(info->_color);
-	btn->setPressed(info->_pushed);
-
-	aliens->setText(Text::formatNumber(info->_actA));
-	aliens->setColor(info->_colorTxt);
-
-	xcom->setText(Text::formatNumber(info->_actX));
-	xcom->setColor(info->_colorTxt);
-}
+} */
 
 }

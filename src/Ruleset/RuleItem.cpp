@@ -639,11 +639,11 @@ int RuleItem::getClipSize() const
  * @param surface - pointer to the surface to draw to
  */
 void RuleItem::drawHandSprite(
-		SurfaceSet* texture,
-		Surface* surface) const
+		SurfaceSet* const texture,
+		Surface* const surface) const
 {
 	Surface* const frame = texture->getFrame(_bigSprite);
-	if (frame != NULL) // kL_safety.
+	if (frame != NULL) // safety.
 	{
 		frame->setX(
 				(RuleInventory::HAND_W - _invWidth)

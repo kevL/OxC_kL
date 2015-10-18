@@ -62,8 +62,8 @@ private:
 	int _current;
 
 	size_t
-		_btnCountriesOffset,
-		_btnRegionsOffset;
+		_btnCountryOffset,
+		_btnRegionOffset;
 
 	InteractiveSurface
 		* _bg,
@@ -145,6 +145,9 @@ private:
 	void shiftButtons(Action* action);
 	/// Scrolls button lists - scroll and repaint buttons' functions.
 	void scrollButtons(
+			int dirVal,
+			bool init = false);
+/*	void scrollButtons(
 			std::vector<GraphBtnInfo*>& toggles,
 			std::vector<ToggleTextButton*>& buttons,
 			std::vector<Text*>& actA_vect,
@@ -153,13 +156,13 @@ private:
 			std::vector<bool>& blinkX,
 			size_t& btnOffset,
 			int dir,
-			bool init = false);
+			bool init = false); */
 	///
 	void updateButton(
 			GraphBtnInfo* info,
 			ToggleTextButton* btn,
-			Text* aliens,
-			Text* xcom);
+			Text* aLiens,
+			Text* xCom);
 
 
 	public:
