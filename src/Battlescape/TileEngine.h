@@ -96,6 +96,12 @@ private:
 			const Position& pos,
 			MapDataType part) const;
 
+	/// Calculates the maximum throwing range.
+	static int getThrowDistance(
+			int weight,
+			int strength,
+			int elevation);
+
 	/// Gets a Tile within melee range.
 	Tile* getVerticalTile(
 			const Position& posOrigin,
@@ -265,11 +271,6 @@ private:
 				const BattleAction* const action,
 				const Position& originVoxel,
 				const Tile* const tile);
-		/// Calculates the maximum throwing range.
-		static int getMaxThrowDistance(
-				int weight,
-				int strength,
-				int elevation);
 
 		/// Validates the melee range between two BattleUnits.
 		bool validMeleeRange(

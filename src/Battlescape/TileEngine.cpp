@@ -5210,11 +5210,10 @@ bool TileEngine::validThrowRange( // static.
 		const Position& originVoxel,
 		const Tile* const tile)
 {
-	//Log(LOG_INFO) << "TileEngine::validThrowRange()";
 	const int
 		delta_x = action->actor->getPosition().x - action->target.x,
 		delta_y = action->actor->getPosition().y - action->target.y;
-	const double throwDist = std::sqrt(static_cast<double>((delta_x * delta_x) + (delta_y * delta_y)));
+	const double distThrow = std::sqrt(static_cast<double>((delta_x * delta_x) + (delta_y * delta_y)));
 
 	int weight = action->weapon->getRules()->getWeight();
 	if (action->weapon->getAmmoItem() != NULL
@@ -5225,24 +5224,12 @@ bool TileEngine::validThrowRange( // static.
 
 	const int delta_z = originVoxel.z
 					  - action->target.z * 24 + tile->getTerrainLevel();
-	const double maxDist = static_cast<double>( // tile-space
-						   getMaxThrowDistance(
-											weight,
-											action->actor->getStrength(),
-											delta_z)
-										+ 8) / 16.;
-	// throwing off a building of 1 level lets you throw 2 tiles further than normal range,
-	// throwing up to the roof of this building lets you throw 2 tiles less further
-/*	int delta_z = action->actor->getPosition().z - action->target.z;
-	distance -= static_cast<double>(delta_z); */
-
-	// since getMaxThrowDistance seems to return 1 less than maxDist, use "< throwDist" for this determination:
-//	bool ret = static_cast<int>(throwDist) < static_cast<int>(maxDist);
-//	const bool ret = throwDist < maxDist;
-	//Log(LOG_INFO) << ". throwDist " << (int)throwDist
-	//				<< " < maxDist " << (int)maxDist
-	//				<< " : return " << ret;
-	return (throwDist < maxDist);
+	const double dist = static_cast<double>(
+						getThrowDistance(
+									weight,
+									action->actor->getStrength(),
+									delta_z) + 8) / 16.;
+	return (distThrow < dist);
 }
 
 /**
@@ -5252,41 +5239,39 @@ bool TileEngine::validThrowRange( // static.
  * @param elevation	- the difference in height between the thrower and the target (voxel-space)
  * @return, the maximum throwing range
  */
-int TileEngine::getMaxThrowDistance( // static.
+int TileEngine::getThrowDistance( // private/static.
 		int weight,
 		int strength,
 		int elevation)
 {
-	//Log(LOG_INFO) << "TileEngine::getMaxThrowDistance()";
 	double
 		z = static_cast<double>(elevation) + 0.5,
-		dz = 1.;
+		dZ = 1.;
 
 	int retDist = 0;
-	while (retDist < 4000) // just in case
+	while (retDist < 4000) // jic.
 	{
 		retDist += 8;
 
-		if (dz < -1.)
+		if (dZ < -1.)
 			z -= 8.;
 		else
-			z += dz * 8.;
+			z += dZ * 8.;
 
-		if (z < 0. && dz < 0.) // roll back
+		if (z < 0. && dZ < 0.) // roll back
 		{
-			dz = std::max(dz, -1.);
-			if (std::abs(dz) > 1e-10) // rollback horizontal
-				retDist -= static_cast<int>(z / dz);
+			dZ = std::max(dZ, -1.);
+			if (std::abs(dZ) > 1e-10) // rollback horizontal
+				retDist -= static_cast<int>(z / dZ);
 
 			break;
 		}
 
-		dz -= static_cast<double>(weight * 50 / strength) / 100.;
-		if (dz <= -2.) // become falling
+		dZ -= static_cast<double>(weight * 50 / strength) / 100.;
+		if (dZ <= -2.) // become falling
 			break;
 	}
 
-	//Log(LOG_INFO) << ". retDist = " << retDist / 16;
 	return retDist;
 }
 
