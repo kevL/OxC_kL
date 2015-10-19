@@ -8219,14 +8219,14 @@
 	"Armor.h"
 	"../Savegame/Soldier.h"
 
-1445283396 source:f:\git\openxcom\src\ruleset\articledefinition.cpp
+1445285159 source:f:\git\openxcom\src\ruleset\articledefinition.cpp
 	"ArticleDefinition.h"
 
 1425905405 source:f:\git\openxcom\src\ruleset\city.cpp
 	"City.h"
 	"../Engine/Language.h"
 
-1445283260 source:f:\git\openxcom\src\ruleset\extrasounds.cpp
+1445285220 source:f:\git\openxcom\src\ruleset\extrasounds.cpp
 	"ExtraSounds.h"
 
 1445283255 source:f:\git\openxcom\src\ruleset\extrasprites.cpp
@@ -8290,7 +8290,7 @@
 1444220981 source:f:\git\openxcom\src\ruleset\ruleresearch.cpp
 	"RuleResearch.h"
 
-1445283731 source:f:\git\openxcom\src\ruleset\ruleset.cpp
+1445284664 source:f:\git\openxcom\src\ruleset\ruleset.cpp
 	"Ruleset.h"
 	"AlienRace.h"
 	"AlienDeployment.h"

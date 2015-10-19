@@ -1875,7 +1875,7 @@ void DogfightState::drawUfo()
  */
 void DogfightState::drawProjectile(const CraftWeaponProjectile* const prj)
 {
-	int posX = (_battleScope->getWidth() / 2) + (prj->getHorizontalPosition() * 3);
+	int posX = (_battleScope->getWidth() / 2) + (prj->getHorizontalPosition() * 4);
 	Uint8
 		color,
 		colorOffset;

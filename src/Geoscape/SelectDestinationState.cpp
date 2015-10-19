@@ -149,12 +149,6 @@ SelectDestinationState::SelectDestinationState(
 	_btnCancel->onKeyboardPress(
 					(ActionHandler)& SelectDestinationState::btnCancelClick,
 					Options::keyCancel);
-	_btnCancel->onKeyboardPress(
-					(ActionHandler)& SelectDestinationState::btnCancelClick,
-					Options::keyOk);
-	_btnCancel->onKeyboardPress(
-					(ActionHandler)& SelectDestinationState::btnCancelClick,
-					Options::keyOkKeypad);
 
 //	_txtTitle->setText(tr("STR_SELECT_DESTINATION"));
 //	_txtTitle->setVerticalAlign(ALIGN_MIDDLE);
@@ -163,7 +157,7 @@ SelectDestinationState::SelectDestinationState(
 
 	if (_craft->getRules()->getSpacecraft() == true
 		&& _game->getSavedGame()->isResearched(_game->getRuleset()->getFinalResearch()) == true
-		&& _craft->getNumSoldiers() > 0)
+		&& _craft->getNumSoldiers() != 0)
 	{
 		for (std::vector<Soldier*>::const_iterator // if all Soldiers have Power or Flight suits .......
 			i = _craft->getBase()->getSoldiers()->begin();
@@ -185,6 +179,21 @@ SelectDestinationState::SelectDestinationState(
 	{
 		_btnCydonia->setText(tr("STR_CYDONIA"));
 		_btnCydonia->onMouseClick((ActionHandler)& SelectDestinationState::btnCydoniaClick);
+		_btnCydonia->onKeyboardPress(
+						(ActionHandler)& SelectDestinationState::btnCydoniaClick,
+						Options::keyOk);
+		_btnCydonia->onKeyboardPress(
+						(ActionHandler)& SelectDestinationState::btnCydoniaClick,
+						Options::keyOkKeypad);
+	}
+	else
+	{
+		_btnCancel->onKeyboardPress(
+						(ActionHandler)& SelectDestinationState::btnCancelClick,
+						Options::keyOk);
+		_btnCancel->onKeyboardPress(
+						(ActionHandler)& SelectDestinationState::btnCancelClick,
+						Options::keyOkKeypad);
 	}
 }
 

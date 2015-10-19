@@ -47,7 +47,6 @@ void ExtraSounds::load(
 		int modIndex)
 {
 	_modIndex = modIndex;
-
 	_sounds = node["files"].as<std::map<int, std::string> >(_sounds);
 }
 

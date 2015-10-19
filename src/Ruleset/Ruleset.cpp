@@ -760,7 +760,7 @@ void Ruleset::loadFile(const std::string& file) // protected.
 		{
 			const std::string id = (*i)["id"].as<std::string>();
 
-			ArticleDefinition* articleRule = NULL;
+			ArticleDefinition* articleRule;
 			if (_ufopaediaArticles.find(id) != _ufopaediaArticles.end())
 				articleRule = _ufopaediaArticles[id];
 			else
@@ -791,12 +791,9 @@ void Ruleset::loadFile(const std::string& file) // protected.
 				else Log(LOG_INFO) << "ERROR: undefined ArticleDefinition type [" << type << "] for " << id;
 			}
 
-			if (articleRule != NULL)
-			{
-				_ufopaediaListOrder += 100;
-				//Log(LOG_INFO) << id << " uPed listOrder = " << _ufopaediaListOrder; // Prints listOrder to LOG.
-				articleRule->load(*i, _ufopaediaListOrder);
-			}
+			_ufopaediaListOrder += 100;
+			//Log(LOG_INFO) << id << " uPed listOrder = " << _ufopaediaListOrder; // Prints listOrder to LOG.
+			articleRule->load(*i, _ufopaediaListOrder);
 		}
 		else if ((*i)["delete"])
 		{
