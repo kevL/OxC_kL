@@ -209,10 +209,10 @@ void ProjectileFlyBState::init()
 		{
 			//Log(LOG_INFO) << ". . BA_THROW panic = " << (int)(_parent->getPanicHandled() == false);
 			const Tile* const tileTarget = _battleSave->getTile(_action.target); // always Valid.
-			if (validThrowRange(
-							&_action,
-							_parent->getTileEngine()->getOriginVoxel(_action),
-							tileTarget) == true)
+			if (TileEngine::validThrowRange(
+										&_action,
+										_parent->getTileEngine()->getOriginVoxel(_action),
+										tileTarget) == true)
 			{
 				_prjItem = _action.weapon;
 				if (tileTarget->getTerrainLevel() == -24
@@ -1068,100 +1068,8 @@ void ProjectileFlyBState::cancel()
 	}
 }
 
-/**
- * Validates the throwing range.
- * @param action		- pointer to BattleAction (BattlescapeGame.h)
- * @param originVoxel	- reference the origin in voxel-space
- * @param tile			- pointer to the targeted tile
- * @return, true if the range is valid
- */
-bool ProjectileFlyBState::validThrowRange( // static.
-		const BattleAction* const action,
-		const Position& originVoxel,
-		const Tile* const tile)
-{
-	//Log(LOG_INFO) << "ProjectileFlyBState::validThrowRange()";
-	const int
-		delta_x = action->actor->getPosition().x - action->target.x,
-		delta_y = action->actor->getPosition().y - action->target.y;
-	const double throwDist = std::sqrt(static_cast<double>((delta_x * delta_x) + (delta_y * delta_y)));
-
-	int weight = action->weapon->getRules()->getWeight();
-	if (action->weapon->getAmmoItem() != NULL
-		&& action->weapon->getAmmoItem() != action->weapon)
-	{
-		weight += action->weapon->getAmmoItem()->getRules()->getWeight();
-	}
-
-	const int delta_z = originVoxel.z
-					  - action->target.z * 24 + tile->getTerrainLevel();
-	const double maxDist = static_cast<double>( // tile-space
-						   getMaxThrowDistance(
-											weight,
-											action->actor->getStrength(),
-											delta_z)
-										+ 8) / 16.;
-	// throwing off a building of 1 level lets you throw 2 tiles further than normal range,
-	// throwing up to the roof of this building lets you throw 2 tiles less further
-/*	int delta_z = action->actor->getPosition().z - action->target.z;
-	distance -= static_cast<double>(delta_z); */
-
-	// since getMaxThrowDistance seems to return 1 less than maxDist, use "< throwDist" for this determination:
-//	bool ret = static_cast<int>(throwDist) < static_cast<int>(maxDist);
-//	const bool ret = throwDist < maxDist;
-	//Log(LOG_INFO) << ". throwDist " << (int)throwDist
-	//				<< " < maxDist " << (int)maxDist
-	//				<< " : return " << ret;
-	return (throwDist < maxDist);
-}
-
-/**
- * Helper for validThrowRange().
- * @param weight	- the weight of the object
- * @param strength	- the strength of the thrower
- * @param elevation	- the difference in height between the thrower and the target (voxel-space)
- * @return, the maximum throwing range
- */
-int ProjectileFlyBState::getMaxThrowDistance( // static.
-		int weight,
-		int strength,
-		int elevation)
-{
-	//Log(LOG_INFO) << "ProjectileFlyBState::getMaxThrowDistance()";
-	double
-		z = static_cast<double>(elevation) + 0.5,
-		dz = 1.;
-
-	int retDist = 0;
-	while (retDist < 4000) // just in case
-	{
-		retDist += 8;
-
-		if (dz < -1.)
-			z -= 8.;
-		else
-			z += dz * 8.;
-
-		if (z < 0. && dz < 0.) // roll back
-		{
-			dz = std::max(dz, -1.);
-			if (std::abs(dz) > 1e-10) // rollback horizontal
-				retDist -= static_cast<int>(z / dz);
-
-			break;
-		}
-
-		dz -= static_cast<double>(weight * 50 / strength) / 100.;
-		if (dz <= -2.) // become falling
-			break;
-	}
-
-	//Log(LOG_INFO) << ". retDist = " << retDist / 16;
-	return retDist;
-}
-
 /*
- * Set the origin voxel.
+ * Sets the origin voxel.
  * @note Used for the blaster launcher.
  * @param pos - reference the origin voxel
  *
@@ -1169,9 +1077,8 @@ void ProjectileFlyBState::setOriginVoxel(const Position& pos) // private.
 {
 	_originVoxel = pos;
 } */
-
 /*
- * Set the boolean flag to angle a blaster bomb towards the floor.
+ * Sets the boolean flag to angle a blaster bomb towards the floor.
  *
 void ProjectileFlyBState::targetFloor() // private.
 {

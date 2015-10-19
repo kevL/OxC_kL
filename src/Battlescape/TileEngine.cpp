@@ -855,7 +855,6 @@ Position TileEngine::getSightOriginVoxel(const BattleUnit* const unit) const
 													unit->getHeight(true) - 4
 														- _battleSave->getTile(pos)->getTerrainLevel(), // TODO: this is quadrant #1, will not be accurate in all cases.
 													unit->getArmor()->getSize());
-
 	const int ceilingZ = pos.z * 24 + 23;
 	if (ceilingZ < originVoxel.z)
 	{
@@ -880,22 +879,23 @@ Position TileEngine::getOriginVoxel(
 	if (tile == NULL)
 		tile = action.actor->getTile();
 
-	const Position pos = tile->getPosition();
-
-	if (action.type == BA_LAUNCH
-		&& action.actor->getPosition() != pos)
+	if (action.type == BA_LAUNCH)
 	{
-		// don't take into account unit height or terrain level if the
-		// projectile is not being launched - ie. is from a waypoint
-		return Position::toVoxelSpaceCentered(pos, 16);
+		const Position pos = tile->getPosition();
+		if (action.actor->getPosition() != pos)
+		{
+			// don't take into account unit height or terrain level if the
+			// projectile is not being launched - ie. is from a waypoint
+			return Position::toVoxelSpaceCentered(pos, 16);
+		}
 	}
 
-	Position originVoxel = Position::toVoxelSpaceCentered(
+	return getSightOriginVoxel(action.actor);
+/*	Position originVoxel = Position::toVoxelSpaceCentered(
 													pos,
 													action.actor->getHeight(true) - 4
 														- _battleSave->getTile(pos)->getTerrainLevel(), // TODO: this is quadrant #1, will not be accurate in all cases.
 													action.actor->getArmor()->getSize());
-
 	const int ceilingZ = pos.z * 24 + 23;
 	if (ceilingZ < originVoxel.z)
 	{
@@ -904,7 +904,7 @@ Position TileEngine::getOriginVoxel(
 			originVoxel.z = ceilingZ; // careful with that ceiling, Eugene.
 	}
 
-	return originVoxel;
+	return originVoxel; */
 }
 /*	const int dirYshift[8] = {1, 1, 8,15,15,15, 8, 1};
 	const int dirXshift[8] = {8,14,15,15, 8, 1, 1, 1};
@@ -918,7 +918,7 @@ Position TileEngine::getOriginVoxel(
  * @param tileTarget	- pointer to Tile to check against
  * @param scanVoxel		- pointer to voxel that is returned coordinate of hit
  * @param excludeUnit	- pointer to unitSelf (to not hit self)
- * @param targetUnit	- pointer to a hypothetical unit to draw a virtual LoF for AI;
+ * @param targetUnit	- pointer to a hypothetical unit to draw a virtual LoF for AI-ambush usage;
 						  if left NULL this function behaves normally (default NULL)
  * @return, true if a unit can be targeted
  */
@@ -4757,7 +4757,7 @@ VoxelType TileEngine::plotLine(
 		horiBlock,
 		vertBlock;
 
-	Position posLast (origin); // init.
+	Position posLast (origin);
 
 
 	x0 = origin.x; // start & end points
@@ -5084,7 +5084,7 @@ bool TileEngine::validateThrow(
 	{
 		const Tile* const tile = _battleSave->getTile(action.target); // safety Off.
 
-		if (ProjectileFlyBState::validThrowRange(&action, originVoxel, tile) == false)
+		if (validThrowRange(&action, originVoxel, tile) == false)
 		{
 			//Log(LOG_INFO) << ". vT() ret FALSE, ThrowRange not valid";
 			return false;
@@ -5199,6 +5199,367 @@ bool TileEngine::validateThrow(
 }
 
 /**
+ * Validates the throwing range.
+ * @param action		- pointer to BattleAction (BattlescapeGame.h)
+ * @param originVoxel	- reference the origin in voxel-space
+ * @param tile			- pointer to the targeted tile
+ * @return, true if the range is valid
+ */
+bool TileEngine::validThrowRange( // static.
+		const BattleAction* const action,
+		const Position& originVoxel,
+		const Tile* const tile)
+{
+	//Log(LOG_INFO) << "TileEngine::validThrowRange()";
+	const int
+		delta_x = action->actor->getPosition().x - action->target.x,
+		delta_y = action->actor->getPosition().y - action->target.y;
+	const double throwDist = std::sqrt(static_cast<double>((delta_x * delta_x) + (delta_y * delta_y)));
+
+	int weight = action->weapon->getRules()->getWeight();
+	if (action->weapon->getAmmoItem() != NULL
+		&& action->weapon->getAmmoItem() != action->weapon)
+	{
+		weight += action->weapon->getAmmoItem()->getRules()->getWeight();
+	}
+
+	const int delta_z = originVoxel.z
+					  - action->target.z * 24 + tile->getTerrainLevel();
+	const double maxDist = static_cast<double>( // tile-space
+						   getMaxThrowDistance(
+											weight,
+											action->actor->getStrength(),
+											delta_z)
+										+ 8) / 16.;
+	// throwing off a building of 1 level lets you throw 2 tiles further than normal range,
+	// throwing up to the roof of this building lets you throw 2 tiles less further
+/*	int delta_z = action->actor->getPosition().z - action->target.z;
+	distance -= static_cast<double>(delta_z); */
+
+	// since getMaxThrowDistance seems to return 1 less than maxDist, use "< throwDist" for this determination:
+//	bool ret = static_cast<int>(throwDist) < static_cast<int>(maxDist);
+//	const bool ret = throwDist < maxDist;
+	//Log(LOG_INFO) << ". throwDist " << (int)throwDist
+	//				<< " < maxDist " << (int)maxDist
+	//				<< " : return " << ret;
+	return (throwDist < maxDist);
+}
+
+/**
+ * Helper for validThrowRange().
+ * @param weight	- the weight of the object
+ * @param strength	- the strength of the thrower
+ * @param elevation	- the difference in height between the thrower and the target (voxel-space)
+ * @return, the maximum throwing range
+ */
+int TileEngine::getMaxThrowDistance( // static.
+		int weight,
+		int strength,
+		int elevation)
+{
+	//Log(LOG_INFO) << "TileEngine::getMaxThrowDistance()";
+	double
+		z = static_cast<double>(elevation) + 0.5,
+		dz = 1.;
+
+	int retDist = 0;
+	while (retDist < 4000) // just in case
+	{
+		retDist += 8;
+
+		if (dz < -1.)
+			z -= 8.;
+		else
+			z += dz * 8.;
+
+		if (z < 0. && dz < 0.) // roll back
+		{
+			dz = std::max(dz, -1.);
+			if (std::abs(dz) > 1e-10) // rollback horizontal
+				retDist -= static_cast<int>(z / dz);
+
+			break;
+		}
+
+		dz -= static_cast<double>(weight * 50 / strength) / 100.;
+		if (dz <= -2.) // become falling
+			break;
+	}
+
+	//Log(LOG_INFO) << ". retDist = " << retDist / 16;
+	return retDist;
+}
+
+/**
+ * Validates the melee range between two BattleUnits.
+ * @param actor			- pointer to acting unit
+ * @param dir			- direction of action (default -1)
+ * @param targetUnit	- pointer to targetUnit (default NULL)
+ * @return, true if within one tile
+ */
+bool TileEngine::validMeleeRange(
+		const BattleUnit* const actor,
+		int dir,
+		const BattleUnit* const targetUnit) const
+{
+	if (dir == -1)
+		dir = actor->getDirection();
+
+	return validMeleeRange(
+						actor->getPosition(),
+						dir,
+						actor,
+						targetUnit);
+}
+
+/**
+ * Validates the melee range between a Position and a BattleUnit.
+ * @param pos			- reference the position of action
+ * @param dir			- direction to check
+ * @param actor			- pointer to acting unit
+ * @param targetUnit	- pointer to targetUnit (default NULL)
+ * @return, true if within one tile
+ */
+bool TileEngine::validMeleeRange(
+		const Position& pos,
+		const int dir,
+		const BattleUnit* const actor,
+		const BattleUnit* const targetUnit) const
+{
+	if (dir < 0 || dir > 7)
+		return false;
+
+	const Tile
+		* tileOrigin,
+		* tileTarget;
+	Position
+		posOrigin,
+		posTarget,
+		posVector,
+		voxelOrigin,
+		voxelTarget; // not used.
+
+	Pathfinding::directionToVector(dir, &posVector);
+
+	const int armorSize = actor->getArmor()->getSize();
+	for (int
+			x = 0;
+			x != armorSize;
+			++x)
+	{
+		for (int
+				y = 0;
+				y != armorSize;
+				++y)
+		{
+			posOrigin = pos + Position(x,y,0);
+			posTarget = posOrigin + posVector;
+
+			tileOrigin = _battleSave->getTile(posOrigin);
+			tileTarget = _battleSave->getTile(posTarget);
+
+			if (tileOrigin != NULL && tileTarget != NULL)
+			{
+				if (tileTarget->getUnit() == NULL)
+					tileTarget = getVerticalTile(posOrigin, posTarget);
+
+				if (tileTarget != NULL
+					&& tileTarget->getUnit() != NULL
+					&& (targetUnit == NULL
+						|| targetUnit == tileTarget->getUnit()))
+				{
+					voxelOrigin = Position::toVoxelSpaceCentered( // note this is not center of large unit, rather the center of each quadrant.
+															posOrigin,
+															actor->getHeight(true) - 4
+																- tileOrigin->getTerrainLevel());
+					if (canTargetUnit(
+								&voxelOrigin,
+								tileTarget,
+								&voxelTarget,
+								actor) == true)
+					{
+						return true;
+					}
+				}
+			}
+		}
+	}
+
+	return false;
+}
+
+/**
+ * Gets an adjacent Position that can be attacked with melee.
+ * @param actor - pointer to a BattleUnit
+ * @return, position in direction that unit faces
+ */
+Position TileEngine::getMeleePosition(const BattleUnit* const actor) const
+{
+	const Tile* tileOrigin;
+	Tile* tileTarget;
+	const Position pos = actor->getPosition();
+	Position
+		posOrigin,
+		posTarget,
+		posVector,
+		voxelOrigin,
+		voxelTarget; // not used.
+
+	const int
+		armorSize = actor->getArmor()->getSize(),
+		dir = actor->getDirection();
+
+	Pathfinding::directionToVector(dir, &posVector);
+
+	for (int
+			x = 0;
+			x != armorSize;
+			++x)
+	{
+		for (int
+				y = 0;
+				y != armorSize;
+				++y)
+		{
+			posOrigin = pos + Position(x,y,0);
+			posTarget = posOrigin + posVector;
+
+			tileOrigin = _battleSave->getTile(posOrigin);
+			tileTarget = _battleSave->getTile(posTarget);
+
+			if (tileOrigin != NULL && tileTarget != NULL)
+			{
+				if (tileTarget->getUnit() == NULL
+					|| tileTarget->getUnit() == actor)
+				{
+					tileTarget = getVerticalTile(posOrigin, posTarget);
+				}
+
+				if (tileTarget != NULL
+					&& tileTarget->getUnit() != NULL
+					&& tileTarget->getUnit() != actor)
+				{
+					voxelOrigin = Position::toVoxelSpaceCentered( // note this is not center of large unit, rather the center of each quadrant.
+															posOrigin,
+															actor->getHeight(true) - 4
+																- tileOrigin->getTerrainLevel());
+					if (canTargetUnit(
+									&voxelOrigin,
+									tileTarget,
+									&voxelTarget,
+									actor) == true)
+					{
+						return tileTarget->getPosition();
+//						return posTarget;	// TODO: conform this to the fact Reapers can melee vs. 2 tiles
+					}						// or three tiles if their direction is diagonal.
+				}
+			}
+		}
+	}
+
+	return Position(-1,-1,-1); // this should simply never happen because the call is made after validMeleeRange()
+}
+
+/**
+ * Gets an adjacent tile with an unconscious unit if any.
+ * @param actor - pointer to a BattleUnit
+ * @return, pointer to a Tile
+ */
+Tile* TileEngine::getExecutionTile(const BattleUnit* const actor) const
+{
+	const Tile* tileOrigin;
+	Tile* tileTarget;
+	const Position pos = actor->getPosition();
+	Position
+		posOrigin,
+		posTarget,
+		posVector,
+		voxelOrigin,
+		voxelTarget; // not used.
+
+	const int
+		armorSize = actor->getArmor()->getSize(),
+		dir = actor->getDirection();
+
+	Pathfinding::directionToVector(dir, &posVector);
+
+	for (int
+			x = 0;
+			x != armorSize;
+			++x)
+	{
+		for (int
+				y = 0;
+				y != armorSize;
+				++y)
+		{
+			posOrigin = pos + Position(x,y,0);
+			posTarget = posOrigin + posVector;
+
+			tileOrigin = _battleSave->getTile(posOrigin);
+			tileTarget = _battleSave->getTile(posTarget);
+
+			if (tileOrigin != NULL && tileTarget != NULL)
+			{
+				if (tileTarget->hasUnconsciousUnit(false) == 0)
+					tileTarget = getVerticalTile(posOrigin, posTarget);
+
+				if (tileTarget != NULL
+					&& tileTarget->hasUnconsciousUnit(false) != 0)
+				{
+					voxelOrigin = Position::toVoxelSpaceCentered( // note this is not center of large unit, rather the center of each quadrant.
+															posOrigin,
+															actor->getHeight(true) - 4
+																- tileOrigin->getTerrainLevel());
+					if (canTargetTile(
+									&voxelOrigin,
+									tileOrigin,
+									O_FLOOR,
+									&voxelTarget,
+									actor) == true)
+					{
+						return tileTarget;
+					}
+				}
+			}
+		}
+	}
+
+	return NULL;
+}
+
+/**
+ * Gets a Tile within melee range.
+ * @param posOrigin - reference a position origin
+ * @param posTarget - reference a position target
+ * @return, pointer to a tile within melee range
+ */
+Tile* TileEngine::getVerticalTile( // private.
+		const Position& posOrigin,
+		const Position& posTarget) const
+{
+	Tile
+		* tileOrigin = _battleSave->getTile(posOrigin),
+
+		* tileTargetAbove = _battleSave->getTile(posTarget + Position(0,0, 1)),
+		* tileTargetBelow = _battleSave->getTile(posTarget + Position(0,0,-1));
+
+	if (tileTargetAbove != NULL
+		&& std::abs(tileTargetAbove->getTerrainLevel() - (tileOrigin->getTerrainLevel() + 24)) < 9)
+	{
+		return tileTargetAbove;
+	}
+
+	if (tileTargetBelow != NULL
+		&& std::abs((tileTargetBelow->getTerrainLevel() + 24) + tileOrigin->getTerrainLevel()) < 9)
+	{
+		return tileTargetBelow;
+	}
+
+	return NULL;
+}
+
+/**
  * Calculates 'ground' z-value for a particular voxel - used for projectile shadow.
  * @param voxel - reference the voxel to trace down
  * @return, z-coord of 'ground'
@@ -5279,7 +5640,7 @@ bool TileEngine::isVoxelVisible(const Position& voxel) const
 
 /**
  * Checks for a target in voxel space.
- * @param posTarget			- reference the Position to check in voxelspace
+ * @param targetVoxel		- reference the Position to check in voxel-space
  * @param excludeUnit		- pointer to unit NOT to do checks for (default NULL)
  * @param excludeAllUnits	- true to NOT do checks on any unit (default false)
  * @param onlyVisible		- true to consider only visible units (default false)
@@ -5298,7 +5659,7 @@ bool TileEngine::isVoxelVisible(const Position& voxel) const
  * VOXEL_OUTOFBOUNDS	//  5
  */
 VoxelType TileEngine::voxelCheck(
-		const Position& posTarget,
+		const Position& targetVoxel,
 		const BattleUnit* const excludeUnit,
 		const bool excludeAllUnits,
 		const bool onlyVisible,
@@ -5306,14 +5667,14 @@ VoxelType TileEngine::voxelCheck(
 {
 	//Log(LOG_INFO) << "TileEngine::voxelCheck()"; // massive lag-to-file, Do not use.
 	const Tile
-		* tile = _battleSave->getTile(posTarget / Position(16,16,24)),
+		* tile = _battleSave->getTile(Position::toTileSpace(targetVoxel)),
 		* tileBelow;
 	//Log(LOG_INFO) << ". tile " << tile->getPosition();
 	// check if we are out of the map <- we. It's a voxel-check, not a 'we'.
 	if (tile == NULL)
-//		|| posTarget.x < 0
-//		|| posTarget.y < 0
-//		|| posTarget.z < 0)
+//		|| targetVoxel.x < 0
+//		|| targetVoxel.y < 0
+//		|| targetVoxel.z < 0)
 	{
 		//Log(LOG_INFO) << ". vC() ret VOXEL_OUTOFBOUNDS";
 		return VOXEL_OUTOFBOUNDS;
@@ -5323,8 +5684,7 @@ VoxelType TileEngine::voxelCheck(
 		&& tile->getUnit() == NULL) // TODO: tie this into the boolean-input parameters
 	{
 		tileBelow = _battleSave->getTile(tile->getPosition() + Position(0,0,-1));
-		if (tileBelow == NULL
-			|| tileBelow->getUnit() == NULL)
+		if (tileBelow == NULL || tileBelow->getUnit() == NULL)
 		{
 			//Log(LOG_INFO) << ". vC() ret VOXEL_EMPTY";
 			return VOXEL_EMPTY;
@@ -5332,7 +5692,7 @@ VoxelType TileEngine::voxelCheck(
 	}
 
 	// kL_note: should allow items to be thrown through a gravLift down to the floor below
-	if (posTarget.z % 24 < 2
+	if (targetVoxel.z % 24 < 2
 		&& tile->getMapData(O_FLOOR) != NULL
 		&& tile->getMapData(O_FLOOR)->isGravLift() == true)
 	{
@@ -5355,28 +5715,28 @@ VoxelType TileEngine::voxelCheck(
 	MapDataType partType;
 	const MapData* partData;
 	size_t
-		layer = (static_cast<size_t>(posTarget.z) % 24) / 2,
+		layer = (static_cast<size_t>(targetVoxel.z) % 24) / 2,
 		loftId,
-		x = 15 - static_cast<size_t>(posTarget.x) % 16;		// x-axis is reversed for tileParts, standard for battleUnit.
-	const size_t y = static_cast<size_t>(posTarget.y) % 16;	// y-axis is standard
+		x = 15 - static_cast<size_t>(targetVoxel.x) % 16;		// x-axis is reversed for tileParts, standard for battleUnit.
+	const size_t y = static_cast<size_t>(targetVoxel.y) % 16;	// y-axis is standard
 
 	int parts = static_cast<int>(Tile::PARTS_TILE); // terrain parts [0=floor, 1/2=walls, 3=content-object]
 	for (int
-			part = 0;
-			part != parts;
-			++part)
+			i = 0;
+			i != parts;
+			++i)
 	{
-		partType = static_cast<MapDataType>(part);
+		partType = static_cast<MapDataType>(i);
 		if (tile->isUfoDoorOpen(partType) == false)
 		{
 			partData = tile->getMapData(partType);
 			if (partData != NULL)
 			{
-				loftId = partData->getLoftId(layer) * 16 + y;
+				loftId = (partData->getLoftId(layer) << 4) + y;
 				if (loftId < _voxelData->size() // davide, http://openxcom.org/forum/index.php?topic=2934.msg32146#msg32146 (x2 _below)
 					&& _voxelData->at(loftId) & (1 << x)) // if the voxelData at loftId is "1" solid:
 				{
-					//Log(LOG_INFO) << ". vC() ret = " << part;
+					//Log(LOG_INFO) << ". vC() ret = " << i;
 					return static_cast<VoxelType>(partType); // Note MapDataType & VoxelType correspond.
 				}
 			}
@@ -5402,12 +5762,12 @@ VoxelType TileEngine::voxelCheck(
 				|| targetUnit->getUnitVisible() == true))
 		{
 			const Position posUnit = targetUnit->getPosition();
-			const int target_z = posUnit.z * 24
+			const int target_z = posUnit.z * 24 // get foot-level voxel
 							   + targetUnit->getFloatHeight()
-							   - tile->getTerrainLevel(); // foot-level voxel
+							   - tile->getTerrainLevel();
 
-			if (posTarget.z > target_z
-				&& posTarget.z <= target_z + targetUnit->getHeight()) // if hit is between foot- and hair-level voxel layers (z-axis)
+			if (targetVoxel.z > target_z
+				&& targetVoxel.z <= target_z + targetUnit->getHeight()) // if hit is between foot- and hair-level voxel layers (z-axis)
 			{
 				if (targetUnit->getArmor()->getSize() > 1) // for large units...
 				{
@@ -5420,10 +5780,10 @@ VoxelType TileEngine::voxelCheck(
 
 //				if (layer > -1)
 //				{
-				x = posTarget.x % 16;
+				x = targetVoxel.x % 16;
 				// That should be (8,8,10) as per BattlescapeGame::handleNonTargetAction() if (_currentAction.type == BA_HIT)
 
-				loftId = targetUnit->getLoft(layer) * 16 + y;
+				loftId = (targetUnit->getLoft(layer) << 4) + y;
 				//Log(LOG_INFO) << "loftId = " << loftId << " vD-size = " << (int)_voxelData->size();
 				if (loftId < _voxelData->size() // davide, http://openxcom.org/forum/index.php?topic=2934.msg32146#msg32146 (x2 ^above)
 					&& _voxelData->at(loftId) & (1 << x)) // if the voxelData at loftId is "1" solid:
@@ -5440,76 +5800,6 @@ VoxelType TileEngine::voxelCheck(
 	//Log(LOG_INFO) << ". vC() ret VOXEL_EMPTY"; // massive lag-to-file, Do not use.
 	return VOXEL_EMPTY;
 }
-
-/**
- * Calculates the distance between 2 points rounded to nearest integer.
- * @param pos1 - reference the first Position
- * @param pos2 - reference the second Position
- * @param considerZ	- true to consider the z coordinate (default true)
- * @return, distance
- */
-int TileEngine::distance( // static.
-		const Position& pos1,
-		const Position& pos2,
-		const bool considerZ)
-{
-	const int
-		x = pos1.x - pos2.x,
-		y = pos1.y - pos2.y;
-
-	int z;
-	if (considerZ == true)
-		z = pos1.z - pos2.z;
-	else
-		z = 0;
-
-	return static_cast<int>(Round(
-		   std::sqrt(static_cast<double>(x * x + y * y + z * z))));
-}
-
-/**
- * Calculates the distance squared between 2 points.
- * No sqrt() no floating point math and sometimes it's all you need.
- * @param pos1		- reference the first Position
- * @param pos2		- reference the second Position
- * @param considerZ	- true to consider the z coordinate (default true)
- * @return, distance
- */
-int TileEngine::distanceSqr( // static.
-		const Position& pos1,
-		const Position& pos2,
-		const bool considerZ)
-{
-	const int
-		x = pos1.x - pos2.x,
-		y = pos1.y - pos2.y;
-
-	int z;
-	if (considerZ == true)
-		z = pos1.z - pos2.z;
-	else
-		z = 0;
-
-	return x * x + y * y + z * z;
-}
-
-/**
- * Calculates the distance between 2 points as a floating-point value.
- * @param pos1 - reference the first Position
- * @param pos2 - reference the second Position
- * @return, distance
- */
-/* double TileEngine::distancePrecise(
-		const Position& pos1,
-		const Position& pos2) const
-{
-	const int
-		x = pos1.x - pos2.x,
-		y = pos1.y - pos2.y,
-		z = pos1.z - pos2.z;
-
-	return std::sqrt(static_cast<double>(x * x + y * y + z * z));
-} */
 
 /**
  * Performs a psionic BattleAction.
@@ -5923,275 +6213,6 @@ Tile* TileEngine::applyGravity(Tile* const tile) const
 }
 
 /**
- * Validates the melee range between two BattleUnits.
- * @param actor			- pointer to acting unit
- * @param dir			- direction of action (default -1)
- * @param targetUnit	- pointer to targetUnit (default NULL)
- * @return, true if within one tile
- */
-bool TileEngine::validMeleeRange(
-		const BattleUnit* const actor,
-		int dir,
-		const BattleUnit* const targetUnit) const
-{
-	if (dir == -1)
-		dir = actor->getDirection();
-
-	return validMeleeRange(
-						actor->getPosition(),
-						dir,
-						actor,
-						targetUnit);
-}
-
-/**
- * Validates the melee range between a Position and a BattleUnit.
- * @param pos			- reference the position of action
- * @param dir			- direction to check
- * @param actor			- pointer to acting unit
- * @param targetUnit	- pointer to targetUnit (default NULL)
- * @return, true if within one tile
- */
-bool TileEngine::validMeleeRange(
-		const Position& pos,
-		const int dir,
-		const BattleUnit* const actor,
-		const BattleUnit* const targetUnit) const
-{
-	if (dir < 0 || dir > 7)
-		return false;
-
-	const Tile
-		* tileOrigin,
-		* tileTarget;
-	Position
-		posOrigin,
-		posTarget,
-		posVector,
-		voxelOrigin,
-		voxelTarget; // not used.
-
-	Pathfinding::directionToVector(dir, &posVector);
-
-	const int armorSize = actor->getArmor()->getSize();
-	for (int
-			x = 0;
-			x != armorSize;
-			++x)
-	{
-		for (int
-				y = 0;
-				y != armorSize;
-				++y)
-		{
-			posOrigin = pos + Position(x,y,0);
-			posTarget = posOrigin + posVector;
-
-			tileOrigin = _battleSave->getTile(posOrigin);
-			tileTarget = _battleSave->getTile(posTarget);
-
-			if (tileOrigin != NULL && tileTarget != NULL)
-			{
-				if (tileTarget->getUnit() == NULL)
-					tileTarget = getVerticalTile(posOrigin, posTarget);
-
-				if (tileTarget != NULL
-					&& tileTarget->getUnit() != NULL
-					&& (targetUnit == NULL
-						|| targetUnit == tileTarget->getUnit()))
-				{
-					voxelOrigin = Position::toVoxelSpaceCentered( // note this is not center of large unit, rather the center of each quadrant.
-															posOrigin,
-															actor->getHeight(true) - 4
-																- tileOrigin->getTerrainLevel());
-					if (canTargetUnit(
-								&voxelOrigin,
-								tileTarget,
-								&voxelTarget,
-								actor) == true)
-					{
-						return true;
-					}
-				}
-			}
-		}
-	}
-
-	return false;
-}
-
-/**
- * Gets an adjacent Position that can be attacked with melee.
- * @param actor - pointer to a BattleUnit
- * @return, position in direction that unit faces
- */
-Position TileEngine::getMeleePosition(const BattleUnit* const actor) const
-{
-	const Tile* tileOrigin;
-	Tile* tileTarget;
-	const Position pos = actor->getPosition();
-	Position
-		posOrigin,
-		posTarget,
-		posVector,
-		voxelOrigin,
-		voxelTarget; // not used.
-
-	const int
-		armorSize = actor->getArmor()->getSize(),
-		dir = actor->getDirection();
-
-	Pathfinding::directionToVector(dir, &posVector);
-
-	for (int
-			x = 0;
-			x != armorSize;
-			++x)
-	{
-		for (int
-				y = 0;
-				y != armorSize;
-				++y)
-		{
-			posOrigin = pos + Position(x,y,0);
-			posTarget = posOrigin + posVector;
-
-			tileOrigin = _battleSave->getTile(posOrigin);
-			tileTarget = _battleSave->getTile(posTarget);
-
-			if (tileOrigin != NULL && tileTarget != NULL)
-			{
-				if (tileTarget->getUnit() == NULL
-					|| tileTarget->getUnit() == actor)
-				{
-					tileTarget = getVerticalTile(posOrigin, posTarget);
-				}
-
-				if (tileTarget != NULL
-					&& tileTarget->getUnit() != NULL
-					&& tileTarget->getUnit() != actor)
-				{
-					voxelOrigin = Position::toVoxelSpaceCentered( // note this is not center of large unit, rather the center of each quadrant.
-															posOrigin,
-															actor->getHeight(true) - 4
-																- tileOrigin->getTerrainLevel());
-					if (canTargetUnit(
-									&voxelOrigin,
-									tileTarget,
-									&voxelTarget,
-									actor) == true)
-					{
-						return tileTarget->getPosition();
-//						return posTarget;	// TODO: conform this to the fact Reapers can melee vs. 2 tiles
-					}						// or three tiles if their direction is diagonal.
-				}
-			}
-		}
-	}
-
-	return Position(-1,-1,-1); // this should simply never happen because the call is made after validMeleeRange()
-}
-
-/**
- * Gets an adjacent tile with an unconscious unit if any.
- * @param actor - pointer to a BattleUnit
- * @return, pointer to a Tile
- */
-Tile* TileEngine::getExecutionTile(const BattleUnit* const actor) const
-{
-	const Tile* tileOrigin;
-	Tile* tileTarget;
-	const Position pos = actor->getPosition();
-	Position
-		posOrigin,
-		posTarget,
-		posVector,
-		voxelOrigin,
-		voxelTarget; // not used.
-
-	const int
-		armorSize = actor->getArmor()->getSize(),
-		dir = actor->getDirection();
-
-	Pathfinding::directionToVector(dir, &posVector);
-
-	for (int
-			x = 0;
-			x != armorSize;
-			++x)
-	{
-		for (int
-				y = 0;
-				y != armorSize;
-				++y)
-		{
-			posOrigin = pos + Position(x,y,0);
-			posTarget = posOrigin + posVector;
-
-			tileOrigin = _battleSave->getTile(posOrigin);
-			tileTarget = _battleSave->getTile(posTarget);
-
-			if (tileOrigin != NULL && tileTarget != NULL)
-			{
-				if (tileTarget->hasUnconsciousUnit(false) == 0)
-					tileTarget = getVerticalTile(posOrigin, posTarget);
-
-				if (tileTarget != NULL
-					&& tileTarget->hasUnconsciousUnit(false) != 0)
-				{
-					voxelOrigin = Position::toVoxelSpaceCentered( // note this is not center of large unit, rather the center of each quadrant.
-															posOrigin,
-															actor->getHeight(true) - 4
-																- tileOrigin->getTerrainLevel());
-					if (canTargetTile(
-									&voxelOrigin,
-									tileOrigin,
-									O_FLOOR,
-									&voxelTarget,
-									actor) == true)
-					{
-						return tileTarget;
-					}
-				}
-			}
-		}
-	}
-
-	return NULL;
-}
-
-/**
- * Gets a Tile within melee range.
- * @param posOrigin - reference a position origin
- * @param posTarget - reference a position target
- * @return, pointer to a tile within melee range
- */
-Tile* TileEngine::getVerticalTile( // private.
-		const Position& posOrigin,
-		const Position& posTarget) const
-{
-	Tile
-		* tileOrigin = _battleSave->getTile(posOrigin),
-
-		* tileTargetAbove = _battleSave->getTile(posTarget + Position(0,0, 1)),
-		* tileTargetBelow = _battleSave->getTile(posTarget + Position(0,0,-1));
-
-	if (tileTargetAbove != NULL
-		&& std::abs(tileTargetAbove->getTerrainLevel() - (tileOrigin->getTerrainLevel() + 24)) < 9)
-	{
-		return tileTargetAbove;
-	}
-
-	if (tileTargetBelow != NULL
-		&& std::abs((tileTargetBelow->getTerrainLevel() + 24) + tileOrigin->getTerrainLevel()) < 9)
-	{
-		return tileTargetBelow;
-	}
-
-	return NULL;
-}
-
-/**
  * Gets the AI to look through a window.
  * @param pos - reference the current Position
  * @return, direction or -1 if no window found
@@ -6241,53 +6262,6 @@ int TileEngine::faceWindow(const Position& pos) const
 	}
 
 	return ret;
-}
-
-/**
- * Returns the direction from origin to target.
- * @note This function is almost identical to BattleUnit::directionTo().
- * @param posOrigin - reference to the origin point of the action
- * @param posTarget - reference to the target point of the action
- * @return, direction
- */
-int TileEngine::getDirectionTo(
-		const Position& posOrigin,
-		const Position& posTarget) const
-{
-	if (posOrigin == posTarget) // safety.
-		return 0;
-
-	const double
-		theta = std::atan2( // radians: + = y > 0; - = y < 0;
-						static_cast<double>(posOrigin.y - posTarget.y),
-						static_cast<double>(posTarget.x - posOrigin.x)),
-
-		// divide the pie in 4 thetas each at 1/8th before each quarter
-		pi_8 = M_PI / 8.,				// a circle divided into 16 sections (rads) -> 22.5 deg
-		d = 0.1,						// a bias toward cardinal directions. (0.1..0.12)
-		pie[4] =
-		{
-			M_PI - pi_8 - d,			// 2.7488935718910690836548129603696	-> 157.5 deg
-			M_PI * 3. / 4. - pi_8 + d,	// 1.9634954084936207740391521145497	-> 112.5 deg
-			M_PI_2 - pi_8 - d,			// 1.1780972450961724644234912687298	-> 67.5 deg
-			pi_8 + d					// 0.39269908169872415480783042290994	-> 22.5 deg
-		};
-
-	if (theta > pie[0] || theta < -pie[0])
-		return 6;
-	if (theta > pie[1])
-		return 7;
-	if (theta > pie[2])
-		return 0;
-	if (theta > pie[3])
-		return 1;
-	if (theta < -pie[1])
-		return 5;
-	if (theta < -pie[2])
-		return 4;
-	if (theta < -pie[3])
-		return 3;
-	return 2;
 }
 
 /**
@@ -6363,6 +6337,123 @@ void TileEngine::setDangerZone(
 			}
 		}
 	}
+}
+
+/**
+ * Calculates the distance between 2 points rounded to nearest integer.
+ * @param pos1 - reference the first Position
+ * @param pos2 - reference the second Position
+ * @param considerZ	- true to consider the z coordinate (default true)
+ * @return, distance
+ */
+int TileEngine::distance( // static.
+		const Position& pos1,
+		const Position& pos2,
+		const bool considerZ)
+{
+	const int
+		x = pos1.x - pos2.x,
+		y = pos1.y - pos2.y;
+
+	int z;
+	if (considerZ == true)
+		z = pos1.z - pos2.z;
+	else
+		z = 0;
+
+	return static_cast<int>(Round(
+		   std::sqrt(static_cast<double>(x * x + y * y + z * z))));
+}
+
+/**
+ * Calculates the distance squared between 2 points.
+ * No sqrt() no floating point math and sometimes it's all you need.
+ * @param pos1		- reference the first Position
+ * @param pos2		- reference the second Position
+ * @param considerZ	- true to consider the z coordinate (default true)
+ * @return, distance
+ */
+int TileEngine::distanceSqr( // static.
+		const Position& pos1,
+		const Position& pos2,
+		const bool considerZ)
+{
+	const int
+		x = pos1.x - pos2.x,
+		y = pos1.y - pos2.y;
+
+	int z;
+	if (considerZ == true)
+		z = pos1.z - pos2.z;
+	else
+		z = 0;
+
+	return x * x + y * y + z * z;
+}
+
+/**
+ * Calculates the distance between 2 points as a floating-point value.
+ * @param pos1 - reference the first Position
+ * @param pos2 - reference the second Position
+ * @return, distance
+ */
+/* double TileEngine::distancePrecise( // static.
+		const Position& pos1,
+		const Position& pos2) const
+{
+	const int
+		x = pos1.x - pos2.x,
+		y = pos1.y - pos2.y,
+		z = pos1.z - pos2.z;
+
+	return std::sqrt(static_cast<double>(x * x + y * y + z * z));
+} */
+
+/**
+ * Returns the direction from origin to target.
+ * @note This function is almost identical to BattleUnit::directionTo().
+ * @param posOrigin - reference to the origin point of the action
+ * @param posTarget - reference to the target point of the action
+ * @return, direction
+ */
+int TileEngine::getDirectionTo(
+		const Position& posOrigin,
+		const Position& posTarget) const
+{
+	if (posOrigin == posTarget) // safety.
+		return 0;
+
+	const double
+		theta = std::atan2( // radians: + = y > 0; - = y < 0;
+						static_cast<double>(posOrigin.y - posTarget.y),
+						static_cast<double>(posTarget.x - posOrigin.x)),
+
+		// divide the pie in 4 thetas each at 1/8th before each quarter
+		pi_8 = M_PI / 8.,				// a circle divided into 16 sections (rads) -> 22.5 deg
+		d = 0.1,						// a bias toward cardinal directions. (0.1..0.12)
+		pie[4] =
+		{
+			M_PI - pi_8 - d,			// 2.7488935718910690836548129603696	-> 157.5 deg
+			M_PI * 3. / 4. - pi_8 + d,	// 1.9634954084936207740391521145497	-> 112.5 deg
+			M_PI_2 - pi_8 - d,			// 1.1780972450961724644234912687298	-> 67.5 deg
+			pi_8 + d					// 0.39269908169872415480783042290994	-> 22.5 deg
+		};
+
+	if (theta > pie[0] || theta < -pie[0])
+		return 6;
+	if (theta > pie[1])
+		return 7;
+	if (theta > pie[2])
+		return 0;
+	if (theta > pie[3])
+		return 1;
+	if (theta < -pie[1])
+		return 5;
+	if (theta < -pie[2])
+		return 4;
+	if (theta < -pie[3])
+		return 3;
+	return 2;
 }
 
 /**

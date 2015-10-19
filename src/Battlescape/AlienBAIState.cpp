@@ -33,7 +33,7 @@
 
 #include "../Ruleset/RuleArmor.h"
 #include "../Ruleset/RuleItem.h"
-#include "../Ruleset/RuleInventory.h" // kL, grenade from Belt to Hand
+#include "../Ruleset/RuleInventory.h" // grenade from Belt to Hand
 #include "../Ruleset/Ruleset.h"
 
 #include "../Savegame/BattleItem.h"
@@ -735,7 +735,7 @@ void AlienBAIState::setupAmbush() // private.
 	_ambushAction->type = BA_RETHINK;
 	_tuAmbush = 0;
 
-	std::vector<int> path;
+	std::vector<int> targetPath;
 
 	if (selectClosestKnownEnemy() == true)
 	{
@@ -745,8 +745,8 @@ void AlienBAIState::setupAmbush() // private.
 			FAST_PASS_THRESHOLD		= 80;
 
 		Position
-			origin = _battleSave->getTileEngine()->getSightOriginVoxel(_aggroTarget),
-			target,
+			originVoxel = _battleSave->getTileEngine()->getSightOriginVoxel(_aggroTarget),
+			scanVoxel, // placeholder.
 			pos;
 		const Tile* tile;
 		int bestScore = 0;
@@ -755,75 +755,69 @@ void AlienBAIState::setupAmbush() // private.
 
 		for (std::vector<Node*>::const_iterator			// use node positions for this since it gives map makers a good
 				i = _battleSave->getNodes()->begin();	// degree of control over how the units will use the environment.
-				i != _battleSave->getNodes()->end();
+				i != _battleSave->getNodes()->end();	// kL_ TODO: I'd rather not, unless this uses so-called 'OpenNodes' ....
 				++i)
 		{
 			pos = (*i)->getPosition();
 			tile = _battleSave->getTile(pos);
-
-			if (tile == NULL
-				|| tile->getDangerous() == true
-				|| pos.z != _unit->getPosition().z
-				|| TileEngine::distance(pos, _unit->getPosition()) > 10
-				|| std::find(
+			if (tile != NULL
+				&& tile->getDangerous() == false
+				&& pos.z == _unit->getPosition().z
+				&& TileEngine::distance(pos, _unit->getPosition()) < 11
+				&& std::find( // ignore unreachable tiles
 						_reachableAttack.begin(),
 						_reachableAttack.end(),
-						_battleSave->getTileIndex(pos)) == _reachableAttack.end())
+						_battleSave->getTileIndex(pos)) != _reachableAttack.end())
 			{
-				continue; // ignore unreachable tiles
-			}
-
-/*			if (_traceAI) // color all the nodes in range purple.
-			{
-				tile->setPreviewDir(10);
-				tile->setPreviewColor(13);
-			} */
-
-			if (countSpottingUnits(pos) == 0
-				&& _battleSave->getTileEngine()->canTargetUnit( // make sure Unit can't be seen here.
-															&origin,
-															tile,
-															&target,
-															_aggroTarget,
-															_unit) == false)
-			{
-				pf->setPathingUnit(_unit);
-				pf->calculate( // make sure Unit can move here
-							_unit,
-							pos);
-
-				const int tuAmbush = pf->getTotalTUCost();
-
-				if (pf->getStartDirection() != -1)
-//					&& tuAmbush <= _unit->getTimeUnits()
-//					- _unit->getActionTu(BA_SNAPSHOT, _attackAction->weapon)) // make sure Unit can still shoot
+/*				if (_traceAI) // color all the nodes in range purple.
 				{
-					int score = BASE_SUCCESS_SYSTEMATIC;
-					score -= tuAmbush;
+					tile->setPreviewDir(10);
+					tile->setPreviewColor(13);
+				} */
 
-					pf->setPathingUnit(_aggroTarget);
-					pf->calculate( // make sure Unit's target can reach here too.
-								_aggroTarget,
-								pos);
+				if (countSpottingUnits(pos) == 0
+					&& _battleSave->getTileEngine()->canTargetUnit( // make sure Unit can't be seen here.
+																&originVoxel,
+																tile,
+																&scanVoxel,
+																_aggroTarget,
+																_unit) == false)
+				{
+					pf->setPathingUnit(_unit);
+					pf->calculate(_unit, pos); // make sure Unit can move here
+
+					const int tuAmbush = pf->getTotalTUCost();
 
 					if (pf->getStartDirection() != -1)
+//						&& tuAmbush <= _unit->getTimeUnits() - _unit->getActionTu(BA_SNAPSHOT, _attackAction->weapon)) // make sure Unit can still shoot
 					{
-						if (_battleSave->getTileEngine()->faceWindow(pos) != -1)	// ideally get behind some cover,
-							score += COVER_BONUS;									// like say a window or low wall.
+						int score = BASE_SUCCESS_SYSTEMATIC;
+						score -= tuAmbush;
 
-						if (score > bestScore)
+						pf->setPathingUnit(_aggroTarget);
+						pf->calculate( // make sure Unit's target can reach here too.
+									_aggroTarget,
+									pos);
+
+						if (pf->getStartDirection() != -1)
 						{
-							path = pf->copyPath(); // note this is copying the aggroTarget's path
+							if (_battleSave->getTileEngine()->faceWindow(pos) != -1)	// ideally get behind some cover,
+								score += COVER_BONUS;									// like say a window or low wall.
 
-							_ambushAction->target = pos;
-							if (pos == _unit->getPosition())
-								_tuAmbush = 1;
-							else
-								_tuAmbush = tuAmbush;
+							if (score > bestScore)
+							{
+								targetPath = pf->copyPath();
 
-							bestScore = score;
-							if (bestScore > FAST_PASS_THRESHOLD)
-								break;
+								_ambushAction->target = pos;
+								if (pos == _unit->getPosition())
+									_tuAmbush = 1;
+								else
+									_tuAmbush = tuAmbush;
+
+								bestScore = score;
+								if (bestScore > FAST_PASS_THRESHOLD)
+									break;
+							}
 						}
 					}
 				}
@@ -834,40 +828,35 @@ void AlienBAIState::setupAmbush() // private.
 		{
 			_ambushAction->type = BA_MOVE;
 
-			origin = _ambushAction->target * Position(16,16,24) // i should really make a function for this. But you didn't. gratz.
-				   + Position(
-							8,8,
-							_unit->getHeight() + _unit->getFloatHeight()
-								- _battleSave->getTile(_ambushAction->target)->getTerrainLevel()
-								- 4); // -4, because -2 is eyes and -2 that is the rifle ( perhaps )
-
-			Position nextPos;
+			originVoxel = Position::toVoxelSpaceCentered(
+													_ambushAction->target,
+													_unit->getHeight(true)
+														- _battleSave->getTile(_ambushAction->target)->getTerrainLevel()
+														- 4);
+			Position posNext;
 
 			pf->setPathingUnit(_aggroTarget);
 			pos = _aggroTarget->getPosition();
 
-			size_t tries = path.size();
+			size_t tries = targetPath.size();
 			while (tries > 0) // hypothetically walk the aggroTarget through the path.
 			{
 				--tries;
 
-				pf->getTuCostPf(
-							pos,
-							path.back(),
-							&nextPos);
-				path.pop_back();
-				pos = nextPos;
+				pf->getTuCostPf(pos, targetPath.back(), &posNext);
+				targetPath.pop_back();
+				pos = posNext;
 
 				tile = _battleSave->getTile(pos);
 				if (_battleSave->getTileEngine()->canTargetUnit( // do a virtual fire calculation
-															&origin,
+															&originVoxel,
 															tile,
-															&target,
+															&scanVoxel,
 															_unit,
 															_aggroTarget) == true)
 				{
 					// if unit can virtually fire at the hypothetical target it knows which way to face.
-					_ambushAction->finalFacing = _battleSave->getTileEngine()->getDirectionTo( // kL: should origin & target be reversed like this
+					_ambushAction->finalFacing = _battleSave->getTileEngine()->getDirectionTo(
 																						_ambushAction->target,
 																						pos);
 					break;
@@ -2430,17 +2419,13 @@ void AlienBAIState::grenadeAction() // private.
 						_unit,
 						grenade->getRules()->getExplosionRadius(),
 						_attackAction->diff) == true)
-//						true))
 		{
-//			if (_unit->getFaction() == FACTION_HOSTILE)
-//			{
 			const RuleInventory* const invRule = grenade->getSlot();
 			int tuCost = invRule->getCost(_battleSave->getBattleGame()->getRuleset()->getInventory("STR_RIGHT_HAND"));
 
 			if (grenade->getFuse() == -1)
 				tuCost += _unit->getActionTu(BA_PRIME, grenade);
-			// Prime is done in ProjectileFlyBState.
-			tuCost += _unit->getActionTu(BA_THROW, grenade);
+			tuCost += _unit->getActionTu(BA_THROW, grenade); // the Prime itself is done 'auto' in ProjectileFlyBState.
 
 			if (tuCost <= _unit->getTimeUnits())
 			{
@@ -2454,7 +2439,7 @@ void AlienBAIState::grenadeAction() // private.
 					originVoxel = _battleSave->getTileEngine()->getOriginVoxel(action),
 					targetVoxel = Position::toVoxelSpaceCentered(
 															action.target,
-															2 - _battleSave->getTile(action.target)->getTerrainLevel() + 2); // LoFT of floor is typically 2 voxels thick.
+															2 - _battleSave->getTile(action.target)->getTerrainLevel()); // LoFT of floor is typically 2 voxels thick.
 
 				if (_battleSave->getTileEngine()->validateThrow(action, originVoxel, targetVoxel) == true)
 				{
@@ -2466,7 +2451,6 @@ void AlienBAIState::grenadeAction() // private.
 					_melee = false;
 				}
 			}
-//			}
 		}
 	}
 }

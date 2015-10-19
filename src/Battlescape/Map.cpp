@@ -1583,18 +1583,14 @@ void Map::drawTerrain(Surface* const surface) // private.
 								BattleAction* const action = _battleSave->getBattleGame()->getCurrentAction();
 								action->target = Position(itX,itY,itZ);
 
+								unsigned accuracy;
+								Uint8 color;
 								const Position
 									originVoxel = _battleSave->getTileEngine()->getOriginVoxel(*action),
 									targetVoxel = Position::toVoxelSpaceCentered( // TODO: conform this to ProjectileFlyBState (modifier keys) & Projectile::_targetVoxel
 																			Position(itX,itY,itZ),
-																			-_battleSave->getTile(action->target)->getTerrainLevel() + 2); // LoFT of floor is typically 2 voxels thick.
-								const bool canThrow = _battleSave->getTileEngine()->validateThrow(
-																							*action,
-																							originVoxel,
-																							targetVoxel);
-								unsigned accuracy;
-								Uint8 color;
-								if (canThrow == true)
+																			2 - _battleSave->getTile(action->target)->getTerrainLevel()); // LoFT of floor is typically 2 voxels thick.
+								if (hasFloor == true && _battleSave->getTileEngine()->validateThrow(*action, originVoxel, targetVoxel) == true)
 								{
 									accuracy = static_cast<unsigned int>(Round(_battleSave->getSelectedUnit()->getAccuracy(*action) * 100.));
 									color = ACU_GREEN;

@@ -89,17 +89,6 @@ private:
 		void cancel();
 		/// Runs state functionality every cycle.
 		void think();
-
-		/// Validates the throwing range.
-		static bool validThrowRange(
-				const BattleAction* const action,
-				const Position& originVoxel,
-				const Tile* const tile);
-		/// Calculates the maximum throwing range.
-		static int getMaxThrowDistance(
-				int weight,
-				int strength,
-				int elevation);
 };
 
 }

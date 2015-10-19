@@ -66,7 +66,7 @@ private:
 	int
 //		_missileDirection,
 		_powerE, // effective power that actually explodes on a tile that's hit by HE.
-		_powerT; // test power that checks if _powerE actually makes it to the next tile.
+		_powerT; // test power that checks if _powerE even makes it to the next tile.
 
 	SavedBattleGame* _battleSave;
 	Tile* _trueTile;
@@ -81,6 +81,7 @@ private:
 			const Position& pos,
 			int power,
 			size_t layer) const;
+
 	/// Calculates blockage of various persuasions.
 	int blockage(
 			const Tile* const tile,
@@ -89,10 +90,12 @@ private:
 			const int dir = -1,
 			const bool originTest = false,
 			const bool trueDir = false) const;
+
 	/// Opens any doors this door is connected to.
 	void openAdjacentDoors(
 			const Position& pos,
 			MapDataType part) const;
+
 	/// Gets a Tile within melee range.
 	Tile* getVerticalTile(
 			const Position& posOrigin,
@@ -249,6 +252,7 @@ private:
 				const double arc,
 				const bool allowCeiling = false,
 				const Position& deltaVoxel = Position(0,0,0)) const;
+
 		/// Validates a throwing action.
 		bool validateThrow(
 				const BattleAction& action,
@@ -256,27 +260,16 @@ private:
 				const Position& targetVoxel,
 				double* const arc = NULL,
 				VoxelType* const voxelType = NULL) const;
-
-		/// Checks the distance between two positions.
-		static int distance(
-				const Position& pos1,
-				const Position& pos2,
-				const bool considerZ = true);
-		/// Checks the distance squared between two positions.
-		static int distanceSqr(
-				const Position& pos1,
-				const Position& pos2,
-				const bool considerZ = true);
-		/// Checks the distance between two positions precisely.
-//		double distancePrecise(
-//				const Position& pos1,
-//				const Position& pos2) const;
-
-		/// Performs a psionic action.
-		bool psiAttack(BattleAction* const action); // removed, post-cosmetic
-
-		/// Applies gravity to anything that occupies this tile.
-		Tile* applyGravity(Tile* const tile) const;
+		/// Validates the throwing range.
+		static bool validThrowRange(
+				const BattleAction* const action,
+				const Position& originVoxel,
+				const Tile* const tile);
+		/// Calculates the maximum throwing range.
+		static int getMaxThrowDistance(
+				int weight,
+				int strength,
+				int elevation);
 
 		/// Validates the melee range between two BattleUnits.
 		bool validMeleeRange(
@@ -292,35 +285,57 @@ private:
 
 		/// Gets an adjacent Position that can be attacked with melee.
 		Position getMeleePosition(const BattleUnit* const actor) const;
+
 		/// Gets an adjacent tile with an unconscious unit if any.
 		Tile* getExecutionTile(const BattleUnit* const actor) const;
 
+		/// Performs a psionic action.
+		bool psiAttack(BattleAction* const action);
+
+		/// Applies gravity to anything that occupies this tile.
+		Tile* applyGravity(Tile* const tile) const;
+
 		/// Gets the AI to look through a window.
 		int faceWindow(const Position& pos) const;
-
-		/// Calculates the z voxel for shadows.
-		int castShadow(const Position& voxel) const;
-
-		/// Checks the visibility of a given voxel.
-//		bool isVoxelVisible(const Position& voxel) const;
-		/// Checks what type of voxel occupies posTarget in voxel space.
-		VoxelType voxelCheck(
-				const Position& posTarget,
-				const BattleUnit* const excludeUnit = NULL,
-				const bool excludeAllUnits = false,
-				const bool onlyVisible = false,
-				const BattleUnit* const excludeAllBut = NULL) const;
-
-		/// Gets direction to a target-point.
-		int getDirectionTo(
-				const Position& posOrigin,
-				const Position& posTarget) const;
 
 		/// Marks a region of the map as "dangerous to aliens" for a turn.
 		void setDangerZone(
 				const Position& pos,
 				const int radius,
 				const BattleUnit* const unit) const;
+
+		/// Calculates the z voxel for shadows.
+		int castShadow(const Position& voxel) const;
+
+		/// Checks the visibility of a given voxel.
+//		bool isVoxelVisible(const Position& voxel) const;
+		/// Checks what type of voxel occupies targetVoxel.
+		VoxelType voxelCheck(
+				const Position& targetVoxel,
+				const BattleUnit* const excludeUnit = NULL,
+				const bool excludeAllUnits = false,
+				const bool onlyVisible = false,
+				const BattleUnit* const excludeAllBut = NULL) const;
+
+		/// Checks the distance between two positions.
+		static int distance(
+				const Position& pos1,
+				const Position& pos2,
+				const bool considerZ = true);
+		/// Checks the distance squared between two positions.
+		static int distanceSqr(
+				const Position& pos1,
+				const Position& pos2,
+				const bool considerZ = true);
+		/// Checks the distance between two positions to double-accuracy.
+//		static double distancePrecise(
+//				const Position& pos1,
+//				const Position& pos2) const;
+
+		/// Gets direction to a target-point.
+		int getDirectionTo(
+				const Position& posOrigin,
+				const Position& posTarget) const;
 
 		/// Sets a tile with a diagonal bigwall as the true epicenter of an explosion.
 		void setTrueTile(Tile* const tile = NULL);
