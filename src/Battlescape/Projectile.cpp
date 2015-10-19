@@ -202,10 +202,7 @@ VoxelType Projectile::calculateShot(
 				|| Options::battleForceFire == false))
 	{
 		if (verifyTarget(originVoxel) == false)
-		{
-//			_trj.clear();
 			return VOXEL_EMPTY;
-		}
 	}
 
 	_trj.clear();
@@ -675,8 +672,7 @@ bool Projectile::verifyTarget(const Position& originVoxel) // private.
 																	false,
 																	&_trj,
 																	_action.actor);
-	if (voxelType != VOXEL_EMPTY
-		&& _trj.empty() == false)
+	if (voxelType != VOXEL_EMPTY && _trj.empty() == false)
 	{
 		Position posTest = Position::toTileSpace(_trj.at(0));
 
@@ -817,7 +813,7 @@ BattleAction* Projectile::getBattleAction()
  */
 Position Projectile::getFinalPosition() const
 {
-	return Position::toTileSpace(_trj.back()); // returning this by const& might be okay due to 'extended temporaries' in C++
+	return Position::toTileSpace(_trj.back());
 }
 
 /**

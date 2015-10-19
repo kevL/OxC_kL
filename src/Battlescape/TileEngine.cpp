@@ -831,7 +831,7 @@ BattleUnit* TileEngine::getTargetUnit(const Tile* const tile) const
 		if (tile->getUnit() != NULL) // warning: Careful not to use this when UnitWalkBState has transient units placed.
 			return tile->getUnit();
 
-		if (tile->hasNoFloor() == true && tile->getPosition().z > 0)
+		if (tile->getPosition().z > 0 && tile->hasNoFloor() == true)
 		{
 			const Tile* const tileBelow = _battleSave->getTile(tile->getPosition() + Position(0,0,-1));
 			if (tileBelow->getUnit() != NULL)
@@ -868,7 +868,7 @@ Position TileEngine::getSightOriginVoxel(const BattleUnit* const unit) const
 }
 
 /**
- * Gets the origin-voxel of a shot or missile.
+ * Gets the origin-voxel of a shot/throw or missile.
  * @param action	- reference the BattleAction
  * @param tile		- pointer to a start tile (default NULL)
  * @return, position of the origin in voxel-space
@@ -2328,8 +2328,8 @@ void TileEngine::explode(
 		* destTile = NULL;
 
 	int // convert voxel-space to tile-space
-		centerX = targetVoxel.x / 16,
-		centerY = targetVoxel.y / 16,
+		centerX = targetVoxel.x >> 4,
+		centerY = targetVoxel.y >> 4,
 		centerZ = targetVoxel.z / 24,
 
 		tileX,
@@ -5002,7 +5002,7 @@ VoxelType TileEngine::plotParabola(
 
 	const double
 		zA = std::sqrt(ro) * arc,
-		zK = (4. * zA) / (ro * ro);
+		zK = 4. * zA / (ro * ro);
 
 	int
 		x = originVoxel.x,
@@ -5084,10 +5084,7 @@ bool TileEngine::validateThrow(
 	{
 		const Tile* const tile = _battleSave->getTile(action.target); // safety Off.
 
-		if (ProjectileFlyBState::validThrowRange(
-											&action,
-											originVoxel,
-											tile) == false)
+		if (ProjectileFlyBState::validThrowRange(&action, originVoxel, tile) == false)
 		{
 			//Log(LOG_INFO) << ". vT() ret FALSE, ThrowRange not valid";
 			return false;
@@ -5105,17 +5102,17 @@ bool TileEngine::validateThrow(
 		}
 	}
 
-	static const double ARC_DELTA = 0.3;
+	static const double ARC_DELTA = 0.1;
 
-//	const Position posTarget = targetVoxel / Position(16,16,24);
 	const Position posTarget = Position::toTileSpace(targetVoxel);
 	double parabolicCoefficient_Low; // higher parabolicCoefficient means higher arc IG. eh ......
 
 	if (posTarget != Position::toTileSpace(originVoxel))
 	{
-		parabolicCoefficient_Low = 0.8;
-		if (action.actor->isKneeled() == true)
-			parabolicCoefficient_Low += ARC_DELTA; // increase the arc reasons.
+		if (action.actor->isKneeled() == false)
+			parabolicCoefficient_Low = 1.; // 8 tiles when standing in a base corridor
+		else
+			parabolicCoefficient_Low = 1.1; // 14 tiles, raise arc when kneeling else range in corridors is too far.
 	}
 	else
 		parabolicCoefficient_Low = 0.;
@@ -5126,7 +5123,7 @@ bool TileEngine::validateThrow(
 	// check for voxelTest up from the lowest arc
 	VoxelType voxelTest;
 
-	while (parabolicCoefficient_Low < 6.)
+	while (parabolicCoefficient_Low < 10.)
 	{
 		//Log(LOG_INFO) << ". . arc[1] = " << parabolicCoefficient_Low;
 		std::vector<Position> trj;
@@ -5155,7 +5152,7 @@ bool TileEngine::validateThrow(
 			parabolicCoefficient_Low += ARC_DELTA;
 	}
 
-	if (parabolicCoefficient_Low >= 6.)
+	if (parabolicCoefficient_Low >= 10.)
 	{
 		//Log(LOG_INFO) << ". vT() ret FALSE, arc > 6";
 		return false;
@@ -5166,7 +5163,7 @@ bool TileEngine::validateThrow(
 		// arc continues rising to find upper limit
 		double parabolicCoefficient_High = parabolicCoefficient_Low;
 
-		while (parabolicCoefficient_High < 6.) // TODO: should use (pC2 < pC+2.0) or so; this just needs to get over the lower limit with some leeway - not 'to the moon'.
+		while (parabolicCoefficient_High < 10.) // TODO: should use (pC2 < pC+2.0) or so; this just needs to get over the lower limit with some leeway - not 'to the moon'.
 		{
 			//Log(LOG_INFO) << ". . arc[2] = " << parabolicCoefficient_High;
 			std::vector<Position> trj;

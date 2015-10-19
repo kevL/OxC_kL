@@ -263,15 +263,14 @@ void ProjectileFlyBState::init()
 	const Tile* const tileTarget = _battleSave->getTile(_action.target);
 	_targetVoxel = Position::toVoxelSpace(_action.target);
 
-	if (_action.type == BA_THROW
-		|| _action.type == BA_LAUNCH)
+	if (_action.type == BA_THROW || _action.type == BA_LAUNCH)
 	{
 		//Log(LOG_INFO) << "projFlyB init() B-Launch OR Throw";
 		_targetVoxel.x += 8;
 		_targetVoxel.y += 8;
 
 		if (_action.type == BA_THROW)
-			_targetVoxel.z -= tileTarget->getTerrainLevel();
+			_targetVoxel.z -= tileTarget->getTerrainLevel() - 2; // LoFT of floor is typically 2 voxels thick.
 		else if (_targetFloor == false)
 			_targetVoxel.z += 16;
 	}
@@ -326,6 +325,7 @@ void ProjectileFlyBState::init()
 				//Log(LOG_INFO) << "projFlyB targetPos[2] = " << _action.target;
 				_targetVoxel.x += 8; // don't shoot yourself but shoot at the floor
 				_targetVoxel.y += 8;
+				_targetVoxel.z += 2;
 				//Log(LOG_INFO) << "projFlyB targetVoxel[2] = " << _targetVoxel;
 			}
 			else
@@ -367,6 +367,7 @@ void ProjectileFlyBState::init()
 													_unit) == false)
 			{
 				_targetVoxel.x += 8;
+				_targetVoxel.y += 2;
 				_targetVoxel.z += 10;
 			}
 		}
@@ -380,6 +381,7 @@ void ProjectileFlyBState::init()
 													&_targetVoxel,
 													_unit) == false)
 			{
+				_targetVoxel.x += 2;
 				_targetVoxel.y += 8;
 				_targetVoxel.z += 10;
 			}
@@ -777,7 +779,7 @@ void ProjectileFlyBState::think()
 			{
 //				_parent->getMap()->resetCameraSmoothing();
 				Position
-					throwVoxel = _parent->getMap()->getProjectile()->getPosition(), // <- beware of 'offset -1'
+					throwVoxel = _parent->getMap()->getProjectile()->getPosition(-1), // <- beware of 'offset -1'
 					pos = Position::toTileSpace(throwVoxel);
 
 				if (pos.x > _battleSave->getMapSizeX()) // note: Bounds-checking is also done better in Projectile::applyAccuracy()
@@ -786,26 +788,26 @@ void ProjectileFlyBState::think()
 				if (pos.y > _battleSave->getMapSizeY())
 					--pos.y;
 
-				BattleItem* const item = _parent->getMap()->getProjectile()->getThrowItem();
-				if (item->getRules()->getBattleType() == BT_GRENADE
-					&& item->getFuse() == 0) //&& Options::battleInstantGrenade == true // -> moved to PrimeGrenadeState (0 cannot be set w/out InstantGrenades)
+				BattleItem* const throwItem = _parent->getMap()->getProjectile()->getThrowItem();
+				if (throwItem->getRules()->getBattleType() == BT_GRENADE
+					&& throwItem->getFuse() == 0) //&& Options::battleInstantGrenade == true // -> moved to PrimeGrenadeState (0 cannot be set w/out InstantGrenades)
 				{
 					_parent->statePushFront(new ExplosionBState( // it's a hot potato set to explode on contact
 															_parent,
 															throwVoxel,
-															item,
+															throwItem,
 															_unit));
 				}
 				else
 				{
-					_parent->dropItem(pos, item);
+					_parent->dropItem(pos, throwItem);
 
 					if (_unit->getFaction() == FACTION_HOSTILE
 						&& _prjItem->getRules()->getBattleType() == BT_GRENADE)
 					{
 						_parent->getTileEngine()->setDangerZone(
 															pos,
-															item->getRules()->getExplosionRadius(),
+															throwItem->getRules()->getExplosionRadius(),
 															_unit);
 					}
 				}
@@ -868,7 +870,8 @@ void ProjectileFlyBState::think()
 					{
 						trjOffset = -2; // step back a bit so tileExpl isn't behind a wall.
 					}
-					else trjOffset = 0;
+					else
+						trjOffset = 0;
 
 					Position explVoxel = _parent->getMap()->getProjectile()->getPosition(trjOffset);
 					const Position pos = Position::toTileSpace(explVoxel);
@@ -1244,16 +1247,15 @@ void ProjectileFlyBState::performMeleeAttack() // private.
 					 + targetUnit->getFloatHeight()
 					 - _battleSave->getTile(_action.target)->getTerrainLevel();
 
-	Position posVoxel;
+	Position hitVoxel;
 	_battleSave->getPathfinding()->directionToVector(
 												_unit->getDirection(),
-												&posVoxel);
-	posVoxel = _action.target * Position(16,16,24)
-			 + Position(8,8, height) - posVoxel;
+												&hitVoxel);
+	hitVoxel = Position::toVoxelSpaceCentered(_action.target, height) - (hitVoxel * 2);
 
 	_parent->statePushNext(new ExplosionBState(
 											_parent,
-											posVoxel,
+											hitVoxel,
 											_action.weapon,
 											_unit,
 											NULL,

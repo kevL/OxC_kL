@@ -1587,7 +1587,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 									originVoxel = _battleSave->getTileEngine()->getOriginVoxel(*action),
 									targetVoxel = Position::toVoxelSpaceCentered( // TODO: conform this to ProjectileFlyBState (modifier keys) & Projectile::_targetVoxel
 																			Position(itX,itY,itZ),
-																			-_battleSave->getTile(action->target)->getTerrainLevel());
+																			-_battleSave->getTile(action->target)->getTerrainLevel() + 2); // LoFT of floor is typically 2 voxels thick.
 								const bool canThrow = _battleSave->getTileEngine()->validateThrow(
 																							*action,
 																							originVoxel,

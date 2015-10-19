@@ -1502,7 +1502,7 @@ items:
     size: 0.5
     costSell: 1000
     weight: 40
-    bigSprite: -1
+    bigSprite: -1 #uh, that might be a terrorist weapon; but it's about to get blown up anyway.
     battleType: 11
     armor: 1 #blow this up easy.
     power: 54 #for Zombie explosions
@@ -1571,7 +1571,7 @@ items:
     costSell: 18000
     battleType: 11
     power: 100 #kL: was 120
-    blastRadius: 6
+    blastRadius: 5
   - type: CYBERDISC_CORPSE_1
     name: STR_CYBERDISC_CORPSE
     floorSprite: 56

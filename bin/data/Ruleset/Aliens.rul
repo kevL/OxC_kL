@@ -2535,7 +2535,6 @@ armors:
     allowInv: false
     corpseBattle:
       - STR_ZOMBIE_CORPSE
-    corpseGeo: STR_ZOMBIE_CORPSE #kL_add. For explosions.
     frontArmor: 5
     sideArmor: 5
     rearArmor: 5

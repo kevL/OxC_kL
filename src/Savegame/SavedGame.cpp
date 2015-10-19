@@ -133,9 +133,9 @@ SavedGame::SavedGame(const Ruleset* const rules)
 //		_detail(true),
 //		_radarLines(false),
 		_monthsPassed(-1),
-		_curRowMatrix(0),		// kL
-		_curGraph(0),			// kL
-//		_curGraphRowCountry(0)	// kL
+		_curRowMatrix(0),
+		_curGraph(0),
+//		_curGraphRowCountry(0),
 //		_selectedBase(0),
 //		_lastselectedArmor("STR_ARMOR_NONE_UC")
 		_debugArgDone(false)

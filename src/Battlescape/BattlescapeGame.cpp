@@ -2414,7 +2414,7 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* const unit) // private.
 									originVoxel (_battleSave->getTileEngine()->getOriginVoxel(ba)),
 									targetVoxel (Position::toVoxelSpaceCentered(
 																			ba.target,
-																			-_battleSave->getTile(ba.target)->getTerrainLevel()));
+																			-_battleSave->getTile(ba.target)->getTerrainLevel() + 2)); // LoFT of floor is typically 2 voxels thick.
 
 								if (_battleSave->getTileEngine()->validateThrow(
 																			ba,

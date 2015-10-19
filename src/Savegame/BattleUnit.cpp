@@ -3131,12 +3131,10 @@ int BattleUnit::getHeight(bool floating) const
 	if (_kneeled == true)
 		return _kneelHeight;
 
-	int ret = _standHeight;
-
 	if (floating == true)
-		ret += _floatHeight;
+		return _standHeight + _floatHeight;
 
-	return ret;
+	return _standHeight;
 }
 
 /**

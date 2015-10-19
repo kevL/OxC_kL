@@ -59,11 +59,11 @@ private:
 		_forceVis,	// true to ensure values are displayed when scrolling buttons
 		_reset;		// true to stop buttons blinking & reset activity
 
-	int _current;
+	int _currentPage;
 
 	size_t
-		_btnCountryOffset,
-		_btnRegionOffset;
+		_btnCountryOffset;
+//		_btnRegionOffset;
 
 	InteractiveSurface
 		* _bg,

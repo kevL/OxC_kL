@@ -18,13 +18,13 @@ items:
     weight: 30
     bigSprite: 106
     floorSprite: 106
-    power: 110
+    power: 80
     invWidth: 2
     invHeight: 2
     recoveryPoints: 5
     battleType: 11
     armor: 26
-    blastRadius: 4
+    blastRadius: 3
     listOrder: 7902
   - type: CYBERMITE_WEAPON
     weight: 3
@@ -324,6 +324,7 @@ units:
     aggression: 0
   - type: STR_CYBERMITE_TERRORIST
     race: STR_CYBERMITE
+    rank: STR_LIVE_TERRORIST
     stats:
       tu: 75
       stamina: 105

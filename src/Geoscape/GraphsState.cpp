@@ -102,9 +102,9 @@ struct GraphBtnInfo
  */
 GraphsState::GraphsState(int curGraph)
 	:
-		_btnRegionOffset(0),
+//		_btnRegionOffset(0),
 		_btnCountryOffset(0),
-		_current(-1),
+		_currentPage(-1),
 		_reset(false),
 		_forceVis(true)
 {
@@ -888,10 +888,9 @@ void GraphsState::btnGeoscapeClick(Action*)
  */
 void GraphsState::btnUfoRegionClick(Action*)
 {
-	if (_current != 0)
+	if (_currentPage != 0)
 	{
-		_current = 0;
-		_game->getSavedGame()->setCurrentGraph(0);
+		_game->getSavedGame()->setCurrentGraph(_currentPage = 0);
 
 		_forceVis =
 
@@ -927,10 +926,9 @@ void GraphsState::btnUfoRegionClick(Action*)
  */
 void GraphsState::btnXcomRegionClick(Action*)
 {
-	if (_current != 1)
+	if (_currentPage != 1)
 	{
-		_current = 1;
-		_game->getSavedGame()->setCurrentGraph(1);
+		_game->getSavedGame()->setCurrentGraph(_currentPage = 1);
 
 		_forceVis = true;
 
@@ -966,10 +964,9 @@ void GraphsState::btnXcomRegionClick(Action*)
  */
 void GraphsState::btnUfoCountryClick(Action*)
 {
-	if (_current != 2)
+	if (_currentPage != 2)
 	{
-		_current = 2;
-		_game->getSavedGame()->setCurrentGraph(2);
+		_game->getSavedGame()->setCurrentGraph(_currentPage = 2);
 
 		_forceVis =
 
@@ -1005,10 +1002,9 @@ void GraphsState::btnUfoCountryClick(Action*)
  */
 void GraphsState::btnXcomCountryClick(Action*)
 {
-	if (_current != 3)
+	if (_currentPage != 3)
 	{
-		_current = 3;
-		_game->getSavedGame()->setCurrentGraph(3);
+		_game->getSavedGame()->setCurrentGraph(_currentPage = 3);
 
 		_forceVis =
 
@@ -1044,10 +1040,9 @@ void GraphsState::btnXcomCountryClick(Action*)
  */
 void GraphsState::btnIncomeClick(Action*)
 {
-	if (_current != 4)
+	if (_currentPage != 4)
 	{
-		_current = 4;
-		_game->getSavedGame()->setCurrentGraph(4);
+		_game->getSavedGame()->setCurrentGraph(_currentPage = 4);
 
 		_income =
 		_country = true;
@@ -1077,10 +1072,9 @@ void GraphsState::btnIncomeClick(Action*)
  */
 void GraphsState::btnFinanceClick(Action*)
 {
-	if (_current != 5)
+	if (_currentPage != 5)
 	{
-		_current = 5;
-		_game->getSavedGame()->setCurrentGraph(5);
+		_game->getSavedGame()->setCurrentGraph(_currentPage = 5);
 
 		_finance = true;
 		_alien =
@@ -1124,7 +1118,7 @@ void GraphsState::btnRegionListClick(Action* action)
 	else
 	{
 		btn = _btnRegions.at(row);
-		id = row + _btnRegionOffset;
+		id = row;// + _btnRegionOffset;
 	}
 
 	_regionToggles.at(id)->_pushed = btn->getPressed();
