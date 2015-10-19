@@ -367,13 +367,13 @@ Globe::Globe(
 	setupRadii(width, height);
 	setZoom(_zoom);
 
-	_randomNoiseData.resize(static_data.random_surf_size * static_data.random_surf_size);
+	_terminatorFluxions.resize(static_data.random_surf_size * static_data.random_surf_size);
 	for (size_t
 			i = 0;
-			i != _randomNoiseData.size();
+			i != _terminatorFluxions.size();
 			++i)
 	{
-		_randomNoiseData[i] = static_cast<Sint16>(RNG::seedless(0,3));
+		_terminatorFluxions[i] = static_cast<Sint16>(RNG::seedless(0,4));
 	}
 
 	cachePolygons();
@@ -1440,7 +1440,7 @@ void Globe::drawShadow()
 										getWidth(),
 										getHeight());
 	ShaderRepeat<Sint16> noise = ShaderRepeat<Sint16>(
-											_randomNoiseData,
+											_terminatorFluxions,
 											static_data.random_surf_size,
 											static_data.random_surf_size);
 

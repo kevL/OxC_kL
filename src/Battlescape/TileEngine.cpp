@@ -5212,8 +5212,8 @@ bool TileEngine::validThrowRange( // static.
 {
 	const int
 		delta_x = action->actor->getPosition().x - action->target.x,
-		delta_y = action->actor->getPosition().y - action->target.y;
-	const double distThrow = std::sqrt(static_cast<double>((delta_x * delta_x) + (delta_y * delta_y)));
+		delta_y = action->actor->getPosition().y - action->target.y,
+		distThrow = static_cast<int>(std::sqrt(static_cast<double>((delta_x * delta_x) + (delta_y * delta_y))));
 
 	int weight = action->weapon->getRules()->getWeight();
 	if (action->weapon->getAmmoItem() != NULL
@@ -5222,21 +5222,21 @@ bool TileEngine::validThrowRange( // static.
 		weight += action->weapon->getAmmoItem()->getRules()->getWeight();
 	}
 
-	const int delta_z = originVoxel.z
-					  - action->target.z * 24 + tile->getTerrainLevel();
-	const double dist = static_cast<double>(
-						getThrowDistance(
-									weight,
-									action->actor->getStrength(),
-									delta_z) + 8) / 16.;
-	return (distThrow < dist);
+	const int
+		delta_z = originVoxel.z // throw up is neg. / throw down is pos.
+				- (action->target.z * 24) + tile->getTerrainLevel(),
+		dist = (getThrowDistance(
+							weight,
+							action->actor->getStrength(),
+							delta_z) + 8) / 16; // round to tile-space.
+	return (distThrow <= dist);
 }
 
 /**
  * Helper for validThrowRange().
  * @param weight	- the weight of the object
  * @param strength	- the strength of the thrower
- * @param elevation	- the difference in height between the thrower and the target (voxel-space)
+ * @param elevation	- the difference in height between the target and the thrower (voxel-space)
  * @return, the maximum throwing range
  */
 int TileEngine::getThrowDistance( // private/static.
@@ -5248,10 +5248,10 @@ int TileEngine::getThrowDistance( // private/static.
 		z = static_cast<double>(elevation) + 0.5,
 		dZ = 1.;
 
-	int retDist = 0;
-	while (retDist < 4000) // jic.
+	int ret = 0;
+	while (ret < 4000) // jic.
 	{
-		retDist += 8;
+		ret += 8;
 
 		if (dZ < -1.)
 			z -= 8.;
@@ -5262,7 +5262,7 @@ int TileEngine::getThrowDistance( // private/static.
 		{
 			dZ = std::max(dZ, -1.);
 			if (std::abs(dZ) > 1e-10) // rollback horizontal
-				retDist -= static_cast<int>(z / dZ);
+				ret -= static_cast<int>(z / dZ);
 
 			break;
 		}
@@ -5272,7 +5272,7 @@ int TileEngine::getThrowDistance( // private/static.
 			break;
 	}
 
-	return retDist;
+	return ret;
 }
 
 /**
