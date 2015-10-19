@@ -3342,7 +3342,7 @@ void GeoscapeState::btnGraphsClick(Action*)
 	kL_soundPop->play(Mix_GroupAvailable(0));
 
 	resetTimer();
-	_game->pushState(new GraphsState(_gameSave->getCurrentGraph()));
+	_game->pushState(new GraphsState());
 }
 
 /**
@@ -3367,8 +3367,6 @@ void GeoscapeState::btnUfopaediaClick(Action*)
  */
 void GeoscapeState::btnOptionsClick(Action*)
 {
-//	_dfStartTimer,
-//	_dfTimer;
 	if (_dfZoomInTimer->isRunning() == false
 		&& _dfZoomOutTimer->isRunning() == false)
 	{

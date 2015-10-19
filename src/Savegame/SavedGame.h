@@ -258,9 +258,7 @@ private:
 		_debugArgDone,
 		_ironman,
 		_warned;
-	int
-		_curGraph,
-		_monthsPassed;
+	int _monthsPassed;
 	size_t
 		_curRowMatrix,
 		_dfZoom,
@@ -541,11 +539,6 @@ private:
 		void setGraphCountryToggles(const std::string& value);
 		/// Sets the GraphFinanceToggles.
 		void setGraphFinanceToggles(const std::string& value);
-
-		/// Sets the current Graph page.
-		void setCurrentGraph(int page);
-		/// Gets the current Graph page.
-		int getCurrentGraph() const;
 
 		/// Increment the month counter.
 		void addMonth();

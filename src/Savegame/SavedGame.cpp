@@ -134,8 +134,6 @@ SavedGame::SavedGame(const Ruleset* const rules)
 //		_radarLines(false),
 		_monthsPassed(-1),
 		_curRowMatrix(0),
-		_curGraph(0),
-//		_curGraphRowCountry(0),
 //		_selectedBase(0),
 //		_lastselectedArmor("STR_ARMOR_NONE_UC")
 		_debugArgDone(false)
@@ -2158,24 +2156,6 @@ void SavedGame::setGraphCountryToggles(const std::string& value)
 void SavedGame::setGraphFinanceToggles(const std::string& value)
 {
 	_graphFinanceToggles = value;
-}
-
-/**
- * Sets the current Graph page.
- * @param page - current page shown by Graphs
- */
-void SavedGame::setCurrentGraph(int page)
-{
-	_curGraph = page;
-}
-
-/**
- * Gets the current Graph page.
- * @return, current page to show in Graphs
- */
-int SavedGame::getCurrentGraph() const
-{
-	return _curGraph;
 }
 
 /**

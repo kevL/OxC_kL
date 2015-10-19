@@ -56,10 +56,9 @@ private:
 		_country,
 		_finance,
 		_income,
+		_init,
 		_forceVis,	// true to ensure values are displayed when scrolling buttons
 		_reset;		// true to stop buttons blinking & reset activity
-
-	int _currentPage;
 
 	size_t
 		_btnCountryOffset;
@@ -167,7 +166,7 @@ private:
 
 	public:
 		/// Creates the Graphs state.
-		explicit GraphsState(int curGraph = 0);
+		GraphsState();
 		/// Cleans up the Graphs state.
 		~GraphsState();
 

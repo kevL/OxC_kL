@@ -55,6 +55,7 @@ namespace OpenXcom
 {
 
 static size_t recallRow = 0;
+static int currentPage = -1;
 
 
 /**
@@ -98,13 +99,12 @@ struct GraphBtnInfo
 
 /**
  * Initializes all the elements in the Graphs screen.
- * @param curGraph - the graph that was last selected (default 0)
  */
-GraphsState::GraphsState(int curGraph)
+GraphsState::GraphsState()
 	:
 //		_btnRegionOffset(0),
 		_btnCountryOffset(0),
-		_currentPage(-1),
+		_init(true),
 		_reset(false),
 		_forceVis(true)
 {
@@ -687,17 +687,15 @@ GraphsState::GraphsState(int curGraph)
 
 	initButtons();
 
-	switch (curGraph)
+	switch (currentPage)
 	{
+		default:
 		case 0: btnUfoRegionClick(NULL);	break;
 		case 1: btnXcomRegionClick(NULL);	break;
 		case 2: btnUfoCountryClick(NULL);	break;
 		case 3: btnXcomCountryClick(NULL);	break;
 		case 4: btnIncomeClick(NULL);		break;
-		case 5: btnFinanceClick(NULL);		break;
-
-		default:
-			btnUfoRegionClick(NULL);
+		case 5: btnFinanceClick(NULL);
 	}
 }
 
@@ -888,9 +886,10 @@ void GraphsState::btnGeoscapeClick(Action*)
  */
 void GraphsState::btnUfoRegionClick(Action*)
 {
-	if (_currentPage != 0)
+	if (currentPage != 0 || _init == true)
 	{
-		_game->getSavedGame()->setCurrentGraph(_currentPage = 0);
+		_init = false;
+		currentPage = 0;
 
 		_forceVis =
 
@@ -926,9 +925,10 @@ void GraphsState::btnUfoRegionClick(Action*)
  */
 void GraphsState::btnXcomRegionClick(Action*)
 {
-	if (_currentPage != 1)
+	if (currentPage != 1 || _init == true)
 	{
-		_game->getSavedGame()->setCurrentGraph(_currentPage = 1);
+		_init = false;
+		currentPage = 1;
 
 		_forceVis = true;
 
@@ -964,9 +964,10 @@ void GraphsState::btnXcomRegionClick(Action*)
  */
 void GraphsState::btnUfoCountryClick(Action*)
 {
-	if (_currentPage != 2)
+	if (currentPage != 2 || _init == true)
 	{
-		_game->getSavedGame()->setCurrentGraph(_currentPage = 2);
+		_init = false;
+		currentPage = 2;
 
 		_forceVis =
 
@@ -1002,9 +1003,10 @@ void GraphsState::btnUfoCountryClick(Action*)
  */
 void GraphsState::btnXcomCountryClick(Action*)
 {
-	if (_currentPage != 3)
+	if (currentPage != 3 || _init == true)
 	{
-		_game->getSavedGame()->setCurrentGraph(_currentPage = 3);
+		_init = false;
+		currentPage = 3;
 
 		_forceVis =
 
@@ -1040,9 +1042,10 @@ void GraphsState::btnXcomCountryClick(Action*)
  */
 void GraphsState::btnIncomeClick(Action*)
 {
-	if (_currentPage != 4)
+	if (currentPage != 4 || _init == true)
 	{
-		_game->getSavedGame()->setCurrentGraph(_currentPage = 4);
+		_init = false;
+		currentPage = 4;
 
 		_income =
 		_country = true;
@@ -1072,9 +1075,10 @@ void GraphsState::btnIncomeClick(Action*)
  */
 void GraphsState::btnFinanceClick(Action*)
 {
-	if (_currentPage != 5)
+	if (currentPage != 5 || _init == true)
 	{
-		_game->getSavedGame()->setCurrentGraph(_currentPage = 5);
+		_init = false;
+		currentPage = 5;
 
 		_finance = true;
 		_alien =
