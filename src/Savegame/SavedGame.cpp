@@ -130,13 +130,12 @@ SavedGame::SavedGame(const Ruleset* const rules)
 		_battleSave(NULL),
 		_debug(false),
 		_warned(false),
+		_monthsPassed(-1),
+		_debugArgDone(false)
 //		_detail(true),
 //		_radarLines(false),
-		_monthsPassed(-1),
-		_curRowMatrix(0),
 //		_selectedBase(0),
 //		_lastselectedArmor("STR_ARMOR_NONE_UC")
-		_debugArgDone(false)
 {
 //	_time = new GameTime(6,1,1,1999,12,0,0);
 	_time = new GameTime(1,1,1999,12,0,0);
@@ -2285,24 +2284,6 @@ std::string SavedGame::getRecallArmor()
 {
 	return _lastselectedArmor;
 } */
-
-/**
- * Sets the current matrix row.
- * @param row - current matrix row
- */
-void SavedGame::setCurrentRowMatrix(size_t row)
-{
-	_curRowMatrix = row;
-}
-
-/**
- * Gets the current matrix row.
- * @return, current matrix row
- */
-size_t SavedGame::getCurrentRowMatrix() const
-{
-	return _curRowMatrix;
-}
 
 /**
  * Sets a debug argument from Globe for GeoscapeState.

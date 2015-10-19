@@ -260,7 +260,6 @@ private:
 		_warned;
 	int _monthsPassed;
 	size_t
-		_curRowMatrix,
 		_dfZoom,
 		_globeZoom;
 //		_selectedBase;
@@ -571,11 +570,6 @@ private:
 //		void setRecallArmor(const std::string& value);
 		/// Gets the last selected armour
 //		std::string getRecallArmor();
-
-		/// Sets the current Matrix row.
-		void setCurrentRowMatrix(size_t row);
-		/// Gets the current Matrix row.
-		size_t getCurrentRowMatrix() const;
 
 		/// Sets a debug argument to GeoscapeState.
 		void setDebugArg(const std::string& debug);

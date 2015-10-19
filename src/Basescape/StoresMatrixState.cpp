@@ -48,6 +48,9 @@
 namespace OpenXcom
 {
 
+static size_t recallRow;
+
+
 /**
  * Initializes all the elements in the Matrix window.
  * @param base - pointer to the accessing Base
@@ -410,7 +413,7 @@ StoresMatrixState::StoresMatrixState(const Base* base)
 		}
 	}
 
-	_lstMatrix->scrollTo(gameSave->getCurrentRowMatrix());
+	_lstMatrix->scrollTo(recallRow);
 //	_lstMatrix->draw(); // only needed if list changes while state is active. Eg, on re-inits
 }
 
@@ -426,7 +429,7 @@ StoresMatrixState::~StoresMatrixState()
  */
 void StoresMatrixState::btnOkClick(Action*)
 {
-	_game->getSavedGame()->setCurrentRowMatrix(_lstMatrix->getScroll());
+	recallRow = _lstMatrix->getScroll();
 	_game->popState();
 }
 
