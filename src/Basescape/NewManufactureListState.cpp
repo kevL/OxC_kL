@@ -105,7 +105,7 @@ NewManufactureListState::NewManufactureListState(
 	_btnCostTable->setText(tr("STR_PRODUCTION_COSTS"));
 	_btnCostTable->onMouseClick((ActionHandler)& NewManufactureListState::btnCostsClick);
 
-	_btnCancel->setText(tr("STR_CANCEL"));
+	_btnCancel->setText(tr("STR_OK"));
 	_btnCancel->onMouseClick((ActionHandler)& NewManufactureListState::btnCancelClick);
 	_btnCancel->onKeyboardPress(
 					(ActionHandler)& NewManufactureListState::btnCancelClick,

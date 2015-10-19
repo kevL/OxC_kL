@@ -4855,7 +4855,7 @@
 1442664635 f:\git\openxcom\src\basescape\manufacturestartstate.h
 	"../Engine/State.h"
 
-1445016920 source:f:\git\openxcom\src\basescape\manufacturestate.cpp
+1445278458 source:f:\git\openxcom\src\basescape\manufacturestate.cpp
 	"ManufactureState.h"
 	"BasescapeState.h"
 	"ManufactureInfoState.h"
@@ -4921,7 +4921,7 @@
 	"../Savegame/Base.h"
 	"../Savegame/SavedGame.h"
 
-1445016908 source:f:\git\openxcom\src\basescape\newmanufactureliststate.cpp
+1445278348 source:f:\git\openxcom\src\basescape\newmanufactureliststate.cpp
 	"NewManufactureListState.h"
 	"ManufactureCostsState.h"
 	"ManufactureStartState.h"
@@ -7089,9 +7089,9 @@
 
 1440252809 f:\git\openxcom\src\ruleset\ufotrajectory.h
 
-1440173244 f:\git\openxcom\src\ufopaedia\ufopaedia.h
+1445281504 f:\git\openxcom\src\ufopaedia\ufopaedia.h
 
-1444728612 source:f:\git\openxcom\src\geoscape\globe.cpp
+1445262910 source:f:\git\openxcom\src\geoscape\globe.cpp
 	"Globe.h"
 	"GeoscapeState.h"
 	"../Engine/Action.h"
@@ -7321,7 +7321,7 @@
 	"../Ruleset/RuleResearch.h"
 	"../Ufopaedia/Ufopaedia.h"
 
-1440185748 f:\git\openxcom\src\ruleset\articledefinition.h
+1445282481 f:\git\openxcom\src\ruleset\articledefinition.h
 
 1443830519 source:f:\git\openxcom\src\geoscape\researchrequiredstate.cpp
 	"ResearchRequiredState.h"
@@ -8219,17 +8219,17 @@
 	"Armor.h"
 	"../Savegame/Soldier.h"
 
-1440203480 source:f:\git\openxcom\src\ruleset\articledefinition.cpp
+1445283396 source:f:\git\openxcom\src\ruleset\articledefinition.cpp
 	"ArticleDefinition.h"
 
 1425905405 source:f:\git\openxcom\src\ruleset\city.cpp
 	"City.h"
 	"../Engine/Language.h"
 
-1444684377 source:f:\git\openxcom\src\ruleset\extrasounds.cpp
+1445283260 source:f:\git\openxcom\src\ruleset\extrasounds.cpp
 	"ExtraSounds.h"
 
-1444684354 source:f:\git\openxcom\src\ruleset\extrasprites.cpp
+1445283255 source:f:\git\openxcom\src\ruleset\extrasprites.cpp
 	"ExtraSprites.h"
 
 1444684396 source:f:\git\openxcom\src\ruleset\extrastrings.cpp
@@ -8290,7 +8290,7 @@
 1444220981 source:f:\git\openxcom\src\ruleset\ruleresearch.cpp
 	"RuleResearch.h"
 
-1444740225 source:f:\git\openxcom\src\ruleset\ruleset.cpp
+1445283731 source:f:\git\openxcom\src\ruleset\ruleset.cpp
 	"Ruleset.h"
 	"AlienRace.h"
 	"AlienDeployment.h"
@@ -8782,7 +8782,7 @@
 	"../Ruleset/Ruleset.h"
 	"../Ruleset/RuleUnit.h"
 
-1442377225 source:f:\git\openxcom\src\ufopaedia\ufopaedia.cpp
+1445282041 source:f:\git\openxcom\src\ufopaedia\ufopaedia.cpp
 	"Ufopaedia.h"
 	"ArticleState.h"
 	"ArticleStateArmor.h"

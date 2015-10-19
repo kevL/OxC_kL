@@ -71,47 +71,47 @@ class Ufopaedia
 {
 
 protected:
-	/// current selected article index (for prev/next navigation).
+	/// Current selected article index (for prev/next navigation).
 	static int _current_index;
 
-	/// get index of the given article id in the visible list.
+	/// Gets index of the given article id in the visible list.
 	static int getArticleIndex(
 			const SavedGame* const gameSave,
 			const Ruleset* const rules,
 			std::string& article_id);
-	/// get list of researched articles
+	/// Gets list of researched articles
 	static ArticleDefinitionList getAvailableArticles(
 			const SavedGame* const gameSave,
 			const Ruleset* const rules);
-	/// create a new state object from article definition.
+	/// Creates a new state object from article definition.
 	static ArticleState* createArticleState(ArticleDefinition* const article);
 
 
 	public:
-		/// check if a specific article is currently available.
+		/// Checks if a specific article is currently available.
 		static bool isArticleAvailable(
 				const SavedGame* const gameSave,
 				const ArticleDefinition* const article);
-		/// open Ufopaedia on a certain entry.
+		/// Opens Ufopaedia on a certain entry.
 		static void openArticle(
 				Game* const game,
 				std::string& article_id);
-		/// open Ufopaedia article from a given article definition.
+		/// Opens Ufopaedia article from a given article definition.
 		static void openArticle(
 				Game* const game,
 				ArticleDefinition* article);
 
-		/// open Ufopaedia with selection dialog.
+		/// Opens Ufopaedia with selection dialog.
 		static void open(
 				Game* const game,
 				bool tactical = false);
 
-		/// article navigation to next article.
+		/// Article navigation to next article.
 		static void next(Game* const game);
-		/// article navigation to previous article.
+		/// Article navigation to previous article.
 		static void prev(Game* const game);
 
-		/// load a vector with article ids that are currently visible of a given section.
+		/// Loads a vector with article ids that are currently visible of a given section.
 		static void list(
 				const SavedGame* const gameSave,
 				const Ruleset* const rules,

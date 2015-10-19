@@ -51,13 +51,14 @@ void ExtraSprites::load(
 		const YAML::Node& node,
 		int modIndex)
 {
+	_modIndex		= modIndex;
+
 	_sprites		= node["files"]			.as< std::map<int, std::string> >(_sprites);
 	_width			= node["width"]			.as<int>(_width);
 	_height			= node["height"]		.as<int>(_height);
 	_singleImage	= node["singleImage"]	.as<bool>(_singleImage);
 	_subX			= node["subX"]			.as<int>(_subX);
 	_subY			= node["subY"]			.as<int>(_subY);
-	_modIndex		= modIndex;
 }
 
 /**

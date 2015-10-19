@@ -220,15 +220,15 @@ void ManufactureState::fillProductionList()
 			woststr3,
 			woststr4;
 
-		woststr0 << tr((*i)->getRules()->getType());
 		if ((*i)->getSellItems() == true)
 		{
-			std::streamsize strSize = woststr0.tellp();
-			woststr0.str(L"$" + woststr0.str());
-			woststr0.seekp(strSize + 1); // lolc++
+//			std::streamsize strSize = woststr0.tellp();
+//			woststr0.str(L"$" + woststr0.str());
+//			woststr0.seekp(strSize + 1); // lolc++
 
-			woststr0 << L"$";
+			woststr0 << L"$ ";
 		}
+		woststr0 << tr((*i)->getRules()->getType());
 
 		woststr1 << (*i)->getAssignedEngineers();
 

@@ -47,19 +47,6 @@ int Ufopaedia::_current_index = 0; // static.
 
 
 /**
- * Checks if an article has already been released.
- * @param gameSave	- pointer to SavedGame
- * @param article	- ArticleDefinition to release
- * @return, true if the article is available
- */
-bool Ufopaedia::isArticleAvailable( // static.
-		const SavedGame* const gameSave,
-		const ArticleDefinition* const article)
-{
-	return gameSave->isResearched(article->requires);
-}
-
-/**
  * Gets the index of the selected article_id in the visible list.
  * @param gameSave		- pointer to SavedGame
  * @param rules			- pointer to Ruleset
@@ -72,7 +59,7 @@ int Ufopaedia::getArticleIndex( // protected/static.
 		std::string& article_id)
 {
 	const ArticleDefinitionList articles = getAvailableArticles(gameSave, rules);
-	const std::string UC_Id = article_id + "_UC";
+	const std::string Id_UC = article_id + "_UC";
 
 	for (size_t
 			i = 0;
@@ -94,14 +81,43 @@ int Ufopaedia::getArticleIndex( // protected/static.
 		if (articles[i]->id == article_id)
 			return i;
 
-		if (articles[i]->id == UC_Id)
+		if (articles[i]->id == Id_UC)
 		{
-			article_id = UC_Id;
+			article_id = Id_UC;
 			return i;
 		}
 	}
 
 	return -1;
+}
+
+/**
+ * Returns an ArticleList with all the currently visible ArticleIds.
+ * @param gameSave	- pointer to SavedGame
+ * @param rules		- pointer to Ruleset
+ * @return, ArticleDefinitionList of visible articles
+ */
+ArticleDefinitionList Ufopaedia::getAvailableArticles( // protected/static.
+		const SavedGame* const gameSave,
+		const Ruleset* const rules)
+{
+	const std::vector<std::string>& pedList = rules->getUfopaediaList();
+	ArticleDefinitionList articles;
+
+	for (std::vector<std::string>::const_iterator
+			i = pedList.begin();
+			i != pedList.end();
+			++i)
+	{
+		ArticleDefinition* const article = rules->getUfopaediaArticle(*i);
+		if (article->section != UFOPAEDIA_NOT_AVAILABLE
+			&& isArticleAvailable(gameSave, article) == true)
+		{
+			articles.push_back(article);
+		}
+	}
+
+	return articles;
 }
 
 /**
@@ -148,7 +164,20 @@ ArticleState* Ufopaedia::createArticleState(ArticleDefinition* const article) //
 }
 
 /**
- * Set UPSaved index and open the new state.
+ * Checks if an article has already been released.
+ * @param gameSave	- pointer to SavedGame
+ * @param article	- ArticleDefinition to release
+ * @return, true if the article is available
+ */
+bool Ufopaedia::isArticleAvailable( // static.
+		const SavedGame* const gameSave,
+		const ArticleDefinition* const article)
+{
+	return gameSave->isResearched(article->requires);
+}
+
+/**
+ * Sets UPSaved index and opens the new state.
  * @param game		- pointer to actual Game
  * @param article	- pointer to ArticleDefinition of the article to open
  */
@@ -185,7 +214,7 @@ void Ufopaedia::openArticle( // static.
 }
 
 /**
- * Open Ufopaedia start state, presenting the section selection buttons.
+ * Opens Ufopaedia start state presenting the section selection buttons.
  * @param game		- pointer to the Game
  * @param tactical	- true if opening Ufopaedia from battlescape (default false)
  */
@@ -197,7 +226,7 @@ void Ufopaedia::open( // static.
 }
 
 /**
- * Open the next article in the list. Loops to the first.
+ * Opens the next article in the list or loops to the first.
  * @param game - pointer to actual Game
  */
 void Ufopaedia::next(Game* const game) // static.
@@ -215,7 +244,7 @@ void Ufopaedia::next(Game* const game) // static.
 }
 
 /**
- * Open the previous article in the list. Loops to the last.
+ * Opens the previous article in the list or loops to the last.
  * @param game - pointer to actual Game
  */
 void Ufopaedia::prev(Game* const game) // static.
@@ -233,7 +262,7 @@ void Ufopaedia::prev(Game* const game) // static.
 }
 
 /**
- * Fill an ArticleList with the currently visible ArticleIds of the given section.
+ * Fills an ArticleList with the currently visible ArticleIds of the given section.
  * @param gameSave	- pointer to SavedGame
  * @param rules		- pointer to Ruleset
  * @param section	- reference the article section to find, e.g. "XCOM Crafts & Armaments", "Alien Lifeforms", etc.
@@ -254,35 +283,6 @@ void Ufopaedia::list( // static.
 		if ((*i)->section == section)
 			data.push_back(*i);
 	}
-}
-
-/**
- * Return an ArticleList with all the currently visible ArticleIds.
- * @param gameSave	- pointer to SavedGame
- * @param rules		- pointer to Ruleset
- * @return, ArticleDefinitionList of visible articles
- */
-ArticleDefinitionList Ufopaedia::getAvailableArticles( // protected/static.
-		const SavedGame* const gameSave,
-		const Ruleset* const rules)
-{
-	const std::vector<std::string>& pedList = rules->getUfopaediaList();
-	ArticleDefinitionList articles;
-
-	for (std::vector<std::string>::const_iterator
-			i = pedList.begin();
-			i != pedList.end();
-			++i)
-	{
-		ArticleDefinition* const article = rules->getUfopaediaArticle(*i);
-		if (article->section != UFOPAEDIA_NOT_AVAILABLE
-			&& isArticleAvailable(gameSave, article) == true)
-		{
-			articles.push_back(article);
-		}
-	}
-
-	return articles;
 }
 
 }

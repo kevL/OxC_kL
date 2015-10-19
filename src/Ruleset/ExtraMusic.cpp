@@ -46,6 +46,8 @@ void ExtraMusic::load(
 		const YAML::Node& node,
 		int modIndex)
 {
+	_modIndex = modIndex;
+
 	_media = node["media"].as<std::string>(_media);
 
 	if (node["overrides"])
@@ -55,7 +57,6 @@ void ExtraMusic::load(
 		_extends = node["extends"].as<std::string>(_extends);
 
 	_terrains = node["terrain"].as<std::vector<std::string> >(_terrains);
-	_modIndex = modIndex;
 }
 
 /**

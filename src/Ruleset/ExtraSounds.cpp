@@ -46,8 +46,9 @@ void ExtraSounds::load(
 		const YAML::Node& node,
 		int modIndex)
 {
-	_sounds = node["files"].as<std::map<int, std::string> >(_sounds);
 	_modIndex = modIndex;
+
+	_sounds = node["files"].as<std::map<int, std::string> >(_sounds);
 }
 
 /**

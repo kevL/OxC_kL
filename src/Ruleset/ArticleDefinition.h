@@ -56,7 +56,6 @@ class ArticleDefinition
 private:
 	int _listOrder;
 
-
 	protected:
 		UfopaediaTypeId _type_id;
 

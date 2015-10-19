@@ -75,7 +75,7 @@ ufopaedia:
     section: STR_XCOM_CRAFT_ARMAMENT
     image_id: HAWKEYE_BIG
     text: STR_HAWKEYE_UFOPEDIA
-    listOrder: 407
+    listOrder: 507
     rect_stats:
       x: 180
       y: 134
@@ -91,7 +91,7 @@ ufopaedia:
     section: STR_XCOM_CRAFT_ARMAMENT
     image_id: AWACS_BIG
     text: STR_AWACS_UFOPEDIA
-    listOrder: 408
+    listOrder: 508
     rect_stats:
       x: 190
       y: 10
@@ -107,7 +107,7 @@ ufopaedia:
     section: STR_XCOM_CRAFT_ARMAMENT
     image_id: DARKSTAR_BIG
     text: STR_DARKSTAR_UFOPEDIA
-    listOrder: 409
+    listOrder: 509
     requires:
       - STR_UNMANNED_AIRCRAFT
     rect_stats:

@@ -104,8 +104,8 @@ void ArticleDefinition::load(
 //	_type_id	= (UfopaediaTypeId)node["type_id"].as<int>(_type_id); // This got set in the cTor.
 
 	_listOrder = node["listOrder"].as<int>(_listOrder);
-	if (_listOrder == 0)
-		_listOrder = listOrder;
+	if (_listOrder == 0)		// if there's no defined listorder
+		_listOrder = listOrder;	// use the one generated in Ruleset::loadFile()
 
 	//Log(LOG_INFO) << "load " << id << " - " << _listOrder; // Prints listOrder to LOG.
 }
