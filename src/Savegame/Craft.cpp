@@ -263,7 +263,7 @@ void Craft::load(
 					++i)
 			{
 				if ((*i)->getId() == id
-					&& (*i)->getDeployment()->getMarkerId() == type)
+					&& (*i)->getSiteDeployment()->getMarkerId() == type)
 				{
 					setDestination(*i);
 					break;

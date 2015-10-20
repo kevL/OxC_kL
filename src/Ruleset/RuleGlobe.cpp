@@ -269,7 +269,8 @@ RuleTexture* RuleGlobe::getTextureRule(int id) const
 
 /**
  * Returns a list of all globe terrains associated with a specific AlienDeployment.
- * @note If a blank string is passed in then terrains that are not associated with any AlienDeployment are returned.
+ * @note If a blank string is passed in then terrains that are not associated
+ * with any AlienDeployment are returned.
  * @param deployType - reference the deployment name (eg. "STR_TERROR_MISSION") (default "" for now ...)
  * @return, vector of terrain-types as strings
  */
@@ -282,13 +283,12 @@ std::vector<std::string> RuleGlobe::getGlobeTerrains(const std::string& deployTy
 			i != _textures.end();
 			++i)
 	{
-		if ((deployType.empty() == true
-				&& i->second->getTextureDeployments().empty() == true)
+		if ((deployType.empty() == true && i->second->getTextureDeployments().empty() == true)
 			|| i->second->getTextureDeployments().find(deployType) != i->second->getTextureDeployments().end())
 		{
-			for (std::vector<TerrainCriteria>::const_iterator
-					j = i->second->getTerrainCriteria()->begin();
-					j != i->second->getTerrainCriteria()->end();
+			for (std::vector<TextureDetail>::const_iterator
+					j = i->second->getTextureDetail()->begin();
+					j != i->second->getTextureDetail()->end();
 					++j)
 			{
 				terrains.push_back(j->type);

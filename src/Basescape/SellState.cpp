@@ -148,8 +148,8 @@ SellState::SellState(Base* const base)
 	_txtItem->setText(tr("STR_ITEM"));
 
 	_txtStorage->setVisible(Options::storageLimitsEnforced);
-	_txtStorage->setColor(WHITE);
 	_txtStorage->setAlign(ALIGN_RIGHT);
+	_txtStorage->setColor(WHITE);
 	std::wostringstream woststr;
 	woststr << _base->getAvailableStores() << L":" << std::fixed << std::setprecision(1) << _base->getUsedStores();
 	_txtStorage->setText(woststr.str());

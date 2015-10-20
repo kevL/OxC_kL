@@ -123,7 +123,7 @@ void RuleRegion::load(const YAML::Node& node)
 			area.latMax = city->getLatitude();
 
 			area.site = city->getName();
-			area.texture = city->getTextureInt();
+			area.texture = city->getTextureId();
 
 			_missionZones.at(MZ_CITY).areas.push_back(area);
 		}
@@ -200,7 +200,7 @@ bool RuleRegion::insideRegion(
  */
 std::vector<RuleCity*>* RuleRegion::getCities()
 {
-	if (_cities.empty() == true) // kL_note: unused for now. Just return the cities, thanks anyway.
+/*	if (_cities.empty() == true) // kL_note: unused for now. Just return the cities, thanks anyway.
 		for (std::vector<MissionZone>::const_iterator
 				i = _missionZones.begin();
 				i != _missionZones.end();
@@ -213,7 +213,7 @@ std::vector<RuleCity*>* RuleRegion::getCities()
 					_cities.push_back(new RuleCity(
 												j->site,
 												j->lonMin,
-												j->latMin));
+												j->latMin)); */
 	return &_cities;
 }
 

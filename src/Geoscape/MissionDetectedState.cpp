@@ -43,15 +43,15 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Mission Detected window.
- * @param mission	- pointer to the respective Mission Site
- * @param state		- pointer to GeoscapeState
+ * @param site	- pointer to the respective Mission Site
+ * @param geo	- pointer to GeoscapeState
  */
 MissionDetectedState::MissionDetectedState(
-		const MissionSite* const mission,
-		GeoscapeState* const state)
+		const MissionSite* const site,
+		GeoscapeState* const geo)
 	:
-		_mission(mission),
-		_state(state)
+		_site(site),
+		_geo(geo)
 {
 	_screen = false;
 
@@ -99,13 +99,13 @@ MissionDetectedState::MissionDetectedState(
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setWordWrap();
-	_txtTitle->setText(tr(mission->getDeployment()->getAlertMessage()));
+	_txtTitle->setText(tr(_site->getSiteDeployment()->getAlertMessage()));
 
 	_txtCity->setBig();
 	_txtCity->setAlign(ALIGN_CENTER);
-	_txtCity->setText(tr(mission->getCity()));
+	_txtCity->setText(tr(_site->getCity()));
 
-	_state->resetTimer();
+	_geo->resetTimer();
 
 	_game->getResourcePack()->fadeMusic(_game, 325);
 	_game->getResourcePack()->playMusic(res_MUSIC_GEO_TERROR_SPLASH);
@@ -127,7 +127,7 @@ MissionDetectedState::~MissionDetectedState()
 void MissionDetectedState::btnInterceptClick(Action*)
 {
 	_game->popState();
-	_game->pushState(new InterceptState(NULL, _state));
+	_game->pushState(new InterceptState(NULL, _geo));
 }
 
 /**
@@ -136,9 +136,9 @@ void MissionDetectedState::btnInterceptClick(Action*)
  */
 void MissionDetectedState::btnCenterClick(Action*)
 {
-	_state->getGlobe()->center(
-							_mission->getLongitude(),
-							_mission->getLatitude());
+	_geo->getGlobe()->center(
+						_site->getLongitude(),
+						_site->getLatitude());
 	_game->popState();
 }
 

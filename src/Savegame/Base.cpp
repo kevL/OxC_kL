@@ -686,7 +686,7 @@ int Base::getTotalScientists() const
 			i != research.end();
 			++i)
 	{
-		total += (*i)->getAssigned();
+		total += (*i)->getAssignedScientists();
 	}
 
 	return total;
@@ -932,7 +932,7 @@ int Base::getUsedLaboratories() const
 			i != research.end();
 			++i)
 	{
-		total += (*i)->getAssigned();
+		total += (*i)->getAssignedScientists();
 	}
 
 	return total;
@@ -1083,7 +1083,7 @@ int Base::getAllocatedScientists() const
 			i != research.end();
 			++i)
 	{
-		total += (*i)->getAssigned();
+		total += (*i)->getAssignedScientists();
 	}
 
 	return total;
@@ -1467,7 +1467,7 @@ void Base::removeResearch(
 		bool grantHelp,
 		bool goOffline)
 {
-	_scientists += project->getAssigned();
+	_scientists += project->getAssignedScientists();
 
 	std::vector<ResearchProject*>::const_iterator i (std::find(
 															_research.begin(),
@@ -1477,7 +1477,7 @@ void Base::removeResearch(
 	{
 		if (goOffline == true)
 		{
-			project->setAssigned(0);
+			project->setAssignedScientists(0);
 			project->setOffline();
 		}
 		else
@@ -2692,17 +2692,17 @@ void Base::destroyFacility(std::vector<BaseFacility*>::const_iterator pFac)
 					&& qty > 0;
 				)
 		{
-			if ((*i)->getAssigned() >= qty)
+			if ((*i)->getAssignedScientists() >= qty)
 			{
-				(*i)->setAssigned((*i)->getAssigned() - qty);
+				(*i)->setAssignedScientists((*i)->getAssignedScientists() - qty);
 				_scientists += qty;
 				break;
 			}
 			else
 			{
-				qty -= (*i)->getAssigned();
-				_scientists += (*i)->getAssigned();
-				(*i)->setAssigned(0);
+				qty -= (*i)->getAssignedScientists();
+				_scientists += (*i)->getAssignedScientists();
+				(*i)->setAssignedScientists(0);
 				++i;
 //				delete *i;
 //				i = _research.erase(i);

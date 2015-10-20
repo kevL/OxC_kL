@@ -30,7 +30,7 @@
 namespace OpenXcom
 {
 
-struct TerrainCriteria
+struct TextureDetail
 {
 	std::string type;
 	int weight;
@@ -40,7 +40,7 @@ struct TerrainCriteria
 		latMin,
 		latMax;
 
-	TerrainCriteria()
+	TextureDetail()
 		:
 			weight(10),
 			lonMin(0.),
@@ -63,7 +63,7 @@ class RuleTexture
 private:
 	int _id;
 	std::map<std::string, int> _deployTypes;
-	std::vector<TerrainCriteria> _terrains;
+	std::vector<TextureDetail> _details;
 
 	public:
 		/// Creates a new texture with mission data.
@@ -75,16 +75,16 @@ private:
 		void load(const YAML::Node& node);
 
 		/// Gets the list of terrain criteria.
-		std::vector<TerrainCriteria>* getTerrainCriteria();
+		std::vector<TextureDetail>* getTextureDetail();
 
 		/// Gets the alien deployments for this Texture.
 		const std::map<std::string, int>& getTextureDeployments();
 
 		/// Gets a random deployment.
-		std::string getRandomDeployment() const;
+		std::string getTextureDeployment() const;
 
 		/// Gets a randomly textured terrain-type for a given target.
-		std::string getRandomTerrain(const Target* const target = NULL) const;
+		std::string getTextureTerrain(const Target* const target = NULL) const;
 };
 
 }
@@ -94,10 +94,10 @@ namespace YAML
 {
 
 template<>
-struct convert<OpenXcom::TerrainCriteria>
+struct convert<OpenXcom::TextureDetail>
 {
 	///
-	static Node encode(const OpenXcom::TerrainCriteria& rhs)
+	static Node encode(const OpenXcom::TextureDetail& rhs)
 	{
 		Node node;
 
@@ -118,7 +118,7 @@ struct convert<OpenXcom::TerrainCriteria>
 	///
 	static bool decode(
 			const Node& node,
-			OpenXcom::TerrainCriteria& rhs)
+			OpenXcom::TextureDetail& rhs)
 	{
 		if (node.IsMap() == false)
 			return false;

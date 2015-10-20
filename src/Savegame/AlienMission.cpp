@@ -310,7 +310,7 @@ void AlienMission::think(
 				if (rules.getDeployment(wave.ufoType) != NULL)
 					deployRule = rules.getDeployment(wave.ufoType);
 				else
-					deployRule = rules.getDeployment(texture->getRandomDeployment());
+					deployRule = rules.getDeployment(texture->getTextureDeployment());
 
 				spawnMissionSite(
 							deployRule,
@@ -711,7 +711,7 @@ void AlienMission::ufoReachedWaypoint(
 															trajectory.getZone(pt),
 															&ufo);
 				const RuleTexture* const texture = rules.getGlobe()->getTextureRule(area.texture);
-				const AlienDeployment* const deployRule = rules.getDeployment(texture->getRandomDeployment());
+				const AlienDeployment* const deployRule = rules.getDeployment(texture->getTextureDeployment());
 				MissionSite* const site = spawnMissionSite(
 														deployRule,
 														area);

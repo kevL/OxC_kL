@@ -162,7 +162,7 @@ void ResearchInfoState::buildUi()
 		}
 	}
 
-	setAssignedScientist();
+	updateInfo();
 
 	_btnMore->onMousePress((ActionHandler)& ResearchInfoState::morePress);
 	_btnMore->onMouseRelease((ActionHandler)& ResearchInfoState::moreRelease);
@@ -250,14 +250,14 @@ void ResearchInfoState::btnCancelClick(Action*)
 /**
  * Updates count of assigned/free scientists and available lab space.
  */
-void ResearchInfoState::setAssignedScientist()
+void ResearchInfoState::updateInfo()
 {
 	_txtAvailableScientist->setText(tr("STR_SCIENTISTS_AVAILABLE_UC_")
 									.arg(_base->getScientists()));
 	_txtAvailableSpace->setText(tr("STR_LABORATORY_SPACE_AVAILABLE_UC_")
 									.arg(_base->getFreeLaboratories()));
 	_txtAllocatedScientist->setText(tr("STR_SCIENTISTS_ALLOCATED_")
-									.arg(_project->getAssigned()));
+									.arg(_project->getAssignedScientists()));
 }
 
 /**
@@ -373,10 +373,10 @@ void ResearchInfoState::moreByValue(int change)
 							std::min(
 									freeScientists,
 									freeSpaceLab));
-			_project->setAssigned(_project->getAssigned() + change);
+			_project->setAssignedScientists(_project->getAssignedScientists() + change);
 			_base->setScientists(_base->getScientists() - change);
 
-			setAssignedScientist();
+			updateInfo();
 		}
 	}
 }
@@ -398,16 +398,16 @@ void ResearchInfoState::lessByValue(int change)
 {
 	if (change > 0)
 	{
-		const int assigned = _project->getAssigned();
+		const int assigned = _project->getAssignedScientists();
 		if (assigned > 0)
 		{
 			change = std::min(
 							change,
 							assigned);
-			_project->setAssigned(assigned - change);
+			_project->setAssignedScientists(assigned - change);
 			_base->setScientists(_base->getScientists() + change);
 
-			setAssignedScientist();
+			updateInfo();
 		}
 	}
 }

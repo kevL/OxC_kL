@@ -2206,7 +2206,7 @@ bool GeoscapeState::processMissionSite(MissionSite* const site) const
 		expired = false;
 		site->setSecondsLeft(site->getSecondsLeft() - 1800);
 
-		basicPts = site->getDeployment()->getPointsPer30(); // AlienDeployments pts have priority over RuleAlienMission pts
+		basicPts = site->getSiteDeployment()->getPointsPer30(); // AlienDeployments pts have priority over RuleAlienMission pts
 		if (basicPts == 0)
 			basicPts = site->getRules()->getPoints() / 10;
 
@@ -2216,7 +2216,7 @@ bool GeoscapeState::processMissionSite(MissionSite* const site) const
 	{
 		expired = true;
 
-		basicPts = site->getDeployment()->getDespawnPenalty(); // AlienDeployments pts have priority over RuleAlienMission pts
+		basicPts = site->getSiteDeployment()->getDespawnPenalty(); // AlienDeployments pts have priority over RuleAlienMission pts
 		if (basicPts == 0)
 			basicPts = site->getRules()->getPoints() * 5;
 

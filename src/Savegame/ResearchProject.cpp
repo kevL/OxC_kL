@@ -81,7 +81,7 @@ const RuleResearch* ResearchProject::getRules() const
  * Changes the number of scientists to this ResearchProject.
  * @param qty - quantity of scientists assigned
  */
-void ResearchProject::setAssigned(const int qty)
+void ResearchProject::setAssignedScientists(const int qty)
 {
 	_assigned = qty;
 }
@@ -90,7 +90,7 @@ void ResearchProject::setAssigned(const int qty)
  * Returns the number of scientists assigned to this ResearchProject.
  * @return, quantity of scientists assigned
  */
-int ResearchProject::getAssigned() const
+int ResearchProject::getAssignedScientists() const
 {
 	return _assigned;
 }

@@ -2936,7 +2936,7 @@ globe:
     - [301.5594, 34.3068, 302.5702, 30.1760]
   textures:
     - id: 0 #forest
-      terrains:
+      details:
         - type: FOREST
         - type: FORESTPOLAR
         - type: STEPPEFOREST #south
@@ -2944,7 +2944,7 @@ globe:
         - type: TAIGAFOREST #north
           area: [0,360,-90,0]
     - id: 1 #savannah/steppe/plains
-      terrains:
+      details:
         - type: CULTA
         - type: CULTAFARMA
         - type: CULTAFARMB
@@ -2955,7 +2955,7 @@ globe:
         - type: STEPPEDESERT #north
           area: [0,360,-90,0]
     - id: 2 #farmland/cultivated/suburban
-      terrains:
+      details:
         - type: CULTA
         - type: CULTAFARMA
         - type: CULTAFARMB
@@ -2966,7 +2966,7 @@ globe:
         - type: NATIVEUFO #south #city <---
           area: [0,360,0,90]
     - id: 3 #forested mountains
-      terrains:
+      details:
         - type: FOREST
         - type: FORESTMOUNT
         - type: GRASSLANDFORESTMOUNT
@@ -2977,13 +2977,13 @@ globe:
         - type: TAIGAFORESTMOUNT #south
           area: [0,360,0,90]
     - id: 4 #tundra/taiga
-      terrains:
+      details:
         - type: TAIGADESERT #north
           area: [0,360,-90,0]
         - type: TUNDRADESERT #north
           area: [0,360,-90,0]
     - id: 5 #barren mountains
-      terrains:
+      details:
         - type: FORESTMOUNT
         - type: MOUNT
         - type: TUNDRAMOUNT #south
@@ -2991,35 +2991,35 @@ globe:
         - type: TUNDRADESERTMOUNT #north
           area: [0,360,-90,0]
     - id: 6 #jungle
-      terrains:
+      details:
         - type: JUNGLE
         - type: JUNGLEPOLAR
         - type: JUNGLETEMPLE
     - id: 7 #desert
-      terrains:
+      details:
         - type: DESERT
         - type: DESERTTEMPLE
     - id: 8 #desert mountains
-      terrains:
+      details:
         - type: DESERTMOUNT
         - type: DESERTTEMPLE
     - id: 9 #polar
-      terrains:
+      details:
         - type: POLAR
         - type: POLARDESERT #north
           area: [0,360,-90,0]
     - id: 10 #urban
-      terrains:
+      details:
         - type: INDUSTRIALUFO #north #city <---
           area: [0,360,-90,0]
         - type: MADURBANUFO #city <---
         - type: NATIVEUFO #south #city <---
           area: [0,360,0,90]
     - id: 11 #polar mountains
-      terrains:
+      details:
         - type: POLARMOUNT
     - id: 12 #icepack
-      terrains:
+      details:
         - type: POLAR
     - id: -1 #inland
       deployTypes:
@@ -3030,55 +3030,55 @@ globe:
 ###--- Original Textures ---###
 #  textures:
 #    - id: 0
-#      terrains:
+#      details:
 #        - type: FOREST
 #          area: [0, 360, -90, 0]
 #        - type: JUNGLE
 #          area: [0, 360, 0, 90]
 #    - id: 1
-#      terrains:
+#      details:
 #        - type: CULTA
 #    - id: 2
-#      terrains:
+#      details:
 #        - type: CULTA
 #    - id: 3
-#      terrains:
+#      details:
 #        - type: CULTA
 #    - id: 4
-#      terrains:
+#      details:
 #        - type: CULTA
 #    - id: 5
-#      terrains:
+#      details:
 #        - type: MOUNT
 #    - id: 6
-#      terrains:
+#      details:
 #        - type: FOREST
 #          area: [0, 360, -90, 0]
 #        - type: JUNGLE
 #          area: [0, 360, 0, 90]
 #    - id: 7
-#      terrains:
+#      details:
 #        - type: DESERT
 #    - id: 8
-#      terrains:
+#      details:
 #        - type: DESERT
 #    - id: 9
-#      terrains:
+#      details:
 #        - type: POLAR
 #    - id: 10
-#      terrains:
+#      details:
 #        - type: FOREST
 #          area: [0, 360, -90, 0]
 #        - type: JUNGLE
 #          area: [0, 360, 0, 90]
 #    - id: 11
-#      terrains:
+#      details:
 #        - type: FOREST
 #          area: [0, 360, -90, 0]
 #        - type: JUNGLE
 #          area: [0, 360, 0, 90]
 #    - id: 12
-#      terrains:
+#      details:
 #        - type: POLAR
 #    - id: -1
 #      deployType: STR_TERROR_MISSION

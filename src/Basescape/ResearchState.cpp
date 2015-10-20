@@ -195,7 +195,7 @@ void ResearchState::init()
 		_online.push_back(true);
 
 		std::wstring daysLeft;
-		const int assigned ((*i)->getAssigned());
+		const int assigned ((*i)->getAssignedScientists());
 		if (assigned != 0)
 		{
 			const int days (static_cast<int>(std::ceil(

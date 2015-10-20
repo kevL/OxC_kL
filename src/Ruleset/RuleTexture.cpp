@@ -50,21 +50,21 @@ void RuleTexture::load(const YAML::Node& node)
 {
 	_id				= node["id"]			.as<int>(_id);
 	_deployTypes	= node["deployTypes"]	.as<std::map<std::string, int> >(_deployTypes);
-	_terrains		= node["terrains"]		.as<std::vector<TerrainCriteria> >(_terrains);
+	_details		= node["details"]		.as<std::vector<TextureDetail> >(_details);
 }
 
 /**
- * Returns the list of TerrainCriteria associated with this RuleTexture.
- * @return, pointer to a vector of TerrainCriteria's
+ * Returns the list of TextureDetail's associated with this RuleTexture.
+ * @return, pointer to a vector of TextureDetail's
  */
-std::vector<TerrainCriteria>* RuleTexture::getTerrainCriteria()
+std::vector<TextureDetail>* RuleTexture::getTextureDetail()
 {
-	return &_terrains;
+	return &_details;
 }
 
 /**
- * Returns the list of deployments associated with this Texture.
- * @return, reference to a map of deployments
+ * Returns a map of weighted deployments associated with this RuleTexture.
+ * @return, reference to a map of deployment types & weights
  */
 const std::map<std::string, int>& RuleTexture::getTextureDeployments()
 {
@@ -72,11 +72,11 @@ const std::map<std::string, int>& RuleTexture::getTextureDeployments()
 }
 
 /**
- * Calculates a random deployment for a mission target based on the texture's
- * available deployments.
- * @return, type of deployment
+ * Calculates a random deployment type for a mission target based on this
+ * RuleTexture's available deployment types.
+ * @return, deployment type
  */
-std::string RuleTexture::getRandomDeployment() const
+std::string RuleTexture::getTextureDeployment() const
 {
 	if (_deployTypes.empty() == true)
 		return "";
@@ -113,27 +113,27 @@ std::string RuleTexture::getRandomDeployment() const
 
 /**
  * Calculates a random terrain for a mission-target based on this texture's
- * available TerrainCriteria.
+ * available TextureDetail.
  * @param target - pointer to the mission Target (default NULL to exclude geographical bounds)
- * @return, terrain string
+ * @return, terrain type
  */
-std::string RuleTexture::getRandomTerrain(const Target* const target) const
+std::string RuleTexture::getTextureTerrain(const Target* const target) const
 {
-	Log(LOG_INFO) << "RuleTexture::getRandomTerrain(TARGET)";
+	Log(LOG_INFO) << "RuleTexture::getTextureTerrain(TARGET)";
 	double
 		lon,lat;
 	std::map<int, std::string> eligibleTerrains;
 
 	int totalWeight (0);
-	for (std::vector<TerrainCriteria>::const_iterator
-			i = _terrains.begin();
-			i != _terrains.end();
+	for (std::vector<TextureDetail>::const_iterator
+			i = _details.begin();
+			i != _details.end();
 			++i)
 	{
 		Log(LOG_INFO) << ". terrainType = " << i->type;
 		if (i->weight != 0)
 		{
-			bool inBounds = false;
+			bool insideArea = false;
 			if (target != NULL)
 			{
 				lon = target->getLongitude();
@@ -144,11 +144,11 @@ std::string RuleTexture::getRandomTerrain(const Target* const target) const
 					&& lat >= i->latMin
 					&& lat <  i->latMax)
 				{
-					inBounds = true;
+					insideArea = true;
 				}
 			}
 
-			if (target == NULL || inBounds == true)
+			if (target == NULL || insideArea == true)
 			{
 				Log(LOG_INFO) << ". . weight = " << i->weight;
 				totalWeight += i->weight;

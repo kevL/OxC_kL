@@ -76,7 +76,7 @@ private:
 		/// Gets this MissionSite's ruleset.
 		const RuleAlienMission* getRules() const;
 		/// Gets this MissionSite's deployment.
-		const AlienDeployment* getDeployment() const;
+		const AlienDeployment* getSiteDeployment() const;
 
 		/// Gets this MissionSite's ID.
 		int getId() const;

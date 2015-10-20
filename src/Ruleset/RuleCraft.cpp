@@ -348,7 +348,7 @@ int RuleCraft::getListOrder() const
  * Gets the deployment layout for the craft.
  * @return, reference to a vector of vectors representing the deployment layout
  */
-std::vector<std::vector<int> >& RuleCraft::getDeployment()
+std::vector<std::vector<int> >& RuleCraft::getCraftDeployment()
 {
 	return _deployment;
 }

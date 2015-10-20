@@ -51,11 +51,11 @@ private:
 	public:
 		/// Creates a new City.
 		RuleCity();
-		/// Creates a new City at coordinates.
+/*		/// Creates a new City at coordinates.
 		RuleCity(
 				const std::string& name,
 				double lon,
-				double lat);
+				double lat); */
 		/// Cleans up the City.
 		~RuleCity();
 
@@ -82,7 +82,7 @@ private:
 		bool getLabelTop() const;
 
 		/// Gets the texture of this City for the battlescape.
-		int getTextureInt() const;
+		int getTextureId() const;
 };
 
 }

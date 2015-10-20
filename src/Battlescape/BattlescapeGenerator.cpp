@@ -281,7 +281,7 @@ void BattlescapeGenerator::run()
 	if (_terrainRule == NULL)
 	{
 		if (_texture == NULL
-			|| _texture->getTerrainCriteria()->empty() == true
+			|| _texture->getTextureDetail()->empty() == true
 			|| deployRule->getDeployTerrains().empty() == false)
 		{
 			size_t pick = RNG::generate(0, deployRule->getDeployTerrains().size() - 1);
@@ -292,7 +292,7 @@ void BattlescapeGenerator::run()
 			const Target* target;
 			if (_mission != NULL) target = _mission;
 			else target = _ufo;
-			_terrainRule = _rules->getTerrain(_texture->getRandomTerrain(target));
+			_terrainRule = _rules->getTerrain(_texture->getTextureTerrain(target));
 		}
 	} */
 /*	if (deployRule->getDeployTerrains().empty() == true) // UFO crashed/landed
@@ -1177,16 +1177,16 @@ BattleUnit* BattlescapeGenerator::addXCOMUnit(BattleUnit* const unit) // private
 		}
 	}
 	else if (_craft != NULL // Transport craft deployments (Lightning & Avenger)
-		&& _craft->getRules()->getDeployment().empty() == false
+		&& _craft->getRules()->getCraftDeployment().empty() == false
 		&& _baseEquipScreen == false)
 	{
-		//Log(LOG_INFO) << ". Craft valid - use Deployment rule";
+		//Log(LOG_INFO) << ". Craft valid - use Deployment";
 		for (std::vector<std::vector<int> >::const_iterator
-				i = _craft->getRules()->getDeployment().begin();
-				i != _craft->getRules()->getDeployment().end();
+				i = _craft->getRules()->getCraftDeployment().begin();
+				i != _craft->getRules()->getCraftDeployment().end();
 				++i)
 		{
-			//Log(LOG_INFO) << ". getDeployment()+";
+			//Log(LOG_INFO) << ". getCraftDeployment()";
 			const Position pos = Position(
 										(*i)[0] + (_craftPos.x * 10),
 										(*i)[1] + (_craftPos.y * 10),

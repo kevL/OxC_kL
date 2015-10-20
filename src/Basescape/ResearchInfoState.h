@@ -77,7 +77,7 @@ private:
 	void btnCancelClick(Action* action);
 
 	///
-	void setAssignedScientist();
+	void updateInfo();
 
 	/// Handler for using the mouse wheel.
 //	void handleWheel(Action* action);

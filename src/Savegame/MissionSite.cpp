@@ -119,7 +119,7 @@ const RuleAlienMission* MissionSite::getRules() const
  * Returns the ruleset for the mission's deployment.
  * @return, pointer to AlienDeployment rules
  */
-const AlienDeployment* MissionSite::getDeployment() const
+const AlienDeployment* MissionSite::getSiteDeployment() const
 {
 	return _deployRule;
 }

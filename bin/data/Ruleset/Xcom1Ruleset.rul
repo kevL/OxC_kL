@@ -1370,13 +1370,13 @@ items:
     specialType: 11
     recoveryPoints: 5
   - type: STR_ALIEN_ALLOYS
-    listOrder: 2
+    listOrder: 1
     size: 0.1
     costSell: 1000 # 21500 (x ?)
     specialType: 10
     recoveryPoints: 1
   - type: STR_ELERIUM_115
-    listOrder: 1
+    listOrder: 2
     size: 0.1
     costSell: 5000
     weight: 7
@@ -4277,7 +4277,7 @@ extraStrings:
       STR_EQUIP_LAYOUTS_SAVED: "All Layouts Saved"
       STR_PAUSE: "pause"
       STR_PSILABS: "PsiLabs"
-      STR_FREESTORE: "free stores"
+      STR_FREESTORE: "stores free"
       STR_SPOTTED: "detected"
       STR_TRUE: "true"
       STR_FALSE: "false"

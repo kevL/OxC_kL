@@ -140,6 +140,8 @@ StoresMatrixState::StoresMatrixState(const Base* base)
 	std::wstring wst;
 	int
 		qty[MTX_BASES] = {0,0,0,0,0,0,0,0},
+		qtyScientist[MTX_BASES] = {0,0,0,0,0,0,0,0},
+		qtyEngineer[MTX_BASES] = {0,0,0,0,0,0,0,0},
 		freeSpace;
 
 	for (size_t
@@ -151,6 +153,8 @@ StoresMatrixState::StoresMatrixState(const Base* base)
 		if (base != NULL)
 		{
 			qty[i] = base->getTotalSoldiers();
+			qtyScientist[i] = base->getTotalScientists();
+			qtyEngineer[i] = base->getTotalEngineers();
 
 			wst = base->getName().substr(0,4);
 			freeSpace = static_cast<int>(static_cast<double>(base->getAvailableStores()) - base->getUsedStores() + 0.5);
@@ -197,18 +201,18 @@ StoresMatrixState::StoresMatrixState(const Base* base)
 		woststr5,
 		woststr6,
 		woststr7;
-	size_t row = 0;
 
-	if (qty[0] + qty[1] + qty[2] + qty[3] + qty[4] + qty[5] + qty[6] + qty[7] > 0)
+	size_t row = 0;
+	if (qty[0] + qty[1] + qty[2] + qty[3] + qty[4] + qty[5] + qty[6] + qty[7] != 0)
 	{
-		if (qty[0] > 0) woststr0 << qty[0];
-		if (qty[1] > 0) woststr1 << qty[1];
-		if (qty[2] > 0) woststr2 << qty[2];
-		if (qty[3] > 0) woststr3 << qty[3];
-		if (qty[4] > 0) woststr4 << qty[4];
-		if (qty[5] > 0) woststr5 << qty[5];
-		if (qty[6] > 0) woststr6 << qty[6];
-		if (qty[7] > 0) woststr7 << qty[7];
+		if (qty[0] != 0) woststr0 << qty[0];
+		if (qty[1] != 0) woststr1 << qty[1];
+		if (qty[2] != 0) woststr2 << qty[2];
+		if (qty[3] != 0) woststr3 << qty[3];
+		if (qty[4] != 0) woststr4 << qty[4];
+		if (qty[5] != 0) woststr5 << qty[5];
+		if (qty[6] != 0) woststr6 << qty[6];
+		if (qty[7] != 0) woststr7 << qty[7];
 
 		_lstMatrix->addRow(
 						9,
@@ -221,8 +225,75 @@ StoresMatrixState::StoresMatrixState(const Base* base)
 						woststr5.str().c_str(),
 						woststr6.str().c_str(),
 						woststr7.str().c_str());
+		_lstMatrix->setRowColor(row++, YELLOW);
+	}
 
-		_lstMatrix->setRowColor(row++, BLUE);
+	if (qtyScientist[0] + qtyScientist[1] + qtyScientist[2] + qtyScientist[3] + qtyScientist[4] + qtyScientist[5] + qtyScientist[6] + qtyScientist[7] != 0)
+	{
+		woststr0.str(L"");
+		woststr1.str(L"");
+		woststr2.str(L"");
+		woststr3.str(L"");
+		woststr4.str(L"");
+		woststr5.str(L"");
+		woststr6.str(L"");
+		woststr7.str(L"");
+
+		if (qtyScientist[0] != 0) woststr0 << qtyScientist[0];
+		if (qtyScientist[1] != 0) woststr1 << qtyScientist[1];
+		if (qtyScientist[2] != 0) woststr2 << qtyScientist[2];
+		if (qtyScientist[3] != 0) woststr3 << qtyScientist[3];
+		if (qtyScientist[4] != 0) woststr4 << qtyScientist[4];
+		if (qtyScientist[5] != 0) woststr5 << qtyScientist[5];
+		if (qtyScientist[6] != 0) woststr6 << qtyScientist[6];
+		if (qtyScientist[7] != 0) woststr7 << qtyScientist[7];
+
+		_lstMatrix->addRow(
+						9,
+						tr("STR_SCIENTISTS").c_str(),
+						woststr0.str().c_str(),
+						woststr1.str().c_str(),
+						woststr2.str().c_str(),
+						woststr3.str().c_str(),
+						woststr4.str().c_str(),
+						woststr5.str().c_str(),
+						woststr6.str().c_str(),
+						woststr7.str().c_str());
+		_lstMatrix->setRowColor(row++, YELLOW);
+	}
+
+	if (qtyEngineer[0] + qtyEngineer[1] + qtyEngineer[2] + qtyEngineer[3] + qtyEngineer[4] + qtyEngineer[5] + qtyEngineer[6] + qtyEngineer[7] != 0)
+	{
+		woststr0.str(L"");
+		woststr1.str(L"");
+		woststr2.str(L"");
+		woststr3.str(L"");
+		woststr4.str(L"");
+		woststr5.str(L"");
+		woststr6.str(L"");
+		woststr7.str(L"");
+
+		if (qtyEngineer[0] != 0) woststr0 << qtyEngineer[0];
+		if (qtyEngineer[1] != 0) woststr1 << qtyEngineer[1];
+		if (qtyEngineer[2] != 0) woststr2 << qtyEngineer[2];
+		if (qtyEngineer[3] != 0) woststr3 << qtyEngineer[3];
+		if (qtyEngineer[4] != 0) woststr4 << qtyEngineer[4];
+		if (qtyEngineer[5] != 0) woststr5 << qtyEngineer[5];
+		if (qtyEngineer[6] != 0) woststr6 << qtyEngineer[6];
+		if (qtyEngineer[7] != 0) woststr7 << qtyEngineer[7];
+
+		_lstMatrix->addRow(
+						9,
+						tr("STR_ENGINEERS").c_str(),
+						woststr0.str().c_str(),
+						woststr1.str().c_str(),
+						woststr2.str().c_str(),
+						woststr3.str().c_str(),
+						woststr4.str().c_str(),
+						woststr5.str().c_str(),
+						woststr6.str().c_str(),
+						woststr7.str().c_str());
+		_lstMatrix->setRowColor(row++, YELLOW);
 	}
 
 	const Ruleset* const rules = _game->getRuleset();
@@ -276,7 +347,7 @@ StoresMatrixState::StoresMatrixState(const Base* base)
 					k != (*j)->getCrafts()->end();
 					++k)
 			{
-				if ((*k)->getRules()->getSoldiers() > 0) // is transport craft
+				if ((*k)->getRules()->getSoldiers() != 0) // is transport craft
 				{
 					for (std::map<std::string, int>::iterator
 							l = (*k)->getCraftItems()->getContents()->begin();
@@ -288,7 +359,7 @@ StoresMatrixState::StoresMatrixState(const Base* base)
 					}
 				}
 
-				if ((*k)->getRules()->getVehicles() > 0) // is transport craft capable of vehicles
+				if ((*k)->getRules()->getVehicles() != 0) // is transport craft capable of vehicles
 				{
 					for (std::vector<Vehicle*>::const_iterator
 							l = (*k)->getVehicles()->begin();
@@ -312,16 +383,16 @@ StoresMatrixState::StoresMatrixState(const Base* base)
 			}
 		}
 
-		if (qty[0] + qty[1] + qty[2] + qty[3] + qty[4] + qty[5] + qty[6] + qty[7] > 0)
+		if (qty[0] + qty[1] + qty[2] + qty[3] + qty[4] + qty[5] + qty[6] + qty[7] != 0)
 		{
-			if (qty[0] > 0) woststr0 << qty[0];
-			if (qty[1] > 0) woststr1 << qty[1];
-			if (qty[2] > 0) woststr2 << qty[2];
-			if (qty[3] > 0) woststr3 << qty[3];
-			if (qty[4] > 0) woststr4 << qty[4];
-			if (qty[5] > 0) woststr5 << qty[5];
-			if (qty[6] > 0) woststr6 << qty[6];
-			if (qty[7] > 0) woststr7 << qty[7];
+			if (qty[0] != 0) woststr0 << qty[0];
+			if (qty[1] != 0) woststr1 << qty[1];
+			if (qty[2] != 0) woststr2 << qty[2];
+			if (qty[3] != 0) woststr3 << qty[3];
+			if (qty[4] != 0) woststr4 << qty[4];
+			if (qty[5] != 0) woststr5 << qty[5];
+			if (qty[6] != 0) woststr6 << qty[6];
+			if (qty[7] != 0) woststr7 << qty[7];
 
 
 			bool craftOrdnance = false;
@@ -378,8 +449,7 @@ StoresMatrixState::StoresMatrixState(const Base* base)
 			color = BLUE;
 
 			if ((itRule->getBattleType() == BT_AMMO
-					|| (itRule->getBattleType() == BT_NONE
-						&& itRule->getClipSize() > 0))
+					|| (itRule->getBattleType() == BT_NONE && itRule->getClipSize() != 0))
 				&& itRule->getType() != _game->getRuleset()->getAlienFuelType())
 			{
 				item.insert(0, L"  ");

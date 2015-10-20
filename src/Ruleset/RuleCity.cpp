@@ -46,13 +46,13 @@ RuleCity::RuleCity()
 	_lat = 0.;
 }
 
-/**
+/*
  * Alternate cTor for Cities.
  * @note Used by TFTD-style rulesets.
  * @param name	- name of the city
  * @param lon	- longitude of the city
  * @param lat	- latitude of the city
- */
+ *
 RuleCity::RuleCity(
 		const std::string& name,
 		double lon,
@@ -66,7 +66,7 @@ RuleCity::RuleCity(
 {
 	_lon = lon;
 	_lat = lat;
-}
+} */
 
 /**
  * dTor.
@@ -159,7 +159,7 @@ bool RuleCity::getLabelTop() const
  * Gets the texture of this City for the battlescape.
  * @return, texture ID
  */
-int RuleCity::getTextureInt() const
+int RuleCity::getTextureId() const
 {
 	return _texture;
 }

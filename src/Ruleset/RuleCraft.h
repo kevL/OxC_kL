@@ -150,7 +150,7 @@ private:
 		int getListOrder() const;
 
 		/// Gets the deployment priority for the craft.
-		std::vector<std::vector<int> >& getDeployment();
+		std::vector<std::vector<int> >& getCraftDeployment();
 
 		/// Gets the item limit for this type of craft.
 		int getMaxItems() const;

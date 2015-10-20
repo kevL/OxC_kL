@@ -63,9 +63,9 @@ private:
 		const RuleResearch* getRules() const;
 
 		/// Sets the number of scientists assigned to this ResearchProject.
-		void setAssigned(const int qty);
+		void setAssignedScientists(const int qty);
 		/// Gets the number of scientist assigned to this ResearchProject.
-		int getAssigned() const;
+		int getAssignedScientists() const;
 
 		/// Sets time already spent on this ResearchProject.
 		void setSpent(const int spent);
