@@ -50,7 +50,9 @@ class TransferItemsState
 {
 
 private:
-	static const Uint8 YELLOW = 213;
+	static const Uint8
+		WHITE	= 208,
+		YELLOW	= 213;
 
 	bool _resetAll;
 	int

@@ -52,7 +52,9 @@ class SellState
 {
 
 private:
-	static const Uint8 YELLOW = 213;
+	static const Uint8
+		WHITE	= 208,
+		YELLOW	= 213;
 
 	int _totalCost;
 	size_t
@@ -60,7 +62,7 @@ private:
 		_hasEng,
 		_sel;
 	Uint8 _colorAmmo;
-	double _spaceChange;
+	double _storeSize;
 
 //	OptionsOrigin _origin;
 
@@ -72,7 +74,7 @@ private:
 		* _txtQuantity,
 		* _txtSales,
 		* _txtSell,
-		* _txtSpaceUsed,
+		* _txtStorage,
 		* _txtTitle,
 		* _txtValue;
 	TextButton

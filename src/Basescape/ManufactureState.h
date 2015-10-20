@@ -63,7 +63,9 @@ private:
 	TextButton
 		* _btnNew,
 		* _btnOk;
-	TextList* _lstManufacture;
+	TextList
+		* _lstManufacture,
+		* _lstResources;
 	Window* _window;
 
 	std::vector<Base*>* _baseList;

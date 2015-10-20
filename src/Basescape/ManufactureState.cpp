@@ -40,8 +40,10 @@
 #include "../Ruleset/RuleManufacture.h"
 
 #include "../Savegame/Base.h"
+#include "../Savegame/ItemContainer.h"
 #include "../Savegame/Production.h"
 #include "../Savegame/SavedGame.h"
+#include "../Savegame/Transfer.h"
 
 
 namespace OpenXcom
@@ -80,7 +82,8 @@ ManufactureState::ManufactureState(
 	_txtCost		= new Text( 50, 17, 215, 45);
 	_txtTimeLeft	= new Text( 25, 17, 271, 45);
 
-	_lstManufacture	= new TextList(285, 97, 16, 71);
+	_lstManufacture	= new TextList(285, 81, 16,  71);
+	_lstResources	= new TextList(285, 17, 16, 156);
 
 	_btnNew			= new TextButton(134, 16,  16, 177);
 	_btnOk			= new TextButton(134, 16, 170, 177);
@@ -102,6 +105,7 @@ ManufactureState::ManufactureState(
 	add(_txtCost,			"text2",	"manufactureMenu");
 	add(_txtTimeLeft,		"text2",	"manufactureMenu");
 	add(_lstManufacture,	"list",		"manufactureMenu");
+	add(_lstResources,		"list",		"manufactureMenu");
 	add(_btnNew,			"button",	"manufactureMenu");
 	add(_btnOk,				"button",	"manufactureMenu");
 
@@ -163,6 +167,25 @@ ManufactureState::ManufactureState(
 	_lstManufacture->setSelectable();
 	_lstManufacture->setBackground(_window);
 	_lstManufacture->onMouseClick((ActionHandler)& ManufactureState::lstManufactureClick);
+
+	_lstResources->setColumns(4, 151,50,40,40);
+	_lstResources->setMargin(4);
+	std::string st = "STR_ALIEN_ALLOYS";
+	for (size_t
+			i = 0;
+			i != 2;
+			++i)
+	{
+		if (i == 1)
+			st = "STR_ELERIUM_115";
+		_lstResources->addRow(4,
+							tr(st).c_str(),
+							L"",
+							tr("STR_TOTAL").c_str(),
+							L"");
+		_lstResources->setCellColor(i, 1, 208); // white: text1->color2
+		_lstResources->setCellColor(i, 3, 208);
+	}
 }
 
 /**
@@ -214,23 +237,19 @@ void ManufactureState::fillProductionList()
 			++i)
 	{
 		std::wostringstream
-			woststr0,
 			woststr1,
 			woststr2,
-			woststr3,
-			woststr4;
+			woststr3;
 
 		if ((*i)->getSellItems() == true)
 		{
-//			std::streamsize strSize = woststr0.tellp();
-//			woststr0.str(L"$" + woststr0.str());
-//			woststr0.seekp(strSize + 1); // lolc++
+//			std::streamsize strSize = woststr1.tellp();
+//			woststr1.str(L"$" + woststr1.str());
+//			woststr1.seekp(strSize + 1); // lolc++
 
-			woststr0 << L"$ ";
+			woststr1 << L"$ ";
 		}
-		woststr0 << tr((*i)->getRules()->getType());
-
-		woststr1 << (*i)->getAssignedEngineers();
+		woststr1 << tr((*i)->getRules()->getType());
 
 		woststr2 << (*i)->getAmountProduced() << L"/";
 		if ((*i)->getInfiniteAmount() == true)
@@ -238,9 +257,7 @@ void ManufactureState::fillProductionList()
 		else
 			woststr2 << (*i)->getAmountTotal();
 
-		woststr3 << Text::formatFunding((*i)->getRules()->getManufactureCost());
-
-		if ((*i)->getAssignedEngineers() > 0)
+		if ((*i)->getAssignedEngineers() != 0)
 		{
 			int hoursLeft;
 			if ((*i)->getSellItems() == true
@@ -265,18 +282,18 @@ void ManufactureState::fillProductionList()
 
 			const int daysLeft = hoursLeft / 24;
 			hoursLeft %= 24;
-			woststr4 << daysLeft << L"/" << hoursLeft;
+			woststr3 << daysLeft << L"/" << hoursLeft;
 		}
 		else
-			woststr4 << L"oo";
+			woststr3 << L"oo";
 
 		_lstManufacture->addRow
 							(5,
-							woststr0.str().c_str(),
 							woststr1.str().c_str(),
+							Text::intWide((*i)->getAssignedEngineers()).c_str(),
 							woststr2.str().c_str(),
-							woststr3.str().c_str(),
-							woststr4.str().c_str());
+							Text::formatFunding((*i)->getRules()->getManufactureCost()).c_str(),
+							woststr3.str().c_str());
 	}
 
 	_txtAvailable->setText(tr("STR_ENGINEERS_AVAILABLE_")
@@ -285,6 +302,56 @@ void ManufactureState::fillProductionList()
 							.arg(_base->getAllocatedEngineers()));
 	_txtSpace->setText(tr("STR_WORKSHOP_SPACE_AVAILABLE_")
 							.arg(_base->getFreeWorkshops()));
+
+	int
+		qtyA = 0,
+		qtyE = 0,
+		totalA = 0,
+		totalE = 0,
+		ally,
+		eler;
+	for (std::vector<Base*>::const_iterator
+			i = _baseList->begin();
+			i != _baseList->end();
+			++i)
+	{
+		ally = (*i)->getStorageItems()->getItemQty("STR_ALIEN_ALLOYS");
+		eler = (*i)->getStorageItems()->getItemQty("STR_ELERIUM_115");
+
+		totalA += ally;
+		totalE += eler;
+
+		if (*i == _base)
+		{
+			qtyA += ally;
+			qtyE += eler;
+		}
+
+		for (std::vector<Transfer*>::const_iterator
+				j = (*i)->getTransfers()->begin();
+				j != (*i)->getTransfers()->end();
+				++j)
+		{
+			if ((*j)->getTransferItems() == "STR_ALIEN_ALLOYS")
+			{
+				ally = (*j)->getQuantity();
+				totalA += ally;
+				if (*i == _base)
+					qtyA += ally;
+			}
+			else if ((*j)->getTransferItems() == "STR_ELERIUM_115")
+			{
+				eler = (*j)->getQuantity();
+				totalA += eler;
+				if (*i == _base)
+					qtyE += eler;
+			}
+		}
+	}
+	_lstResources->setCellText(0,1, Text::intWide(qtyA));
+	_lstResources->setCellText(1,1, Text::intWide(qtyE));
+	_lstResources->setCellText(0,3, Text::intWide(totalA));
+	_lstResources->setCellText(1,3, Text::intWide(totalE));
 }
 
 /**

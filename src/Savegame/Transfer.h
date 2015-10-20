@@ -105,7 +105,7 @@ private:
 		/// Advances the transfer.
 		void advance(Base* base);
 
-		/// Gets the soldier being transferred.
+		/// Gets the soldier being transfered.
 		Soldier* getSoldier() const;
 };
 

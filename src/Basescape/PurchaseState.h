@@ -48,6 +48,8 @@ class PurchaseState
 {
 
 private:
+	static const Uint8 WHITE = 208;
+
 	int
 		_qtyCraft,
 		_qtyPersonnel,
@@ -64,7 +66,7 @@ private:
 		* _txtItem,
 		* _txtPurchases,
 		* _txtQuantity,
-		* _txtSpaceUsed,
+		* _txtStorage,
 		* _txtTitle;
 	TextButton
 		* _btnCancel,

@@ -125,23 +125,21 @@ std::string RuleTexture::getRandomTerrain(const Target* const target) const
 	std::map<int, std::string> eligibleTerrains;
 
 	int totalWeight (0);
-
 	for (std::vector<TerrainCriteria>::const_iterator
 			i = _terrains.begin();
 			i != _terrains.end();
 			++i)
 	{
 		Log(LOG_INFO) << ". terrainType = " << i->type;
-		if (i->weight > 0)
+		if (i->weight != 0)
 		{
 			bool inBounds = false;
-
 			if (target != NULL)
 			{
 				lon = target->getLongitude();
 				lat = target->getLatitude();
 
-				if (lon >= i->lonMin
+				if (   lon >= i->lonMin
 					&& lon <  i->lonMax
 					&& lat >= i->latMin
 					&& lat <  i->latMax)
@@ -156,7 +154,7 @@ std::string RuleTexture::getRandomTerrain(const Target* const target) const
 				totalWeight += i->weight;
 				eligibleTerrains[totalWeight] = i->type;
 			}
-			else Log(LOG_INFO) << ". <- out of bounds";
+			else Log(LOG_INFO) << ". . target outside texture-detail's assigned geographical area";
 		}
 	}
 

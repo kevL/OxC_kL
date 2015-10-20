@@ -75,19 +75,18 @@ PurchaseState::PurchaseState(Base* const base)
 
 	_txtTitle		= new Text(310, 17,   5, 9);
 	_txtBaseLabel	= new Text( 80,  9,  16, 9);
-	_txtSpaceUsed	= new Text( 85,  9, 219, 9);
+	_txtStorage		= new Text( 85,  9, 219, 9);
 
 	_txtFunds		= new Text(140, 9,  16, 24);
 	_txtPurchases	= new Text(140, 9, 160, 24);
 
-/*	_txtSpaceUsed = new Text(150, 9, 160, 34);
+/*	_txtStorage = new Text(150, 9, 160, 34);
 	_txtItem = new Text(140, 9, 10, Options::storageLimitsEnforced? 44:33);
 	_txtCost = new Text(102, 9, 152, Options::storageLimitsEnforced? 44:33);
 	_txtQuantity = new Text(60, 9, 256, Options::storageLimitsEnforced? 44:33);
 	_lstItems = new TextList(287, Options::storageLimitsEnforced? 112:120, 8, Options::storageLimitsEnforced? 55:44); */
 
 	_txtItem		= new Text( 30, 9,  16, 33);
-//	_txtSpaceUsed	= new Text( 85, 9,  70, 33);
 	_txtCost		= new Text(102, 9, 166, 33);
 	_txtQuantity	= new Text( 48, 9, 267, 33);
 
@@ -106,7 +105,7 @@ PurchaseState::PurchaseState(Base* const base)
 	add(_txtFunds,		"text",		"buyMenu");
 	add(_txtPurchases,	"text",		"buyMenu");
 	add(_txtItem,		"text",		"buyMenu");
-	add(_txtSpaceUsed,	"text",		"buyMenu");
+	add(_txtStorage,	"text",		"buyMenu");
 	add(_txtCost,		"text",		"buyMenu");
 	add(_txtQuantity,	"text",		"buyMenu");
 	add(_lstItems,		"list",		"buyMenu");
@@ -149,11 +148,12 @@ PurchaseState::PurchaseState(Base* const base)
 
 	_txtItem->setText(tr("STR_ITEM"));
 
-	_txtSpaceUsed->setVisible(Options::storageLimitsEnforced);
-	_txtSpaceUsed->setAlign(ALIGN_RIGHT);
+	_txtStorage->setVisible(Options::storageLimitsEnforced);
+	_txtStorage->setAlign(ALIGN_RIGHT);
+	_txtStorage->setColor(WHITE);
 	std::wostringstream woststr;
 	woststr << _base->getAvailableStores() << L":" << std::fixed << std::setprecision(1) << _base->getUsedStores();
-	_txtSpaceUsed->setText(woststr.str());
+	_txtStorage->setText(woststr.str());
 
 	_txtCost->setText(tr("STR_COST_PER_UNIT_UC"));
 
@@ -912,11 +912,11 @@ void PurchaseState::updateItemStrings() // private.
 	woststr << _base->getAvailableStores() << L":" << std::fixed << std::setprecision(1) << _base->getUsedStores();
 	if (std::abs(_storeSize) > 0.05)
 	{
-		woststr << L"(";
+		woststr << L" ";
 		if (_storeSize > 0.) woststr << L"+";
-		woststr << std::fixed << std::setprecision(1) << _storeSize << L")";
+		woststr << std::fixed << std::setprecision(1) << _storeSize;
 	}
-	_txtSpaceUsed->setText(woststr.str());
+	_txtStorage->setText(woststr.str());
 
 	_btnOk->setVisible(_costTotal != 0);
 }

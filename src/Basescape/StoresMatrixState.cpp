@@ -62,7 +62,7 @@ StoresMatrixState::StoresMatrixState(const Base* base)
 	_txtTitle		= new Text(300, 17,  10, 8);
 	_txtBaseLabel	= new Text( 80,  9, 224, 8);
 
-	_txtItem		= new Text(100, 9, 16, 25);
+//	_txtItem		= new Text(100, 9, 16, 25);
 	_txtFreeStore	= new Text(100, 9, 16, 33);
 
 	_txtBase_0		= new Text(23, 17, 116, 25);
@@ -83,7 +83,7 @@ StoresMatrixState::StoresMatrixState(const Base* base)
 	add(_window);
 	add(_txtTitle);
 	add(_txtBaseLabel);
-	add(_txtItem);
+//	add(_txtItem);
 	add(_txtFreeStore);
 	add(_txtBase_0);
 	add(_txtBase_1);
@@ -123,8 +123,8 @@ StoresMatrixState::StoresMatrixState(const Base* base)
 	_txtBaseLabel->setColor(BLUE);
 	_txtBaseLabel->setAlign(ALIGN_RIGHT);
 
-	_txtItem->setText(tr("STR_ITEM"));
-	_txtItem->setColor(WHITE);
+//	_txtItem->setText(tr("STR_ITEM"));
+//	_txtItem->setColor(WHITE);
 
 	_txtFreeStore->setText(tr("STR_FREESTORE"));
 	_txtFreeStore->setColor(WHITE);

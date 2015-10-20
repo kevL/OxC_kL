@@ -4460,17 +4460,17 @@
 1440459791 f:\git\openxcom\src\menu\optionsbasestate.h
 	"../Engine/State.h"
 
-1440476320 f:\git\openxcom\src\basescape\manufacturestate.h
+1445287584 f:\git\openxcom\src\basescape\manufacturestate.h
 	"../Engine/State.h"
 
-1444497231 f:\git\openxcom\src\basescape\purchasestate.h
+1445299159 f:\git\openxcom\src\basescape\purchasestate.h
 	"../Engine/State.h"
 	"../Savegame/Base.h"
 
 1444212185 f:\git\openxcom\src\basescape\researchstate.h
 	"../Engine/State.h"
 
-1444505597 f:\git\openxcom\src\basescape\sellstate.h
+1445299034 f:\git\openxcom\src\basescape\sellstate.h
 	"../Engine/State.h"
 	"../Savegame/Base.h"
 
@@ -4855,7 +4855,7 @@
 1442664635 f:\git\openxcom\src\basescape\manufacturestartstate.h
 	"../Engine/State.h"
 
-1445278458 source:f:\git\openxcom\src\basescape\manufacturestate.cpp
+1445295625 source:f:\git\openxcom\src\basescape\manufacturestate.cpp
 	"ManufactureState.h"
 	"BasescapeState.h"
 	"ManufactureInfoState.h"
@@ -4869,8 +4869,10 @@
 	"../Resource/ResourcePack.h"
 	"../Ruleset/RuleManufacture.h"
 	"../Savegame/Base.h"
+	"../Savegame/ItemContainer.h"
 	"../Savegame/Production.h"
 	"../Savegame/SavedGame.h"
+	"../Savegame/Transfer.h"
 
 1443908264 f:\git\openxcom\src\basescape\newmanufactureliststate.h
 	"../Engine/State.h"
@@ -5012,7 +5014,7 @@
 1436386751 f:\git\openxcom\src\basescape\placestartfacilitystate.h
 	"PlaceFacilityState.h"
 
-1445016864 source:f:\git\openxcom\src\basescape\purchasestate.cpp
+1445299135 source:f:\git\openxcom\src\basescape\purchasestate.cpp
 	"PurchaseState.h"
 	"../Engine/Action.h"
 	"../Engine/Game.h"
@@ -5039,7 +5041,7 @@
 	<limits>
 	<cmath>
 
-1444475644 f:\git\openxcom\src\savegame\transfer.h
+1445295106 f:\git\openxcom\src\savegame\transfer.h
 	"Base.h"
 
 1444222678 source:f:\git\openxcom\src\basescape\researchinfostate.cpp
@@ -5264,7 +5266,7 @@
 	"../Savegame/Region.h"
 	"../Savegame/SavedGame.h"
 
-1444494798 f:\git\openxcom\src\basescape\transferitemsstate.h
+1445296598 f:\git\openxcom\src\basescape\transferitemsstate.h
 	"../Engine/State.h"
 	"../Savegame/Transfer.h"
 
@@ -5281,7 +5283,7 @@
 1430149550 f:\git\openxcom\src\basescape\transferconfirmstate.h
 	"../Engine/State.h"
 
-1445016705 source:f:\git\openxcom\src\basescape\transferitemsstate.cpp
+1445298262 source:f:\git\openxcom\src\basescape\transferitemsstate.cpp
 	"TransferItemsState.h"
 	"TransferConfirmState.h"
 	"../Engine/Action.h"
@@ -6880,7 +6882,7 @@
 	"../Resource/XcomResourcePack.h"
 	"../Savegame/SavedGame.h"
 
-1444503847 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
+1445292282 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
 	"DogfightState.h"
 	"GeoscapeCraftState.h"
 	"GeoscapeState.h"
@@ -7332,7 +7334,7 @@
 	"../Resource/ResourcePack.h"
 	"../Ruleset/RuleItem.h"
 
-1444327625 source:f:\git\openxcom\src\geoscape\selectdestinationstate.cpp
+1445286706 source:f:\git\openxcom\src\geoscape\selectdestinationstate.cpp
 	"SelectDestinationState.h"
 	"ConfirmCydoniaState.h"
 	"CraftErrorState.h"
@@ -8290,7 +8292,7 @@
 1444220981 source:f:\git\openxcom\src\ruleset\ruleresearch.cpp
 	"RuleResearch.h"
 
-1445284664 source:f:\git\openxcom\src\ruleset\ruleset.cpp
+1445285325 source:f:\git\openxcom\src\ruleset\ruleset.cpp
 	"Ruleset.h"
 	"AlienRace.h"
 	"AlienDeployment.h"
@@ -8637,7 +8639,7 @@
 	"../Ruleset/RuleArmor.h"
 	"../Savegame/SavedBattleGame.h"
 
-1444475888 source:f:\git\openxcom\src\savegame\transfer.cpp
+1445295096 source:f:\git\openxcom\src\savegame\transfer.cpp
 	"Transfer.h"
 	"Craft.h"
 	"ItemContainer.h"
@@ -10351,7 +10353,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1445224106 source:f:\git\openxcom\src\basescape\storesmatrixstate.cpp
+1445296310 source:f:\git\openxcom\src\basescape\storesmatrixstate.cpp
 	"StoresMatrixState.h"
 	"../Engine/Game.h"
 	"../Interface/Text.h"
@@ -10370,7 +10372,7 @@
 	"../Savegame/Transfer.h"
 	"../Savegame/Vehicle.h"
 
-1442616928 f:\git\openxcom\src\basescape\storesmatrixstate.h
+1445296280 f:\git\openxcom\src\basescape\storesmatrixstate.h
 	"../Engine/State.h"
 
 1430149550 source:f:\git\openxcom\src\ruleset\extramusic.cpp
@@ -11143,7 +11145,7 @@
 	"../Engine/Language.h"
 	"../Geoscape/Globe.h"
 
-1444100447 source:f:\git\openxcom\src\ruleset\ruletexture.cpp
+1445297418 source:f:\git\openxcom\src\ruleset\ruletexture.cpp
 	"RuleTexture.h"
 	"../Savegame/Target.h"
 

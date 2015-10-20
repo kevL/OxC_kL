@@ -71,7 +71,7 @@ SellState::SellState(Base* const base)
 		_totalCost(0),
 		_hasSci(0),
 		_hasEng(0),
-		_spaceChange(0.)
+		_storeSize(0.)
 {
 //	bool overfull = Options::storageLimitsEnforced == true
 //				 && _base->storesOverfull() == true;
@@ -80,7 +80,7 @@ SellState::SellState(Base* const base)
 
 	_txtTitle		= new Text(310, 17,  5, 9);
 	_txtBaseLabel	= new Text( 80, 9,  16, 9);
-	_txtSpaceUsed	= new Text( 85, 9, 219, 9);
+	_txtStorage		= new Text( 85, 9, 219, 9);
 
 	_txtFunds		= new Text(140, 9,  16, 24);
 	_txtSales		= new Text(140, 9, 160, 24);
@@ -105,7 +105,7 @@ SellState::SellState(Base* const base)
 	add(_txtFunds,		"text",		"sellMenu");
 	add(_txtSales,		"text",		"sellMenu");
 	add(_txtItem,		"text",		"sellMenu");
-	add(_txtSpaceUsed,	"text",		"sellMenu");
+	add(_txtStorage,	"text",		"sellMenu");
 	add(_txtQuantity,	"text",		"sellMenu");
 	add(_txtSell,		"text",		"sellMenu");
 	add(_txtValue,		"text",		"sellMenu");
@@ -147,11 +147,12 @@ SellState::SellState(Base* const base)
 						.arg(Text::formatFunding(_game->getSavedGame()->getFunds())));
 	_txtItem->setText(tr("STR_ITEM"));
 
-	_txtSpaceUsed->setVisible(Options::storageLimitsEnforced);
-	_txtSpaceUsed->setAlign(ALIGN_RIGHT);
+	_txtStorage->setVisible(Options::storageLimitsEnforced);
+	_txtStorage->setColor(WHITE);
+	_txtStorage->setAlign(ALIGN_RIGHT);
 	std::wostringstream woststr;
 	woststr << _base->getAvailableStores() << L":" << std::fixed << std::setprecision(1) << _base->getUsedStores();
-	_txtSpaceUsed->setText(woststr.str());
+	_txtStorage->setText(woststr.str());
 
 	_txtQuantity->setText(tr("STR_QUANTITY_UC"));
 	_txtSell->setText(tr("STR_SELL_SACK"));
@@ -822,7 +823,7 @@ void SellState::changeByValue(
 			if (_soldiers[_sel]->getArmor()->getStoreItem() != "STR_NONE")
 			{
 				itRule = _game->getRuleset()->getItem(_soldiers[_sel]->getArmor()->getStoreItem());
-				_spaceChange += static_cast<double>(dir) * itRule->getSize();
+				_storeSize += static_cast<double>(dir) * itRule->getSize();
 			}
 		break;
 
@@ -845,13 +846,13 @@ void SellState::changeByValue(
 						storesReq += static_cast<double>((*i)->getClipsLoaded(_game->getRuleset())) * itRule->getSize();
 				}
 			}
-			_spaceChange += static_cast<double>(dir) * storesReq;
+			_storeSize += static_cast<double>(dir) * storesReq;
 		}
 		break;
 
 		case PST_ITEM:
 			itRule = _game->getRuleset()->getItem(_items[getItemIndex(_sel)]);
-			_spaceChange -= static_cast<double>(dir * qtyDelta) * itRule->getSize();
+			_storeSize -= static_cast<double>(dir * qtyDelta) * itRule->getSize();
 	}
 
 	updateItemStrings();
@@ -940,16 +941,16 @@ void SellState::updateItemStrings() // private.
 
 	std::wostringstream woststr;
 	woststr << _base->getAvailableStores() << L":" << std::fixed << std::setprecision(1) << _base->getUsedStores();
-	if (std::abs(_spaceChange) > 0.05)
+	if (std::abs(_storeSize) > 0.05)
 	{
-		woststr << L"(";
-		if (_spaceChange > 0.) woststr << L"+";
-		woststr << std::fixed << std::setprecision(1) << _spaceChange << L")";
+		woststr << L" ";
+		if (_storeSize > 0.) woststr << L"+";
+		woststr << std::fixed << std::setprecision(1) << _storeSize;
 	}
-	_txtSpaceUsed->setText(woststr.str());
+	_txtStorage->setText(woststr.str());
 
 //	if (Options::storageLimitsEnforced == true)
-//		showOk = showOk && _base->storesOverfull(_spaceChange) == false;
+//		showOk = showOk && _base->storesOverfull(_storeSize) == false;
 	_btnOk->setVisible(showOk == true);
 }
 

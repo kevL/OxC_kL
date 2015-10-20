@@ -151,20 +151,18 @@ TransferItemsState::TransferItemsState(
 	_txtTitle->setText(tr("STR_TRANSFER"));
 
 	_txtBaseSource->setText(_baseSource->getName());
-
-	_txtBaseTarget->setAlign(ALIGN_RIGHT);
 	_txtBaseTarget->setText(_baseTarget->getName());
+	_txtBaseTarget->setAlign(ALIGN_RIGHT);
 
 	_txtSpaceSource->setAlign(ALIGN_RIGHT);
-
+	_txtSpaceSource->setColor(WHITE);
 	_txtSpaceTarget->setAlign(ALIGN_LEFT);
+	_txtSpaceTarget->setColor(WHITE);
 
 	_txtItem->setText(tr("STR_ITEM"));
-
 	_txtQuantity->setText(tr("STR_QUANTITY_UC"));
 
 //	_txtTransferQty->setText(tr("STR_AMOUNT_TO_TRANSFER"));
-
 	_txtQtyTarget->setText(tr("STR_AMOUNT_AT_DESTINATION"));
 
 	_lstItems->setBackground(_window);
@@ -213,9 +211,9 @@ void TransferItemsState::init()
 		woststr << _baseSource->getAvailableStores() << L":" << std::fixed << std::setprecision(1) << _baseSource->getUsedStores();
 		if (std::abs(_storeSize) > 0.05)
 		{
-			woststr << L"(";
+			woststr << L" ";
 			if (-_storeSize > 0.) woststr << L"+";
-			woststr << std::fixed << std::setprecision(1) << -_storeSize << L")";
+			woststr << std::fixed << std::setprecision(1) << -_storeSize;
 		}
 		_txtSpaceSource->setText(woststr.str());
 
@@ -223,9 +221,9 @@ void TransferItemsState::init()
 		woststr << _baseTarget->getAvailableStores() << L":" << std::fixed << std::setprecision(1) << _baseTarget->getUsedStores();
 		if (std::abs(_storeSize) > 0.05)
 		{
-			woststr << L"(";
+			woststr << L" ";
 			if (_storeSize > 0.) woststr << L"+";
-			woststr << std::fixed << std::setprecision(1) << _storeSize << L")";
+			woststr << std::fixed << std::setprecision(1) << _storeSize;
 		}
 		_txtSpaceTarget->setText(woststr.str());
 
@@ -1127,9 +1125,9 @@ void TransferItemsState::updateItemStrings() // private.
 	woststr << _baseSource->getAvailableStores() << L":" << std::fixed << std::setprecision(1) << _baseSource->getUsedStores();
 	if (std::abs(_storeSize) > 0.05)
 	{
-		woststr << L"(";
+		woststr << L" ";
 		if (-_storeSize > 0.) woststr << L"+";
-		woststr << std::fixed << std::setprecision(1) << -_storeSize << L")";
+		woststr << std::fixed << std::setprecision(1) << -_storeSize;
 	}
 	_txtSpaceSource->setText(woststr.str());
 
@@ -1137,9 +1135,9 @@ void TransferItemsState::updateItemStrings() // private.
 	woststr << _baseTarget->getAvailableStores() << L":" << std::fixed << std::setprecision(1) << _baseTarget->getUsedStores();
 	if (std::abs(_storeSize) > 0.05)
 	{
-		woststr << L"(";
+		woststr << L" ";
 		if (_storeSize > 0.) woststr << L"+";
-		woststr << std::fixed << std::setprecision(1) << _storeSize << L")";
+		woststr << std::fixed << std::setprecision(1) << _storeSize;
 	}
 	_txtSpaceTarget->setText(woststr.str());
 

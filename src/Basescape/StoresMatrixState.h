@@ -59,7 +59,7 @@ private:
 		* _txtBase_5,
 		* _txtBase_6,
 		* _txtBase_7,
-		* _txtItem,
+//		* _txtItem,
 		* _txtFreeStore,
 		* _txtTitle;
 	TextButton* _btnOk;

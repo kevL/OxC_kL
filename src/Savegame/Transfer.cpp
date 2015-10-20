@@ -107,11 +107,11 @@ bool Transfer::load(
 	if (const YAML::Node& item = node["itemId"])
 	{
 		_itemId = item.as<std::string>(_itemId);
-		if (rules->getItem(_itemId) == NULL)
+/*		if (rules->getItem(_itemId) == NULL)
 		{
 			delete this;
 			return false;
-		}
+		} */
 	}
 
 	_itemQty	= node["itemQty"]	.as<int>(_itemQty);
@@ -148,7 +148,7 @@ YAML::Node Transfer::save() const
 }
 
 /**
- * Changes the soldier being transferred.
+ * Changes the soldier being transfered.
  * @param soldier - pointer to a Soldier
  */
 void Transfer::setSoldier(Soldier* soldier)
@@ -157,7 +157,7 @@ void Transfer::setSoldier(Soldier* soldier)
 }
 
 /**
- * Changes the scientists being transferred.
+ * Changes the scientists being transfered.
  * @param scientists - amount of scientists
  */
 void Transfer::setScientists(int scientists)
@@ -166,7 +166,7 @@ void Transfer::setScientists(int scientists)
 }
 
 /**
- * Changes the engineers being transferred.
+ * Changes the engineers being transfered.
  * @param engineers - amount of engineers
  */
 void Transfer::setEngineers(int engineers)
@@ -175,7 +175,7 @@ void Transfer::setEngineers(int engineers)
 }
 
 /**
- * Changes the craft being transferred.
+ * Changes the craft being transfered.
  * @param craft - pointer to a Craft
  */
 void Transfer::setCraft(Craft* craft)
@@ -184,7 +184,7 @@ void Transfer::setCraft(Craft* craft)
 }
 
 /**
- * Gets the craft being transferred.
+ * Gets the craft being transfered.
  * @return, pointer to the Craft
  */
 Craft* Transfer::getCraft() const
@@ -193,7 +193,7 @@ Craft* Transfer::getCraft() const
 }
 
 /**
- * Returns the item-type being transferred.
+ * Returns the item-type being transfered.
  * @return, item ID
  */
 std::string Transfer::getTransferItems() const
@@ -202,7 +202,7 @@ std::string Transfer::getTransferItems() const
 }
 
 /**
- * Changes the item-type being transferred.
+ * Changes the item-type being transfered.
  * @param id	- reference the item ID
  * @param qty	- item quantity (default 1)
  */
@@ -314,7 +314,7 @@ void Transfer::advance(Base* base)
 }
 
 /**
- * Gets the soldier being transferred.
+ * Gets the soldier being transfered.
  * @return, pointer to Soldier
  */
 Soldier* Transfer::getSoldier() const
