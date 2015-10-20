@@ -523,10 +523,7 @@ void TransferItemsState::think()
 void TransferItemsState::btnOkClick(Action*)
 {
 	_resetAll = false;
-	_baseSource->setRecallRow( // note that if TransferConfirmState gets cancelled this still takes effect.
-						REC_TRANSFER,
-						_lstItems->getScroll());
-
+	_baseSource->setRecallRow(REC_TRANSFER, _lstItems->getScroll()); // note that if TransferConfirmState gets cancelled this still takes effect.
 	_game->pushState(new TransferConfirmState(_baseTarget, this));
 }
 
@@ -536,6 +533,7 @@ void TransferItemsState::btnOkClick(Action*)
  */
 void TransferItemsState::btnCancelClick(Action*)
 {
+	_baseSource->setRecallRow(REC_TRANSFER, _lstItems->getScroll());
 	_game->popState(); // pop main Transfer (this)
 //	_game->popState(); // pop choose Destination
 }

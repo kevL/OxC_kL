@@ -594,6 +594,7 @@ void SellState::btnOkClick(Action*)
  */
 void SellState::btnCancelClick(Action*)
 {
+	_base->setRecallRow(REC_SELL, _lstItems->getScroll());
 	_game->popState();
 }
 

@@ -5044,7 +5044,7 @@
 1445295106 f:\git\openxcom\src\savegame\transfer.h
 	"Base.h"
 
-1444222678 source:f:\git\openxcom\src\basescape\researchinfostate.cpp
+1445353521 source:f:\git\openxcom\src\basescape\researchinfostate.cpp
 	"ResearchInfoState.h"
 	"../Engine/Action.h"
 	"../Engine/Game.h"
@@ -5062,7 +5062,7 @@
 
 1444099995 f:\git\openxcom\src\engine\rng.h
 
-1445016856 source:f:\git\openxcom\src\basescape\researchstate.cpp
+1445353451 source:f:\git\openxcom\src\basescape\researchstate.cpp
 	"ResearchState.h"
 	"AlienContainmentState.h"
 	"BasescapeState.h"
@@ -8399,7 +8399,7 @@
 	"../Ruleset/RuleRegion.h"
 	"../Ruleset/Ruleset.h"
 
-1444489119 source:f:\git\openxcom\src\savegame\base.cpp
+1445353521 source:f:\git\openxcom\src\savegame\base.cpp
 	"Base.h"
 	"BaseFacility.h"
 	"Craft.h"
@@ -8537,7 +8537,7 @@
 	"Region.h"
 	"../Ruleset/RuleRegion.h"
 
-1444213424 source:f:\git\openxcom\src\savegame\researchproject.cpp
+1445353526 source:f:\git\openxcom\src\savegame\researchproject.cpp
 	"ResearchProject.h"
 	"../Interface/Text.h"
 	"../Ruleset/RuleResearch.h"

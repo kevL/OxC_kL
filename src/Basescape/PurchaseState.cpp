@@ -601,6 +601,7 @@ void PurchaseState::btnOkClick(Action*)
  */
 void PurchaseState::btnCancelClick(Action*)
 {
+	_base->setRecallRow(REC_PURCHASE, _lstItems->getScroll());
 	_game->popState();
 }
 
