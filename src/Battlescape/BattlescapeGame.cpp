@@ -2769,7 +2769,7 @@ void BattlescapeGame::primaryAction(const Position& pos)
 						_currentAction.actor->setTurnDirection(1);
 
 					Pathfinding::directionToVector(
-												(_currentAction.actor->getDirection() + 4) % 8,
+												(_currentAction.actor->getUnitDirection() + 4) % 8,
 												&_currentAction.target);
 					_currentAction.target += pos;
 
@@ -3003,10 +3003,10 @@ BattleUnit* BattlescapeGame::convertUnit(BattleUnit* const unit)
 
 	int dir;
 	if (conUnit->isZombie() == true)
-		dir = RNG::generate(0,7); // or, (unit->getDirection())
+		dir = RNG::generate(0,7); // or, (unit->getUnitDirection())
 	else
 		dir = 3;
-	conUnit->setDirection(dir);
+	conUnit->setUnitDirection(dir);
 
 	_battleSave->getUnits()->push_back(conUnit);
 

@@ -194,7 +194,7 @@ void UnitFallBState::think()
 
 		// The unit has moved from one tile to the other.
 		// kL_note: Can prob. use _tileSwitchDone around here...
-		if ((*i)->getPosition() != (*i)->getLastPosition())
+		if ((*i)->getPosition() != (*i)->getStartPosition())
 		{
 			for (int // reset tiles moved from
 					x = unitSize;
@@ -207,10 +207,10 @@ void UnitFallBState::think()
 						--y)
 				{
 					// Another falling unit might have already taken up this position so check that that unit is still there.
-					if (*i == _battleSave->getTile((*i)->getLastPosition() + Position(x,y,0))->getUnit())
+					if (*i == _battleSave->getTile((*i)->getStartPosition() + Position(x,y,0))->getUnit())
 					{
 						//Log(LOG_INFO) << ". Tile is not occupied";
-						_battleSave->getTile((*i)->getLastPosition() + Position(x,y,0))->setUnit(NULL);
+						_battleSave->getTile((*i)->getStartPosition() + Position(x,y,0))->setUnit(NULL);
 					}
 				}
 			}

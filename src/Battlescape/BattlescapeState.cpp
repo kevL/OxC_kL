@@ -2674,7 +2674,7 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 		if (selUnit->getCarriedWeight() > selUnit->getStrength())
 			_isOverweight = true;
 
-		_numDir->setValue(selUnit->getDirection());
+		_numDir->setValue(selUnit->getUnitDirection());
 		_numDir->setVisible();
 
 		if (selUnit->getTurretType() != -1)
@@ -4136,7 +4136,7 @@ void BattlescapeState::saveVoxelView()
 		ang_x,
 		ang_y,
 		dist = 0.,
-		dir = static_cast<double>(selUnit->getDirection() + 4) / 4. * M_PI;
+		dir = static_cast<double>(selUnit->getUnitDirection() + 4) / 4. * M_PI;
 
 	std::vector<unsigned char> image;
 	std::vector<Position> trj;

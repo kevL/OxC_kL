@@ -610,32 +610,44 @@ private:
 		/// Gets this unit's position.
 		const Position& getPosition() const;
 		/// Gets this unit's position.
-		const Position& getLastPosition() const;
+		const Position& getStartPosition() const;
+		/// Gets this unit's destination when walking.
+		const Position& getStopPosition() const;
 
 		/// Sets this unit's direction 0-7.
-		void setDirection(
+		void setUnitDirection(
 				int dir,
 				bool turret = true);
 		/// Gets this unit's direction.
-		int getDirection() const;
+		int getUnitDirection() const;
+		/// Looks at a certain point.
+		void setDirectionTo(
+				const Position& pos,
+				bool turret = false);
+		/// Looks in a certain direction.
+		void setDirectionTo(
+				int dir,
+				bool force = false);
 		/// Sets this unit's face direction - only used by strafing moves.
 		void setFaceDirection(int dir);
 		/// Gets this unit's face direction - only used by strafing moves.
 		int getFaceDirection() const;
-		/// Gets this unit's turret direction.
-		int getTurretDirection() const;
 		/// Sets this unit's turret direction.
 		void setTurretDirection(int dir);
+		/// Gets this unit's turret direction.
+		int getTurretDirection() const;
 		/// Gets this unit's turret To direction.
 		int getTurretToDirection() const;
 		/// Gets this unit's vertical direction.
 		int getVerticalDirection() const;
 
-		/// Gets this unit's status.
-		UnitStatus getUnitStatus() const;
-		/// Sets this unit's status.
-		void setUnitStatus(const UnitStatus status);
+		/// Turns to the destination direction.
+		void turn(bool turret = false);
 
+		/// Gets the walking phase for animation and sound.
+		int getWalkPhase() const;
+		/// Gets the walking phase for diagonal walking.
+		int getDiagonalWalkPhase() const;
 		/// Starts the walkingPhase.
 		void startWalking(
 				int dir,
@@ -649,24 +661,11 @@ private:
 		void walkPhaseCutoffs(
 				int& halfPhase,
 				int& fullPhase) const;
-		/// Gets the walking phase for animation and sound.
-		int getWalkPhase() const;
-		/// Gets the walking phase for diagonal walking.
-		int getDiagonalWalkPhase() const;
 
-		/// Gets this unit's destination when walking.
-		const Position& getDestination() const;
-
-		/// Looks at a certain point.
-		void lookAt(
-				const Position& pos,
-				bool turret = false);
-		/// Looks in a certain direction.
-		void lookAt(
-				int dir,
-				bool force = false);
-		/// Turns to the destination direction.
-		void turn(bool turret = false);
+		/// Sets this unit's status.
+		void setUnitStatus(const UnitStatus status);
+		/// Gets this unit's status.
+		UnitStatus getUnitStatus() const;
 
 		/// Gets the unit's gender.
 		SoldierGender getGender() const;

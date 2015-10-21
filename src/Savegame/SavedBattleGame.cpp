@@ -2135,8 +2135,7 @@ void SavedBattleGame::reviveUnit(
 				unit->kneel(true);
 
 			unit->clearCache();
-
-			unit->setDirection(RNG::generate(0,7));
+			unit->setUnitDirection(RNG::generate(0,7));
 			unit->setTimeUnits(0);
 			unit->setEnergy(0);
 			unit->setRevived();

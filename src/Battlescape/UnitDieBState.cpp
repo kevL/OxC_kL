@@ -82,7 +82,7 @@ UnitDieBState::UnitDieBState(
 			_parent->getMap()->setUnitDying();
 
 		if (_unit->getSpawnUnit().empty() == false)
-			_unit->lookAt(3); // inits STATUS_TURNING if not facing correctly. Else STATUS_STANDING
+			_unit->setDirectionTo(3); // inits STATUS_TURNING if not facing correctly. Else STATUS_STANDING
 		else
 			_unit->initDeathSpin(); // inits STATUS_TURNING
 	}

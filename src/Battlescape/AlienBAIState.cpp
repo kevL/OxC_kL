@@ -572,9 +572,9 @@ void AlienBAIState::setupPatrol() // private.
 		// take a peek through window before walking to the next node
 		const int dir = _battleSave->getTileEngine()->faceWindow(_unit->getPosition());
 		if (dir != -1
-			&& dir != _unit->getDirection())
+			&& dir != _unit->getUnitDirection())
 		{
-			_unit->lookAt(dir);
+			_unit->setDirectionTo(dir);
 			while (_unit->getUnitStatus() == STATUS_TURNING)
 				_unit->turn();
 		}
@@ -2076,7 +2076,7 @@ void AlienBAIState::meleeAction() // private.
  */
 void AlienBAIState::meleeAttack() // private.
 {
-	_unit->lookAt(
+	_unit->setDirectionTo(
 			_aggroTarget->getPosition() + Position(
 												_unit->getArmor()->getSize() - 1,
 												_unit->getArmor()->getSize() - 1,

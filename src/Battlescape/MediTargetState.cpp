@@ -165,7 +165,7 @@ void MediTargetState::init()
 					|| ((*i)->getFaction() != FACTION_HOSTILE
 						&& battleSave->getTileEngine()->validMeleeRange(
 																	_action->actor,
-																	_action->actor->getDirection(),
+																	_action->actor->getUnitDirection(),
 																	*i) == true))
 				{
 					addToList = true;

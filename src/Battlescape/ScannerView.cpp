@@ -135,7 +135,7 @@ void ScannerView::draw()
 
 	_dotsDone = true;
 
-	srf = srt->getFrame(_unit->getDirection() + 7); // the arrow in the direction the unit is pointed
+	srf = srt->getFrame(_unit->getUnitDirection() + 7); // the arrow in the direction the unit is pointed
 	srf->blitNShade(
 				this,
 				Surface::getX() + (9 * 8) - 4,

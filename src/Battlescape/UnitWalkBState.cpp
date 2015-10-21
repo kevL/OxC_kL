@@ -110,10 +110,10 @@ void UnitWalkBState::init()
 	_dirStart = _pf->getStartDirection();
 	//Log(LOG_INFO) << ". strafe = " << (int)_action.strafe;
 	//Log(LOG_INFO) << ". StartDirection(init) = " << _dirStart;
-	//Log(LOG_INFO) << ". getDirection(init) = " << _unit->getDirection();
+	//Log(LOG_INFO) << ". getUnitDirection(init) = " << _unit->getUnitDirection();
 	if (_action.strafe == false					// not strafing
 		&& _dirStart > -1 && _dirStart < 8		// moving but not up or down
-		&& _dirStart != _unit->getDirection())	// not facing in direction of movement
+		&& _dirStart != _unit->getUnitDirection())	// not facing in direction of movement
 	{
 		// kL_note: if unit is not facing in the direction that it's about to
 		// walk toward... This makes the unit expend tu's if it spots a new
@@ -122,7 +122,7 @@ void UnitWalkBState::init()
 		_preStepTurn = true;
 	}
 
-//	_unit->setFaceDirection(_unit->getDirection());
+//	_unit->setFaceDirection(_unit->getUnitDirection());
 
 	doFallCheck(); // kL
 	//Log(LOG_INFO) << "UnitWalkBState::init() EXIT";
@@ -147,7 +147,7 @@ void UnitWalkBState::think()
 //	bool onScreen = (_unit->getVisible() && _parent->getMap()->getCamera()->isOnScreen(_unit->getPosition(), true, size, false));
 	_onScreen = _unit->getUnitVisible();
 //				&& (_walkCam->isOnScreen(_unit->getPosition())
-//					|| _walkCam->isOnScreen(_unit->getDestination()));
+//					|| _walkCam->isOnScreen(_unit->getStopPosition()));
 	//Log(LOG_INFO) << ". _onScreen = " << _onScreen;
 
 
@@ -161,7 +161,7 @@ void UnitWalkBState::think()
 		if (_onScreen == true)
 		{
 			//Log(LOG_INFO) << ". onScreen";
-			const int dest_z = _unit->getDestination().z;
+			const int dest_z = _unit->getStopPosition().z;
 			if (_walkCam->isOnScreen(_unit->getPosition()) == true
 				&& _walkCam->getViewLevel() < dest_z)
 			{
@@ -207,7 +207,7 @@ void UnitWalkBState::think()
 				else if (_walkCam->isOnScreen(_unit->getPosition()) == true)
 				{
 					//Log(LOG_INFO) << ". onScreen";
-					const int dest_z = _unit->getDestination().z;
+					const int dest_z = _unit->getStopPosition().z;
 					if (_walkCam->getViewLevel() > dest_z
 						&& (_pf->getPath().size() == 0
 							|| _pf->getPath().back() != _pf->DIR_UP))
@@ -236,16 +236,16 @@ void UnitWalkBState::think()
 //			if (_pf->getStrafeMove() == true) // NOTE: This could be trimmed, because I had to make tanks use getFaceDirection() in UnitSprite::drawRoutine2() anyway ...
 			if (_action.strafe == true)
 			{
-				//Log(LOG_INFO) << ". WALKING strafe, unitDir = " << _unit->getDirection();
+				//Log(LOG_INFO) << ". WALKING strafe, unitDir = " << _unit->getUnitDirection();
 				//Log(LOG_INFO) << ". WALKING strafe, faceDir = " << _unit->getFaceDirection();
-				const int dirStrafe = _unit->getDirection(); // direction of travel
-				_unit->setDirection(
-								_unit->getFaceDirection(),
-								false);
+				const int dirStrafe = _unit->getUnitDirection(); // direction of travel
+				_unit->setUnitDirection(
+									_unit->getFaceDirection(),
+									false);
 
 //				_unit->clearCache(); // kL, might play around with Strafe anim's ......
 				_parent->getMap()->cacheUnit(_unit);
-				_unit->setDirection(dirStrafe, false);
+				_unit->setUnitDirection(dirStrafe, false);
 			}
 			else
 			{
@@ -284,7 +284,7 @@ void UnitWalkBState::think()
 				//Log(LOG_INFO) << ". cam->onScreen";
 				const int
 					pos_z = _unit->getPosition().z,
-					dest_z = _unit->getDestination().z;
+					dest_z = _unit->getStopPosition().z;
 				if (pos_z == dest_z
 					|| (pos_z < dest_z
 						&& _walkCam->getViewLevel() < dest_z))
@@ -414,8 +414,8 @@ bool UnitWalkBState::doStatusStand() // private.
 			if (_unit->getGeoscapeSoldier() != NULL
 				|| _unit->getUnitRules()->isMechanical() == false)
 			{
-				//Log(LOG_INFO) << ". STANDING strafeMove, setFaceDirection() -> " << _unit->getDirection();
-				_unit->setFaceDirection(_unit->getDirection());
+				//Log(LOG_INFO) << ". STANDING strafeMove, setFaceDirection() -> " << _unit->getUnitDirection();
+				_unit->setFaceDirection(_unit->getUnitDirection());
 			}
 			else
 			{
@@ -425,7 +425,7 @@ bool UnitWalkBState::doStatusStand() // private.
 
 				if (_unit->getTurretType() != -1)
 				{
-					const int turretOffset = _unit->getTurretDirection() - _unit->getDirection();
+					const int turretOffset = _unit->getTurretDirection() - _unit->getUnitDirection();
 					_unit->setTurretDirection((turretOffset + dirStrafe) % 8);
 					//Log(LOG_INFO) << ". STANDING strafeTank, setTurretDirection() -> " << (turretOffset + dirStrafe);
 				}
@@ -554,12 +554,12 @@ bool UnitWalkBState::doStatusStand() // private.
 
 			return false;
 		}
-		else if (dir != _unit->getDirection()	// unit is looking in the wrong way so turn first - unless strafe.
+		else if (dir != _unit->getUnitDirection()	// unit is looking in the wrong way so turn first - unless strafe.
 			&& dir < _pf->DIR_UP				// Do not use TurnBState because turning during walking doesn't cost TU.
 			&& _action.strafe == false)
 		{
-			//Log(LOG_INFO) << ". . dir != _unit->getDirection() -> turn";
-			_unit->lookAt(dir);
+			//Log(LOG_INFO) << ". . dir != _unit->getUnitDirection() -> turn";
+			_unit->setDirectionTo(dir);
 
 			_unit->clearCache();
 			_parent->getMap()->cacheUnit(_unit);
@@ -690,7 +690,7 @@ bool UnitWalkBState::doStatusStand() // private.
 	}
 	else // dir == -1
 	{
-		//Log(LOG_INFO) << ". dir = " << _unit->getDirection();
+		//Log(LOG_INFO) << ". dir = " << _unit->getUnitDirection();
 		//Log(LOG_INFO) << ". . CALL postPathProcedures()";
 		postPathProcedures();
 		return false;
@@ -707,11 +707,11 @@ bool UnitWalkBState::doStatusStand() // private.
 bool UnitWalkBState::doStatusWalk() // private.
 {
 	//Log(LOG_INFO) << "***** UnitWalkBState::doStatusWalk() : " << _unit->getId();
-	if (_battleSave->getTile(_unit->getDestination())->getUnit() == NULL // next tile must be not occupied
+	if (_battleSave->getTile(_unit->getStopPosition())->getUnit() == NULL // next tile must be not occupied
 		// kL_note: and, if not flying, the position directly below the tile must not be occupied...
 		// Had that happen with a sectoid left standing in the air because a cyberdisc was 2 levels below it.
 		// btw, these have probably been already checked...
-		|| _battleSave->getTile(_unit->getDestination())->getUnit() == _unit)
+		|| _battleSave->getTile(_unit->getStopPosition())->getUnit() == _unit)
 	{
 		//Log(LOG_INFO) << ". WalkBState, keepWalking()";
 		playMovementSound();
@@ -725,8 +725,8 @@ bool UnitWalkBState::doStatusWalk() // private.
 		//Log(LOG_INFO) << ". WalkBState, !falling Abort path";
 		clearTilesLink(false);
 
-		_unit->lookAt( // turn to blocking unit
-				_unit->getDestination(),
+		_unit->setDirectionTo( // turn to blocking unit
+				_unit->getStopPosition(),
 				_unit->getTurretType() != -1);
 
 		_pf->abortPath();
@@ -736,7 +736,7 @@ bool UnitWalkBState::doStatusWalk() // private.
 	//Log(LOG_INFO) << ". . unitPos " << _unit->getPosition();
 	// unit moved from one tile to the other, update the tiles & investigate new flooring
 	if (_tileSwitchDone == false
-		&& _unit->getPosition() != _unit->getLastPosition())
+		&& _unit->getPosition() != _unit->getStartPosition())
 	{
 		//Log(LOG_INFO) << ". tile switch from _lastpos to _destination";
 		_tileSwitchDone = true;
@@ -756,7 +756,7 @@ bool UnitWalkBState::doStatusWalk() // private.
 					--y)
 			{
 				//Log(LOG_INFO) << ". . remove unit from previous tile";
-				tile = _battleSave->getTile(_unit->getLastPosition() + Position(x,y,0));
+				tile = _battleSave->getTile(_unit->getStartPosition() + Position(x,y,0));
 				tile->setUnit(NULL);
 				tile->setTransitUnit(_unit); // IMPORTANT: lastTile transiently holds onto this unit (all quads) for Map drawing.
 			}
@@ -1076,7 +1076,7 @@ void UnitWalkBState::postPathProcedures() // private.
 		}
 		else if (_unit->isHiding() == true)
 		{
-//			dir = _unit->getDirection() + 4; // just remove this so I don't have to look at Sectopod arses.
+//			dir = _unit->getUnitDirection() + 4; // just remove this so I don't have to look at Sectopod arses.
 			_unit->setHiding(false);
 			_unit->dontReselect();
 		}
@@ -1086,7 +1086,7 @@ void UnitWalkBState::postPathProcedures() // private.
 
 		if (dir != -1)
 		{
-			_unit->lookAt(dir % 8);
+			_unit->setDirectionTo(dir % 8);
 			while (_unit->getUnitStatus() == STATUS_TURNING)
 			{
 				_unit->turn();
@@ -1356,7 +1356,7 @@ void UnitWalkBState::establishTilesLink() const // private.
 				y != -1;
 				--y)
 		{
-			_battleSave->getTile(_unit->getDestination() + Position(x,y,0))->setTransitUnit(_unit);
+			_battleSave->getTile(_unit->getStopPosition() + Position(x,y,0))->setTransitUnit(_unit);
 		}
 	}
 }
@@ -1389,9 +1389,9 @@ void UnitWalkBState::clearTilesLink(bool origin) const // private.
 	}
 
 	if (origin == true)
-		pos = _unit->getLastPosition();
+		pos = _unit->getStartPosition();
 	else
-		pos = _unit->getDestination();
+		pos = _unit->getStopPosition();
 
 	for (int
 			x = armorSize;

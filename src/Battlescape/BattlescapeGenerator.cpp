@@ -1152,7 +1152,7 @@ BattleUnit* BattlescapeGenerator::addXCOMUnit(BattleUnit* const unit) // private
 			_battleSave->getUnits()->push_back(unit); // add unit to vector of Units.
 
 			_battleSave->setUnitPosition(unit, node->getPosition());
-			unit->setDirection(RNG::generate(0,7));
+			unit->setUnitDirection(RNG::generate(0,7));
 
 			_tileEquipt = _battleSave->getTile(node->getPosition());
 			_battleSave->setBattleInventory(_tileEquipt);
@@ -1167,7 +1167,7 @@ BattleUnit* BattlescapeGenerator::addXCOMUnit(BattleUnit* const unit) // private
 				//Log(LOG_INFO) << ". . . placeUnitNearFriend() TRUE";
 				_battleSave->getUnits()->push_back(unit); // add unit to vector of Units.
 
-				unit->setDirection(RNG::generate(0,7));
+				unit->setUnitDirection(RNG::generate(0,7));
 
 				_tileEquipt = _battleSave->getTile(unit->getPosition());
 				_battleSave->setBattleInventory(_tileEquipt);
@@ -1216,7 +1216,7 @@ BattleUnit* BattlescapeGenerator::addXCOMUnit(BattleUnit* const unit) // private
 					//Log(LOG_INFO) << ". setUnitPosition()";
 					_battleSave->getUnits()->push_back(unit); // add unit to vector of Units.
 
-					unit->setDirection((*i)[3]);
+					unit->setUnitDirection((*i)[3]);
 
 					return unit;
 				}
@@ -1887,7 +1887,7 @@ BattleUnit* BattlescapeGenerator::addAlien( // private.
 
 		if (dir == -1)
 			dir = RNG::generate(0,7);
-		unit->setDirection(dir);
+		unit->setUnitDirection(dir);
 
 		int tu = unit->getTimeUnits();
 		tu = static_cast<int>(ceil(
@@ -2000,7 +2000,7 @@ void BattlescapeGenerator::addCivilian(RuleUnit* const unitRule) // private.
 		|| placeUnitNearFriend(unit) == true)
 	{
 		unit->setAIState(new CivilianBAIState(_battleSave, unit, node));
-		unit->setDirection(RNG::generate(0,7));
+		unit->setUnitDirection(RNG::generate(0,7));
 
 		_battleSave->getUnits()->push_back(unit);
 	}

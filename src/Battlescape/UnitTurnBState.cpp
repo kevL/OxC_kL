@@ -91,7 +91,7 @@ void UnitTurnBState::init()
 	if (_unit->getPosition().x != _action.target.x
 		|| _unit->getPosition().y != _action.target.y)
 	{
-		_unit->lookAt(_action.target, _turret); // -> STATUS_TURNING
+		_unit->setDirectionTo(_action.target, _turret); // -> STATUS_TURNING
 	}
 
 

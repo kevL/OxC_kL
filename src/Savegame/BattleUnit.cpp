@@ -772,19 +772,21 @@ const Position& BattleUnit::getPosition() const
 }
 
 /**
- * Gets this BattleUnit's last position.
+ * Gets the Position at which this BattleUnit started walking Tile-to-Tile.
+ * @note This is one step only - UnitWalkBState updates it after *every* tile.
  * @return, reference to the position
  */
-const Position& BattleUnit::getLastPosition() const
+const Position& BattleUnit::getStartPosition() const
 {
 	return _posLast;
 }
 
 /**
- * Gets this BattleUnit's destination.
+ * Gets the Position at which this BattleUnit will stop walking Tile-toTile.
+ * @note This is one step only - UnitWalkBState updates it after *every* tile.
  * @return, reference to the destination
  */
-const Position& BattleUnit::getDestination() const
+const Position& BattleUnit::getStopPosition() const
 {
 	return _posDest;
 }
@@ -795,7 +797,7 @@ const Position& BattleUnit::getDestination() const
  * @param dir		- new horizontal direction
  * @param turret	- true to set the turret direction also
  */
-void BattleUnit::setDirection(
+void BattleUnit::setUnitDirection(
 		int dir,
 		bool turret)
 {
@@ -803,16 +805,64 @@ void BattleUnit::setDirection(
 	_dirTo = dir;
 
 	if (turret == true) // || _turretType == -1
-		_dirTurret = dir;
+		_dirTurret =
+		_dirToTurret = dir;
 }
 
 /**
  * Gets this BattleUnit's horizontal direction.
  * @return, horizontal direction
  */
-int BattleUnit::getDirection() const
+int BattleUnit::getUnitDirection() const
 {
 	return _dir;
+}
+
+/**
+ * Look at a point.
+ * @param pos		- reference the position to look at
+ * @param turret	- true to turn the turret (default false to turn the unit)
+ */
+void BattleUnit::setDirectionTo(
+		const Position& pos,
+		bool turret)
+{
+	const int dir = directionTo(pos);
+	if (turret == true)
+	{
+		if (dir != _dirTurret)
+		{
+			_dirToTurret = dir;
+			_status = STATUS_TURNING;
+		}
+	}
+	else if (dir != _dir)
+	{
+		_dirTo = dir;
+		_status = STATUS_TURNING;
+	}
+}
+
+/**
+ * Look a direction.
+ * @param dir	- direction to look
+ * @param force	- true to instantly set direction (default false to animate)
+ */
+void BattleUnit::setDirectionTo(
+		int dir,
+		bool force)
+{
+	if (dir != _dir
+		&& dir > -1 && dir < 8)
+	{
+		if (force == false)
+		{
+			_dirTo = dir;
+			_status = STATUS_TURNING;
+		}
+		else
+			_dirTo = _dir = dir;
+	}
 }
 
 /**
@@ -836,21 +886,21 @@ int BattleUnit::getFaceDirection() const
 }
 
 /**
- * Gets this BattleUnit's turret direction.
- * @return, turret direction
- */
-int BattleUnit::getTurretDirection() const
-{
-	return _dirTurret;
-}
-
-/**
  * Sets this BattleUnit's turret direction.
  * @param dir - turret direction
  */
 void BattleUnit::setTurretDirection(int dir)
 {
 	_dirTurret = dir;
+}
+
+/**
+ * Gets this BattleUnit's turret direction.
+ * @return, turret direction
+ */
+int BattleUnit::getTurretDirection() const
+{
+	return _dirTurret;
 }
 
 /**
@@ -873,21 +923,137 @@ int BattleUnit::getVerticalDirection() const
 }
 
 /**
- * Gets this BattleUnit's status.
- * @return, UnitStatus enum (BattleUnit.h)
+ * Advances the turning towards the target direction.
+ * @param turret - true to turn the turret (default false to turn the whole unit)
  */
-UnitStatus BattleUnit::getUnitStatus() const
+void BattleUnit::turn(bool turret)
 {
-	return _status;
+	int delta;
+
+	if (turret == true)
+	{
+		if (_dirTurret == _dirToTurret)
+		{
+			_status = STATUS_STANDING;
+			return;
+		}
+
+		delta = _dirToTurret - _dirTurret;
+	}
+	else
+	{
+		if (_dir == _dirTo)
+		{
+			_status = STATUS_STANDING;
+			return;
+		}
+
+		delta = _dirTo - _dir;
+	}
+
+	if (delta != 0) // duh
+	{
+		if (delta > 0)
+		{
+			if (delta < 5
+				&& _dirTurn != -1)
+			{
+				if (turret == false)
+				{
+					++_dir;
+					if (_turretType > -1)
+						++_dirTurret;
+				}
+				else
+					++_dirTurret;
+			}
+			else // > 4
+			{
+				if (turret == false)
+				{
+					--_dir;
+					if (_turretType > -1)
+						--_dirTurret;
+				}
+				else
+					--_dirTurret;
+			}
+		}
+		else
+		{
+			if (delta > -5
+				&& _dirTurn != 1)
+			{
+				if (turret == false)
+				{
+					--_dir;
+					if (_turretType > -1)
+						--_dirTurret;
+				}
+				else
+					--_dirTurret;
+			}
+			else // < -4
+			{
+				if (turret == false)
+				{
+					++_dir;
+					if (_turretType > -1)
+						++_dirTurret;
+				}
+				else
+					++_dirTurret;
+			}
+		}
+
+		if (_dir < 0)
+			_dir = 7;
+		else if (_dir > 7)
+			_dir = 0;
+
+		if (_dirTurret < 0)
+			_dirTurret = 7;
+		else if (_dirTurret > 7)
+			_dirTurret = 0;
+
+		if (_visible == true
+			|| _faction == FACTION_PLAYER) // kL_note: Faction_player should *always* be _visible...
+		{
+			_cacheInvalid = true;
+		}
+	}
+
+	if (turret == true)
+	{
+		 if (_dirToTurret == _dirTurret)
+			_status = STATUS_STANDING;
+	}
+	else if (_dirTo == _dir
+		|| _status == STATUS_UNCONSCIOUS)	// kL_note: I didn't know Unconscious could turn...
+											// learn something new every day.
+											// It's used when reviving unconscious soldiers;
+											// they need to go to STATUS_STANDING.
+	{
+		_status = STATUS_STANDING;
+	}
 }
 
 /**
- * Sets a unit's status.
- * @param status - UnitStatus enum (BattleUnit.h)
+ * Gets the walking phase for animation and sound.
+ * @return, phase will always go from 0-7
  */
-void BattleUnit::setUnitStatus(const UnitStatus status)
+int BattleUnit::getWalkPhase() const
 {
-	_status = status;
+	return _walkPhase % 8;
+}
+
+/**
+ * Gets the walking phase for diagonal walking.
+ * @return, phase will be 0 or 8 due to rounding ints down
+ */
+int BattleUnit::getDiagonalWalkPhase() const
+{
+	return (_walkPhase / 8) * 8;
 }
 
 /**
@@ -1041,184 +1207,21 @@ void BattleUnit::walkPhaseCutoffs(
 }
 
 /**
- * Gets the walking phase for animation and sound.
- * @return, phase will always go from 0-7
+ * Sets a unit's status.
+ * @param status - UnitStatus enum (BattleUnit.h)
  */
-int BattleUnit::getWalkPhase() const
+void BattleUnit::setUnitStatus(const UnitStatus status)
 {
-	return _walkPhase % 8;
+	_status = status;
 }
 
 /**
- * Gets the walking phase for diagonal walking.
- * @return, phase will be 0 or 8 due to rounding ints down
+ * Gets this BattleUnit's status.
+ * @return, UnitStatus enum (BattleUnit.h)
  */
-int BattleUnit::getDiagonalWalkPhase() const
+UnitStatus BattleUnit::getUnitStatus() const
 {
-	return (_walkPhase / 8) * 8;
-}
-
-/**
- * Look at a point.
- * @param pos		- reference the position to look at
- * @param turret	- true to turn the turret (default false to turn the unit)
- */
-void BattleUnit::lookAt(
-		const Position& pos,
-		bool turret)
-{
-	const int dir = directionTo(pos);
-	if (turret == true)
-	{
-		if (dir != _dirTurret)
-		{
-			_dirToTurret = dir;
-			_status = STATUS_TURNING;
-		}
-	}
-	else if (dir != _dir)
-	{
-		_dirTo = dir;
-		_status = STATUS_TURNING;
-	}
-}
-
-/**
- * Look a direction.
- * @param dir	- direction to look
- * @param force	- true to instantly set direction (default false to animate)
- */
-void BattleUnit::lookAt(
-		int dir,
-		bool force)
-{
-	if (dir != _dir
-		&& dir > -1 && dir < 8)
-	{
-		if (force == true)
-			_dir = _dirTo = dir;
-		else
-		{
-			_dirTo = dir;
-			_status = STATUS_TURNING;
-		}
-	}
-}
-
-/**
- * Advances the turning towards the target direction.
- * @param turret - true to turn the turret (default false to turn the unit)
- */
-void BattleUnit::turn(bool turret)
-{
-	int delta;
-
-	if (turret == true)
-	{
-		if (_dirTurret == _dirToTurret)
-		{
-			_status = STATUS_STANDING;
-			return;
-		}
-
-		delta = _dirToTurret - _dirTurret;
-	}
-	else
-	{
-		if (_dir == _dirTo)
-		{
-			_status = STATUS_STANDING;
-			return;
-		}
-
-		delta = _dirTo - _dir;
-	}
-
-	if (delta != 0) // duh
-	{
-		if (delta > 0)
-		{
-			if (delta < 5
-				&& _dirTurn != -1)
-			{
-				if (turret == false)
-				{
-					++_dir;
-					if (_turretType > -1)
-						++_dirTurret;
-				}
-				else
-					++_dirTurret;
-			}
-			else // > 4
-			{
-				if (turret == false)
-				{
-					--_dir;
-					if (_turretType > -1)
-						--_dirTurret;
-				}
-				else
-					--_dirTurret;
-			}
-		}
-		else
-		{
-			if (delta > -5
-				&& _dirTurn != 1)
-			{
-				if (turret == false)
-				{
-					--_dir;
-					if (_turretType > -1)
-						--_dirTurret;
-				}
-				else
-					--_dirTurret;
-			}
-			else // < -4
-			{
-				if (turret == false)
-				{
-					++_dir;
-					if (_turretType > -1)
-						++_dirTurret;
-				}
-				else
-					++_dirTurret;
-			}
-		}
-
-		if (_dir < 0)
-			_dir = 7;
-		else if (_dir > 7)
-			_dir = 0;
-
-		if (_dirTurret < 0)
-			_dirTurret = 7;
-		else if (_dirTurret > 7)
-			_dirTurret = 0;
-
-		if (_visible == true
-			|| _faction == FACTION_PLAYER) // kL_note: Faction_player should *always* be _visible...
-		{
-			_cacheInvalid = true;
-		}
-	}
-
-	if (turret == true)
-	{
-		 if (_dirToTurret == _dirTurret)
-			_status = STATUS_STANDING;
-	}
-	else if (_dirTo == _dir
-		|| _status == STATUS_UNCONSCIOUS)	// kL_note: I didn't know Unconscious could turn...
-											// learn something new every day.
-											// It's used when reviving unconscious soldiers;
-											// they need to go to STATUS_STANDING.
-	{
-		_status = STATUS_STANDING;
-	}
+	return _status;
 }
 
 /**
@@ -4269,7 +4272,7 @@ void BattleUnit::contDeathSpin()
 			dir = 7;
 	}
 
-	setDirection(dir);
+	setUnitDirection(dir);
 	_cacheInvalid = true;
 }
 

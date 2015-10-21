@@ -384,7 +384,7 @@ bool TileEngine::calculateFOV(BattleUnit* const unit) const
 		dir = unit->getTurretDirection();
 	}
 	else
-		dir = unit->getDirection();
+		dir = unit->getUnitDirection();
 
 	const bool swapXY = (dir == 0 || dir == 4);
 
@@ -4285,7 +4285,7 @@ int TileEngine::unitOpensDoor(
 {
 	//Log(LOG_INFO) << "unitOpensDoor()";
 	if (dir == -1)
-		dir = unit->getDirection();
+		dir = unit->getUnitDirection();
 
 	if (rtClick == true // RMB works only for cardinal directions, and not for dogs.
 		&& (dir % 2 == 1
@@ -5288,7 +5288,7 @@ bool TileEngine::validMeleeRange(
 		const BattleUnit* const targetUnit) const
 {
 	if (dir == -1)
-		dir = actor->getDirection();
+		dir = actor->getUnitDirection();
 
 	return validMeleeRange(
 						actor->getPosition(),
@@ -5392,7 +5392,7 @@ Position TileEngine::getMeleePosition(const BattleUnit* const actor) const
 
 	const int
 		armorSize = actor->getArmor()->getSize(),
-		dir = actor->getDirection();
+		dir = actor->getUnitDirection();
 
 	Pathfinding::directionToVector(dir, &posVector);
 
@@ -5464,7 +5464,7 @@ Tile* TileEngine::getExecutionTile(const BattleUnit* const actor) const
 
 	const int
 		armorSize = actor->getArmor()->getSize(),
-		dir = actor->getDirection();
+		dir = actor->getUnitDirection();
 
 	Pathfinding::directionToVector(dir, &posVector);
 
@@ -6129,7 +6129,7 @@ Tile* TileEngine::applyGravity(Tile* const tile) const
 				{
 					// move to the position you're already in. this will unset the kneeling flag, set the floating flag, etc.
 					unit->startWalking(
-									unit->getDirection(),
+									unit->getUnitDirection(),
 									unit->getPosition(),
 									_battleSave->getTile(unit->getPosition() + Position(0,0,-1)));
 //									true);

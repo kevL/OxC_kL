@@ -782,8 +782,8 @@ void Map::drawTerrain(Surface* const surface) // private.
 							&& unitWest->getUnitVisible() == true // don't bother checking DebugMode.
 							&& (unitWest->getUnitStatus() == STATUS_WALKING
 								|| unitWest->getUnitStatus() == STATUS_FLYING)
-							&& (unitWest->getDirection() == 1
-								|| unitWest->getDirection() == 5)) // && vertical dir == 0
+							&& (unitWest->getUnitDirection() == 1
+								|| unitWest->getUnitDirection() == 5)) // && vertical dir == 0
 						{
 							const Tile* tileNorth = _battleSave->getTile(posField + Position(0,-1,0));
 							const BattleUnit* unitNorth = tileNorth->getUnit();
@@ -1153,12 +1153,12 @@ void Map::drawTerrain(Surface* const surface) // private.
 							draw = true;
 
 						if ((_unit->getWalkPhase() != 0
-								|| _unit->getDirection() == 1
-								|| _unit->getDirection() == 2) // weird.
+								|| _unit->getUnitDirection() == 1
+								|| _unit->getUnitDirection() == 2) // weird.
 							&& (_unit->getUnitStatus() == STATUS_WALKING
 								|| _unit->getUnitStatus() == STATUS_FLYING))
 						{
-							switch (_unit->getDirection())
+							switch (_unit->getUnitDirection())
 							{
 								case 0:
 								case 4:
@@ -1981,12 +1981,12 @@ bool Map::checkWest( // private.
 	if (ret == false) // unit might actually be too far away from wall to clip despite above conditions - now don't let the floor clip it
 	{
 		if (unit == NULL) unit = _unit;
-		switch (unit->getDirection())
+		switch (unit->getUnitDirection())
 		{
 			case 1:
-			case 2: ret = unit->getPosition() == unit->getDestination(); break;
+			case 2: ret = unit->getPosition() == unit->getStopPosition(); break;
 			case 5:
-			case 6: ret = unit->getPosition() == unit->getLastPosition();
+			case 6: ret = unit->getPosition() == unit->getStartPosition();
 		}
 
 		if (halfRight != NULL && unit->getArmor()->getSize() == 2)
@@ -2012,7 +2012,7 @@ bool Map::checkWest( // private.
 					*halfRight = true; // but only if a wall is directly south
 				}
 			}
-			else if (unit->getDirection() == 1 || unit->getDirection() == 2)
+			else if (unit->getUnitDirection() == 1 || unit->getUnitDirection() == 2)
 			{
 				*halfRight = true;
 				ret = true;
@@ -2059,12 +2059,12 @@ bool Map::checkNorth( // private.
 	if (ret == false) // unit might actually be too far away from wall to clip despite above conditions - now don't let the floor clip it
 	{
 		if (unit == NULL) unit = _unit;
-		switch (unit->getDirection())
+		switch (unit->getUnitDirection())
 		{
 			case 0:
-			case 1: ret = unit->getPosition() == unit->getLastPosition(); break;
+			case 1: ret = unit->getPosition() == unit->getStartPosition(); break;
 			case 4:
-			case 5: ret = unit->getPosition() == unit->getDestination();
+			case 5: ret = unit->getPosition() == unit->getStopPosition();
 		}
 	}
 
@@ -2284,8 +2284,8 @@ int Map::getQuadrant(
 			+ (tile->getPosition().y - unit->getPosition().y) * 2;
 	}
 
-	int dir = unit->getDirection();
-	if (unit->getPosition() == unit->getDestination())
+	int dir = unit->getUnitDirection();
+	if (unit->getPosition() == unit->getStopPosition())
 		dir = (dir + 4) % 8;
 
 	Position
@@ -2323,7 +2323,7 @@ void Map::calculateWalkingOffset(
 			offsetFalseY[8] = {-8,  0,  8, 16,  8,  0, -8,-16}, // destination & last positions. See UnitWalkBState.
 			offsetFalseVert = 24;
 		const int
-			dir = unit->getDirection(),				// 0..7
+			dir = unit->getUnitDirection(),				// 0..7
 			dirVert = unit->getVerticalDirection(),	// 0= none, 8= up, 9= down
 			walkPhase = unit->getWalkPhase() + unit->getDiagonalWalkPhase(),
 			armorSize = unit->getArmor()->getSize();
@@ -2360,8 +2360,8 @@ void Map::calculateWalkingOffset(
 
 		// if unit is between tiles interpolate its terrain level (y-adjustment).
 		const int
-			posLastZ = unit->getLastPosition().z,
-			posDestZ = unit->getDestination().z;
+			posLastZ = unit->getStartPosition().z,
+			posDestZ = unit->getStopPosition().z;
 		int
 			levelStart,
 			levelEnd;
@@ -2374,7 +2374,7 @@ void Map::calculateWalkingOffset(
 				offset->y += (trueLoc == true) ? 0 : -offsetFalseVert;
 
 			levelEnd = getTerrainLevel(
-									unit->getDestination(),
+									unit->getStopPosition(),
 									armorSize);
 
 			if (posLastZ > posDestZ)		// going down a level so 'levelEnd' 0 becomes +24 (-8 becomes 16)
@@ -2402,7 +2402,7 @@ void Map::calculateWalkingOffset(
 				offset->y += (trueLoc == true) ? 0 : offsetFalseVert;
 
 			levelStart = getTerrainLevel(
-									unit->getLastPosition(),
+									unit->getStartPosition(),
 									armorSize);
 
 			if (posLastZ > posDestZ)		// going down a level so 'levelStart' 0 becomes -24 (-8 becomes -32)
@@ -2411,7 +2411,7 @@ void Map::calculateWalkingOffset(
 				levelStart =  24 * (posDestZ - posLastZ) - std::abs(levelStart);
 
 			levelEnd = getTerrainLevel(
-									unit->getDestination(),
+									unit->getStopPosition(),
 									armorSize);
 			offset->y += ((levelStart * (fullPhase - walkPhase)) / fullPhase) + ((levelEnd * walkPhase) / fullPhase);
 

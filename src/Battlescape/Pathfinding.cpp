@@ -335,7 +335,7 @@ void Pathfinding::calculate(
 				&& unit->getGeoscapeSoldier() != NULL
 				&& (_strafe == false
 					|| (_path.size() == 1
-						&& unit->getDirection() == _path.front())))
+						&& unit->getUnitDirection() == _path.front())))
 			{
 				_strafe = false;
 
@@ -1148,7 +1148,7 @@ int Pathfinding::getTuCostPf(
 				// kL_begin: extra TU for strafe-moves ->	1 0 1
 				//											2 ^ 2
 				//											3 2 3
-				int delta = std::abs((dir + 4) % 8 - _unit->getDirection());
+				int delta = std::abs((dir + 4) % 8 - _unit->getUnitDirection());
 
 				if (_unit->getUnitRules() != NULL
 					&& _unit->getUnitRules()->isMechanical() == true
@@ -1157,13 +1157,13 @@ int Pathfinding::getTuCostPf(
 					_strafe = false; // illegal direction for tank-strafe.
 					_battleAction->strafe = false;
 				}
-				else if (_unit->getDirection() != dir) // if not dashing straight ahead 1 tile.
+				else if (_unit->getUnitDirection() != dir) // if not dashing straight ahead 1 tile.
 				{
 					delta = std::min(
-								std::abs(8 + dir - _unit->getDirection()),
+								std::abs(8 + dir - _unit->getUnitDirection()),
 								std::min(
-									std::abs(_unit->getDirection() - dir),
-									std::abs(8 + _unit->getDirection() - dir)));
+									std::abs(_unit->getUnitDirection() - dir),
+									std::abs(8 + _unit->getUnitDirection() - dir)));
 					if (delta == 4) delta = 2;
 
 					cost += delta;

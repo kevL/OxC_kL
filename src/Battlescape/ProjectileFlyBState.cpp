@@ -1156,7 +1156,7 @@ void ProjectileFlyBState::performMeleeAttack() // private.
 
 	Position hitVoxel;
 	_battleSave->getPathfinding()->directionToVector(
-												_unit->getDirection(),
+												_unit->getUnitDirection(),
 												&hitVoxel);
 	hitVoxel = Position::toVoxelSpaceCentered(_action.target, height) - (hitVoxel * 2);
 
