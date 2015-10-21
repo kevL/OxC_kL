@@ -5014,7 +5014,7 @@
 1436386751 f:\git\openxcom\src\basescape\placestartfacilitystate.h
 	"PlaceFacilityState.h"
 
-1445299135 source:f:\git\openxcom\src\basescape\purchasestate.cpp
+1445375650 source:f:\git\openxcom\src\basescape\purchasestate.cpp
 	"PurchaseState.h"
 	"../Engine/Action.h"
 	"../Engine/Game.h"
@@ -5109,7 +5109,7 @@
 	"../Savegame/Base.h"
 	"../Savegame/BaseFacility.h"
 
-1445300350 source:f:\git\openxcom\src\basescape\sellstate.cpp
+1445375665 source:f:\git\openxcom\src\basescape\sellstate.cpp
 	"SellState.h"
 	"../Engine/Action.h"
 	"../Engine/Game.h"
@@ -5283,7 +5283,7 @@
 1430149550 f:\git\openxcom\src\basescape\transferconfirmstate.h
 	"../Engine/State.h"
 
-1445298262 source:f:\git\openxcom\src\basescape\transferitemsstate.cpp
+1445375631 source:f:\git\openxcom\src\basescape\transferitemsstate.cpp
 	"TransferItemsState.h"
 	"TransferConfirmState.h"
 	"../Engine/Action.h"
@@ -5965,7 +5965,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1445253517 source:f:\git\openxcom\src\battlescape\map.cpp
+1445383942 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	"BattlescapeMessage.h"
 	"BattlescapeState.h"
@@ -6549,7 +6549,7 @@
 	<assert.h>
 	<stdlib.h>
 
-1444988905 source:f:\git\openxcom\src\engine\screen.cpp
+1445377726 source:f:\git\openxcom\src\engine\screen.cpp
 	"Screen.h"
 	"Action.h"
 	"CrossPlatform.h"

@@ -150,61 +150,57 @@ Surface* Screen::getSurface()
  */
 void Screen::handle(Action* action)
 {
-//	if (Options::debug == true)
-//	{
-	if (action->getDetails()->type == SDL_KEYDOWN
-		&& action->getDetails()->key.keysym.sym == SDLK_F8)
+	if (action->getDetails()->type == SDL_KEYDOWN)
 	{
-#ifdef _WIN32
-		MessageBeep(MB_OK);
-#endif
-		switch (Timer::coreInterval)
+		if (action->getDetails()->key.keysym.sym == SDLK_F8) // && Options::debug == true
 		{
-			case 1: Timer::coreInterval = 6;	break;
-			case 5: Timer::coreInterval = 14;	break;
+#ifdef _WIN32
+			MessageBeep(MB_OK);
+#endif
+			switch (Timer::coreInterval)
+			{
+				case 1: Timer::coreInterval =  6;	break;
+				case 6: Timer::coreInterval = 14;	break;
 
-			default:
-				Timer::coreInterval = 1;
+				default:
+					Timer::coreInterval = 1;
+			}
 		}
-	}
-//	}
-
-	if (action->getDetails()->type == SDL_KEYDOWN
-		&& action->getDetails()->key.keysym.sym == SDLK_RETURN
-		&& (SDL_GetModState() & KMOD_ALT) != 0)
-	{
-		Options::fullscreen = !Options::fullscreen;
-		resetDisplay();
-	}
-	else if (action->getDetails()->type == SDL_KEYDOWN
-		&& action->getDetails()->key.keysym.sym == Options::keyScreenshot)
-	{
-#ifdef _WIN32
-		MessageBeep(MB_ICONASTERISK); // start ->
-#endif
-		std::ostringstream oststr;
-/*		int i = 0;
-		do {
-			oststr.str("");
-			oststr << Options::getPictureFolder() << "oxc_" << CrossPlatform::timeString() << "_" << i << ".png";
-			++i; }
-		while (CrossPlatform::fileExists(oststr.str()) == true); */
-		// ... too slow to take & write more than one screenshot per second @ 1920x1080 ...
-		// Skip the do-while Loop:
-		oststr << Options::getPictureFolder() << "0xC_kL_" << CrossPlatform::timeString() << ".png";
-		screenshot(oststr.str());
-#ifdef _WIN32
-		MessageBeep(MB_OK); // end.
-#endif
-/*		std::ostringstream oststr;
-		int i = 0;
-		do
+		else if (action->getDetails()->key.keysym.sym == SDLK_RETURN
+			&& (SDL_GetModState() & KMOD_ALT) != 0)
 		{
-			oststr.str("");
-			oststr << Options::getUserFolder() << "screen" << std::setfill('0') << std::setw(3) << i << ".png";
-			++i;
-		} while (CrossPlatform::fileExists(oststr.str()) == true);
-		screenshot(oststr.str()); */
+			Options::fullscreen = !Options::fullscreen;
+			resetDisplay();
+		}
+		else if (action->getDetails()->key.keysym.sym == Options::keyScreenshot)
+		{
+#ifdef _WIN32
+			MessageBeep(MB_ICONASTERISK); // start ->
+#endif
+			std::ostringstream oststr;
+/*			int i = 0;
+			do {
+				oststr.str("");
+				oststr << Options::getPictureFolder() << "oxc_" << CrossPlatform::timeString() << "_" << i << ".png";
+				++i; }
+			while (CrossPlatform::fileExists(oststr.str()) == true); */
+			// ... too slow to take & write more than one screenshot per second @ 1920x1080 ...
+			// Skip the do-while Loop:
+			oststr << Options::getPictureFolder() << "0xC_kL_" << CrossPlatform::timeString() << ".png";
+			screenshot(oststr.str());
+#ifdef _WIN32
+			MessageBeep(MB_OK); // end.
+#endif
+/*			std::ostringstream oststr;
+			int i = 0;
+			do
+			{
+				oststr.str("");
+				oststr << Options::getUserFolder() << "screen" << std::setfill('0') << std::setw(3) << i << ".png";
+				++i;
+			} while (CrossPlatform::fileExists(oststr.str()) == true);
+			screenshot(oststr.str()); */
+		}
 	}
 }
 

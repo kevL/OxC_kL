@@ -786,7 +786,17 @@ void Map::drawTerrain(Surface* const surface) // private.
 								|| unitWest->getDirection() == 5))
 						{
 							const Tile* const tileNorth = _battleSave->getTile(posField + Position(0,-1,0));
-							const BattleUnit* const unitNorth = tileNorth->getUnit();
+							const BattleUnit* unitNorth = tileNorth->getUnit();
+							int offsetZ_y;
+							if (unitNorth == NULL && itZ != 0)
+							{
+								const Tile* const tileNorthBelow = _battleSave->getTile(posField + Position(0,-1,-1));
+								unitNorth = tileNorthBelow->getUnit();
+								offsetZ_y = 24;
+							}
+							else
+								offsetZ_y = 0;
+
 							if (unitNorth == unitWest)
 							{
 								const Tile* const tileSouthWest = _battleSave->getTile(posField + Position(-1,1,0));
@@ -809,7 +819,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 											sprite->blitNShade(
 													surface,
 													posScreen.x + walkOffset.x + 16,
-													posScreen.y + walkOffset.y - 8,
+													posScreen.y + walkOffset.y - 8 + offsetZ_y,
 													shade);
 
 											if (unitNorth->getFireUnit() != 0)
