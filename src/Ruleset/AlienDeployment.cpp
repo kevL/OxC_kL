@@ -154,7 +154,8 @@ AlienDeployment::AlienDeployment(const std::string& type)
 		_objectiveCompleteScore(0),
 		_objectiveFailedScore(0),
 		_despawnPenalty(0),
-		_pointsPer30(0)
+		_pointsPer30(0),
+		_alertBg("BACK03.SCR")
 {}
 
 /**
@@ -183,10 +184,11 @@ void AlienDeployment::load(const YAML::Node& node)
 	_finalDestination	= node["finalDestination"]	.as<bool>(_finalDestination);
 	_finalMission		= node["finalMission"]		.as<bool>(_finalMission);
 	_script				= node["script"]			.as<std::string>(_script);
-	_alert				= node["alert"]				.as<std::string>(_alert);
 	_briefingData		= node["briefing"]			.as<BriefingData>(_briefingData);
 	_markerName			= node["markerName"]		.as<std::string>(_markerName);
 	_markerIcon			= node["markerIcon"]		.as<int>(_markerIcon);
+	_alert				= node["alert"]				.as<std::string>(_alert);
+	_alertBg			= node["alertBg"]			.as<std::string>(_alertBg);
 
 	if (node["duration"])
 	{
@@ -344,6 +346,15 @@ bool AlienDeployment::isFinalMission() const
 const std::string& AlienDeployment::getAlertMessage() const
 {
 	return _alert;
+}
+
+/**
+ * Gets the alert background displayed when this mission spawns.
+ * @return, ID for the background
+ */
+const std::string& AlienDeployment::getAlertBackground() const
+{
+	return _alertBg;
 }
 
 /**

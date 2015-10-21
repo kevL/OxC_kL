@@ -122,6 +122,7 @@ private:
 
 	std::string
 		_alert,
+		_alertBg,
 		_markerName,
 		_nextStage,
 		_objectiveCompleteText,
@@ -186,6 +187,8 @@ private:
 
 		/// Gets the alert message for this mission type.
 		const std::string& getAlertMessage() const;
+		/// Gets the alert background for this mission type.
+		const std::string& getAlertBackground() const;
 
 		/// Gets the briefing data for this mission type.
 		BriefingData getBriefingData() const;

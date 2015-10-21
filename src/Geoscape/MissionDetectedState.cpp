@@ -76,7 +76,7 @@ MissionDetectedState::MissionDetectedState(
 	centerAllSurfaces();
 
 
-	_window->setBackground(_game->getResourcePack()->getSurface("BACK03.SCR"));
+	_window->setBackground(_game->getResourcePack()->getSurface(_site->getSiteDeployment()->getAlertBackground()));
 
 	_btnIntercept->setText(tr("STR_INTERCEPT"));
 	_btnIntercept->onMouseClick((ActionHandler)& MissionDetectedState::btnInterceptClick);

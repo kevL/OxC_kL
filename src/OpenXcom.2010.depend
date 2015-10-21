@@ -5339,7 +5339,7 @@
 	"Position.h"
 	"../Engine/State.h"
 
-1442964029 f:\git\openxcom\src\ruleset\aliendeployment.h
+1445465427 f:\git\openxcom\src\ruleset\aliendeployment.h
 	"../Resource/XcomResourcePack.h"
 
 1443057100 source:f:\git\openxcom\src\battlescape\actionmenuitem.cpp
@@ -5410,7 +5410,7 @@
 	"../Battlescape/Position.h"
 	"../Ruleset/MapData.h"
 
-1445456829 source:f:\git\openxcom\src\battlescape\alienbaistate.cpp
+1445461735 source:f:\git\openxcom\src\battlescape\alienbaistate.cpp
 	"AlienBAIState.h"
 	"../Battlescape/BattlescapeState.h"
 	"../Battlescape/Map.h"
@@ -8211,7 +8211,7 @@
 
 1442985958 f:\git\openxcom\src\ruleset\extrasounds.h
 
-1442964109 source:f:\git\openxcom\src\ruleset\aliendeployment.cpp
+1445465812 source:f:\git\openxcom\src\ruleset\aliendeployment.cpp
 	"AlienDeployment.h"
 
 1441867759 source:f:\git\openxcom\src\ruleset\alienrace.cpp
@@ -10627,7 +10627,7 @@
 1431489878 source:f:\git\openxcom\src\ruleset\statstringcondition.cpp
 	"StatStringCondition.h"
 
-1443934666 source:f:\git\openxcom\src\engine\adlib\adlplayer.cpp
+1445461593 source:f:\git\openxcom\src\engine\adlib\adlplayer.cpp
 	<math.h>
 	<memory.h>
 	<stdint.h>
@@ -11100,7 +11100,7 @@
 1445313503 f:\git\openxcom\src\geoscape\missiondetectedstate.h
 	"../Engine/State.h"
 
-1445313527 source:f:\git\openxcom\src\geoscape\missiondetectedstate.cpp
+1445465957 source:f:\git\openxcom\src\geoscape\missiondetectedstate.cpp
 	"MissionDetectedState.h"
 	"GeoscapeState.h"
 	"Globe.h"
