@@ -4627,7 +4627,7 @@
 1443574926 f:\git\openxcom\src\battlescape\battlescapegenerator.h
 	"../Ruleset/MapScript.h"
 
-1444733474 f:\git\openxcom\src\battlescape\inventorystate.h
+1445450990 f:\git\openxcom\src\battlescape\inventorystate.h
 	"../Engine/State.h"
 
 1442265022 f:\git\openxcom\src\engine\logger.h
@@ -5938,7 +5938,7 @@
 	<SDL.h>
 	<yaml-cpp/yaml.h>
 
-1444733422 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
+1445451324 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
 	"InventoryState.h"
 	"BattlescapeState.h"
 	"Inventory.h"
@@ -6289,7 +6289,7 @@
 	"UnitPanicBState.h"
 	"../Savegame/BattleUnit.h"
 
-1445440854 source:f:\git\openxcom\src\battlescape\unitsprite.cpp
+1445445355 source:f:\git\openxcom\src\battlescape\unitsprite.cpp
 	"UnitSprite.h"
 	"../Engine/SurfaceSet.h"
 	"../Ruleset/RuleArmor.h"
@@ -8440,7 +8440,7 @@
 	"../Ruleset/RuleItem.h"
 	"../Savegame/SavedBattleGame.h"
 
-1445445715 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1445445949 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	"BattleItem.h"
 	"SavedGame.h"

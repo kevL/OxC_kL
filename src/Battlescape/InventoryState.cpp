@@ -98,7 +98,7 @@ InventoryState::InventoryState(
 	} */
 
 	_bg			= new Surface(320, 200);
-	_soldier	= new Surface(320, 200);
+	_paper		= new Surface(320, 200);
 
 	_txtName	= new Text(200, 17, 36, 6);
 	_gender		= new Surface(7, 7, 28, 1);
@@ -141,7 +141,7 @@ InventoryState::InventoryState(
 	_btnClearInventory = new BattlescapeButton(32,22, _templateBtnX, _clearInventoryBtnY); */
 
 	_txtAmmo	= new Text(40, 24, 288, 64);
-	_selAmmo	= new Surface(
+	_srfAmmo	= new Surface(
 						RuleInventory::HAND_W * RuleInventory::SLOT_W,
 						RuleInventory::HAND_H * RuleInventory::SLOT_H,
 						288,88);
@@ -157,7 +157,7 @@ InventoryState::InventoryState(
 	_game->getResourcePack()->getSurface("TAC01.SCR")->blit(_bg);
 
 	add(_gender);
-	add(_soldier);
+	add(_paper);
 	add(_txtName,		"textName",			"inventory", _bg);
 
 	add(_txtWeight,		"textWeight",		"inventory", _bg);
@@ -196,7 +196,7 @@ InventoryState::InventoryState(
 	add(_wndRightLeg);
 	add(_wndLeftLeg);
 
-	add(_selAmmo);
+	add(_srfAmmo);
 	add(_inv);
 
 	// move the TU display down to make room for the weight display
@@ -508,7 +508,7 @@ void InventoryState::init()
 
 	unit->clearCache();
 
-	_soldier->clear();
+	_paper->clear();
 	_btnRank->clear();
 	_gender->clear();
 
@@ -530,11 +530,12 @@ void InventoryState::init()
 	}
 
 
-	SurfaceSet* const srtRank = _game->getResourcePack()->getSurfaceSet("SMOKE.PCK");
+//	SurfaceSet* const srtRank = _game->getResourcePack()->getSurfaceSet("SMOKE.PCK");
 
 	const Soldier* const sol = unit->getGeoscapeSoldier();
 	if (sol != NULL)
 	{
+		SurfaceSet* const srtRank = _game->getResourcePack()->getSurfaceSet("SMOKE.PCK");
 //		srtRank->getFrame(20 + sol->getRank())->setX(0);
 //		srtRank->getFrame(20 + sol->getRank())->setY(0);
 		srtRank->getFrame(20 + sol->getRank())->blit(_btnRank);
@@ -569,20 +570,21 @@ void InventoryState::init()
 			look = sol->getArmor()->getSpriteInventory() + ".SPK";
 		}
 
-		_game->getResourcePack()->getSurface(look)->blit(_soldier);
+		_game->getResourcePack()->getSurface(look)->blit(_paper);
 		if (gender != NULL)
 			gender->blit(_gender);
-
 	}
 	else
 	{
 //		srtRank->getFrame(26)->setX(0);
 //		srtRank->getFrame(26)->setY(0);
-		srtRank->getFrame(26)->blit(_btnRank);
+//		srtRank->getFrame(26)->blit(_btnRank); // small blue expl.
+		Surface* const dolphins = _game->getResourcePack()->getSurface("DOLPHINS");
+		dolphins->blit(_btnRank);
 
 		Surface* const srfArmor = _game->getResourcePack()->getSurface(unit->getArmor()->getSpriteInventory());
 		if (srfArmor != NULL)
-			srfArmor->blit(_soldier);
+			srfArmor->blit(_paper);
 	}
 
 	updateStats();
@@ -869,7 +871,7 @@ void InventoryState::btnUnloadClick(Action*)
 		_txtAmmo->setText(L"");
 		_txtUseTU->setText(L"");
 
-		_selAmmo->clear();
+		_srfAmmo->clear();
 
 		updateStats();
 		_game->getResourcePack()->getSound("BATTLE.CAT", ResourcePack::ITEM_UNLOAD_HQ)->play();
@@ -1104,7 +1106,7 @@ void InventoryState::invClick(Action*)
 				rect.y = 0;
 				rect.w = static_cast<Sint16>(RuleInventory::HAND_W * RuleInventory::SLOT_W);
 				rect.h = static_cast<Sint16>(RuleInventory::HAND_H * RuleInventory::SLOT_H);
-				_selAmmo->drawRect(
+				_srfAmmo->drawRect(
 								&rect,
 								static_cast<Uint8>(_game->getRuleset()->getInterface("inventory")->getElement("grid")->color));
 
@@ -1112,11 +1114,11 @@ void InventoryState::invClick(Action*)
 				++rect.y;
 				rect.w -= 2;
 				rect.h -= 2;
-				_selAmmo->drawRect(&rect, 15);
+				_srfAmmo->drawRect(&rect, 15);
 
 				ammo->getRules()->drawHandSprite(
 											_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"),
-											_selAmmo);
+											_srfAmmo);
 			}
 			else if (item->getAmmoQuantity() != 0)
 				wst = tr("STR_AMMO_ROUNDS_LEFT").arg(item->getAmmoQuantity());
@@ -1167,22 +1169,22 @@ void InventoryState::invMouseOver(Action*)
 				rect.y = 0;
 				rect.w = RuleInventory::HAND_W * RuleInventory::SLOT_W;
 				rect.h = RuleInventory::HAND_H * RuleInventory::SLOT_H;
-				_selAmmo->drawRect(&rect, static_cast<Uint8>(_game->getRuleset()->getInterface("inventory")->getElement("grid")->color));
+				_srfAmmo->drawRect(&rect, static_cast<Uint8>(_game->getRuleset()->getInterface("inventory")->getElement("grid")->color));
 
 				++rect.x;
 				++rect.y;
 				rect.w -= 2;
 				rect.h -= 2;
-				_selAmmo->drawRect(&rect, 15);
+				_srfAmmo->drawRect(&rect, 15);
 
 				ammo->getRules()->drawHandSprite(
 											_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"),
-											_selAmmo);
+											_srfAmmo);
 //				_updateTemplateButtons(false);
 			}
 			else
 			{
-				_selAmmo->clear();
+				_srfAmmo->clear();
 //				_updateTemplateButtons(!_tuMode);
 			}
 
@@ -1208,7 +1210,7 @@ void InventoryState::invMouseOver(Action*)
 			_txtAmmo->setText(L"");
 			_txtUseTU->setText(L"");
 
-			_selAmmo->clear();
+			_srfAmmo->clear();
 //			_updateTemplateButtons(!_tuMode);
 		}
 	}
@@ -1224,7 +1226,7 @@ void InventoryState::invMouseOut(Action*)
 	_txtAmmo->setText(L"");
 	_txtUseTU->setText(L"");
 
-	_selAmmo->clear();
+	_srfAmmo->clear();
 
 //	_updateTemplateButtons(!_tuMode);
 	_tuCost->setVisible(false);

@@ -172,6 +172,12 @@ extraSprites:
     subY: 58
     files:
       0: Resources/Sprites/ufograph/medibits/medibits.png
+  - type: DOLPHINS
+    width: 26
+    height: 23
+    singleImage: true
+    files:
+      0: Resources/Sprites/ufograph/misc/rank5alter.png
   - type: DETBORD.PCK
     width: 320
     height: 200

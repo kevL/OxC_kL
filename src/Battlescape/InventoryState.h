@@ -81,8 +81,8 @@ private:
 	Surface
 		* _bg,
 		* _gender,
-		* _selAmmo,
-		* _soldier;
+		* _srfAmmo,
+		* _paper;
 	Text
 		* _txtName,
 		* _txtItem,
