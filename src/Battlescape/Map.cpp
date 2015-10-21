@@ -783,7 +783,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 							&& (unitWest->getUnitStatus() == STATUS_WALKING
 								|| unitWest->getUnitStatus() == STATUS_FLYING)
 							&& (unitWest->getDirection() == 1
-								|| unitWest->getDirection() == 5))
+								|| unitWest->getDirection() == 5)) // && vertical dir == 0
 						{
 							const Tile* tileNorth = _battleSave->getTile(posField + Position(0,-1,0));
 							const BattleUnit* unitNorth = tileNorth->getUnit();
@@ -1144,7 +1144,9 @@ void Map::drawTerrain(Surface* const surface) // private.
 					// end draw bullet.
 
 // Main Draw BattleUnit ->
-					if (hasUnit == true)
+					if (hasUnit == true
+						&& (tileBelow == NULL
+							|| tileBelow->getUnit() != _tile->getUnit()))
 					{
 						bool
 							halfRight = false,
@@ -1349,7 +1351,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 						const BattleUnit* const unitBelow = tileBelow->getUnit();
 						if (unitBelow != NULL
 							&& unitBelow->getUnitVisible() == true // don't bother checking DebugMode
-							&& unitBelow->getHeight(true) - tileBelow->getTerrainLevel() > 25) // head sticks up
+							&& unitBelow->getHeight(true) - tileBelow->getTerrainLevel() > 25) // head sticks up (should be able to set "25" higher than 25)
 						{
 							trueLoc = isTrueLoc(unitBelow, tileBelow);
 							quadrant = getQuadrant(unitBelow, tileBelow, trueLoc);
