@@ -73,8 +73,8 @@ BattleUnit::BattleUnit(
 		_turretType(-1),
 		_tile(NULL),
 		_pos(Position()),
-		_posLast(Position()),
-		_posDest(Position()),
+		_posStart(Position()),
+		_posStop(Position()),
 		_dir(0),
 		_dirTo(0),
 		_dirTurret(0),
@@ -242,8 +242,8 @@ BattleUnit::BattleUnit(
 		_rankInt(-1),
 		_turretType(-1),
 		_pos(Position()),
-		_posLast(Position()),
-		_posDest(Position()),
+		_posStart(Position()),
+		_posStop(Position()),
 		_tile(NULL),
 		_dir(0),
 		_dirTo(0),
@@ -757,7 +757,7 @@ void BattleUnit::setPosition(
 		bool updateLast)
 {
 	if (updateLast == true)
-		_posLast = _pos;
+		_posStart = _pos;
 
 	_pos = pos;
 }
@@ -778,7 +778,7 @@ const Position& BattleUnit::getPosition() const
  */
 const Position& BattleUnit::getStartPosition() const
 {
-	return _posLast;
+	return _posStart;
 }
 
 /**
@@ -788,7 +788,7 @@ const Position& BattleUnit::getStartPosition() const
  */
 const Position& BattleUnit::getStopPosition() const
 {
-	return _posDest;
+	return _posStop;
 }
 
 /**
@@ -915,7 +915,7 @@ int BattleUnit::getTurretToDirection() const
 /**
  * Gets this BattleUnit's vertical direction.
  * @note This is when going up or down, doh!
- * @return, vertical direction
+ * @return, vertical direction (0=none 8=up 9=down)
  */
 int BattleUnit::getVerticalDirection() const
 {
@@ -1039,21 +1039,21 @@ void BattleUnit::turn(bool turret)
 }
 
 /**
- * Gets the walking phase for animation and sound.
- * @return, phase will always go from 0-7
+ * Gets the walk-phase for calculating Map offset.
+ * @return, phase (full range)
+ */
+int BattleUnit::getTrueWalkPhase() const
+{
+	return _walkPhase;
+}
+
+/**
+ * Gets the walk-phase for sprite determination and various triggers.
+ * @return, phase (0..7)
  */
 int BattleUnit::getWalkPhase() const
 {
 	return _walkPhase % 8;
-}
-
-/**
- * Gets the walking phase for diagonal walking.
- * @return, phase will be 0 or 8 due to rounding ints down
- */
-int BattleUnit::getDiagonalWalkPhase() const
-{
-	return (_walkPhase / 8) * 8;
 }
 
 /**
@@ -1064,12 +1064,12 @@ int BattleUnit::getDiagonalWalkPhase() const
  */
 void BattleUnit::startWalking(
 		int dir,
-		const Position& dest,
+		const Position& posStop,
 		const Tile* const tileBelow)
 {
 	_walkPhase = 0;
-	_posLast = _pos;
-	_posDest = dest;
+	_posStart = _pos;
+	_posStop = posStop;
 
 	if (dir >= Pathfinding::DIR_UP)
 	{
@@ -1131,7 +1131,7 @@ void BattleUnit::keepWalking(
 	if (_walkPhase == halfPhase) // assume unit reached the destination tile; This is actually a drawing hack so soldiers are not overlapped by floortiles
 	{
 		//Log(LOG_INFO) << "switch pos to DEST pos";
-		_pos = _posDest;
+		_pos = _posStop;
 	}
 
 	if (_walkPhase >= fullPhase) // officially reached the destination tile

@@ -491,8 +491,8 @@ private:
 
 	Position
 		_pos,
-		_posLast,
-		_posDest;
+		_posStart,
+		_posStop;
 	UnitFaction
 		_faction,
 		_originalFaction,
@@ -644,14 +644,14 @@ private:
 		/// Turns to the destination direction.
 		void turn(bool turret = false);
 
-		/// Gets the walking phase for animation and sound.
+		/// Gets the walk-phase for calculating Map offset.
+		int getTrueWalkPhase() const;
+		/// Gets the walk-phase for sprite determination and various triggers.
 		int getWalkPhase() const;
-		/// Gets the walking phase for diagonal walking.
-		int getDiagonalWalkPhase() const;
 		/// Starts the walkingPhase.
 		void startWalking(
 				int dir,
-				const Position& dest,
+				const Position& posStop,
 				const Tile* const tileBelow);
 		/// Advances the walkingPhase.
 		void keepWalking(

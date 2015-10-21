@@ -1028,63 +1028,63 @@ void UnitSprite::drawRoutine4()
 		offX3[8]	= { 0,  6,  6, 12, -4, -5, -5,-13 }, // for the left handed rifles
 		offY3[8]	= {-4, -4, -1,  0,  5,  0,  1,  0 }, // for the left handed rifles
 
-		offXAiming = 16;
+		offXAiming = 16,
+
+		dir = _unit->getUnitDirection();
 
 	if (_unit->getUnitStatus() == STATUS_COLLAPSING)
 	{
 		srf = _unitSurface->getFrame(die + _unit->getFallingPhase());
 		drawRecolored(srf);
-
 		return;
 	}
-	else if (_unit->getUnitStatus() == STATUS_WALKING
+
+	if (_unit->getUnitStatus() == STATUS_WALKING
 		&& _unit->getRaceString() != "STR_ETHEREAL")
 	{
-		srf = _unitSurface->getFrame(walk + (8 * _unit->getUnitDirection()) + _unit->getWalkPhase());
+		srf = _unitSurface->getFrame(walk + (8 * dir) + _unit->getWalkPhase());
 	}
 	else
-	{
-		srf = _unitSurface->getFrame(stand + _unit->getUnitDirection());
-	}
+		srf = _unitSurface->getFrame(stand + dir);
 
 	sortRifles();
 
-	if (_itemA
-		&& !_itemA->getRules()->isFixed())
+	if (_itemA != NULL
+		&& _itemA->getRules()->isFixed() == false)
 	{
 		if (_unit->getUnitStatus() == STATUS_AIMING // draw handob item
-			&& _itemA->getRules()->isTwoHanded())
+			&& _itemA->getRules()->isTwoHanded() == true)
 		{
-			int dir = (_unit->getUnitDirection() + 2) % 8;
-			itemA = _itemSurfaceA->getFrame(_itemA->getRules()->getHandSprite() + dir);
-			itemA->setX(offX[_unit->getUnitDirection()]);
-			itemA->setY(offY[_unit->getUnitDirection()]);
+			int dirAim = (dir + 2) % 8;
+			itemA = _itemSurfaceA->getFrame(_itemA->getRules()->getHandSprite() + dirAim);
+			itemA->setX(offX[static_cast<size_t>(dir)]);
+			itemA->setY(offY[static_cast<size_t>(dir)]);
 		}
 		else
 		{
 			if (_itemA->getSlot()->getId() == "STR_RIGHT_HAND")
 			{
-				itemA = _itemSurfaceA->getFrame(_itemA->getRules()->getHandSprite() + _unit->getUnitDirection());
+				itemA = _itemSurfaceA->getFrame(_itemA->getRules()->getHandSprite() + dir);
 				itemA->setX(0);
 				itemA->setY(0);
 			}
 			else
 			{
-				itemA = _itemSurfaceA->getFrame(_itemA->getRules()->getHandSprite() + _unit->getUnitDirection());
-				itemA->setX(offX2[_unit->getUnitDirection()]);
-				itemA->setY(offY2[_unit->getUnitDirection()]);
+				itemA = _itemSurfaceA->getFrame(_itemA->getRules()->getHandSprite() + dir);
+				itemA->setX(offX2[static_cast<size_t>(dir)]);
+				itemA->setY(offY2[static_cast<size_t>(dir)]);
 			}
 		}
 	}
 
-	if (_itemB // if dual wielding
-		&& !_itemB->getRules()->isFixed())
+	if (_itemB != NULL // if dual wielding
+		&& _itemB->getRules()->isFixed() == false)
 	{
-		itemB = _itemSurfaceB->getFrame(_itemB->getRules()->getHandSprite() + _unit->getUnitDirection());
-		if (!_itemB->getRules()->isTwoHanded())
+		itemB = _itemSurfaceB->getFrame(_itemB->getRules()->getHandSprite() + dir);
+		if (_itemB->getRules()->isTwoHanded() == false)
 		{
-			itemB->setX(offX2[_unit->getUnitDirection()]);
-			itemB->setY(offY2[_unit->getUnitDirection()]);
+			itemB->setX(offX2[static_cast<size_t>(dir)]);
+			itemB->setY(offY2[static_cast<size_t>(dir)]);
 		}
 		else
 		{
@@ -1093,25 +1093,25 @@ void UnitSprite::drawRoutine4()
 		}
 
 		if (_unit->getUnitStatus() == STATUS_AIMING
-			&& _itemB->getRules()->isTwoHanded())
+			&& _itemB->getRules()->isTwoHanded() == true)
 		{
-			int dir = (_unit->getUnitDirection() + 2) % 8;
-			itemB = _itemSurfaceB->getFrame(_itemB->getRules()->getHandSprite() + dir);
-			itemB->setX(offX3[_unit->getUnitDirection()]);
-			itemB->setY(offY3[_unit->getUnitDirection()]);
+			int dirAim = (dir + 2) % 8;
+			itemB = _itemSurfaceB->getFrame(_itemB->getRules()->getHandSprite() + dirAim);
+			itemB->setX(offX3[static_cast<size_t>(dir)]);
+			itemB->setY(offY3[static_cast<size_t>(dir)]);
 		}
 	}
 
 	if (_unit->getUnitStatus() == STATUS_AIMING)
 	{
 		srf->setX(offXAiming);
-		if (itemA)
+		if (itemA != NULL)
 			itemA->setX(itemA->getX() + offXAiming);
-		if (itemB)
+		if (itemB != NULL)
 			itemB->setX(itemB->getX() + offXAiming);
 	}
 
-	switch (_unit->getUnitDirection())
+	switch (dir)
 	{
 		case 0:
 			itemB ? itemB->blit(this) : void();
@@ -1148,10 +1148,8 @@ void UnitSprite::drawRoutine4()
 	}
 
 	srf->setX(0);
-	if (itemA)
-		itemA->setX(0);
-	if (itemB)
-		itemB->setX(0);
+	if (itemA != NULL) itemA->setX(0);
+	if (itemB != NULL) itemB->setX(0);
 }
 
 /**
@@ -1166,7 +1164,7 @@ void UnitSprite::drawRoutine5()
 	Surface* srf;
 
 	if (_unit->getUnitStatus() == STATUS_WALKING)
-		srf = _unitSurface->getFrame(32 + (_unit->getUnitDirection() * 16) + (_part * 4) + ((_unit->getWalkPhase() / 2) %4));
+		srf = _unitSurface->getFrame(32 + (_unit->getUnitDirection() * 16) + (_part * 4) + ((_unit->getWalkPhase() / 2) % 4));
 	else
 		srf = _unitSurface->getFrame((_part * 8) + _unit->getUnitDirection());
 

@@ -4639,7 +4639,7 @@
 1443975946 f:\git\openxcom\src\savegame\savedbattlegame.h
 	"BattleUnit.h"
 
-1445441594 f:\git\openxcom\src\savegame\battleunit.h
+1445445909 f:\git\openxcom\src\savegame\battleunit.h
 	"SavedGame.h"
 	"Soldier.h"
 	"../Battlescape/BattlescapeGame.h"
@@ -5410,7 +5410,7 @@
 	"../Battlescape/Position.h"
 	"../Ruleset/MapData.h"
 
-1445440854 source:f:\git\openxcom\src\battlescape\alienbaistate.cpp
+1445441242 source:f:\git\openxcom\src\battlescape\alienbaistate.cpp
 	"AlienBAIState.h"
 	"../Battlescape/BattlescapeState.h"
 	"../Battlescape/Map.h"
@@ -5634,7 +5634,7 @@
 1430149550 f:\git\openxcom\src\battlescape\battlescapemessage.h
 	"../Engine/Surface.h"
 
-1445440854 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1445442333 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	"AbortMissionState.h"
 	"ActionMenuState.h"
@@ -5965,7 +5965,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1445440854 source:f:\git\openxcom\src\battlescape\map.cpp
+1445445727 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	"BattlescapeMessage.h"
 	"BattlescapeState.h"
@@ -6233,7 +6233,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1445028850 source:f:\git\openxcom\src\battlescape\unitdiebstate.cpp
+1445441243 source:f:\git\openxcom\src\battlescape\unitdiebstate.cpp
 	"UnitDieBState.h"
 	"BattlescapeState.h"
 	"Camera.h"
@@ -6314,7 +6314,7 @@
 1420130448 f:\git\openxcom\src\engine\shadermove.h
 	"ShaderDraw.h"
 
-1445028546 source:f:\git\openxcom\src\battlescape\unitturnbstate.cpp
+1445441243 source:f:\git\openxcom\src\battlescape\unitturnbstate.cpp
 	"UnitTurnBState.h"
 	"BattlescapeState.h"
 	"Map.h"
@@ -6325,7 +6325,7 @@
 	"../Savegame/BattleUnit.h"
 	"../Savegame/SavedBattleGame.h"
 
-1445440854 source:f:\git\openxcom\src\battlescape\unitwalkbstate.cpp
+1445441242 source:f:\git\openxcom\src\battlescape\unitwalkbstate.cpp
 	"UnitWalkBState.h"
 	"BattlescapeState.h"
 	"Camera.h"
@@ -6549,7 +6549,7 @@
 	<assert.h>
 	<stdlib.h>
 
-1445377726 source:f:\git\openxcom\src\engine\screen.cpp
+1445442199 source:f:\git\openxcom\src\engine\screen.cpp
 	"Screen.h"
 	"Action.h"
 	"CrossPlatform.h"
@@ -8440,7 +8440,7 @@
 	"../Ruleset/RuleItem.h"
 	"../Savegame/SavedBattleGame.h"
 
-1445440954 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1445445715 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	"BattleItem.h"
 	"SavedGame.h"

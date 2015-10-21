@@ -3993,13 +3993,12 @@ void BattlescapeState::saveAIMap()
 					switch (unit->getFaction())
 					{
 						case FACTION_HOSTILE:
-							// #4080C0 is Volutar Blue. CONGRATULATIONz!!!
 							characterRGBA(
 										img,
 										rect.x,
 										rect.y,
-										(posTile.z - z)? 'a': 'A',
-										0x40,
+										(posTile.z - z) ? 'a' : 'A',
+										0x40, // #4080C0 is Volutar Blue. CONGRATULATIONz!!!
 										0x80,
 										0xC0,
 										0xff);
@@ -4009,7 +4008,7 @@ void BattlescapeState::saveAIMap()
 										img,
 										rect.x,
 										rect.y,
-										(posTile.z - z)? 'x': 'X',
+										(posTile.z - z) ? 'x' : 'X',
 										255,
 										255,
 										127,
@@ -4020,7 +4019,7 @@ void BattlescapeState::saveAIMap()
 										img,
 										rect.x,
 										rect.y,
-										(posTile.z - z)? 'c': 'C',
+										(posTile.z - z) ? 'c' : 'C',
 										255,
 										127,
 										127,

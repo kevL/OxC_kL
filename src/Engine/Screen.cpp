@@ -433,19 +433,15 @@ void Screen::resetDisplay(bool resetVideo)
 		Log(LOG_INFO) << "Attempting to set display to " << width << "x" << height << "x" << _bpp << "...";
 
 		_screen = SDL_SetVideoMode(
-								width,
-								height,
-								_bpp,
-								_flags);
+								width, height,
+								_bpp, _flags);
 		if (_screen == NULL)
 		{
 			Log(LOG_ERROR) << SDL_GetError();
 			Log(LOG_INFO) << "Attempting to set display to default resolution...";
 			_screen = SDL_SetVideoMode(
-									640,
-									400,
-									_bpp,
-									_flags);
+									640,400,
+									_bpp, _flags);
 			if (_screen == NULL)
 			{
 				throw Exception(SDL_GetError());

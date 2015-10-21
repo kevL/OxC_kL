@@ -2323,9 +2323,9 @@ void Map::calculateWalkingOffset(
 			offsetFalseY[8] = {-8,  0,  8, 16,  8,  0, -8,-16}, // destination & last positions. See UnitWalkBState.
 			offsetFalseVert = 24;
 		const int
-			dir = unit->getUnitDirection(),				// 0..7
+			dir = unit->getUnitDirection(),			// 0..7
 			dirVert = unit->getVerticalDirection(),	// 0= none, 8= up, 9= down
-			walkPhase = unit->getWalkPhase() + unit->getDiagonalWalkPhase(),
+			walkPhase = unit->getTrueWalkPhase(),
 			armorSize = unit->getArmor()->getSize();
 		int
 			halfPhase,
