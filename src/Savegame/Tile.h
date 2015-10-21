@@ -186,8 +186,8 @@ protected:
 		 * @note Used for visibility/light blocking checks. This function
 		 * assumes that there never are 2 doors on 1 tile or a door and another
 		 * wall on 1 tile.
-		 * @param part		- the tile part to consider
-		 * @return, bool	- true if ufo-door is valid and not closed
+		 * @param part - the tile part to consider
+		 * @return, true if ufo-door is valid and not closed
 		 */
 		bool isUfoDoorOpen(MapDataType part) const
 		{	return _objects[part] != NULL

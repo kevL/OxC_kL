@@ -5405,7 +5405,7 @@
 
 1443150185 f:\git\openxcom\src\savegame\battleitem.h
 
-1443826591 f:\git\openxcom\src\savegame\tile.h
+1445432616 f:\git\openxcom\src\savegame\tile.h
 	"BattleUnit.h"
 	"../Battlescape/Position.h"
 	"../Ruleset/MapData.h"
@@ -5965,7 +5965,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1445383942 source:f:\git\openxcom\src\battlescape\map.cpp
+1445435833 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	"BattlescapeMessage.h"
 	"BattlescapeState.h"
