@@ -271,8 +271,7 @@ void Node::freeNode()
  */
 bool Node::isTarget() const
 {
-	return _destruct > 0; // kL
-//	return _destruct == 5;
+	return _destruct != 0; // was == 5
 }
 
 }

@@ -56,7 +56,7 @@ CivilianBAIState::CivilianBAIState(
 		_AIMode(AI_PATROL),
 		_visibleEnemies(0),
 		_spottingEnemies(0),
-		_fromNode(node),
+		_startNode(node),
 		_toNode(NULL)
 //		_traceAI(false)
 {
@@ -87,7 +87,7 @@ void CivilianBAIState::load(const YAML::Node& node)
 		toNodeId	= node["toNode"]	.as<int>(-1);
 
 	if (fromNodeId != -1)
-		_fromNode = _battleSave->getNodes()->at(static_cast<size_t>(fromNodeId));
+		_startNode = _battleSave->getNodes()->at(static_cast<size_t>(fromNodeId));
 
 	if (toNodeId != -1)
 		_toNode = _battleSave->getNodes()->at(static_cast<size_t>(toNodeId));
@@ -103,7 +103,7 @@ YAML::Node CivilianBAIState::save() const
 		fromNodeId = -1,
 		toNodeId = -1;
 
-	if (_fromNode != NULL)	fromNodeId	= _fromNode->getId();
+	if (_startNode != NULL)	fromNodeId	= _startNode->getId();
 	if (_toNode != NULL)	toNodeId	= _toNode->getId();
 
 	YAML::Node node;
@@ -507,12 +507,12 @@ void CivilianBAIState::setupPatrol()
 		//if (_traceAI) Log(LOG_INFO) << "Patrol destination reached!";
 		// destination reached
 		// head off to next patrol node
-		_fromNode = _toNode;
+		_startNode = _toNode;
 		_toNode = NULL;
 	}
 
-	if (_fromNode == NULL)
-		_fromNode = _battleSave->getNearestNode(_unit);
+	if (_startNode == NULL)
+		_startNode = _battleSave->getNearestNode(_unit);
 /*{
 		// assume closest node as "from node"
 		// on same level to avoid strange things, and the node has to match unit size or it will freeze
@@ -528,7 +528,7 @@ void CivilianBAIState::setupPatrol()
 				&& distTest < dist
 				&& (node->getNodeType() & Node::TYPE_SMALL))
 			{
-				_fromNode = node;
+				_startNode = node;
 				dist = distTest;
 			}
 		}
@@ -542,9 +542,9 @@ void CivilianBAIState::setupPatrol()
 	{
 		--triesLeft;
 
-		_toNode = _battleSave->getPatrolNode(true, _unit, _fromNode);
+		_toNode = _battleSave->getPatrolNode(true, _unit, _startNode);
 		if (_toNode == NULL)
-			_toNode = _battleSave->getPatrolNode(false, _unit, _fromNode);
+			_toNode = _battleSave->getPatrolNode(false, _unit, _startNode);
 
 		if (_toNode != NULL)
 		{

@@ -70,7 +70,7 @@ private:
 			SEG_CRAFT	= 1000,
 			SEG_UFO		= 2000,
 
-		// -> Any=0; Flying=1; Small=2; FlyingLarge=3; Large=4 <- loaded in BattlescapeGenerator::loadRMP()
+			// -> Any=0; Flying=1; Small=2; FlyingLarge=3; Large=4 <- loaded in BattlescapeGenerator::loadRMP()
 			TYPE_FLYING			= 0x01,	// non-flying unit cannot spawn here when this bit is set; see SavedBattleGame::getSpawnNode()
 			TYPE_SMALL			= 0x02,	// large unit cannot spawn here when this bit is set; see SavedBattleGame::getSpawnNode()
 										// NOTE: getNodeType() is also used in SavedBattleGame::getPatrolNode() <- ie, it's not about spawning only; it affects patrolling also.

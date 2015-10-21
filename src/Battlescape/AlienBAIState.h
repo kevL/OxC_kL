@@ -78,7 +78,7 @@ protected:
 		* _patrolAction,
 		* _psiAction;
 	Node
-		* _fromNode,
+		* _startNode,
 		* _toNode;
 
 	BattleActionType _reserve;

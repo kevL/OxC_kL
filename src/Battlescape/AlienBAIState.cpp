@@ -77,7 +77,7 @@ AlienBAIState::AlienBAIState(
 		_didPsi(false),
 		_AIMode(AI_PATROL),
 		_closestDist(100),
-		_fromNode(node),
+		_startNode(node),
 		_toNode(NULL),
 		_reserve(BA_NONE),
 		_intelligence(unit->getIntelligence())
@@ -122,7 +122,7 @@ void AlienBAIState::load(const YAML::Node& node)
 //	_wasHitBy	= node["wasHitBy"].as<std::vector<int> >(_wasHitBy);
 
 	if (fromNodeID != -1)
-		_fromNode = _battleSave->getNodes()->at(fromNodeID);
+		_startNode = _battleSave->getNodes()->at(fromNodeID);
 
 	if (toNodeID != -1)
 		_toNode = _battleSave->getNodes()->at(toNodeID);
@@ -138,7 +138,7 @@ YAML::Node AlienBAIState::save() const
 		fromNodeID	= -1,
 		toNodeID	= -1;
 
-	if (_fromNode != NULL)	fromNodeID	= _fromNode->getId();
+	if (_startNode != NULL)	fromNodeID	= _startNode->getId();
 	if (_toNode != NULL)	toNodeID	= _toNode->getId();
 
 	YAML::Node node;
@@ -565,7 +565,7 @@ void AlienBAIState::setupPatrol() // private.
 		//if (_traceAI) Log(LOG_INFO) << "Patrol destination reached!";
 
 		// destination reached; head off to next patrol node
-		_fromNode = _toNode;
+		_startNode = _toNode;
 		_toNode->freeNode();
 		_toNode = NULL;
 
@@ -580,8 +580,8 @@ void AlienBAIState::setupPatrol() // private.
 		}
 	}
 
-	if (_fromNode == NULL)
-		_fromNode = _battleSave->getNearestNode(_unit);
+	if (_startNode == NULL)
+		_startNode = _battleSave->getNearestNode(_unit);
 
 	Node* node;
 	const MapData* data;
@@ -603,8 +603,8 @@ void AlienBAIState::setupPatrol() // private.
 			// kL_note: That, above is wrong. Orig behavior depends on "aggression" setting;
 			// determines whether aliens come out of UFO to scout/search (attack, actually).
 			// also anyone standing in fire should also probably move
-			if (_fromNode != NULL
-				&& _fromNode->getNodeRank() != NR_SCOUT
+			if (_startNode != NULL
+				&& _startNode->getNodeRank() != NR_SCOUT
 				&& (_battleSave->getTile(_unit->getPosition()) == NULL // <- shouldn't be necessary.
 					|| _battleSave->getTile(_unit->getPosition())->getFire() == 0)
 				&& (_battleSave->isCheating() == false
@@ -615,14 +615,15 @@ void AlienBAIState::setupPatrol() // private.
 		}
 		else if (_unit->getArmor()->getSize() == 1)	// in base defense missions the non-large aliens walk towards target nodes - or
 		{											// once there shoot objects thereabouts so scan this room for objects to destroy
-			if (_fromNode->isTarget() == true
+			if (_startNode->isTarget() == true
 				&& _unit->getMainHandWeapon() != NULL
 				&& (_unit->getMainHandWeapon()->getRules()->getAccuracySnap() != 0 // TODO: this ought be expanded to include melee.
 					|| _unit->getMainHandWeapon()->getRules()->getAccuracyAuto() != 0
 					|| _unit->getMainHandWeapon()->getRules()->getAccuracyAimed() != 0)
 				&& _unit->getMainHandWeapon()->getAmmoItem() != NULL
 				&& _unit->getMainHandWeapon()->getAmmoItem()->getRules()->getDamageType() != DT_HE
-				&& _battleSave->getModuleMap()[_fromNode->getPosition().x / 10][_fromNode->getPosition().y / 10].second > 0)
+				&& _battleSave->getModuleMap()[_startNode->getPosition().x / 10]
+											  [_startNode->getPosition().y / 10].second > 0)
 			{
 				const int
 					x = (_unit->getPosition().x / 10) * 10,
@@ -672,7 +673,7 @@ void AlienBAIState::setupPatrol() // private.
 														_unit->getPosition(),
 														node->getPosition());
 						if (_toNode == NULL
-							|| (distTest < distSqr && node != _fromNode))
+							|| (distTest < distSqr && node != _startNode))
 						{
 							distSqr = distTest;
 							_toNode = node;
@@ -684,20 +685,14 @@ void AlienBAIState::setupPatrol() // private.
 
 		if (_toNode == NULL)
 		{
-			//Log(LOG_INFO) << ". _toNode == 0 a -> getPatrolNode(scout)";
-			_toNode = _battleSave->getPatrolNode(scout, _unit, _fromNode);
-
+			_toNode = _battleSave->getPatrolNode(scout, _unit, _startNode);
 			if (_toNode == NULL)
-			{
-				//Log(LOG_INFO) << ". _toNode == 0 b -> getPatrolNode(!scout)";
-				_toNode = _battleSave->getPatrolNode(scout == false, _unit, _fromNode);
-			}
+				_toNode = _battleSave->getPatrolNode(scout == false, _unit, _startNode);
 		}
 
 		if (_toNode != NULL)
 		{
 			pf->calculate(_unit, _toNode->getPosition());
-
 //			if (std::find(
 //						_reachable.begin(),
 //						_reachable.end(),
@@ -712,7 +707,6 @@ void AlienBAIState::setupPatrol() // private.
 	if (_toNode != NULL)
 	{
 		_toNode->allocateNode();
-
 		_patrolAction->actor = _unit;
 		_patrolAction->target = _toNode->getPosition();
 		_patrolAction->type = BA_MOVE;

@@ -1767,52 +1767,45 @@ Node* SavedBattleGame::getSpawnNode(
  * Finds a fitting node where a given unit can patrol to.
  * @param scout		- true if the unit is scouting
  * @param unit		- pointer to a BattleUnit
- * @param fromNode	- pointer to the node that unit is currently at
+ * @param startNode	- pointer to the node that unit is currently at
  * @return, pointer to the destination Node
  */
 Node* SavedBattleGame::getPatrolNode(
 		bool scout,
 		BattleUnit* const unit,
-		Node* fromNode)
+		Node* startNode)
 {
-	//Log(LOG_INFO) << "SavedBattleGame::getPatrolNode()";
-	if (fromNode == NULL)
-		fromNode = getNearestNode(unit);
+	if (startNode == NULL)
+		startNode = getNearestNode(unit);
 
 	std::vector<Node*>
 		scoutNodes,
-		rankedNodes;
+		officerNodes;
 	Node* node;
 
-	size_t nodeQty;
+	size_t qtyNodes;
 	if (scout == true)
-		nodeQty = getNodes()->size();
+		qtyNodes = getNodes()->size();
 	else
-		nodeQty = fromNode->getNodeLinks()->size();
+		qtyNodes = startNode->getNodeLinks()->size();
 
 	for (size_t
 			i = 0;
-			i != nodeQty;
+			i != qtyNodes;
 			++i)
 	{
-		if (scout == true
-			|| fromNode->getNodeLinks()->at(i) != 0)							// non-scouts need Links to travel along.
-		{
-			if (scout == true)
+		if (scout == true || startNode->getNodeLinks()->at(i) > -1)	// non-scouts need Links to travel along.
+		{															// N-E-S-W directions are never used (linkId's -2,-3,-4,-5).
+			if (scout == true)										// Meaning that non-scouts never leave their spawn-block ...
 				node = getNodes()->at(i);
 			else
-				node = getNodes()->at(static_cast<size_t>(fromNode->getNodeLinks()->at(i)));
+				node = getNodes()->at(static_cast<size_t>(startNode->getNodeLinks()->at(i)));
 
 			if ((node->getPatrol() != 0
 					|| node->getNodeRank() > NR_SCOUT
 					|| scout == true)										// for non-scouts find a node with a desirability above 0
 				&& node->isAllocated() == false								// check if not allocated
 				&& isNodeType(node, unit)
-//				&& (!(node->getNodeType() & Node::TYPE_SMALL)				// the small unit bit is not set
-//					|| unit->getArmor()->getSize() == 1)						// or the unit is small
-//				&& (!(node->getNodeType() & Node::TYPE_FLYING)				// the flying unit bit is not set
-//					|| unit->getMovementType() == MT_FLY)						// or the unit can fly
-//				&& !(node->getNodeType() & Node::TYPE_DANGEROUS)			// don't go there if an alien got shot there; stupid behavior like that
 				&& setUnitPosition(											// check if unit can be set at this node
 								unit,											// ie. it's big enough
 								node->getPosition(),							// and there's not already a unit there.
@@ -1821,23 +1814,22 @@ Node* SavedBattleGame::getPatrolNode(
 				&& getTile(node->getPosition())->getFire() == 0				// you are not a firefighter; do not patrol into fire
 				&& (getTile(node->getPosition())->getDangerous() == false	// aliens don't run into a grenade blast
 					|| unit->getFaction() != FACTION_HOSTILE)					// but civies do!
-				&& (node != fromNode										// scouts push forward
-					|| scout == false)											// others can mill around.. ie, stand there
-				&& node->getPosition().x > -1								// x-pos valid
-				&& node->getPosition().y > -1)								// y-pos valid
+				&& (node != startNode										// scouts push forward
+					|| scout == false))											// others can mill around.. ie, stand there
+//				&& node->getPosition().x > -1								// x-pos valid
+//				&& node->getPosition().y > -1)								// y-pos valid
 			{
-				for (int													// weight each eligible node by its Flags.
-						j = node->getPatrol();
+				for (int
+						j = node->getPatrol(); // weight each eligible node by its patrol-Flags.
 						j != -1;
 						--j)
 				{
 					scoutNodes.push_back(node);
-
 					if (scout == false
 						&& node->getNodeRank() == Node::nodeRank[static_cast<size_t>(unit->getRankInt())]
-																[0])			// high-class node here.
+																[0]) // high-class node here.
 					{
-						rankedNodes.push_back(node);
+						officerNodes.push_back(node);
 					}
 				}
 			}
@@ -1846,30 +1838,23 @@ Node* SavedBattleGame::getPatrolNode(
 
 	if (scoutNodes.empty() == true)
 	{
-		//Log(LOG_INFO) << " . scoutNodes is EMPTY.";
 		if (scout == false && unit->getArmor()->getSize() > 1)
 		{
 //			return Sectopod::CTD();
-			return getPatrolNode(true, unit, fromNode);
+			return getPatrolNode(true, unit, startNode);
 		}
 
-		//Log(LOG_INFO) << " . return NULL";
 		return NULL;
 	}
-	//Log(LOG_INFO) << " . scoutNodes is NOT Empty.";
 
 	if (scout == true // picks a random destination
-		|| rankedNodes.empty() == true
+		|| officerNodes.empty() == true
 		|| RNG::percent(19) == true) // officers can go for a stroll ...
 	{
-		//Log(LOG_INFO) << " . scout";
-		//Log(LOG_INFO) << " . return scoutNodes @ " << pick;
 		return scoutNodes[RNG::pick(scoutNodes.size())];
 	}
-	//Log(LOG_INFO) << " . !scout";
 
-	//Log(LOG_INFO) << " . return scoutNodes @ " << pick;
-	return rankedNodes[RNG::pick(rankedNodes.size())];
+	return officerNodes[RNG::pick(officerNodes.size())];
 }
 
 /**
@@ -1881,11 +1866,9 @@ Node* SavedBattleGame::getPatrolNode(
  */
 Node* SavedBattleGame::getNearestNode(const BattleUnit* const unit) const
 {
-	Node
-		* node = NULL,
-		* nodeTest;
+	Node* node = NULL;
 	int
-		distSqr = 100000,
+		dist = 100000,
 		distTest;
 
 	for (std::vector<Node*>::const_iterator
@@ -1893,18 +1876,16 @@ Node* SavedBattleGame::getNearestNode(const BattleUnit* const unit) const
 			i != _nodes.end();
 			++i)
 	{
-		nodeTest = *i;
-		distTest = TileEngine::distanceSqr(
-										unit->getPosition(),
-										nodeTest->getPosition());
-
-		if (unit->getPosition().z == nodeTest->getPosition().z
-			&& distTest < distSqr
+		if (unit->getPosition().z == (*i)->getPosition().z
 			&& (unit->getArmor()->getSize() == 1
-				|| !(nodeTest->getNodeType() & Node::TYPE_SMALL)))
+				|| !((*i)->getNodeType() & Node::TYPE_SMALL)))
 		{
-			distSqr = distTest;
-			node = nodeTest;
+			distTest = TileEngine::distanceSqr((*i)->getPosition(), unit->getPosition());
+			if (distTest < dist)
+			{
+				dist = distTest;
+				node = *i;
+			}
 		}
 	}
 
@@ -1944,6 +1925,11 @@ bool SavedBattleGame::isNodeType(
 
 	return true;
 }
+//	&& (!(node->getNodeType() & Node::TYPE_SMALL)		// the small unit bit is not set
+//		|| unit->getArmor()->getSize() == 1)				// or the unit is small
+//	&& (!(node->getNodeType() & Node::TYPE_FLYING)		// the flying unit bit is not set
+//		|| unit->getMovementType() == MT_FLY)				// or the unit can fly
+//	&& !(node->getNodeType() & Node::TYPE_DANGEROUS)	// don't go there if an alien got shot there; stupid behavior like that
 
 /**
  * Carries out new turn preparations such as fire and smoke spreading.

@@ -2239,7 +2239,7 @@ void BattlescapeGenerator::loadRMP( // private.
 		int offset_y,
 		int segment)
 {
-	char array_RMP[24];
+	char dataArray[24];
 
 	std::ostringstream file;
 	file << "ROUTES/" << block->getType() << ".RMP";
@@ -2270,12 +2270,12 @@ void BattlescapeGenerator::loadRMP( // private.
 	Position pos;
 
 	while (mapFile.read(
-					(char*)&array_RMP,
-					sizeof(array_RMP)) != NULL)
+					(char*)&dataArray,
+					sizeof(dataArray)) != NULL)
 	{
-		pos_x = static_cast<int>(array_RMP[1]); // note: Here is where x-y values get reversed
-		pos_y = static_cast<int>(array_RMP[0]); // vis-a-vis values in .RMP files vs. loaded values.
-		pos_z = static_cast<int>(array_RMP[2]);
+		pos_x = static_cast<int>(dataArray[1]); // note: Here is where x-y values get reversed
+		pos_y = static_cast<int>(dataArray[0]); // vis-a-vis values in .RMP files vs. loaded values.
+		pos_z = static_cast<int>(dataArray[2]);
 
 		if (pos_x < block->getSizeX()
 			&& pos_y < block->getSizeY()
@@ -2286,11 +2286,11 @@ void BattlescapeGenerator::loadRMP( // private.
 						offset_y + pos_y,
 						block->getSizeZ() - pos_z - 1);
 
-			unitType		= static_cast<int>(array_RMP[19]); // -> Any=0; Flying=1; Small=2; FlyingLarge=3; Large=4
-			nodeRank		= static_cast<int>(array_RMP[20]);
-			ptrlPriority	= static_cast<int>(array_RMP[21]);
-			aLienObject		= static_cast<int>(array_RMP[22]);
-			spPriority		= static_cast<int>(array_RMP[23]);
+			unitType		= static_cast<int>(dataArray[19]); // -> Any=0; Flying=1; Small=2; FlyingLarge=3; Large=4
+			nodeRank		= static_cast<int>(dataArray[20]);
+			ptrlPriority	= static_cast<int>(dataArray[21]);
+			aLienObject		= static_cast<int>(dataArray[22]);
+			spPriority		= static_cast<int>(dataArray[23]);
 
 			// TYPE_FLYING		= 0x01 -> ref Savegame/Node.h
 			// TYPE_SMALL		= 0x02
@@ -2313,22 +2313,21 @@ void BattlescapeGenerator::loadRMP( // private.
 						aLienObject,
 						spPriority);
 
-			for (size_t
+			for (size_t // create nodeLinks ->
 					j = 0;
 					j != 5;
 					++j)
 			{
-				linkId = static_cast<int>(array_RMP[(j * 3) + 4]); // <- 4[5,6],7[8,9],10[11,12],13[14,15],16[17,18] -> [unitType & distance of linked nodes are not used]
+				linkId = static_cast<int>(dataArray[(j * 3) + 4]); // <- 4[5,6],7[8,9],10[11,12],13[14,15],16[17,18] -> [unitType & distance of linked nodes are not used]
 
 				if (linkId < 251) // do not offset special values; ie. links to N,S,E,West, or none.
 					linkId += nodeOffset;
 				else
-					linkId -= 256;
-					// 255 -> -1 = unused
-					// 254 -> -2 = north
-					// 253 -> -3 = east
-					// 252 -> -4 = south
-					// 251 -> -5 = west
+					linkId -= 256;	// 255 -> -1 = unused
+									// 254 -> -2 = north
+									// 253 -> -3 = east
+									// 252 -> -4 = south
+									// 251 -> -5 = west
 
 				std::vector<int>* nodeLinks = node->getNodeLinks();
 				if (std::find(
@@ -2336,8 +2335,8 @@ void BattlescapeGenerator::loadRMP( // private.
 							nodeLinks->rend(),
 							linkId) != nodeLinks->rend())
 				{
-					linkId = -1;	// <- for Expanded U_BASE, which seems to have multiple identical links on nodes.
-				}					// TODO: yeah i'm working on it but things like 'mapView' are involved ....
+					linkId = -1; // prevent multiple identical links on nodes.
+				}
 
 				nodeLinks->push_back(linkId);
 			}

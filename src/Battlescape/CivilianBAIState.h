@@ -62,7 +62,7 @@ private:
 
 	protected:
 		Node
-			* _fromNode,
+			* _startNode,
 			* _toNode;
 
 
