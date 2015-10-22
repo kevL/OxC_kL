@@ -75,14 +75,16 @@ private:
 		ACU_ORANGE	= 18,
 		ACU_RED		= 35,
 		ACU_GREEN	= 51;
-
+	static const Uint32
+		SCREEN_WHITE	=  1,
+		SCREEN_BLACK	= 15;
 
 	CursorType _cursorType;
 
 	bool
 		_bulletStart,
 		_explosionInFOV,
-//		_flashScreen,
+		_flashScreen,
 		_mapIsHidden,
 		_noDraw,
 		_projectileInFOV,
@@ -274,9 +276,9 @@ private:
 //		void resetCameraSmoothing();
 
 		/// Sets whether the screen should "flash" or not.
-//		void setBlastFlash(bool flash);
+		void setBlastFlash(bool flash);
 		/// Check if the screen is flashing this.
-//		bool getBlastFlash() const;
+		bool getBlastFlash() const;
 
 		/// Sets whether to draw or not.
 		void setNoDraw(bool noDraw = true);

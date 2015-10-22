@@ -117,7 +117,7 @@ Map::Map(
 		_unitDying(false),
 		_reveal(0),
 		_smoothingEngaged(false),
-//		_flashScreen(false),
+		_flashScreen(false),
 		_mapIsHidden(false),
 		_noDraw(false),
 		_showProjectile(true),
@@ -307,10 +307,25 @@ void Map::draw()
 
 	// Normally call for a Surface::draw();
 	// but don't clear the background with color 0, which is transparent
-	// (aka black) -- you use color 15 because that actually corresponds to the
+	// (aka black) -- use color 15 because that actually corresponds to the
 	// color you DO want in all variations of the xcom palettes.
 //	Surface::draw();
-	clear(15); // black
+	if (_flashScreen == true)
+	{
+		static int stickyTicks;	// TODO: This should really be some factor of the rate at which calls to
+								// ExplosionBState are made against the rate at which calls to Map here are made.
+		if (++stickyTicks == 5)
+		{
+			stickyTicks = 0;
+			_flashScreen = false;
+		}
+
+		clear(SCREEN_WHITE);
+		return;
+	}
+
+	clear(SCREEN_BLACK);
+
 	static bool delayHiddenScreen;
 
 	if (_noDraw == false) // don't draw if MiniMap is open. Or if Inventory is open.
@@ -1889,9 +1904,11 @@ void Map::drawTerrain(Surface* const surface) // private.
 		// are actually drawn. This causes everything to look like EGA for a single frame.
 		if (_flashScreen == true)
 		{
-			_flashScreen = false;
 			Uint8 color;
-			for (int x = 0, y = 0; x < surface->getWidth() && y < surface->getHeight();)
+			for (int
+					x = 0, y = 0;
+					x < surface->getWidth() && y < surface->getHeight()
+					;)
 			{
 //				surface->setPixelIterative(&x,&y, surface->getPixelColor(x,y) & 0xF0); // <- Volutar's, Lol good stuf.
 				color = (surface->getPixelColor(x,y) / 16) * 16; // get the brightest color in each colorgroup.
@@ -2759,23 +2776,23 @@ void Map::resetCameraSmoothing()
 	_smoothingEngaged = false;
 } */
 
-/*
+/**
  * Sets the "explosion flash" bool.
  * @param flash - true to render the screen in EGA this frame
- *
+ */
 void Map::setBlastFlash(bool flash)
 {
 	_flashScreen = flash;
-} */
+}
 
-/*
+/**
  * Checks if the screen is still being rendered in EGA.
  * @return, true if still in EGA mode
- *
+ */
 bool Map::getBlastFlash() const
 {
 	return _flashScreen;
-} */
+}
 
 /**
  * Sets whether to draw or not.

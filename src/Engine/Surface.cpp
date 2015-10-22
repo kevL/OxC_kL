@@ -267,7 +267,8 @@ Surface::~Surface() // virtual.
 
 /**
  * Loads the contents of an X-Com SCR image file into the surface.
- * SCR files are simply uncompressed images containing the palette offset of each pixel.
+ * @note SCR files are simply uncompressed images containing the palette offset
+ * of each pixel.
  * @param file - reference the filename of the SCR image
  * @sa http://www.ufopaedia.org/index.php?title=Image_Formats#SCR_.26_DAT
  */
@@ -325,9 +326,9 @@ void Surface::loadImage(const std::string& file)
 }
 
 /**
- * Loads the contents of an X-Com SPK image file into
- * the surface. SPK files are compressed with a custom
- * algorithm since they're usually full-screen images.
+ * Loads the contents of an X-Com SPK image file into the surface.
+ * @note SPK files are compressed with a custom algorithm since they're usually
+ * full-screen images.
  * @param file - reference the filename of the SPK image
  * @sa http://www.ufopaedia.org/index.php?title=Image_Formats#SPK
  */
@@ -394,8 +395,8 @@ void Surface::loadSpk(const std::string& file)
 }
 
 /**
- * Loads the contents of a TFTD BDY image file into the surface;
- * BDY files are compressed with a custom algorithm.
+ * Loads the contents of a TFTD BDY image file into the surface.
+ * @note BDY files are compressed with a custom algorithm.
  * @param file - reference the filename of the BDY image
  * @sa http://www.ufopaedia.org/index.php?title=Image_Formats#BDY
  */
@@ -462,8 +463,8 @@ void Surface::loadBdy(const std::string& file)
 }
 
 /**
- * Clears the entire contents of the surface, resulting in a blank image
- * of the specified color (0 for transparent).
+ * Clears the entire contents of the surface resulting in a blank image of the
+ * specified color (0 for transparent).
  * @param color - the color for the background of the surface (default 0)
  */
 void Surface::clear(Uint32 color)

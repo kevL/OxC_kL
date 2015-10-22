@@ -172,12 +172,16 @@ void ExplosionBState::init()
 
 			if (_item != NULL)
 			{
-				start = _item->getRules()->getHitAnimation();
-				radius = _item->getRules()->getExplosionRadius();
+				const RuleItem* const itRule = _item->getRules();
+				if (itRule->defusePulse() == true)
+					_parent->getMap()->setBlastFlash(true);
+
+				start = itRule->getHitAnimation();
+				radius = itRule->getExplosionRadius();
 				if (radius == -1) radius = 0;
 
-				if (_item->getRules()->getDamageType() == DT_SMOKE
-					|| _item->getRules()->getDamageType() == DT_STUN)
+				if (itRule->getDamageType() == DT_SMOKE
+					|| itRule->getDamageType() == DT_STUN)
 				{
 //					start = 8;
 					qty = qty * 2 / 3; // smoke & stun bombs do fewer anims.
@@ -224,8 +228,6 @@ void ExplosionBState::init()
 
 				_parent->getMap()->getExplosions()->push_back(explosion);
 			}
-
-//			_parent->getMap()->setBlastFlash(true);
 
 
 			int soundId = -1; // set item's hitSound to -1 for silent.
@@ -336,8 +338,7 @@ void ExplosionBState::think()
 			delete *i;
 			i = _parent->getMap()->getExplosions()->erase(i);
 		}
-		else
-			++i;
+		else ++i;
 	}
 
 	if (_parent->getMap()->getExplosions()->empty() == true)
@@ -347,31 +348,30 @@ void ExplosionBState::think()
 		explode(); */
 
 
-//	if (_parent->getMap()->getBlastFlash() == false)
-//	{
-	if (_parent->getMap()->getExplosions()->empty() == true)
-		explode();
-
-	for (std::list<Explosion*>::const_iterator
-			i = _parent->getMap()->getExplosions()->begin();
-			i != _parent->getMap()->getExplosions()->end();
-			)
+	if (_parent->getMap()->getBlastFlash() == false)
 	{
-		if ((*i)->animate() == false) // done.
-		{
-			delete *i;
-			i = _parent->getMap()->getExplosions()->erase(i);
+		if (_parent->getMap()->getExplosions()->empty() == true)
+			explode();
 
-			if (_parent->getMap()->getExplosions()->empty() == true)
+		for (std::list<Explosion*>::const_iterator
+				i = _parent->getMap()->getExplosions()->begin();
+				i != _parent->getMap()->getExplosions()->end();
+				)
+		{
+			if ((*i)->animate() == false) // done.
 			{
-				explode();
-				return;
+				delete *i;
+				i = _parent->getMap()->getExplosions()->erase(i);
+
+				if (_parent->getMap()->getExplosions()->empty() == true)
+				{
+					explode();
+					return;
+				}
 			}
+			else ++i;
 		}
-		else
-			++i;
 	}
-//	}
 }
 
 /**

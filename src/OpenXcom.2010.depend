@@ -5442,7 +5442,7 @@
 1440092817 f:\git\openxcom\src\battlescape\battlestate.h
 	"BattlescapeGame.h"
 
-1445525370 f:\git\openxcom\src\battlescape\map.h
+1445531855 f:\git\openxcom\src\battlescape\map.h
 	"Position.h"
 	"../Engine/InteractiveSurface.h"
 
@@ -5553,7 +5553,7 @@
 
 1440163450 f:\git\openxcom\src\ruleset\ruleinventory.h
 
-1445459428 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
+1445528197 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
 	"BattlescapeGenerator.h"
 	"AlienBAIState.h"
 	"CivilianBAIState.h"
@@ -5871,7 +5871,7 @@
 1443409027 f:\git\openxcom\src\battlescape\explosion.h
 	"Position.h"
 
-1445029699 source:f:\git\openxcom\src\battlescape\explosionbstate.cpp
+1445538623 source:f:\git\openxcom\src\battlescape\explosionbstate.cpp
 	"ExplosionBState.h"
 	"BattlescapeState.h"
 	"Camera.h"
@@ -5965,7 +5965,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1445527498 source:f:\git\openxcom\src\battlescape\map.cpp
+1445540875 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	"BattlescapeMessage.h"
 	"BattlescapeState.h"
@@ -6593,7 +6593,7 @@
 1430149550 f:\git\openxcom\src\interface\slider.h
 	"../Engine/InteractiveSurface.h"
 
-1444721492 source:f:\git\openxcom\src\engine\surface.cpp
+1445532312 source:f:\git\openxcom\src\engine\surface.cpp
 	"Surface.h"
 	"Language.h"
 	<malloc.h>
@@ -8432,7 +8432,7 @@
 	"Base.h"
 	"../Ruleset/RuleBaseFacility.h"
 
-1443150202 source:f:\git\openxcom\src\savegame\battleitem.cpp
+1445528242 source:f:\git\openxcom\src\savegame\battleitem.cpp
 	"BattleItem.h"
 	"BattleUnit.h"
 	"Tile.h"
