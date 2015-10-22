@@ -321,8 +321,6 @@ void resetDefault()
 
 	rulesets.clear();
 	rulesets.push_back("Xcom1Ruleset");
-
-	purchaseExclusions.clear();
 }
 
 /**
@@ -593,10 +591,6 @@ void load(const std::string& file)
 	try
 	{
 		const YAML::Node doc = YAML::LoadFile(st);
-
-//		if (doc["options"]["NewBattleMission"]) // Ignore old options files
-//			return;
-
 		for (std::vector<OptionInfo>::const_iterator
 				i = _info.begin();
 				i != _info.end();
@@ -604,8 +598,6 @@ void load(const std::string& file)
 		{
 			i->load(doc["options"]);
 		}
-
-		purchaseExclusions = doc["purchaseexclusions"].as<std::vector<std::string> >(purchaseExclusions);
 		rulesets = doc["rulesets"].as<std::vector<std::string> >(rulesets);
 	}
 	catch (YAML::Exception& e)
@@ -644,9 +636,8 @@ void save(const std::string& file)
 			i->save(node);
 		}
 
-		doc["options"]				= node;
-		doc["purchaseexclusions"]	= purchaseExclusions;
-		doc["rulesets"]				= rulesets;
+		doc["options"]	= node;
+		doc["rulesets"]	= rulesets;
 		output << doc;
 
 		save << output.c_str();

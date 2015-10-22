@@ -100,7 +100,7 @@ YAML::Node MissionSite::saveId() const
 {
 	YAML::Node node = Target::saveId();
 
-	node["type"]	= _deployRule->getMarkerId();
+	node["type"]	= _deployRule->getMarkerType();
 	node["id"]		= _id;
 
 	return node;
@@ -149,7 +149,7 @@ void MissionSite::setId(const int id)
  */
 std::wstring MissionSite::getName(const Language* const lang) const
 {
-	return lang->getString(_deployRule->getMarkerId()).arg(_id);
+	return lang->getString(_deployRule->getMarkerType()).arg(_id);
 }
 
 /**

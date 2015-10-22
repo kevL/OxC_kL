@@ -1144,7 +1144,6 @@ std::vector<Country*>* SavedGame::getCountries()
 int SavedGame::getCountryFunding() const
 {
 	int total = 0;
-
 	for (std::vector<Country*>::const_iterator
 			i = _countries.begin();
 			i != _countries.end();

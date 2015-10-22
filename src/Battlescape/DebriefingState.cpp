@@ -588,8 +588,7 @@ void DebriefingState::btnOkClick(Action*)
 			if (playAwardMusic == true)
 				_game->getResourcePack()->playMusic(
 												OpenXcom::res_MUSIC_TAC_AWARDS,
-												"",
-												1);
+												"", 1);
 			else
 				_game->getResourcePack()->playMusic(OpenXcom::res_MUSIC_GEO_GLOBE);
 		}
@@ -635,6 +634,7 @@ void DebriefingState::addStat( // private.
 
 
 /**
+ * *** FUNCTOR ***
  * Clears any supply missions from an aLien base.
  */
 class ClearAlienBase
@@ -739,9 +739,7 @@ void DebriefingState::prepareDebriefing() // private.
 			i != _specialTypes.end();
 			++i)
 	{
-		_stats.push_back(new DebriefingStat(
-										(*i).second->type,
-										true));
+		_stats.push_back(new DebriefingStat((*i).second->type, true));
 	}
 /*	_stats.push_back(new DebriefingStat("STR_UFO_POWER_SOURCE", true)); // ->> SpecialTileTypes <<-
 	_stats.push_back(new DebriefingStat("STR_UFO_NAVIGATION", true));
@@ -754,9 +752,7 @@ void DebriefingState::prepareDebriefing() // private.
 	_stats.push_back(new DebriefingStat("STR_ALIEN_ALLOYS", true));
 	_stats.push_back(new DebriefingStat("STR_ALIEN_HABITAT", true)); */
 
-	_stats.push_back(new DebriefingStat(
-									_rules->getAlienFuelType(),
-									true));
+	_stats.push_back(new DebriefingStat(_rules->getAlienFuelType(), true));
 
 	const bool aborted = battleSave->isAborted();
 	bool missionAccomplished = !aborted

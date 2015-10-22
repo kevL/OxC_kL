@@ -720,9 +720,11 @@ void Screen::updateScale( // static.
 		int& height,
 		bool change)
 {
-	double pixelRatioY = 1.;
-	if (Options::nonSquarePixelRatio)
+	double pixelRatioY;
+	if (Options::nonSquarePixelRatio == true)
 		pixelRatioY = 1.2;
+	else
+		pixelRatioY = 1.;
 
 	type = selection;
 	switch (type)

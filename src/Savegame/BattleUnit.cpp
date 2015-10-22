@@ -805,8 +805,7 @@ void BattleUnit::setUnitDirection(
 	_dirTo = dir;
 
 	if (turret == true) // || _turretType == -1
-		_dirTurret =
-		_dirToTurret = dir;
+		_dirTurret = dir;
 }
 
 /**

@@ -2022,9 +2022,8 @@ void BattlescapeGame::checkForCasualties(
 			const BattleUnit* const unit = _battleSave->getSelectedUnit();
 			_parentState->showPsiButton(unit != NULL
 									 && unit->getOriginalFaction() == FACTION_HOSTILE
-									 && unit->getBaseStats()->psiSkill > 0
+									 && unit->getBaseStats()->psiSkill != 0
 									 && unit->isOut_t() == false);
-//									 && unit->isOut(true, true) == false);
 		}
 
 /*		if (_battleSave->getTacType() == TCT_BASEASSAULT // do this in SavedBattleGame::addDestroyedObjective()
@@ -2043,11 +2042,9 @@ void BattlescapeGame::checkForCasualties(
 					break;
 				}
 			}
-
 			if (controlDestroyed == true)
 			{
 				_battleSave->setControlDestroyed();
-
 				Game* const game = _parentState->getGame();
 				game->pushState(new InfoboxOKState(game->getLanguage()->getString("STR_ALIEN_BASE_CONTROL_DESTROYED")));
 			}

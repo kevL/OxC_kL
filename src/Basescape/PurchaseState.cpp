@@ -253,8 +253,7 @@ PurchaseState::PurchaseState(Base* const base)
 		laRule = _game->getRuleset()->getItem(cwRule->getLauncherItem());
 		type = laRule->getType();
 
-		if (laRule->getBuyCost() != 0
-			&& isExcluded(type) == false) // + isResearched
+		if (laRule->getBuyCost() != 0) // + isResearched
 		{
 			_orderQty.push_back(0);
 			_items.push_back(type);
@@ -302,8 +301,7 @@ PurchaseState::PurchaseState(Base* const base)
 		clRule = _game->getRuleset()->getItem(cwRule->getClipItem());
 		type = clRule->getType();
 
-		if (clRule->getBuyCost() != 0 // clRule != NULL &&
-			&& isExcluded(type) == false) // + isResearched
+		if (clRule->getBuyCost() != 0) // clRule != NULL && // + isResearched
 		{
 			_orderQty.push_back(0);
 			_items.push_back(type);
@@ -360,8 +358,7 @@ PurchaseState::PurchaseState(Base* const base)
 		//Log(LOG_INFO) << (*i) << " list# " << itRule->getListOrder(); // Prints listOrder to LOG.
 
 		if (itRule->getBuyCost() != 0
-			&& _game->getSavedGame()->isResearched(itRule->getRequirements()) == true
-			&& isExcluded(*i) == false)
+			&& _game->getSavedGame()->isResearched(itRule->getRequirements()) == true)
 		{
 			_orderQty.push_back(0);
 			_items.push_back(*i);
@@ -383,7 +380,7 @@ PurchaseState::PurchaseState(Base* const base)
 					j != _base->getCrafts()->end();
 					++j)
 			{
-				if ((*j)->getRules()->getSoldiers() > 0) // is transport craft
+				if ((*j)->getRules()->getSoldiers() != 0) // is transport craft
 				{
 					for (std::map<std::string, int>::const_iterator
 							k = (*j)->getCraftItems()->getContents()->begin();
@@ -395,7 +392,7 @@ PurchaseState::PurchaseState(Base* const base)
 					}
 				}
 
-				if ((*j)->getRules()->getVehicles() > 0) // is transport craft capable of vehicles
+				if ((*j)->getRules()->getVehicles() != 0) // is transport craft capable of vehicles
 				{
 					for (std::vector<Vehicle*>::const_iterator
 							k = (*j)->getVehicles()->begin();
@@ -489,25 +486,6 @@ void PurchaseState::think()
 
 	_timerInc->think(this, NULL);
 	_timerDec->think(this, NULL);
-}
-
-/**
- * Returns whether the item is excluded in the options file.
- * @param item - reference an item to look up
- * @return, true if the item is excluded in the options file
- */
-bool PurchaseState::isExcluded(const std::string& item)
-{
-	for (std::vector<std::string>::const_iterator
-			i = Options::purchaseExclusions.begin();
-			i != Options::purchaseExclusions.end();
-			++i)
-	{
-		if (*i == item)
-			return true;
-	}
-
-	return false;
 }
 
 /**
@@ -699,7 +677,7 @@ void PurchaseState::lstItemsRightArrowClick(Action* action)
  * Gets the price of the currently selected item.
  * @return, the price of the currently selected item
  */
-int PurchaseState::getPrice()
+int PurchaseState::getPrice() // private.
 {
 	switch (getPurchaseType(_sel))
 	{
@@ -926,7 +904,7 @@ void PurchaseState::updateItemStrings() // private.
  * Gets the purchase type.
  * @return, PurchaseSellTransferType (Base.h)
  */
-PurchaseSellTransferType PurchaseState::getPurchaseType(size_t sel) const
+PurchaseSellTransferType PurchaseState::getPurchaseType(size_t sel) const // private.
 {
 	size_t rowCutoff = _soldiers.size();
 
@@ -950,7 +928,7 @@ PurchaseSellTransferType PurchaseState::getPurchaseType(size_t sel) const
  * @param sel - currently selected item
  * @return, current index
  */
-size_t PurchaseState::getItemIndex(size_t sel) const
+size_t PurchaseState::getItemIndex(size_t sel) const // private.
 {
 	return sel - _soldiers.size() - _crafts.size() - 2;
 }
@@ -960,7 +938,7 @@ size_t PurchaseState::getItemIndex(size_t sel) const
  * @param sel - currently selected craft
  * @return, current index
  */
-size_t PurchaseState::getCraftIndex(size_t sel) const
+size_t PurchaseState::getCraftIndex(size_t sel) const // private.
 {
 	return sel - _soldiers.size() - 2;
 }

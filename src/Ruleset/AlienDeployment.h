@@ -123,7 +123,7 @@ private:
 	std::string
 		_alert,
 		_alertBg,
-		_markerName,
+		_markerType,
 		_nextStage,
 		_objectiveCompleteText,
 		_objectiveFailedText,
@@ -193,8 +193,8 @@ private:
 		/// Gets the briefing data for this mission type.
 		BriefingData getBriefingData() const;
 
-		/// Gets the marker name for this mission.
-		const std::string& getMarkerId() const;
+		/// Gets the marker type for this mission.
+		const std::string& getMarkerType() const;
 		/// Gets the marker icon for this mission.
 		int getMarkerIcon() const;
 

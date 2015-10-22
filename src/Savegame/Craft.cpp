@@ -263,7 +263,7 @@ void Craft::load(
 					++i)
 			{
 				if ((*i)->getId() == id
-					&& (*i)->getSiteDeployment()->getMarkerId() == type)
+					&& (*i)->getSiteDeployment()->getMarkerType() == type) // is this necessary. not for UFO.
 				{
 					setDestination(*i);
 					break;

@@ -285,7 +285,7 @@ void AlienMission::think(
 				_gameSave.getUfos()->push_back(ufo);
 			else if ((rules.getUfo(wave.ufoType) == NULL // a mission site to spawn directly
 					&& rules.getDeployment(wave.ufoType) != NULL
-					&& rules.getDeployment(wave.ufoType)->getMarkerId().empty() == false)
+					&& rules.getDeployment(wave.ufoType)->getMarkerType().empty() == false)
 				|| (_missionRule.getObjective() == alm_SITE // or spawn one at random according to the terrain
 					&& wave.objective == true))
 			{
@@ -796,7 +796,7 @@ MissionSite* AlienMission::spawnMissionSite( // private.
 												deployRule);
 		site->setLongitude(RNG::generate(area.lonMin, area.lonMax));
 		site->setLatitude(RNG::generate(area.latMin, area.latMax));
-		site->setId(_gameSave.getCanonicalId(deployRule->getMarkerId()));
+		site->setId(_gameSave.getCanonicalId(deployRule->getMarkerType()));
 		site->setSecondsLeft(RNG::generate(
 										deployRule->getDurationMin(),
 										deployRule->getDurationMax()) * 3600);

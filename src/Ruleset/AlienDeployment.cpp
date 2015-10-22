@@ -155,6 +155,8 @@ AlienDeployment::AlienDeployment(const std::string& type)
 		_objectiveFailedScore(0),
 		_despawnPenalty(0),
 		_pointsPer30(0),
+		_markerType("STR_TERROR_SITE"),
+		_alert("STR_ALIENS_TERRORISE"),
 		_alertBg("BACK03.SCR")
 {}
 
@@ -185,7 +187,7 @@ void AlienDeployment::load(const YAML::Node& node)
 	_finalMission		= node["finalMission"]		.as<bool>(_finalMission);
 	_script				= node["script"]			.as<std::string>(_script);
 	_briefingData		= node["briefing"]			.as<BriefingData>(_briefingData);
-	_markerName			= node["markerName"]		.as<std::string>(_markerName);
+	_markerType			= node["markerType"]		.as<std::string>(_markerType);
 	_markerIcon			= node["markerIcon"]		.as<int>(_markerIcon);
 	_alert				= node["alert"]				.as<std::string>(_alert);
 	_alertBg			= node["alertBg"]			.as<std::string>(_alertBg);
@@ -341,7 +343,7 @@ bool AlienDeployment::isFinalMission() const
 
 /**
  * Gets the alert message displayed when this mission spawns.
- * @return, string ID for the message
+ * @return, ID for the message
  */
 const std::string& AlienDeployment::getAlertMessage() const
 {
@@ -367,12 +369,12 @@ BriefingData AlienDeployment::getBriefingData() const
 }
 
 /**
- * Returns the globe marker name for this mission.
- * @return, string ID for marker name
+ * Returns the globe marker type for this mission.
+ * @return, ID for marker type
  */
-const std::string& AlienDeployment::getMarkerId() const
+const std::string& AlienDeployment::getMarkerType() const
 {
-	return _markerName;
+	return _markerType;
 }
 
 /**

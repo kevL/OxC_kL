@@ -83,11 +83,8 @@ private:
 		_items,
 		_soldiers;
 
-	/// Is excluded in the options file.
-	bool isExcluded(const std::string& item);
 	/// Gets selected price.
 	int getPrice();
-
 	/// Updates the quantity-strings of the selected item.
 	void updateItemStrings();
 	/// Gets the purchase type.
