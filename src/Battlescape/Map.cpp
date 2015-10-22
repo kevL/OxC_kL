@@ -300,6 +300,8 @@ void Map::think()
  */
 void Map::draw()
 {
+	if (_noDraw == false) // don't draw if MiniMap is open. Or if Inventory is open.
+	{
 	// removed setting this here and in BattlescapeGame::handleState(),
 	// Camera::scrollXY(), ProjectileFlyBState::think() x2.
 //	if (_redraw == false) return;
@@ -310,28 +312,24 @@ void Map::draw()
 	// (aka black) -- use color 15 because that actually corresponds to the
 	// color you DO want in all variations of the xcom palettes.
 //	Surface::draw();
-	if (_flashScreen == true)
-	{
-		static int stickyTicks;	// TODO: This should really be some factor of the rate at which calls to
-								// ExplosionBState are made against the rate at which calls to Map here are made.
-		if (++stickyTicks == 5)
+
+		if (_flashScreen == true)
 		{
-			stickyTicks = 0;
-			_flashScreen = false;
+			static int stickyTicks;	// TODO: This should really be some factor of the rate at which calls to
+									// ExplosionBState are made against the rate at which calls to Map here are made.
+			if (++stickyTicks == 5)
+			{
+				stickyTicks = 0;
+				_flashScreen = false;
+			}
+
+			clear(SCREEN_WHITE);
+			return;
 		}
 
-		clear(SCREEN_WHITE);
-		return;
-	}
+		clear(SCREEN_BLACK);
 
-	clear(SCREEN_BLACK);
-
-	static bool delayHiddenScreen;
-
-	if (_noDraw == false) // don't draw if MiniMap is open. Or if Inventory is open.
-	{
 		const Tile* tile;
-
 		if (_projectile != NULL) //&& _battleSave->getSide() == FACTION_PLAYER)
 		{
 			tile = _battleSave->getTile(Position::toTileSpace(_projectile->getPosition()));
@@ -343,8 +341,7 @@ void Map::draw()
 			}
 		}
 		else
-			_projectileInFOV = _battleSave->getDebugMode(); // reveals prj in debugmode.
-
+			_projectileInFOV = _battleSave->getDebugMode(); // reveals map in debugmode; hides battlefield if no projectiles in flight.
 
 		if (_explosions.empty() == false)
 		{
@@ -367,8 +364,10 @@ void Map::draw()
 			}
 		}
 		else
-			_explosionInFOV = _battleSave->getDebugMode(); // reveals expl in debugmode.
+			_explosionInFOV = _battleSave->getDebugMode(); // reveals map in debugmode; hides battlefield if no explosions waiting.
 
+
+		static bool delayHiddenScreen;
 
 		if (_battleSave->getSelectedUnit() == NULL
 			|| _battleSave->getSelectedUnit()->getUnitVisible() == true
@@ -498,12 +497,10 @@ void Map::drawTerrain(Surface* const surface) // private.
 			{ */
 			const Position posFinal = _projectile->getFinalPosition();
 			BattleAction* const action = _projectile->getBattleAction();
-			bool arcChase = false;
 
 			if (_bulletStart == true)
 			{
 				_bulletStart = false;
-
 				if (   bullet.x < 0 // if bullet starts offScreen
 					|| bullet.x >= surface->getWidth()
 					|| bullet.y < 0
@@ -524,7 +521,6 @@ void Map::drawTerrain(Surface* const surface) // private.
 				if (action->actor->getFaction() != _battleSave->getSide()	// moved here from TileEngine::reactionShot()
 					&& offScreen_final == true)								// because this is the (accurate) position of the bullet-shot-actor's Camera mapOffset.
 				{
-					//Log(LOG_INFO) << "Map add rfActor " << action->actor->getId() << " " << _camera->getMapOffset() << " final Pos offScreen";
 					std::map<int, Position>* const rfShotPos (_battleSave->getTileEngine()->getReactionPositions());
 					rfShotPos->insert(std::pair<int, Position>(
 															action->actor->getId(),
@@ -540,10 +536,6 @@ void Map::drawTerrain(Surface* const surface) // private.
 				{
 					_smoothingEngaged = true;
 					_camera->setPauseAfterShot();
-					//Log(LOG_INFO) << ". shot going offScreen OR throw - setPauseAfterShot";
-
-					if (offScreen_final == false)
-						arcChase = true;
 				}
 			}
 			else if (_smoothingEngaged == true)
@@ -551,11 +543,12 @@ void Map::drawTerrain(Surface* const surface) // private.
 							surface->getWidth() / 2 - bullet.x,
 							_playableHeight / 2 - bullet.y);
 
-			const int posBullet_z = (_projectile->getPosition().z) / 24;
-			if (viewLevel != posBullet_z
-				&& (arcChase == true || posFinal.z != action->actor->getPosition().z))
+			if (_smoothingEngaged == true
+				|| posFinal.z != action->actor->getPosition().z)
 			{
-				_camera->setViewLevel(viewLevel = posBullet_z);
+				const int posBullet_z ((_projectile->getPosition().z) / 24);
+				if (posBullet_z != viewLevel)
+					_camera->setViewLevel(viewLevel = posBullet_z);
 			}
 /*			}
 			else // NOT smoothCamera: I don't use this.
@@ -1905,10 +1898,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 		if (_flashScreen == true)
 		{
 			Uint8 color;
-			for (int
-					x = 0, y = 0;
-					x < surface->getWidth() && y < surface->getHeight()
-					;)
+			for (int x = 0, y = 0; x < surface->getWidth() && y < surface->getHeight();)
 			{
 //				surface->setPixelIterative(&x,&y, surface->getPixelColor(x,y) & 0xF0); // <- Volutar's, Lol good stuf.
 				color = (surface->getPixelColor(x,y) / 16) * 16; // get the brightest color in each colorgroup.
