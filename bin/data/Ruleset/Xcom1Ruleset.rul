@@ -597,6 +597,7 @@ items:
     clipSize: 6
     battleType: 2
     blastRadius: 12
+    defusePulse: true
   - type: STR_PISTOL
     size: 0.2
     costBuy: 725

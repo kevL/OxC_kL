@@ -162,7 +162,7 @@ Map::Map(
 	_scrollKeyTimer = new Timer(SCROLL_INTERVAL);
 	_scrollKeyTimer->onTimer((SurfaceHandler)& Map::scrollKey);
 
-	_camera->setScrollTimer(
+	_camera->setScrollTimers(
 						_scrollMouseTimer,
 						_scrollKeyTimer);
 
@@ -481,12 +481,13 @@ void Map::drawTerrain(Surface* const surface) // private.
 
 /*			if (Options::battleSmoothCamera == true)
 			{ */
+			const Position posFinal = _projectile->getFinalPosition();
+			BattleAction* const action = _projectile->getBattleAction();
+			bool arcChase = false;
+
 			if (_bulletStart == true)
 			{
 				_bulletStart = false;
-
-				const Position posFinal = _projectile->getFinalPosition();
-				BattleAction* const action = _projectile->getBattleAction();
 
 				if (   bullet.x < 0 // if bullet starts offScreen
 					|| bullet.x >= surface->getWidth()
@@ -516,14 +517,18 @@ void Map::drawTerrain(Surface* const surface) // private.
 				}
 
 				if (offScreen_final == true
-					|| (_projectile->getThrowItem() != NULL
+					|| ((_projectile->getThrowItem() != NULL
+							|| action->weapon->getRules()->getArcingShot() == true)
 						&& TileEngine::distance(
 											action->actor->getPosition(),
-											posFinal) > 8)) // no smoothing unless throw > 8 tiles
+											posFinal) > DIST_ARC_SMOOTH)) // no smoothing unless throw > 8 tiles
 				{
 					_smoothingEngaged = true;
 					_camera->setPauseAfterShot();
 					//Log(LOG_INFO) << ". shot going offScreen OR throw - setPauseAfterShot";
+
+					if (offScreen_final == false)
+						arcChase = true;
 				}
 			}
 			else if (_smoothingEngaged == true)
@@ -532,8 +537,11 @@ void Map::drawTerrain(Surface* const surface) // private.
 							_playableHeight / 2 - bullet.y);
 
 			const int posBullet_z = (_projectile->getPosition().z) / 24;
-			if (viewLevel != posBullet_z)
+			if (viewLevel != posBullet_z
+				&& (arcChase == true || posFinal.z != action->actor->getPosition().z))
+			{
 				_camera->setViewLevel(viewLevel = posBullet_z);
+			}
 /*			}
 			else // NOT smoothCamera: I don't use this.
 			// Camera remains stationary when xCom actively fires at target;

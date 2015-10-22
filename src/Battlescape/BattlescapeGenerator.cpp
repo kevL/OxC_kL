@@ -488,6 +488,9 @@ void BattlescapeGenerator::nextStage()
 			i != _battleSave->getItems()->end();
 			++i)
 	{
+		if ((*i)->getOwner() == NULL)
+			(*i)->setFuse(-1);
+
 		if ((*i)->getIsLoadedAmmo() == false)
 		{
 			std::vector<BattleItem*>* toContainer = &removeFromGame;
@@ -686,10 +689,6 @@ void BattlescapeGenerator::nextStage()
 	}
 
 
-	_unitSequence = _battleSave->getUnits()->back()->getId() + 1;
-
-	const size_t unitCount = _battleSave->getUnits()->size();
-
 	_alienRace = deployRule->getRace();
 	if (_alienRace.empty() == true)
 	{
@@ -726,6 +725,10 @@ void BattlescapeGenerator::nextStage()
 		throw Exception("Map generator encountered an error: no alien race could be determined.");
 	}
 
+
+	_unitSequence = _battleSave->getUnits()->back()->getId() + 1;
+
+	const size_t unitCount = _battleSave->getUnits()->size();
 
 	deployAliens(deployRule); // <-- ALIEN DEPLOYMENT.
 

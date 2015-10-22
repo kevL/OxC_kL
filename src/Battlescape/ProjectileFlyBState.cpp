@@ -132,8 +132,7 @@ void ProjectileFlyBState::init()
 			}
 			else fireValid = true;
 
-			if (fireValid == false
-				|| _unit->getStopShot() == true)
+			if (fireValid == false || _unit->getStopShot() == true)
 			{
 				_unit->setTimeUnits(_unit->getTimeUnits() + _action.TU);
 				popThis = true;

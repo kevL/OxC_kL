@@ -83,16 +83,18 @@ Camera::~Camera()
 {}
 
 /**
- * Sets the camera's scrolling timer.
- * @param mouse	- pointer to mouse Timer
- * @param key	- pointer to key Timer
+ * Sets this Camera's mouse- and keyboard- scrolling timers for use in the
+ * battlefield.
+ * @note Goebbels wants pics.
+ * @param mouseTimer	- pointer to mouse Timer
+ * @param keyboardTimer	- pointer to keyboard Timer
  */
-void Camera::setScrollTimer(
-		Timer* mouse,
-		Timer* key)
+void Camera::setScrollTimers(
+		Timer* mouseTimer,
+		Timer* keyboardTimer)
 {
-	_scrollMouseTimer = mouse;
-	_scrollKeyTimer = key;
+	_scrollMouseTimer = mouseTimer;
+	_scrollKeyTimer = keyboardTimer;
 }
 
 /**

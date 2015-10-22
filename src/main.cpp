@@ -35,13 +35,12 @@
  * @mainpage
  * @author OpenXcom Developers
  *
- * OpenXcom is an open-source clone of the original X-Com
- * written entirely in C++ and SDL. This documentation contains info
- * on every class contained in the source code and its public methods.
- * The code itself also contains in-line comments for more complicated
- * code blocks. Hopefully all of this will make the code a lot more
- * readable for you in case you wish to learn or make use of it in
- * your own projects, though note that all the source code is licensed
+ * OpenXcom is an open-source clone of the original X-Com written entirely in
+ * C++ and SDL. This documentation contains info on every class contained in the
+ * source code and its public methods. The code itself also contains in-line
+ * comments for more complicated code blocks. Hopefully all of this will make
+ * the code a lot more readable for you in case you wish to learn or make use of
+ * it in your own projects - though note that all the source code is licensed
  * under the GNU General Public License. Enjoy!!!!
  */
 

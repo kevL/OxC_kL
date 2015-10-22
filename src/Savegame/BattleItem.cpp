@@ -165,7 +165,7 @@ int BattleItem::getFuse() const
 
 /**
  * Sets the turns until detonation.
- * @param turns - turns until detonation (player/alien turns, not game turns)
+ * @param turns - turns until detonation (player/alien turns not full turns)
  */
 void BattleItem::setFuse(int turn)
 {
@@ -341,7 +341,7 @@ void BattleItem::setPreviousOwner(BattleUnit* const owner)
 }
 
 /**
- * Removes the item from the previous owner and moves it to the new owner.
+ * Removes the item from the previous owner and moves it to a new owner.
  * @param owner - pointer to BattleUnit (default NULL)
  */
 void BattleItem::moveToOwner(BattleUnit* const owner)

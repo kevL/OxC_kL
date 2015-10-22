@@ -68,7 +68,8 @@ private:
 	static const int
 		SCROLL_INTERVAL	= 15,
 		BULLET_SPRITES	= 35,
-		SHADE_BLACK		= 16;
+		SHADE_BLACK		= 16,
+		DIST_ARC_SMOOTH	=  8;
 
 	static const Uint8
 		ACU_ORANGE	= 18,

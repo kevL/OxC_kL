@@ -103,9 +103,9 @@ private:
 		void keyboardRelease(Action* action, State* state);
 
 		/// Sets the camera's scroll timers.
-		void setScrollTimer(
-				Timer* mouse,
-				Timer* key);
+		void setScrollTimers(
+				Timer* mouseTimer,
+				Timer* keyboardTimer);
 		/// Scrolls the view for mouse-scrolling.
 		void scrollMouse();
 		/// Scrolls the view for keyboard-scrolling.
