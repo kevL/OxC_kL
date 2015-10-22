@@ -130,10 +130,10 @@ bool MapData::isNoFloor() const
 }
 
 /**
- * Gets whether this is a big wall, which blocks all surrounding paths.
- * See Pathfinding.h enum
+ * Gets whether this is a big wall that blocks all surrounding diagonal paths
+ * (Pathfinding.h).
  *
- * Return value key:
+ * @note Return value key:
  * 0: not a bigWall
  * 1: regular bigWall
  * 2: allows movement in ne/sw direction

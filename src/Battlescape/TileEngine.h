@@ -204,19 +204,19 @@ private:
 				const Position& targetVoxel,
 				int power,
 				DamageType dType,
-				int maxRadius,
+				int radius,
 				BattleUnit* const attacker = NULL,
 				bool grenade = false,
 				bool defusePulse = false);
 		/// Checks the horizontal blockage of a tile.
 		int horizontalBlockage(
-				const Tile* const startTile,
-				const Tile* const endTile,
+				const Tile* const tileStart,
+				const Tile* const tileStop,
 				const DamageType dType) const;
 		/// Checks the vertical blockage of a tile.
 		int verticalBlockage(
-				const Tile* const startTile,
-				const Tile* const endTile,
+				const Tile* const tileStart,
+				const Tile* const tileStop,
 				const DamageType dType) const;
 		/// Sets the final direction from which a missile or thrown-object came.
 		void setProjectileDirection(const int dir);

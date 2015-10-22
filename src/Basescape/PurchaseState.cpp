@@ -357,8 +357,8 @@ PurchaseState::PurchaseState(Base* const base)
 		itRule = _game->getRuleset()->getItem(*i);
 		//Log(LOG_INFO) << (*i) << " list# " << itRule->getListOrder(); // Prints listOrder to LOG.
 
-		if (itRule->getBuyCost() != 0
-			&& _game->getSavedGame()->isResearched(itRule->getRequirements()) == true)
+		if (itRule->getBuyCost() != 0)
+//			&& _game->getSavedGame()->isResearched(itRule->getRequirements()) == true)
 		{
 			_orderQty.push_back(0);
 			_items.push_back(*i);

@@ -621,7 +621,7 @@ int Tile::getShade() const
  * @param type - SpecialTileType
  * @return, true if an 'objective' was destroyed
  */
-bool Tile::destroyTile( // TODO: If floor gets destroyed, destroy object also.
+bool Tile::destroyTilePart(
 		MapDataType part,
 		SpecialTileType type)
 {
@@ -665,21 +665,24 @@ bool Tile::destroyTile( // TODO: If floor gets destroyed, destroy object also.
 					MapDataSet::getScorchedEarthTile(),
 					1,0, O_FLOOR);
 
-		if (_objects[O_OBJECT] != NULL) // destroy the object if floor is gone.
-			destroyTile(O_OBJECT, type);
+		if (_objects[O_OBJECT] != NULL // destroy the object if floor is gone.
+			&& _objects[O_OBJECT]->getBigWall() == BIGWALL_NONE)
+		{
+			destroyTilePart(O_OBJECT, type); // stop floating haybales.
+		}
 	}
 
 	return objective;
 }
 
 /**
- * Damages terrain (check against terrain-part armor/hitpoints/constitution)
+ * Damages terrain (check against terrain-part armor/hitpoints/constitution).
  * @param part	- part of tile to check (MapData.h)
  * @param power	- power of the damage
  * @param type	- SpecialTileType
  * @return, true if an objective was destroyed
  */
-bool Tile::damageTile(
+bool Tile::hitTile(
 		MapDataType part,
 		int power,
 		SpecialTileType type)
@@ -688,7 +691,7 @@ bool Tile::damageTile(
 	bool objectiveDestroyed = false;
 
 	if (power >= _objects[part]->getArmor())
-		objectiveDestroyed = destroyTile(part, type);
+		objectiveDestroyed = destroyTilePart(part, type);
 
 	return objectiveDestroyed;
 }
@@ -700,7 +703,7 @@ bool Tile::damageTile(
  * on a tile is that of the most powerful ray that passes through it -- see
  * TileEngine::explode().
  * @param power		- how big the BOOM will be / how much tile-destruction
- * @param explType	- the type of this Tile's explosion (set in MCD; not the same as item damage types)
+ * @param explType	- the type of this Tile's explosion (set in MCD)
  * @param force		- forces value even if lower (default false)
  */
 void Tile::setExplosive(
