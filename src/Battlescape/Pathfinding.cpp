@@ -1568,11 +1568,11 @@ BIGWALL_E_S		// 8
 */
 /*	// kL_begin:
 	if ((tile->getMapData(O_WESTWALL)
-			&& tile->getMapData(O_WESTWALL)->getBigWall() == BIGWALL_BLOCK)
+			&& tile->getMapData(O_WESTWALL)->getBigwall() == BIGWALL_BLOCK)
 		|| (tile->getMapData(O_NORTHWALL)
-			&& tile->getMapData(O_NORTHWALL)->getBigWall() == BIGWALL_BLOCK))
+			&& tile->getMapData(O_NORTHWALL)->getBigwall() == BIGWALL_BLOCK))
 //		|| (tile->getMapData(O_OBJECT)
-//			&& tile->getMapData(O_OBJECT)->getBigWall() == BIGWALL_BLOCK))
+//			&& tile->getMapData(O_OBJECT)->getBigwall() == BIGWALL_BLOCK))
 	{
 		return true;
 	} // kL_end. */
@@ -1581,9 +1581,9 @@ BIGWALL_E_S		// 8
 	{
 		//Log(LOG_INFO) << ". part is Bigwall";
 		if (tile->getMapData(O_OBJECT)
-			&& tile->getMapData(O_OBJECT)->getBigWall() != bigWallExclusion
-			&& tile->getMapData(O_OBJECT)->getBigWall() != BIGWALL_NONE
-			&& tile->getMapData(O_OBJECT)->getBigWall() < BIGWALL_WEST) // block,NESW,NWSE
+			&& tile->getMapData(O_OBJECT)->getBigwall() != bigWallExclusion
+			&& tile->getMapData(O_OBJECT)->getBigwall() != BIGWALL_NONE
+			&& tile->getMapData(O_OBJECT)->getBigwall() < BIGWALL_WEST) // block,NESW,NWSE
 		{
 			return true; // blocking part
 		}
@@ -1595,9 +1595,9 @@ BIGWALL_E_S		// 8
 	{
 		//Log(LOG_INFO) << ". part is Westwall";
 		if (tile->getMapData(O_OBJECT)
-			&& (tile->getMapData(O_OBJECT)->getBigWall() == BIGWALL_WEST
-				|| tile->getMapData(O_OBJECT)->getBigWall() == BIGWALL_W_N))
-//				|| tile->getMapData(O_OBJECT)->getBigWall() == BIGWALL_BLOCK)) // kL
+			&& (tile->getMapData(O_OBJECT)->getBigwall() == BIGWALL_WEST
+				|| tile->getMapData(O_OBJECT)->getBigwall() == BIGWALL_W_N))
+//				|| tile->getMapData(O_OBJECT)->getBigwall() == BIGWALL_BLOCK)) // kL
 		{
 			return true; // blocking part
 		}
@@ -1607,9 +1607,9 @@ BIGWALL_E_S		// 8
 			return true; // do not look outside of map
 
 		if (tileWest->getMapData(O_OBJECT)
-			&& (tileWest->getMapData(O_OBJECT)->getBigWall() == BIGWALL_EAST
-				|| tileWest->getMapData(O_OBJECT)->getBigWall() == BIGWALL_E_S))
-//				|| tileWest->getMapData(O_OBJECT)->getBigWall() == BIGWALL_BLOCK)) // kL
+			&& (tileWest->getMapData(O_OBJECT)->getBigwall() == BIGWALL_EAST
+				|| tileWest->getMapData(O_OBJECT)->getBigwall() == BIGWALL_E_S))
+//				|| tileWest->getMapData(O_OBJECT)->getBigwall() == BIGWALL_BLOCK)) // kL
 		{
 			return true; // blocking part
 		}
@@ -1619,9 +1619,9 @@ BIGWALL_E_S		// 8
 	{
 		//Log(LOG_INFO) << ". part is Northwall";
 		if (tile->getMapData(O_OBJECT)
-			&& (tile->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NORTH
-				|| tile->getMapData(O_OBJECT)->getBigWall() == BIGWALL_W_N))
-//				|| tile->getMapData(O_OBJECT)->getBigWall() == BIGWALL_BLOCK)) // kL
+			&& (tile->getMapData(O_OBJECT)->getBigwall() == BIGWALL_NORTH
+				|| tile->getMapData(O_OBJECT)->getBigwall() == BIGWALL_W_N))
+//				|| tile->getMapData(O_OBJECT)->getBigwall() == BIGWALL_BLOCK)) // kL
 		{
 			return true; // blocking part
 		}
@@ -1631,9 +1631,9 @@ BIGWALL_E_S		// 8
 			return true; // do not look outside of map
 
 		if (tileNorth->getMapData(O_OBJECT)
-			&& (tileNorth->getMapData(O_OBJECT)->getBigWall() == BIGWALL_SOUTH
-				|| tileNorth->getMapData(O_OBJECT)->getBigWall() == BIGWALL_E_S))
-//				|| tileNorth->getMapData(O_OBJECT)->getBigWall() == BIGWALL_BLOCK)) // kL
+			&& (tileNorth->getMapData(O_OBJECT)->getBigwall() == BIGWALL_SOUTH
+				|| tileNorth->getMapData(O_OBJECT)->getBigwall() == BIGWALL_E_S))
+//				|| tileNorth->getMapData(O_OBJECT)->getBigwall() == BIGWALL_BLOCK)) // kL
 		{
 			return true; // blocking part
 		}

@@ -1992,10 +1992,10 @@ void SavedBattleGame::tileVolatiles()
 				if ((*i)->getMapData(O_OBJECT)->getFlammable() != 255
 					&& (*i)->getMapData(O_OBJECT)->getArmor() != 255)
 				{
-					if ((*i)->destroyTilePart(O_OBJECT, getObjectiveType()) == true)
+					if ((*i)->destroyTilepart(O_OBJECT, getObjectiveType()) == true)
 						addDestroyedObjective();
 
-					if ((*i)->destroyTilePart(O_FLOOR, getObjectiveType()) == true)
+					if ((*i)->destroyTilepart(O_FLOOR, getObjectiveType()) == true)
 						addDestroyedObjective();
 				}
 			}
@@ -2004,7 +2004,7 @@ void SavedBattleGame::tileVolatiles()
 				if ((*i)->getMapData(O_FLOOR)->getFlammable() != 255
 					&& (*i)->getMapData(O_FLOOR)->getArmor() != 255)
 				{
-					if ((*i)->destroyTilePart(O_FLOOR, getObjectiveType()) == true)
+					if ((*i)->destroyTilepart(O_FLOOR, getObjectiveType()) == true)
 						addDestroyedObjective();
 				}
 			}
@@ -2206,8 +2206,8 @@ bool SavedBattleGame::setUnitPosition(
 						|| (unit->getMoveTypeUnit() != MT_FLY
 							&& tile->hasNoFloor(getTile(posTest + Position(x,y,-1))) == true) // <- so just use the unit's moveType.
 						|| (tile->getMapData(O_OBJECT) != NULL
-							&& tile->getMapData(O_OBJECT)->getBigWall() > BIGWALL_NONE
-							&& tile->getMapData(O_OBJECT)->getBigWall() < BIGWALL_WEST))
+							&& tile->getMapData(O_OBJECT)->getBigwall() > BIGWALL_NONE
+							&& tile->getMapData(O_OBJECT)->getBigwall() < BIGWALL_WEST))
 					{
 						return false;
 					}

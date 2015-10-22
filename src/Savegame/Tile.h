@@ -213,7 +213,7 @@ protected:
 		int getShade() const;
 
 		/// Destroys a tile part.
-		bool destroyTilePart(
+		bool destroyTilepart(
 				MapDataType part,
 				SpecialTileType type);
 		/// Damages a tile part.

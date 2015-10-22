@@ -166,7 +166,7 @@ private:
 		/// Gets whether this is a floor.
 		bool isNoFloor() const;
 		/// Gets whether this is a big wall.
-		int getBigWall() const;
+		int getBigwall() const;
 		/// Gets whether this is a normal door.
 		bool isDoor() const;
 		/// Gets whether this is a grav lift.

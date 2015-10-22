@@ -312,8 +312,8 @@ VoxelType Projectile::calculateThrow(double accuracy)
 				const Tile* const tileTarget = _battleSave->getTile(Position::toTileSpace(_trj.back())); // _trj.at(0) <- see TileEngine::validateThrow()
 				if (tileTarget != NULL
 					&& tileTarget->getMapData(O_OBJECT) != NULL
-					&& (tileTarget->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NESW
-						|| tileTarget->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NWSE))
+					&& (tileTarget->getMapData(O_OBJECT)->getBigwall() == BIGWALL_NESW
+						|| tileTarget->getMapData(O_OBJECT)->getBigwall() == BIGWALL_NWSE))
 //					&& _action.target->getMapData(O_OBJECT)->getTuCostPart(MT_WALK) == 255
 //					&& (action.weapon->getRules()->getBattleType() == BT_GRENADE
 //						|| action.weapon->getRules()->getBattleType() == BT_PROXYGRENADE))

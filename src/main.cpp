@@ -93,15 +93,15 @@ int main(
 		exit(EXIT_FAILURE);
 	}
 #endif
-//kL	Options::save();	// -> wtf keeps rewriting my options.cfg .....
-							// yet it works fine Game::run() before quitting.
-							// Ps. why are they even doing Options::save() twice
-							// ... now they both fuck up.
+//	Options::save();	// -> wtf keeps rewriting my options.cfg .....
+						// yet it works fine Game::run() before quitting.
+						// Ps. why are they even doing Options::save() twice
+						// ... now they both fuck up.
 
 	// Comment this for faster exit.
 	delete game;
 
-	Log(LOG_INFO) << "OpenXcom is shutting down.";
+	Log(LOG_INFO) << "0xC_kL is shutting down.";
 	return EXIT_SUCCESS;
 }
 

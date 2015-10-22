@@ -723,7 +723,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 							const Tile* const tileEast = _battleSave->getTile(posField + Position(1,0,0));
 							if (tileEast->getSprite(O_FLOOR) == NULL
 								&& (tileEast->getMapData(O_OBJECT) == NULL // special case ->
-									|| tileEast->getMapData(O_OBJECT)->getBigWall() != BIGWALL_NWSE))
+									|| tileEast->getMapData(O_OBJECT)->getBigwall() != BIGWALL_NWSE))
 							{
 								const Tile* const tileEastBelow = _battleSave->getTile(posField + Position(1,0,-1));
 								const BattleUnit* const unitEastBelow = tileEastBelow->getUnit();
@@ -934,8 +934,8 @@ void Map::drawTerrain(Surface* const surface) // private.
 // Draw Object in Background & Center
 						sprite = _tile->getSprite(O_OBJECT);
 						if (sprite
-							&& (_tile->getMapData(O_OBJECT)->getBigWall() < BIGWALL_EAST // do none,Block,diagonals,West,North,West&North
-								|| _tile->getMapData(O_OBJECT)->getBigWall() == BIGWALL_W_N))
+							&& (_tile->getMapData(O_OBJECT)->getBigwall() < BIGWALL_EAST // do none,Block,diagonals,West,North,West&North
+								|| _tile->getMapData(O_OBJECT)->getBigwall() == BIGWALL_W_N))
 						{
 							hasObject = true;
 							sprite->blitNShade(
@@ -1444,8 +1444,8 @@ void Map::drawTerrain(Surface* const surface) // private.
 // Draw Front Object
 					sprite = _tile->getSprite(O_OBJECT);
 					if (sprite
-						&& _tile->getMapData(O_OBJECT)->getBigWall() > BIGWALL_NORTH // do East,South,East&South
-						&& _tile->getMapData(O_OBJECT)->getBigWall() != BIGWALL_W_N)
+						&& _tile->getMapData(O_OBJECT)->getBigwall() > BIGWALL_NORTH // do East,South,East&South
+						&& _tile->getMapData(O_OBJECT)->getBigwall() != BIGWALL_W_N)
 					{
 						sprite->blitNShade(
 								surface,
@@ -1969,14 +1969,14 @@ bool Map::checkWest( // private.
 
 	ret = ret
 		|| ((tile6->getMapData(O_OBJECT) == NULL
-				|| tile6->getMapData(O_OBJECT)->getBigWall() != BIGWALL_SOUTH)
+				|| tile6->getMapData(O_OBJECT)->getBigwall() != BIGWALL_SOUTH)
 			&& (tile5 == NULL
 				|| ((tile5->getMapData(O_NORTHWALL) == NULL
 						|| tile5->isUfoDoorOpen(O_NORTHWALL) == true)
 					&& (tile5->getMapData(O_OBJECT) == NULL
-						|| (tile5->getMapData(O_OBJECT)->getBigWall() != BIGWALL_NESW
-							&& tile5->getMapData(O_OBJECT)->getBigWall() != BIGWALL_BLOCK)))));
-//							&& tile5->getMapData(O_OBJECT)->getBigWall() != BIGWALL_NORTH // not in UFO.
+						|| (tile5->getMapData(O_OBJECT)->getBigwall() != BIGWALL_NESW
+							&& tile5->getMapData(O_OBJECT)->getBigwall() != BIGWALL_BLOCK)))));
+//							&& tile5->getMapData(O_OBJECT)->getBigwall() != BIGWALL_NORTH // not in UFO.
 
 	if (ret == false) // unit might actually be too far away from wall to clip despite above conditions - now don't let the floor clip it
 	{
@@ -2001,13 +2001,13 @@ bool Map::checkWest( // private.
 					* const tileSouth (_battleSave->getTile(pos + Position(0,1,0)));
 				if (!
 					((tile->getMapData(O_OBJECT) == NULL
-						|| tile->getMapData(O_OBJECT)->getBigWall() != BIGWALL_SOUTH)
+						|| tile->getMapData(O_OBJECT)->getBigwall() != BIGWALL_SOUTH)
 					&& (tileSouth == NULL
 						|| ((tileSouth->getMapData(O_NORTHWALL) == NULL
 								|| tileSouth->isUfoDoorOpen(O_NORTHWALL) == true)
 							&& (tileSouth->getMapData(O_OBJECT) == NULL
-								|| (tileSouth->getMapData(O_OBJECT)->getBigWall() != BIGWALL_NESW			// all that causes clipping when the large unit moves out eastward from along the northern side
-									&& tileSouth->getMapData(O_OBJECT)->getBigWall() != BIGWALL_BLOCK))))))	// of an EW barrier but it's better than leaving a big hole in the 3rd quadrant as it moves out
+								|| (tileSouth->getMapData(O_OBJECT)->getBigwall() != BIGWALL_NESW			// all that causes clipping when the large unit moves out eastward from along the northern side
+									&& tileSouth->getMapData(O_OBJECT)->getBigwall() != BIGWALL_BLOCK))))))	// of an EW barrier but it's better than leaving a big hole in the 3rd quadrant as it moves out
 				{
 					*halfRight = true; // but only if a wall is directly south
 				}
@@ -2047,14 +2047,14 @@ bool Map::checkNorth( // private.
 
 	ret = ret
 		|| ((tile0->getMapData(O_OBJECT) == NULL
-				|| tile0->getMapData(O_OBJECT)->getBigWall() != BIGWALL_EAST)
+				|| tile0->getMapData(O_OBJECT)->getBigwall() != BIGWALL_EAST)
 			&& (tile1 == NULL
 				|| ((tile1->getMapData(O_WESTWALL) == NULL
 						|| tile1->isUfoDoorOpen(O_WESTWALL) == true)
 					&& (tile1->getMapData(O_OBJECT) == NULL
-						|| (tile1->getMapData(O_OBJECT)->getBigWall() != BIGWALL_NESW
-							&& tile1->getMapData(O_OBJECT)->getBigWall() != BIGWALL_BLOCK)))));
-//							&& tile1->getMapData(O_OBJECT)->getBigWall() != BIGWALL_WEST // not in UFO.
+						|| (tile1->getMapData(O_OBJECT)->getBigwall() != BIGWALL_NESW
+							&& tile1->getMapData(O_OBJECT)->getBigwall() != BIGWALL_BLOCK)))));
+//							&& tile1->getMapData(O_OBJECT)->getBigwall() != BIGWALL_WEST // not in UFO.
 
 	if (ret == false) // unit might actually be too far away from wall to clip despite above conditions - now don't let the floor clip it
 	{

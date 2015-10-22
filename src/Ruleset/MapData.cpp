@@ -146,7 +146,7 @@ bool MapData::isNoFloor() const
  * 9: acts as a north and west wall
  * @return, an integer representing what kind of bigwall this is
  */
-int MapData::getBigWall() const
+int MapData::getBigwall() const
 {
 	return _bigWall;
 }

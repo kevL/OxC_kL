@@ -331,7 +331,7 @@ int Tile::getTuCostTile(
 		&& !(_objects[part]->isUfoDoor() == true
 			&& _curFrame[part] > 1)
 		&& !(part == O_OBJECT
-			&& _objects[part]->getBigWall() > BIGWALL_NWSE)) // ie. side-walls
+			&& _objects[part]->getBigwall() > BIGWALL_NWSE)) // ie. side-walls
 	{
 		return _objects[part]->getTuCostPart(moveType);
 	}
@@ -369,7 +369,7 @@ bool Tile::hasNoFloor(const Tile* const tileBelow) const
 bool Tile::isBigWall() const
 {
 	if (_objects[O_OBJECT] != NULL)
-		return (_objects[O_OBJECT]->getBigWall() != BIGWALL_NONE);
+		return (_objects[O_OBJECT]->getBigwall() != BIGWALL_NONE);
 
 	return false;
 }
@@ -412,7 +412,7 @@ int Tile::getFootstepSound(const Tile* const tileBelow) const
 	int sound = -1;
 
 	if (_objects[static_cast<size_t>(O_OBJECT)] != NULL
-		&& _objects[static_cast<size_t>(O_OBJECT)]->getBigWall() < BIGWALL_NESW // ie. None or Block
+		&& _objects[static_cast<size_t>(O_OBJECT)]->getBigwall() < BIGWALL_NESW // ie. None or Block
 		&& _objects[static_cast<size_t>(O_OBJECT)]->getFootstepSound() > 0) // > -1
 	{
 		sound = _objects[static_cast<size_t>(O_OBJECT)]->getFootstepSound();
@@ -621,7 +621,7 @@ int Tile::getShade() const
  * @param type - SpecialTileType
  * @return, true if an 'objective' was destroyed
  */
-bool Tile::destroyTilePart(
+bool Tile::destroyTilepart(
 		MapDataType part,
 		SpecialTileType type)
 {
@@ -666,9 +666,9 @@ bool Tile::destroyTilePart(
 					1,0, O_FLOOR);
 
 		if (_objects[O_OBJECT] != NULL // destroy the object if floor is gone.
-			&& _objects[O_OBJECT]->getBigWall() == BIGWALL_NONE)
+			&& _objects[O_OBJECT]->getBigwall() == BIGWALL_NONE)
 		{
-			destroyTilePart(O_OBJECT, type); // stop floating haybales.
+			destroyTilepart(O_OBJECT, type); // stop floating haybales.
 		}
 	}
 
@@ -691,7 +691,7 @@ bool Tile::hitTile(
 	bool objectiveDestroyed = false;
 
 	if (power >= _objects[part]->getArmor())
-		objectiveDestroyed = destroyTilePart(part, type);
+		objectiveDestroyed = destroyTilepart(part, type);
 
 	return objectiveDestroyed;
 }
@@ -954,8 +954,8 @@ int Tile::getSmoke() const
 bool Tile::isSmokable() const // private.
 {
 	return _objects[O_OBJECT] == NULL
-		|| (_objects[O_OBJECT]->getBigWall() != BIGWALL_NESW
-			&& _objects[O_OBJECT]->getBigWall() != BIGWALL_NWSE
+		|| (_objects[O_OBJECT]->getBigwall() != BIGWALL_NESW
+			&& _objects[O_OBJECT]->getBigwall() != BIGWALL_NWSE
 			&& _objects[O_OBJECT]->blockSmoke() == false);
 }
 
@@ -970,8 +970,8 @@ bool Tile::isFirable() const // private.
 	return (_objects[O_FLOOR] != NULL
 		&& _objects[O_FLOOR]->blockFire() == false)
 		&& (_objects[O_OBJECT] == NULL
-			|| (_objects[O_OBJECT]->getBigWall() != BIGWALL_NESW
-				&& _objects[O_OBJECT]->getBigWall() != BIGWALL_NWSE
+			|| (_objects[O_OBJECT]->getBigwall() != BIGWALL_NESW
+				&& _objects[O_OBJECT]->getBigwall() != BIGWALL_NWSE
 				&& _objects[O_OBJECT]->blockFire() == false));
 }
 

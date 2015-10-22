@@ -598,9 +598,9 @@ bool TileEngine::calculateFOV(BattleUnit* const unit) const
 											#1 - northwall
 											#2 - floor + content (reveals both walls also) */
 										if (tile->getMapData(O_OBJECT) == NULL
-											|| (tile->getMapData(O_OBJECT)->getBigWall() != BIGWALL_BLOCK
-												&& tile->getMapData(O_OBJECT)->getBigWall() != BIGWALL_EAST
-												&& tile->getMapData(O_OBJECT)->getBigWall() != BIGWALL_E_S))
+											|| (tile->getMapData(O_OBJECT)->getBigwall() != BIGWALL_BLOCK
+												&& tile->getMapData(O_OBJECT)->getBigwall() != BIGWALL_EAST
+												&& tile->getMapData(O_OBJECT)->getBigwall() != BIGWALL_E_S))
 										{
 											tileEdge = _battleSave->getTile(Position( // show Tile EAST
 																				posTrj.x + 1,
@@ -609,8 +609,8 @@ bool TileEngine::calculateFOV(BattleUnit* const unit) const
 											if (tileEdge != NULL)
 											{
 												if (tileEdge->getMapData(O_OBJECT) != NULL
-													&& (tileEdge->getMapData(O_OBJECT)->getBigWall() == BIGWALL_BLOCK
-														|| tileEdge->getMapData(O_OBJECT)->getBigWall() == BIGWALL_WEST))
+													&& (tileEdge->getMapData(O_OBJECT)->getBigwall() == BIGWALL_BLOCK
+														|| tileEdge->getMapData(O_OBJECT)->getBigwall() == BIGWALL_WEST))
 												{
 													tileEdge->setDiscovered(true, 2); // reveal entire TileEast
 												}
@@ -620,9 +620,9 @@ bool TileEngine::calculateFOV(BattleUnit* const unit) const
 										}
 
 										if (tile->getMapData(O_OBJECT) == NULL
-											|| (tile->getMapData(O_OBJECT)->getBigWall() != BIGWALL_BLOCK
-												&& tile->getMapData(O_OBJECT)->getBigWall() != BIGWALL_SOUTH
-												&& tile->getMapData(O_OBJECT)->getBigWall() != BIGWALL_E_S))
+											|| (tile->getMapData(O_OBJECT)->getBigwall() != BIGWALL_BLOCK
+												&& tile->getMapData(O_OBJECT)->getBigwall() != BIGWALL_SOUTH
+												&& tile->getMapData(O_OBJECT)->getBigwall() != BIGWALL_E_S))
 										{
 											tileEdge = _battleSave->getTile(Position( // show Tile SOUTH
 																				posTrj.x,
@@ -631,8 +631,8 @@ bool TileEngine::calculateFOV(BattleUnit* const unit) const
 											if (tileEdge != NULL)
 											{
 												if (tileEdge->getMapData(O_OBJECT) != NULL
-													&& (tileEdge->getMapData(O_OBJECT)->getBigWall() == BIGWALL_BLOCK
-														|| tileEdge->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NORTH))
+													&& (tileEdge->getMapData(O_OBJECT)->getBigwall() == BIGWALL_BLOCK
+														|| tileEdge->getMapData(O_OBJECT)->getBigwall() == BIGWALL_NORTH))
 												{
 													tileEdge->setDiscovered(true, 2); // reveal entire TileSouth
 												}
@@ -643,8 +643,8 @@ bool TileEngine::calculateFOV(BattleUnit* const unit) const
 
 										if (tile->getMapData(O_WESTWALL) == NULL
 											&& (tile->getMapData(O_OBJECT) == NULL
-												|| (tile->getMapData(O_OBJECT)->getBigWall() != BIGWALL_BLOCK
-													&& tile->getMapData(O_OBJECT)->getBigWall() != BIGWALL_WEST)))
+												|| (tile->getMapData(O_OBJECT)->getBigwall() != BIGWALL_BLOCK
+													&& tile->getMapData(O_OBJECT)->getBigwall() != BIGWALL_WEST)))
 										{
 											tileEdge = _battleSave->getTile(Position( // show Tile WEST
 																				posTrj.x - 1,
@@ -652,9 +652,9 @@ bool TileEngine::calculateFOV(BattleUnit* const unit) const
 																				posTrj.z));
 											if (tileEdge != NULL
 												&& tileEdge->getMapData(O_OBJECT) != NULL
-												&& (tileEdge->getMapData(O_OBJECT)->getBigWall() == BIGWALL_BLOCK
-													|| tileEdge->getMapData(O_OBJECT)->getBigWall() == BIGWALL_EAST
-													|| tileEdge->getMapData(O_OBJECT)->getBigWall() == BIGWALL_E_S))
+												&& (tileEdge->getMapData(O_OBJECT)->getBigwall() == BIGWALL_BLOCK
+													|| tileEdge->getMapData(O_OBJECT)->getBigwall() == BIGWALL_EAST
+													|| tileEdge->getMapData(O_OBJECT)->getBigwall() == BIGWALL_E_S))
 											{
 												tileEdge->setDiscovered(true, 2); // reveal entire TileWest
 											}
@@ -662,8 +662,8 @@ bool TileEngine::calculateFOV(BattleUnit* const unit) const
 
 										if (tile->getMapData(O_NORTHWALL) == NULL
 											&& (tile->getMapData(O_OBJECT) == NULL
-												|| (tile->getMapData(O_OBJECT)->getBigWall() != BIGWALL_BLOCK
-													&& tile->getMapData(O_OBJECT)->getBigWall() != BIGWALL_NORTH)))
+												|| (tile->getMapData(O_OBJECT)->getBigwall() != BIGWALL_BLOCK
+													&& tile->getMapData(O_OBJECT)->getBigwall() != BIGWALL_NORTH)))
 										{
 											tileEdge = _battleSave->getTile(Position( // show Tile NORTH
 																				posTrj.x,
@@ -671,9 +671,9 @@ bool TileEngine::calculateFOV(BattleUnit* const unit) const
 																				posTrj.z));
 											if (tileEdge != NULL
 												&& tileEdge->getMapData(O_OBJECT) != NULL
-												&& (tileEdge->getMapData(O_OBJECT)->getBigWall() == BIGWALL_BLOCK
-													|| tileEdge->getMapData(O_OBJECT)->getBigWall() == BIGWALL_SOUTH
-													|| tileEdge->getMapData(O_OBJECT)->getBigWall() == BIGWALL_E_S))
+												&& (tileEdge->getMapData(O_OBJECT)->getBigwall() == BIGWALL_BLOCK
+													|| tileEdge->getMapData(O_OBJECT)->getBigwall() == BIGWALL_SOUTH
+													|| tileEdge->getMapData(O_OBJECT)->getBigwall() == BIGWALL_E_S))
 											{
 												tileEdge->setDiscovered(true, 2); // reveal entire TileNorth
 											}
@@ -2352,21 +2352,21 @@ void TileEngine::explode(
 //	int testIter = 0; // TEST.
 	//Log(LOG_INFO) << ". r_Max = " << r_Max;
 
-	for (int fi = 0; fi == 0; ++fi)		// kL_note: Looks like a TEST ray. ( 0 == horizontal )
+//	for (int fi = 0; fi == 0; ++fi)		// kL_note: Looks like a TEST ray. ( 0 == horizontal )
 //	for (int fi = 90; fi == 90; ++fi)	// vertical: UP
-/*	for (int
+	for (int
 			fi = -90;
 			fi < 91;
-			fi += 5) // ray-tracing every 5 degrees makes sure all tiles are covered within a sphere. */
+			fi += 5) // ray-tracing every 5 degrees makes sure all tiles are covered within a sphere.
 	{
-		for (int te = 0; te == 0; ++te)			// kL_note: Looks like a TEST ray. ( 0 == south, 180 == north, goes CounterClock-wise )
+//		for (int te = 0; te == 0; ++te)			// kL_note: Looks like a TEST ray. ( 0 == south, 180 == north, goes CounterClock-wise )
 //		for (int te = 90; te < 360; te += 180)	// E & W
 //		for (int te = 45; te < 360; te += 180)	// SE & NW
 //		for (int te = 225; te < 420; te += 180)	// NW & SE
-/*		for (int
+		for (int
 				te = 0;
 				te < 361;
-				te += 3) // ray-tracing every 3 degrees makes sure all tiles are covered within a circle. */
+				te += 3) // ray-tracing every 3 degrees makes sure all tiles are covered within a circle.
 		{
 			sin_te = std::sin(static_cast<double>(te) * M_PI / 180.);
 			cos_te = std::cos(static_cast<double>(te) * M_PI / 180.);
@@ -3104,7 +3104,7 @@ int TileEngine::horizontalBlockage(
 
 				// instead of last blockage() above, check this:
 /*				tmpTile = _save->getTile(tileStart->getPosition() + oneTileNorth);
-				if (tmpTile && tmpTile->getMapData(O_OBJECT) && tmpTile->getMapData(O_OBJECT)->getBigWall() != BIGWALLNESW)
+				if (tmpTile && tmpTile->getMapData(O_OBJECT) && tmpTile->getMapData(O_OBJECT)->getBigwall() != BIGWALLNESW)
 					block += blockage(tmpTile, O_OBJECT, dType, 3); */
 
 				if (block == 0) break; // this way is opened
@@ -3126,7 +3126,7 @@ int TileEngine::horizontalBlockage(
 
 				// instead of last blockage() above, check this:
 /*				tmpTile = _save->getTile(tileStart->getPosition() + oneTileEast);
-				if (tmpTile && tmpTile->getMapData(O_OBJECT) && tmpTile->getMapData(O_OBJECT)->getBigWall() != BIGWALLNESW)
+				if (tmpTile && tmpTile->getMapData(O_OBJECT) && tmpTile->getMapData(O_OBJECT)->getBigwall() != BIGWALLNESW)
 					block += blockage(tmpTile, O_OBJECT, dType, 7); */
 				// etc. on down through non-cardinal dir's; see 'wayboys' source for details (or not)
 
@@ -3864,7 +3864,7 @@ int TileEngine::blockage(
 		}
 		else // dir > -1 -> OBJECT part. ( BigWalls & content ) *always* an OBJECT-part gets passed in through here, and *with* a direction.
 		{
-			const int bigWall = tile->getMapData(O_OBJECT)->getBigWall(); // 0..9 or, per MCD.
+			const int bigWall = tile->getMapData(O_OBJECT)->getBigwall(); // 0..9 or, per MCD.
 			//Log(LOG_INFO) << ". bigWall = " << bigWall;
 
 			if (originTest == true)	// the ContentOBJECT already got hit as the previous endTile... but can still block LoS when looking down ...
@@ -4140,7 +4140,7 @@ bool TileEngine::detonate(Tile* const tile) const
 		if (tiles[i] == NULL || tiles[i]->getMapData(parts[i]) == NULL)
 			continue; // no tile or no tile-part
 
-		const int bigWall = tiles[i]->getMapData(parts[i])->getBigWall();
+		const int bigWall = tiles[i]->getMapData(parts[i])->getBigwall();
 
 		if (i > 6
 			&& (!
@@ -4161,9 +4161,9 @@ bool TileEngine::detonate(Tile* const tile) const
 		// kL_begin:
 		if (tile->getMapData(O_OBJECT) != NULL										// if tile has object
 			&& ((i == 1																// don't hit tileEast westwall
-					&& tile->getMapData(O_OBJECT)->getBigWall() == BIGWALL_EAST)	// if eastern bigWall not destroyed
+					&& tile->getMapData(O_OBJECT)->getBigwall() == BIGWALL_EAST)	// if eastern bigWall not destroyed
 				|| (i == 2															// don't hit tileSouth northwall
-					&& tile->getMapData(O_OBJECT)->getBigWall() == BIGWALL_SOUTH)))	// if southern bigWall not destroyed
+					&& tile->getMapData(O_OBJECT)->getBigwall() == BIGWALL_SOUTH)))	// if southern bigWall not destroyed
 		{
 			continue;
 		} // kL_end.
@@ -4218,7 +4218,7 @@ bool TileEngine::detonate(Tile* const tile) const
 			else
 				partTemp = part;
 
-			if (tiles[i]->destroyTilePart(part, _battleSave->getObjectiveType()) == true) // DESTROY HERE <-|
+			if (tiles[i]->destroyTilepart(part, _battleSave->getObjectiveType()) == true) // DESTROY HERE <-|
 				objectiveDestroyed = true;
 
 			part = partTemp;
@@ -5091,8 +5091,8 @@ bool TileEngine::validateThrow(
 		}
 
 		if (tile->getMapData(O_OBJECT) != NULL
-			&& (tile->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NESW
-				|| tile->getMapData(O_OBJECT)->getBigWall() == BIGWALL_NWSE))
+			&& (tile->getMapData(O_OBJECT)->getBigwall() == BIGWALL_NESW
+				|| tile->getMapData(O_OBJECT)->getBigwall() == BIGWALL_NWSE))
 //			&& tile->getMapData(O_OBJECT)->getTuCostPart(MT_WALK) == 255
 //			&& (action.weapon->getRules()->getBattleType() == BT_GRENADE
 //				|| action.weapon->getRules()->getBattleType() == BT_PROXYGRENADE))

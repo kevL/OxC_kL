@@ -4590,7 +4590,7 @@
 	"MapData.h"
 	"Unit.h"
 
-1444630637 f:\git\openxcom\src\ruleset\mapdata.h
+1445487512 f:\git\openxcom\src\ruleset\mapdata.h
 	"RuleItem.h"
 
 1445152746 f:\git\openxcom\src\ruleset\ruleitem.h
@@ -5405,7 +5405,7 @@
 
 1443150185 f:\git\openxcom\src\savegame\battleitem.h
 
-1445485548 f:\git\openxcom\src\savegame\tile.h
+1445487469 f:\git\openxcom\src\savegame\tile.h
 	"BattleUnit.h"
 	"../Battlescape/Position.h"
 	"../Ruleset/MapData.h"
