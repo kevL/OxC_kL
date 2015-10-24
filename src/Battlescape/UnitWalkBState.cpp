@@ -137,7 +137,7 @@ void UnitWalkBState::think()
 		|| _unit->getUnitStatus() == STATUS_FLYING)
 	{
 		//Log(LOG_INFO) << "STATUS_WALKING or FLYING : " << _unit->getId();
-		if (_isVisible == true)
+/*		if (_isVisible == true)
 		{
 			const int stopZ = _unit->getStopPosition().z;
 			if (_walkCam->isOnScreen(_unit->getPosition()) == true
@@ -145,7 +145,7 @@ void UnitWalkBState::think()
 			{
 				_walkCam->setViewLevel(stopZ);
 			}
-		}
+		} */
 
 		if (doStatusWalk() == false)
 		{
@@ -162,7 +162,7 @@ void UnitWalkBState::think()
 			//Log(LOG_INFO) << "STATUS_STANDING_end in UnitWalkBState _WALKING or _FLYING !!!" ;
 			clearTilesLink(true);
 
-			if (_isVisible == true)
+/*			if (_isVisible == true)
 			{
 				const Position pos = _unit->getPosition();
 
@@ -181,7 +181,7 @@ void UnitWalkBState::think()
 						_walkCam->setViewLevel(stopZ);
 					}
 				}
-			}
+			} */
 
 			if (doStatusStand_end() == false)
 			{
@@ -235,7 +235,7 @@ void UnitWalkBState::think()
 		}
 
 		// Destination is not valid until *after* doStatusStand() runs.
-		if (_isVisible == true)
+/*		if (_isVisible == true)
 		{
 			//Log(LOG_INFO) << ". onScreen";
 			const Position pos = _unit->getPosition();
@@ -249,13 +249,12 @@ void UnitWalkBState::think()
 			else if (_walkCam->isOnScreen(pos) == true) // is Faction_Player
 			{
 				const int stopZ = _unit->getStopPosition().z;
-				if (pos.z == stopZ
-					|| (pos.z < stopZ && _walkCam->getViewLevel() < stopZ))
+				if (pos.z == stopZ || (pos.z < stopZ && _walkCam->getViewLevel() < stopZ))
 				{
 					_walkCam->setViewLevel(pos.z);
 				}
 			}
-		}
+		} */
 	}
 
 
@@ -299,7 +298,18 @@ bool UnitWalkBState::doStatusStand() // private.
 	int dir = _pf->getStartDirection();
 	//Log(LOG_INFO) << ". StartDirection = " << dir;
 
-	const Tile* const tile = _battleSave->getTile(_unit->getPosition());
+	const Position pos = _unit->getPosition();
+
+	if (_unit->getFaction() != FACTION_PLAYER)
+		_walkCam->centerOnPosition(pos);
+
+	if (dir == Pathfinding::DIR_DOWN)
+		_walkCam->setViewLevel(pos.z - 1);
+	else
+		_walkCam->setViewLevel(pos.z);
+
+
+	const Tile* const tile = _battleSave->getTile(pos);
 	const bool gravLift = dir >= _pf->DIR_UP // Assumes tops & bottoms of gravLifts always have floors/ceilings.
 					   && tile->getMapData(O_FLOOR) != NULL
 					   && tile->getMapData(O_FLOOR)->isGravLift();
@@ -391,18 +401,15 @@ bool UnitWalkBState::doStatusStand() // private.
 		}
 		//else Log(LOG_INFO) << ". STANDING no strafe.";
 
-		//Log(LOG_INFO) << ". getTuCostPf() & dest";
-		Position dest;
+		//Log(LOG_INFO) << ". getTuCostPf() & posStop";
+		Position posStop;
 		int
-			tuCost = _pf->getTuCostPf( // gets tu cost but also sets the destination position.
-								_unit->getPosition(),
-								dir,
-								&dest),
+			tuCost = _pf->getTuCostPf(pos, dir, &posStop), // gets tu cost but also sets the destination position.
 			tuTest,
 			staCost;
 		//Log(LOG_INFO) << ". tuCost = " << tuCost;
 
-		Tile* const destTile = _battleSave->getTile(dest);
+		Tile* const destTile = _battleSave->getTile(posStop);
 
 		// kL_note: should this include neutrals? (ie != FACTION_PLAYER; see also 32tu inflation...)
 		if (destTile != NULL // would hate to see what happens if destTile=NULL, nuclear war no doubt.
@@ -531,7 +538,7 @@ bool UnitWalkBState::doStatusStand() // private.
 
 			if (soundId != -1)
 				_parent->getResourcePack()->getSound("BATTLE.CAT", soundId)
-											->play(-1, _parent->getMap()->getSoundAngle(_unit->getPosition()));
+											->play(-1, _parent->getMap()->getSoundAngle(pos));
 
 			if (door == 1 || door == 3) // ufo door still opening ...
 				return false; // don't start walking yet, wait for the ufo door to open
@@ -559,10 +566,10 @@ bool UnitWalkBState::doStatusStand() // private.
 			{
 				//Log(LOG_INFO) << ". . check obstacle(unit)";
 				const BattleUnit
-					* const unitInMyWay = _battleSave->getTile(dest + Position(x,y,0))->getUnit(),
+					* const unitInMyWay = _battleSave->getTile(posStop + Position(x,y,0))->getUnit(),
 					* unitBelowMyWay = NULL;
 
-				const Tile* const belowDest = _battleSave->getTile(dest + Position(x,y,-1));
+				const Tile* const belowDest = _battleSave->getTile(posStop + Position(x,y,-1));
 				if (belowDest != NULL)
 					unitBelowMyWay = belowDest->getUnit();
 
@@ -609,8 +616,8 @@ bool UnitWalkBState::doStatusStand() // private.
 
 			//Log(LOG_INFO) << ". . WalkBState: startWalking()";
 			_unit->startWalking(
-							dir, dest,
-							_battleSave->getTile(_unit->getPosition() + Position(0,0,-1)));
+							dir, posStop,
+							_battleSave->getTile(pos + Position(0,0,-1)));
 
 			//Log(LOG_INFO) << ". . WalkBState: establishTilesLink()";
 			establishTilesLink();

@@ -6290,7 +6290,7 @@
 	"UnitPanicBState.h"
 	"../Savegame/BattleUnit.h"
 
-1445445355 source:f:\git\openxcom\src\battlescape\unitsprite.cpp
+1445663584 source:f:\git\openxcom\src\battlescape\unitsprite.cpp
 	"UnitSprite.h"
 	"../Engine/SurfaceSet.h"
 	"../Ruleset/RuleArmor.h"
@@ -6326,7 +6326,7 @@
 	"../Savegame/BattleUnit.h"
 	"../Savegame/SavedBattleGame.h"
 
-1445656937 source:f:\git\openxcom\src\battlescape\unitwalkbstate.cpp
+1445727849 source:f:\git\openxcom\src\battlescape\unitwalkbstate.cpp
 	"UnitWalkBState.h"
 	"BattlescapeState.h"
 	"Camera.h"
@@ -11150,11 +11150,11 @@
 	"RuleTexture.h"
 	"../Savegame/Target.h"
 
-1444866856 source:f:\git\openxcom\src\ruleset\rulearmor.cpp
+1445664051 source:f:\git\openxcom\src\ruleset\rulearmor.cpp
 	"RuleArmor.h"
 	"../Savegame/Soldier.h"
 
-1445663441 f:\git\openxcom\src\ruleset\rulearmor.h
+1445664093 f:\git\openxcom\src\ruleset\rulearmor.h
 	"MapData.h"
 	"RuleUnit.h"
 

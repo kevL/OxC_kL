@@ -197,7 +197,7 @@ private:
 		/// Checks if this Armor's inventory be accessed.
 		bool hasInventory() const;
 
-		/// Gets this Armor's units.
+		/// Gets this Armor's applicable BattleUnits.
 		const std::vector<std::string>& getUnits() const;
 
 		/// Gets if this Armor is basic (lowest rank, standard issue wear).

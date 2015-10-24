@@ -483,7 +483,7 @@ bool RuleArmor::hasInventory() const
 
 /**
  * Gets the list of BattleUnits this Armor applies to.
- * @return, reference to the list of unit IDs (empty = applies to all)
+ * @return, reference to the list of unit types (empty = applies to all)
  */
 const std::vector<std::string>& RuleArmor::getUnits() const
 {
