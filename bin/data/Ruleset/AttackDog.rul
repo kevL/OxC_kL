@@ -62,7 +62,7 @@ armors:
     rearArmor: 3
     underArmor: 2
     movementType: 0
-    drawingRoutine: 4
+    drawRoutine: 4
     damageModifier:
       - 1.0  #none
       - 1.13 #ap

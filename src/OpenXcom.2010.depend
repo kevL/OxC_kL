@@ -4559,7 +4559,7 @@
 
 1444449287 f:\git\openxcom\src\savegame\gametime.h
 
-1445112895 source:f:\git\openxcom\src\basescape\craftarmorstate.cpp
+1445662926 source:f:\git\openxcom\src\basescape\craftarmorstate.cpp
 	"CraftArmorState.h"
 	"SoldierArmorState.h"
 	"SoldierInfoState.h"
@@ -4583,7 +4583,7 @@
 1442268562 f:\git\openxcom\src\basescape\craftarmorstate.h
 	"../Engine/State.h"
 
-1436901502 f:\git\openxcom\src\basescape\soldierarmorstate.h
+1445662193 f:\git\openxcom\src\basescape\soldierarmorstate.h
 	"../Engine/State.h"
 
 1427081721 f:\git\openxcom\src\ruleset\armor.h
@@ -5014,7 +5014,7 @@
 1436386751 f:\git\openxcom\src\basescape\placestartfacilitystate.h
 	"PlaceFacilityState.h"
 
-1445479528 source:f:\git\openxcom\src\basescape\purchasestate.cpp
+1445662780 source:f:\git\openxcom\src\basescape\purchasestate.cpp
 	"PurchaseState.h"
 	"../Engine/Action.h"
 	"../Engine/Game.h"
@@ -5082,7 +5082,7 @@
 	"../Savegame/ResearchProject.h"
 	"../Savegame/SavedGame.h"
 
-1443320911 source:f:\git\openxcom\src\basescape\sacksoldierstate.cpp
+1445662161 source:f:\git\openxcom\src\basescape\sacksoldierstate.cpp
 	"SackSoldierState.h"
 	"../Engine/Game.h"
 	"../Interface/Text.h"
@@ -5094,7 +5094,7 @@
 	"../Savegame/ItemContainer.h"
 	"../Savegame/Soldier.h"
 
-1430149549 f:\git\openxcom\src\basescape\sacksoldierstate.h
+1445662169 f:\git\openxcom\src\basescape\sacksoldierstate.h
 	"../Engine/State.h"
 
 1438164754 source:f:\git\openxcom\src\basescape\selectstartfacilitystate.cpp
@@ -5133,7 +5133,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Vehicle.h"
 
-1445016842 source:f:\git\openxcom\src\basescape\soldierarmorstate.cpp
+1445662184 source:f:\git\openxcom\src\basescape\soldierarmorstate.cpp
 	"SoldierArmorState.h"
 	"../Engine/Game.h"
 	"../Interface/Text.h"
@@ -5143,6 +5143,7 @@
 	"../Resource/ResourcePack.h"
 	"../Ruleset/RuleArmor.h"
 	"../Ruleset/Ruleset.h"
+	"../Ruleset/RuleSoldier.h"
 	"../Savegame/Base.h"
 	"../Savegame/ItemContainer.h"
 	"../Savegame/SavedGame.h"
@@ -5173,7 +5174,7 @@
 1444505734 f:\git\openxcom\src\basescape\soldierinfostate.h
 	"../Engine/State.h"
 
-1444506642 f:\git\openxcom\src\ruleset\rulesoldier.h
+1445660014 f:\git\openxcom\src\ruleset\rulesoldier.h
 	"../Ruleset/RuleUnit.h"
 
 1445111625 source:f:\git\openxcom\src\basescape\soldiermemorialstate.cpp
@@ -5965,7 +5966,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1445658099 source:f:\git\openxcom\src\battlescape\map.cpp
+1445659372 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	"BattlescapeMessage.h"
 	"BattlescapeState.h"
@@ -6002,7 +6003,7 @@
 	"Position.h"
 	"../Ruleset/MapData.h"
 
-1443305831 f:\git\openxcom\src\battlescape\unitsprite.h
+1445663565 f:\git\openxcom\src\battlescape\unitsprite.h
 	"../Engine/Surface.h"
 	"../Ruleset/MapData.h"
 
@@ -8340,7 +8341,7 @@
 	"../Savegame/SoldierDiary.h"
 	"../Ufopaedia/Ufopaedia.h"
 
-1444506649 source:f:\git\openxcom\src\ruleset\rulesoldier.cpp
+1445660278 source:f:\git\openxcom\src\ruleset\rulesoldier.cpp
 	"RuleSoldier.h"
 
 1442969895 source:f:\git\openxcom\src\ruleset\ruleterrain.cpp
@@ -11153,7 +11154,7 @@
 	"RuleArmor.h"
 	"../Savegame/Soldier.h"
 
-1444630636 f:\git\openxcom\src\ruleset\rulearmor.h
+1445663441 f:\git\openxcom\src\ruleset\rulearmor.h
 	"MapData.h"
 	"RuleUnit.h"
 

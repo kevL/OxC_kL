@@ -65,8 +65,8 @@ UnitSprite::UnitSprite(
 		_itemSurfaceA(NULL),
 		_itemSurfaceB(NULL),
 		_part(0),
-		_animationFrame(0),
-		_drawingRoutine(0),
+		_aniFrame(0),
+		_drawRoutine(0),
 		_color(NULL),
 		_colorSize(0)
 {}
@@ -104,7 +104,7 @@ void UnitSprite::setBattleUnit(
 		BattleUnit* const unit,
 		int part)
 {
-	_drawingRoutine = unit->getArmor()->getDrawingRoutine();
+	_drawRoutine = unit->getArmor()->getDrawRoutine();
 
 	_unit = unit;
 	_part = part;
@@ -217,7 +217,7 @@ void UnitSprite::drawRecolored(Surface* src)
  */
 void UnitSprite::setAnimationFrame(int frame)
 {
-	_animationFrame = frame;
+	_aniFrame = frame;
 }
 
 /**
@@ -226,7 +226,7 @@ void UnitSprite::setAnimationFrame(int frame)
  */
 void UnitSprite::draw()
 {
-	//Log(LOG_INFO) << "UnitSprite::draw() Routine " << _drawingRoutine;
+	//Log(LOG_INFO) << "UnitSprite::draw() Routine " << _drawRoutine;
 	Surface::draw();
 
 	void (UnitSprite::*routines[])() = // Array of drawing routines.
@@ -244,7 +244,7 @@ void UnitSprite::draw()
 		&UnitSprite::drawRoutine0
 	};
 
-	(this->*(routines[_drawingRoutine]))(); // Call the matching routine.
+	(this->*(routines[_drawRoutine]))(); // Call the matching routine.
 }
 
 /**
@@ -323,7 +323,7 @@ void UnitSprite::drawRoutine0()
 		return;
 	}
 
-	if (_drawingRoutine == 0)
+	if (_drawRoutine == 0)
 	{
 		if (_unit->getArmor()->getForcedTorso() == TORSO_ALWAYS_FEMALE // STR_FLYING_SUIT_UC, the mod Colored Armors might muck w/ these.
 			|| (_unit->getGender() == GENDER_FEMALE
@@ -348,7 +348,7 @@ void UnitSprite::drawRoutine0()
 
 	if (isWalking == true) // when walking torso (fixed sprite) has to be animated up/down
 	{
-		if (_drawingRoutine == 10)							// muton
+		if (_drawRoutine == 10)								// muton
 			torsoHandsWeaponY = yoffWalk_mut[walkPhase];
 		else												// xCom agents etc
 			torsoHandsWeaponY = yoffWalk[walkPhase];
@@ -391,7 +391,7 @@ void UnitSprite::drawRoutine0()
 		else
 		{
 			itemA = _itemSurfaceA->getFrame(_itemA->getRules()->getHandSprite() + unitDir);
-			if (_drawingRoutine == 10)
+			if (_drawRoutine == 10)
 			{
 				if (_itemA->getRules()->isTwoHanded())
 				{
@@ -427,7 +427,7 @@ void UnitSprite::drawRoutine0()
 		}
 		else
 		{
-			if (_drawingRoutine == 10)
+			if (_drawRoutine == 10)
 			{
 				rightArm = _unitSurface->getFrame(rarm2H + unitDir);
 			}
@@ -457,7 +457,7 @@ void UnitSprite::drawRoutine0()
 		itemB = _itemSurfaceB->getFrame(_itemB->getRules()->getHandSprite() + unitDir);
 		if (_itemB->getRules()->isTwoHanded() == false)
 		{
-			if (_drawingRoutine == 10)
+			if (_drawRoutine == 10)
 			{
 				itemB->setX(offX4[unitDir]);
 				itemB->setY(offY4[unitDir]);
@@ -483,7 +483,7 @@ void UnitSprite::drawRoutine0()
 			int dir = (unitDir + 2) % 8;
 			itemB = _itemSurfaceB->getFrame(_itemB->getRules()->getHandSprite() + dir);
 
-			if (_drawingRoutine == 10)
+			if (_drawRoutine == 10)
 			{
 				itemB->setX(offX7[unitDir]);
 				itemB->setY(offY7[unitDir]);
@@ -919,7 +919,7 @@ void UnitSprite::drawRoutine2()
 	if (_part > 0
 		&& hoverTank != 0)
 	{
-		srf = _unitSurface->getFrame(104 + ((_part - 1) * 8) + _animationFrame);
+		srf = _unitSurface->getFrame(104 + ((_part - 1) * 8) + _aniFrame);
 		drawRecolored(srf);
 	}
 
@@ -994,7 +994,7 @@ void UnitSprite::drawRoutine3()
 	// draw the animated propulsion below the hwp
 	if (_part > 0)
 	{
-		srf = _unitSurface->getFrame(32 + ((_part-1) * 8) + _animationFrame);
+		srf = _unitSurface->getFrame(32 + ((_part-1) * 8) + _aniFrame);
 		drawRecolored(srf);
 	}
 
@@ -1551,7 +1551,7 @@ void UnitSprite::drawRoutine8()
 		die		= 6,
 		pulsate[8] = { 0, 1, 2, 3, 4, 3, 2, 1 };
 
-	legs = _unitSurface->getFrame(body + pulsate[_animationFrame]);
+	legs = _unitSurface->getFrame(body + pulsate[_aniFrame]);
 	_redraw = true;
 
 	if (_unit->getUnitStatus() == STATUS_COLLAPSING)
@@ -1606,7 +1606,7 @@ void UnitSprite::drawRoutine9()
 		//if (_unit->getId() == 1000007) Log(LOG_INFO) << ". set aimPhase to " << phase;
 	}
 	else
-		torso = _unitSurface->getFrame(body + _animationFrame);
+		torso = _unitSurface->getFrame(body + _aniFrame);
 
 	drawRecolored(torso);
 }

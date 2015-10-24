@@ -91,7 +91,7 @@ armors:
     sideArmor: 8
     rearArmor: 5
     underArmor: 2
-    drawingRoutine: 4
+    drawRoutine: 4
     damageModifier:
       - 1.0
       - 1.13
@@ -116,7 +116,7 @@ armors:
     sideArmor: 8
     rearArmor: 5
     underArmor: 2
-    drawingRoutine: 4
+    drawRoutine: 4
     damageModifier:
       - 1.0
       - 1.13
@@ -141,7 +141,7 @@ armors:
     sideArmor: 8
     rearArmor: 5
     underArmor: 2
-    drawingRoutine: 4
+    drawRoutine: 4
     damageModifier:
       - 1.0
       - 1.13
@@ -166,7 +166,7 @@ armors:
     sideArmor: 8
     rearArmor: 5
     underArmor: 2
-    drawingRoutine: 4
+    drawRoutine: 4
     damageModifier:
       - 1.0
       - 1.13
@@ -191,7 +191,7 @@ armors:
     sideArmor: 8
     rearArmor: 5
     underArmor: 2
-    drawingRoutine: 4
+    drawRoutine: 4
     damageModifier:
       - 1.0
       - 1.13
@@ -216,7 +216,7 @@ armors:
     sideArmor: 8
     rearArmor: 5
     underArmor: 2
-    drawingRoutine: 4
+    drawRoutine: 4
     damageModifier:
       - 1.0
       - 1.13
@@ -241,7 +241,7 @@ armors:
     sideArmor: 8
     rearArmor: 5
     underArmor: 2
-    drawingRoutine: 4
+    drawRoutine: 4
     damageModifier:
       - 1.0
       - 1.13
@@ -266,7 +266,7 @@ armors:
     sideArmor: 8
     rearArmor: 5
     underArmor: 2
-    drawingRoutine: 4
+    drawRoutine: 4
     damageModifier:
       - 1.0
       - 1.13

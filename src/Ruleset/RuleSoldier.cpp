@@ -62,7 +62,7 @@ namespace OpenXcom
 {
 
 /**
- * Creates a blank ruleunit for a certain type of soldier.
+ * Creates a blank ruleset for a type of Soldier.
  * @param type - reference to type
  */
 RuleSoldier::RuleSoldier(const std::string& type)
@@ -83,12 +83,13 @@ RuleSoldier::~RuleSoldier()
 {}
 
 /**
- * Loads the unit from a YAML file.
+ * Loads the Soldier ruleset from a YAML file.
  * @param node - reference the YAML node
  */
 void RuleSoldier::load(const YAML::Node& node)
 {
 	_type			= node["type"]			.as<std::string>(_type);
+	_requires		= node["requires"]		.as<std::vector<std::string> >(_requires);
 	_armor			= node["armor"]			.as<std::string>(_armor);
 	_costBuy		= node["costBuy"]		.as<int>(_costBuy);
 	_costSalary		= node["costSalary"]	.as<int>(_costSalary);
@@ -105,12 +106,21 @@ void RuleSoldier::load(const YAML::Node& node)
 }
 
 /**
- * Returns the Soldier type.
+ * Returns this Soldier type.
  * @return, type
  */
 const std::string& RuleSoldier::getType() const
 {
 	return _type;
+}
+
+/**
+ * Gets the list of research required to acquire this type of Soldier.
+ * @return, reference to the list of research IDs
+ */
+const std::vector<std::string>& RuleSoldier::getRequirements() const
+{
+	return _requires;
 }
 
 /**
@@ -159,7 +169,7 @@ int RuleSoldier::getSalaryCost() const
 }
 
 /**
- * Gets the height of the soldier when it's standing.
+ * Gets the height of this type of Soldier when it's standing.
  * @return, the standing height
  */
 int RuleSoldier::getStandHeight() const
@@ -168,7 +178,7 @@ int RuleSoldier::getStandHeight() const
 }
 
 /**
- * Gets the height of the soldier when it's kneeling.
+ * Gets the height of this type of Soldier when it's kneeling.
  * @return, the kneeling height
  */
 int RuleSoldier::getKneelHeight() const
@@ -177,7 +187,7 @@ int RuleSoldier::getKneelHeight() const
 }
 
 /**
- * Gets the elevation of the soldier when it's flying.
+ * Gets the elevation of this type of Soldier when it's flying.
  * @return, the floating height
  */
 int RuleSoldier::getFloatHeight() const
@@ -186,7 +196,7 @@ int RuleSoldier::getFloatHeight() const
 }
 
 /**
- * Gets the armor issued to this type of soldier.
+ * Gets the armor issued to this type of Soldier by default.
  * @return, the armor name
  */
 const std::string& RuleSoldier::getArmor() const
@@ -203,11 +213,11 @@ const RuleGender* const RuleSoldier::getGenderRatio() const
 	return &_genderRatio;
 }
 
-/**
+/*
  * Gets the female appearance ratio.
  * @return, percent chance of a female soldier getting generated
- */
-/* int RuleSoldier::getFemaleFrequency() const
+ *
+int RuleSoldier::getFemaleFrequency() const
 {
 	return _femaleFrequency;
 } */

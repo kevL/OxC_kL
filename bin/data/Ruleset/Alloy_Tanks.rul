@@ -80,7 +80,7 @@ armors:
     sideArmor: 100
     rearArmor: 95
     underArmor: 85
-    drawingRoutine: 2
+    drawRoutine: 2
     size: 2
     loftSet: [92, 89, 90, 91]
     damageModifier:

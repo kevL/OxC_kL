@@ -56,7 +56,7 @@ private:
 	public:
 		/// Creates the Sack Soldier state.
 		SackSoldierState(
-				Base* base,
+				Base* const base,
 				size_t _soldierId);
 		/// Cleans up the Sack Soldier state.
 		~SackSoldierState();

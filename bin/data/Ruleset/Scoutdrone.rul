@@ -53,7 +53,7 @@ armors:
     sideArmor: 30
     rearArmor: 15
     underArmor: 15
-    drawingRoutine: 4
+    drawRoutine: 4
     size: 1
     damageModifier:
       - 1.0 #none

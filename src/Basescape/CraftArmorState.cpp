@@ -149,12 +149,10 @@ void CraftArmorState::init()
 		craft = NULL;
 
 	size_t row = 0;
-
 	for (std::vector<Soldier*>::const_iterator
 			i = _base->getSoldiers()->begin();
 			i != _base->getSoldiers()->end();
-			++i,
-				++row)
+			++i, ++row)
 	{
 		_lstSoldiers->addRow(
 						3,
@@ -163,7 +161,6 @@ void CraftArmorState::init()
 						(*i)->getCraftString(_game->getLanguage()).c_str());
 
 		Uint8 color;
-
 		if ((*i)->getCraft() == NULL)
 			color = _lstSoldiers->getColor();
 		else
@@ -251,19 +248,18 @@ void CraftArmorState::lstSoldiersPress(Action* action)
 		kL_soundPop->play(Mix_GroupAvailable(0));
 	}
 }
-/*kL: sorry I'll keep SoldierInfoState on RMB; it's easy enough to assign armor.
+/*		sorry I'll keep SoldierInfoState on RMB; it's easy enough to assign armor. TODO: Could use CTRL+click ....
 		SavedGame* _save;
 		_save = _game->getSavedGame();
 		RuleArmor* a = _game->getRuleset()->getArmor(_save->getLastSelectedArmor());
 		if (_game->getSavedGame()->getMonthsPassed() != -1)
 		{
-			if (_base->getItems()->getItem(a->getStoreItem()) > 0 || a->getStoreItem() == "STR_NONE")
+			if (_base->getItems()->getItem(a->getStoreItem()) > 0 || a->getStoreItem() == RuleArmor::NONE)
 			{
-				if (s->getArmor()->getStoreItem() != "STR_NONE")
+				if (s->getArmor()->getStoreItem() != RuleArmor::NONE)
 					_base->getItems()->addItem(s->getArmor()->getStoreItem());
-				if (a->getStoreItem() != "STR_NONE")
+				if (a->getStoreItem() != RuleArmor::NONE)
 					_base->getItems()->removeItem(a->getStoreItem());
-
 				s->setArmor(a);
 				_lstSoldiers->setCellText(_lstSoldiers->getSelectedRow(), 2, tr(a->getType()));
 			}

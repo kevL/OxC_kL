@@ -21,6 +21,7 @@
 #define OPENXCOM_RULESOLDIER_H
 
 //#include <string>
+//#include <yaml-cpp/yaml.h>
 
 #include "../Ruleset/RuleUnit.h"
 
@@ -37,9 +38,9 @@ struct RuleGender
 
 
 /**
- * Represents the creation data for a specific type of unit.
- * @note This info is copied to either Soldier for XCom soldiers or BattleUnit
- * for aliens and civilians.
+ * Represents the creation data for an X-COM unit.
+ * @note This info is copied to either Soldier for Geoscape or BattleUnit for
+ * Battlescape.
  * @sa Soldier BattleUnit
  */
 class RuleSoldier
@@ -64,18 +65,22 @@ private:
 		_statCaps;
 	RuleGender _genderRatio;
 
+	std::vector<std::string> _requires;
+
 
 	public:
-		/// Creates a blank unit ruleset.
+		/// Creates a blank Soldier ruleset.
 		explicit RuleSoldier(const std::string& type);
-		/// Cleans up the unit ruleset.
+		/// Cleans up the Soldier ruleset.
 		~RuleSoldier();
 
-		/// Loads the unit data from YAML.
+		/// Loads the Soldier ruleset data from YAML.
 		void load(const YAML::Node& node);
 
-		/// Gets the unit's type.
+		/// Gets the Soldier's type.
 		const std::string& getType() const;
+		/// Gets the Soldier's requirements.
+		const std::vector<std::string>& getRequirements() const;
 
 		/// Gets the minimum stats for the random stats generator.
 		UnitStats getMinStats() const;
@@ -89,14 +94,14 @@ private:
 		/// Gets the monthly salary of this type of Soldier.
 		int getSalaryCost() const;
 
-		/// Gets the height of the soldier when it's standing.
+		/// Gets the height of the Soldier when it's standing.
 		int getStandHeight() const;
-		/// Gets the height of the soldier when it's kneeling.
+		/// Gets the height of the Soldier when it's kneeling.
 		int getKneelHeight() const;
-		/// Gets the elevation of the soldier when it's flying.
+		/// Gets the elevation of the Soldier when it's floating.
 		int getFloatHeight() const;
 
-		/// Gets the armor issued to this type of soldier.
+		/// Gets the armor issued to this type of Soldier by default.
 		const std::string& getArmor() const;
 
 		/// Gets the gender ratio struct.

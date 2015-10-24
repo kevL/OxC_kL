@@ -44,9 +44,9 @@ class UnitSprite
 
 private:
 	int
-		_animationFrame,
+		_aniFrame,
 		_colorSize,
-		_drawingRoutine,
+		_drawRoutine,
 		_part;
 
 	BattleItem

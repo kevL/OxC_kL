@@ -19,6 +19,7 @@
 
 #include "SoldierArmorState.h"
 
+//#include <algorithm>
 //#include <sstream>
 
 #include "../Engine/Game.h"
@@ -34,6 +35,7 @@
 
 #include "../Ruleset/RuleArmor.h"
 #include "../Ruleset/Ruleset.h"
+#include "../Ruleset/RuleSoldier.h"
 
 #include "../Savegame/Base.h"
 #include "../Savegame/ItemContainer.h"
@@ -50,7 +52,7 @@ namespace OpenXcom
  * @param soldierId	- ID of the selected Soldier
  */
 SoldierArmorState::SoldierArmorState(
-		Base* base,
+		Base* const base,
 		size_t soldierId)
 	:
 		_base(base),
@@ -114,25 +116,32 @@ SoldierArmorState::SoldierArmorState(
 			++i)
 	{
 		armorRule = _game->getRuleset()->getArmor(*i);
-		if (_base->getStorageItems()->getItemQty(armorRule->getStoreItem()) != 0)
+		if (armorRule->getUnits().empty() == true
+			|| std::find(
+					armorRule->getUnits().begin(),
+					armorRule->getUnits().end(),
+					_soldier->getRules()->getType()) != armorRule->getUnits().end())
 		{
-			_armors.push_back(armorRule);
+			if (_base->getStorageItems()->getItemQty(armorRule->getStoreItem()) != 0)
+			{
+				_armors.push_back(armorRule);
 
-			std::wostringstream woststr;
-			if (_game->getSavedGame()->getMonthsPassed() != -1)
-				woststr << _base->getStorageItems()->getItemQty(armorRule->getStoreItem());
-			else
-				woststr << L"-";
+				std::wostringstream woststr;
+				if (_game->getSavedGame()->getMonthsPassed() != -1)
+					woststr << _base->getStorageItems()->getItemQty(armorRule->getStoreItem());
+				else
+					woststr << L"-";
 
-			_lstArmor->addRow(
-							2,
-							tr(armorRule->getType()).c_str(),
-							woststr.str().c_str());
-		}
-		else if (armorRule->getStoreItem() == "STR_NONE")
-		{
-			_armors.push_back(armorRule);
-			_lstArmor->addRow(1, tr(armorRule->getType()).c_str());
+				_lstArmor->addRow(
+								2,
+								tr(armorRule->getType()).c_str(),
+								woststr.str().c_str());
+			}
+			else if (armorRule->getStoreItem() == RuleArmor::NONE)
+			{
+				_armors.push_back(armorRule);
+				_lstArmor->addRow(1, tr(armorRule->getType()).c_str());
+			}
 		}
 	}
 
@@ -162,10 +171,10 @@ void SoldierArmorState::lstArmorClick(Action*)
 {
 	if (_game->getSavedGame()->getMonthsPassed() != -1)
 	{
-		if (_soldier->getArmor()->getStoreItem() != "STR_NONE")
+		if (_soldier->getArmor()->getStoreItem() != RuleArmor::NONE)
 			_base->getStorageItems()->addItem(_soldier->getArmor()->getStoreItem());
 
-		if (_armors[_lstArmor->getSelectedRow()]->getStoreItem() != "STR_NONE")
+		if (_armors[_lstArmor->getSelectedRow()]->getStoreItem() != RuleArmor::NONE)
 			_base->getStorageItems()->removeItem(_armors[_lstArmor->getSelectedRow()]->getStoreItem());
 	}
 

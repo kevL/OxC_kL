@@ -62,7 +62,7 @@ private:
 	public:
 		/// Creates the Soldier Armor state.
 		SoldierArmorState(
-				Base* base,
+				Base* const base,
 				size_t soldierId);
 		/// Cleans up the Soldier Armor state.
 		~SoldierArmorState();

@@ -95,7 +95,7 @@ armors:
     sideArmor: 16
     rearArmor: 14
     underArmor: 22
-    drawingRoutine: 1
+    drawRoutine: 1
     movementType: 1
     damageModifier:
       - 1.0 #none
@@ -118,7 +118,7 @@ armors:
     sideArmor: 22
     rearArmor: 18
     underArmor: 22
-    drawingRoutine: 1
+    drawRoutine: 1
     movementType: 1
     damageModifier:
       - 1.0 #none
@@ -141,7 +141,7 @@ armors:
     sideArmor: 28
     rearArmor: 22
     underArmor: 26
-    drawingRoutine: 1
+    drawRoutine: 1
     movementType: 1
     damageModifier:
       - 1.0 #none
@@ -164,7 +164,7 @@ armors:
     sideArmor: 24
     rearArmor: 24
     underArmor: 20
-    drawingRoutine: 4
+    drawRoutine: 4
     damageModifier:
       - 1.0 #none
       - 1.0 #ap

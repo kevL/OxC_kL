@@ -40,17 +40,15 @@ enum ForcedTorso
 
 
 /**
- * Represents a specific type of armor.
- * Not only soldier armor, but also alien armor - some alien
- * races wear Soldier Armor, Leader Armor or Commander Armor
- * depending on their rank.
+ * Represents a specific type of Armor.
+ * @note Not only soldier armor but also alien armor - aliens can be assigned
+ * different types of armor depending on their rank.
  */
 class RuleArmor
 {
-
 	public:
 		static const size_t DAMAGE_TYPES = 10;
-
+		static const std::string NONE;
 
 private:
 	std::string
@@ -78,7 +76,7 @@ private:
 		_rearArmor,
 		_underArmor,
 
-		_drawingRoutine,
+		_drawRoutine,
 
 		_size,
 		_weight,
@@ -100,8 +98,9 @@ private:
 		_utileColor,
 		_rankColor;
 	std::vector<size_t> _loftSet;
-	std::vector<std::string> _corpseBattle;
-
+	std::vector<std::string>
+		_corpseBattle,
+		_units;
 
 	public:
 		/// Creates a blank armor ruleset.
@@ -141,7 +140,7 @@ private:
 //		std::string getSpecialWeapon() const;
 
 		/// Gets the battlescape drawing routine ID.
-		int getDrawingRoutine() const;
+		int getDrawRoutine() const;
 
 		/// Gets whether the armor can fly.
 		/// DO NOT USE THIS FUNCTION OUTSIDE THE BATTLEUNIT CONSTRUCTOR OR I WILL HUNT YOU DOWN and kiss you.
@@ -197,6 +196,9 @@ private:
 
 		/// Checks if this Armor's inventory be accessed.
 		bool hasInventory() const;
+
+		/// Gets this Armor's units.
+		const std::vector<std::string>& getUnits() const;
 
 		/// Gets if this Armor is basic (lowest rank, standard issue wear).
 		bool isBasic() const;

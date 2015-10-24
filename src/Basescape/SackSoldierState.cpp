@@ -45,7 +45,7 @@ namespace OpenXcom
  * @param soldierId	- pointer to the soldier to sack
  */
 SackSoldierState::SackSoldierState(
-		Base* base,
+		Base* const base,
 		size_t soldierId)
 	:
 		_base(base),
@@ -77,6 +77,9 @@ SackSoldierState::SackSoldierState(
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& SackSoldierState::btnOkClick,
 					Options::keyOk);
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& SackSoldierState::btnOkClick,
+					Options::keyOkKeypad);
 
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)& SackSoldierState::btnCancelClick);
@@ -104,7 +107,7 @@ SackSoldierState::~SackSoldierState()
 void SackSoldierState::btnOkClick(Action*)
 {
 	const Soldier* const sol = _base->getSoldiers()->at(_soldierId);
-	if (sol->getArmor()->getStoreItem() != "STR_NONE")
+	if (sol->getArmor()->getStoreItem() != RuleArmor::NONE)
 		_base->getStorageItems()->addItem(sol->getArmor()->getStoreItem());
 
 	delete sol;

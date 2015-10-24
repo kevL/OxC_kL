@@ -97,7 +97,9 @@ PurchaseState::PurchaseState(Base* const base)
 
 	setInterface("buyMenu");
 
-	_colorAmmo = static_cast<Uint8>(_game->getRuleset()->getInterface("buyMenu")->getElement("ammoColor")->color);
+	const Ruleset* const rules (_game->getRuleset());
+
+	_colorAmmo = static_cast<Uint8>(rules->getInterface("buyMenu")->getElement("ammoColor")->color);
 
 	add(_window,		"window",	"buyMenu");
 	add(_txtTitle,		"text",		"buyMenu");
@@ -172,27 +174,32 @@ PurchaseState::PurchaseState(Base* const base)
 	_lstItems->onRightArrowRelease((ActionHandler)& PurchaseState::lstItemsRightArrowRelease);
 	_lstItems->onRightArrowClick((ActionHandler)& PurchaseState::lstItemsRightArrowClick);
 
-	const std::vector<std::string>& soldierList = _game->getRuleset()->getSoldiersList();
+	const std::vector<std::string>& soldierList = rules->getSoldiersList();
 	for (std::vector<std::string>::const_iterator
 			i = soldierList.begin();
 			i != soldierList.end();
 			++i)
 	{
-		_orderQty.push_back(0);
-		_soldiers.push_back(*i);
-		_lstItems->addRow(
-					4,
-					tr(*i).c_str(),
-					Text::formatFunding(_game->getRuleset()->getSoldier(*i)->getBuyCost()).c_str(),
-					Text::intWide(_base->getSoldierCount(*i)).c_str(),
-					L"0");
+		const RuleSoldier* const solRule = rules->getSoldier(*i);
+		if (solRule->getBuyCost() != 0
+			&& _game->getSavedGame()->isResearched(solRule->getRequirements()) == true)
+		{
+			_orderQty.push_back(0);
+			_soldiers.push_back(*i);
+			_lstItems->addRow(
+						4,
+						tr(*i).c_str(),
+						Text::formatFunding(rules->getSoldier(*i)->getBuyCost()).c_str(),
+						Text::intWide(_base->getSoldierCount(*i)).c_str(),
+						L"0");
+		}
 	}
 
 	_orderQty.push_back(0);
 	_lstItems->addRow(
 					4,
 					tr("STR_SCIENTIST").c_str(),
-					Text::formatFunding(_game->getRuleset()->getScientistCost() * 2).c_str(),
+					Text::formatFunding(rules->getScientistCost() * 2).c_str(),
 					Text::intWide(_base->getTotalScientists()).c_str(),
 					L"0");
 
@@ -200,20 +207,20 @@ PurchaseState::PurchaseState(Base* const base)
 	_lstItems->addRow(
 					4,
 					tr("STR_ENGINEER").c_str(),
-					Text::formatFunding(_game->getRuleset()->getEngineerCost() * 2).c_str(),
+					Text::formatFunding(rules->getEngineerCost() * 2).c_str(),
 					Text::intWide(_base->getTotalEngineers()).c_str(),
 					L"0");
 
 
 	// Add craft-types to purchase list.
 	const RuleCraft* crftRule;
-	const std::vector<std::string>& craftList = _game->getRuleset()->getCraftsList();
+	const std::vector<std::string>& craftList = rules->getCraftsList();
 	for (std::vector<std::string>::const_iterator
 			i = craftList.begin();
 			i != craftList.end();
 			++i)
 	{
-		crftRule = _game->getRuleset()->getCraft(*i);
+		crftRule = rules->getCraft(*i);
 		if (crftRule->getBuyCost() != 0
 			&& _game->getSavedGame()->isResearched(crftRule->getRequirements()) == true)
 		{
@@ -229,8 +236,8 @@ PurchaseState::PurchaseState(Base* const base)
 	}
 
 
-//	const std::vector<std::string>& itemList = _game->getRuleset()->getItemsList();
-	std::vector<std::string> purchaseList = _game->getRuleset()->getItemsList(); // Copy, need to remove entries; note that SellState has a more elegant way of handling this ->
+//	const std::vector<std::string>& itemList = rules->getItemsList();
+	std::vector<std::string> purchaseList = rules->getItemsList(); // Copy, need to remove entries; note that SellState has a more elegant way of handling this ->
 
 	const RuleCraftWeapon* cwRule;
 	const RuleItem
@@ -243,14 +250,14 @@ PurchaseState::PurchaseState(Base* const base)
 	int clipSize;
 
 	// Add craft Weapon-types to purchase list.
-	const std::vector<std::string>& cwList = _game->getRuleset()->getCraftWeaponsList();
+	const std::vector<std::string>& cwList = rules->getCraftWeaponsList();
 	for (std::vector<std::string>::const_iterator
 			i = cwList.begin();
 			i != cwList.end();
 			++i)
 	{
-		cwRule = _game->getRuleset()->getCraftWeapon(*i);
-		laRule = _game->getRuleset()->getItem(cwRule->getLauncherItem());
+		cwRule = rules->getCraftWeapon(*i);
+		laRule = rules->getItem(cwRule->getLauncherItem());
 		type = laRule->getType();
 
 		if (laRule->getBuyCost() != 0) // + isResearched
@@ -298,7 +305,7 @@ PurchaseState::PurchaseState(Base* const base)
 		}
 
 		// Handle craft weapon ammo.
-		clRule = _game->getRuleset()->getItem(cwRule->getClipItem());
+		clRule = rules->getItem(cwRule->getClipItem());
 		type = clRule->getType();
 
 		if (clRule->getBuyCost() != 0) // clRule != NULL && // + isResearched
@@ -354,7 +361,7 @@ PurchaseState::PurchaseState(Base* const base)
 			i != purchaseList.end();
 			++i)
 	{
-		itRule = _game->getRuleset()->getItem(*i);
+		itRule = rules->getItem(*i);
 		//Log(LOG_INFO) << (*i) << " list# " << itRule->getListOrder(); // Prints listOrder to LOG.
 
 		if (itRule->getBuyCost() != 0)
@@ -404,8 +411,8 @@ PurchaseState::PurchaseState(Base* const base)
 
 						if ((*k)->getAmmo() != 255)
 						{
-							amRule = _game->getRuleset()->getItem(
-									 _game->getRuleset()->getItem((*k)->getRules()->getType())
+							amRule = rules->getItem(
+									 rules->getItem((*k)->getRules()->getType())
 									 ->getCompatibleAmmo()->front());
 
 							if (amRule->getType() == type)
@@ -420,7 +427,7 @@ PurchaseState::PurchaseState(Base* const base)
 			if (itRule->getBattleType() == BT_AMMO			// weapon clips & HWP rounds
 //					|| (itRule->getBattleType() == BT_NONE	// craft weapon rounds - ^HANDLED ABOVE^^
 //						&& itRule->getClipSize() != 0))
-				&& itRule->getType() != _game->getRuleset()->getAlienFuelType())
+				&& itRule->getType() != rules->getAlienFuelType())
 			{
 				if (itRule->getType().substr(0,8) != "STR_HWP_") // *cuckoo** weapon clips
 				{
@@ -443,7 +450,7 @@ PurchaseState::PurchaseState(Base* const base)
                 if (itRule->isFixed() == true // tank w/ Ordnance.
 					&& itRule->getCompatibleAmmo()->empty() == false)
                 {
-					amRule = _game->getRuleset()->getItem(itRule->getCompatibleAmmo()->front());
+					amRule = rules->getItem(itRule->getCompatibleAmmo()->front());
 					clipSize = amRule->getClipSize();
 					if (clipSize != 0)
 						wst += (L" (" + Text::intWide(clipSize) + L")");
@@ -502,6 +509,8 @@ void PurchaseState::btnOkClick(Action*)
 		_base->setCashSpent(_costTotal);
 	}
 
+	const Ruleset* const rules (_game->getRuleset());
+
 	for (size_t
 			sel = 0;
 			sel != _orderQty.size();
@@ -519,22 +528,22 @@ void PurchaseState::btnOkClick(Action*)
 						i != _orderQty[sel];
 						++i)
 				{
-					transfer = new Transfer(_game->getRuleset()->getPersonnelTime());
-					transfer->setSoldier(_game->getRuleset()->genSoldier(
-																	_game->getSavedGame(),
-																	_soldiers[sel]));
+					transfer = new Transfer(rules->getPersonnelTime());
+					transfer->setSoldier(rules->genSoldier(
+														_game->getSavedGame(),
+														_soldiers[sel]));
 					_base->getTransfers()->push_back(transfer);
 				}
 				break;
 
 				case PST_SCIENTIST:
-					transfer = new Transfer(_game->getRuleset()->getPersonnelTime());
+					transfer = new Transfer(rules->getPersonnelTime());
 					transfer->setScientists(_orderQty[sel]);
 					_base->getTransfers()->push_back(transfer);
 				break;
 
 				case PST_ENGINEER:
-					transfer = new Transfer(_game->getRuleset()->getPersonnelTime());
+					transfer = new Transfer(rules->getPersonnelTime());
 					transfer->setEngineers(_orderQty[sel]);
 					_base->getTransfers()->push_back(transfer);
 				break;
@@ -545,7 +554,7 @@ void PurchaseState::btnOkClick(Action*)
 							i != _orderQty[sel];
 							++i)
 					{
-						RuleCraft* const crftRule = _game->getRuleset()->getCraft(_crafts[getCraftIndex(sel)]);
+						RuleCraft* const crftRule = rules->getCraft(_crafts[getCraftIndex(sel)]);
 						transfer = new Transfer(crftRule->getTransferTime());
 						Craft* const craft = new Craft(
 													crftRule,
@@ -559,7 +568,7 @@ void PurchaseState::btnOkClick(Action*)
 
 				case PST_ITEM:
 				{
-					const RuleItem* const itRule = _game->getRuleset()->getItem(_items[getItemIndex(sel)]);
+					const RuleItem* const itRule = rules->getItem(_items[getItemIndex(sel)]);
 					transfer = new Transfer(itRule->getTransferTime());
 					transfer->setTransferItems(
 										_items[getItemIndex(sel)],
