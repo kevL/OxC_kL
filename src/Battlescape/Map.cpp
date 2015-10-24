@@ -1160,9 +1160,13 @@ void Map::drawTerrain(Surface* const surface) // private.
 					// end draw bullet.
 
 // Main Draw BattleUnit ->
-					if (hasUnit == true
-						&& (tileBelow == NULL
-							|| tileBelow->getUnit() != _tile->getUnit()))
+					if (hasUnit == true)
+/*						&& (_unit->getVerticalDirection() == 0	// -> problems with foreground-below & background-above during vertical motion:
+							|| hasFloor == true					// if draw-on-tileBelow then unit-sprite's upper body gets overdrawn by background floors & walls on higher level;
+																// if draw-on-tileAbove then unit-sprite's lower body gets drawn overtop of foreground walls on lower level.
+//							|| tileBelow == NULL // if (hasFloor=false) then tile-below *should be* valid.
+							|| _unit != tileBelow->getUnit())) // draw unit on belowTile only.
+//							|| tileBelow->getMapData(O_FLOOR)->isGravLift() == true */
 					{
 						bool
 							halfRight = false,
@@ -1227,8 +1231,8 @@ void Map::drawTerrain(Surface* const surface) // private.
 								else
 									shade = tileShade;
 
-//								if (shade != 0 && quadrant != 0) // try to even out lighting of all four quadrants of large units.
-//									shade -= 1; // TODO: trickle this throughout this function!
+//								if (shade != 0 && quadrant != 0)	// try to even out lighting of all four quadrants of large units.
+//									shade -= 1;						// TODO: trickle this throughout this function!
 
 								calculateWalkingOffset(_unit, &walkOffset, trueLoc);
 								sprite->blitNShade(

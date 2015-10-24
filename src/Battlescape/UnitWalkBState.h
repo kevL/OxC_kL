@@ -48,7 +48,7 @@ private:
 	bool
 		_falling,
 		_kneelCheck,
-		_onScreen,
+		_isVisible,
 		_playFly,
 		_tileSwitchDone,
 		_preStepTurn;
@@ -100,7 +100,7 @@ private:
 	public:
 		/// Creates a new UnitWalkBState class.
 		UnitWalkBState(
-				BattlescapeGame* parent,
+				BattlescapeGame* const parent,
 				BattleAction _action);
 		/// Cleans up the UnitWalkBState.
 		~UnitWalkBState();

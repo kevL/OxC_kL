@@ -663,16 +663,16 @@ void Camera::convertVoxelToScreen(
 		Position* const posScreen) const
 {
 	const Position mapPosition = Position(
-										posVoxel.x / 16,
-										posVoxel.y / 16,
+										posVoxel.x >> 4, // yeh i know: just say no.
+										posVoxel.y >> 4,
 										posVoxel.z / 24);
 	convertMapToScreen(
 					mapPosition,
 					posScreen);
 
 	const double
-		dx = posVoxel.x - (mapPosition.x * 16),
-		dy = posVoxel.y - (mapPosition.y * 16),
+		dx = posVoxel.x - (mapPosition.x << 4),
+		dy = posVoxel.y - (mapPosition.y << 4),
 		dz = posVoxel.z - (mapPosition.z * 24);
 
 	posScreen->x += static_cast<int>(dx - dy) + (_spriteWidth / 2);

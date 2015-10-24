@@ -5542,7 +5542,7 @@
 1442867274 f:\git\openxcom\src\battlescape\unitturnbstate.h
 	"BattleState.h"
 
-1441671284 f:\git\openxcom\src\battlescape\unitwalkbstate.h
+1445650275 f:\git\openxcom\src\battlescape\unitwalkbstate.h
 	"BattlescapeGame.h"
 	"BattleState.h"
 
@@ -5772,7 +5772,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Ufo.h"
 
-1445524831 source:f:\git\openxcom\src\battlescape\camera.cpp
+1445656717 source:f:\git\openxcom\src\battlescape\camera.cpp
 	"Camera.h"
 	"BattlescapeState.h"
 	"Map.h"
@@ -5965,7 +5965,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1445540875 source:f:\git\openxcom\src\battlescape\map.cpp
+1445658099 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	"BattlescapeMessage.h"
 	"BattlescapeState.h"
@@ -6325,7 +6325,7 @@
 	"../Savegame/BattleUnit.h"
 	"../Savegame/SavedBattleGame.h"
 
-1445441242 source:f:\git\openxcom\src\battlescape\unitwalkbstate.cpp
+1445656937 source:f:\git\openxcom\src\battlescape\unitwalkbstate.cpp
 	"UnitWalkBState.h"
 	"BattlescapeState.h"
 	"Camera.h"
