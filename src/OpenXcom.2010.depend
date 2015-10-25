@@ -5469,7 +5469,7 @@
 1443707949 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1445740917 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1445793950 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	"AlienBAIState.h"
 	"BattlescapeState.h"

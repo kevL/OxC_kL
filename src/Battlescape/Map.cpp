@@ -1173,6 +1173,7 @@ void Map::drawTerrain(Surface* const surface) // private.
 							draw = true;
 
 						if ((_unit->getWalkPhase() != 0
+								|| _unit->getUnitDirection() == 4
 								|| _unit->getUnitDirection() == 1
 								|| _unit->getUnitDirection() == 2) // weird.
 							&& (_unit->getUnitStatus() == STATUS_WALKING
@@ -1208,7 +1209,6 @@ void Map::drawTerrain(Surface* const surface) // private.
 										* const tileSouthWest = _battleSave->getTile(posField + Position(-1,1,0)),
 										* const tileSouthSouthWest = _battleSave->getTile(posField + Position(-1,2,0));
 									draw = checkWest(tileSouthWest, tileSouthSouthWest);
-// not needed, i guess				draw = checkWest(tileSouthWest, tileSouthSouthWest, NULL, &halfRight);
 
 									const Tile
 										* const tileNorthEast = _battleSave->getTile(posField + Position(1,-1,0)),

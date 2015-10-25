@@ -93,9 +93,9 @@ int main(
 	}
 #endif
 //	Options::save();	// -> wtf keeps rewriting my options.cfg .....
-						// yet it works fine Game::run() before quitting.
+						// yet it works fine in Game::run() before quitting.
 						// Ps. why are they even doing Options::save() twice
-						// ... now they both fuck up.
+						// ... now they both fuck up. BYE!
 
 	// Comment this for faster exit.
 	delete game;

@@ -448,10 +448,10 @@ void Game::run()
 		}
 	}
 
-//	Options::save();	// kL_note: why this work here but not at main() EXIT,
+//	Options::save();	// kL_note: why this work here but not in main() EXIT,
 						// where it clears & rewrites my options.cfg
 						// Ps. why are they even doing Options::save() twice
-						// ... now they both fuck up. BYE !
+						// ... now they both fuck up. BYE!
 }
 
 /**
@@ -463,8 +463,8 @@ void Game::quit()
 		&& _gameSave->isIronman() == true
 		&& _gameSave->getName().empty() == false)
 	{
-		const std::string filename = CrossPlatform::sanitizeFilename(Language::wstrToFs(_gameSave->getName())) + ".sav";
-		_gameSave->save(filename);
+		const std::string file = CrossPlatform::sanitizeFilename(Language::wstrToFs(_gameSave->getName())) + ".sav";
+		_gameSave->save(file);
 	}
 
 	_quit = true;
