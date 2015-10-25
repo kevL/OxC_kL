@@ -721,7 +721,7 @@ private:
 		/// Sets this unit as having cried out from a shotgun blast to the face.
 		void hasCried(bool cried);
 		/// Gets if this unit has cried already.
-		bool hasCried();
+		bool hasCried() const;
 
 		/// Sets this unit's health level.
 		void setHealth(int health);
@@ -826,7 +826,8 @@ private:
 		/// Calculates and resets this BattleUnit's time units and energy.
 		void initTu(
 				bool preBattle = false,
-				bool hasPanicked = false);
+				bool hasPanicked = false,
+				bool reverted = false);
 
 		/// Changes this unit's morale.
 		void moraleChange(int change);

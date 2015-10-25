@@ -1688,7 +1688,7 @@ void BattleUnit::hasCried(bool cried)
  * Gets if this unit has cried already.
  * @return, true if cried
  */
-bool BattleUnit::hasCried()
+bool BattleUnit::hasCried() const
 {
 	return _hasCried;
 }
@@ -2428,14 +2428,14 @@ void BattleUnit::prepUnit(bool full)
 	_dontReselect = false;
 	_motionPoints = 0;
 
+	bool reverted = false;
 	if (_faction != _originalFaction) // reverting from Mind Control at start of MC-ing faction's next turn
 	{
 		_faction = _originalFaction;
-		return;
+		reverted = true;
 	}
 
 	bool hasPanicked = false;
-
 	if (full == true) // don't do damage or panic when transitioning between stages
 	{
 		if (_fire > 0)
@@ -2445,18 +2445,16 @@ void BattleUnit::prepUnit(bool full)
 		if (_health < 1)
 		{
 			_health = 0;
-
 			if (_currentAIState != NULL) // if unit is dead AI state disappears
 			{
 //				_currentAIState->exit(); // does nothing.
 				delete _currentAIState;
 				_currentAIState = NULL;
 			}
-
 			return;
 		}
 
-		if (_stunLevel > 0
+		if (_stunLevel != 0
 			&& (_geoscapeSoldier != NULL
 				|| _unitRule->isMechanical() == false))
 		{
@@ -2465,38 +2463,37 @@ void BattleUnit::prepUnit(bool full)
 
 		if (_status != STATUS_UNCONSCIOUS)
 		{
-			const int pctPanic = 100 - (2 * getMorale());
-			if (RNG::percent(pctPanic) == true)
+			const int panicPct = 100 - (2 * getMorale());
+			if (RNG::percent(panicPct) == true)
 			{
 				hasPanicked = true;
-
-				if (RNG::percent(30) == true)
-					_status = STATUS_BERSERK;	// shoot stuff.
-				else
-					_status = STATUS_PANICKING;	// panic is either flee or freeze - determined later
+				if (reverted == false) // stay STATUS_STANDING if just coming out of Mc. But init tu/stamina as if panicked.
+				{
+					if (RNG::percent(30) == true)
+						_status = STATUS_BERSERK;	// shoot stuff.
+					else
+						_status = STATUS_PANICKING;	// panic is either flee or freeze - determined later
+				}
 			}
-			else if (pctPanic > 0 // else successfully avoided Panic
-				&& _geoscapeSoldier != NULL)
-			{
+			else if (panicPct > 0 && _geoscapeSoldier != NULL) // successfully avoided Panic
 				++_expBravery;
-			}
 		}
 	}
 
 	if (_status != STATUS_UNCONSCIOUS)
-		initTu(
-			false,
-			hasPanicked);
+		initTu(false, hasPanicked, reverted);
 }
 
 /**
  * Calculates and resets this BattleUnit's time units and energy.
  * @param preBattle		- true for pre-battle initialization (default false)
  * @param hasPanicked	- true if unit has just panicked (default false)
+ * @param reverted		- true if unit has just reverted from MC (default false)
  */
 void BattleUnit::initTu(
 		bool preBattle,
-		bool hasPanicked)
+		bool hasPanicked,
+		bool reverted)
 {
 	if (_revived == true)
 	{
@@ -2506,19 +2503,26 @@ void BattleUnit::initTu(
 	}
 	else
 	{
-		int tu = _stats.tu;
+		_tu = _stats.tu;
 
 		const int overBurden = getCarriedWeight() - getStrength();
 		if (overBurden > 0)
-			tu -= overBurden;
+			_tu -= overBurden;
 
 		if (_geoscapeSoldier != NULL) // Each fatal wound to the left or right leg reduces a Soldier's TUs by 10%.
-			tu -= (tu * (getFatalWound(BODYPART_LEFTLEG) + getFatalWound(BODYPART_RIGHTLEG) * 10)) / 100;
+			_tu -= (_tu * (getFatalWound(BODYPART_LEFTLEG) + getFatalWound(BODYPART_RIGHTLEG) * 10)) / 100;
 
-		if (hasPanicked == true) // this is how many TU the unit gets to run around/shoot with.
-			tu = tu * RNG::generate(0,100) / 100;
+		if (hasPanicked == true)
+		{
+			if (reverted == false)
+				_tu = _tu * RNG::generate(0,100) / 100; // this is how many TU the unit gets to run around/shoot with.
+			else
+				_tu = 0;	// if unit fails its panic-roll when reverting from MC (at
+		}					// the beginning of opponent's turn) it simply loses its TU.
 
-		_tu = std::max(12, tu);
+		if (hasPanicked == false || reverted == false)
+			_tu = std::max(12, _tu);
+
 
 		if (preBattle == false)				// no energy recovery needed at battle start
 		{									// and none wanted for next stage battles:
@@ -3384,11 +3388,12 @@ void BattleUnit::postMissionProcedures(
  */
 int BattleUnit::improveStat(int xp) // private.
 {
-	int tier = 1;
+	int tier;
 
-	if		(xp > 10)	tier = 4;
-	else if (xp >  5)	tier = 3;
-	else if (xp >  2)	tier = 2;
+	if		(xp > 10) tier = 4;
+	else if (xp >  5) tier = 3;
+	else if (xp >  2) tier = 2;
+	else			  tier = 1;
 
 	return (tier / 2 + RNG::generate(0, tier));
 }
@@ -3407,7 +3412,6 @@ int BattleUnit::getMiniMapSpriteIndex() const
 	// * 9-11  : Item
 	// * 12-23 : Xcom HWP
 	// * 24-35 : Alien big terror unit(cyberdisk, ...)
-//	if (isOut(true, true) == true)
 	if (isOut_t(OUT_STAT) == true)
 		return 9;
 

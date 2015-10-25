@@ -1347,8 +1347,7 @@ bool SavedBattleGame::endBattlePhase()
 			{
 				const int delta = RNG::generate(0,5);
 				if (_turn > 17 + delta
-					|| (_turn > 5
-						&& liveAliens < delta - 1))
+					|| (_turn > 5 && liveAliens < delta - 1))
 				{
 					_cheatAI = true;
 				}
@@ -1403,7 +1402,7 @@ bool SavedBattleGame::endBattlePhase()
 			else if ((*i)->getFaction() == _side
 				&& (*i)->getFireUnit() != 0)
 			{
-				(*i)->setFireUnit((*i)->getFireUnit() - 1);
+				(*i)->setFireUnit((*i)->getFireUnit() - 1); // dead burning bodies eventually go out.
 			}
 		}
 	}

@@ -1742,7 +1742,8 @@ BattleUnit* TileEngine::getReactor(
 			++i)
 	{
 		//Log(LOG_INFO) << ". . check nextReactor id-" << (*i)->getId();
-		if ((*i)->isOut() == false)
+//		if ((*i)->isOut() == false)
+		if ((*i)->isOut_t() == false)
 		{
 			initTest = (*i)->getInitiative();
 			if (initTest > init)
@@ -1768,7 +1769,7 @@ BattleUnit* TileEngine::getReactor(
 	if (nextReactor != defender
 		&& nextReactor->getFaction() == FACTION_HOSTILE)
 	{
-		//Log(LOG_INFO) << "getReactor() id-" << nextReactor->getId() << " spots " << defender->getId();
+		//Log(LOG_INFO) << "getReactor() id-" << nextReactor->getId() << " spots id-" << defender->getId();
 		if (autoSpot == true)
 			defender->setExposed();								// defender has been spotted on Player turn.
 		else

@@ -1373,7 +1373,7 @@ void BattlescapeGame::endTurnPhase() // private.
 			{
 				pos = Position::toVoxelSpaceCentered(
 												_battleSave->getTiles()[i]->getPosition(),
-												-_battleSave->getTiles()[i]->getTerrainLevel());
+												2 - _battleSave->getTiles()[i]->getTerrainLevel());
 				statePushNext(new ExplosionBState(
 												this, pos, *j,
 												(*j)->getPreviousOwner()));
@@ -1447,7 +1447,6 @@ void BattlescapeGame::endTurnPhase() // private.
 	{
 		if ((*i)->getOriginalFaction() == _battleSave->getSide()
 			&& (*i)->isOut_t(OUT_STAT) == false)
-//			&& (*i)->isOut() == false)
 		{
 			tile = (*i)->getTile();
 			if (tile != NULL
@@ -1627,7 +1626,6 @@ void BattlescapeGame::checkForCasualties(
 					i != attackUnit->getRfSpotters()->end();
 					++i)
 			{
-//				if ((*i)->getHealth() != 0 && (*i)->getHealth() > (*i)->getStun())
 				if ((*i)->isOut_t(OUT_HLTH_STUN) == false)
 				{
 					attackUnit->setExposed(); // defender has been spotted on Player turn.
@@ -1713,8 +1711,6 @@ void BattlescapeGame::checkForCasualties(
 	{
 		if ((*i)->getUnitStatus() != STATUS_LIMBO) // kL_tentative.
 		{
-//			dead = ((*i)->getHealth() == 0);
-//			stunned = ((*i)->getHealth() <= (*i)->getStun());
 			dead = (*i)->isOut_t(OUT_HLTH);
 			stunned = (*i)->isOut_t(OUT_STUN);
 
