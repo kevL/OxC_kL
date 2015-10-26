@@ -60,8 +60,8 @@ private:
 	public:
 		/// Creates the Confirm New Base state.
 		ConfirmNewBaseState(
-				Base* base,
-				Globe* globe);
+				Base* const base,
+				Globe* const globe);
 		/// Cleans up the Confirm New Base state.
 		~ConfirmNewBaseState();
 

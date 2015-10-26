@@ -233,12 +233,12 @@ void MapData::setFlags(
 
 /**
  * Gets the amount of blockage of a certain type.
- * @param type - DamageType (RuleItem.h)
+ * @param dType - DamageType (RuleItem.h)
  * @return, the blockage (0-255)
  */
-int MapData::getBlock(DamageType type) const
+int MapData::getBlock(DamageType dType) const
 {
-	switch (type)
+	switch (dType)
 	{
 /*		case DT_NONE:	return _block[1];
 		case DT_HE:		return _block[2];

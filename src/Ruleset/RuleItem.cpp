@@ -108,7 +108,8 @@ RuleItem::RuleItem(const std::string& type)
 		_meleeAnimation(0),
 		_meleeSound(-1),
 		_meleeHitSound(-1),
-		_specialType(-1),
+		_specialType(STT_NONE),
+//		_specialType(-1),
 		_canExecute(false),
 		_defusePulse(false)
 {}
@@ -210,8 +211,10 @@ void RuleItem::load(
 			_meleeHitSound += modIndex;
 	}
 
-	_damageType			= static_cast<DamageType>(node["damageType"].as<int>(_damageType));
-	_battleType			= static_cast<BattleType>(node["battleType"]	.as<int>(_battleType));
+	_damageType			= static_cast<DamageType>(node["damageType"]		.as<int>(_damageType));
+	_battleType			= static_cast<BattleType>(node["battleType"]		.as<int>(_battleType));
+	_specialType		= static_cast<SpecialTileType>(node["specialType"]	.as<int>(_specialType));
+//	_specialType		= node["specialType"].as<int>(_specialType);
 
 	_power				= node["power"]				.as<int>(_power);
 	_clipSize			= node["clipSize"]			.as<int>(_clipSize);
@@ -269,7 +272,6 @@ void RuleItem::load(
 	_noReaction			= node["noReaction"]		.as<bool>(_noReaction);
 	_noResearch			= node["noResearch"]		.as<bool>(_noResearch);
 	_meleePower			= node["meleePower"]		.as<int>(_meleePower);
-	_specialType		= node["specialType"]		.as<int>(_specialType);
 	_defusePulse		= node["defusePulse"]		.as<bool>(_defusePulse);
 
 	switch (_damageType)
@@ -1051,10 +1053,10 @@ bool RuleItem::isLosRequired() const
 /**
  * Gets the associated special type of this item.
  * @note Type 14 is the alien brain and types 0 and 1 are "regular tile" and
- ( "starting point" so try not to use those ones.
+ * "starting point" so try not to use those ones.
  * @return, special type
  */
-int RuleItem::getSpecialType() const
+SpecialTileType RuleItem::getSpecialType() const
 {
 	return _specialType;
 }

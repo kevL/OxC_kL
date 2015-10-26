@@ -47,8 +47,8 @@ namespace OpenXcom
  * @param state	- pointer to the base State to refresh
  */
 BuildFacilitiesState::BuildFacilitiesState(
-		Base* base,
-		State* state)
+		Base* const base,
+		State* const state)
 	:
 		_base(base),
 		_state(state)
@@ -58,10 +58,10 @@ BuildFacilitiesState::BuildFacilitiesState(
 	_window			= new Window(
 								this,
 								128,165,
-								192,35,
+								192,33,
 								POPUP_VERTICAL);
-	_txtTitle		= new Text(118, 17, 197, 43);
-	_lstFacilities	= new TextList(101, 113, 200, 59);
+	_txtTitle		= new Text(118, 17, 197, 41);
+	_lstFacilities	= new TextList(101, 113, 200, 57);
 	_btnOk			= new TextButton(112, 16, 200, 176);
 
 	setInterface("selectFacility");
@@ -114,7 +114,6 @@ void BuildFacilitiesState::PopulateBuildList() // virtual. Cf, SelectStartFacili
 			++i)
 	{
 		RuleBaseFacility* const facRule = _game->getRuleset()->getBaseFacility(*i);
-
 		if (_game->getSavedGame()->isResearched(facRule->getRequirements()) == true
 			&& facRule->isLift() == false)
 		{
@@ -127,9 +126,7 @@ void BuildFacilitiesState::PopulateBuildList() // virtual. Cf, SelectStartFacili
 			i != _facilities.end();
 			++i)
 	{
-		_lstFacilities->addRow(
-							1,
-							tr((*i)->getType()).c_str());
+		_lstFacilities->addRow(1, tr((*i)->getType()).c_str());
 	}
 }
 
@@ -155,7 +152,7 @@ void BuildFacilitiesState::btnOkClick(Action*)
  * Places the selected facility.
  * @param action - pointer to an Action
  */
-void BuildFacilitiesState::lstFacilitiesClick(Action*)
+void BuildFacilitiesState::lstFacilitiesClick(Action*) // virtual.
 {
 	_game->pushState(new PlaceFacilityState(
 										_base,

@@ -41,19 +41,17 @@ namespace OpenXcom
 {
 
 /**
- * Initializes all the elements in the Place Facility window.
+ * Initializes all the elements in the Place Start Facility window.
  * @param base		- pointer to the base to get info from
  * @param select	- pointer to the selection state
- * @param rule		- pointer to the facility ruleset to build
+ * @param facRule	- pointer to the facility ruleset to build
  */
 PlaceStartFacilityState::PlaceStartFacilityState(
-		Base* base,
-		SelectStartFacilityState* select,
-		RuleBaseFacility* rule)
+		Base* const base,
+		SelectStartFacilityState* const select,
+		const RuleBaseFacility* const facRule)
 	:
-		PlaceFacilityState(
-			base,
-			rule),
+		PlaceFacilityState(base, facRule),
 		_select(select)
 {
 	_view->onMouseClick((ActionHandler)& PlaceStartFacilityState::viewClick);
@@ -74,7 +72,17 @@ PlaceStartFacilityState::~PlaceStartFacilityState()
  */
 void PlaceStartFacilityState::viewClick(Action*)
 {
-	if (_view->isPlaceable(_facRule) == false)
+	if (_view->isPlaceable(_facRule) == true)
+	{
+		BaseFacility* const fac = new BaseFacility(_facRule, _base);
+		fac->setX(_view->getGridX());
+		fac->setY(_view->getGridY());
+
+		_base->getFacilities()->push_back(fac);
+		_game->popState();
+		_select->facilityBuilt();
+	}
+	else
 	{
 		_game->popState();
 		_game->pushState(new ErrorMessageState(
@@ -83,20 +91,6 @@ void PlaceStartFacilityState::viewClick(Action*)
 											_game->getRuleset()->getInterface("basescape")->getElement("errorMessage")->color,
 											"BACK01.SCR",
 											_game->getRuleset()->getInterface("basescape")->getElement("errorPalette")->color));
-	}
-	else
-	{
-		BaseFacility* const fac = new BaseFacility(
-												_facRule,
-												_base);
-		fac->setX(_view->getGridX());
-		fac->setY(_view->getGridY());
-
-		_base->getFacilities()->push_back(fac);
-
-		_game->popState();
-
-		_select->facilityBuilt();
 	}
 }
 

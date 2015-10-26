@@ -87,7 +87,7 @@ BasescapeState::BasescapeState(
 		_base(base),
 		_globe(globe),
 		_baseList(_game->getSavedGame()->getBases()),
-		_allowStoresWarning(true)
+		_allowStoresWarning(false) // stop warning from popping-up when building 1st Base.
 {
 	_view			= new BaseView(192, 192, 0, 8);
 	_mini			= new MiniBaseView(128, 22, 192, 33);
@@ -374,38 +374,38 @@ void BasescapeState::init()
  */
 void BasescapeState::setBase(Base* const base)
 {
-	if (_baseList->empty() == false)
+/*	if (_baseList->empty() == false)
+	{ */
+	bool exists = false; // check if base still exists
+	for (size_t
+			i = 0;
+			i != _baseList->size();
+			++i)
 	{
-		bool exists = false; // check if base still exists
-		for (size_t
-				i = 0;
-				i != _baseList->size();
-				++i)
+		if (base == _baseList->at(i))
 		{
-			if (base == _baseList->at(i))
-			{
-				_base = base;
-				_mini->setSelectedBase(i);
-//				_game->getSavedGame()->setRecallBase(i);
+			_base = base;
+			_mini->setSelectedBase(i);
+//			_game->getSavedGame()->setRecallBase(i);
 
-				exists = true;
-				break;
-			}
-		}
-
-		if (exists == false)
-		{
-			_base = _baseList->front();
-			_mini->setSelectedBase(0);
-//			_game->getSavedGame()->setRecallBase(0);
+			exists = true;
+			break;
 		}
 	}
-	else
+
+	if (exists == false)
+	{
+		_base = _baseList->front();
+		_mini->setSelectedBase(0);
+//		_game->getSavedGame()->setRecallBase(0);
+	}
+/*	}
+	else // WARNING: if player can delete and rebuilt his/her only base this could be needed again: (unchecked/untested)
 	{
 		_base = new Base(_game->getRuleset());
 		_mini->setSelectedBase(0);
 //		_game->getSavedGame()->setRecallBase(0);
-	}
+	} */
 }
 
 /*
@@ -791,8 +791,8 @@ void BasescapeState::handleKeyPress(Action* action)
  */
 size_t BasescapeState::getKeyedBaseId(SDLKey keyId) const
 {
-	static const SDLKey baseKeys[8] =	// note that 'static' means these keys will not be
-	{									// changed (in Options) while the program is running.
+	static const SDLKey baseKeys[Base::MAX_BASES] =	// note that 'static' means these keys will not be
+	{												// changed (in Options) while the program is running.
 		Options::keyBaseSelect1,
 		Options::keyBaseSelect2,
 		Options::keyBaseSelect3,

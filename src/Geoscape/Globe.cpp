@@ -2372,7 +2372,6 @@ void Globe::drawTarget( // private.
 			Surface* const marker = _markerSet->getFrame(target->getMarker());
 			marker->setX(x - 1);
 			marker->setY(y - 1);
-
 			marker->blit(surface);
 		}
 	}
@@ -2386,6 +2385,7 @@ void Globe::drawMarkers()
 {
 	_markers->clear();
 
+	int j = 0;
 	for (std::vector<Base*>::const_iterator // Draw the Base markers
 			i = _game->getSavedGame()->getBases()->begin();
 			i != _game->getSavedGame()->getBases()->end();

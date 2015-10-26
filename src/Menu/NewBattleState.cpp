@@ -227,6 +227,9 @@ NewBattleState::NewBattleState()
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& NewBattleState::btnOkClick,
 					Options::keyOk);
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& NewBattleState::btnOkClick,
+					Options::keyOkKeypad);
 
 	_btnCancel->setText(tr("STR_CANCEL"));
 	_btnCancel->onMouseClick((ActionHandler)& NewBattleState::btnCancelClick);
@@ -256,11 +259,11 @@ void NewBattleState::init()
 
 /**
  * Loads new battle data from a YAML file.
- * @param filename - reference a YAML filename (default "battle")
+ * @param file - reference a YAML filename (default "battle")
  */
-void NewBattleState::load(const std::string& filename)
+void NewBattleState::load(const std::string& file)
 {
-	const std::string config = Options::getConfigFolder() + filename + ".cfg";
+	const std::string config = Options::getConfigFolder() + file + ".cfg";
 
 	if (CrossPlatform::fileExists(config) == false)
 		initPlay();
@@ -295,8 +298,7 @@ void NewBattleState::load(const std::string& filename)
 				Base* const base = new Base(_rules);
 				base->load(
 						doc["base"],
-						savedGame,
-						false);
+						savedGame); // note: considered as neither a 'firstBase' nor a 'skirmish' ...
 				savedGame->getBases()->push_back(base);
 
 				// Add research
@@ -364,16 +366,16 @@ void NewBattleState::load(const std::string& filename)
 
 /**
  * Saves new battle data to a YAML file.
- * @param filename - reference a YAML filename (default "battle")
+ * @param file - reference a YAML filename (default "battle")
  */
-void NewBattleState::save(const std::string& filename)
+void NewBattleState::save(const std::string& file)
 {
-	const std::string config = Options::getConfigFolder() + filename + ".cfg";
+	const std::string config = Options::getConfigFolder() + file + ".cfg";
 
-	std::ofstream save (config.c_str()); // init
+	std::ofstream save (config.c_str());
 	if (save.fail() == true)
 	{
-		Log(LOG_WARNING) << "Failed to save " << filename << ".cfg";
+		Log(LOG_WARNING) << "Failed to save " << file << ".cfg";
 		return;
 	}
 
@@ -401,24 +403,24 @@ void NewBattleState::initPlay()
 {
 	RNG::setSeed(0);
 
-	SavedGame* const savedGame = new SavedGame(_rules); // uh do these get deleted anywhere
+	SavedGame* const gameSave = new SavedGame(_rules); // uh do these get deleted anywhere
 	Base* const base = new Base(_rules);
 
-	const YAML::Node& startBase = _rules->getStartingBase();
+	const YAML::Node& node = _rules->getStartingBase();
 	base->load(
-			startBase,
-			savedGame,
+			node,
+			gameSave,
 			true,
 			true);
-	savedGame->getBases()->push_back(base);
+	gameSave->getBases()->push_back(base);
 
-	// kill everything we don't want in this base
+	// delete Soldiers & Craft in this base
 	for (std::vector<Soldier*>::const_iterator
 			i = base->getSoldiers()->begin();
 			i != base->getSoldiers()->end();
 			++i)
 	{
-		delete (*i);
+		delete *i;
 	}
 	base->getSoldiers()->clear();
 
@@ -427,10 +429,11 @@ void NewBattleState::initPlay()
 			i != base->getCrafts()->end();
 			++i)
 	{
-		delete (*i);
+		delete *i;
 	}
 	base->getCrafts()->clear();
 
+	// clear the Stores too.
 	base->getStorageItems()->getContents()->clear();
 
 	_craft = new Craft(
@@ -444,7 +447,7 @@ void NewBattleState::initPlay()
 			i != 30;
 			++i)
 	{
-		Soldier* const soldier = _rules->genSoldier(savedGame);
+		Soldier* const soldier = _rules->genSoldier(gameSave);
 
 		for (int
 				j = 0;
@@ -508,10 +511,10 @@ void NewBattleState::initPlay()
 			i != research.end();
 			++i)
 	{
-		savedGame->addFinishedResearch(_rules->getResearch(*i), false);
+		gameSave->addFinishedResearch(_rules->getResearch(*i), false);
 	}
 
-	_game->setSavedGame(savedGame);
+	_game->setSavedGame(gameSave);
 	cbxMissionChange(NULL);
 }
 

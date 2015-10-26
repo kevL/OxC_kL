@@ -151,7 +151,7 @@ private:
 	void addStat(
 			const std::string& type,
 			int score,
-			int quantity = 1);
+			int qty = 1);
 	/// Prepares debriefing.
 	void prepareDebriefing();
 	/// Recovers items from the battlescape.

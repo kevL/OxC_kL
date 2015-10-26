@@ -54,8 +54,8 @@ private:
 	public:
 		/// Creates the Place Lift state.
 		PlaceLiftState(
-				Base* base,
-				Globe* globe,
+				Base* const base,
+				Globe* const globe,
 				bool firstBase);
 		/// Cleans up the Place Lift state.
 		~PlaceLiftState();

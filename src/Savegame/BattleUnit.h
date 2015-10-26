@@ -886,7 +886,7 @@ private:
 		bool checkAmmo();
 
 		/// Checks if this unit is in the exit area.
-		bool isInExitArea(SpecialTileType stt = START_POINT) const;
+		bool isInExitArea(SpecialTileType tileType = START_POINT) const;
 
 		/// Gets this unit's height taking into account kneeling/standing.
 		int getHeight(bool floating = false) const;

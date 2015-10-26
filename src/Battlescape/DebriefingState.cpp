@@ -608,14 +608,14 @@ void DebriefingState::btnOkClick(Action*)
 
 /**
  * Adds to the debriefing stats.
- * @param type		- reference the untranslated name of the stat
- * @param score		- the score to add
- * @param quantity	- the quantity to add (default 1)
+ * @param type	- reference the untranslated name of the stat
+ * @param score	- the score to add
+ * @param qty	- the quantity to add (default 1)
  */
 void DebriefingState::addStat( // private.
 		const std::string& type,
 		int score,
-		int quantity)
+		int qty)
 {
 	for (std::vector<DebriefingStat*>::const_iterator
 			i = _stats.begin();
@@ -625,8 +625,7 @@ void DebriefingState::addStat( // private.
 		if ((*i)->item == type)
 		{
 			(*i)->score += score;
-			(*i)->qty += quantity;
-
+			(*i)->qty += qty;
 			break;
 		}
 	}
@@ -680,14 +679,14 @@ void DebriefingState::prepareDebriefing() // private.
 			i != _rules->getItemsList().end();
 			++i)
 	{
-		const int type = _rules->getItem(*i)->getSpecialType();
-		if (type > 1)
+		const SpecialTileType tileType = _rules->getItem(*i)->getSpecialType();
+		if (tileType > 1)
 		{
-			SpecialType* const specialItem = new SpecialType();
-			specialItem->type = *i;
-			specialItem->value = _rules->getItem(*i)->getRecoveryPoints();
+			SpecialType* const specialType = new SpecialType();
+			specialType->type = *i;
+			specialType->value = _rules->getItem(*i)->getRecoveryPoints();
 
-			_specialTypes[type] = specialItem;
+			_specialTypes[tileType] = specialType;
 		}
 	}
 
@@ -850,7 +849,7 @@ void DebriefingState::prepareDebriefing() // private.
 				}
 				// if only one soldier survived give him a medal! (unless he killed all the others ...)
 				else if ((*i)->getStatistics()->hasFriendlyFired() == false
-					&& soldierDead > 0)
+					&& soldierDead != 0)
 				{
 					(*i)->getStatistics()->loneSurvivor = true;
 					break;
@@ -893,23 +892,16 @@ void DebriefingState::prepareDebriefing() // private.
 			}
 			else if ((*j)->getDestination() != NULL)
 			{
-				if (soldierLive != 0
-					&& aborted == false)
+				if (soldierLive != 0 && aborted == false)
 				{
 					const Ufo* const ufo = dynamic_cast<Ufo*>((*j)->getDestination());
-					if (ufo != NULL
-						&& ufo->isInBattlescape() == true)
-					{
+					if (ufo != NULL && ufo->isInBattlescape() == true)
 						(*j)->returnToBase();
-					}
 				}
 
 				const MissionSite* const site = dynamic_cast<MissionSite*>((*j)->getDestination());
-				if (site != NULL
-					&& site->isInBattlescape() == true)
-				{
+				if (site != NULL && site->isInBattlescape() == true)
 					(*j)->returnToBase();
-				}
 			}
 		}
 
@@ -987,7 +979,6 @@ void DebriefingState::prepareDebriefing() // private.
 		if ((*i)->isInBattlescape() == true)
 		{
 			found = true;
-
 			_txtRecovery->setText(tr("STR_UFO_RECOVERY"));
 			_missionStatistics->ufo = (*i)->getRules()->getType();
 
@@ -1000,7 +991,6 @@ void DebriefingState::prepareDebriefing() // private.
 			else
 			{
 				(*i)->setInBattlescape(false);
-
 				if ((*i)->getUfoStatus() == Ufo::LANDED)
 					(*i)->setSecondsLeft(15);
 			}
@@ -1019,10 +1009,8 @@ void DebriefingState::prepareDebriefing() // private.
 			if ((*i)->isInBattlescape() == true)
 			{
 				found = true;
-
 				delete *i;
 				_gameSave->getMissionSites()->erase(i);
-
 				break;
 			}
 		}
@@ -1225,24 +1213,23 @@ void DebriefingState::prepareDebriefing() // private.
 						if (_skirmish == false)
 							_missionCost += _base->hwpExpense((*i)->getArmor()->getSize() * (*i)->getArmor()->getSize());
 
-						const RuleItem* itRule;
-						const BattleItem* ammoItem;
+						const RuleItem* hwpRule;
+						const BattleItem* aItem;
 
 						if ((*i)->getItem("STR_RIGHT_HAND") != NULL)
 						{
-							itRule = _rules->getItem((*i)->getType()); // note this is generally the tank/item itself. -> (*i)->getItem("STR_RIGHT_HAND")->getRules()
-							if (itRule->getCompatibleAmmo()->empty() == false)
+							hwpRule = _rules->getItem((*i)->getType()); // note this is generally the tank/item itself. -> (*i)->getItem("STR_RIGHT_HAND")->getRules()
+							if (hwpRule->getCompatibleAmmo()->empty() == false)
 							{
-								ammoItem = (*i)->getItem("STR_RIGHT_HAND")->getAmmoItem();
-								if (ammoItem != NULL
-									&& ammoItem->getAmmoQuantity() > 0)
+								aItem = (*i)->getItem("STR_RIGHT_HAND")->getAmmoItem();
+								if (aItem != NULL && aItem->getAmmoQuantity() > 0)
 								{
-									int total = ammoItem->getAmmoQuantity();
-									if (itRule->getClipSize() != 0) // meaning this tank can store multiple rounds
-										total /= ammoItem->getRules()->getClipSize();
+									int total = aItem->getAmmoQuantity();
+									if (hwpRule->getClipSize() != 0) // meaning this tank can store multiple rounds
+										total /= aItem->getRules()->getClipSize();
 
 									_base->getStorageItems()->addItem(
-																	itRule->getCompatibleAmmo()->front(),
+																	hwpRule->getCompatibleAmmo()->front(),
 																	total);
 								}
 							}
@@ -1250,19 +1237,18 @@ void DebriefingState::prepareDebriefing() // private.
 
 						if ((*i)->getItem("STR_LEFT_HAND") != NULL)
 						{
-							itRule = (*i)->getItem("STR_LEFT_HAND")->getRules();
-							if (itRule->getCompatibleAmmo()->empty() == false)
+							hwpRule = (*i)->getItem("STR_LEFT_HAND")->getRules();
+							if (hwpRule->getCompatibleAmmo()->empty() == false)
 							{
-								ammoItem = (*i)->getItem("STR_LEFT_HAND")->getAmmoItem();
-								if (ammoItem != NULL
-									&& ammoItem->getAmmoQuantity() > 0)
+								aItem = (*i)->getItem("STR_LEFT_HAND")->getAmmoItem();
+								if (aItem != NULL && aItem->getAmmoQuantity() > 0)
 								{
-									int total = ammoItem->getAmmoQuantity();
-									if (itRule->getClipSize() != 0) // meaning this tank can store multiple rounds
-										total /= ammoItem->getRules()->getClipSize();
+									int total = aItem->getAmmoQuantity();
+									if (hwpRule->getClipSize() != 0) // meaning this tank can store multiple rounds
+										total /= aItem->getRules()->getClipSize();
 
 									_base->getStorageItems()->addItem(
-																	itRule->getCompatibleAmmo()->front(),
+																	hwpRule->getCompatibleAmmo()->front(),
 																	total);
 								}
 							}
@@ -1303,8 +1289,7 @@ void DebriefingState::prepareDebriefing() // private.
 			else if (faction == FACTION_PLAYER		// This section is for units still standing.
 				&& orgFaction == FACTION_HOSTILE	// ie, MC'd aLiens
 				&& (*i)->isOut_t(OUT_STAT) == false
-				&& (aborted == false
-					|| (*i)->isInExitArea() == true))
+				&& (aborted == false || (*i)->isInExitArea() == true))
 				// kL_note: so, this never actually runs unless early psi-exit
 				// when all aliens are dead or mind-controlled is turned on ....
 				// Except the two-stage Cydonia mission, in which case all this
@@ -1397,7 +1382,7 @@ void DebriefingState::prepareDebriefing() // private.
 	std::string tacResult;
 
 	if ((aborted == false || missionAccomplished == true)	// Run through all tiles to recover UFO components and items.
-		&& soldierLive > 0)									// RECOVER UFO:
+		&& soldierLive != 0)								// RECOVER UFO:
 	{
 		switch (tacType)
 		{
@@ -1440,18 +1425,18 @@ void DebriefingState::prepareDebriefing() // private.
 					++i)
 			{
 				for (int
-						part = 0;
-						part != parts;
-						++part)
+						j = 0;
+						j != parts;
+						++j)
 				{
-					partType = static_cast<MapDataType>(part);
+					partType = static_cast<MapDataType>(j);
 					if (battleSave->getTiles()[i]->getMapData(partType) != NULL)
 					{
-						const SpecialTileType stt = battleSave->getTiles()[i]->getMapData(partType)->getSpecialType();
-						if (_specialTypes.find(stt) != _specialTypes.end())
+						const SpecialTileType tileType = battleSave->getTiles()[i]->getMapData(partType)->getSpecialType();
+						if (_specialTypes.find(tileType) != _specialTypes.end())
 							addStat(
-								_specialTypes[stt]->type,
-								_specialTypes[stt]->value);
+								_specialTypes[tileType]->type,
+								_specialTypes[tileType]->value);
 					}
 				}
 
@@ -1502,7 +1487,7 @@ void DebriefingState::prepareDebriefing() // private.
 				objectiveFailedText,
 				objectiveFailedScore);
 
-		if (soldierLive > 0 && _destroyXComBase == false)
+		if (soldierLive != 0 && _destroyXComBase == false)
 		{
 			for (size_t // recover items from the ground
 					i = 0;
@@ -1524,17 +1509,17 @@ void DebriefingState::prepareDebriefing() // private.
 			i != _rounds.end();
 			++i)
 	{
-		if (i->first->getClipSize() > 0)
+		if (i->first->getClipSize() != 0)
 		{
-			const int total_clips = i->second / i->first->getClipSize();
-			if (total_clips > 0)
+			const int fullClips = i->second / i->first->getClipSize();
+			if (fullClips != 0)
 				_base->getStorageItems()->addItem(
 												i->first->getType(),
-												total_clips);
+												fullClips);
 		}
 	}
 
-	if (soldierLive > 0) // recover all the goodies
+	if (soldierLive != 0) // recover all the goodies
 	{
 		for (std::vector<DebriefingStat*>::const_iterator
 				i = _stats.begin();
@@ -1550,12 +1535,12 @@ void DebriefingState::prepareDebriefing() // private.
 				else
 					alloyDivisor = 15;
 
-				(*i)->qty = (*i)->qty / alloyDivisor;
-				(*i)->score = (*i)->score / alloyDivisor;
+				(*i)->qty /= alloyDivisor;
+				(*i)->score /= alloyDivisor;
 			}
 
 			// recoverable battlescape tiles are now converted to items and put in base inventory
-			if ((*i)->recover == true && (*i)->qty > 0)
+			if ((*i)->recover == true && (*i)->qty != 0)
 				_base->getStorageItems()->addItem((*i)->item, (*i)->qty);
 		}
 
@@ -1676,21 +1661,15 @@ void DebriefingState::reequipCraft(Craft* craft) // private.
 
 		if (qtyBase >= i->second)
 		{
-			_base->getStorageItems()->removeItem(
-											i->first,
-											i->second);
+			_base->getStorageItems()->removeItem(i->first, i->second);
 //			used = i->second; // kL
 		}
 		else
 		{
-			_base->getStorageItems()->removeItem(
-											i->first,
-											qtyBase);
+			_base->getStorageItems()->removeItem(i->first, qtyBase);
 
 			qtyLost = i->second - qtyBase;
-			craft->getCraftItems()->removeItem(
-											i->first,
-											qtyLost);
+			craft->getCraftItems()->removeItem(i->first, qtyLost);
 //											i->second - qtyBase); // kL
 //			used = qtyLost; // kL
 
@@ -1875,7 +1854,7 @@ void DebriefingState::reequipCraft(Craft* craft) // private.
 
 /**
  * Recovers items from the battlescape.
- * Converts the battlescape inventory into a geoscape itemcontainer.
+ * @note Converts the battlescape inventory into a geoscape itemcontainer.
  * @param battleItems - pointer to a vector of pointers to BattleItems on the battlescape
  */
 void DebriefingState::recoverItems(std::vector<BattleItem*>* const battleItems) // private.
@@ -1924,7 +1903,7 @@ void DebriefingState::recoverItems(std::vector<BattleItem*>* const battleItems) 
 									|| (unit->getUnitStatus() == STATUS_LIMBO // kL_tentative.
 										&& unit->isOut_t(OUT_HLTH) == true)))
 							{
-								//Log(LOG_INFO) << ". . corpse = " << itRule->getType();
+								//Log(LOG_INFO) << ". . corpse = " << itRule->getType() << " id-" << unit->getId();
 								addStat(
 									"STR_ALIEN_CORPSES_RECOVERED",
 									unit->getValue() / 3); // This should rather be the 'recoveryPoints' of the corpse item!
@@ -1996,7 +1975,7 @@ void DebriefingState::recoverLiveAlien(BattleUnit* const unit) // private.
 	}
 	else if (_base->getAvailableContainment() != 0)
 	{
-		//Log(LOG_INFO) << ". . . alienLive = " << unit->getType();
+		//Log(LOG_INFO) << ". . . alienLive = " << unit->getType() << " id-" << unit->getId();
 		const std::string type = unit->getType();
 
 		int value;

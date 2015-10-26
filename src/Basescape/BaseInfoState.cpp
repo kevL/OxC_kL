@@ -672,28 +672,33 @@ void BaseInfoState::miniClick(Action*)
  */
 void BaseInfoState::viewMouseOver(Action*)
 {
-	const size_t baseId = _mini->getHoveredBase();
-	const Base* const hoverBase = _baseList->at(baseId);
-	if (baseId < _baseList->size()
-		&& hoverBase != _base)
-	{
-		_txtHoverBase->setText(hoverBase->getName(_game->getLanguage()).c_str());
+	bool clearText = true;
 
-		for (std::vector<Region*>::const_iterator
-				i = _game->getSavedGame()->getRegions()->begin();
-				i != _game->getSavedGame()->getRegions()->end();
-				++i)
+	const size_t baseId = _mini->getHoveredBase();
+	if (baseId < _baseList->size())
+	{
+		const Base* const hoverBase = _baseList->at(baseId);
+		if (hoverBase != _base)
 		{
-			if ((*i)->getRules()->insideRegion(
-											hoverBase->getLongitude(),
-											hoverBase->getLatitude()))
+			clearText = false;
+			_txtHoverBase->setText(hoverBase->getName(_game->getLanguage()).c_str());
+			for (std::vector<Region*>::const_iterator
+					i = _game->getSavedGame()->getRegions()->begin();
+					i != _game->getSavedGame()->getRegions()->end();
+					++i)
 			{
-				_txtHoverRegion->setText(tr((*i)->getRules()->getType()));
-				break;
+				if ((*i)->getRules()->insideRegion(
+												hoverBase->getLongitude(),
+												hoverBase->getLatitude()))
+				{
+					_txtHoverRegion->setText(tr((*i)->getRules()->getType()));
+					break;
+				}
 			}
 		}
 	}
-	else
+
+	if (clearText == true)
 	{
 		_txtHoverBase->setText(L"");
 		_txtHoverRegion->setText(L"");

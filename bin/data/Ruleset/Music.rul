@@ -65,7 +65,7 @@ music:
   - type: TAC_DEBRIEFING_BAD
     files: [ 12TACTIC ]
   - type: TAC_AWARDS
-    files: [ GMMARS, PSMARS, LCDEBRIEF ]
+    files: [ PSMARS, LCDEBRIEF ] #GMMARS loops; TAC_AWARDS-type is set to not loop; find a use for GMMARS elsewhere
 # -------- extra -------- #
   - type: BASE_AWARDS #defined in code but not used.
     files: [ 12MARS ]

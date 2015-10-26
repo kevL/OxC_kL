@@ -3117,14 +3117,14 @@ bool BattleUnit::checkAmmo()
 
 /**
  * Check if this unit is in the exit area.
- * @param stt - type of exit tile to check for (default START_POINT)
+ * @param tileType - type of exit tile to check for (default START_POINT)
  * @return, true if unit is in a special exit area
  */
-bool BattleUnit::isInExitArea(SpecialTileType stt) const
+bool BattleUnit::isInExitArea(SpecialTileType tileType) const
 {
 	return _tile != NULL
 		&& _tile->getMapData(O_FLOOR) != NULL
-		&& _tile->getMapData(O_FLOOR)->getSpecialType() == stt;
+		&& _tile->getMapData(O_FLOOR)->getSpecialType() == tileType;
 }
 
 /**

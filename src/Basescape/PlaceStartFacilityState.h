@@ -44,9 +44,9 @@ private:
 	public:
 		/// Creates the Place Facility state.
 		PlaceStartFacilityState(
-				Base* base,
-				SelectStartFacilityState* select,
-				RuleBaseFacility* rule);
+				Base* const base,
+				SelectStartFacilityState* const select,
+				const RuleBaseFacility* const facRule);
 		/// Cleans up the Place Facility state.
 		~PlaceStartFacilityState();
 

@@ -127,7 +127,7 @@ private:
 		void load(
 				const YAML::Node& node,
 				SavedGame* const gameSave,
-				bool firstBase,
+				bool firstBase = false,
 				bool skirmish = false);
 		/// Saves this Base to YAML.
 		YAML::Node save() const;
@@ -303,7 +303,7 @@ private:
 		bool getBaseExposed() const;
 
 		/// Sets this base as placed and in operation.
-		void setBasePlaced(bool placed = true);
+		void setBasePlaced();
 		/// Gets if this base has been placed on the Globe.
 		bool getBasePlaced() const;
 

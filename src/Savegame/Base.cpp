@@ -174,8 +174,8 @@ Base::~Base()
  * Loads a base from a YAML file.
  * @param node		- reference a YAML node
  * @param gameSave	- pointer to SavedGame
- * @param firstBase	- true if this is the first Base of a new game
- * @param skirmish	- true if this is the Base of a skirmish game
+ * @param firstBase	- true if this is the first Base of a new game (default false)
+ * @param skirmish	- true if this is the Base of a skirmish game (default false)
  */
 void Base::load(
 		const YAML::Node& node,
@@ -183,15 +183,15 @@ void Base::load(
 		bool firstBase,
 		bool skirmish)
 {
+	//Log(LOG_INFO) << "Base load()";
 	Target::load(node);
 
 	_name = Language::utf8ToWstr(node["name"].as<std::string>(""));
-	_placed = true;
 
-	if (firstBase == false
-		|| skirmish == true
-		|| Options::customInitialBase == false)
+	if (firstBase == false || skirmish == true)
+//		|| Options::customInitialBase == false)
 	{
+		_placed = true;
 		for (YAML::const_iterator
 				i = node["facilities"].begin();
 				i != node["facilities"].end();
@@ -2060,12 +2060,11 @@ bool Base::getBaseExposed() const
 }
 
 /**
- * Sets if this Base has been placed and is in operation.
- * @param placed - true if placed (default true)
+ * Sets this Base as placed and in operation.
  */
-void Base::setBasePlaced(bool placed)
+void Base::setBasePlaced()
 {
-	_placed = placed;
+	_placed = true;
 }
 
 /**

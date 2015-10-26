@@ -61,17 +61,17 @@ PlaceFacilityState::PlaceFacilityState(
 {
 	_screen = false;
 
-	_window			= new Window(this, 128, 160, 192, 40);
+	_window			= new Window(this, 128, 160, 192, 38);
 
 	_view			= new BaseView(192, 192, 0, 8);
 
-	_txtFacility	= new Text(110,  9, 202,  50);
-	_txtCost		= new Text(110,  9, 202,  62);
-	_numCost		= new Text(110, 17, 202,  70);
-	_txtTime		= new Text(110,  9, 202,  90);
-	_numTime		= new Text(110, 17, 202,  98);
-	_txtMaintenance	= new Text(110,  9, 202, 118);
-	_numMaintenance	= new Text(110, 17, 202, 126);
+	_txtFacility	= new Text(110,  9, 202,  48);
+	_txtCost		= new Text(110,  9, 202,  60);
+	_numCost		= new Text(110, 17, 202,  68);
+	_txtTime		= new Text(110,  9, 202,  88);
+	_numTime		= new Text(110, 17, 202,  96);
+	_txtMaintenance	= new Text(110,  9, 202, 116);
+	_numMaintenance	= new Text(110, 17, 202, 124);
 
 	_btnCancel		= new TextButton(112, 16, 200, 176);
 
@@ -166,10 +166,7 @@ void PlaceFacilityState::viewClick(Action*)
 	}
 	else
 	{
-		BaseFacility* const fac = new BaseFacility(
-												_facRule,
-												_base);
-
+		BaseFacility* const fac = new BaseFacility(_facRule, _base);
 		fac->setX(_view->getGridX());
 		fac->setY(_view->getGridY());
 		fac->setBuildTime(_facRule->getBuildTime());

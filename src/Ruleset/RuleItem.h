@@ -24,7 +24,8 @@
 //#include <vector>
 //#include <yaml-cpp/yaml.h>
 
-#include "../Battlescape/BattlescapeGame.h" // kL, BattleActionType
+#include "../Battlescape/BattlescapeGame.h" // BattleActionType
+
 
 
 namespace OpenXcom
@@ -44,7 +45,6 @@ enum DamageType
 	DT_SMOKE	// 9
 };
 
-
 enum BattleType
 {
 	BT_NONE,			// 0
@@ -59,6 +59,26 @@ enum BattleType
 	BT_PSIAMP,			// 9
 	BT_FLARE,			// 10
 	BT_CORPSE			// 11
+};
+
+enum SpecialTileType
+{
+	STT_NONE = -1,			// -1
+	TILE,					//  0
+	START_POINT,			//  1
+	UFO_POWER_SOURCE,		//  2
+	UFO_NAVIGATION,			//  3
+	UFO_CONSTRUCTION,		//  4
+	ALIEN_FOOD,				//  5
+	ALIEN_REPRODUCTION,		//  6
+	ALIEN_ENTERTAINMENT,	//  7
+	ALIEN_SURGERY,			//  8
+	EXAM_ROOM,				//  9
+	ALIEN_ALLOYS,			// 10
+	ALIEN_HABITAT,			// 11
+	DEAD_TILE,				// 12
+	END_POINT,				// 13
+	MUST_DESTROY			// 14
 };
 
 
@@ -124,7 +144,6 @@ private:
 		_power,
 		_shotgunPellets,
 		_shotgunPattern,
-		_specialType,
 
 		_accuracyAimed,
 		_accuracyAuto,
@@ -166,6 +185,9 @@ private:
 
 	BattleType _battleType;
 	DamageType _damageType;
+
+	SpecialTileType _specialType;
+//	int _specialType;
 
 	std::vector<std::string>
 		_compatibleAmmo,
@@ -382,8 +404,9 @@ private:
 
 		/// Checks if LOS is required to use this item (only applies to psionic type items)
 		bool isLosRequired() const;
+
 		/// Gets the associated special type of this item.
-		int getSpecialType() const;
+		SpecialTileType getSpecialType() const;
 
 		/// Gets the item's default BattleAction.
 		BattleActionType getDefaultAction(bool isPrimed = false) const;

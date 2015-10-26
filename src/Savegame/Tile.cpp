@@ -261,33 +261,33 @@ void Tile::saveBinary(Uint8** buffer) const
  * @param data		- pointer to MapData
  * @param dataID	- dataID
  * @param dataSetID	- dataSetID
- * @param part		- the part number
+ * @param partType	- the part type (MapData.h)
  */
 void Tile::setMapData(
 		MapData* const data,
 		const int dataID,
 		const int dataSetID,
-		const MapDataType part)
+		const MapDataType partType)
 {
-	_objects[part] = data;
-	_mapDataId[part] = dataID;
-	_mapDataSetId[part] = dataSetID;
+	_objects[partType] = data;
+	_mapDataId[partType] = dataID;
+	_mapDataSetId[partType] = dataSetID;
 }
 
 /**
  * Gets the MapData references of parts 0 to 3.
  * @param dataID	- pointer to dataID
  * @param dataSetID	- pointer to dataSetID
- * @param part		- the part number (MapData.h)
+ * @param partType	- the part type (MapData.h)
  * @return, the object ID
  */
 void Tile::getMapData(
 		int* dataID,
 		int* dataSetID,
-		MapDataType part) const
+		MapDataType partType) const
 {
-	*dataID = _mapDataId[part];
-	*dataSetID = _mapDataSetId[part];
+	*dataID = _mapDataId[partType];
+	*dataSetID = _mapDataSetId[partType];
 }
 
 /**
@@ -319,21 +319,21 @@ bool Tile::isVoid(
 
 /**
  * Gets the TU cost to move over a certain part of the tile.
- * @param part		- the part type (MapData.h)
+ * @param partType	- the part type (MapData.h)
  * @param moveType	- the movement type
  * @return, TU cost
  */
 int Tile::getTuCostTile(
-		MapDataType part,
+		MapDataType partType,
 		MovementType moveType) const
 {
-	if (_objects[part] != NULL
-		&& !(_objects[part]->isUfoDoor() == true
-			&& _curFrame[part] > 1)
-		&& !(part == O_OBJECT
-			&& _objects[part]->getBigwall() > BIGWALL_NWSE)) // ie. side-walls
+	if (_objects[partType] != NULL
+		&& !(_objects[partType]->isUfoDoor() == true
+			&& _curFrame[partType] > 1)
+		&& !(partType == O_OBJECT
+			&& _objects[partType]->getBigwall() > BIGWALL_NWSE)) // ie. side-walls
 	{
-		return _objects[part]->getTuCostPart(moveType);
+		return _objects[partType]->getTuCostPart(moveType);
 	}
 
 	return 0;
@@ -383,7 +383,6 @@ bool Tile::isBigWall() const
 int Tile::getTerrainLevel() const
 {
 	int level = 0;
-
 	if (_objects[static_cast<size_t>(O_FLOOR)] != NULL)
 		level = _objects[static_cast<size_t>(O_FLOOR)]->getTerrainLevel();
 
@@ -410,7 +409,6 @@ int Tile::getTerrainLevel() const
 int Tile::getFootstepSound(const Tile* const tileBelow) const
 {
 	int sound = -1;
-
 	if (_objects[static_cast<size_t>(O_OBJECT)] != NULL
 		&& _objects[static_cast<size_t>(O_OBJECT)]->getBigwall() < BIGWALL_NESW // ie. None or Block
 		&& _objects[static_cast<size_t>(O_OBJECT)]->getFootstepSound() > 0) // > -1
@@ -431,8 +429,8 @@ int Tile::getFootstepSound(const Tile* const tileBelow) const
 
 /**
  * Open a door on this Tile.
- * @param part		- a tile part type
- * @param unit		- pointer to a BattleUnit (default NULL)
+ * @param partType		- a tile part type (MapData.h)
+ * @param unit			- pointer to a BattleUnit (default NULL)
 // * @param reserved	- BattleActionType (BattlescapeGame.h) (default BA_NONE)
  * @return, -1 no door opened
  *			 0 normal door
@@ -441,13 +439,13 @@ int Tile::getFootstepSound(const Tile* const tileBelow) const
  *			 4 not enough TUs
  */
 int Tile::openDoor(
-		const MapDataType part,
+		const MapDataType partType,
 		const BattleUnit* const unit)
 //		const BattleActionType reserved)
 {
-	if (_objects[part] != NULL)
+	if (_objects[partType] != NULL)
 	{
-		if (_objects[part]->isDoor() == true)
+		if (_objects[partType]->isDoor() == true)
 		{
 			if (_unit != NULL
 				&& _unit != unit
@@ -457,39 +455,39 @@ int Tile::openDoor(
 			}
 
 			if (unit != NULL
-				&& unit->getTimeUnits() < _objects[part]->getTuCostPart(unit->getMoveTypeUnit()))
+				&& unit->getTimeUnits() < _objects[partType]->getTuCostPart(unit->getMoveTypeUnit()))
 //											+ unit->getActionTu(reserved, unit->getMainHandWeapon(false)))
 			{
 				return DR_ERR_TU;
 			}
 
 			setMapData(
-					_objects[part]->getDataset()->getObjects()->at(_objects[part]->getAltMCD()),
-					_objects[part]->getAltMCD(),
-					_mapDataSetId[part],
-					_objects[part]->getDataset()->getObjects()->at(_objects[part]->getAltMCD())->getPartType());
+					_objects[partType]->getDataset()->getObjects()->at(_objects[partType]->getAltMCD()),
+					_objects[partType]->getAltMCD(),
+					_mapDataSetId[partType],
+					_objects[partType]->getDataset()->getObjects()->at(_objects[partType]->getAltMCD())->getPartType());
 
-			setMapData(NULL,-1,-1, part);
+			setMapData(NULL,-1,-1, partType);
 
 			return DR_OPEN_WOOD;
 		}
 
-		if (_objects[part]->isUfoDoor() == true)
+		if (_objects[partType]->isUfoDoor() == true)
 		{
-			if (_curFrame[part] == 0) // ufo door part 0 - door is closed
+			if (_curFrame[partType] == 0) // ufo door part 0 - door is closed
 			{
 				if (unit != NULL
-					&& unit->getTimeUnits() < _objects[part]->getTuCostPart(unit->getMoveTypeUnit()))
+					&& unit->getTimeUnits() < _objects[partType]->getTuCostPart(unit->getMoveTypeUnit()))
 //												+ unit->getActionTu(reserved, unit->getMainHandWeapon(false)))
 				{
 					return DR_ERR_TU;
 				}
 
-				_curFrame[part] = 1; // start opening door
+				_curFrame[partType] = 1; // start opening door
 				return DR_OPEN_METAL;
 			}
 
-			if (_curFrame[part] != 7) // ufo door != part 7 -> door is still opening
+			if (_curFrame[partType] != 7) // ufo door != part 7 -> door is still opening
 				return DR_WAIT_METAL;
 		}
 	}
@@ -504,7 +502,6 @@ int Tile::openDoor(
 int Tile::closeUfoDoor()
 {
 	int ret = 0;
-
 	for (size_t
 			i = 0;
 			i != PARTS_TILE;
@@ -617,30 +614,30 @@ int Tile::getShade() const
  * because the object type of the old and new are not necessarily the same. If
  * the destroyed part is an explosive set the tile's explosive value which will
  * trigger a chained explosion.
- * @param part - this Tile's part for destruction (MapData.h)
- * @param type - SpecialTileType
- * @return, true if an 'objective' was destroyed
+ * @param partType	- this Tile's part for destruction (MapData.h)
+ * @param tileType	- SpecialTileType (RuleItem.h)
+ * @return, true if an objective-tilepart was destroyed
  */
 bool Tile::destroyTilepart(
-		MapDataType part,
-		SpecialTileType type)
+		MapDataType partType,
+		SpecialTileType tileType)
 {
 	bool objective = false;
 
-	if (_objects[part])
+	if (_objects[partType])
 	{
-		if (_objects[part]->isGravLift() == true
-			|| _objects[part]->getArmor() == 255) // <- set to 255 in MCD for Truly Indestructability.
+		if (_objects[partType]->isGravLift() == true
+			|| _objects[partType]->getArmor() == 255) // <- set to 255 in MCD for Truly Indestructability.
 		{
 			return false;
 		}
 
-		objective = (_objects[part]->getSpecialType() == type);
+		objective = (_objects[partType]->getSpecialType() == tileType);
 
-		const MapData* const partOrg = _objects[part];
-		const int origMapDataSetID = _mapDataSetId[part];
+		const MapData* const partOrg = _objects[partType];
+		const int origMapDataSetID = _mapDataSetId[partType];
 
-		setMapData(NULL,-1,-1, part);
+		setMapData(NULL,-1,-1, partType);
 
 		if (partOrg->getDieMCD() != 0)
 		{
@@ -658,7 +655,7 @@ bool Tile::destroyTilepart(
 					partOrg->getExplosiveType());
 	}
 
-	if (part == O_FLOOR) // check if the floor on the lowest level is gone.
+	if (partType == O_FLOOR) // check if the floor on the lowest level is gone.
 	{
 		if (_pos.z == 0 && _objects[O_FLOOR] == NULL)
 			setMapData( // replace with scorched earth
@@ -668,7 +665,7 @@ bool Tile::destroyTilepart(
 		if (_objects[O_OBJECT] != NULL // destroy the object if floor is gone.
 			&& _objects[O_OBJECT]->getBigwall() == BIGWALL_NONE)
 		{
-			destroyTilepart(O_OBJECT, type); // stop floating haybales.
+			destroyTilepart(O_OBJECT, tileType); // stop floating haybales.
 		}
 	}
 
@@ -677,21 +674,21 @@ bool Tile::destroyTilepart(
 
 /**
  * Damages terrain (check against terrain-part armor/hitpoints/constitution).
- * @param part	- part of tile to check (MapData.h)
- * @param power	- power of the damage
- * @param type	- SpecialTileType
+ * @param partType	- part of tile to check (MapData.h)
+ * @param power		- power of the damage
+ * @param tileType	- SpecialTileType (RuleItem.h)
  * @return, true if an objective was destroyed
  */
 bool Tile::hitTile(
-		MapDataType part,
+		MapDataType partType,
 		int power,
-		SpecialTileType type)
+		SpecialTileType tileType)
 {
-	//Log(LOG_INFO) << "Tile::damage() vs part = " << part << ", hp = " << _objects[part]->getArmor();
+	//Log(LOG_INFO) << "Tile::damage() vs partType = " << partType << ", hp = " << _objects[partType]->getArmor();
 	bool objectiveDestroyed = false;
 
-	if (power >= _objects[part]->getArmor())
-		objectiveDestroyed = destroyTilepart(part, type);
+	if (power >= _objects[partType]->getArmor())
+		objectiveDestroyed = destroyTilepart(partType, tileType);
 
 	return objectiveDestroyed;
 }
@@ -764,12 +761,12 @@ int Tile::getFlammability() const
 /**
  * Gets the flammability of a tile-part.
  * @note I now decree that this returns the inverse of 0..255 as a percentage!
- * @param part - the part to check (MapData.h)
+ * @param partType - the part to check (MapData.h)
  * @return, the lower the value the higher the chance the tile-part catches fire - BSZAAST!!!
  */
-int Tile::getFlammability(MapDataType part) const
+int Tile::getFlammability(MapDataType partType) const
 {
-	return convertBurnToPct(_objects[part]->getFlammable());
+	return convertBurnToPct(_objects[partType]->getFlammable());
 }
 
 /**
@@ -798,12 +795,12 @@ int Tile::convertBurnToPct(int burn) const // private.
  * Gets the fuel of a tile-part.
  * @note Fuel of a tile is the highest fuel of its parts/objects.
  * @note This is NOT the sum of the fuel of the objects!
- * @param part - the part to check or O_NULTYPE to check all parts (default O_NULTYPE)
+ * @param partType - the part to check or O_NULTYPE to check all parts (default O_NULTYPE) (MapData.h)
  * @return, turns to burn
  */
-int Tile::getFuel(MapDataType part) const
+int Tile::getFuel(MapDataType partType) const
 {
-	if (part == O_NULTYPE)
+	if (partType == O_NULTYPE)
 	{
 		int fuel = 0;
 
@@ -822,7 +819,7 @@ int Tile::getFuel(MapDataType part) const
 		return fuel;
 	}
 
-	return _objects[part]->getFuel();
+	return _objects[partType]->getFuel();
 }
 
 /**

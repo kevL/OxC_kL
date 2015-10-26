@@ -50,8 +50,8 @@ namespace OpenXcom
  * @param firstBase	- true if this a custom starting base
  */
 PlaceLiftState::PlaceLiftState(
-		Base* base,
-		Globe* globe,
+		Base* const base,
+		Globe* const globe,
 		bool firstBase)
 	:
 		_base(base),
@@ -105,6 +105,7 @@ void PlaceLiftState::viewClick(Action*)
 	fac->setY(_view->getGridY());
 
 	_base->getFacilities()->push_back(fac);
+	_base->setBasePlaced();
 
 	_game->popState();
 	BasescapeState* const baseState = new BasescapeState(_base, _globe);

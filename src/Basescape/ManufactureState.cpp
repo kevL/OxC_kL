@@ -375,12 +375,10 @@ void ManufactureState::miniClick(Action*)
 	if (_state != NULL) // cannot switch bases if coming from geoscape.
 	{
 		const size_t baseId = _mini->getHoveredBase();
-
 		if (baseId < _baseList->size())
 		{
 			Base* const base = _baseList->at(baseId);
-			if (base != _base
-				&& base->hasProduction() == true)
+			if (base != _base && base->hasProduction() == true)
 			{
 				_txtHoverBase->setText(L"");
 
@@ -402,7 +400,6 @@ void ManufactureState::miniClick(Action*)
 void ManufactureState::viewMouseOver(Action*)
 {
 	const size_t baseId = _mini->getHoveredBase();
-
 	if (baseId < _baseList->size()
 		&& _base != _baseList->at(baseId)
 		&& _baseList->at(baseId)->hasProduction() == true)

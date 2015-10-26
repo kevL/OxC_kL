@@ -44,9 +44,9 @@ private:
 	public:
 		/// Creates the Build Facilities state.
 		SelectStartFacilityState(
-				Base* base,
-				State* state,
-				Globe* globe);
+				Base* const base,
+				State* const state,
+				Globe* const globe);
 		/// Cleans up the Build Facilities state.
 		~SelectStartFacilityState();
 

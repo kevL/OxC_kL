@@ -60,8 +60,8 @@ protected:
 	public:
 		/// Creates the Build Facilities state.
 		BuildFacilitiesState(
-				Base* base,
-				State* state);
+				Base* const base,
+				State* const state);
 		/// Cleans up the Build Facilities state.
 		~BuildFacilitiesState();
 

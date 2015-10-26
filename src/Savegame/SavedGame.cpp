@@ -583,7 +583,7 @@ void SavedGame::load(
 			++i)
 	{
 		Base* const b (new Base(_rules));
-		b->load(*i, this, false);
+		b->load(*i, this);
 		_bases.push_back(b);
 	}
 

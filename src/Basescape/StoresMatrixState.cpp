@@ -146,11 +146,11 @@ StoresMatrixState::StoresMatrixState(const Base* base)
 
 	for (size_t
 		i = 0;
-		i != MTX_BASES;
+		i != gameSave->getBases()->size();
 		++i)
 	{
 		base = gameSave->getBases()->at(i);
-		if (base != NULL)
+		if (base != NULL) // safety.
 		{
 			qty[i] = base->getTotalSoldiers();
 			qtyScientist[i] = base->getTotalScientists();
@@ -179,8 +179,6 @@ StoresMatrixState::StoresMatrixState(const Base* base)
 				case 7: _txtBase_7->setText(woststr.str().c_str());
 			}
 		}
-		else
-			break;
 	}
 
 	_txtBase_0->setColor(WHITE);

@@ -132,20 +132,20 @@ protected:
 		 * @param part - the part 0-3
 		 * @return, pointer to MapData
 		 */
-		MapData* getMapData(MapDataType part) const
-		{ return _objects[part]; }
+		MapData* getMapData(MapDataType partType) const
+		{ return _objects[partType]; }
 
 		/// Sets the pointer to the mapdata for a specific part of the Tile.
 		void setMapData(
 				MapData* const data,
 				const int dataID,
 				const int dataSetID,
-				const MapDataType part);
+				const MapDataType partType);
 		/// Gets the IDs of the mapdata for a specific part of the Tile.
 		void getMapData(
 				int* dataID,
 				int* dataSetID,
-				MapDataType part) const;
+				MapDataType partType) const;
 
 		/// Gets whether this tile has no objects
 		bool isVoid(
@@ -154,7 +154,7 @@ protected:
 
 		/// Gets the TU cost to walk over a certain part of the Tile.
 		int getTuCostTile(
-				MapDataType part,
+				MapDataType partType,
 				MovementType moveType) const;
 
 		/// Checks if this tile has a floor.
@@ -178,7 +178,7 @@ protected:
 
 		/// Opens a door.
 		int openDoor(
-				const MapDataType part,
+				const MapDataType partType,
 				const BattleUnit* const unit = NULL);
 //				const BattleActionType reserved = BA_NONE);
 		/**
@@ -186,13 +186,13 @@ protected:
 		 * @note Used for visibility/light blocking checks. This function
 		 * assumes that there never are 2 doors on 1 tile or a door and another
 		 * wall on 1 tile.
-		 * @param part - the tile part to consider
+		 * @param partType - the tile part to consider
 		 * @return, true if ufo-door is valid and not closed
 		 */
-		bool isUfoDoorOpen(MapDataType part) const
-		{	return _objects[part] != NULL
-				&& _objects[part]->isUfoDoor() == true
-				&& _curFrame[part] != 0; }
+		bool isUfoDoorOpen(MapDataType partType) const
+		{	return _objects[partType] != NULL
+				&& _objects[partType]->isUfoDoor() == true
+				&& _curFrame[partType] != 0; }
 		/// Closes ufo door.
 		int closeUfoDoor();
 
@@ -214,13 +214,13 @@ protected:
 
 		/// Destroys a tile part.
 		bool destroyTilepart(
-				MapDataType part,
-				SpecialTileType type);
+				MapDataType partType,
+				SpecialTileType tileType);
 		/// Damages a tile part.
 		bool hitTile(
-				MapDataType part,
+				MapDataType partType,
 				int power,
-				SpecialTileType type);
+				SpecialTileType tileType);
 
 		/// Sets a virtual explosive on this tile to detonate later.
 		void setExplosive(
@@ -235,10 +235,10 @@ protected:
 		/// Gets flammability.
 		int getFlammability() const;
 		/// Gets flammability of part.
-		int getFlammability(MapDataType part) const;
+		int getFlammability(MapDataType partType) const;
 
 		/// Gets turns to burn of part.
-		int getFuel(MapDataType part = O_NULTYPE) const;
+		int getFuel(MapDataType partType = O_NULTYPE) const;
 
 		/// Tries to start fire on this Tile.
 		bool ignite(int power);

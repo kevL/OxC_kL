@@ -19,6 +19,7 @@
 
 #include "SelectStartFacilityState.h"
 
+#include "BasescapeState.h" // resetStoresWarning
 #include "PlaceLiftState.h"
 #include "PlaceStartFacilityState.h"
 
@@ -40,26 +41,24 @@ namespace OpenXcom
 {
 
 /**
- * Initializes all the elements in the Build Facilities window.
+ * Initializes all the elements in the Select Start Facility window.
  * @param base	- pointer to the Base to get info from
  * @param state	- pointer to the base State to refresh
  * @param globe	- pointer to the Globe to refresh
  */
 SelectStartFacilityState::SelectStartFacilityState(
-		Base* base,
-		State* state,
-		Globe* globe)
+		Base* const base,
+		State* const state,
+		Globe* const globe)
 	:
-		BuildFacilitiesState(
-			base,
-			state),
+		BuildFacilitiesState(base, state),
 		_globe(globe)
 {
 	_facilities = _game->getRuleset()->getCustomBaseFacilities();
 
 	_btnOk->setText(tr("STR_RESET"));
 	_btnOk->onMouseClick((ActionHandler)& SelectStartFacilityState::btnOkClick);
-	_btnOk->onKeyboardPress(0, Options::keyCancel);
+	_btnOk->onKeyboardPress(NULL, Options::keyCancel);
 
 	_lstFacilities->onMouseClick((ActionHandler)& SelectStartFacilityState::lstFacilitiesClick);
 
@@ -78,20 +77,17 @@ SelectStartFacilityState::~SelectStartFacilityState()
 void SelectStartFacilityState::populateBuildList() // virtual. Cf, BuildFacilitiesState::PopulateBuildList()
 {
 	_lstFacilities->clearList();
-
 	for (std::vector<RuleBaseFacility*>::iterator
 			i = _facilities.begin();
 			i != _facilities.end();
 			++i)
 	{
-		_lstFacilities->addRow(
-							1,
-							tr((*i)->getType()).c_str());
+		_lstFacilities->addRow(1, tr((*i)->getType()).c_str());
 	}
 }
 
 /**
- * Resets the base building.
+ * Resets the base-building procedure.
  * @param action - pointer to an Action
  */
 void SelectStartFacilityState::btnOkClick(Action*)
@@ -109,10 +105,7 @@ void SelectStartFacilityState::btnOkClick(Action*)
 	_game->popState();
 	_game->popState();
 
-	_game->pushState(new PlaceLiftState(
-									_base,
-									_globe,
-									true));
+	_game->pushState(new PlaceLiftState(_base, _globe, true));
 }
 
 /**
@@ -122,8 +115,7 @@ void SelectStartFacilityState::btnOkClick(Action*)
 void SelectStartFacilityState::lstFacilitiesClick(Action*)
 {
 	_game->pushState(new PlaceStartFacilityState(
-											_base,
-											this,
+											_base, this,
 											_facilities[_lstFacilities->getSelectedRow()]));
 }
 
@@ -139,6 +131,9 @@ void SelectStartFacilityState::facilityBuilt()
 	{
 		_game->popState();
 		_game->popState();
+
+		BasescapeState* const basescape = dynamic_cast<BasescapeState*>(_state);
+		basescape->resetStoresWarning();
 	}
 	else
 		populateBuildList();

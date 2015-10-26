@@ -48,11 +48,11 @@ private:
 		_firstBase,
 		_showRadar;
 	int
-		_mousex,
-		_mousey;
+		_mX,
+		_mY;
 	double
-		_oldlat,
-		_oldlon;
+		_latOld,
+		_lonOld;
 
 	Base* _base;
 	Globe* _globe;

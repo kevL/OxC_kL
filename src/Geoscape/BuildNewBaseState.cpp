@@ -67,10 +67,10 @@ BuildNewBaseState::BuildNewBaseState(
 		_base(base),
 		_globe(globe),
 		_firstBase(firstBase),
-		_oldlat(0.),
-		_oldlon(0.),
-		_mousex(0),
-		_mousey(0)
+		_latOld(0.),
+		_lonOld(0.),
+		_mX(0),
+		_mY(0)
 {
 	_screen = false;
 
@@ -179,7 +179,6 @@ BuildNewBaseState::~BuildNewBaseState()
 void BuildNewBaseState::init()
 {
 	State::init();
-
 	_globe->onMouseOver((ActionHandler)& BuildNewBaseState::globeHover);
 	_globe->setNewBaseHover();
 }
@@ -210,8 +209,8 @@ void BuildNewBaseState::handle(Action* action)
  */
 void BuildNewBaseState::globeHover(Action* action)
 {
-	_mousex = static_cast<int>(std::floor(action->getAbsoluteXMouse()));
-	_mousey = static_cast<int>(std::floor(action->getAbsoluteYMouse()));
+	_mX = static_cast<int>(std::floor(action->getAbsoluteXMouse()));
+	_mY = static_cast<int>(std::floor(action->getAbsoluteYMouse()));
 
 	if (_hoverTimer->isRunning() == false)
 		_hoverTimer->start();
@@ -223,30 +222,23 @@ void BuildNewBaseState::globeHover(Action* action)
 void BuildNewBaseState::hoverRedraw()
 {
 	double
-		lon,
-		lat;
+		lon,lat;
 	_globe->cartToPolar(
-					static_cast<Sint16>(_mousex),
-					static_cast<Sint16>(_mousey),
-					&lon,
-					&lat);
+					static_cast<Sint16>(_mX),
+					static_cast<Sint16>(_mY),
+					&lon, &lat);
 
-	if (lon == lon
-		&& lat == lat)
+	if (lon == lon && lat == lat)
 	{
-		_globe->setNewBaseHoverPos(
-								lon,
-								lat);
+		_globe->setNewBaseHoverPos(lon,lat);
 		_globe->setNewBaseHover();
 	}
 
 	if (Options::globeRadarLines == true
-		&& !(
-			AreSame(_oldlat, lat) && AreSame(_oldlon, lon)))
+		&& !(AreSame(_latOld, lat) && AreSame(_lonOld, lon)))
 	{
-		_oldlat = lat;
-		_oldlon = lon;
-
+		_latOld = lat;
+		_lonOld = lon;
 		_globe->invalidate();
 	}
 }
@@ -261,21 +253,17 @@ void BuildNewBaseState::globeClick(Action* action)
 	if (mouseY > _window->getHeight())
 	{
 		const int mouseX = static_cast<int>(std::floor(action->getAbsoluteXMouse()));
-
 		double
-			lon,
-			lat;
+			lon,lat;
 		_globe->cartToPolar(
 						static_cast<Sint16>(mouseX),
 						static_cast<Sint16>(mouseY),
-						&lon,
-						&lat);
+						&lon, &lat);
 
 		if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 		{
 			if (_globe->insideLand(lon, lat) == true)
 			{
-				_base->setBasePlaced();
 				_base->setLongitude(lon);
 				_base->setLatitude(lat);
 
@@ -289,14 +277,9 @@ void BuildNewBaseState::globeClick(Action* action)
 				}
 
 				if (_firstBase == true)
-					_game->pushState(new BaseNameState(
-													_base,
-													_globe,
-													true));
+					_game->pushState(new BaseNameState(_base, _globe, true));
 				else
-					_game->pushState(new ConfirmNewBaseState(
-														_base,
-														_globe));
+					_game->pushState(new ConfirmNewBaseState(_base, _globe));
 			}
 			else
 				_game->pushState(new ErrorMessageState(

@@ -51,8 +51,8 @@ namespace OpenXcom
  * @param globe	- pointer to the Geoscape globe
  */
 ConfirmNewBaseState::ConfirmNewBaseState(
-		Base* base,
-		Globe* globe)
+		Base* const base,
+		Globe* const globe)
 	:
 		_base(base),
 		_globe(globe),
@@ -63,7 +63,7 @@ ConfirmNewBaseState::ConfirmNewBaseState(
 	_window		= new Window(this, 224, 72, 16, 64);
 	_txtCost	= new Text(120, 9, 68, 80);
 	_txtArea	= new Text(120, 9, 68, 90);
-	_btnCancel	= new TextButton(54, 14, 68, 106);
+	_btnCancel	= new TextButton(54, 14,  68, 106);
 	_btnOk		= new TextButton(54, 14, 138, 106);
 
 	setInterface("geoscape");
@@ -79,7 +79,6 @@ ConfirmNewBaseState::ConfirmNewBaseState(
 
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
-	std::wstring region;
 	for (std::vector<Region*>::const_iterator
 			i = _game->getSavedGame()->getRegions()->begin();
 			i != _game->getSavedGame()->getRegions()->end();
@@ -90,13 +89,11 @@ ConfirmNewBaseState::ConfirmNewBaseState(
 										_base->getLatitude()))
 		{
 			_cost = (*i)->getRules()->getBaseCost();
-			region = tr((*i)->getRules()->getType());
-
+			_txtCost->setText(tr("STR_COST_").arg(Text::formatFunding(_cost)));
+			_txtArea->setText(tr("STR_AREA_").arg(tr((*i)->getRules()->getType())));
 			break;
 		}
 	}
-	_txtCost->setText(tr("STR_COST_").arg(Text::formatFunding(_cost)));
-	_txtArea->setText(tr("STR_AREA_").arg(region));
 
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
 	_btnCancel->onMouseClick((ActionHandler)& ConfirmNewBaseState::btnCancelClick);
@@ -109,6 +106,9 @@ ConfirmNewBaseState::ConfirmNewBaseState(
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& ConfirmNewBaseState::btnOkClick,
 					Options::keyOk);
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& ConfirmNewBaseState::btnOkClick,
+					Options::keyOkKeypad);
 }
 
 /**
@@ -129,9 +129,7 @@ void ConfirmNewBaseState::btnOkClick(Action*)
 		_base->setCashSpent(_cost);
 
 		_game->getSavedGame()->getBases()->push_back(_base);
-		_game->pushState(new BaseNameState(
-										_base,
-										_globe));
+		_game->pushState(new BaseNameState(_base, _globe));
 	}
 	else
 		_game->pushState(new ErrorMessageState(
@@ -148,7 +146,7 @@ void ConfirmNewBaseState::btnOkClick(Action*)
  */
 void ConfirmNewBaseState::btnCancelClick(Action*)
 {
-	_globe->onMouseOver(0);
+	_globe->onMouseOver(NULL);
 	_game->popState();
 }
 
