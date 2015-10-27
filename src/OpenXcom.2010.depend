@@ -5967,7 +5967,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1445968693 source:f:\git\openxcom\src\battlescape\map.cpp
+1445969088 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	"BattlescapeMessage.h"
 	"BattlescapeState.h"
@@ -6062,7 +6062,7 @@
 	"Position.h"
 	"../Engine/InteractiveSurface.h"
 
-1445968200 source:f:\git\openxcom\src\battlescape\minimapview.cpp
+1445969748 source:f:\git\openxcom\src\battlescape\minimapview.cpp
 	"MiniMapView.h"
 	"Camera.h"
 	"MiniMapState.h"
@@ -6154,7 +6154,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1445909539 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
+1445971896 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
 	"ProjectileFlyBState.h"
 	"AlienBAIState.h"
 	"BattlescapeState.h"
@@ -6327,7 +6327,7 @@
 	"../Savegame/BattleUnit.h"
 	"../Savegame/SavedBattleGame.h"
 
-1445727849 source:f:\git\openxcom\src\battlescape\unitwalkbstate.cpp
+1445973768 source:f:\git\openxcom\src\battlescape\unitwalkbstate.cpp
 	"UnitWalkBState.h"
 	"BattlescapeState.h"
 	"Camera.h"

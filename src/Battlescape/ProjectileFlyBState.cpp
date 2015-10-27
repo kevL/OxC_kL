@@ -517,8 +517,10 @@ bool ProjectileFlyBState::createNewProjectile() // private.
 				&& _ammo->getRules()->getExplosionRadius() != -1)
 			{
 				const Tile* const tile = _battleSave->getTile(_parent->getMap()->getProjectile()->getFinalPosition());
-				if (tile->getMapData(O_OBJECT)->getBigwall() == BIGWALL_NESW
-					|| tile->getMapData(O_OBJECT)->getBigwall() == BIGWALL_NWSE)
+				if (tile != NULL // safety.
+					&& tile->getMapData(O_OBJECT) != NULL
+					&& (tile->getMapData(O_OBJECT)->getBigwall() == BIGWALL_NESW
+						|| tile->getMapData(O_OBJECT)->getBigwall() == BIGWALL_NWSE))
 				{
 //					prj->storeProjectileDirection();		// kL: used to handle explosions against diagonal bigWalls.
 					_prjVector = prj->getStrikeVector();	// ^supercedes above^ storeProjectileDirection()

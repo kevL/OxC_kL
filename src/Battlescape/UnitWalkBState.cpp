@@ -89,11 +89,13 @@ void UnitWalkBState::init()
 {
 	//Log(LOG_INFO) << "\nUnitWalkBState::init() unitID = " << _unit->getId();
 	//Log(LOG_INFO) << ". walking from " << _unit->getPosition() << " to " << _action.target;
-	_pf->setPathingUnit(_unit);
+	if (_unit->getFaction() != FACTION_PLAYER)
+		_walkCam->centerOnPosition(_unit->getPosition());
 
 	// This is used only for aLiens:
 	_unitsSpotted = _unit->getHostileUnitsThisTurn().size();
 
+	_pf->setPathingUnit(_unit);
 	_dirStart = _pf->getStartDirection();
 	//Log(LOG_INFO) << ". strafe = " << (int)_action.strafe;
 	//Log(LOG_INFO) << ". StartDirection(init) = " << _dirStart;
@@ -300,8 +302,12 @@ bool UnitWalkBState::doStatusStand() // private.
 
 	const Position pos = _unit->getPosition();
 
-	if (_unit->getFaction() != FACTION_PLAYER)
+	if (_isVisible == true
+		&& _unit->getFaction() != FACTION_PLAYER
+		&& _walkCam->isOnScreen(_unit->getPosition()) == false)
+	{
 		_walkCam->centerOnPosition(pos);
+	}
 
 	if (dir == Pathfinding::DIR_DOWN)
 		_walkCam->setViewLevel(pos.z - 1);

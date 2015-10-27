@@ -284,7 +284,7 @@ void MiniMapView::draw()
 	else Log(LOG_INFO) << "ERROR: MiniMapView SCANG.DAT not available";
 
 
-	//looks like the crosshairs for the MiniMap
+	// looks like the crosshairs for the MiniMap
 	const Sint16
 		centerX = static_cast<Sint16>(width / 2) - 1,
 		centerY = static_cast<Sint16>(height / 2) - 1,
