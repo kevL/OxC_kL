@@ -78,7 +78,7 @@ void ScannerView::draw()
 		yPos;
 
 	SavedBattleGame* const battleSave = _game->getSavedGame()->getBattleSave();
-	std::vector<std::pair<int,int> >& scanDots = battleSave->getScannerDots();
+	std::vector<std::pair<int,int> >& scanDots = battleSave->scannerDots();
 
 	this->lock();
 	for (int

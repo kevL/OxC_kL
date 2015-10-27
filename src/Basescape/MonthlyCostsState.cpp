@@ -105,6 +105,7 @@ MonthlyCostsState::MonthlyCostsState(Base* base)
 		cost, qty;
 
 	_lstCrafts->setColumns(4, 124,62,43,56);
+	_lstCrafts->setMargin();
 	_lstCrafts->setDot();
 	const std::vector<std::string>& craftList = _game->getRuleset()->getCraftsList();
 	for (std::vector<std::string>::const_iterator
@@ -130,6 +131,7 @@ MonthlyCostsState::MonthlyCostsState(Base* base)
 	_txtSalaries->setText(tr("STR_SALARIES"));
 
 	_lstSalaries->setColumns(4, 124,62,43,56);
+	_lstSalaries->setMargin();
 	_lstSalaries->setDot();
 	const std::vector<std::string>& soldierList = _game->getRuleset()->getSoldiersList();
 	for (std::vector<std::string>::const_iterator
@@ -174,6 +176,7 @@ MonthlyCostsState::MonthlyCostsState(Base* base)
 	std::wostringstream woststr;
 
 	_lstMaintenance->setColumns(2, 229,56);
+	_lstMaintenance->setMargin();
 	_lstMaintenance->setDot();
 	woststr << L'\x01' << Text::formatFunding(base->getFacilityMaintenance()); // quah
 	_lstMaintenance->addRow(
@@ -182,6 +185,7 @@ MonthlyCostsState::MonthlyCostsState(Base* base)
 						woststr.str().c_str());
 
 	_lstBaseCost->setColumns(2, 47,56);
+	_lstBaseCost->setMargin();
 	_lstBaseCost->setDot();
 	_lstBaseCost->addRow(
 					2,
@@ -193,6 +197,7 @@ MonthlyCostsState::MonthlyCostsState(Base* base)
 	_txtIncome->setText(woststr.str());
 
 	_lstTotal->setColumns(2, 47,56);
+	_lstTotal->setMargin();
 	_lstTotal->setDot();
 	_lstTotal->addRow(
 					2,

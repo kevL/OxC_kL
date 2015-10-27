@@ -461,7 +461,8 @@ private:
 		const Position& getRfTriggerPosition() const;
 
 		/// Gets a ref to the scanner dots vector.
-		std::vector<std::pair<int, int> >& getScannerDots();
+		std::vector<std::pair<int, int> >& scannerDots();
+		const std::vector<std::pair<int, int> >& scannerDots() const;
 };
 
 }

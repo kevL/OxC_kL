@@ -28,26 +28,6 @@ namespace OpenXcom
 
 class MapDataSet;
 
-/* enum SpecialTileType // <- moved to RuleItem.h ->
-{
-	STT_NONE = -1,			// -1
-	TILE,					//  0
-	START_POINT,			//  1
-	UFO_POWER_SOURCE,		//  2
-	UFO_NAVIGATION,			//  3
-	UFO_CONSTRUCTION,		//  4
-	ALIEN_FOOD,				//  5
-	ALIEN_REPRODUCTION,		//  6
-	ALIEN_ENTERTAINMENT,	//  7
-	ALIEN_SURGERY,			//  8
-	EXAM_ROOM,				//  9
-	ALIEN_ALLOYS,			// 10
-	ALIEN_HABITAT,			// 11
-	DEAD_TILE,				// 12
-	END_POINT,				// 13
-	MUST_DESTROY			// 14
-}; */
-
 enum MovementType
 {
 	MT_WALK,	// 0

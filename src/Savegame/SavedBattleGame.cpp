@@ -2982,7 +2982,11 @@ const Position& SavedBattleGame::getRfTriggerPosition() const
  * Gets a ref to the scanner dots vector.
  * @return, reference to a vector of pairs of ints which are positions of current Turn's scanner dots.
  */
-std::vector<std::pair<int, int> >& SavedBattleGame::getScannerDots()
+std::vector<std::pair<int, int> >& SavedBattleGame::scannerDots()
+{
+	return _scanDots;
+}
+const std::vector<std::pair<int, int> >& SavedBattleGame::scannerDots() const
 {
 	return _scanDots;
 }

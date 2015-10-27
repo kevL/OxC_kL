@@ -2007,7 +2007,7 @@ std::map<int, Position>* TileEngine::getReactionPositions()
 /**
  * Handles bullet/weapon hits. A bullet/weapon hits a voxel.
  * @note Called from ExplosionBState::explode().
- * @param targetVoxel	- reference the center of hit in voxelspace
+ * @param targetVoxel	- reference the center of hit in voxel-space
  * @param power			- power of the hit/explosion
  * @param dType			- damage type of the hit (RuleItem.h)
  * @param attacker		- pointer to BattleUnit that caused the hit

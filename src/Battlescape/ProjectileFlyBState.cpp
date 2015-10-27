@@ -981,7 +981,7 @@ void ProjectileFlyBState::think()
 																_ammo->getRules()->getHitAnimation());
 
 							_parent->getMap()->getExplosions()->push_back(expl);
-                            _parent->setShotgun(true);
+                            _parent->setShotgun();
 							_battleSave->getTileEngine()->hit(
 															shotVoxel,
 															_ammo->getRules()->getPower(),

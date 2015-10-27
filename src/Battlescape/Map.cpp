@@ -737,7 +737,8 @@ void Map::drawTerrain(Surface* const surface) // private.
 						if (itZ > 0 && itX < endX)
 						{
 							const Tile* const tileEast = _battleSave->getTile(posField + Position(1,0,0));
-							if (tileEast->getSprite(O_FLOOR) == NULL
+							if (tileEast != NULL // why.
+								&& tileEast->getSprite(O_FLOOR) == NULL
 								&& (tileEast->getMapData(O_OBJECT) == NULL // special case ->
 									|| tileEast->getMapData(O_OBJECT)->getBigwall() != BIGWALL_NWSE))
 							{
@@ -1719,15 +1720,15 @@ void Map::drawTerrain(Surface* const surface) // private.
 
 // Draw scanner dots
 					if (itZ == viewLevel
-						&& _battleSave->getScannerDots().empty() == false)
+						&& _battleSave->scannerDots().empty() == false)
 					{
-						std::pair<int,int> dotTest = std::make_pair(
-																_tile->getPosition().x,
-																_tile->getPosition().y);
+						const std::pair<int,int> dotTest = std::make_pair(
+																		posField.x,
+																		posField.y);
 						if (std::find(
-								_battleSave->getScannerDots().begin(),
-								_battleSave->getScannerDots().end(),
-								dotTest) != _battleSave->getScannerDots().end())
+								_battleSave->scannerDots().begin(),
+								_battleSave->scannerDots().end(),
+								dotTest) != _battleSave->scannerDots().end())
 						{
 							sprite = _res->getSurfaceSet("SCANG.DAT")->getFrame(330); // gray square cross
 							sprite->blitNShade(

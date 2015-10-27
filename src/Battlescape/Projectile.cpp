@@ -395,7 +395,7 @@ void Projectile::applyAccuracy( // private.
 
 		if (_action.autoShotCount == 1)
 		{
-			const int autoHit = static_cast<int>(std::ceil(accuracy * 20.)); // chance for Bulls-eye.
+			const int autoHit = static_cast<int>(std::ceil(accuracy * 21.)); // chance for Bulls-eye.
 			if (RNG::percent(autoHit) == false)
 			{
 				//Log(LOG_INFO) << ". NOT autoHit";

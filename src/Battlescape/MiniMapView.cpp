@@ -152,7 +152,7 @@ void MiniMapView::draw()
 						colorGroup,
 						colorOffset;
 
-					if (px == 0
+					if (px == 0 // edge markers
 						|| px == _battleSave->getMapSizeX() - 1
 						|| py == 0
 						|| py == _battleSave->getMapSizeY() - 1)
@@ -175,7 +175,7 @@ void MiniMapView::draw()
 						&& lvl == 0								// is ground level
 						&& tile->getMapData(O_OBJECT) == NULL)	// but has no content-object
 					{
-						srf = _set->getFrame(377);
+						srf = _set->getFrame(377); // edge marker
 						srf->blitNShade(
 									this,
 									x,y,
@@ -186,13 +186,12 @@ void MiniMapView::draw()
 					else // draw tile parts
 					{
 						for (int
-								part = 0;
-								part != parts;
-								++part)
+								i = 0;
+								i != parts;
+								++i)
 						{
-							data = tile->getMapData(static_cast<MapDataType>(part));
-							if (data != NULL
-								&& data->getMiniMapIndex() != 0)
+							data = tile->getMapData(static_cast<MapDataType>(i));
+							if (data != NULL && data->getMiniMapIndex() != 0)
 							{
 								srf = _set->getFrame(data->getMiniMapIndex() + 35);
 								if (srf != NULL)
@@ -204,15 +203,14 @@ void MiniMapView::draw()
 												colorGroup);
 								else
 									Log(LOG_WARNING) << "MiniMapView::draw() no data for Tile["
-													 << part << "] pos " << tile->getPosition()
+													 << i << "] pos " << tile->getPosition()
 													 << " frame = " << data->getMiniMapIndex() + 35;
 							}
 						}
 					}
 
 					unit = tile->getUnit();
-					if (unit != NULL
-						&& unit->getUnitVisible() == true) // alive visible units
+					if (unit != NULL && unit->getUnitVisible() == true) // alive visible units
 					{
 						const int
 							unitSize = unit->getArmor()->getSize(),
@@ -257,12 +255,22 @@ void MiniMapView::draw()
 					if (tile->isDiscovered(2) == true
 						&& tile->getInventory()->empty() == false) // at least one item on this tile
 					{
-						const int frame = 9 + _frame;
+						srf = _set->getFrame(_frame + 9); // white cross
+						srf->blitNShade(this, x,y, 0);
+					}
 
-						srf = _set->getFrame(frame);
-						srf->blitNShade( // draw white cross
-									this,
-									x,y,0);
+					if (_frame == 0
+						&& _battleSave->scannerDots().empty() == false)
+					{
+						std::pair<int,int> dotTest = std::make_pair(px,py);
+						if (std::find(
+								_battleSave->scannerDots().begin(),
+								_battleSave->scannerDots().end(),
+								dotTest) != _battleSave->scannerDots().end())
+						{
+							srf = _set->getFrame(_frame + 9);			// white cross
+							srf->blitNShade(this, x,y, 0, false, 3);	// red
+						}
 					}
 
 					++px;
@@ -276,7 +284,7 @@ void MiniMapView::draw()
 	else Log(LOG_INFO) << "ERROR: MiniMapView SCANG.DAT not available";
 
 
-	// kL_note: looks like the crosshairs for the MiniMap
+	//looks like the crosshairs for the MiniMap
 	const Sint16
 		centerX = static_cast<Sint16>(width / 2) - 1,
 		centerY = static_cast<Sint16>(height / 2) - 1,
