@@ -270,10 +270,10 @@ void BaseView::setSelectable(size_t facSize)
  */
 bool BaseView::isPlaceable(const RuleBaseFacility* const facRule) const
 {
-	if (   _gridX < 0
+	if (_gridX < 0
 		|| _gridY < 0
-		|| _gridX > static_cast<int>(Base::BASE_SIZE) - 1
-		|| _gridY > static_cast<int>(Base::BASE_SIZE) - 1)
+		|| _gridX >= static_cast<int>(Base::BASE_SIZE)
+		|| _gridY >= static_cast<int>(Base::BASE_SIZE))
 	{
 		return false;
 	}
@@ -282,54 +282,65 @@ bool BaseView::isPlaceable(const RuleBaseFacility* const facRule) const
 		gridX = static_cast<size_t>(_gridX),
 		gridY = static_cast<size_t>(_gridY);
 
-	if (_facilities[gridX][gridY] == NULL)
+	const size_t facSize = facRule->getSize();
+	for (size_t // check for overlaps
+			x = 0;
+			x != facSize;
+			++x)
 	{
-		const bool allowQ = Options::allowBuildingQueue;
-		const size_t facSize = facRule->getSize();
-
-		for (size_t // check for a facility to connect to
-				i = 0;
-				i != facSize;
-				++i)
+		for (size_t
+				y = 0;
+				y != facSize;
+				++y)
 		{
-			if ((	   gridX != 0							// check left
-					&& gridY + i < Base::BASE_SIZE
-					&& _facilities[gridX - 1]
-								  [gridY + i] != NULL
-					&& (allowQ == true
-						|| _facilities[gridX - 1]
-									  [gridY + i]
-								->buildFinished() == true))
+			if (_facilities[gridX + x][gridY + y] != NULL)
+				return false;
+		}
+	}
 
-				|| (   gridX + i < Base::BASE_SIZE			// check top
-					&& gridY != 0
-					&& _facilities[gridX + i]
-								  [gridY - 1] != NULL
-					&& (allowQ == true
-						|| _facilities[gridX + i]
-									  [gridY - 1]
-								->buildFinished() == true))
+	const bool allowQ = Options::allowBuildingQueue;
+	for (size_t // check for a facility to connect to
+			i = 0;
+			i != facSize;
+			++i)
+	{
+		if ((	   gridX != 0							// check left
+				&& gridY + i < Base::BASE_SIZE
+				&& _facilities[gridX - 1]
+							  [gridY + i] != NULL
+				&& (allowQ == true
+					|| _facilities[gridX - 1]
+								  [gridY + i]
+							->buildFinished() == true))
 
-				|| (   gridX + facSize < Base::BASE_SIZE	// check right
-					&& gridY + i < Base::BASE_SIZE
-					&& _facilities[gridX + facSize]
-								  [gridY + i] != NULL
-					&& (allowQ == true
-						|| _facilities[gridX + facSize]
-									  [gridY + i]
-								->buildFinished() == true))
+			|| (   gridX + i < Base::BASE_SIZE			// check top
+				&& gridY != 0
+				&& _facilities[gridX + i]
+							  [gridY - 1] != NULL
+				&& (allowQ == true
+					|| _facilities[gridX + i]
+								  [gridY - 1]
+							->buildFinished() == true))
 
-				|| (   gridX + i < Base::BASE_SIZE			// check bottom
-					&& gridY + facSize < Base::BASE_SIZE
-					&& _facilities[gridX + i]
-								  [gridY + facSize] != NULL
-					&& (allowQ == true
-						|| _facilities[gridX + i]
-									  [gridY + facSize]
-								->buildFinished() == true)))
-			{
-				return true;
-			}
+			|| (   gridX + facSize < Base::BASE_SIZE	// check right
+				&& gridY + i < Base::BASE_SIZE
+				&& _facilities[gridX + facSize]
+							  [gridY + i] != NULL
+				&& (allowQ == true
+					|| _facilities[gridX + facSize]
+								  [gridY + i]
+							->buildFinished() == true))
+
+			|| (   gridX + i < Base::BASE_SIZE			// check bottom
+				&& gridY + facSize < Base::BASE_SIZE
+				&& _facilities[gridX + i]
+							  [gridY + facSize] != NULL
+				&& (allowQ == true
+					|| _facilities[gridX + i]
+								  [gridY + facSize]
+							->buildFinished() == true)))
+		{
+			return true;
 		}
 	}
 
@@ -478,8 +489,7 @@ void BaseView::updateNeighborFacilityBuildTime( // private.
 		const BaseFacility* const facility,
 		BaseFacility* const neighbor)
 {
-	if (   facility != NULL
-		&& neighbor != NULL)
+	if (facility != NULL && neighbor != NULL)
 	{
 		const int
 			facBuild = facility->getBuildTime(),
@@ -624,7 +634,7 @@ void BaseView::draw()
 						y != facY + facSize;
 						++y)
 				{
-					if (   _facilities[x][y] != NULL
+					if (_facilities[x][y] != NULL
 						&& _facilities[x][y]->buildFinished() == true)
 					{
 						srfTunnel = _texture->getFrame(7);
@@ -642,7 +652,7 @@ void BaseView::draw()
 						x != facX + facSize;
 						++x)
 				{
-					if (   _facilities[x][y] != NULL
+					if (_facilities[x][y] != NULL
 						&& _facilities[x][y]->buildFinished() == true)
 					{
 						srfTunnel = _texture->getFrame(8);
@@ -778,8 +788,7 @@ void BaseView::draw()
 	// draw dog
 	if (dogPosition.empty() == false)
 	{
-		const size_t i = RNG::generate(
-									0,
+		const size_t i = RNG::generate(0,
 									dogPosition.size() - 1);
 		_srfDog->setX(dogPosition[i].first);
 		_srfDog->setY(dogPosition[i].second);
@@ -811,20 +820,19 @@ void BaseView::mouseOver(Action* action, State* state)
 	_gridY = static_cast<int>(std::floor(
 			 action->getRelativeYMouse() / (static_cast<double>(GRID_SIZE) * action->getYScale())));
 
-	if (   _gridX > -1
+	if (_gridX > -1
 		&& _gridX < static_cast<int>(Base::BASE_SIZE)
 		&& _gridY > -1
 		&& _gridY < static_cast<int>(Base::BASE_SIZE))
 	{
 		_selFacility = _facilities[static_cast<size_t>(_gridX)][static_cast<size_t>(_gridY)];
-		if (_selSize > 0)
+		if (_selSize != 0)
 		{
-			if (   static_cast<size_t>(_gridX) + _selSize < Base::BASE_SIZE + 1
-				&& static_cast<size_t>(_gridY) + _selSize < Base::BASE_SIZE + 1)
+			if (static_cast<size_t>(_gridX) + _selSize <= Base::BASE_SIZE
+				&& static_cast<size_t>(_gridY) + _selSize <= Base::BASE_SIZE)
 			{
 				_selector->setX(_x + _gridX * GRID_SIZE);
 				_selector->setY(_y + _gridY * GRID_SIZE);
-
 				_selector->setVisible();
 			}
 			else
@@ -834,8 +842,7 @@ void BaseView::mouseOver(Action* action, State* state)
 	else
 	{
 		_selFacility = NULL;
-
-		if (_selSize > 0)
+		if (_selSize != 0)
 			_selector->setVisible(false);
 	}
 
@@ -850,8 +857,7 @@ void BaseView::mouseOver(Action* action, State* state)
 void BaseView::mouseOut(Action* action, State* state)
 {
 	_selFacility = NULL;
-
-	if (_selSize > 0)
+	if (_selSize != 0)
 		_selector->setVisible(false);
 
 	InteractiveSurface::mouseOut(action, state);

@@ -4392,7 +4392,7 @@
 	"Soldier.h"
 	"../Ruleset/RuleAlienMission.h"
 
-1445896190 source:f:\git\openxcom\src\basescape\basescapestate.cpp
+1445899036 source:f:\git\openxcom\src\basescape\basescapestate.cpp
 	"BasescapeState.h"
 	"AlienContainmentState.h"
 	"BaseDetectionState.h"
@@ -4530,7 +4530,7 @@
 
 1445313840 f:\git\openxcom\src\ruleset\rulecraft.h
 
-1445893498 source:f:\git\openxcom\src\basescape\buildfacilitiesstate.cpp
+1445898630 source:f:\git\openxcom\src\basescape\buildfacilitiesstate.cpp
 	"BuildFacilitiesState.h"
 	"PlaceFacilityState.h"
 	"../Engine/Game.h"
@@ -4593,7 +4593,7 @@
 1445821123 f:\git\openxcom\src\ruleset\mapdata.h
 	"RuleItem.h"
 
-1445821745 f:\git\openxcom\src\ruleset\ruleitem.h
+1445899886 f:\git\openxcom\src\ruleset\ruleitem.h
 	"../Battlescape/BattlescapeGame.h"
 
 1445017038 source:f:\git\openxcom\src\basescape\craftequipmentstate.cpp
@@ -6735,7 +6735,7 @@
 	"../Engine/State.h"
 	"Globe.h"
 
-1445893347 source:f:\git\openxcom\src\geoscape\buildnewbasestate.cpp
+1445898546 source:f:\git\openxcom\src\geoscape\buildnewbasestate.cpp
 	"BuildNewBaseState.h"
 	"BaseNameState.h"
 	"ConfirmNewBaseState.h"
@@ -6962,7 +6962,7 @@
 1442441486 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1445891471 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1445899196 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	"AlienBaseState.h"
 	"BaseDefenseState.h"
@@ -7095,7 +7095,7 @@
 
 1445281504 f:\git\openxcom\src\ufopaedia\ufopaedia.h
 
-1445895175 source:f:\git\openxcom\src\geoscape\globe.cpp
+1445899516 source:f:\git\openxcom\src\geoscape\globe.cpp
 	"Globe.h"
 	"GeoscapeState.h"
 	"../Engine/Action.h"
@@ -7587,7 +7587,7 @@
 	"OptionsBaseState.h"
 	"../Engine/State.h"
 
-1444099109 source:f:\git\openxcom\src\menu\newbattlestate.cpp
+1445898412 source:f:\git\openxcom\src\menu\newbattlestate.cpp
 	"NewBattleState.h"
 	"../Basescape/CraftInfoState.h"
 	"../Battlescape/BattlescapeGenerator.h"
@@ -8401,7 +8401,7 @@
 	"../Ruleset/RuleRegion.h"
 	"../Ruleset/Ruleset.h"
 
-1445891351 source:f:\git\openxcom\src\savegame\base.cpp
+1445899142 source:f:\git\openxcom\src\savegame\base.cpp
 	"Base.h"
 	"BaseFacility.h"
 	"Craft.h"
@@ -10355,7 +10355,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1445891067 source:f:\git\openxcom\src\basescape\storesmatrixstate.cpp
+1445898511 source:f:\git\openxcom\src\basescape\storesmatrixstate.cpp
 	"StoresMatrixState.h"
 	"../Engine/Game.h"
 	"../Interface/Text.h"

@@ -214,7 +214,6 @@ void RuleItem::load(
 	_damageType			= static_cast<DamageType>(node["damageType"]		.as<int>(_damageType));
 	_battleType			= static_cast<BattleType>(node["battleType"]		.as<int>(_battleType));
 	_specialType		= static_cast<SpecialTileType>(node["specialType"]	.as<int>(_specialType));
-//	_specialType		= node["specialType"].as<int>(_specialType);
 
 	_power				= node["power"]				.as<int>(_power);
 	_clipSize			= node["clipSize"]			.as<int>(_clipSize);

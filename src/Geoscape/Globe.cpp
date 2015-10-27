@@ -2385,7 +2385,6 @@ void Globe::drawMarkers()
 {
 	_markers->clear();
 
-	int j = 0;
 	for (std::vector<Base*>::const_iterator // Draw the Base markers
 			i = _game->getSavedGame()->getBases()->begin();
 			i != _game->getSavedGame()->getBases()->end();

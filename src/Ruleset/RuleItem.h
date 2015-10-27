@@ -185,9 +185,7 @@ private:
 
 	BattleType _battleType;
 	DamageType _damageType;
-
 	SpecialTileType _specialType;
-//	int _specialType;
 
 	std::vector<std::string>
 		_compatibleAmmo,
