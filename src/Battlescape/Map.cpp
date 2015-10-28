@@ -1994,8 +1994,9 @@ bool Map::checkWest( // private.
 				|| ((tile5->getMapData(O_NORTHWALL) == NULL
 						|| tile5->isUfoDoorOpen(O_NORTHWALL) == true)
 					&& (tile5->getMapData(O_OBJECT) == NULL
-						|| (tile5->getMapData(O_OBJECT)->getBigwall() != BIGWALL_NESW
-							&& tile5->getMapData(O_OBJECT)->getBigwall() != BIGWALL_BLOCK)))));
+						|| (tile5->getMapData(O_OBJECT)->getBigwall() != BIGWALL_BLOCK
+							&& tile5->getMapData(O_OBJECT)->getBigwall() != BIGWALL_NESW
+							&& tile5->getMapData(O_OBJECT)->getBigwall() != BIGWALL_EAST)))));
 //							&& tile5->getMapData(O_OBJECT)->getBigwall() != BIGWALL_NORTH // not in UFO.
 
 	if (ret == false) // unit might actually be too far away from wall to clip despite above conditions - now don't let the floor clip it

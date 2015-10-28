@@ -364,7 +364,7 @@ bool Tile::hasNoFloor(const Tile* const tileBelow) const
 
 /**
  * Gets whether this tile has a bigwall.
- * @return, true if the content-object in this tile has a bigwall ( see Big Wall enum )
+ * @return, true if the content-object in this tile has a bigwall (see BigwallTypes in Pathfinding.h)
  */
 bool Tile::isBigWall() const
 {

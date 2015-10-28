@@ -1083,19 +1083,21 @@ void BattleUnit::startWalking(
 		else
 			_floating = true;
 	}
-	else if (_tile->hasNoFloor(tileBelow) == true)
-	{
-		_status = STATUS_FLYING;
-		_floating = true;
-		_kneeled = false;
-		_dir = dir;
-	}
 	else
 	{
-		_status = STATUS_WALKING;
-		_floating =
-		_kneeled = false;
 		_dir = dir;
+		if (_tile->hasNoFloor(tileBelow) == true)
+		{
+			_status = STATUS_FLYING;
+			_floating = true;
+			_kneeled = false;
+		}
+		else
+		{
+			_status = STATUS_WALKING;
+			_floating =
+			_kneeled = false;
+		}
 	}
 	//Log(LOG_INFO) << "start Phase = " << _walkPhase;
 	//Log(LOG_INFO) << ". status = " << (int)_status;
@@ -1314,7 +1316,7 @@ bool BattleUnit::isKneeled() const
 
 /**
  * Gets if this unit is floating.
- * A unit is floating if there is no ground underneath.
+ * @note A unit is floating if there is no ground underneath.
  * @return, true if floating
  */
 bool BattleUnit::isFloating() const

@@ -5388,7 +5388,7 @@
 1443688763 f:\git\openxcom\src\battlescape\medikitstate.h
 	"../Engine/State.h"
 
-1443764875 f:\git\openxcom\src\battlescape\pathfinding.h
+1445990588 f:\git\openxcom\src\battlescape\pathfinding.h
 	"PathfindingNode.h"
 	"Position.h"
 	"../Ruleset/MapData.h"
@@ -5967,7 +5967,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1445969088 source:f:\git\openxcom\src\battlescape\map.cpp
+1445987975 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	"BattlescapeMessage.h"
 	"BattlescapeState.h"
@@ -8442,7 +8442,7 @@
 	"../Ruleset/RuleItem.h"
 	"../Savegame/SavedBattleGame.h"
 
-1445822465 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1445990218 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	"BattleItem.h"
 	"SavedGame.h"

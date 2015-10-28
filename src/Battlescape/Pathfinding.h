@@ -36,7 +36,7 @@ class SavedBattleGame;
 class Tile;
 
 
-enum bigWallTypes
+enum BigwallTypes
 {
 	BIGWALL_NONE,	// 0
 	BIGWALL_BLOCK,	// 1

@@ -1311,8 +1311,7 @@ bool BattlescapeGame::kneel(BattleUnit* const unit)
 	}
 	else if (unit->getGeoscapeSoldier() != NULL) // MC'd xCom agent, trying to stand & walk by AI.
 	{
-		const int energyCost = std::max(
-									0,
+		const int energyCost = std::max(0,
 									5 - unit->getArmor()->getAgility());
 
 		if (unit->getTimeUnits() > 9
