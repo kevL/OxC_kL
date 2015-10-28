@@ -296,6 +296,7 @@ void UnitWalkBState::cancel()
  */
 bool UnitWalkBState::doStatusStand() // private.
 {
+	//Log(LOG_INFO) << "";
 	//Log(LOG_INFO) << "***** UnitWalkBState::doStatusStand() : " << _unit->getId();
 	int dir = _pf->getStartDirection();
 	//Log(LOG_INFO) << ". StartDirection = " << dir;
@@ -308,12 +309,6 @@ bool UnitWalkBState::doStatusStand() // private.
 	{
 		_walkCam->centerOnPosition(pos);
 	}
-
-	if (dir == Pathfinding::DIR_DOWN)
-		_walkCam->setViewLevel(pos.z - 1);
-	else
-		_walkCam->setViewLevel(pos.z);
-
 
 	const Tile* const tile = _battleSave->getTile(pos);
 	const bool gravLift = dir >= _pf->DIR_UP // Assumes tops & bottoms of gravLifts always have floors/ceilings.
@@ -338,6 +333,7 @@ bool UnitWalkBState::doStatusStand() // private.
 
 			if (_terrain->checkReactionFire(_unit) == true) // unit got fired upon - stop.
 			{
+				//Log(LOG_INFO) << ". . . RF triggered";
 				_pf->abortPath();
 				_parent->popState();
 				return false;
@@ -379,264 +375,271 @@ bool UnitWalkBState::doStatusStand() // private.
 		//Log(LOG_INFO) << ". . _falling, dir = " << dir;
 	}
 
-	if (dir != -1)
-	{
-		//Log(LOG_INFO) << "enter (dir!= -1) : " << _unit->getId();
-		if (_action.strafe == true
-			&& _pf->getPath().empty() == false) // <- don't bother with this if it's the end of movement/ State.
-		{
-			if (_unit->getGeoscapeSoldier() != NULL
-				|| _unit->getUnitRules()->isMechanical() == false)
-			{
-				//Log(LOG_INFO) << ". STANDING strafeMove, setFaceDirection() -> " << _unit->getUnitDirection();
-				_unit->setFaceDirection(_unit->getUnitDirection());
-			}
-			else
-			{
-				const int dirStrafe = (_dirStart + 4) % 8;
-				_unit->setFaceDirection(dirStrafe);
-				//Log(LOG_INFO) << ". STANDING strafeTank, setFaceDirection() -> " << dirStrafe;
-
-				if (_unit->getTurretType() != -1)
-				{
-					const int turretOffset = _unit->getTurretDirection() - _unit->getUnitDirection();
-					_unit->setTurretDirection((turretOffset + dirStrafe) % 8);
-					//Log(LOG_INFO) << ". STANDING strafeTank, setTurretDirection() -> " << (turretOffset + dirStrafe);
-				}
-			}
-		}
-		//else Log(LOG_INFO) << ". STANDING no strafe.";
-
-		//Log(LOG_INFO) << ". getTuCostPf() & posStop";
-		Position posStop;
-		int
-			tuCost = _pf->getTuCostPf(pos, dir, &posStop), // gets tu cost but also sets the destination position.
-			tuTest,
-			staCost;
-		//Log(LOG_INFO) << ". tuCost = " << tuCost;
-
-		Tile* const destTile = _battleSave->getTile(posStop);
-
-		// kL_note: should this include neutrals? (ie != FACTION_PLAYER; see also 32tu inflation...)
-		if (destTile != NULL // would hate to see what happens if destTile=NULL, nuclear war no doubt.
-			&& destTile->getFire() > 0
-			&& _unit->getFaction() != FACTION_PLAYER
-			&& (_unit->getArmor()->getDamageModifier(DT_IN) > 0.f
-				|| _unit->isZombie() == false))
-		{
-			//Log(LOG_INFO) << ". . subtract tu inflation for a fireTile";
-			// The TU cost was artificially inflated by 32 points in getTuCostPf
-			// so it has to be deflated again here under the same conditions.
-			// See: Pathfinding::getTuCostPf(), where TU cost was inflated.
-			tuCost -= 32;
-			//Log(LOG_INFO) << ". . subtract tu inflation for a fireTile DONE";
-		}
-
-		if (_falling == true)
-		{
-			//Log(LOG_INFO) << ". . falling, set tuCost 0";
-			tuCost =
-			tuTest =
-			staCost = 0;
-		}
-		else
-		{
-			tuTest =
-			staCost = tuCost;
-
-			if (gravLift == false)
-			{
-				if (_action.dash == true // allow dash when moving vertically 1 tile (or more).
-					|| (_action.strafe == true
-						&& dir >= _pf->DIR_UP))
-				{
-					tuCost -= _pf->getOpenDoor();
-					tuCost = (tuCost * 3 / 4) + _pf->getOpenDoor();
-
-					staCost -= _pf->getOpenDoor();
-					staCost = staCost * 3 / 2;
-				}
-
-				staCost -= _unit->getArmor()->getAgility();
-				if (staCost < 0) staCost = 0;
-			}
-			else // gravLift
-			{
-				//Log(LOG_INFO) << ". . using GravLift";
-				staCost = 0;
-			}
-		}
-
-		//Log(LOG_INFO) << ". check tuCost + stamina, etc. TU = " << tuCost;
-		//Log(LOG_INFO) << ". unit->TU = " << _unit->getTimeUnits();
-		if (tuCost - _pf->getOpenDoor() > _unit->getTimeUnits())
-		{
-			//Log(LOG_INFO) << ". . tuCost > _unit->TU()";
-			if (_unit->getFaction() == FACTION_PLAYER
-				&& _parent->getPanicHandled() == true
-				&& tuTest < 255)
-			{
-				//Log(LOG_INFO) << ". send warning: not enough TU";
-				_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
-			}
-
-			_unit->clearCache();
-			_parent->getMap()->cacheUnit(_unit);
-
-			_pf->abortPath();
-			_parent->popState();
-
-			return false;
-		}
-		else if (staCost > _unit->getEnergy())
-		{
-			//Log(LOG_INFO) << ". . staCost > _unit->getEnergy()";
-			if (_unit->getFaction() == FACTION_PLAYER
-				&& _parent->getPanicHandled() == true)
-			{
-				_action.result = "STR_NOT_ENOUGH_ENERGY";
-			}
-
-			_unit->clearCache();
-			_parent->getMap()->cacheUnit(_unit);
-
-			_pf->abortPath();
-			_parent->popState();
-
-			return false;
-		}
-		else if (_parent->getPanicHandled() == true					// note this operates differently for player-units and non-player units;
-			&& _unit->getFaction() != FACTION_PLAYER				// <- no Reserve tolerance.
-			&& _parent->checkReservedTu(_unit, tuCost) == false)	// Only player's units will *bypass* abortPath() due to panicking ....
-																	// Tbh, other code should have rendered the getPanicHandled() redundant.
-																	// That is to say this should kick in *only* when player has actively
-		{															// clicked to move but tries to go further than TUs allow; because
-			//Log(LOG_INFO) << ". . checkReservedTu(_unit, tuCost) == false";	// either the AI or the panic-code should not try to
-			_unit->clearCache();												// move a unit farther than its [reserved] TUs would allow
-			_parent->getMap()->cacheUnit(_unit);
-
-			_pf->abortPath();
-
-			return false;
-		}
-		else if (dir != _unit->getUnitDirection()	// unit is looking in the wrong way so turn first - unless strafe.
-			&& dir < _pf->DIR_UP				// Do not use TurnBState because turning during walking doesn't cost TU.
-			&& _action.strafe == false)
-		{
-			//Log(LOG_INFO) << ". . dir != _unit->getUnitDirection() -> turn";
-			_unit->setDirectionTo(dir);
-
-			_unit->clearCache();
-			_parent->getMap()->cacheUnit(_unit);
-
-			return false;
-		}
-		else if (dir < _pf->DIR_UP) // now open doors (if any)
-		{
-			int soundId;
-
-			const int door = _terrain->unitOpensDoor(_unit, false, dir);
-			if (door == 0) // normal door
-				soundId = ResourcePack::DOOR_OPEN;
-			else if (door == 1) // ufo door
-				soundId = ResourcePack::SLIDING_DOOR_OPEN;
-			else soundId = -1;
-
-			if (soundId != -1)
-				_parent->getResourcePack()->getSound("BATTLE.CAT", soundId)
-											->play(-1, _parent->getMap()->getSoundAngle(pos));
-
-			if (door == 1 || door == 3) // ufo door still opening ...
-				return false; // don't start walking yet, wait for the ufo door to open
-		}
-
-		// proxy blows up in face after door opens - copied doStatusStand_end()
-		if (_parent->checkProxyGrenades(_unit) == true) // kL_add: Put checkForSilacoid() here!
-		{
-			_parent->popState();
-//			postPathProcedures(); // .. one or the other i suppose.
-			return false;
-		}
-
-		//Log(LOG_INFO) << ". check size for obstacles";
-		const int armorSize = _unit->getArmor()->getSize() - 1;
-		for (int
-				x = armorSize;
-				x != -1;
-				--x)
-		{
-			for (int
-					y = armorSize;
-					y != -1;
-					--y)
-			{
-				//Log(LOG_INFO) << ". . check obstacle(unit)";
-				const BattleUnit
-					* const unitInMyWay = _battleSave->getTile(posStop + Position(x,y,0))->getUnit(),
-					* unitBelowMyWay = NULL;
-
-				const Tile* const belowDest = _battleSave->getTile(posStop + Position(x,y,-1));
-				if (belowDest != NULL)
-					unitBelowMyWay = belowDest->getUnit();
-
-				// can't walk into units in this tile, or on top of other units sticking their head into this tile
-				if (_falling == false
-					&& ((unitInMyWay != NULL
-							&& unitInMyWay != _unit)
-						|| (belowDest != NULL
-							&& unitBelowMyWay != NULL
-							&& unitBelowMyWay != _unit
-							&& unitBelowMyWay->getHeight(true) - belowDest->getTerrainLevel() > 27)))
-							// 4+ voxels poking into the tile above, we don't kick people in the head here at XCom.
-							// kL_note: this appears to be only +2 in Pathfinding....
-				{
-					//Log(LOG_INFO) << ". . . obstacle(unit) -> abortPath()";
-					_action.TU = 0;
-					_pf->abortPath();
-
-					_unit->clearCache();
-					_parent->getMap()->cacheUnit(_unit);
-
-					_parent->popState();
-					return false;
-				}
-			}
-		}
-
-		dir = _pf->dequeuePath();
-		//Log(LOG_INFO) << ". dequeuePath() dir[0] = " << dir;
-
-		if (_falling == true)
-		{
-			//Log(LOG_INFO) << ". . falling, _pf->DIR_DOWN";
-			dir = _pf->DIR_DOWN;
-		}
-		//Log(LOG_INFO) << ". dequeuePath() dir[1] = " << dir;
-
-		if (_unit->spendTimeUnits(tuCost) == true
-			&& _unit->spendEnergy(staCost) == true)
-		{
-			//Log(LOG_INFO) << ". . WalkBState: spend TU & Energy -> establish tile-links";
-			_preStepTurn = false;
-			_playFly = false;
-
-			//Log(LOG_INFO) << ". . WalkBState: startWalking()";
-			_unit->startWalking(
-							dir, posStop,
-							_battleSave->getTile(pos + Position(0,0,-1)));
-
-			//Log(LOG_INFO) << ". . WalkBState: establishTilesLink()";
-			establishTilesLink();
-		}
-		//Log(LOG_INFO) << ". EXIT (dir!=-1) : " << _unit->getId();
-	}
-	else // dir == -1
+	if (dir == -1)
 	{
 		//Log(LOG_INFO) << ". dir = " << _unit->getUnitDirection();
 		//Log(LOG_INFO) << ". . CALL postPathProcedures()";
 		postPathProcedures();
 		return false;
 	}
+
+	//Log(LOG_INFO) << "enter (dir!= -1) : " << _unit->getId();
+	if (_action.strafe == true
+		&& _pf->getPath().empty() == false) // <- don't bother with this if it's the end of movement/ State.
+	{
+		if (_unit->getGeoscapeSoldier() != NULL
+			|| _unit->getUnitRules()->isMechanical() == false)
+		{
+			//Log(LOG_INFO) << ". STANDING strafeMove, setFaceDirection() -> " << _unit->getUnitDirection();
+			_unit->setFaceDirection(_unit->getUnitDirection());
+		}
+		else
+		{
+			const int dirStrafe = (_dirStart + 4) % 8;
+			_unit->setFaceDirection(dirStrafe);
+			//Log(LOG_INFO) << ". STANDING strafeTank, setFaceDirection() -> " << dirStrafe;
+
+			if (_unit->getTurretType() != -1)
+			{
+				const int turretOffset = _unit->getTurretDirection() - _unit->getUnitDirection();
+				_unit->setTurretDirection((turretOffset + dirStrafe) % 8);
+				//Log(LOG_INFO) << ". STANDING strafeTank, setTurretDirection() -> " << (turretOffset + dirStrafe);
+			}
+		}
+	}
+	//else Log(LOG_INFO) << ". STANDING no strafe.";
+
+	//Log(LOG_INFO) << ". getTuCostPf() & posStop";
+	Position posStop;
+	int
+		tuCost = _pf->getTuCostPf(pos, dir, &posStop), // gets tu cost but also sets the destination position.
+		tuTest,
+		staCost;
+	//Log(LOG_INFO) << ". tuCost = " << tuCost;
+
+	Tile* const destTile = _battleSave->getTile(posStop);
+
+	// kL_note: should this include neutrals? (ie != FACTION_PLAYER; see also 32tu inflation...)
+	if (destTile != NULL // would hate to see what happens if destTile=NULL, nuclear war no doubt.
+		&& destTile->getFire() > 0
+		&& _unit->getFaction() != FACTION_PLAYER
+		&& (_unit->getArmor()->getDamageModifier(DT_IN) > 0.f
+			|| _unit->isZombie() == false))
+	{
+		//Log(LOG_INFO) << ". . subtract tu inflation for a fireTile";
+		// The TU cost was artificially inflated by 32 points in getTuCostPf
+		// so it has to be deflated again here under the same conditions.
+		// See: Pathfinding::getTuCostPf(), where TU cost was inflated.
+		tuCost -= 32;
+		//Log(LOG_INFO) << ". . subtract tu inflation for a fireTile DONE";
+	}
+
+	if (_falling == true)
+	{
+		//Log(LOG_INFO) << ". . falling, set tuCost 0";
+		tuCost =
+		tuTest =
+		staCost = 0;
+	}
+	else
+	{
+		tuTest =
+		staCost = tuCost;
+
+		if (gravLift == false)
+		{
+			if (_action.dash == true // allow dash when moving vertically 1 tile (or more).
+				|| (_action.strafe == true
+					&& dir >= _pf->DIR_UP))
+			{
+				tuCost -= _pf->getOpenDoor();
+				tuCost = (tuCost * 3 / 4) + _pf->getOpenDoor();
+
+				staCost -= _pf->getOpenDoor();
+				staCost = staCost * 3 / 2;
+			}
+
+			staCost -= _unit->getArmor()->getAgility();
+			if (staCost < 0) staCost = 0;
+		}
+		else // gravLift
+		{
+			//Log(LOG_INFO) << ". . using GravLift";
+			staCost = 0;
+		}
+	}
+
+	//Log(LOG_INFO) << ". check tuCost + stamina, etc. TU = " << tuCost;
+	//Log(LOG_INFO) << ". unit->TU = " << _unit->getTimeUnits();
+	if (tuCost - _pf->getOpenDoor() > _unit->getTimeUnits())
+	{
+		//Log(LOG_INFO) << ". . tuCost > _unit->TU()";
+		if (_unit->getFaction() == FACTION_PLAYER
+			&& _parent->getPanicHandled() == true
+			&& tuTest < 255)
+		{
+			//Log(LOG_INFO) << ". send warning: not enough TU";
+			_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
+		}
+
+		_unit->clearCache();
+		_parent->getMap()->cacheUnit(_unit);
+
+		_pf->abortPath();
+		_parent->popState();
+
+		return false;
+	}
+
+	if (staCost > _unit->getEnergy())
+	{
+		//Log(LOG_INFO) << ". . staCost > _unit->getEnergy()";
+		if (_unit->getFaction() == FACTION_PLAYER
+			&& _parent->getPanicHandled() == true)
+		{
+			_action.result = "STR_NOT_ENOUGH_ENERGY";
+		}
+
+		_unit->clearCache();
+		_parent->getMap()->cacheUnit(_unit);
+
+		_pf->abortPath();
+		_parent->popState();
+
+		return false;
+	}
+
+	if (_parent->getPanicHandled() == true						// note this operates differently for player-units and non-player units;
+		&& _unit->getFaction() != FACTION_PLAYER				// <- no Reserve tolerance.
+		&& _parent->checkReservedTu(_unit, tuCost) == false)	// Only player's units will *bypass* abortPath() due to panicking ....
+																// Tbh, other code should have rendered the getPanicHandled() redundant.
+																// That is to say this should kick in *only* when player has actively
+	{															// clicked to move but tries to go further than TUs allow; because
+		//Log(LOG_INFO) << ". . checkReservedTu(_unit, tuCost) == false";	// either the AI or the panic-code should not try to
+		_unit->clearCache();												// move a unit farther than its [reserved] TUs would allow
+		_parent->getMap()->cacheUnit(_unit);
+
+		_pf->abortPath();
+
+		return false;
+	}
+
+	if (dir != _unit->getUnitDirection()	// unit is looking in the wrong way so turn first - unless strafe.
+		&& dir < _pf->DIR_UP				// Do not use TurnBState because turning during walking doesn't cost TU.
+		&& _action.strafe == false)
+	{
+		//Log(LOG_INFO) << ". . dir != _unit->getUnitDirection() -> turn";
+		_unit->setDirectionTo(dir);
+
+		_unit->clearCache();
+		_parent->getMap()->cacheUnit(_unit);
+
+		return false;
+	}
+
+	if (dir < _pf->DIR_UP) // now open doors (if any)
+	{
+		int soundId;
+
+		const int door = _terrain->unitOpensDoor(_unit, false, dir);
+		if (door == 0) // normal door
+			soundId = ResourcePack::DOOR_OPEN;
+		else if (door == 1) // ufo door
+			soundId = ResourcePack::SLIDING_DOOR_OPEN;
+		else soundId = -1;
+
+		if (soundId != -1)
+			_parent->getResourcePack()->getSound("BATTLE.CAT", soundId)
+										->play(-1, _parent->getMap()->getSoundAngle(pos));
+
+		if (door == 1 || door == 3) // ufo door still opening ...
+			return false; // don't start walking yet, wait for the ufo door to open
+	}
+
+	// proxy blows up in face after door opens - copied doStatusStand_end()
+	if (_parent->checkProxyGrenades(_unit) == true) // kL_add: Put checkForSilacoid() here!
+	{
+		_parent->popState();
+//			postPathProcedures(); // .. one or the other i suppose.
+		return false;
+	}
+
+	//Log(LOG_INFO) << ". check size for obstacles";
+	const int armorSize = _unit->getArmor()->getSize() - 1;
+	for (int
+			x = armorSize;
+			x != -1;
+			--x)
+	{
+		for (int
+				y = armorSize;
+				y != -1;
+				--y)
+		{
+			//Log(LOG_INFO) << ". . check obstacle(unit)";
+			const BattleUnit
+				* const unitInMyWay = _battleSave->getTile(posStop + Position(x,y,0))->getUnit(),
+				* unitBelowMyWay = NULL;
+
+			const Tile* const belowDest = _battleSave->getTile(posStop + Position(x,y,-1));
+			if (belowDest != NULL)
+				unitBelowMyWay = belowDest->getUnit();
+
+			// can't walk into units in this tile, or on top of other units sticking their head into this tile
+			if (_falling == false
+				&& ((unitInMyWay != NULL
+						&& unitInMyWay != _unit)
+					|| (belowDest != NULL
+						&& unitBelowMyWay != NULL
+						&& unitBelowMyWay != _unit
+						&& unitBelowMyWay->getHeight(true) - belowDest->getTerrainLevel() > 27)))
+						// 4+ voxels poking into the tile above, we don't kick people in the head here at XCom.
+						// kL_note: this appears to be only +2 in Pathfinding....
+			{
+				//Log(LOG_INFO) << ". . . obstacle(unit) -> abortPath()";
+				_action.TU = 0;
+				_pf->abortPath();
+
+				_unit->clearCache();
+				_parent->getMap()->cacheUnit(_unit);
+
+				_parent->popState();
+				return false;
+			}
+		}
+	}
+
+	dir = _pf->dequeuePath();
+	//Log(LOG_INFO) << ". dequeuePath() dir[0] = " << dir;
+
+	if (_falling == true)
+	{
+		//Log(LOG_INFO) << ". . falling, _pf->DIR_DOWN";
+		dir = _pf->DIR_DOWN;
+	}
+	//Log(LOG_INFO) << ". dequeuePath() dir[1] = " << dir;
+
+	if (_unit->spendTimeUnits(tuCost) == true
+		&& _unit->spendEnergy(staCost) == true)
+	{
+		//Log(LOG_INFO) << ". . WalkBState: spend TU & Energy -> establish tile-links";
+		_preStepTurn = false;
+		_playFly = false;
+
+		//Log(LOG_INFO) << ". . WalkBState: startWalking()";
+		_unit->startWalking(
+						dir, posStop,
+						_battleSave->getTile(pos + Position(0,0,-1)));
+
+		//Log(LOG_INFO) << ". . WalkBState: establishTilesLink()";
+		establishTilesLink();
+	}
+	//Log(LOG_INFO) << ". EXIT (dir!=-1) : " << _unit->getId();
+
+	if (dir == Pathfinding::DIR_DOWN)
+		_walkCam->setViewLevel(pos.z - 1);
+	else
+		_walkCam->setViewLevel(pos.z);
 
 	return true;
 }
@@ -805,10 +808,9 @@ bool UnitWalkBState::doStatusStand_end() // private.
 		// Put burnedBySilacoid() here! etc
 		_unit->getTile()->ignite(1);
 
-		const Position pos = _unit->getPosition() * Position(16,16,24)
-						   + Position(
-									8,8,
-									-(_unit->getTile()->getTerrainLevel()));
+		const Position pos = Position::toVoxelSpaceCentered(
+													_unit->getPosition(),
+													-_unit->getTile()->getTerrainLevel());
 		_parent->getTileEngine()->hit(
 									pos,
 									_unit->getBaseStats()->strength,
@@ -818,13 +820,26 @@ bool UnitWalkBState::doStatusStand_end() // private.
 
 	_terrain->calculateUnitLighting();
 
-	// This needs to be done *before* the calculateFOV(pos)
-	// or else any newVis will be marked Visible before
-	// visForUnits() catches the new unit that is !Visible.
+	// This needs to be done *before* the calculateFOV(pos) or else any newVis will
+	// be marked Visible before visForUnits() catches the new unit that is !Visible.
 	bool newVis = visForUnits();
 
-	// This calculates or 'refreshes' the Field of View
-	// of all units within maximum distance (20 tiles) of current unit.
+/*	// debug -->
+	BattleUnit* hostile;
+	for (std::vector<BattleUnit*>::const_iterator
+			i = _battleSave->getUnits()->begin();
+			i != _battleSave->getUnits()->end();
+			++i)
+	{
+		if ((*i)->getId() == 1000007)
+		{
+			Log(LOG_INFO) << ". dist = " << TileEngine::distance(_unit->getPosition(), (*i)->getPosition());
+			break;
+		}
+	} // debug_end. */
+
+	// This calculates or 'refreshes' the Field of View of all units within
+	// maximum distance (20 tiles) of current unit.
 	_terrain->calculateFOV(
 						_unit->getPosition(),
 						true);
@@ -834,10 +849,11 @@ bool UnitWalkBState::doStatusStand_end() // private.
 		_parent->popState();
 		return false;
 	}
-	else if (newVis == true)
+
+	if (newVis == true)
 	{
-		//if (_unit->getFaction() == FACTION_PLAYER) Log(LOG_INFO) << ". . _newVis = TRUE, Abort path";
-		//else if (_unit->getFaction() != FACTION_PLAYER) Log(LOG_INFO) << ". . _newUnitSpotted = TRUE, Abort path";
+		//if (_unit->getFaction() == FACTION_PLAYER) Log(LOG_INFO) << ". . _newVis TRUE, Abort path";
+		//else if (_unit->getFaction() != FACTION_PLAYER) Log(LOG_INFO) << ". . _newUnitSpotted TRUE, Abort path";
 		_unit->clearCache();
 		_parent->getMap()->cacheUnit(_unit);
 
@@ -846,19 +862,22 @@ bool UnitWalkBState::doStatusStand_end() // private.
 
 		return false;
 	}
-	else if (_falling == false) // check for reaction fire
+
+	if (_falling == false) // check for reaction fire
 	{
 		//Log(LOG_INFO) << ". . WalkBState: NOT falling, checkReactionFire()";
 		if (_terrain->checkReactionFire(_unit) == true) // unit got fired upon - stop walking
 		{
-			//Log(LOG_INFO) << ". . . cacheUnit/pop state";
+			//Log(LOG_INFO) << ". . . RF triggered - cacheUnit/pop state";
 			_unit->clearCache();
 			_parent->getMap()->cacheUnit(_unit);
+
 			_pf->abortPath();
 			_parent->popState();
+
 			return false;
 		}
-		//else Log(LOG_INFO) << ". . WalkBState: checkReactionFire() FALSE... no caching";
+		//else Log(LOG_INFO) << ". . WalkBState: checkReactionFire() FALSE - no caching";
 	}
 
 	return true;

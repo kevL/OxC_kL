@@ -162,7 +162,7 @@ research:
 #---- XCom Armors -------------------------------------------------------------#
   - type: STR_PERSONAL_ARMOR
     cost: 9000
-    points: 20
+    points: 15
     dependencies:
       - STR_ALIEN_ALLOYS
   - type: STR_POWER_SUIT
@@ -173,10 +173,15 @@ research:
       - STR_UFO_POWER_SOURCE
   - type: STR_FLYING_SUIT
     cost: 33000
-    points: 20
+    points: 25
     dependencies:
       - STR_POWER_SUIT
       - STR_UFO_NAVIGATION
+  - type: STR_ALLOY_TANK_ARMOR
+    cost: 4200
+    points: 20
+    dependencies:
+      - STR_ALIEN_ALLOYS
 #---- XCom Facilities ---------------------------------------------------------#
   - type: STR_ALIEN_CONTAINMENT
     cost: 1500
@@ -220,6 +225,17 @@ research:
     points: 25
     dependencies:
       - STR_ULTIMATE_CRAFT
+  - type: STR_HYPER_WAVE_DECODER
+    cost: 67000
+    points: 25
+    requires:
+      - STR_UFO_NAVIGATION
+    dependencies:
+      - STR_FLOATER_NAVIGATOR
+      - STR_SNAKEMAN_NAVIGATOR
+      - STR_MUTON_NAVIGATOR
+      - STR_SECTOID_NAVIGATOR
+      - STR_WASPITE_NAVIGATOR
 #---- aLien Origins -----------------------------------------------------------#
   - type: STR_ALIEN_ORIGINS
     cost: 30000
@@ -261,7 +277,7 @@ research:
       - STR_WASPITE_NAVIGATOR
       - STR_WASPITE_SOLDIER
 #      - STR_CYBERMITE_TERRORIST
-  - type: STR_LEADER_PLUS
+  - type: STR_LEADER_PLUS #why are these PLUS-things even used
     requires:
       - STR_ALIEN_ORIGINS
     dependencies:
@@ -281,7 +297,7 @@ research:
     dependencies:
 #      - STR_ALIEN_ORIGINS # note LeaderPlus already REQUIRES origins
       - STR_LEADER_PLUS
-  - type: STR_COMMANDER_PLUS
+  - type: STR_COMMANDER_PLUS #why are these PLUS-things even used
 #    unlocks:
 #      - STR_CYDONIA_OR_BUST
     requires:
@@ -299,22 +315,6 @@ research:
     unlockFinalMission: true
     dependencies:
       - STR_COMMANDER_PLUS
-  - type: STR_HYPER_WAVE_DECODER
-    cost: 67000
-    points: 25
-    requires:
-      - STR_UFO_NAVIGATION
-    dependencies:
-      - STR_FLOATER_NAVIGATOR
-      - STR_SNAKEMAN_NAVIGATOR
-      - STR_MUTON_NAVIGATOR
-      - STR_SECTOID_NAVIGATOR
-      - STR_WASPITE_NAVIGATOR
-  - type: STR_ALLOY_TANK_ARMOR
-    cost: 4200
-    points: 15
-    dependencies:
-      - STR_ALIEN_ALLOYS
 #---- aLien UFO Components ----------------------------------------------------#
   - type: STR_UFO_NAVIGATION
     cost: 45000

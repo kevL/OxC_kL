@@ -1273,8 +1273,7 @@ bool BattlescapeGame::kneel(BattleUnit* const unit)
 			{
 				if (tu == 3
 					|| (tu == 10
-						&& unit->spendEnergy(std::max(
-												0,
+						&& unit->spendEnergy(std::max(0,
 												5 - unit->getArmor()->getAgility())) == true))
 				{
 					unit->spendTimeUnits(tu);

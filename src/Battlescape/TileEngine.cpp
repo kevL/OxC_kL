@@ -296,12 +296,12 @@ void TileEngine::addLight(
 
 	for (int // only loop through the positive quadrant.
 			x = 0;
-			x != power + 1;
+			x <= power;
 			++x)
 	{
 		for (int
 				y = 0;
-				y != power + 1;
+				y <= power;
 				++y)
 		{
 			for (int
@@ -317,44 +317,36 @@ void TileEngine::addLight(
 														pos.y + y,
 														z));
 				if (tile != NULL)
-					tile->addLight(
-								dist,
-								layer);
+					tile->addLight(dist, layer);
 
 				tile = _battleSave->getTile(Position(
 												pos.x - x,
 												pos.y - y,
 												z));
 				if (tile != NULL)
-					tile->addLight(
-								dist,
-								layer);
+					tile->addLight(dist, layer);
 
 				tile = _battleSave->getTile(Position(
 												pos.x + x,
 												pos.y - y,
 												z));
 				if (tile != NULL)
-					tile->addLight(
-								dist,
-								layer);
+					tile->addLight(dist, layer);
 
 				tile = _battleSave->getTile(Position(
 												pos.x - x,
 												pos.y + y,
 												z));
 				if (tile != NULL)
-					tile->addLight(
-								dist,
-								layer);
+					tile->addLight(dist, layer);
 			}
 		}
 	}
 }
 
 /**
- * Calculates line of sight of a BattleUnit.
- * @param unit - pointer to a BattleUnit to check field of view for
+ * Calculates Field of View for a BattleUnit.
+ * @param unit - pointer to a BattleUnit
  * @return, true when previously concealed units are spotted
  */
 bool TileEngine::calculateFOV(BattleUnit* const unit) const
@@ -375,14 +367,11 @@ bool TileEngine::calculateFOV(BattleUnit* const unit) const
 
 	bool ret = false;
 
-	const size_t hostiles_pre = unit->getHostileUnitsThisTurn().size();
+	const size_t antecedentOpponents = unit->getHostileUnitsThisTurn().size();
 
 	int dir;
-	if (Options::battleStrafe == true
-		&& unit->getTurretType() > -1)
-	{
+	if (unit->getTurretType() != -1) // && Options::battleStrafe == true
 		dir = unit->getTurretDirection();
-	}
 	else
 		dir = unit->getUnitDirection();
 
@@ -407,7 +396,7 @@ bool TileEngine::calculateFOV(BattleUnit* const unit) const
 	else
 		diag = false;
 
-	VoxelType block;
+	VoxelType blockType;
 
 	std::vector<Position> trj;
 
@@ -423,16 +412,11 @@ bool TileEngine::calculateFOV(BattleUnit* const unit) const
 
 	BattleUnit* spottedUnit;
 
-	if (unit->getHeight()
-				+ unit->getFloatHeight()
-				- _battleSave->getTile(posUnit)->getTerrainLevel() > 27)
+	if (unit->getHeight(true) - _battleSave->getTile(posUnit)->getTerrainLevel() > 27)
 	{
 		const Tile* const tileAbove = _battleSave->getTile(posUnit + Position(0,0,1));
-		if (tileAbove != NULL
-			&& tileAbove->hasNoFloor())
-		{
+		if (tileAbove != NULL && tileAbove->hasNoFloor())
 			++posUnit.z;
-		}
 	}
 
 	const int mapSize_z = _battleSave->getMapSizeZ();
@@ -476,9 +460,13 @@ bool TileEngine::calculateFOV(BattleUnit* const unit) const
 							|| _battleSave->getBattleGame()->getPanicHandled() == true) // spot units ->>
 						{
 							spottedUnit = _battleSave->getTile(posTest)->getUnit();
+/*							if (spottedUnit != NULL)
+								Log(LOG_INFO) << "CalcFoV for " << unit->getId()
+											  << " - unit on Tile id-" << spottedUnit->getId()
+											  << " " << spottedUnit->getPosition()
+											  << " vis = " << visible(unit, _battleSave->getTile(posTest)); */
 
 							if (spottedUnit != NULL
-//								&& spottedUnit->isOut() == false
 								&& spottedUnit->isOut_t(OUT_STAT) == false
 								&& visible(
 										unit,
@@ -557,7 +545,7 @@ bool TileEngine::calculateFOV(BattleUnit* const unit) const
 															size_x,
 															size_y,
 															0);
-									block = plotLine(
+									blockType = plotLine(
 													pos,
 													posTest,
 													true,
@@ -567,11 +555,11 @@ bool TileEngine::calculateFOV(BattleUnit* const unit) const
 
 									trjLength = trj.size();
 
-//									if (block > 127)	// last tile is blocked thus must be cropped
-//									if (block > 0)		// kL: -1 - do NOT crop trajectory (ie. hit content-object)
-														//		0 - expose Tile (should never return this, unless out-of-bounds)
-														//		1 - crop the trajectory (hit regular wall)
-									if (block > VOXEL_FLOOR) // 0
+//									if (blockType > 127)	// last tile is blocked thus must be cropped
+//									if (blockType > 0)		// kL: -1 - do NOT crop trajectory (ie. hit content-object)
+															//		0 - expose Tile (should never return this, unless out-of-bounds)
+															//		1 - crop the trajectory (hit regular wall)
+									if (blockType > VOXEL_FLOOR) // 0
 										--trjLength;
 
 									for (size_t
@@ -688,15 +676,12 @@ bool TileEngine::calculateFOV(BattleUnit* const unit) const
 		}
 	}
 
-	if (unit->getFaction() == FACTION_PLAYER
-		&& ret == true)
-	{
-		return true;
-	}
+	if (unit->getFaction() == FACTION_PLAYER)
+		return ret;
 
 	if (unit->getFaction() != FACTION_PLAYER
 		&& unit->getHostileUnits()->empty() == false
-		&& unit->getHostileUnitsThisTurn().size() > hostiles_pre)
+		&& unit->getHostileUnitsThisTurn().size() > antecedentOpponents)
 	{
 		return true;
 	}
@@ -1676,7 +1661,7 @@ bool TileEngine::checkReactionFire(
  */
 std::vector<BattleUnit*> TileEngine::getSpottingUnits(const BattleUnit* const unit)
 {
-	//Log(LOG_INFO) << "TileEngine::getSpottingUnits() vs. id-" << unit->getId();
+	//Log(LOG_INFO) << "TileEngine::getSpottingUnits() vs. id-" << unit->getId() << " " << unit->getPosition();
 	const Tile* const tile = unit->getTile();
 	std::vector<BattleUnit*> spotters;
 
@@ -1686,9 +1671,9 @@ std::vector<BattleUnit*> TileEngine::getSpottingUnits(const BattleUnit* const un
 			++i)
 	{
 		//Log(LOG_INFO) << ". spotCheck id-" << (*i)->getId();
-		if ((*i)->getTimeUnits() != 0
-			&& (*i)->getFaction() != _battleSave->getSide()
+		if ((*i)->getFaction() != _battleSave->getSide()
 			&& (*i)->getFaction() != FACTION_NEUTRAL
+			&& (*i)->getTimeUnits() != 0
 			&& (*i)->isOut_t() == false)
 //			&& (*i)->isOut(true, true) == false)
 //			&& (*i)->getSpawnUnit().empty() == true)
@@ -1699,11 +1684,10 @@ std::vector<BattleUnit*> TileEngine::getSpottingUnits(const BattleUnit* const un
 					|| (((*i)->getOriginalFaction() == FACTION_PLAYER			// Also - aLiens get to see in all directions
 							|| (*i)->isZombie() == true)
 						&& (*i)->checkViewSector(unit->getPosition()) == true))	// but xCom & zombies must checkViewSector() even when MC'd
-				&& visible(
-						*i,
-						tile) == true)
+				&& visible(*i, tile) == true)
 			{
-				//Log(LOG_INFO) << ". . Add spotter.";
+				//Log(LOG_INFO) << ". . Add spotter " << (*i)->getPosition();
+				//Log(LOG_INFO) << ". . distance = " << distance(unit->getPosition(), (*i)->getPosition());
 				spotters.push_back(*i);
 			}
 		}
@@ -2039,7 +2023,7 @@ BattleUnit* TileEngine::hit(
 			voxelType = voxelCheck(
 								targetVoxel,
 								attacker,
-								false,false,NULL);
+								false, false, NULL);
 
 		if (voxelType > VOXEL_EMPTY && voxelType < VOXEL_UNIT	// 4 terrain parts (0..3)
 			&& dType != DT_STUN									// workaround for Stunrod. (might include DT_SMOKE & DT_IN)
