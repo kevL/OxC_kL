@@ -231,7 +231,8 @@ private:
 		 * Gets the Tile at a given position on the map.
 		 * This method is called over 50mil+ times per turn so it seems useful to inline it.
 		 * @note Are not functions that are defined inside the class def'n here
-		 * supposedly assumed as 'inlined' ......
+		 * supposedly assumed as 'inlined' ...... And the true result of keyword
+		 * "inline" is actually something quite different.
 		 * @param pos - reference a Map position
 		 * @return, pointer to the tile at that position
 		 */

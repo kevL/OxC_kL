@@ -259,35 +259,34 @@ void Tile::saveBinary(Uint8** buffer) const
 /**
  * Sets the MapData references of parts 0 to 3.
  * @param data		- pointer to MapData
- * @param dataID	- dataID
- * @param dataSetID	- dataSetID
+ * @param dataId	- dataID
+ * @param dataSetId	- dataSetID
  * @param partType	- the part type (MapData.h)
  */
 void Tile::setMapData(
 		MapData* const data,
-		const int dataID,
-		const int dataSetID,
+		const int dataId,
+		const int dataSetId,
 		const MapDataType partType)
 {
 	_objects[partType] = data;
-	_mapDataId[partType] = dataID;
-	_mapDataSetId[partType] = dataSetID;
+	_mapDataId[partType] = dataId;
+	_mapDataSetId[partType] = dataSetId;
 }
 
 /**
  * Gets the MapData references of parts 0 to 3.
- * @param dataID	- pointer to dataID
- * @param dataSetID	- pointer to dataSetID
+ * @param dataId	- pointer to dataID
+ * @param dataSetId	- pointer to dataSetID
  * @param partType	- the part type (MapData.h)
- * @return, the object ID
  */
 void Tile::getMapData(
-		int* dataID,
-		int* dataSetID,
+		int* dataId,
+		int* dataSetId,
 		MapDataType partType) const
 {
-	*dataID = _mapDataId[partType];
-	*dataSetID = _mapDataSetId[partType];
+	*dataId = _mapDataId[partType];
+	*dataSetId = _mapDataSetId[partType];
 }
 
 /**
@@ -614,17 +613,20 @@ int Tile::getShade() const
  * because the object type of the old and new are not necessarily the same. If
  * the destroyed part is an explosive set the tile's explosive value which will
  * trigger a chained explosion.
- * @param partType	- this Tile's part for destruction (MapData.h)
- * @param tileType	- SpecialTileType (RuleItem.h)
+ * @param partType		- this Tile's part for destruction (MapData.h)
+ * @param tileType		- SpecialTileType to consider the objective (RuleItem.h)
+ * @param battleSave	- pointer to the SavedBattleGame
  * @return, true if an objective-tilepart was destroyed
  */
 bool Tile::destroyTilepart(
 		MapDataType partType,
-		SpecialTileType tileType)
+		SpecialTileType tileType,
+		SavedBattleGame* const battleSave)
 {
 	bool objective = false;
+	int tLevel = 0;
 
-	if (_objects[partType])
+	if (_objects[partType] != NULL)
 	{
 		if (_objects[partType]->isGravLift() == true
 			|| _objects[partType]->getArmor() == 255) // <- set to 255 in MCD for Truly Indestructability.
@@ -632,27 +634,30 @@ bool Tile::destroyTilepart(
 			return false;
 		}
 
+		if (partType == O_OBJECT)
+			tLevel = _objects[O_OBJECT]->getTerrainLevel();
+
 		objective = (_objects[partType]->getSpecialType() == tileType);
 
-		const MapData* const partOrg = _objects[partType];
-		const int origMapDataSetID = _mapDataSetId[partType];
+		const MapData* const origData = _objects[partType];
+		const int origDataSetId = _mapDataSetId[partType];
 
 		setMapData(NULL,-1,-1, partType);
 
-		if (partOrg->getDieMCD() != 0)
+		if (origData->getDieMCD() != 0)
 		{
-			MapData* const dead = partOrg->getDataset()->getObjects()->at(partOrg->getDieMCD());
+			MapData* const dead = origData->getDataset()->getObjects()->at(origData->getDieMCD());
 			setMapData(
 					dead,
-					partOrg->getDieMCD(),
-					origMapDataSetID,
+					origData->getDieMCD(),
+					origDataSetId,
 					dead->getPartType());
 		}
 
-		if (partOrg->getExplosive() != 0)
+		if (origData->getExplosive() != 0)
 			setExplosive(
-					partOrg->getExplosive(),
-					partOrg->getExplosiveType());
+					origData->getExplosive(),
+					origData->getExplosiveType());
 	}
 
 	if (partType == O_FLOOR) // check if the floor on the lowest level is gone.
@@ -665,7 +670,20 @@ bool Tile::destroyTilepart(
 		if (_objects[O_OBJECT] != NULL // destroy the object if floor is gone.
 			&& _objects[O_OBJECT]->getBigwall() == BIGWALL_NONE)
 		{
-			destroyTilepart(O_OBJECT, tileType); // stop floating haybales.
+
+			destroyTilepart(O_OBJECT, tileType, battleSave); // stop floating haybales.
+		}
+	}
+
+	if (tLevel == -24) // destroy the object-above if its support is gone.
+	{
+		Tile* const tileAbove = battleSave->getTile(_pos + Position(0,0,1));
+		if (tileAbove != NULL
+			&& tileAbove->getMapData(O_FLOOR) == NULL
+			&& tileAbove->getMapData(O_OBJECT) != NULL
+			&& tileAbove->getMapData(O_OBJECT)->getBigwall() == BIGWALL_NONE)
+		{
+			destroyTilepart(O_OBJECT, tileType, battleSave); // stop floating lampposts.
 		}
 	}
 
@@ -674,21 +692,23 @@ bool Tile::destroyTilepart(
 
 /**
  * Damages terrain (check against terrain-part armor/hitpoints/constitution).
- * @param partType	- part of tile to check (MapData.h)
- * @param power		- power of the damage
- * @param tileType	- SpecialTileType (RuleItem.h)
+ * @param partType		- part of tile to check (MapData.h)
+ * @param power			- power of the damage
+ * @param tileType		- SpecialTileType (RuleItem.h)
+ * @param battleSave	- pointer to the SavedBattleGame
  * @return, true if an objective was destroyed
  */
 bool Tile::hitTile(
 		MapDataType partType,
 		int power,
-		SpecialTileType tileType)
+		SpecialTileType tileType,
+		SavedBattleGame* const battleSave)
 {
 	//Log(LOG_INFO) << "Tile::damage() vs partType = " << partType << ", hp = " << _objects[partType]->getArmor();
 	bool objectiveDestroyed = false;
 
 	if (power >= _objects[partType]->getArmor())
-		objectiveDestroyed = destroyTilepart(partType, tileType);
+		objectiveDestroyed = destroyTilepart(partType, tileType, battleSave);
 
 	return objectiveDestroyed;
 }

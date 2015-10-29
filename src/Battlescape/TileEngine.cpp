@@ -2090,7 +2090,8 @@ BattleUnit* TileEngine::hit(
 				if (tile->hitTile(
 								partType,
 								power,
-								_battleSave->getObjectiveType()) == true)
+								_battleSave->getObjectiveType(),
+								_battleSave) == true)
 				{
 					_battleSave->addDestroyedObjective();
 				}
@@ -4203,7 +4204,7 @@ bool TileEngine::detonate(Tile* const tile) const
 			else
 				partTemp = part;
 
-			if (tiles[i]->destroyTilepart(part, _battleSave->getObjectiveType()) == true) // DESTROY HERE <-|
+			if (tiles[i]->destroyTilepart(part, _battleSave->getObjectiveType(), _battleSave) == true) // DESTROY HERE <-|
 				objectiveDestroyed = true;
 
 			part = partTemp;

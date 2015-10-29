@@ -215,12 +215,14 @@ protected:
 		/// Destroys a tile part.
 		bool destroyTilepart(
 				MapDataType partType,
-				SpecialTileType tileType);
+				SpecialTileType tileType,
+				SavedBattleGame* const battleSave);
 		/// Damages a tile part.
 		bool hitTile(
 				MapDataType partType,
 				int power,
-				SpecialTileType tileType);
+				SpecialTileType tileType,
+				SavedBattleGame* const battleSave);
 
 		/// Sets a virtual explosive on this tile to detonate later.
 		void setExplosive(

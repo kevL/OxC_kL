@@ -1991,10 +1991,10 @@ void SavedBattleGame::tileVolatiles()
 				if ((*i)->getMapData(O_OBJECT)->getFlammable() != 255
 					&& (*i)->getMapData(O_OBJECT)->getArmor() != 255)
 				{
-					if ((*i)->destroyTilepart(O_OBJECT, getObjectiveType()) == true)
+					if ((*i)->destroyTilepart(O_OBJECT, getObjectiveType(), this) == true)
 						addDestroyedObjective();
 
-					if ((*i)->destroyTilepart(O_FLOOR, getObjectiveType()) == true)
+					if ((*i)->destroyTilepart(O_FLOOR, getObjectiveType(), this) == true)
 						addDestroyedObjective();
 				}
 			}
@@ -2003,7 +2003,7 @@ void SavedBattleGame::tileVolatiles()
 				if ((*i)->getMapData(O_FLOOR)->getFlammable() != 255
 					&& (*i)->getMapData(O_FLOOR)->getArmor() != 255)
 				{
-					if ((*i)->destroyTilepart(O_FLOOR, getObjectiveType()) == true)
+					if ((*i)->destroyTilepart(O_FLOOR, getObjectiveType(), this) == true)
 						addDestroyedObjective();
 				}
 			}

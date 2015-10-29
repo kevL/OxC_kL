@@ -90,7 +90,10 @@ void UnitWalkBState::init()
 	//Log(LOG_INFO) << "\nUnitWalkBState::init() unitID = " << _unit->getId();
 	//Log(LOG_INFO) << ". walking from " << _unit->getPosition() << " to " << _action.target;
 	if (_unit->getFaction() != FACTION_PLAYER)
+	{
 		_walkCam->centerOnPosition(_unit->getPosition());
+		_walkCam->setViewLevel(_unit->getPosition().z);
+	}
 
 	// This is used only for aLiens:
 	_unitsSpotted = _unit->getHostileUnitsThisTurn().size();
@@ -303,11 +306,11 @@ bool UnitWalkBState::doStatusStand() // private.
 
 	const Position pos = _unit->getPosition();
 
-	if (_isVisible == true
-		&& _unit->getFaction() != FACTION_PLAYER
+	if (_unit->getFaction() != FACTION_PLAYER // && _isVisible == true
 		&& _walkCam->isOnScreen(_unit->getPosition()) == false)
 	{
 		_walkCam->centerOnPosition(pos);
+//		_walkCam->setViewLevel(pos.z);
 	}
 
 	const Tile* const tile = _battleSave->getTile(pos);
@@ -802,23 +805,27 @@ bool UnitWalkBState::doStatusStand_end() // private.
 											static_cast<double>(energy) / stat * 100.));
 	}
 
+	const Position pos = _unit->getPosition();
+
 	if (_falling == false
 		&& _unit->getSpecialAbility() == SPECAB_BURN) // if the unit burns floortiles, burn floortiles
 	{
 		// Put burnedBySilacoid() here! etc
 		_unit->getTile()->ignite(1);
 
-		const Position pos = Position::toVoxelSpaceCentered(
-													_unit->getPosition(),
-													-_unit->getTile()->getTerrainLevel());
+		const Position targetVoxel = Position::toVoxelSpaceCentered(
+																pos,
+																-_unit->getTile()->getTerrainLevel());
 		_parent->getTileEngine()->hit(
-									pos,
+									targetVoxel,
 									_unit->getBaseStats()->strength,
 									DT_IN,
 									_unit);
 	}
 
 	_terrain->calculateUnitLighting();
+
+	_walkCam->setViewLevel(pos.z);
 
 	// This needs to be done *before* the calculateFOV(pos) or else any newVis will
 	// be marked Visible before visForUnits() catches the new unit that is !Visible.
@@ -833,16 +840,14 @@ bool UnitWalkBState::doStatusStand_end() // private.
 	{
 		if ((*i)->getId() == 1000007)
 		{
-			Log(LOG_INFO) << ". dist = " << TileEngine::distance(_unit->getPosition(), (*i)->getPosition());
+			Log(LOG_INFO) << ". dist = " << TileEngine::distance(pos, (*i)->getPosition());
 			break;
 		}
 	} // debug_end. */
 
 	// This calculates or 'refreshes' the Field of View of all units within
 	// maximum distance (20 tiles) of current unit.
-	_terrain->calculateFOV(
-						_unit->getPosition(),
-						true);
+	_terrain->calculateFOV(pos, true);
 
 	if (_parent->checkProxyGrenades(_unit) == true) // Put checkForSilacoid() here!
 	{

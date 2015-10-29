@@ -205,9 +205,7 @@ void MapDataSet::loadData()
 				i != 8; // sprite-frames
 				++i)
 		{
-			to->setSprite(
-						i,
-						(int)mcd.Frame[i]);
+			to->setSprite(i, (int)mcd.Frame[i]);
 		}
 
 		to->setObjectType(static_cast<MapDataType>(mcd.Tile_Type)); // must come after setSprite() above to set '_isPsychedelic' correctly.
