@@ -3586,7 +3586,6 @@ void BattlescapeGame::cleanupDeleted()
 	{
 		delete *i;
 	}
-
 	_deleted.clear();
 }
 

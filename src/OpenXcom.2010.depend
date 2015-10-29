@@ -4636,7 +4636,7 @@
 
 1432464769 f:\git\openxcom\src\savegame\itemcontainer.h
 
-1446104767 f:\git\openxcom\src\savegame\savedbattlegame.h
+1446158748 f:\git\openxcom\src\savegame\savedbattlegame.h
 	"BattleUnit.h"
 
 1446124378 f:\git\openxcom\src\savegame\battleunit.h
@@ -5341,7 +5341,8 @@
 	"Position.h"
 	"../Engine/State.h"
 
-1445472306 f:\git\openxcom\src\ruleset\aliendeployment.h
+1446156864 f:\git\openxcom\src\ruleset\aliendeployment.h
+	"RuleItem.h"
 	"../Resource/XcomResourcePack.h"
 
 1443057100 source:f:\git\openxcom\src\battlescape\actionmenuitem.cpp
@@ -5399,7 +5400,7 @@
 1444727612 f:\git\openxcom\src\battlescape\scannerstate.h
 	"../Engine/State.h"
 
-1445483026 f:\git\openxcom\src\battlescape\tileengine.h
+1446158348 f:\git\openxcom\src\battlescape\tileengine.h
 	"BattlescapeGame.h"
 	"Position.h"
 	"../Ruleset/MapData.h"
@@ -5407,7 +5408,7 @@
 
 1443150185 f:\git\openxcom\src\savegame\battleitem.h
 
-1446154382 f:\git\openxcom\src\savegame\tile.h
+1446157984 f:\git\openxcom\src\savegame\tile.h
 	"BattleUnit.h"
 	"../Battlescape/Position.h"
 	"../Ruleset/MapData.h"
@@ -5470,7 +5471,7 @@
 1443707949 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1446057674 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1446157571 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	"AlienBAIState.h"
 	"BattlescapeState.h"
@@ -5555,7 +5556,7 @@
 
 1440163450 f:\git\openxcom\src\ruleset\ruleinventory.h
 
-1446150628 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
+1446157206 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
 	"BattlescapeGenerator.h"
 	"AlienBAIState.h"
 	"CivilianBAIState.h"
@@ -6212,7 +6213,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1446154745 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1446158480 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	"AlienBAIState.h"
 	"BattlescapeState.h"
@@ -8213,7 +8214,7 @@
 
 1442985958 f:\git\openxcom\src\ruleset\extrasounds.h
 
-1445472387 source:f:\git\openxcom\src\ruleset\aliendeployment.cpp
+1446156864 source:f:\git\openxcom\src\ruleset\aliendeployment.cpp
 	"AlienDeployment.h"
 
 1441867759 source:f:\git\openxcom\src\ruleset\alienrace.cpp
@@ -8544,7 +8545,7 @@
 	"../Interface/Text.h"
 	"../Ruleset/RuleResearch.h"
 
-1446107147 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
+1446158558 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
 	"SavedBattleGame.h"
 	"BattleItem.h"
 	"Node.h"
@@ -8631,7 +8632,7 @@
 	"TerrorSite.h"
 	"../Engine/Language.h"
 
-1446106873 source:f:\git\openxcom\src\savegame\tile.cpp
+1446158182 source:f:\git\openxcom\src\savegame\tile.cpp
 	"Tile.h"
 	"BattleItem.h"
 	"SerializationHelper.h"

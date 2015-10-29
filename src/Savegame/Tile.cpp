@@ -615,13 +615,11 @@ int Tile::getShade() const
  * trigger a chained explosion.
  * @param partType		- this Tile's part for destruction (MapData.h)
  * @param battleSave	- pointer to the SavedBattleGame
- * @return, true if an objective-tilepart was destroyed
  */
-bool Tile::destroyTilepart(
+void Tile::destroyTilepart(
 		MapDataType partType,
 		SavedBattleGame* const battleSave)
 {
-	bool objectiveDestroyed = false;
 	int tLevel = 0;
 
 	if (_objects[partType] != NULL)
@@ -629,13 +627,14 @@ bool Tile::destroyTilepart(
 		if (_objects[partType]->isGravLift() == true
 			|| _objects[partType]->getArmor() == 255) // <- set to 255 in MCD for Truly Indestructability.
 		{
-			return false;
+			return;
 		}
 
 		if (partType == O_OBJECT)
 			tLevel = _objects[O_OBJECT]->getTerrainLevel();
 
-		objectiveDestroyed = (_objects[partType]->getSpecialType() == battleSave->getObjectiveType());
+		if (_objects[partType]->getSpecialType() == battleSave->getObjectiveType())
+			battleSave->addDestroyedObjective();
 
 		const MapData* const origData = _objects[partType];
 		const int origDataSetId = _mapDataSetId[partType];
@@ -684,8 +683,6 @@ bool Tile::destroyTilepart(
 			destroyTilepart(O_OBJECT, battleSave); // stop floating lampposts.
 		}
 	}
-
-	return objectiveDestroyed;
 }
 
 /**
@@ -693,18 +690,15 @@ bool Tile::destroyTilepart(
  * @param partType		- part of tile to check (MapData.h)
  * @param power			- power of the damage
  * @param battleSave	- pointer to the SavedBattleGame
- * @return, true if an objective was destroyed
  */
-bool Tile::hitTile(
+void Tile::hitTile(
 		MapDataType partType,
 		int power,
 		SavedBattleGame* const battleSave)
 {
 	//Log(LOG_INFO) << "Tile::damage() vs partType = " << partType << ", hp = " << _objects[partType]->getArmor();
 	if (power >= _objects[partType]->getArmor())
-		return destroyTilepart(partType, battleSave);
-
-	return false;
+		destroyTilepart(partType, battleSave);
 }
 
 /**

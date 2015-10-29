@@ -2086,9 +2086,7 @@ BattleUnit* TileEngine::hit(
 					_battleSave->getModuleMap()[(targetVoxel.x / 16) / 10]
 											   [(targetVoxel.y / 16) / 10].second--;
 				}
-
-				if (tile->hitTile(partType, power, _battleSave) == true)
-					_battleSave->addDestroyedObjective();
+				tile->hitTile(partType, power, _battleSave);
 			}
 		}
 		else if (voxelType == VOXEL_UNIT) // battleunit voxelType HIT SUCCESS.
@@ -2960,11 +2958,8 @@ void TileEngine::explode(
 		{
 			if (*i != _trueTile)
 			{
-				if (detonate(*i) == true)
-					_battleSave->addDestroyedObjective();
-
+				detonate(*i);
 				applyGravity(*i);
-
 				Tile* const tileAbove = _battleSave->getTile((*i)->getPosition() + Position(0,0,1));
 				if (tileAbove != NULL)
 					applyGravity(tileAbove);
@@ -4042,13 +4037,12 @@ int TileEngine::blockage(
  * - up to 4 bigWalls around the perimeter
  * - plus the content-object in the center
  * @param tile - pointer to Tile affected
- * @return, true if an objective was destroyed
  */
-bool TileEngine::detonate(Tile* const tile) const
+void TileEngine::detonate(Tile* const tile) const
 {
 	int power = tile->getExplosive(); // <- power that hit the Tile.
 	if (power == 0) // no explosive applied to the Tile
-		return false;
+		return;
 
 	//Log(LOG_INFO) << "";
 	//Log(LOG_INFO) << "TileEngine::detonate() " << tile->getPosition() << " power = " << power;
@@ -4105,9 +4099,7 @@ bool TileEngine::detonate(Tile* const tile) const
 		partType,
 		partT;
 
-	bool
-		objectiveDestroyed = false,
-		diagWallDestroyed = true;
+	bool diagWallDestroyed = true;
 
 	for (size_t
 			i = 8;
@@ -4195,8 +4187,7 @@ bool TileEngine::detonate(Tile* const tile) const
 			else
 				partT = partType;
 
-			if (tiles[i]->destroyTilepart(partType, _battleSave) == true) // DESTROY HERE <-|
-				objectiveDestroyed = true;
+			tiles[i]->destroyTilepart(partType, _battleSave); // DESTROY HERE <-|
 
 			partType = partT;
 		}
@@ -4218,8 +4209,6 @@ bool TileEngine::detonate(Tile* const tile) const
 			tileAbove->addSmoke(tile->getSmoke() / 3);
 		}
 	}
-
-	return objectiveDestroyed;
 }
 
 /**

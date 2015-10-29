@@ -149,7 +149,7 @@ AlienDeployment::AlienDeployment(const std::string& type)
 		_markerIcon(-1),
 		_durationMin(0),
 		_durationMax(0),
-		_objectiveType(-1),
+		_objectiveType(STT_NONE),
 		_objectivesReqd(0),
 		_objectiveCompleteScore(0),
 		_objectiveFailedScore(0),
@@ -206,9 +206,10 @@ void AlienDeployment::load(const YAML::Node& node)
 		_musics.push_back((*i).as<std::string>(""));
 	}
 
-	_objectiveType	= node["objectiveType"]	.as<int>(_objectiveType);
+	_objectiveType = static_cast<SpecialTileType>(node["objectiveType"].as<int>(_objectiveType));
 	_objectivesReqd	= node["objectivesReqd"].as<int>(_objectivesReqd);
 	_objectivePopup	= node["objectivePopup"].as<std::string>(_objectivePopup);
+
 	_despawnPenalty	= node["despawnPenalty"].as<int>(_despawnPenalty);
 	_pointsPer30	= node["pointsPer30"]	.as<int>(_pointsPer30);
 
@@ -415,9 +416,9 @@ const std::vector<std::string>& AlienDeployment::getDeploymentMusics()
 
 /**
  * Gets the objective type for this mission (eg alien control consoles).
- * @return, objective type
+ * @return, objective type (RuleItem.h)
  */
-int AlienDeployment::getObjectiveType() const
+SpecialTileType AlienDeployment::getObjectiveType() const
 {
 	return _objectiveType;
 }
@@ -426,7 +427,7 @@ int AlienDeployment::getObjectiveType() const
  * Gets the number of objectives required by this mission.
  * @return, number of objectives
  */
-int AlienDeployment::getObjectivesReqd() const
+int AlienDeployment::getObjectivesRequired() const
 {
 	return _objectivesReqd;
 }

@@ -4077,13 +4077,13 @@ bool BattlescapeGenerator::removeBlocks(MapScript* const scriptCommand) // priva
  */
 void BattlescapeGenerator::setupObjectives(const AlienDeployment* const deployRule)
 {
-	int targetType = deployRule->getObjectiveType();
-	if (targetType > -1)
+	const SpecialTileType specialType = deployRule->getObjectiveType();
+	if (specialType != STT_NONE)
 	{
 		int
-			reqd = deployRule->getObjectivesReqd(),
-			actual = 0,
-			parts = static_cast<int>(Tile::PARTS_TILE);
+			req = deployRule->getObjectivesRequired(),
+			inSitu = 0;
+		const int parts = static_cast<int>(Tile::PARTS_TILE);
 		MapDataType partType;
 
 		for (size_t
@@ -4092,30 +4092,27 @@ void BattlescapeGenerator::setupObjectives(const AlienDeployment* const deployRu
 				++i)
 		{
 			for (int
-					part = 0;
-					part != parts;
-					++part)
+					j = 0;
+					j != parts;
+					++j)
 			{
-				partType = static_cast<MapDataType>(part);
+				partType = static_cast<MapDataType>(j);
 				if (_battleSave->getTiles()[i]->getMapData(partType)
-					&& _battleSave->getTiles()[i]->getMapData(partType)->getSpecialType() == targetType)
+					&& _battleSave->getTiles()[i]->getMapData(partType)->getSpecialType() == specialType)
 				{
-					++actual;
+					++inSitu;
 				}
 			}
 		}
 
-		if (actual != 0)
+		if (inSitu != 0)
 		{
-			_battleSave->setObjectiveType(targetType);
+			_battleSave->setObjectiveType(specialType);
 
-			if (reqd == 0
-				|| actual < reqd)
-			{
-				reqd = actual;
-			}
+			if (req == 0 || inSitu < req)
+				req = inSitu;
 
-			_battleSave->setObjectiveCount(reqd);
+			_battleSave->setObjectiveTotal(req);
 		}
 	}
 }

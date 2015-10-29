@@ -24,6 +24,8 @@
 //#include <vector>
 //#include <yaml-cpp/yaml.h>
 
+#include "RuleItem.h"
+
 #include "../Resource/XcomResourcePack.h"
 
 
@@ -115,7 +117,6 @@ private:
 		_objectiveCompleteScore,
 		_objectiveFailedScore,
 		_objectivesReqd,
-		_objectiveType,
 		_pointsPer30,
 		_shade,
 		_width;
@@ -138,7 +139,7 @@ private:
 	std::vector<DeploymentData> _data;
 
 	BriefingData _briefingData;
-
+	SpecialTileType _objectiveType;
 
 	public:
 		/// Creates a blank Alien Deployment ruleset.
@@ -207,9 +208,9 @@ private:
 		const std::vector<std::string>& getDeploymentMusics();
 
 		/// Gets the objective type for this mission.
-		int getObjectiveType() const;
+		SpecialTileType getObjectiveType() const;
 		/// Gets a fixed number of objectives required if any.
-		int getObjectivesReqd() const;
+		int getObjectivesRequired() const;
 		/// Gets the string to pop up when the mission objectives are complete.
 		const std::string& getObjectivePopup() const;
 		/// Fills out the objective complete info.

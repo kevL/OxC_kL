@@ -76,7 +76,7 @@ SavedBattleGame::SavedBattleGame(const std::vector<OperationPool*>* const titles
 		_debugMode(false),
 		_aborted(false),
 		_itemId(0),
-		_objectiveType(-1),
+		_objectiveType(STT_NONE),
 		_objectivesDestroyed(0),
 		_objectivesNeeded(0),
 		_unitsFalling(false),
@@ -526,9 +526,11 @@ void SavedBattleGame::load(
 	}
 
 	Log(LOG_INFO) << ". set some vars";
-	_objectiveType			= node["objectiveType"]			.as<int>(_objectiveType);
+
+	_objectiveType = static_cast<SpecialTileType>(node["objectiveType"].as<int>(_objectiveType));
 	_objectivesDestroyed	= node["objectivesDestroyed"]	.as<int>(_objectivesDestroyed);
 	_objectivesNeeded		= node["objectivesNeeded"]		.as<int>(_objectivesNeeded);
+
 	_alienRace				= node["alienRace"]				.as<std::string>(_alienRace);
 //	_kneelReserved			= node["kneelReserved"]			.as<bool>(_kneelReserved);
 
@@ -618,9 +620,9 @@ YAML::Node SavedBattleGame::save() const
 {
 	YAML::Node node;
 
-	if (_objectivesNeeded > 0)
+	if (_objectivesNeeded != 0)
 	{
-		node["objectiveType"]		= _objectiveType;
+		node["objectiveType"]		= static_cast<int>(_objectiveType);
 		node["objectivesDestroyed"]	= _objectivesDestroyed;
 		node["objectivesNeeded"]	= _objectivesNeeded;
 	}
@@ -1645,26 +1647,45 @@ bool SavedBattleGame::isAborted() const
 }
 
 /**
- * Changes the objectives-needed count.
+ * Sets the objective type for the current battle.
+ * @param type - the objective type (RuleItem.h)
+ */
+void SavedBattleGame::setObjectiveType(SpecialTileType type)
+{
+	_objectiveType = type;
+}
+
+/**
+ * Gets the objective type for the current battle.
+ * @return, the objective type (RuleItem.h)
+ */
+SpecialTileType SavedBattleGame::getObjectiveType() const
+{
+	return _objectiveType;
+}
+
+/**
+ * Initializes the objectives-needed count.
  * @note Used only to initialize the objective counter; cf addDestroyedObjective() below.
  * @note Objectives were tile-parts marked w/ MUST_DESTROY in their MCD but now
  * can be any specially marked tile. See elsewhere.
+ * @param qty - quantity of objective-tileparts that need to be destroyed
  */
-void SavedBattleGame::setObjectiveCount(int qty)
+void SavedBattleGame::setObjectiveTotal(int qty)
 {
 	_objectivesNeeded = qty;
 	_objectivesDestroyed = 0;
 }
 
 /**
- * Increments the objectives-destroyed count.
+ * Increments the objectives-destroyed count and checks whether the necessary
+ * quantity of objectives have been destroyed.
  */
 void SavedBattleGame::addDestroyedObjective()
 {
 	if (allObjectivesDestroyed() == false)
 	{
 		++_objectivesDestroyed;
-
 		if (allObjectivesDestroyed() == true)
 		{
 			_controlDestroyed = true;
@@ -1674,13 +1695,13 @@ void SavedBattleGame::addDestroyedObjective()
 }
 
 /**
- * Returns whether the objectives are destroyed.
+ * Returns whether or not enough objectives have been destroyed.
  * @return, true if the objectives are destroyed
  */
 bool SavedBattleGame::allObjectivesDestroyed() const
 {
-	return _objectivesNeeded > 0
-		&& _objectivesNeeded == _objectivesDestroyed;
+	return _objectivesNeeded != 0
+		&& _objectivesNeeded <= _objectivesDestroyed;
 }
 
 /**
@@ -1991,11 +2012,8 @@ void SavedBattleGame::tileVolatiles()
 				if ((*i)->getMapData(O_OBJECT)->getFlammable() != 255
 					&& (*i)->getMapData(O_OBJECT)->getArmor() != 255)
 				{
-					if ((*i)->destroyTilepart(O_OBJECT, this) == true)
-						addDestroyedObjective();
-
-					if ((*i)->destroyTilepart(O_FLOOR, this) == true)
-						addDestroyedObjective();
+					(*i)->destroyTilepart(O_OBJECT, this);
+					(*i)->destroyTilepart(O_FLOOR, this);
 				}
 			}
 			else if ((*i)->getMapData(O_FLOOR) != NULL)
@@ -2003,8 +2021,7 @@ void SavedBattleGame::tileVolatiles()
 				if ((*i)->getMapData(O_FLOOR)->getFlammable() != 255
 					&& (*i)->getMapData(O_FLOOR)->getArmor() != 255)
 				{
-					if ((*i)->destroyTilepart(O_FLOOR, this) == true)
-						addDestroyedObjective();
+					(*i)->destroyTilepart(O_FLOOR, this);
 				}
 			}
 
@@ -2921,24 +2938,6 @@ void SavedBattleGame::calibrateMusic(
 		}
 	}
 	//Log(LOG_INFO) << "SBG:calibrateMusic music= " << music << " terrain= " << terrain;
-}
-
-/**
- * Sets the objective type for the current battle.
- * @param type - the objective type
- */
-void SavedBattleGame::setObjectiveType(int type)
-{
-	_objectiveType = type;
-}
-
-/**
- * Gets the objective type for the current battle.
- * @return, the objective type
- */
-SpecialTileType SavedBattleGame::getObjectiveType() const
-{
-	return static_cast<SpecialTileType>(_objectiveType);
 }
 
 /**

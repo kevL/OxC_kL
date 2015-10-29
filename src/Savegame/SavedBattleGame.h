@@ -86,12 +86,12 @@ private:
 		_mapsize_z,
 		_objectivesDestroyed,
 		_objectivesNeeded,
-		_objectiveType,
 		_turn;
 	size_t _mapSize;
 
 //	BattleActionType _batReserved;
 	Position _rfTriggerPosition;
+	SpecialTileType _objectiveType;
 	TacticalType _tacType;
 	UnitFaction _side;
 
@@ -297,8 +297,12 @@ private:
 		/// Checks if the mission was aborted.
 		bool isAborted() const;
 
+		/// Sets the objective type for this mission.
+		void setObjectiveType(SpecialTileType type);
+		/// Gets the objective type of this mission.
+		SpecialTileType getObjectiveType() const;
 		/// Sets how many objectives need to be destroyed.
-		void setObjectiveCount(int qty);
+		void setObjectiveTotal(int qty);
 		/// Increments the objectives-destroyed counter.
 		void addDestroyedObjective();
 		/// Checks if all the objectives are destroyed.
@@ -445,11 +449,6 @@ private:
 		void calibrateMusic(
 				std::string& music,
 				std::string& terrain) const;
-
-		/// Sets the objective type for this mission.
-		void setObjectiveType(int type);
-		/// Gets the objective type of this mission.
-		SpecialTileType getObjectiveType() const;
 
 		/// Sets the aLiens as having been pacified.
 		void setPacified();
