@@ -6004,13 +6004,13 @@ bool TileEngine::psiAttack(BattleAction* const action)
 			if (victim->getOriginalFaction() == FACTION_PLAYER)
 //				&& Options::allowPsiStrengthImprovement == true)
 			{
-				int resistXp;
+				int xpResist;
 				if (action->actor->getFaction() == FACTION_HOSTILE)
-					resistXp = 2; // xCom resisted an aLien
+					xpResist = 2; // xCom resisted an aLien
 				else
-					resistXp = 1; // xCom resisted an xCom attempt
+					xpResist = 1; // xCom resisted an xCom attempt
 
-				victim->addPsiStrengthExp(resistXp);
+				victim->addPsiStrengthExp(xpResist);
 			}
 		}
 	}

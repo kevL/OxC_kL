@@ -424,16 +424,15 @@ void ExplosionBState::explode() // private.
 				&& _unit->getFaction() == _unit->getOriginalFaction())
 			{
 				const BattleUnit* const targetUnit = _battleSave->getTile(Position::toTileSpace(_center))->getUnit();
-				if (targetUnit != NULL
-					&& targetUnit->getFaction() != FACTION_PLAYER)
+				if (targetUnit != NULL && targetUnit->getFaction() != FACTION_PLAYER)
 				{
-					int grantXp;
+					int xpMelee;
 					if (_hitSuccess == true)
-						grantXp = 2;
+						xpMelee = 2;
 					else
-						grantXp = 1;
+						xpMelee = 1;
 
-					_unit->addMeleeExp(grantXp);
+					_unit->addMeleeExp(xpMelee);
 				}
 			}
 		}
@@ -449,11 +448,8 @@ void ExplosionBState::explode() // private.
 
 	if (itRule != NULL)
 	{
-		if (_unit == NULL
-			&& _item->getPreviousOwner() != NULL)
-		{
+		if (_unit == NULL && _item->getPreviousOwner() != NULL)
 			_unit = _item->getPreviousOwner();
-		}
 
 		if (_areaOfEffect == true)
 		{

@@ -3061,7 +3061,7 @@ std::string BattleUnit::getMeleeWeapon() const
 /**
  * Check if this BattleUnit has ammo and if so reload weapon.
  * @note Used by the AI as well as player's reload hotkey.
- * @return, true if unit has a loaded weapon or has just loaded it.
+ * @return, true if unit has a loaded weapon or has just loaded it
  */
 bool BattleUnit::checkAmmo()
 {
@@ -3086,14 +3086,12 @@ bool BattleUnit::checkAmmo()
 		BattleItem* ammo = NULL;
 		for (std::vector<BattleItem*>::const_iterator
 				i = getInventory()->begin();
-				i != getInventory()->end()
-					&& ammo == NULL;
+				i != getInventory()->end() && ammo == NULL;
 				++i)
 		{
 			for (std::vector<std::string>::const_iterator
 					j = weapon->getRules()->getCompatibleAmmo()->begin();
-					j != weapon->getRules()->getCompatibleAmmo()->end()
-						&& ammo == NULL;
+					j != weapon->getRules()->getCompatibleAmmo()->end() && ammo == NULL;
 					++j)
 			{
 				if (*j == (*i)->getRules()->getType())
@@ -3113,13 +3111,13 @@ bool BattleUnit::checkAmmo()
 
 	// didn't find any compatible ammo in inventory
 	// or weapon is loaded/ doesn't require ammo
-	// or not enough Tu to reload anyway.
+	// or not enough TU to reload anyway.
 	return false;
 }
 
 /**
  * Check if this unit is in the exit area.
- * @param tileType - type of exit tile to check for (default START_POINT)
+ * @param tileType - type of exit tile to check for (RuleItem.h) (default START_POINT)
  * @return, true if unit is in a special exit area
  */
 bool BattleUnit::isInExitArea(SpecialTileType tileType) const
@@ -3213,8 +3211,8 @@ int BattleUnit::getExpPsiStrength() const
  */
 void BattleUnit::addReactionExp()
 {
-	if (_battleGame->getBattleSave()->getPacified() == false)
-		++_expReactions;
+//	if (_battleGame->getBattleSave()->getPacified() == false)
+	++_expReactions;
 }
 
 /**
@@ -3222,8 +3220,8 @@ void BattleUnit::addReactionExp()
  */
 void BattleUnit::addFiringExp()
 {
-	if (_battleGame->getBattleSave()->getPacified() == false)
-		++_expFiring;
+//	if (_battleGame->getBattleSave()->getPacified() == false)
+	++_expFiring;
 }
 
 /**
@@ -3231,8 +3229,8 @@ void BattleUnit::addFiringExp()
  */
 void BattleUnit::addThrowingExp()
 {
-	if (_battleGame->getBattleSave()->getPacified() == false)
-		++_expThrowing;
+//	if (_battleGame->getBattleSave()->getPacified() == false)
+	++_expThrowing;
 }
 
 /**
@@ -3241,8 +3239,8 @@ void BattleUnit::addThrowingExp()
  */
 void BattleUnit::addPsiSkillExp(int qty)
 {
-	if (_battleGame->getBattleSave()->getPacified() == false)
-		_expPsiSkill += qty;
+//	if (_battleGame->getBattleSave()->getPacified() == false)
+	_expPsiSkill += qty;
 }
 
 /**
@@ -3251,8 +3249,8 @@ void BattleUnit::addPsiSkillExp(int qty)
  */
 void BattleUnit::addPsiStrengthExp(int qty)
 {
-	if (_battleGame->getBattleSave()->getPacified() == false)
-		_expPsiStrength += qty;
+//	if (_battleGame->getBattleSave()->getPacified() == false)
+	_expPsiStrength += qty;
 }
 
 /**
@@ -3261,8 +3259,8 @@ void BattleUnit::addPsiStrengthExp(int qty)
  */
 void BattleUnit::addMeleeExp(int qty)
 {
-	if (_battleGame->getBattleSave()->getPacified() == false)
-		_expMelee += qty;
+//	if (_battleGame->getBattleSave()->getPacified() == false)
+	_expMelee += qty;
 }
 
 /**
