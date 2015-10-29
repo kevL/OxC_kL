@@ -2087,14 +2087,8 @@ BattleUnit* TileEngine::hit(
 											   [(targetVoxel.y / 16) / 10].second--;
 				}
 
-				if (tile->hitTile(
-								partType,
-								power,
-								_battleSave->getObjectiveType(),
-								_battleSave) == true)
-				{
+				if (tile->hitTile(partType, power, _battleSave) == true)
 					_battleSave->addDestroyedObjective();
-				}
 			}
 		}
 		else if (voxelType == VOXEL_UNIT) // battleunit voxelType HIT SUCCESS.
@@ -2103,11 +2097,8 @@ BattleUnit* TileEngine::hit(
 				&& _battleSave->getTile(posTarget)->hasNoFloor() == true)
 			{
 				const Tile* const tileBelow = _battleSave->getTile(posTarget + Position(0,0,-1));
-				if (tileBelow != NULL
-					&& tileBelow->getUnit() != NULL)
-				{
+				if (tileBelow != NULL && tileBelow->getUnit() != NULL)
 					targetUnit = tileBelow->getUnit();
-				}
 			}
 
 			if (targetUnit != NULL)
@@ -4111,8 +4102,8 @@ bool TileEngine::detonate(Tile* const tile) const
 		dieMCD;
 
 	MapDataType
-		part,
-		partTemp;
+		partType,
+		partT;
 
 	bool
 		objectiveDestroyed = false,
@@ -4156,19 +4147,19 @@ bool TileEngine::detonate(Tile* const tile) const
 
 
 		powerTest = power;
-		part = parts[i];
+		partType = parts[i];
 
 		if (i == 6
 			&& (bigWall == BIGWALL_NESW || bigWall == BIGWALL_NWSE) // diagonals
-			&& tiles[i]->getMapData(part)->getArmor() * 2 > powerTest) // not enough to destroy
+			&& tiles[i]->getMapData(partType)->getArmor() * 2 > powerTest) // not enough to destroy
 		{
 			diagWallDestroyed = false;
 		}
 
 		// iterate through tile-part armor and destroy all deathtiles if enough powerTest
-		while (tiles[i]->getMapData(part) != NULL
-			&& tiles[i]->getMapData(part)->getArmor() != 255
-			&& tiles[i]->getMapData(part)->getArmor() * 2 <= powerTest)
+		while (tiles[i]->getMapData(partType) != NULL
+			&& tiles[i]->getMapData(partType)->getArmor() != 255
+			&& tiles[i]->getMapData(partType)->getArmor() * 2 <= powerTest)
 		{
 			if (powerTest == power) // only once per initial part destroyed.
 			{
@@ -4177,12 +4168,12 @@ bool TileEngine::detonate(Tile* const tile) const
 						j != 12;
 						++j)
 				{
-					if (tiles[i]->getMapData(part)->getLoftId(j) != 0)
+					if (tiles[i]->getMapData(partType)->getLoftId(j) != 0)
 						++density;
 				}
 			}
 
-			powerTest -= tiles[i]->getMapData(part)->getArmor() * 2;
+			powerTest -= tiles[i]->getMapData(partType)->getArmor() * 2;
 
 			if (i == 6
 				&& (bigWall == BIGWALL_NESW || bigWall == BIGWALL_NWSE)) // diagonals for the current tile
@@ -4191,23 +4182,23 @@ bool TileEngine::detonate(Tile* const tile) const
 			}
 
 			if (_battleSave->getTacType() == TCT_BASEDEFENSE
-				&& tiles[i]->getMapData(part)->isBaseModule() == true)
+				&& tiles[i]->getMapData(partType)->isBaseModule() == true)
 			{
 				_battleSave->getModuleMap()[tile->getPosition().x / 10]
 										   [tile->getPosition().y / 10].second--;
 			}
 
 			// this follows transformed object parts (object can become a ground - unless your MCDs are correct)
-			dieMCD = tiles[i]->getMapData(part)->getDieMCD();
+			dieMCD = tiles[i]->getMapData(partType)->getDieMCD();
 			if (dieMCD != 0)
-				partTemp = tiles[i]->getMapData(part)->getDataset()->getObjects()->at(static_cast<size_t>(dieMCD))->getPartType();
+				partT = tiles[i]->getMapData(partType)->getDataset()->getObjects()->at(static_cast<size_t>(dieMCD))->getPartType();
 			else
-				partTemp = part;
+				partT = partType;
 
-			if (tiles[i]->destroyTilepart(part, _battleSave->getObjectiveType(), _battleSave) == true) // DESTROY HERE <-|
+			if (tiles[i]->destroyTilepart(partType, _battleSave) == true) // DESTROY HERE <-|
 				objectiveDestroyed = true;
 
-			part = partTemp;
+			partType = partT;
 		}
 	}
 

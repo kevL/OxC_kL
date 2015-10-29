@@ -614,16 +614,14 @@ int Tile::getShade() const
  * the destroyed part is an explosive set the tile's explosive value which will
  * trigger a chained explosion.
  * @param partType		- this Tile's part for destruction (MapData.h)
- * @param tileType		- SpecialTileType to consider the objective (RuleItem.h)
  * @param battleSave	- pointer to the SavedBattleGame
  * @return, true if an objective-tilepart was destroyed
  */
 bool Tile::destroyTilepart(
 		MapDataType partType,
-		SpecialTileType tileType,
 		SavedBattleGame* const battleSave)
 {
-	bool objective = false;
+	bool objectiveDestroyed = false;
 	int tLevel = 0;
 
 	if (_objects[partType] != NULL)
@@ -637,7 +635,7 @@ bool Tile::destroyTilepart(
 		if (partType == O_OBJECT)
 			tLevel = _objects[O_OBJECT]->getTerrainLevel();
 
-		objective = (_objects[partType]->getSpecialType() == tileType);
+		objectiveDestroyed = (_objects[partType]->getSpecialType() == battleSave->getObjectiveType());
 
 		const MapData* const origData = _objects[partType];
 		const int origDataSetId = _mapDataSetId[partType];
@@ -671,7 +669,7 @@ bool Tile::destroyTilepart(
 			&& _objects[O_OBJECT]->getBigwall() == BIGWALL_NONE)
 		{
 
-			destroyTilepart(O_OBJECT, tileType, battleSave); // stop floating haybales.
+			destroyTilepart(O_OBJECT, battleSave); // stop floating haybales.
 		}
 	}
 
@@ -683,34 +681,30 @@ bool Tile::destroyTilepart(
 			&& tileAbove->getMapData(O_OBJECT) != NULL
 			&& tileAbove->getMapData(O_OBJECT)->getBigwall() == BIGWALL_NONE)
 		{
-			destroyTilepart(O_OBJECT, tileType, battleSave); // stop floating lampposts.
+			destroyTilepart(O_OBJECT, battleSave); // stop floating lampposts.
 		}
 	}
 
-	return objective;
+	return objectiveDestroyed;
 }
 
 /**
  * Damages terrain (check against terrain-part armor/hitpoints/constitution).
  * @param partType		- part of tile to check (MapData.h)
  * @param power			- power of the damage
- * @param tileType		- SpecialTileType (RuleItem.h)
  * @param battleSave	- pointer to the SavedBattleGame
  * @return, true if an objective was destroyed
  */
 bool Tile::hitTile(
 		MapDataType partType,
 		int power,
-		SpecialTileType tileType,
 		SavedBattleGame* const battleSave)
 {
 	//Log(LOG_INFO) << "Tile::damage() vs partType = " << partType << ", hp = " << _objects[partType]->getArmor();
-	bool objectiveDestroyed = false;
-
 	if (power >= _objects[partType]->getArmor())
-		objectiveDestroyed = destroyTilepart(partType, tileType, battleSave);
+		return destroyTilepart(partType, battleSave);
 
-	return objectiveDestroyed;
+	return false;
 }
 
 /**
