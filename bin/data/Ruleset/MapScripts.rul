@@ -136,24 +136,24 @@ mapScripts:
       label: 1
       direction: vertical
       executionChance: 33
-      rects:
-        - [1,1,4,1] #Terrain Pack removes this
+#      rects:
+#        - [1,1,4,1] #Terrain Pack removes this
     - type: addLine
       label: 2
-      conditionals: -1
+      conditions: [-1]
       executionChance: 50
       direction: horizontal
-      rects:
-        - [1,1,1,4] #Terrain Pack removes this
+#      rects:
+#        - [1,1,1,4] #Terrain Pack removes this
     - type: addLine
-      conditionals: [-1,-2]
+      conditions: [-1,-2]
       direction: both
-      rects:
-        - [1,1,4,4] #Terrain Pack adds this
+#      rects:
+#        - [1,1,4,4] #Terrain Pack adds this
 #        - [1,0,4,5]
     - type: addBlock
       size: 2
-      executions: 4
+      executions: 3 #was 4
     - type: fillArea
       # URBAN set is lacking blocks 10-13, so the numbers don't correlate properly here,
       # because these are references to the block numbers within the sets, not the file names.
@@ -167,24 +167,24 @@ mapScripts:
       label: 1
       direction: vertical
       executionChance: 33
-      rects:
-        - [1,1,4,1] #Terrain Pack removes this
+#      rects:
+#        - [1,1,4,1] #Terrain Pack removes this
     - type: addLine
       label: 2
-      conditionals: -1
+      conditions: [-1]
       executionChance: 50
       direction: horizontal
-      rects:
-        - [1,1,1,3] #Terrain Pack removes this
+#      rects:
+#        - [1,1,1,3] #Terrain Pack removes this
     - type: addLine
-      conditionals: [-1,-2]
+      conditions: [-1,-2]
       direction: both
-      rects:
-        - [1,1,3,3] #Terrain Pack adds this
+#      rects:
+#        - [1,1,3,3] #Terrain Pack adds this
 #        - [1,0,4,5]
     - type: addBlock
       size: 2
-      executions: 4
+      executions: 3 #was 4
     - type: fillArea
       # URBAN set is lacking blocks 10-13, so the numbers don't correlate properly here,
       # because these are references to the block numbers within the sets, not the file names.
@@ -215,11 +215,11 @@ mapScripts:
       executionChance: 50
     - type: addLine
       label: 2
-      conditionals: -1
+      conditions: [-1]
       executionChance: 50
       direction: horizontal
     - type: addLine
-      conditionals: [-1,-2]
+      conditions: [-1,-2]
       direction: both
       rects:
         - [1,0,4,5]
@@ -240,11 +240,11 @@ mapScripts:
       executionChance: 50
     - type: addLine
       label: 2
-      conditionals: -1
+      conditions: [-1]
       executionChance: 50
       direction: horizontal
     - type: addLine
-      conditionals: [-1,-2]
+      conditions: [-1,-2]
       direction: both
     - type: addBlock
       size: 2
@@ -261,11 +261,11 @@ mapScripts:
       executionChance: 50
     - type: addLine
       label: 2
-      conditionals: -1
+      conditions: [-1]
       executionChance: 50
       direction: horizontal
     - type: addLine
-      conditionals: [-1,-2]
+      conditions: [-1,-2]
       direction: both
     - type: addBlock
       size: 2
@@ -282,11 +282,11 @@ mapScripts:
       executionChance: 50
     - type: addLine
       label: 2
-      conditionals: -1
+      conditions: [-1]
       executionChance: 50
       direction: horizontal
     - type: addLine
-      conditionals: [-1,-2]
+      conditions: [-1,-2]
       direction: both
     - type: addBlock
       size: 2
@@ -322,11 +322,11 @@ mapScripts:
       executionChance: 50
     - type: addLine
       label: 2
-      conditionals: -1
+      conditions: [-1]
       executionChance: 50
       direction: horizontal
     - type: addLine
-      conditionals: [-1,-2]
+      conditions: [-1,-2]
       direction: both
       rects:
         - [1,0,4,5]
@@ -346,11 +346,11 @@ mapScripts:
       executionChance: 50
     - type: addLine
       label: 2
-      conditionals: -1
+      conditions: [-1]
       executionChance: 50
       direction: horizontal
     - type: addLine
-      conditionals: [-1, -2]
+      conditions: [-1, -2]
       direction: both
       rects:
         - [1,0,4,5]
@@ -373,12 +373,19 @@ mapScripts:
     commands:
     - type: addUFO
     - type: addCraft
+    - type: addLine
+      label: 1
+      direction: vertical
+      executionChance: 50
+    - type: addLine
+      conditions: [-1]
+      direction: horizontal
     - type: addBlock
       size: 2
-      executions: 4
+      executions: 3 #was 4
     - type: fillArea
-      blocks: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 32, 33, 34, 35, 36, 46]
-      freqs:  [2, 2, 2, 2, 2, 2, 2, 2, 2, 2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2]
+#      blocks: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 32, 33, 34, 35, 36, 46]
+#      freqs:  [2, 2, 2, 2, 2, 2, 2, 2, 2, 2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2]
   - type: PORTTFTD
     commands:
     - type: addCraft
@@ -410,11 +417,11 @@ mapScripts:
       executionChance: 50
     - type: addLine
       label: 2
-      conditionals: -1
+      conditions: [-1]
       executionChance: 50
       direction: horizontal
     - type: addLine
-      conditionals: [-1,-2]
+      conditions: [-1,-2]
       direction: both
     - type: addBlock
       size: 2
@@ -431,11 +438,11 @@ mapScripts:
       executionChance: 50
     - type: addLine
       label: 2
-      conditionals: -1
+      conditions: [-1]
       executionChance: 50
       direction: horizontal
     - type: addLine
-      conditionals: [-1,-2]
+      conditions: [-1,-2]
       direction: both
     - type: addBlock
       size: 2

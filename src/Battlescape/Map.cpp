@@ -1173,7 +1173,19 @@ void Map::drawTerrain(Surface* const surface) // private.
 							halfRight = false,
 							draw = true;
 
-						if ((_unit->getWalkPhase() != 0
+/*						if (_unit->getUnitDirection() == 3 // don't clip chairs/walls when moving directly to or away.
+							|| _unit->getUnitDirection() == 7)
+						{
+							if (trueLoc == false)
+							{
+								if ((_unit->getUnitDirection() == 3 && _unit->getWalkPhase() > 12)
+									|| _unit->getUnitDirection() == 7 && _unit->getWalkPhase() < 4)
+								{
+									draw = false;
+								}
+							}
+						} else */ // screw it.
+						if ((_unit->getWalkPhase() != 0 // don't clip through north/northwest/west UFO hulls etc.
 								|| _unit->getUnitDirection() == 4
 								|| _unit->getUnitDirection() == 1
 								|| _unit->getUnitDirection() == 2) // weird.
@@ -2346,7 +2358,7 @@ void Map::calculateWalkingOffset(
 		const int
 			dir = unit->getUnitDirection(),			// 0..7
 			dirVert = unit->getVerticalDirection(),	// 0= none, 8= up, 9= down
-			walkPhase = unit->getTrueWalkPhase(),
+			walkPhase = unit->getWalkPhaseTrue(),
 			armorSize = unit->getArmor()->getSize();
 		int
 			halfPhase,

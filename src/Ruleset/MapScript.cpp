@@ -65,38 +65,38 @@ MapScript::~MapScript()
 }
 
 /**
- * Loads a map script command from YAML.
+ * Loads a map script directive from YAML.
  * @param node - reference a YAML node
  */
 void MapScript::load(const YAML::Node& node)
 {
 	if (const YAML::Node& mapNode = node["type"])
 	{
-		const std::string command = mapNode.as<std::string>("");
+		const std::string directive = mapNode.as<std::string>("");
 
-		if (command == "addBlock")
+		if (directive == "addBlock")
 			_type = MSC_ADDBLOCK;
-		else if (command == "addLine")
+		else if (directive == "addLine")
 			_type = MSC_ADDLINE;
-		else if (command == "addCraft")
+		else if (directive == "addCraft")
 		{
 			_type = MSC_ADDCRAFT;
 			_groups.push_back(1); // this is a default and can be overridden
 		}
-		else if (command == "addUFO")
+		else if (directive == "addUFO")
 		{
 			_type = MSC_ADDUFO;
 			_groups.push_back(1); // this is a default and can be overridden
 		}
-		else if (command == "digTunnel")
+		else if (directive == "digTunnel")
 			_type = MSC_DIGTUNNEL;
-		else if (command == "fillArea")
+		else if (directive == "fillArea")
 			_type = MSC_FILLAREA;
-		else if (command == "checkBlock")
+		else if (directive == "checkBlock")
 			_type = MSC_CHECKBLOCK;
-		else if (command == "removeBlock")
+		else if (directive == "removeBlock")
 			_type = MSC_REMOVE;
-		else if (command == "resize")
+		else if (directive == "resize")
 		{
 			_type = MSC_RESIZE;
 			_sizeX =
@@ -104,12 +104,12 @@ void MapScript::load(const YAML::Node& node)
 		}
 		else
 		{
-			throw Exception("Unknown command: " + command);
+			throw Exception("Unknown directive: " + directive);
 		}
 	}
 	else
 	{
-		throw Exception("Missing command type.");
+		throw Exception("Missing directive type.");
 	}
 
 	if (const YAML::Node& mapNode = node["rects"])
@@ -151,12 +151,12 @@ void MapScript::load(const YAML::Node& node)
 		}
 	}
 
-	if (const YAML::Node& mapNode = node["conditionals"])
+	if (const YAML::Node& mapNode = node["conditions"])
 	{
 		if (mapNode.Type() == YAML::NodeType::Sequence)
-			_conditionals = mapNode.as<std::vector<int> >(_conditionals);
+			_conditions = mapNode.as<std::vector<int> >(_conditions);
 		else
-			_conditionals.push_back(mapNode.as<int>(0));
+			_conditions.push_back(mapNode.as<int>(0));
 	}
 
 	if (const YAML::Node& mapNode = node["size"])
@@ -285,11 +285,11 @@ void MapScript::load(const YAML::Node& node)
 	{
 		if (_type == MSC_DIGTUNNEL)
 		{
-			throw Exception("no direction defined for dig tunnel command, must be [V]ertical, [H]orizontal, or [B]oth");
+			throw Exception("no direction defined for dig tunnel directive, must be [V]ertical, [H]orizontal, or [B]oth");
 		}
 		else if (_type == MSC_ADDLINE)
 		{
-			throw Exception("no direction defined for add line command, must be [V]ertical, [H]orizontal, or [B]oth");
+			throw Exception("no direction defined for add line directive, must be [V]ertical, [H]orizontal, or [B]oth");
 		}
 	}
 
@@ -300,7 +300,7 @@ void MapScript::load(const YAML::Node& node)
 }
 
 /**
- * Initializes all the various scratch values and such for the command.
+ * Initializes all the various scratch values and such for the directive.
  */
 void MapScript::init()
 {
@@ -414,7 +414,7 @@ int MapScript::getBlockNumber() // private.
 MapBlock* MapScript::getNextBlock(RuleTerrain* const terraRule)
 {
 	if (_blocks.empty() == true)
-		return terraRule->getRandomMapBlock(
+		return terraRule->getMapBlockRand(
 										_sizeX * 10,
 										_sizeY * 10,
 										getGroupNumber());

@@ -66,7 +66,7 @@ private:
 		_type,
 		_varName;
 
-	std::vector<int> _conditionals;
+	std::vector<int> _conditions;
 
 	std::vector<std::pair<size_t, WeightedOptions*> >
 		_missionWeights,
@@ -104,7 +104,7 @@ private:
 		/// Gets the last month this command will run.
 		int getLastMonth() const;
 
-		/// Gets the label of this command, used for conditionals.
+		/// Gets the label of this command for conditions.
 		int getLabel() const;
 
 		/// Gets the odds of this command executing.
@@ -122,7 +122,7 @@ private:
 		int getDelay() const;
 
 		/// Gets the list of conditions this command requires in order to run.
-		const std::vector<int>& getConditionals() const;
+		const std::vector<int>& getConditions() const;
 
 		/// Checks if this command has race weights.
 		bool hasRaceWeights() const;

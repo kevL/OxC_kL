@@ -143,43 +143,44 @@ const std::string& RuleTerrain::getType() const
 
 /**
  * Gets a random mapblock within the given constraints.
- * @param maxSizeX	- the maximum X size of the mapblock
- * @param maxSizeY	- the maximum Y size of the mapblock
- * @param group		- the group Type
- * @param force		- true to enforce the max size (default true)
- * @return, pointer to a MapBlock or NULL if not found
+ * @param sizeX - the maximum X size of the mapblock
+ * @param sizeY - the maximum Y size of the mapblock
+ * @param group - the group Type
+ * @param force - true to enforce block-size at the max-size (default true)
+ * @return, pointer to a MapBlock or NULL if none found
  */
-MapBlock* RuleTerrain::getRandomMapBlock(
-		int maxSizeX,
-		int maxSizeY,
+MapBlock* RuleTerrain::getMapBlockRand(
+		int sizeX,
+		int sizeY,
 		int group,
 		bool force) const
 {
-	std::vector<MapBlock*> eligibleBlocks;
+	//Log(LOG_INFO) << "getMapBlockRand()";
+	//Log(LOG_INFO) << "sizeX = " << sizeX << " sizeY = " << sizeY << " group = " << group << " force = " << force;
+	std::vector<MapBlock*> blocks;
 
 	for (std::vector<MapBlock*>::const_iterator
 			i = _mapBlocks.begin();
 			i != _mapBlocks.end();
 			++i)
 	{
-		if (((*i)->getSizeX() == maxSizeX
-				|| (force == false
-					&& (*i)->getSizeX() < maxSizeX))
-			&& ((*i)->getSizeY() == maxSizeY
-				|| (force == false
-					&& (*i)->getSizeY() < maxSizeY))
-			&& (*i)->isInGroup(group) == true)
+		//Log(LOG_INFO) << ". try [" << (*i)->getType() << "]";
+		if ((*i)->isInGroup(group) == true
+			&& ((*i)->getSizeX() == sizeX
+				|| (force == false && (*i)->getSizeX() < sizeX))
+			&& ((*i)->getSizeY() == sizeY
+				|| (force == false && (*i)->getSizeY() < sizeY)))
 		{
-			eligibleBlocks.push_back((*i));
+			//Log(LOG_INFO) << ". . PUSH BLOC";
+			blocks.push_back(*i);
 		}
 	}
 
-	if (eligibleBlocks.empty() == true)
-		return NULL;
+	if (blocks.empty() == false)
+		return blocks[RNG::pick(blocks.size())];
 
-	const size_t block = static_cast<size_t>(RNG::generate(0,
-						 static_cast<int>(eligibleBlocks.size()) - 1));
-	return eligibleBlocks[block];
+	//Log(LOG_INFO) << "ret NULL";
+	return NULL;
 }
 
 /**

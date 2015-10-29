@@ -645,7 +645,7 @@ private:
 		void turn(bool turret = false);
 
 		/// Gets the walk-phase for calculating Map offset.
-		int getTrueWalkPhase() const;
+		int getWalkPhaseTrue() const;
 		/// Gets the walk-phase for sprite determination and various triggers.
 		int getWalkPhase() const;
 		/// Starts the walkingPhase.

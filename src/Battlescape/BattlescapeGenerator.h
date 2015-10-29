@@ -145,7 +145,7 @@ private:
 			int offset_x,
 			int offset_y,
 			const RuleTerrain* const terraRule,
-			int dataSetOffset,
+			int dataSetIdOffset = 0,
 			bool discovered = false,
 			bool craft = false);
 	/// Loads an XCom RMP file.
@@ -187,9 +187,9 @@ private:
 			int size_y);
 	/// Adds a craft (either a ufo or an xcom craft) somewhere on the map.
 	bool addCraft(
-			const MapBlock* const craftBlock,
-			MapScript* const scriptCommand,
-			SDL_Rect& rectCraft);
+			const MapBlock* const block,
+			MapScript* const script,
+			SDL_Rect& rect);
 	/// Adds a line (generally a road) to the map.
 	bool addLine(
 			MapDirection dir,

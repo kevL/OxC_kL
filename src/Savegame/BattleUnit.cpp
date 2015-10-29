@@ -1041,13 +1041,13 @@ void BattleUnit::turn(bool turret)
  * Gets the walk-phase for calculating Map offset.
  * @return, phase (full range)
  */
-int BattleUnit::getTrueWalkPhase() const
+int BattleUnit::getWalkPhaseTrue() const
 {
 	return _walkPhase;
 }
 
 /**
- * Gets the walk-phase for sprite determination and various triggers.
+ * Gets the walk-phase for sprite determination and various FX triggers.
  * @return, phase (0..7)
  */
 int BattleUnit::getWalkPhase() const

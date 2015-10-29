@@ -2434,8 +2434,8 @@ terrains:
       - type: MOUNT12
         width: 20
         length: 20
-  - type: NATIVEUFO # NEW ##
-    script: URBANUFO #was NATIVEUFO
+  - type: NATIVEUFO
+    script: NATIVEUFO
     mapDataSets:
       - BLANKS
       - JUNGLE
@@ -2585,7 +2585,7 @@ terrains:
       - type: NATIVEURBAN46
         width: 10
         length: 10
-        groups: [0,1] #was 1
+        groups: [0,1,2,3]
   - type: NATIVEURBAN
     script: URBAN #was NATIVEURBAN
     mapDataSets:

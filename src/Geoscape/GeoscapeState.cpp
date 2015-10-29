@@ -3883,8 +3883,8 @@ void GeoscapeState::determineAlienMissions() // private.
 			success (false);
 
 		for (std::vector<int>::const_iterator
-				j = directive->getConditionals().begin();
-				j != directive->getConditionals().end()
+				j = directive->getConditions().begin();
+				j != directive->getConditions().end()
 					&& process == true;
 				++j)
 		{

@@ -3144,7 +3144,6 @@ void BattlescapeState::executionExplosion() // private.
 			if (_battleGame->getMap()->getExplosions()->empty() == true)
 			{
 				_battleGame->setExecution(false);
-//				setStateInterval(BattlescapeState::STATE_INTERVAL_STANDARD);
 
 				BattleUnit* const selUnit = _battleSave->getSelectedUnit();
 				selUnit->aim(false);

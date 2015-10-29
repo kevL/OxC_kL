@@ -93,7 +93,7 @@ void RuleMissionScript::load(const YAML::Node& node)
 	_maxRuns		= node["maxRuns"]		.as<int>(_maxRuns);
 	_avoidRepeats	= node["avoidRepeats"]	.as<int>(_avoidRepeats);
 	_delay			= node["startDelay"]	.as<int>(_delay);
-	_conditionals	= node["conditionals"]	.as<std::vector<int> >(_conditionals);
+	_conditions		= node["conditions"]	.as<std::vector<int> >(_conditions);
 
 	_minDifficulty = static_cast<GameDifficulty>(node["minDifficulty"].as<int>(_minDifficulty));
 
@@ -250,9 +250,9 @@ int RuleMissionScript::getDelay() const
  * Gets the list of conditions that govern execution of this command.
  * @return, reference to a vector of ints
  */
-const std::vector<int>& RuleMissionScript::getConditionals() const
+const std::vector<int>& RuleMissionScript::getConditions() const
 {
-	return _conditionals;
+	return _conditions;
 }
 
 /**

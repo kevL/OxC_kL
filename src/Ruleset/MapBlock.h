@@ -77,7 +77,7 @@ private:
 		/// Loads the map block from YAML.
 		void load(const YAML::Node& node);
 
-		/// Gets the mapblock's type (used for MAP generation).
+		/// Gets the mapblock's type - used for MAP generation.
 		const std::string& getType() const;
 
 		/// Gets the mapblock's x size.

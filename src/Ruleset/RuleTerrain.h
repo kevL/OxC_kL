@@ -77,9 +77,9 @@ private:
 		std::vector<MapDataSet*>* getMapDataSets();
 
 		/// Gets a random mapblock.
-		MapBlock* getRandomMapBlock(
-				int maxSizeX,
-				int maxSizeY,
+		MapBlock* getMapBlockRand(
+				int sizeX,
+				int sizeY,
 				int group,
 				bool force = true) const;
 		/// Gets a mapblock given its type.

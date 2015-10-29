@@ -104,7 +104,7 @@ private:
 	std::vector<int>
 		_blocks,
 		_blocksTemp,
-		_conditionals,
+		_conditions,
 		_frequencies,
 		_frequenciesTemp,
 		_groups,
@@ -162,8 +162,8 @@ private:
 		{ return _executions; };
 
 		/// Gets what conditions apply to this command.
-		const std::vector<int>* getConditionals() const
-		{ return &_conditionals; };
+		const std::vector<int>* getConditions() const
+		{ return &_conditions; };
 
 		/// Gets the groups vector for iteration.
 		const std::vector<int>* getGroups() const

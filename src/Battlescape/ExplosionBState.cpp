@@ -225,7 +225,6 @@ void ExplosionBState::init()
 														start,
 														delay,
 														true);
-
 				_parent->getMap()->getExplosions()->push_back(explosion);
 			}
 
