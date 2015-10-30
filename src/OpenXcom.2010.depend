@@ -5110,7 +5110,7 @@
 	"../Savegame/Base.h"
 	"../Savegame/BaseFacility.h"
 
-1445375665 source:f:\git\openxcom\src\basescape\sellstate.cpp
+1446171600 source:f:\git\openxcom\src\basescape\sellstate.cpp
 	"SellState.h"
 	"../Engine/Action.h"
 	"../Engine/Game.h"
@@ -6292,7 +6292,7 @@
 	"UnitPanicBState.h"
 	"../Savegame/BattleUnit.h"
 
-1445663584 source:f:\git\openxcom\src\battlescape\unitsprite.cpp
+1446172067 source:f:\git\openxcom\src\battlescape\unitsprite.cpp
 	"UnitSprite.h"
 	"../Engine/SurfaceSet.h"
 	"../Ruleset/RuleArmor.h"
@@ -8545,7 +8545,7 @@
 	"../Interface/Text.h"
 	"../Ruleset/RuleResearch.h"
 
-1446158983 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
+1446160299 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
 	"SavedBattleGame.h"
 	"BattleItem.h"
 	"Node.h"

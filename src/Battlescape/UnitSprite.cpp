@@ -903,7 +903,6 @@ void UnitSprite::drawRoutine1()
  */
 void UnitSprite::drawRoutine2()
 {
-//	if (_unit->isOut() == true)
 	if (_unit->isOut_t(OUT_STAT) == true)
 		return;
 
@@ -916,8 +915,7 @@ void UnitSprite::drawRoutine2()
 	Surface* srf = NULL;
 
 	// draw the animated propulsion below the hwp
-	if (_part > 0
-		&& hoverTank != 0)
+	if (_part != 0 && hoverTank != 0)
 	{
 		srf = _unitSurface->getFrame(104 + ((_part - 1) * 8) + _aniFrame);
 		drawRecolored(srf);
@@ -929,7 +927,7 @@ void UnitSprite::drawRoutine2()
 	// throughout a single-tile strafe move with tanks. At least _faceDirection
 	// seems constant during these sprite-frames.
 	int dirFace;
-	if (_unit->getFaceDirection() > -1)
+	if (_unit->getFaceDirection() != -1)
 		dirFace = _unit->getFaceDirection();
 	else
 		dirFace = _unit->getUnitDirection();
@@ -938,16 +936,31 @@ void UnitSprite::drawRoutine2()
 	srf = _unitSurface->getFrame(hoverTank + (_part * 8) + dirFace);
 	drawRecolored(srf);
 
-	// draw the turret together with the last part <- no draw it w/ each part.
-//	if (_part == 3 &&
-	if (turret != -1)
+	// draw the turret together with the last part
+	if (_part == 3 && turret != -1)
 	{
 		srf = _unitSurface->getFrame(64 + (turret * 8) + _unit->getTurretDirection());
+		int
+			turretOffsetX = 0,
+			turretOffsetY = -4;
+		if (hoverTank != 0)
+		{
+			turretOffsetX += offX[dirFace];
+			turretOffsetY += offY[dirFace];
+		}
+
+		srf->setX(turretOffsetX);
+		srf->setY(turretOffsetY);
+		drawRecolored(srf);
+	}
+	// or draw it w/ each part. ->
+/*	if (turret != -1)
+	{
 		int
 			turretOffsetX,
 			turretOffsetY;
 
-		if (_part == 0) // kL->
+		if (_part == 0)
 		{
 			turretOffsetX = 0,
 			turretOffsetY = 12;
@@ -977,7 +990,7 @@ void UnitSprite::drawRoutine2()
 		srf->setX(turretOffsetX);
 		srf->setY(turretOffsetY);
 		drawRecolored(srf);
-	}
+	} */
 }
 
 /**

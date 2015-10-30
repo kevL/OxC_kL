@@ -180,14 +180,15 @@ SellState::SellState(Base* const base)
 		{
 			_sellQty.push_back(0);
 			_soldiers.push_back(*i);
-
 			_lstItems->addRow(
 							4,
 							(*i)->getName().c_str(),
-							L"1",L"0",
-							Text::formatFunding(0).c_str());
+							L"1",L"0",L"-");
+//							Text::formatFunding(0).c_str());
 		}
 	}
+
+	int val;
 
 	for (std::vector<Craft*>::const_iterator
 			i = _base->getCrafts()->begin();
@@ -198,43 +199,44 @@ SellState::SellState(Base* const base)
 		{
 			_sellQty.push_back(0);
 			_crafts.push_back(*i);
-
+			std::wstring wst;
+			val = (*i)->getRules()->getSellCost();
+			if (val != 0)
+				wst = Text::formatFunding(val);
+			else
+				wst = L"-";
 			_lstItems->addRow(
 							4,
 							(*i)->getName(_game->getLanguage()).c_str(),
 							L"1",L"0",
-							Text::formatFunding((*i)->getRules()->getSellCost()).c_str());
+							wst.c_str());
 		}
 	}
 
-	if (_base->getScientists() != 0)
+	val = _base->getScientists();
+	if (val != 0)
 	{
 		_hasSci = 1;
 		_sellQty.push_back(0);
-
-		std::wostringstream woststr;
-		woststr << _base->getScientists();
 		_lstItems->addRow(
 						4,
 						tr("STR_SCIENTIST").c_str(),
-						woststr.str().c_str(),
-						L"0",
-						Text::formatFunding(0).c_str());
+						Text::intWide(val).c_str(),
+						L"0",L"-");
+//						Text::formatFunding(0).c_str());
 	}
 
-	if (_base->getEngineers() != 0)
+	val = _base->getEngineers();
+	if (val != 0)
 	{
 		_hasEng = 1;
 		_sellQty.push_back(0);
-
-		std::wostringstream woststr;
-		woststr << _base->getEngineers();
 		_lstItems->addRow(
 						4,
 						tr("STR_ENGINEER").c_str(),
-						woststr.str().c_str(),
-						L"0",
-						Text::formatFunding(0).c_str());
+						Text::intWide(val).c_str(),
+						L"0",L"-");
+//						Text::formatFunding(0).c_str());
 	}
 
 
