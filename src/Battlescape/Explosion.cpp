@@ -34,25 +34,28 @@ const int
  * Sets up a Explosion sprite with the specified size and position.
  * @param pos			- explosion center position in voxel x/y/z
  * @param frameStart	- used to offset different explosions to different frames on the spritesheet
- * @param frameDelay	- used to delay the start of explosion (default 0)
+ * @param startDelay	- used to delay the start of explosion (default 0)
  * @param big			- flag to indicate it is a real explosion (true) or a bullet hit (default false)
  * @param hit			- used for melee and psi attacks (default 0)
  *						 1 - is a melee attack that SUCCEEDED or Psi-attack
  *						 0 - is not a hit-type attack
  *						-1 - is a melee attack that MISSED
+ * @param retard		- decreases speed of animation (default 0)
  */
 Explosion::Explosion(
 		Position pos,
 		int frameStart,
-		int frameDelay,
+		int startDelay,
 		bool big,
-		int hit)
+		int hit,
+		int retard)
 	:
 		_pos(pos),
 		_frameStart(frameStart),
-		_frameDelay(frameDelay),
+		_startDelay(startDelay),
 		_big(big),
 		_hit(hit),
+		_retard(retard),
 		_frameCurrent(frameStart)
 {}
 
@@ -68,13 +71,21 @@ Explosion::~Explosion()
  */
 bool Explosion::animate()
 {
-	if (_frameDelay > 0)
+	if (_startDelay != 0)
 	{
-		--_frameDelay;
+		--_startDelay;
 		return true;
 	}
 
-	++_frameCurrent;
+	static int stickyTicks;
+
+	if (stickyTicks < _retard)
+		++stickyTicks;
+	else
+	{
+		stickyTicks = 0;
+		++_frameCurrent;
+	}
 
 	if (_frameStart == 88) // special handling for Fusion Torch - it has 6 frames that cycle 6 times.
 	{
@@ -126,7 +137,7 @@ Position Explosion::getPosition() const
  */
 int Explosion::getCurrentFrame() const
 {
-	if (_frameDelay > 0)
+	if (_startDelay != 0)
 		return -1;
 
 	return _frameCurrent;

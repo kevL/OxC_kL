@@ -108,8 +108,7 @@ RuleItem::RuleItem(const std::string& type)
 		_meleeAnimation(0),
 		_meleeSound(-1),
 		_meleeHitSound(-1),
-		_specialType(STT_NONE),
-//		_specialType(-1),
+		_specialType(STT_NONE), // -1
 		_canExecute(false),
 		_defusePulse(false)
 {}
@@ -211,9 +210,9 @@ void RuleItem::load(
 			_meleeHitSound += modIndex;
 	}
 
-	_damageType		= static_cast<DamageType>(node["damageType"]		.as<int>(0));
-	_battleType		= static_cast<BattleType>(node["battleType"]		.as<int>(0));
-	_specialType	= static_cast<SpecialTileType>(node["specialType"]	.as<int>(-1));
+	_damageType		= static_cast<DamageType>(node["damageType"]		.as<int>(_damageType));
+	_battleType		= static_cast<BattleType>(node["battleType"]		.as<int>(_battleType));
+	_specialType	= static_cast<SpecialTileType>(node["specialType"]	.as<int>(_specialType));
 
 	_power				= node["power"]				.as<int>(_power);
 	_clipSize			= node["clipSize"]			.as<int>(_clipSize);

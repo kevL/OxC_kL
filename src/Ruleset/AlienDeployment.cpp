@@ -149,7 +149,7 @@ AlienDeployment::AlienDeployment(const std::string& type)
 		_markerIcon(-1),
 		_durationMin(0),
 		_durationMax(0),
-		_objectiveType(STT_NONE),
+		_objectiveType(STT_NONE), // -1
 		_objectivesReqd(0),
 		_objectiveCompleteScore(0),
 		_objectiveFailedScore(0),
@@ -206,7 +206,7 @@ void AlienDeployment::load(const YAML::Node& node)
 		_musics.push_back((*i).as<std::string>(""));
 	}
 
-	_objectiveType = static_cast<SpecialTileType>(node["objectiveType"].as<int>(-1));
+	_objectiveType = static_cast<SpecialTileType>(node["objectiveType"].as<int>(_objectiveType));
 	_objectivesReqd	= node["objectivesReqd"].as<int>(_objectivesReqd);
 	_objectivePopup	= node["objectivePopup"].as<std::string>(_objectivePopup);
 

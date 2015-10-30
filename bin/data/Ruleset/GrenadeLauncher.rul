@@ -38,6 +38,7 @@ items:
     damageType: 3
     battleType: 2
     blastRadius: 4
+    explosionSpeed: 1 #retard
     clipSize: 1
     armor: 15
   - type: STR_LAUNCHER_INC
@@ -54,6 +55,7 @@ items:
     damageType: 2
     battleType: 2
     blastRadius: 3
+    explosionSpeed: 2 #retard
     clipSize: 1
     armor: 15
   - type: STR_LAUNCHER_SMOKE
@@ -71,6 +73,7 @@ items:
     damageType: 9
     battleType: 2
     blastRadius: 4
+    explosionSpeed: 3 #retard
     clipSize: 1
     armor: 15
 ufopaedia:

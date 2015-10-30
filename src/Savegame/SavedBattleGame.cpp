@@ -76,7 +76,7 @@ SavedBattleGame::SavedBattleGame(const std::vector<OperationPool*>* const titles
 		_debugMode(false),
 		_aborted(false),
 		_itemId(0),
-		_objectiveType(STT_NONE),
+		_objectiveType(STT_NONE), // -1
 		_objectivesDestroyed(0),
 		_objectivesNeeded(0),
 		_unitsFalling(false),
@@ -337,7 +337,7 @@ void SavedBattleGame::load(
 	{
 		id				= (*i)["id"]										.as<int>();
 		faction			= static_cast<UnitFaction>((*i)["faction"]			.as<int>());
-		originalFaction	= static_cast<UnitFaction>((*i)["originalFaction"]	.as<int>(static_cast<int>(faction))); // .. technically.
+		originalFaction	= static_cast<UnitFaction>((*i)["originalFaction"]	.as<int>(faction)); // .. technically, static_cast<int>(faction).
 
 		const GameDifficulty diff (savedGame->getDifficulty());
 		if (id < BattleUnit::MAX_SOLDIER_ID)	// BattleUnit is linked to a geoscape soldier
@@ -527,7 +527,7 @@ void SavedBattleGame::load(
 
 	Log(LOG_INFO) << ". set some vars";
 
-	_objectiveType = static_cast<SpecialTileType>(node["objectiveType"].as<int>(-1));
+	_objectiveType = static_cast<SpecialTileType>(node["objectiveType"].as<int>(_objectiveType));
 	_objectivesDestroyed	= node["objectivesDestroyed"]	.as<int>(_objectivesDestroyed);
 	_objectivesNeeded		= node["objectivesNeeded"]		.as<int>(_objectivesNeeded);
 

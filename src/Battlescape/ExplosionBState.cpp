@@ -133,7 +133,7 @@ void ExplosionBState::init()
 			// all the rest hits one point: AP, melee (stun or AP), laser, plasma, acid
 			_areaOfEffect = _pistolWhip == false
 						 && _item->getRules()->getBattleType() != BT_MELEE
-						 && _item->getRules()->getExplosionRadius() > -1;
+						 && _item->getRules()->getExplosionRadius() != -1;
 		}
 	}
 	else if (_tile != NULL)
@@ -168,13 +168,16 @@ void ExplosionBState::init()
 				delay = 0,
 				qty = _power,
 				radius,
-				offset;
+				offset,
+				explRetard;
 
 			if (_item != NULL)
 			{
 				const RuleItem* const itRule = _item->getRules();
 				if (itRule->defusePulse() == true)
 					_parent->getMap()->setBlastFlash(true);
+
+				explRetard = _item->getRules()->getExplosionSpeed(); // prolongs the explosion (neg values are ignored).
 
 				start = itRule->getHitAnimation();
 				radius = itRule->getExplosionRadius();
@@ -192,6 +195,7 @@ void ExplosionBState::init()
 			{
 				start = ResourcePack::EXPLOSION_OFFSET;
 				radius = _power / 9; // <- for cyberdiscs & terrain expl.
+				explRetard = 0;
 			}
 
 			offset = radius * 6; // voxelspace
@@ -224,7 +228,8 @@ void ExplosionBState::init()
 														voxelExpl + Position(11,11,0), // jogg the anim down a few pixels. Tks.
 														start,
 														delay,
-														true);
+														true, 0,
+														explRetard);
 				_parent->getMap()->getExplosions()->push_back(explosion);
 			}
 
@@ -295,11 +300,12 @@ void ExplosionBState::init()
 													result);
 			_parent->getMap()->getExplosions()->push_back(explosion);
 
-			const int speedExpl = _item->getRules()->getExplosionSpeed(); // can be negative to prolong the explosion.
-			if (speedExpl != 0)
+			const int explSpeed = _item->getRules()->getExplosionSpeed(); // can be negative to prolong the explosion.
+			if (explSpeed != 0)
 			{
-				Uint32 interval = BattlescapeState::STATE_INTERVAL_STANDARD - static_cast<Uint32>(speedExpl * 10);
+				Uint32 interval = BattlescapeState::STATE_INTERVAL_STANDARD - static_cast<Uint32>(explSpeed * 10);
 				if (interval < 1) interval = 1;
+				//Log(LOG_INFO) << "explB setStateInterval = " << interval;
 				_parent->setStateInterval(interval);
 			}
 		}
@@ -346,7 +352,7 @@ void ExplosionBState::think()
 	if (_extend < 1)
 		explode(); */
 
-
+	//Log(LOG_INFO) << "explB think()";
 	if (_parent->getMap()->getBlastFlash() == false)
 	{
 		if (_parent->getMap()->getExplosions()->empty() == true)

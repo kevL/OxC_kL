@@ -1159,9 +1159,9 @@ void BattlescapeGame::executeUnit() // private.
 				*_battleSave,
 				*_currentAction.weapon);
 
-	Position posOrigin_voxel = _currentAction.target * Position(16,16,24) + Position(8,8,2);
+	Position explVoxel = Position::toVoxelSpaceCentered(_currentAction.target, 2);
 	Explosion* const explosion = new Explosion(
-											posOrigin_voxel,
+											explVoxel,
 											start,
 											0,
 											false,

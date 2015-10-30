@@ -515,6 +515,7 @@ items:
     damageType: 3
     clipSize: 6
     battleType: 2
+    explosionSpeed: 1 #retard
   - type: STR_TANK_LASER_CANNON
     size: 5
     costSell: 406290 # 1354300
@@ -597,6 +598,7 @@ items:
     clipSize: 6
     battleType: 2
     blastRadius: 12
+    explosionSpeed: 1 #retard
     defusePulse: true
   - type: STR_PISTOL
     size: 0.2
@@ -722,6 +724,7 @@ items:
     invWidth: 2
     invHeight: 1
     blastRadius: 4
+    explosionSpeed: 1 #retard
   - type: STR_HC_I_AMMO
     size: 0.2
     costBuy: 600
@@ -738,6 +741,7 @@ items:
     invWidth: 2
     invHeight: 1
     blastRadius: 3
+    explosionSpeed: 2 #retard
   - type: STR_AUTO_CANNON
     size: 0.5
     costBuy: 12750
@@ -793,6 +797,7 @@ items:
     invWidth: 2
     invHeight: 1
     blastRadius: 3
+    explosionSpeed: 1 #retard
   - type: STR_AC_I_AMMO
     size: 0.2
     costBuy: 750
@@ -809,6 +814,7 @@ items:
     invWidth: 2
     invHeight: 1
     blastRadius: 2
+    explosionSpeed: 2 #retard
   - type: STR_ROCKET_LAUNCHER
     size: 0.7
     costBuy: 4300
@@ -841,6 +847,7 @@ items:
     hitSound: 5
     power: 81
     damageType: 3
+    explosionSpeed: 1 #retard
     clipSize: 1
     battleType: 2
     invWidth: 1
@@ -855,6 +862,7 @@ items:
     hitSound: 5
     power: 98
     damageType: 3
+    explosionSpeed: 1 #retard
     clipSize: 1
     battleType: 2
     invWidth: 1
@@ -870,6 +878,7 @@ items:
 #    hitAnimation: 0
     power: 92
     damageType: 2
+    explosionSpeed: 2 #retard
     clipSize: 1
     battleType: 2
     invWidth: 1
@@ -955,6 +964,7 @@ items:
     damageType: 3
     battleType: 4
     blastRadius: 3
+    explosionSpeed: 1 #retard
     tuPrime: 45
   - type: STR_SMOKE_GRENADE
     size: 0.1
@@ -969,6 +979,7 @@ items:
     damageType: 9
     battleType: 4
     blastRadius: 4
+    explosionSpeed: 3 #retard
     tuPrime: 45
   - type: STR_PROXIMITY_GRENADE
     size: 0.1
@@ -982,6 +993,7 @@ items:
     damageType: 3
     battleType: 5
     blastRadius: 4
+    explosionSpeed: 1 #retard
     tuPrime: 50
   - type: STR_HIGH_EXPLOSIVE
     size: 0.3
@@ -997,6 +1009,7 @@ items:
     invWidth: 2
     invHeight: 1
     blastRadius: 7
+    explosionSpeed: 1 #retard
     tuPrime: 65
   - type: STR_MOTION_SCANNER
     size: 0.1
@@ -1266,6 +1279,7 @@ items:
     invHeight: 2
     recoveryPoints: 1
     blastRadius: 9
+    explosionSpeed: 1 #retard
     defusePulse: true
     attraction: 7
   - type: STR_SMALL_LAUNCHER
@@ -1307,6 +1321,7 @@ items:
     battleType: 2
     recoveryPoints: 1
     blastRadius: 3
+    explosionSpeed: 2 #retard
     attraction: 6
   - type: STR_ALIEN_GRENADE
     requires:
@@ -1323,6 +1338,7 @@ items:
     recoveryPoints: 1
     armor: 26
     blastRadius: 5
+    explosionSpeed: 1 #retard
     attraction: 7
     tuPrime: 35
   - type: STR_MIND_PROBE

@@ -922,7 +922,7 @@ BattlescapeState::BattlescapeState()
 
 	_tacticalTimer = new Timer(STATE_INTERVAL_STANDARD); // setStateInterval() will change this <-
 	_tacticalTimer->onTimer((StateHandler)& BattlescapeState::handleState);
-//	_tacticalTimer->debug("BattlescapeState");
+	//_tacticalTimer->debug("BattlescapeState");
 
 	_battleGame = new BattlescapeGame(_battleSave, this);
 	//Log(LOG_INFO) << "Create BattlescapeState EXIT";

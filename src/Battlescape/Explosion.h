@@ -38,9 +38,10 @@ private:
 	bool _big;
 	int
 		_frameCurrent,
-		_frameDelay,
+		_startDelay,
 		_frameStart,
-		_hit;
+		_hit,
+		_retard;
 
 	Position _pos;
 
@@ -56,9 +57,10 @@ private:
 		Explosion(
 				Position pos,
 				int frameStart,
-				int frameDelay = 0,
+				int startDelay = 0,
 				bool big = false,
-				int hit = 0);
+				int hit = 0,
+				int retard = 0);
 		/// Cleans up the Explosion.
 		~Explosion();
 
