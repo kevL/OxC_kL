@@ -8214,7 +8214,7 @@
 
 1442985958 f:\git\openxcom\src\ruleset\extrasounds.h
 
-1446156864 source:f:\git\openxcom\src\ruleset\aliendeployment.cpp
+1446159853 source:f:\git\openxcom\src\ruleset\aliendeployment.cpp
 	"AlienDeployment.h"
 
 1441867759 source:f:\git\openxcom\src\ruleset\alienrace.cpp
@@ -8280,7 +8280,7 @@
 	"RuleInventory.h"
 	"RuleItem.h"
 
-1445899854 source:f:\git\openxcom\src\ruleset\ruleitem.cpp
+1446159951 source:f:\git\openxcom\src\ruleset\ruleitem.cpp
 	"RuleItem.h"
 	"RuleInventory.h"
 	"../Engine/SurfaceSet.h"
@@ -8545,7 +8545,7 @@
 	"../Interface/Text.h"
 	"../Ruleset/RuleResearch.h"
 
-1446158558 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
+1446158983 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
 	"SavedBattleGame.h"
 	"BattleItem.h"
 	"Node.h"

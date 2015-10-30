@@ -211,9 +211,9 @@ void RuleItem::load(
 			_meleeHitSound += modIndex;
 	}
 
-	_damageType			= static_cast<DamageType>(node["damageType"]		.as<int>(_damageType));
-	_battleType			= static_cast<BattleType>(node["battleType"]		.as<int>(_battleType));
-	_specialType		= static_cast<SpecialTileType>(node["specialType"]	.as<int>(_specialType));
+	_damageType		= static_cast<DamageType>(node["damageType"]		.as<int>(0));
+	_battleType		= static_cast<BattleType>(node["battleType"]		.as<int>(0));
+	_specialType	= static_cast<SpecialTileType>(node["specialType"]	.as<int>(-1));
 
 	_power				= node["power"]				.as<int>(_power);
 	_clipSize			= node["clipSize"]			.as<int>(_clipSize);

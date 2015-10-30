@@ -206,7 +206,7 @@ void AlienDeployment::load(const YAML::Node& node)
 		_musics.push_back((*i).as<std::string>(""));
 	}
 
-	_objectiveType = static_cast<SpecialTileType>(node["objectiveType"].as<int>(_objectiveType));
+	_objectiveType = static_cast<SpecialTileType>(node["objectiveType"].as<int>(-1));
 	_objectivesReqd	= node["objectivesReqd"].as<int>(_objectivesReqd);
 	_objectivePopup	= node["objectivePopup"].as<std::string>(_objectivePopup);
 
