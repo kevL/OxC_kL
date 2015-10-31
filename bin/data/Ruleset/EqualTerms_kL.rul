@@ -441,7 +441,7 @@ items:
     damageType: 2
     battleType: 4
     blastRadius: 2
-    explosionSpeed: 2 #retard
+#    explosionSpeed:
     tuPrime: 45
 #------------------------------------------------------------------------------
   - type: STR_SSRL
@@ -474,7 +474,7 @@ items:
     armor: 20
     damageType: 3 #HE
     blastRadius: 2
-    explosionSpeed: 1 #retard
+#    explosionSpeed:
 #------------------------------------------------------------------------------
   - type: STR_APFSDS_ROCKET
     listOrder: 3401

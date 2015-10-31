@@ -14,7 +14,7 @@ items:
     damageType: 2
     battleType: 4
     blastRadius: 4
-    explosionSpeed: 2 #retard
+#    explosionSpeed:
     tuPrime: 50
 ufopaedia:
   - id: STR_INC_GRENADE

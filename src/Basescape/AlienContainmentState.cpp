@@ -252,10 +252,10 @@ AlienContainmentState::AlienContainmentState(
 							_lstAliens->getSecondaryColor());
 	}
 
-	_timerInc = new Timer(250);
+	_timerInc = new Timer(Timer::SCROLL_SLOW);
 	_timerInc->onTimer((StateHandler)& AlienContainmentState::increase);
 
-	_timerDec = new Timer(250);
+	_timerDec = new Timer(Timer::SCROLL_SLOW);
 	_timerDec->onTimer((StateHandler)& AlienContainmentState::decrease);
 }
 
@@ -347,8 +347,8 @@ void AlienContainmentState::lstItemsRightArrowClick(Action* action)
 	{
 		increaseByValue(1);
 
-		_timerInc->setInterval(250);
-		_timerDec->setInterval(250);
+		_timerInc->setInterval(Timer::SCROLL_SLOW);
+		_timerDec->setInterval(Timer::SCROLL_SLOW);
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 		increaseByValue(std::numeric_limits<int>::max());
@@ -390,8 +390,8 @@ void AlienContainmentState::lstItemsLeftArrowClick(Action* action)
 	{
 		decreaseByValue(1);
 
-		_timerInc->setInterval(250);
-		_timerDec->setInterval(250);
+		_timerInc->setInterval(Timer::SCROLL_SLOW);
+		_timerDec->setInterval(Timer::SCROLL_SLOW);
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 		decreaseByValue(std::numeric_limits<int>::max());
@@ -411,8 +411,8 @@ int AlienContainmentState::getQuantity()
  */
 void AlienContainmentState::increase()
 {
-	_timerDec->setInterval(80);
-	_timerInc->setInterval(80);
+	_timerDec->setInterval(Timer::SCROLL_FAST);
+	_timerInc->setInterval(Timer::SCROLL_FAST);
 
 	increaseByValue(1);
 }
@@ -442,8 +442,8 @@ void AlienContainmentState::increaseByValue(int change)
  */
 void AlienContainmentState::decrease()
 {
-	_timerInc->setInterval(80);
-	_timerDec->setInterval(80);
+	_timerInc->setInterval(Timer::SCROLL_FAST);
+	_timerDec->setInterval(Timer::SCROLL_FAST);
 
 	decreaseByValue(1);
 }

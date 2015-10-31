@@ -172,10 +172,10 @@ void ResearchInfoState::buildUi()
 	_btnLess->onMouseRelease((ActionHandler)& ResearchInfoState::lessRelease);
 	_btnLess->onMouseClick((ActionHandler)& ResearchInfoState::lessClick, 0);
 
-	_timerMore = new Timer(250);
+	_timerMore = new Timer(Timer::SCROLL_SLOW);
 	_timerMore->onTimer((StateHandler)& ResearchInfoState::moreSci);
 
-	_timerLess = new Timer(250);
+	_timerLess = new Timer(Timer::SCROLL_SLOW);
 	_timerLess->onTimer((StateHandler)& ResearchInfoState::lessSci);
 
 	if (_resRule != NULL)
@@ -290,7 +290,7 @@ void ResearchInfoState::moreRelease(Action* action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		_timerMore->setInterval(250);
+		_timerMore->setInterval(Timer::SCROLL_SLOW);
 		_timerMore->stop();
 	}
 }
@@ -326,7 +326,7 @@ void ResearchInfoState::lessRelease(Action* action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		_timerLess->setInterval(250);
+		_timerLess->setInterval(Timer::SCROLL_SLOW);
 		_timerLess->stop();
 	}
 }
@@ -349,7 +349,7 @@ void ResearchInfoState::lessClick(Action* action)
  */
 void ResearchInfoState::moreSci()
 {
-	_timerMore->setInterval(80);
+	_timerMore->setInterval(Timer::SCROLL_FAST);
 	moreByValue(getQty());
 }
 
@@ -386,7 +386,7 @@ void ResearchInfoState::moreByValue(int change)
  */
 void ResearchInfoState::lessSci()
 {
-	_timerLess->setInterval(80);
+	_timerLess->setInterval(Timer::SCROLL_FAST);
 	lessByValue(getQty());
 }
 

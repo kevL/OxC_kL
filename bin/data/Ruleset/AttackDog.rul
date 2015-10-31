@@ -33,7 +33,7 @@ units:
     race: STR_DOGE
     stats:
       tu: 84
-      stamina: 92
+      stamina: 90
       health: 25
       bravery: 90
       reactions: 66
@@ -49,7 +49,7 @@ units:
     value: 8
     deathSound: 211
     aggroSound: 210
-    energyRecovery: 80
+    energyRecovery: 65
     hasHands: false
     dog: true
 armors:

@@ -181,10 +181,10 @@ TransferItemsState::TransferItemsState(
 	_distance = getDistance();
 
 
-	_timerInc = new Timer(250);
+	_timerInc = new Timer(Timer::SCROLL_SLOW);
 	_timerInc->onTimer((StateHandler)& TransferItemsState::increase);
 
-	_timerDec = new Timer(250);
+	_timerDec = new Timer(Timer::SCROLL_SLOW);
 	_timerDec->onTimer((StateHandler)& TransferItemsState::decrease);
 }
 
@@ -764,8 +764,8 @@ void TransferItemsState::lstItemsLeftArrowClick(Action* action)
 		else
 			increaseByValue(1);
 
-		_timerInc->setInterval(250);
-		_timerDec->setInterval(250);
+		_timerInc->setInterval(Timer::SCROLL_SLOW);
+		_timerDec->setInterval(Timer::SCROLL_SLOW);
 	}
 }
 
@@ -810,8 +810,8 @@ void TransferItemsState::lstItemsRightArrowClick(Action* action)
 		else
 			decreaseByValue(1);
 
-		_timerInc->setInterval(250);
-		_timerDec->setInterval(250);
+		_timerInc->setInterval(Timer::SCROLL_SLOW);
+		_timerDec->setInterval(Timer::SCROLL_SLOW);
 	}
 }
 
@@ -872,8 +872,8 @@ int TransferItemsState::getSourceQuantity() const // private.
  */
 void TransferItemsState::increase()
 {
-	_timerDec->setInterval(80);
-	_timerInc->setInterval(80);
+	_timerDec->setInterval(Timer::SCROLL_FAST);
+	_timerInc->setInterval(Timer::SCROLL_FAST);
 
 	if ((SDL_GetModState() & KMOD_CTRL) != 0)
 		increaseByValue(10);
@@ -1008,8 +1008,8 @@ void TransferItemsState::increaseByValue(int qtyDelta)
  */
 void TransferItemsState::decrease()
 {
-	_timerInc->setInterval(80);
-	_timerDec->setInterval(80);
+	_timerInc->setInterval(Timer::SCROLL_FAST);
+	_timerDec->setInterval(Timer::SCROLL_FAST);
 
 	if ((SDL_GetModState() & KMOD_CTRL) != 0)
 		decreaseByValue(10);

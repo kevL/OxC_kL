@@ -61,9 +61,11 @@ void UnitFallBState::init()
 {
 	Uint32 interval;
 	if (_battleSave->getSide() == FACTION_PLAYER)
-		interval = static_cast<Uint32>(Options::battleXcomSpeed);
+		interval = _parent->getBattlescapeState()->STATE_INTERVAL_XCOM;
 	else
-		interval = static_cast<Uint32>(Options::battleAlienSpeed);
+		interval = _parent->getBattlescapeState()->STATE_INTERVAL_ALIEN;
+
+	//Log(LOG_INFO) << "unitFallB: init() set interval = " << interval;
 	_parent->setStateInterval(interval);
 }
 

@@ -202,7 +202,7 @@ private:
 
 
 	/// Prints contents of hovered Tile's inventory to screen.
-	void printTileInventory();
+	void printTileInventory(Tile* const tile);
 
 	/// Shows primer warnings on hand-held live grenades.
 	void drawFuse();
@@ -225,7 +225,17 @@ private:
 
 	public:
 //		static const Uint32 STATE_INTERVAL_STANDARD = 90; // for fast shaders - Raw, Quillez, etc.
-		static const Uint32 STATE_INTERVAL_STANDARD = 75; // for slow shaders - 4xHQX & above.
+		static const Uint32
+			STATE_INTERVAL_STANDARD		=  76, // for slow shaders - 4xHQX & above. TODO: Ruleset.
+			STATE_INTERVAL_FAST			=  15,
+			STATE_INTERVAL_DEATHSPIN	=  21,
+			STATE_INTERVAL_EXPLOSION	= 100,
+			STATE_INTERVAL_TILE			=  87;
+		Uint32
+			STATE_INTERVAL_XCOM,
+			STATE_INTERVAL_XCOMDASH,
+			STATE_INTERVAL_ALIEN;
+
 
 		/// Creates a BattlescapeState.
 		BattlescapeState();

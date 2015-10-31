@@ -38,11 +38,11 @@ class Window;
 
 enum BaseDefenseActionType
 {
-	BD_NONE,
-	BD_FIRE,
-	BD_RESOLVE,
-	BD_DESTROY,
-	BD_END
+	BD_NONE,	// 0
+	BD_FIRE,	// 1
+	BD_RESOLVE,	// 2
+	BD_DESTROY,	// 3
+	BD_END		// 4
 };
 
 
@@ -58,7 +58,7 @@ private:
 	static const Uint32
 		TI_SLOW		= 973, // Time Intervals
 		TI_MEDIUM	= 269,
-		TI_FAST		= 76;
+		TI_FAST		=  76;
 
 	int
 		_thinkCycles;
@@ -96,9 +96,9 @@ private:
 	public:
 		/// Creates the Base Defense state.
 		BaseDefenseState(
-				Base* base,
-				Ufo* ufo,
-				GeoscapeState* state);
+				Base* const base,
+				Ufo* const ufo,
+				GeoscapeState* const state);
 		/// Cleans up the Base Defense state.
 		~BaseDefenseState();
 

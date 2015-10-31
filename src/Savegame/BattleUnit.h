@@ -1154,6 +1154,8 @@ private:
 
 		/// Sets this BattleUnit's turn direction when spinning 180 degrees.
 		void setTurnDirection(int dir);
+		/// Clears turn direction.
+		void clearTurnDirection();
 
 		/// Sets this BattleUnit as having just revived during a Turnover.
 		void setRevived(bool revived = true);

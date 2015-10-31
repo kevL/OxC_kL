@@ -1146,17 +1146,18 @@ void UnitWalkBState::setWalkSpeed(bool gravLift) const // private.
 			|| (_unit->getUnitRules() != NULL
 				&& _unit->getUnitRules()->isDog() == true))
 		{
-			interval = static_cast<Uint32>(Options::battleXcomSpeed * 2 / 3);
+			interval = _parent->getBattlescapeState()->STATE_INTERVAL_XCOMDASH;
 		}
 		else
-			interval = static_cast<Uint32>(Options::battleXcomSpeed);
+			interval = _parent->getBattlescapeState()->STATE_INTERVAL_XCOM;
 	}
 	else
-		interval = static_cast<Uint32>(Options::battleAlienSpeed);
+		interval = _parent->getBattlescapeState()->STATE_INTERVAL_ALIEN;
 
 	if (gravLift == true)
 		interval *= 2;
 
+	//Log(LOG_INFO) << "unitWalkB: setWalkSpeed() set interval = " << interval;
 	_parent->setStateInterval(interval);
 }
 

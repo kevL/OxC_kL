@@ -245,13 +245,13 @@ void ManufactureInfoState::buildUi() // private.
 	setAssignedEngineer();
 
 
-	_timerMoreEngineer = new Timer(250);
-	_timerLessEngineer = new Timer(250);
+	_timerMoreEngineer = new Timer(Timer::SCROLL_SLOW);
+	_timerLessEngineer = new Timer(Timer::SCROLL_SLOW);
 	_timerMoreEngineer->onTimer((StateHandler)& ManufactureInfoState::onMoreEngineer);
 	_timerLessEngineer->onTimer((StateHandler)& ManufactureInfoState::onLessEngineer);
 
-	_timerMoreUnit = new Timer(250);
-	_timerLessUnit = new Timer(250);
+	_timerMoreUnit = new Timer(Timer::SCROLL_SLOW);
+	_timerLessUnit = new Timer(Timer::SCROLL_SLOW);
 	_timerMoreUnit->onTimer((StateHandler)& ManufactureInfoState::onMoreUnit);
 	_timerLessUnit->onTimer((StateHandler)& ManufactureInfoState::onLessUnit);
 }
@@ -561,7 +561,7 @@ void ManufactureInfoState::moreEngineerRelease(Action* action) // private.
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		_timerMoreEngineer->setInterval(250);
+		_timerMoreEngineer->setInterval(Timer::SCROLL_SLOW);
 		_timerMoreEngineer->stop();
 	}
 }
@@ -618,7 +618,7 @@ void ManufactureInfoState::lessEngineerRelease(Action* action) // private.
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		_timerLessEngineer->setInterval(250);
+		_timerLessEngineer->setInterval(Timer::SCROLL_SLOW);
 		_timerLessEngineer->stop();
 	}
 }
@@ -693,7 +693,7 @@ void ManufactureInfoState::moreUnitRelease(Action* action) // private.
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		_timerMoreUnit->setInterval(250);
+		_timerMoreUnit->setInterval(Timer::SCROLL_SLOW);
 		_timerMoreUnit->stop();
 	}
 }
@@ -765,7 +765,7 @@ void ManufactureInfoState::lessUnitRelease(Action* action) // private.
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		_timerLessUnit->setInterval(250);
+		_timerLessUnit->setInterval(Timer::SCROLL_SLOW);
 		_timerLessUnit->stop();
 	}
 }
@@ -793,7 +793,7 @@ void ManufactureInfoState::lessUnitClick(Action* action) // private.
  */
 void ManufactureInfoState::onMoreEngineer() // private.
 {
-	_timerMoreEngineer->setInterval(80);
+	_timerMoreEngineer->setInterval(Timer::SCROLL_FAST);
 	moreEngineer(getQty());
 }
 
@@ -802,7 +802,7 @@ void ManufactureInfoState::onMoreEngineer() // private.
  */
 void ManufactureInfoState::onLessEngineer() // private.
 {
-	_timerLessEngineer->setInterval(80);
+	_timerLessEngineer->setInterval(Timer::SCROLL_FAST);
 	lessEngineer(getQty());
 }
 
@@ -823,7 +823,7 @@ void ManufactureInfoState::onLessEngineer() // private.
  */
 void ManufactureInfoState::onMoreUnit() // private.
 {
-	_timerMoreUnit->setInterval(80);
+	_timerMoreUnit->setInterval(Timer::SCROLL_FAST);
 	moreUnit(getQty());
 }
 
@@ -832,7 +832,7 @@ void ManufactureInfoState::onMoreUnit() // private.
  */
 void ManufactureInfoState::onLessUnit() // private.
 {
-	_timerLessUnit->setInterval(80);
+	_timerLessUnit->setInterval(Timer::SCROLL_FAST);
 	lessUnit(getQty());
 }
 

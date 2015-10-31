@@ -323,7 +323,11 @@ void BattlescapeGame::popState()
 //		<< (_battleSave->getSelectedUnit()? _battleSave->getSelectedUnit()->getTimeUnits(): -9999) << " TU";
 //	}
 
-	setStateInterval(BattlescapeState::STATE_INTERVAL_STANDARD);
+	if (getMap()->getExplosions()->empty() == true) // explosions need to run fast after popping ProjectileFlyBState etc etc.
+	{
+		//Log(LOG_INFO) << "bg: popState() set interval = " << BattlescapeState::STATE_INTERVAL_STANDARD;
+		setStateInterval(BattlescapeState::STATE_INTERVAL_STANDARD);
+	}
 
 	if (_states.empty() == false)
 	{
@@ -3495,7 +3499,7 @@ bool BattlescapeGame::getKneelReserved() const
 /**
  * Checks if a unit has moved next to a proximity grenade.
  * @note Checks one tile around the unit in every direction. For a large unit
- * check every tile the unit occupies.
+ * check around every tile the unit occupies.
  * @param unit - pointer to a BattleUnit
  * @return, true if a proximity grenade is triggered
  */
@@ -3523,8 +3527,8 @@ bool BattlescapeGame::checkProxyGrenades(BattleUnit* const unit)
 						++ty)
 				{
 					Tile* const tile = _battleSave->getTile(unit->getPosition()
-																   + Position(x,y,0)
-																   + Position(tx,ty,0));
+																   + Position( x, y, 0)
+																   + Position(tx,ty, 0));
 					if (tile != NULL)
 					{
 						for (std::vector<BattleItem*>::const_iterator
@@ -3545,16 +3549,11 @@ bool BattlescapeGame::checkProxyGrenades(BattleUnit* const unit)
 																			dir,
 																			unit) == false)	// kL try passing in OBJECT_SELF as a missile target to kludge for closed doors.
 								{															// there *might* be a problem if the Proxy is on a non-walkable tile ....
-									Position pos;
-
-									pos.x = tile->getPosition().x * 16 + 8;
-									pos.y = tile->getPosition().y * 16 + 8;
-									pos.z = tile->getPosition().z * 24 - tile->getTerrainLevel();
-
+									const Position pos = Position::toVoxelSpaceCentered(
+																					tile->getPosition(),
+																					-(tile->getTerrainLevel()));
 									statePushNext(new ExplosionBState(
-																	this,
-																	pos,
-																	*i,
+																	this, pos, *i,
 																	(*i)->getPreviousOwner()));
 									_battleSave->removeItem(*i); // does/should this even be done (also done at end of ExplosionBState) -> causes a double-explosion if remarked here.
 

@@ -455,7 +455,8 @@ bool ProjectileFlyBState::createNewProjectile() // private.
 	_parent->getMap()->setProjectile(prj); // add projectile to Map.
 
 
-	_parent->setStateInterval(16); // set the speed of the state think cycle to 16 ms (roughly one think-cycle per frame)
+	//Log(LOG_INFO) << "projFlyB: createNewProjectile() set interval = " << BattlescapeState::STATE_INTERVAL_FAST;
+	_parent->setStateInterval(BattlescapeState::STATE_INTERVAL_FAST); // set the speed of the state think cycle to 16 ms (roughly one think-cycle per frame)
 	int soundId = -1;
 
 	_prjImpact = VOXEL_EMPTY; // let it calculate a trajectory

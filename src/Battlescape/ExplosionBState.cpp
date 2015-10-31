@@ -56,7 +56,7 @@ namespace OpenXcom
  */
 ExplosionBState::ExplosionBState(
 		BattlescapeGame* const parent,
-		Position center,
+		const Position center,
 		BattleItem* const item,
 		BattleUnit* const unit,
 		Tile* const tile,
@@ -168,34 +168,31 @@ void ExplosionBState::init()
 				delay = 0,
 				qty = _power,
 				radius,
-				offset,
-				explRetard;
+				offset;
 
+			Uint32 interval = BattlescapeState::STATE_INTERVAL_EXPLOSION;
 			if (_item != NULL)
 			{
 				const RuleItem* const itRule = _item->getRules();
 				if (itRule->defusePulse() == true)
 					_parent->getMap()->setBlastFlash(true);
 
-				explRetard = _item->getRules()->getExplosionSpeed(); // prolongs the explosion (neg values are ignored).
+				const int explSpeed = itRule->getExplosionSpeed(); // can be negative to prolong the explosion.
+				if (explSpeed != 0)
+					interval = static_cast<Uint32>(std::max(1,
+							   static_cast<int>(interval) - explSpeed));
 
 				start = itRule->getHitAnimation();
 				radius = itRule->getExplosionRadius();
 				if (radius == -1) radius = 0;
 
-				if (itRule->getDamageType() == DT_SMOKE
-					|| itRule->getDamageType() == DT_STUN)
-				{
-//					start = 8;
+				if (itRule->getDamageType() == DT_SMOKE || itRule->getDamageType() == DT_STUN)
 					qty = qty * 2 / 3; // smoke & stun bombs do fewer anims.
-				}
-//				else qty = qty * 3 / 2; // bump this up.
 			}
 			else
 			{
 				start = ResourcePack::EXPLOSION_OFFSET;
 				radius = _power / 9; // <- for cyberdiscs & terrain expl.
-				explRetard = 0;
 			}
 
 			offset = radius * 6; // voxelspace
@@ -204,33 +201,32 @@ void ExplosionBState::init()
 			if (qty < 1 || offset == 0)
 				qty = 1;
 
-//			if (_parent->getDepth() > 0)
-//				start -= Explosion::FRAMES_EXPLODE;
-
-			Position voxelExpl = _center;
+			Position explVoxel = _center;
 			for (int
 					i = 0;
 					i != qty;
 					++i)
 			{
-				if (i > 0) // bypass 1st explosion: it's always centered w/out any delay.
+				if (i != 0) // bypass 1st explosion: it's always centered w/out any delay.
 				{
-//					voxelExpl.x += RNG::generate(-offset, offset); // these cause anims to sweep across the battlefield.
-//					voxelExpl.y += RNG::generate(-offset, offset);
-					voxelExpl.x = _center.x + RNG::generate(-offset, offset);
-					voxelExpl.y = _center.y + RNG::generate(-offset, offset);
+//					explVoxel.x += RNG::generate(-offset, offset); // these cause anims to sweep across the battlefield. Pretty cool.
+//					explVoxel.y += RNG::generate(-offset, offset);
+					explVoxel.x = _center.x + RNG::generate(-offset, offset);
+					explVoxel.y = _center.y + RNG::generate(-offset, offset);
 
-					if (RNG::percent(50) == true)
+					if (RNG::percent(60) == true)
 						++delay;
 				}
 
 				Explosion* const explosion = new Explosion( // animation
-														voxelExpl + Position(11,11,0), // jogg the anim down a few pixels. Tks.
+														explVoxel + Position(20,20,0), // jogg the anim down a few pixels. Tks.
 														start,
 														delay,
-														true, 0,
-														explRetard);
+														true, 0);
 				_parent->getMap()->getExplosions()->push_back(explosion);
+
+				//Log(LOG_INFO) << "explB: init() set interval = " << interval;
+				_parent->setStateInterval(interval);
 			}
 
 
@@ -300,14 +296,14 @@ void ExplosionBState::init()
 													result);
 			_parent->getMap()->getExplosions()->push_back(explosion);
 
+			Uint32 interval = BattlescapeState::STATE_INTERVAL_EXPLOSION;
 			const int explSpeed = _item->getRules()->getExplosionSpeed(); // can be negative to prolong the explosion.
 			if (explSpeed != 0)
-			{
-				Uint32 interval = BattlescapeState::STATE_INTERVAL_STANDARD - static_cast<Uint32>(explSpeed * 10);
-				if (interval < 1) interval = 1;
-				//Log(LOG_INFO) << "explB setStateInterval = " << interval;
-				_parent->setStateInterval(interval);
-			}
+				interval = static_cast<Uint32>(std::max(1,
+						   static_cast<int>(interval) - explSpeed));
+
+			//Log(LOG_INFO) << "explB: init() set interval = " << interval;
+			_parent->setStateInterval(interval);
 		}
 
 		Camera* const exploCam = _parent->getMap()->getCamera();
@@ -595,10 +591,10 @@ void ExplosionBState::explode() // private.
 	Tile* const tile = tileEngine->checkForTerrainExplosions(); // check for more exploding tiles
 	if (tile != NULL)
 	{
-		const Position voxelExpl = Position::toVoxelSpaceCentered(tile->getPosition(), 10);
+		const Position explVoxel = Position::toVoxelSpaceCentered(tile->getPosition(), 10);
 		_parent->statePushFront(new ExplosionBState(
 												_parent,
-												voxelExpl,
+												explVoxel,
 												NULL,
 												_unit,
 												tile,

@@ -253,10 +253,10 @@ CraftEquipmentState::CraftEquipmentState(
 		}
 	}
 
-	_timerLeft = new Timer(250);
+	_timerLeft = new Timer(Timer::SCROLL_SLOW);
 	_timerLeft->onTimer((StateHandler)& CraftEquipmentState::moveLeft);
 
-	_timerRight = new Timer(250);
+	_timerRight = new Timer(Timer::SCROLL_SLOW);
 	_timerRight->onTimer((StateHandler)& CraftEquipmentState::moveRight);
 }
 
@@ -344,8 +344,8 @@ void CraftEquipmentState::lstEquipmentLeftArrowClick(Action* action)
 	{
 		moveLeftByValue(1);
 
-		_timerRight->setInterval(250);
-		_timerLeft->setInterval(250);
+		_timerRight->setInterval(Timer::SCROLL_SLOW);
+		_timerLeft->setInterval(Timer::SCROLL_SLOW);
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 		moveLeftByValue(std::numeric_limits<int>::max());
@@ -386,8 +386,8 @@ void CraftEquipmentState::lstEquipmentRightArrowClick(Action* action)
 	{
 		moveRightByValue(1);
 
-		_timerRight->setInterval(250);
-		_timerLeft->setInterval(250);
+		_timerRight->setInterval(Timer::SCROLL_SLOW);
+		_timerLeft->setInterval(Timer::SCROLL_SLOW);
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 		moveRightByValue(std::numeric_limits<int>::max());
@@ -444,8 +444,8 @@ void CraftEquipmentState::updateQuantity()
  */
 void CraftEquipmentState::moveLeft()
 {
-	_timerLeft->setInterval(80);
-	_timerRight->setInterval(80);
+	_timerLeft->setInterval(Timer::SCROLL_FAST);
+	_timerRight->setInterval(Timer::SCROLL_FAST);
 
 	moveLeftByValue(1);
 }
@@ -542,8 +542,8 @@ void CraftEquipmentState::moveLeftByValue(int qtyDelta)
  */
 void CraftEquipmentState::moveRight()
 {
-	_timerLeft->setInterval(80);
-	_timerRight->setInterval(80);
+	_timerLeft->setInterval(Timer::SCROLL_FAST);
+	_timerRight->setInterval(Timer::SCROLL_FAST);
 
 	moveRightByValue(1);
 }

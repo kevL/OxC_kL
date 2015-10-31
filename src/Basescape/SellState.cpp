@@ -376,10 +376,10 @@ SellState::SellState(Base* const base)
 
 	_lstItems->scrollTo(_base->getRecallRow(REC_SELL));
 
-	_timerInc = new Timer(250);
+	_timerInc = new Timer(Timer::SCROLL_SLOW);
 	_timerInc->onTimer((StateHandler)& SellState::increase);
 
-	_timerDec = new Timer(250);
+	_timerDec = new Timer(Timer::SCROLL_SLOW);
 	_timerDec->onTimer((StateHandler)& SellState::decrease);
 }
 
@@ -640,8 +640,8 @@ void SellState::lstItemsLeftArrowClick(Action* action)
 		else
 			changeByValue(1,1);
 
-		_timerInc->setInterval(250);
-		_timerDec->setInterval(250);
+		_timerInc->setInterval(Timer::SCROLL_SLOW);
+		_timerDec->setInterval(Timer::SCROLL_SLOW);
 	}
 }
 
@@ -685,8 +685,8 @@ void SellState::lstItemsRightArrowClick(Action* action)
 		else
 			changeByValue(1,-1);
 
-		_timerInc->setInterval(250);
-		_timerDec->setInterval(250);
+		_timerInc->setInterval(Timer::SCROLL_SLOW);
+		_timerDec->setInterval(Timer::SCROLL_SLOW);
 	}
 }
 
@@ -761,8 +761,8 @@ int SellState::getBaseQuantity() // private.
  */
 void SellState::increase()
 {
-	_timerDec->setInterval(80);
-	_timerInc->setInterval(80);
+	_timerDec->setInterval(Timer::SCROLL_FAST);
+	_timerInc->setInterval(Timer::SCROLL_FAST);
 
 	if ((SDL_GetModState() & KMOD_CTRL) != 0)
 		changeByValue(10,1);
@@ -775,8 +775,8 @@ void SellState::increase()
  */
 void SellState::decrease()
 {
-	_timerInc->setInterval(80);
-	_timerDec->setInterval(80);
+	_timerInc->setInterval(Timer::SCROLL_FAST);
+	_timerDec->setInterval(Timer::SCROLL_FAST);
 
 	if ((SDL_GetModState() & KMOD_CTRL) != 0)
 		changeByValue(10,-1);

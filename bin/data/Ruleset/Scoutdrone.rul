@@ -33,7 +33,7 @@ items:
     battleType: 2
     clipSize: 8
     blastRadius: 3
-    explosionSpeed: 3 #retard
+    explosionSpeed: -15
     listOrder: 1099
   - type: STR_SMALL_TANK_CORPSE
     weight: 30

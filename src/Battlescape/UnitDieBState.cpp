@@ -158,7 +158,8 @@ void UnitDieBState::think()
 	{
 		if (_unit->getSpinPhase() != -1)
 		{
-			_parent->setStateInterval(BattlescapeState::STATE_INTERVAL_STANDARD * 2 / 7);
+			//Log(LOG_INFO) << "unitDieB: think() set interval = " << BattlescapeState::STATE_INTERVAL_DEATHSPIN;
+			_parent->setStateInterval(BattlescapeState::STATE_INTERVAL_DEATHSPIN);
 			_unit->contDeathSpin(); // -> STATUS_STANDING
 		}
 		else // spawn conversion is going to happen
@@ -172,6 +173,7 @@ void UnitDieBState::think()
 // #2
 	else if (_unit->isOut_t(OUT_STAT) == false) // this ought be Status_Standing/Disabled also.
 	{
+		//Log(LOG_INFO) << "unitDieB: think() set interval = " << BattlescapeState::STATE_INTERVAL_STANDARD;
 		_parent->setStateInterval(BattlescapeState::STATE_INTERVAL_STANDARD);
 		_unit->startFalling(); // -> STATUS_COLLAPSING
 

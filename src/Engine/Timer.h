@@ -56,6 +56,9 @@ private:
 
 	public:
 		static Uint32 coreInterval;
+		static const Uint32
+			SCROLL_SLOW = 250,
+			SCROLL_FAST =  80;
 
 		/// Creates a stopped timer.
 		Timer(Uint32 interval);

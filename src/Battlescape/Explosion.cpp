@@ -40,23 +40,20 @@ const int
  *						 1 - is a melee attack that SUCCEEDED or Psi-attack
  *						 0 - is not a hit-type attack
  *						-1 - is a melee attack that MISSED
- * @param retard		- decreases speed of animation (default 0)
  */
 Explosion::Explosion(
-		Position pos,
+		const Position pos,
 		int frameStart,
 		int startDelay,
 		bool big,
-		int hit,
-		int retard)
+		int hit)
 	:
 		_pos(pos),
 		_frameStart(frameStart),
+		_frameCurrent(frameStart),
 		_startDelay(startDelay),
 		_big(big),
-		_hit(hit),
-		_retard(retard),
-		_frameCurrent(frameStart)
+		_hit(hit)
 {}
 
 /**
@@ -77,19 +74,11 @@ bool Explosion::animate()
 		return true;
 	}
 
-	static int stickyTicks;
-
-	if (stickyTicks < _retard)
-		++stickyTicks;
-	else
-	{
-		stickyTicks = 0;
-		++_frameCurrent;
-	}
+	++_frameCurrent;
 
 	if (_frameStart == 88) // special handling for Fusion Torch - it has 6 frames that cycle 6 times.
 	{
-		static int torchCycle; // inits to 0.
+		static int torchCycle;
 
 		if (torchCycle == 7)
 		{
@@ -126,7 +115,7 @@ bool Explosion::animate()
  * Gets the current position in voxel space.
  * @return, position in voxel space
  */
-Position Explosion::getPosition() const
+const Position Explosion::getPosition() const
 {
 	return _pos;
 }

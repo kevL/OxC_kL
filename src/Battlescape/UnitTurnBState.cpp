@@ -48,9 +48,7 @@ UnitTurnBState::UnitTurnBState(
 		BattleAction action,
 		bool chargeTu)
 	:
-		BattleState(
-			parent,
-			action),
+		BattleState(parent, action),
 		_chargeTu(chargeTu),
 		_unit(action.actor),
 		_turret(false)
@@ -69,7 +67,7 @@ void UnitTurnBState::init()
 {
 	if (_unit->isOut_t(OUT_STAT) == true)
 	{
-		_unit->setTurnDirection(0);
+		_unit->clearTurnDirection();
 		_parent->popState();
 		return;
 	}
@@ -77,14 +75,8 @@ void UnitTurnBState::init()
 	_action.TU = 0;
 	_unit->setStopShot(false);
 
-	Uint32 interval;
-	if (_unit->getFaction() == FACTION_PLAYER)
-		interval = static_cast<Uint32>(Options::battleXcomSpeed);
-	else
-		interval = static_cast<Uint32>(Options::battleAlienSpeed);
-	_parent->setStateInterval(interval);
-
-	// if the unit has a turret and it's turning during targeting then only the turret turns
+	// if unit has a turret and it's either strafing or turning during
+	// targeting then only the turret turns
 	_turret = _unit->getTurretType() != -1
 		   && (_action.strafe == true || _action.targeting == true);
 
@@ -94,11 +86,9 @@ void UnitTurnBState::init()
 		_unit->setDirectionTo(_action.target, _turret); // -> STATUS_TURNING
 	}
 
-
-	if (_chargeTu == true
-		&& _unit->getUnitStatus() != STATUS_TURNING) // try to open a door
+	if (_unit->getUnitStatus() != STATUS_TURNING) // try to open a door
 	{
-		if (_action.type == BA_NONE)
+		if (_chargeTu == true && _action.type == BA_NONE)
 		{
 			int soundId;
 			switch (_parent->getTileEngine()->unitOpensDoor(_unit, true))
@@ -123,8 +113,19 @@ void UnitTurnBState::init()
 											->play(-1, _parent->getMap()->getSoundAngle(_unit->getPosition()));
 		}
 
-		_unit->setTurnDirection(0);
+		_unit->clearTurnDirection();
 		_parent->popState();
+	}
+	else
+	{
+		Uint32 interval;
+		if (_unit->getFaction() == FACTION_PLAYER)
+			interval = _parent->getBattlescapeState()->STATE_INTERVAL_XCOM;
+		else
+			interval = _parent->getBattlescapeState()->STATE_INTERVAL_ALIEN;
+
+		//Log(LOG_INFO) << "unitTurnB: init() set interval = " << interval;
+		_parent->setStateInterval(interval);
 	}
 }
 
@@ -154,7 +155,7 @@ void UnitTurnBState::think()
 		&& _parent->checkReservedTu(_unit, tu) == false)
 	{
 		_unit->setUnitStatus(STATUS_STANDING);
-		_unit->setTurnDirection(0);
+		_unit->clearTurnDirection();
 		_parent->popState();
 	}
 	else if (_unit->spendTimeUnits(tu) == true)
@@ -163,12 +164,12 @@ void UnitTurnBState::think()
 		_unit->clearCache();
 		_parent->getMap()->cacheUnit(_unit);
 
-		const size_t preSpots = _unit->getHostileUnitsThisTurn().size();
-		const bool vis = _parent->getTileEngine()->calculateFOV(_unit);
+		const size_t antecedentOpponents = _unit->getHostileUnitsThisTurn().size();
+		const bool newVis = _parent->getTileEngine()->calculateFOV(_unit);
 
 		if (_unit->getFaction() == FACTION_PLAYER)
 		{
-			if (_chargeTu == true && vis == true)
+			if (_chargeTu == true && newVis == true)
 			{
 				_unit->setUnitStatus(STATUS_STANDING);
 
@@ -179,14 +180,14 @@ void UnitTurnBState::think()
 		}
 		else if (_chargeTu == true
 			&& _action.type == BA_NONE
-			&& _unit->getHostileUnitsThisTurn().size() > preSpots)
+			&& _unit->getHostileUnitsThisTurn().size() > antecedentOpponents)
 		{
 			_unit->setUnitStatus(STATUS_STANDING);
 		}
 
 		if (_unit->getUnitStatus() == STATUS_STANDING)
 		{
-			_unit->setTurnDirection(0);
+			_unit->clearTurnDirection();
 			_parent->popState();
 		}
 		else if (_chargeTu == true)
@@ -195,9 +196,8 @@ void UnitTurnBState::think()
 	else
 	{
 		_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
-
 		_unit->setUnitStatus(STATUS_STANDING);
-		_unit->setTurnDirection(0);
+		_unit->clearTurnDirection();
 		_parent->popState();
 	}
 }

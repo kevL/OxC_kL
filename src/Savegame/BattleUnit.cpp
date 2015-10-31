@@ -4652,6 +4652,14 @@ void BattleUnit::setTurnDirection(int dir)
 }
 
 /**
+ * Clears turn direction.
+ */
+void BattleUnit::clearTurnDirection()
+{
+	_dirTurn = 0;
+}
+
+/**
  * Sets this BattleUnit as having just revived or not.
  * @param revived - true if unit has just revived during a Turnover (default true)
  */

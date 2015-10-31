@@ -38,12 +38,11 @@ private:
 	bool _big;
 	int
 		_frameCurrent,
-		_startDelay,
 		_frameStart,
 		_hit,
-		_retard;
+		_startDelay;
 
-	Position _pos;
+	const Position _pos;
 
 
 	public:
@@ -55,12 +54,11 @@ private:
 
 		/// Creates a new Explosion.
 		Explosion(
-				Position pos,
+				const Position pos,
 				int frameStart,
 				int startDelay = 0,
 				bool big = false,
-				int hit = 0,
-				int retard = 0);
+				int hit = 0);
 		/// Cleans up the Explosion.
 		~Explosion();
 
@@ -68,7 +66,7 @@ private:
 		bool animate();
 
 		/// Gets the current position in voxel space.
-		Position getPosition() const;
+		const Position getPosition() const;
 
 		/// Gets the current frame.
 		int getCurrentFrame() const;

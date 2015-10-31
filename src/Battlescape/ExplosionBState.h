@@ -61,7 +61,7 @@ private:
 	SavedBattleGame* _battleSave;
 	Tile* _tile;
 
-	Position _center;
+	const Position _center;
 
 
 	/// Calculates the effects of the explosion.
@@ -72,7 +72,7 @@ private:
 		/// Creates a new ExplosionBState class.
 		ExplosionBState(
 				BattlescapeGame* const parent,
-				Position center,
+				const Position center,
 				BattleItem* const item,
 				BattleUnit* const unit,
 				Tile* const tile = NULL,

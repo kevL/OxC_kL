@@ -55,9 +55,9 @@ namespace OpenXcom
  * @param state	- pointer to GeoscapeState
  */
 BaseDefenseState::BaseDefenseState(
-		Base* base,
-		Ufo* ufo,
-		GeoscapeState* state)
+		Base* const base,
+		Ufo* const ufo,
+		GeoscapeState* const state)
 	:
 		_base(base),
 		_ufo(ufo),
@@ -277,7 +277,7 @@ void BaseDefenseState::nextStep()
 						_game->getResourcePack()->playSoundFX(defFac->getRules()->getHitSound());
 
 						int power = defFac->getRules()->getDefenseValue();
-						power = RNG::generate( // kL: vary power between 75% and 133% ( stock is 50..150% )
+						power = RNG::generate( // vary power between 75% and 133% ( stock is 50..150% )
 											power * 3 / 4,
 											power * 4 / 3);
 						_ufo->setUfoDamage(_ufo->getUfoDamage() + power);

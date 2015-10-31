@@ -135,8 +135,7 @@ void Timer::think(
 				(state->*_state)();		// call to *StateHandler.
 			}
 
-			if (_running == true &&
-				surface != NULL && _surface != NULL)
+			if (_running == true && surface != NULL && _surface != NULL)
 			{
 				//if (_debug) Log(LOG_INFO) << ". . . call SurfaceHandler";
 				(surface->*_surface)();	// call to *SurfaceHandler.

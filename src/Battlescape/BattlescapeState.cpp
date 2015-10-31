@@ -129,6 +129,10 @@ BattlescapeState::BattlescapeState()
 		_isKneeled(false)
 {
 	//Log(LOG_INFO) << "Create BattlescapeState";
+	STATE_INTERVAL_XCOM		= static_cast<Uint32>(Options::battleXcomSpeed);
+	STATE_INTERVAL_XCOMDASH	= BattlescapeState::STATE_INTERVAL_XCOM * 2 / 3;
+	STATE_INTERVAL_ALIEN	= static_cast<Uint32>(Options::battleAlienSpeed);
+
 	const int
 		screenWidth		= Options::baseXResolution,
 		screenHeight	= Options::baseYResolution,
@@ -917,7 +921,7 @@ BattlescapeState::BattlescapeState()
 	_btnReserveAimed->setGroup(&_reserve);
 	_btnReserveAuto->setGroup(&_reserve); */
 
-	_aniTimer = new Timer(STATE_INTERVAL_STANDARD); // setStateInterval() does NOT change this <-
+	_aniTimer = new Timer(STATE_INTERVAL_TILE); // setStateInterval() does NOT change this <-
 	_aniTimer->onTimer((StateHandler)& BattlescapeState::animate);
 
 	_tacticalTimer = new Timer(STATE_INTERVAL_STANDARD); // setStateInterval() will change this <-
@@ -1153,28 +1157,31 @@ void BattlescapeState::mapOver(Action* action)
 
 		_game->getCursor()->handle(action);
 	}
-	else if (_showConsole > 0
-		&& _mouseOverIcons == false
-		&& allowButtons() == true)
+	else if (_mouseOverIcons == false && allowButtons() == true)
 	{
-		printTileInventory();
+		Position pos;
+		_map->getSelectorPosition(&pos);
+
+		Tile* const tile = _battleSave->getTile(pos);
+		updateTileInfo(tile);
+
+		if (_showConsole > 0)
+			printTileInventory(tile);
 	}
+//	else if (_mouseOverIcons == true){} // might need to erase some info here.
 }
 
 /**
  * Prints contents of hovered Tile's inventory to screen.
+ * @param tile - mouseOver tile
  */
-void BattlescapeState::printTileInventory() // private.
+void BattlescapeState::printTileInventory(Tile* const tile) // private.
 {
 	_txtConsole1->setText(L"");
 	_txtConsole2->setText(L"");
 
 	bool showInfo;
 
-	Position pos;
-	_map->getSelectorPosition(&pos);
-
-	Tile* const tile = _battleSave->getTile(pos);
 	if (tile != NULL
 		&& tile->isDiscovered(2) == true
 		&& tile->getInventory()->empty() == false)
@@ -1331,8 +1338,6 @@ void BattlescapeState::printTileInventory() // private.
 	}
 	else
 		showInfo = true;
-
-	updateTileInfo(tile);
 
 	_txtTerrain->setVisible(showInfo);
 	_txtShade->setVisible(showInfo);
@@ -2464,7 +2469,6 @@ void BattlescapeState::btnConsoleToggle(Action*)
 		if (_showConsole == 0)
 		{
 			_showConsole = 1;
-
 			_txtConsole2->setText(L"");
 		}
 		else if (_showConsole == 1)
@@ -2472,7 +2476,6 @@ void BattlescapeState::btnConsoleToggle(Action*)
 		else if (_showConsole == 2)
 		{
 			_showConsole = 0;
-
 			_txtConsole1->setText(L"");
 			_txtConsole2->setText(L"");
 
@@ -2488,6 +2491,7 @@ void BattlescapeState::btnConsoleToggle(Action*)
 
 		_txtConsole1->setVisible(_showConsole > 0);
 		_txtConsole2->setVisible(_showConsole > 1);
+		refreshMousePosition();
 	}
 }
 
