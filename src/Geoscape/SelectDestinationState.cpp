@@ -236,21 +236,24 @@ void SelectDestinationState::handle(Action* action)
  */
 void SelectDestinationState::globeClick(Action* action)
 {
-	const int mY = static_cast<int>(std::floor(action->getAbsoluteYMouse()));
-
-	if (mY < 30) // ignore window(this) clicks
-		return;
-
-	const int mX = static_cast<int>(std::floor(action->getAbsoluteXMouse()));
-	double
-		lon,lat;
-	_globe->cartToPolar(
-					static_cast<Sint16>(mX),
-					static_cast<Sint16>(mY),
-					&lon,&lat);
-
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) // set Waypoint
 	{
+		const int mY = static_cast<int>(std::floor(action->getAbsoluteYMouse()));
+		if (mY < _window->getX() + _window->getHeight()) // ignore window clicks
+			return;
+
+		const int mX = static_cast<int>(std::floor(action->getAbsoluteXMouse()));
+		double
+			lon,lat;
+		_globe->cartToPolar(
+						static_cast<Sint16>(mX),
+						static_cast<Sint16>(mY),
+						&lon,&lat);
+
+		Waypoint* const wp = new Waypoint();
+		wp->setLongitude(lon);
+		wp->setLatitude(lat);
+
 		const RuleCraft* const craftRule = _craft->getRules();
 		int range = _craft->getFuel();
 		if (craftRule->getRefuelItem().empty() == false)
@@ -258,12 +261,8 @@ void SelectDestinationState::globeClick(Action* action)
 
 		range /= 6; // six doses per hour on Geoscape.
 
-		Waypoint* const wp = new Waypoint();
-		wp->setLongitude(lon);
-		wp->setLatitude(lat);
-
-		if (range < static_cast<int>(std::floor((_craft->getDistance(wp) + _craft->getBase()->getDistance(wp))
-					* earthRadius)))
+		if (range < static_cast<int>(std::floor(
+					(_craft->getDistance(wp) + _craft->getBase()->getDistance(wp)) * earthRadius)))
 		{
 			_txtError->setVisible();
 			delete wp;
@@ -279,7 +278,6 @@ void SelectDestinationState::globeClick(Action* action)
 															dynamic_cast<Target*>(_craft->getDestination()));
 			if (i != targets.end())
 				targets.erase(i);
-
 
 			if (targets.empty() == false)
 				delete wp;

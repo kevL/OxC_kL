@@ -490,25 +490,27 @@ void Craft::setCraftStatus(const std::string& status)
 std::string Craft::getAltitude() const
 {
 	if (_dest == NULL)
-		return "STR_HIGH_UC";
+		return "STR_LOW_UC";
 
 	const Ufo* const ufo = dynamic_cast<Ufo*>(_dest);
 	if (ufo != NULL)
 	{
-		if (ufo->getAltitude() != "STR_GROUND")
-			return ufo->getAltitude();
+		if (ufo->getAltitude() == "STR_GROUND")
+			return "STR_VERY_LOW";
 
-		return "STR_VERY_LOW";
+		return ufo->getAltitude();
 	}
 
-	switch (RNG::generate(0,3))
+	return "STR_HIGH_UC";
+
+/*	switch (RNG::generate(0,3))
 	{
 		default: // avoid vc++ linker warnings.
 		case 0:
 		case 1: return "STR_LOW_UC";
 		case 2: return "STR_HIGH_UC";
 		case 3: return "STR_VERY_HIGH";
-	}
+	} */
 }
 
 /**
@@ -635,6 +637,37 @@ std::vector<Vehicle*>* Craft::getVehicles()
 }
 
 /**
+ * Gets the amount of damage this craft has taken.
+ * @return, amount of damage
+ */
+int Craft::getCraftDamage() const
+{
+	return _damage;
+}
+
+/**
+ * Sets the amount of damage this craft has taken.
+ * @param damage - amount of damage
+ */
+void Craft::setCraftDamage(const int damage)
+{
+	_damage = damage;
+
+	if (_damage < 0) _damage = 0;
+}
+
+/**
+ * Gets the ratio between the amount of damage this craft has taken and the
+ * total it can take before it's destroyed.
+ * @return, damage taken as percent
+ */
+int Craft::getCraftDamagePct() const
+{
+	return static_cast<int>(std::ceil(
+		   static_cast<double>(_damage) / static_cast<double>(_crRule->getMaxDamage()) * 100.));
+}
+
+/**
  * Gets the amount of fuel currently contained in this craft.
  * @return, amount of fuel
  */
@@ -664,40 +697,8 @@ void Craft::setFuel(int fuel)
  */
 int Craft::getFuelPct() const
 {
-	return static_cast<int>(std::floor(
-		   static_cast<double>(_fuel) / static_cast<double>(_crRule->getMaxFuel()) * 100.));
-}
-
-/**
- * Gets the amount of damage this craft has taken.
- * @return, amount of damage
- */
-int Craft::getCraftDamage() const
-{
-	return _damage;
-}
-
-/**
- * Sets the amount of damage this craft has taken.
- * @param damage - amount of damage
- */
-void Craft::setCraftDamage(const int damage)
-{
-	_damage = damage;
-
-	if (_damage < 0)
-		_damage = 0;
-}
-
-/**
- * Gets the ratio between the amount of damage this craft has taken and the
- * total it can take before it's destroyed.
- * @return, damage taken as percent
- */
-int Craft::getCraftDamagePct() const
-{
 	return static_cast<int>(std::ceil(
-		   static_cast<double>(_damage) / static_cast<double>(_crRule->getMaxDamage()) * 100.));
+		   static_cast<double>(_fuel) / static_cast<double>(_crRule->getMaxFuel()) * 100.));
 }
 
 /**
@@ -721,22 +722,11 @@ void Craft::setLowFuel(bool low)
 }
 
 /**
- * Gets whether this craft has just done a ground mission and is forced to
- * return to its Base.
- * @return, true if this craft needs to return to base
+ * Consumes the craft's fuel every 10 minutes while it's in the air.
  */
-bool Craft::getTacticalReturn() const
+void Craft::consumeFuel()
 {
-	return _tacticalDone;
-}
-
-/**
- * Sets that this craft has just done a ground mission and is forced to return
- * to its Base.
- */
-void Craft::setTacticalReturn()
-{
-	_tacticalDone = true;
+	setFuel(_fuel - getFuelConsumption());
 }
 
 /**
@@ -762,24 +752,44 @@ int Craft::getFuelLimit() const
 
 /**
  * Gets the minimum required fuel for this craft to get back to Base.
+ * @note Speed and distance are in radians.
  * @param base - pointer to a target Base
  * @return, fuel amount
  */
-int Craft::getFuelLimit(const Base* const base) const
+int Craft::getFuelLimit(const Base* const base) const // private.
 {
-	double
-		distRads = getDistance(base),
-		patrol_factor = 1.;
+	double dist;
+	if (_dest == NULL)
+		dist = getDistance(base);
+	else
+		dist = getDistance(_dest) + _base->getDistance(_dest);
 
-	if (_dest != NULL)
-		distRads = getDistance(_dest) + _base->getDistance(_dest);
-	else if (_crRule->getRefuelItem().empty() == true)
-		patrol_factor = 2.;	// Elerium-powered Craft do not suffer this; they use 1 fuel per 10-min regardless of patrol speed.
-
-	const double speedRads = static_cast<double>(_crRule->getMaxSpeed()) * unitToRads / 6.;
+	const double speed = static_cast<double>(_crRule->getMaxSpeed()) * unitToRads / 6.;
 
 	return static_cast<int>(std::ceil(
-		   static_cast<double>(getFuelConsumption()) * distRads * patrol_factor / speedRads));
+		   static_cast<double>(getFuelConsumption()) * dist / speed));
+/*	double
+		dist,
+		patrol_factor;
+
+	if (_dest != NULL)
+	{
+		patrol_factor = 1.;
+		dist = getDistance(_dest) + _base->getDistance(_dest);
+	}
+	else
+	{
+		dist = getDistance(base);
+		if (_crRule->getRefuelItem().empty() == false)
+			patrol_factor = 1.;	// Elerium-powered Craft do not get an increase for patrolling; they use 1 fuel per 10-min regardless of patrol speed.
+		else
+			patrol_factor = 2.;
+	}
+
+	const double speed = static_cast<double>(_crRule->getMaxSpeed()) * unitToRads / 6.;
+
+	return static_cast<int>(std::ceil(
+		   static_cast<double>(getFuelConsumption()) * dist * patrol_factor / speed)); */
 }
 
 /**
@@ -788,6 +798,25 @@ int Craft::getFuelLimit(const Base* const base) const
 void Craft::returnToBase()
 {
 	setDestination(_base);
+}
+
+/**
+ * Gets whether this craft has just done a ground mission and is forced to
+ * return to its Base.
+ * @return, true if this craft needs to return to base
+ */
+bool Craft::getTacticalReturn() const
+{
+	return _tacticalDone;
+}
+
+/**
+ * Sets that this craft has just done a ground mission and is forced to return
+ * to its Base.
+ */
+void Craft::setTacticalReturn()
+{
+	_tacticalDone = true;
 }
 
 /**
@@ -879,14 +908,6 @@ bool Craft::detect(const Target* const target) const
 	}
 
 	return false;
-}
-
-/**
- * Consumes the craft's fuel every 10 minutes while it's in the air.
- */
-void Craft::consumeFuel()
-{
-	setFuel(_fuel - getFuelConsumption());
 }
 
 /**

@@ -88,6 +88,9 @@ private:
 	std::vector<CraftWeapon*> _weapons;
 	std::vector<Vehicle*> _vehicles;
 
+	/// Gets the craft's minimum fuel limit to go to a base.
+	int getFuelLimit(const Base* const base) const;
+
 
 	public:
 		/// Creates a craft of the specified type.
@@ -160,13 +163,6 @@ private:
 		/// Gets the craft's vehicles.
 		std::vector<Vehicle*>* getVehicles();
 
-		/// Gets the craft's amount of fuel.
-		int getFuel() const;
-		/// Sets the craft's amount of fuel.
-		void setFuel(int fuel);
-		/// Gets the craft's percentage of fuel.
-		int getFuelPct() const;
-
 		/// Gets the craft's amount of damage.
 		int getCraftDamage() const;
 		/// Sets the craft's amount of damage.
@@ -174,25 +170,29 @@ private:
 		/// Gets the craft's percentage of damage.
 		int getCraftDamagePct() const;
 
+		/// Gets the craft's amount of fuel.
+		int getFuel() const;
+		/// Sets the craft's amount of fuel.
+		void setFuel(int fuel);
+		/// Gets the craft's percentage of fuel.
+		int getFuelPct() const;
 		/// Gets whether the craft is running out of fuel.
 		bool getLowFuel() const;
 		/// Sets whether the craft is running out of fuel.
 		void setLowFuel(bool low = true);
-
-		/// Gets whether the craft has just finished a mission.
-		bool getTacticalReturn() const;
-		/// Sets that the craft has just finished a mission.
-		void setTacticalReturn();
-
+		/// Consumes the craft's fuel.
+		void consumeFuel();
 		/// Gets the craft's fuel consumption.
 		int getFuelConsumption() const;
 		/// Gets the craft's minimum fuel limit.
 		int getFuelLimit() const;
-		/// Gets the craft's minimum fuel limit to go to a base.
-		int getFuelLimit(const Base* const base) const;
 
 		/// Returns the craft to its base.
 		void returnToBase();
+		/// Gets whether the craft has just finished a mission.
+		bool getTacticalReturn() const;
+		/// Sets that the craft has just finished a mission.
+		void setTacticalReturn();
 
 		/// Handles craft logic.
 		void think();
@@ -202,9 +202,6 @@ private:
 
 		/// Checks if a target is detected by the craft's radar.
 		bool detect(const Target* const target) const;
-
-		/// Consumes the craft's fuel.
-		void consumeFuel();
 
 		/// Repairs the Craft.
 		void repair();

@@ -4501,7 +4501,7 @@
 
 1443844103 f:\git\openxcom\src\savegame\basefacility.h
 
-1443319800 f:\git\openxcom\src\savegame\craft.h
+1446280560 f:\git\openxcom\src\savegame\craft.h
 	"CraftId.h"
 	"MovingTarget.h"
 
@@ -5471,7 +5471,7 @@
 1443707949 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1446252473 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1446264505 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	"AlienBAIState.h"
 	"BattlescapeState.h"
@@ -5637,7 +5637,7 @@
 1430149550 f:\git\openxcom\src\battlescape\battlescapemessage.h
 	"../Engine/Surface.h"
 
-1446245641 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1446264464 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	"AbortMissionState.h"
 	"ActionMenuState.h"
@@ -5874,7 +5874,7 @@
 1446249870 f:\git\openxcom\src\battlescape\explosion.h
 	"Position.h"
 
-1446250630 source:f:\git\openxcom\src\battlescape\explosionbstate.cpp
+1446264525 source:f:\git\openxcom\src\battlescape\explosionbstate.cpp
 	"ExplosionBState.h"
 	"BattlescapeState.h"
 	"Camera.h"
@@ -6155,7 +6155,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1446244290 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
+1446264531 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
 	"ProjectileFlyBState.h"
 	"AlienBAIState.h"
 	"BattlescapeState.h"
@@ -6236,7 +6236,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1446244301 source:f:\git\openxcom\src\battlescape\unitdiebstate.cpp
+1446264544 source:f:\git\openxcom\src\battlescape\unitdiebstate.cpp
 	"UnitDieBState.h"
 	"BattlescapeState.h"
 	"Camera.h"
@@ -6255,7 +6255,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1446245971 source:f:\git\openxcom\src\battlescape\unitfallbstate.cpp
+1446264550 source:f:\git\openxcom\src\battlescape\unitfallbstate.cpp
 	"UnitFallBState.h"
 	"BattlescapeState.h"
 	"Camera.h"
@@ -6317,7 +6317,7 @@
 1420130448 f:\git\openxcom\src\engine\shadermove.h
 	"ShaderDraw.h"
 
-1446245996 source:f:\git\openxcom\src\battlescape\unitturnbstate.cpp
+1446264556 source:f:\git\openxcom\src\battlescape\unitturnbstate.cpp
 	"UnitTurnBState.h"
 	"BattlescapeState.h"
 	"Map.h"
@@ -6328,7 +6328,7 @@
 	"../Savegame/BattleUnit.h"
 	"../Savegame/SavedBattleGame.h"
 
-1446246008 source:f:\git\openxcom\src\battlescape\unitwalkbstate.cpp
+1446264561 source:f:\git\openxcom\src\battlescape\unitwalkbstate.cpp
 	"UnitWalkBState.h"
 	"BattlescapeState.h"
 	"Camera.h"
@@ -6606,7 +6606,7 @@
 	"SurfaceSet.h"
 	"Surface.h"
 
-1446233615 source:f:\git\openxcom\src\engine\timer.cpp
+1446264421 source:f:\git\openxcom\src\engine\timer.cpp
 	"Timer.h"
 	"Game.h"
 
@@ -7337,7 +7337,7 @@
 	"../Resource/ResourcePack.h"
 	"../Ruleset/RuleItem.h"
 
-1445286706 source:f:\git\openxcom\src\geoscape\selectdestinationstate.cpp
+1446282078 source:f:\git\openxcom\src\geoscape\selectdestinationstate.cpp
 	"SelectDestinationState.h"
 	"ConfirmCydoniaState.h"
 	"CraftErrorState.h"
