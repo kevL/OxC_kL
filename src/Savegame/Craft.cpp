@@ -533,7 +533,7 @@ void Craft::setDestination(Target* const dest)
 }
 
 /**
- * Gets the amount of weapons currently equipped on this craft.
+ * Gets the amount of weapons currently equipped on this Craft.
  * @return, number of weapons
  */
 int Craft::getNumWeapons() const
@@ -555,7 +555,7 @@ int Craft::getNumWeapons() const
 }
 
 /**
- * Gets the amount of soldiers from a list that are currently attached to this craft.
+ * Gets the amount of soldiers from a list that are currently attached to this Craft.
  * @return, number of soldiers
  */
 int Craft::getNumSoldiers() const
@@ -577,7 +577,7 @@ int Craft::getNumSoldiers() const
 }
 
 /**
- * Gets the amount of equipment currently equipped on this craft.
+ * Gets the amount of equipment currently equipped on this Craft.
  * @return, number of items
  */
 int Craft::getNumEquipment() const
@@ -586,7 +586,7 @@ int Craft::getNumEquipment() const
 }
 
 /**
- * Gets the amount of vehicles currently contained in this craft.
+ * Gets the amount of vehicles currently contained in this Craft.
  * @param tiles - true to return tile-spaces used in a transport (default false)
  * @return, either number of vehicles or tile-space used
  */
@@ -637,7 +637,7 @@ std::vector<Vehicle*>* Craft::getVehicles()
 }
 
 /**
- * Gets the amount of damage this craft has taken.
+ * Gets the amount of damage this Craft has taken.
  * @return, amount of damage
  */
 int Craft::getCraftDamage() const
@@ -646,7 +646,7 @@ int Craft::getCraftDamage() const
 }
 
 /**
- * Sets the amount of damage this craft has taken.
+ * Sets the amount of damage this Craft has taken.
  * @param damage - amount of damage
  */
 void Craft::setCraftDamage(const int damage)
@@ -657,7 +657,7 @@ void Craft::setCraftDamage(const int damage)
 }
 
 /**
- * Gets the ratio between the amount of damage this craft has taken and the
+ * Gets the ratio between the amount of damage this Craft has taken and the
  * total it can take before it's destroyed.
  * @return, damage taken as percent
  */
@@ -668,7 +668,7 @@ int Craft::getCraftDamagePct() const
 }
 
 /**
- * Gets the amount of fuel currently contained in this craft.
+ * Gets the amount of fuel currently contained in this Craft.
  * @return, amount of fuel
  */
 int Craft::getFuel() const
@@ -677,21 +677,21 @@ int Craft::getFuel() const
 }
 
 /**
- * Sets the amount of fuel currently contained in this craft.
+ * Sets the amount of fuel currently contained in this Craft.
  * @param fuel - amount of fuel
  */
 void Craft::setFuel(int fuel)
 {
-	_fuel = fuel;
+	if (fuel > _crRule->getMaxFuel())
+		fuel = _crRule->getMaxFuel();
+	else if (fuel < 0)
+		fuel = 0;
 
-	if (_fuel > _crRule->getMaxFuel())
-		_fuel = _crRule->getMaxFuel();
-	else if (_fuel < 0)
-		_fuel = 0;
+	_fuel = fuel;
 }
 
 /**
- * Gets the ratio between the amount of fuel currently contained in this craft
+ * Gets the ratio between the amount of fuel currently contained in this Craft
  * and the total it can carry.
  * @return, fuel remaining as percent
  */
@@ -712,7 +712,7 @@ bool Craft::getLowFuel() const
 }
 
 /**
- * Sets whether this craft is currently low on fuel - only has enough to get
+ * Sets whether this Craft is currently low on fuel - only has enough to get
  * back to its Base.
  * @param low - true if fuel is low (default true)
  */
@@ -730,7 +730,7 @@ void Craft::consumeFuel()
 }
 
 /**
- * Gets the amount of fuel this craft uses while it's airborne.
+ * Gets the amount of fuel this Craft uses while it's airborne.
  * @return, fuel amount
  */
 int Craft::getFuelConsumption() const
@@ -742,21 +742,21 @@ int Craft::getFuelConsumption() const
 }
 
 /**
- * Gets the minimum required fuel for this craft to get back to Base.
+ * Gets the minimum required fuel for this Craft to get back to Base.
  * @return, fuel amount
  */
 int Craft::getFuelLimit() const
 {
-	return getFuelLimit(_base);
+	return calcFuelLimit(_base);
 }
 
 /**
- * Gets the minimum required fuel for this craft to get back to Base.
+ * Calculates the minimum required fuel for this Craft to get back to Base.
  * @note Speed and distance are in radians.
  * @param base - pointer to a target Base
  * @return, fuel amount
  */
-int Craft::getFuelLimit(const Base* const base) const // private.
+int Craft::calcFuelLimit(const Base* const base) const // private.
 {
 	double dist;
 	if (_dest == NULL)
@@ -793,7 +793,7 @@ int Craft::getFuelLimit(const Base* const base) const // private.
 }
 
 /**
- * Sends the craft back to its origin Base.
+ * Sends this Craft back to its origin Base.
  */
 void Craft::returnToBase()
 {
@@ -801,9 +801,9 @@ void Craft::returnToBase()
 }
 
 /**
- * Gets whether this craft has just done a ground mission and is forced to
+ * Gets whether this Craft has just done a ground mission and is forced to
  * return to its Base.
- * @return, true if this craft needs to return to base
+ * @return, true if this Craft needs to return to base
  */
 bool Craft::getTacticalReturn() const
 {
@@ -811,7 +811,7 @@ bool Craft::getTacticalReturn() const
 }
 
 /**
- * Sets that this craft has just done a ground mission and is forced to return
+ * Sets that this Craft has just done a ground mission and is forced to return
  * to its Base.
  */
 void Craft::setTacticalReturn()
@@ -1162,7 +1162,7 @@ int Craft::calcLoadCurrent()
 }
 
 /**
- * Gets this craft's current CraftWarning status.
+ * Gets this Craft's current CraftWarning status.
  * @return, CraftWarning (Craft.h)
  */
 CraftWarning Craft::getWarning() const
@@ -1171,7 +1171,7 @@ CraftWarning Craft::getWarning() const
 }
 
 /**
- * Sets this craft's CraftWarning status.
+ * Sets this Craft's CraftWarning status.
  * @param warning - a CraftWarning  (Craft.h)
  */
 void Craft::setWarning(const CraftWarning warning)

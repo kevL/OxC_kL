@@ -88,119 +88,119 @@ private:
 	std::vector<CraftWeapon*> _weapons;
 	std::vector<Vehicle*> _vehicles;
 
-	/// Gets the craft's minimum fuel limit to go to a base.
-	int getFuelLimit(const Base* const base) const;
+	/// Calculates the Craft's minimum fuel required to go to a base.
+	int calcFuelLimit(const Base* const base) const;
 
 
 	public:
-		/// Creates a craft of the specified type.
+		/// Creates a Craft of the specified type.
 		Craft(
 				RuleCraft* const crRule,
 				Base* const base,
 				int id = 0);
-		/// Cleans up the craft.
+		/// Cleans up the Craft.
 		~Craft();
 
-		/// Loads the craft from YAML.
+		/// Loads the Craft from YAML.
 		void load(
 				const YAML::Node& node,
 				const Ruleset* const rules,
 				SavedGame* const save);
-		/// Saves the craft to YAML.
+		/// Saves the Craft to YAML.
 		YAML::Node save() const;
-		/// Saves the craft's ID to YAML.
+		/// Saves the Craft's ID to YAML.
 		YAML::Node saveId() const;
-		/// Loads a craft ID from YAML.
+		/// Loads a Craft ID from YAML.
 		static CraftId loadId(const YAML::Node& node);
 
-		/// Gets the craft's ruleset.
+		/// Gets the Craft's ruleset.
 		RuleCraft* getRules() const;
-		/// Sets the craft's ruleset.
+		/// Sets the Craft's ruleset.
 		void changeRules(RuleCraft* const crRule);
 
-		/// Gets the craft's ID.
+		/// Gets the Craft's ID.
 		int getId() const;
-		/// Gets the craft's name.
+		/// Gets the Craft's name.
 		std::wstring getName(const Language* const lang) const;
-		/// Sets the craft's name.
+		/// Sets the Craft's name.
 		void setName(const std::wstring& newName);
 
-		/// Gets the craft's marker.
+		/// Gets the Craft's marker.
 		int getMarker() const;
 
-		/// Gets the craft's base.
+		/// Gets the Craft's base.
 		Base* getBase() const;
-		/// Sets the craft's base.
+		/// Sets the Craft's base.
 		void setBase(
 				Base* const base,
 				bool transfer = true);
 
-		/// Gets the craft's status.
+		/// Gets the Craft's status.
 		std::string getCraftStatus() const;
-		/// Sets the craft's status.
+		/// Sets the Craft's status.
 		void setCraftStatus(const std::string& status);
 
-		/// Gets the craft's altitude.
+		/// Gets the Craft's altitude.
 		std::string getAltitude() const;
 
-		/// Sets the craft's destination.
+		/// Sets the Craft's destination.
 		void setDestination(Target* const dest);
 
-		/// Gets the craft's amount of weapons.
+		/// Gets the Craft's amount of weapons.
 		int getNumWeapons() const;
-		/// Gets the craft's amount of soldiers.
+		/// Gets the Craft's amount of soldiers.
 		int getNumSoldiers() const;
-		/// Gets the craft's amount of equipment.
+		/// Gets the Craft's amount of equipment.
 		int getNumEquipment() const;
-		/// Gets the craft's amount of vehicles.
+		/// Gets the Craft's amount of vehicles.
 		int getNumVehicles(bool tiles = false) const;
 
-		/// Gets the craft's weapons.
+		/// Gets the Craft's weapons.
 		std::vector<CraftWeapon*>* getWeapons();
 
-		/// Gets the craft's items.
+		/// Gets the Craft's items.
 		ItemContainer* getCraftItems() const;
-		/// Gets the craft's vehicles.
+		/// Gets the Craft's vehicles.
 		std::vector<Vehicle*>* getVehicles();
 
-		/// Gets the craft's amount of damage.
+		/// Gets the Craft's amount of damage.
 		int getCraftDamage() const;
-		/// Sets the craft's amount of damage.
+		/// Sets the Craft's amount of damage.
 		void setCraftDamage(const int damage);
-		/// Gets the craft's percentage of damage.
+		/// Gets the Craft's percentage of damage.
 		int getCraftDamagePct() const;
 
-		/// Gets the craft's amount of fuel.
+		/// Gets the Craft's amount of fuel.
 		int getFuel() const;
-		/// Sets the craft's amount of fuel.
+		/// Sets the Craft's amount of fuel.
 		void setFuel(int fuel);
-		/// Gets the craft's percentage of fuel.
+		/// Gets the Craft's percentage of fuel.
 		int getFuelPct() const;
-		/// Gets whether the craft is running out of fuel.
+		/// Gets whether the Craft is running out of fuel.
 		bool getLowFuel() const;
-		/// Sets whether the craft is running out of fuel.
+		/// Sets whether the Craft is running out of fuel.
 		void setLowFuel(bool low = true);
-		/// Consumes the craft's fuel.
+		/// Consumes the Craft's fuel.
 		void consumeFuel();
-		/// Gets the craft's fuel consumption.
+		/// Gets the Craft's fuel consumption.
 		int getFuelConsumption() const;
-		/// Gets the craft's minimum fuel limit.
+		/// Gets the Craft's minimum fuel limit.
 		int getFuelLimit() const;
 
-		/// Returns the craft to its base.
+		/// Returns the Craft to its base.
 		void returnToBase();
-		/// Gets whether the craft has just finished a mission.
+		/// Gets whether the Craft has just finished a mission.
 		bool getTacticalReturn() const;
-		/// Sets that the craft has just finished a mission.
+		/// Sets that the Craft has just finished a mission.
 		void setTacticalReturn();
 
-		/// Handles craft logic.
+		/// Handles Craft logic.
 		void think();
 
-		/// Does a craft full checkup.
+		/// Does a Craft full checkup.
 		void checkup();
 
-		/// Checks if a target is detected by the craft's radar.
+		/// Checks if a target is detected by the Craft's radar.
 		bool detect(const Target* const target) const;
 
 		/// Repairs the Craft.
@@ -242,9 +242,9 @@ private:
 		/// Gets the Craft's current load.
 		int calcLoadCurrent();
 
-		/// Gets this craft's current CraftWarning status.
+		/// Gets the Craft's current CraftWarning status.
 		CraftWarning getWarning() const;
-		/// Sets this craft's CraftWarning status.
+		/// Sets the Craft's CraftWarning status.
 		void setWarning(const CraftWarning warning);
 		/// Gets whether a warning has been issued for this Craft.
 		bool getWarned() const;
