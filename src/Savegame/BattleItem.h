@@ -86,9 +86,7 @@ private:
 		/// Sets the item's ammo quantity.
 		void setAmmoQuantity(int qty);
 		/// Gets if the item is a clip in a weapon.
-		bool getIsLoadedAmmo() const;
-		/// Sets if the item is a clip in a weapon.
-		void setIsLoadedAmmo(bool loaded = true);
+		bool isLoadedAmmo() const;
 
 		/// Gets the item's ammo item.
 		BattleItem* getAmmoItem() const;

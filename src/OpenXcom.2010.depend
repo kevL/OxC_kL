@@ -4494,7 +4494,7 @@
 
 1431564753 f:\git\openxcom\src\ruleset\rulebasefacility.h
 
-1444017448 f:\git\openxcom\src\ruleset\ruleregion.h
+1446796359 f:\git\openxcom\src\ruleset\ruleregion.h
 	"../Savegame/WeightedOptions.h"
 
 1444097696 f:\git\openxcom\src\savegame\weightedoptions.h
@@ -4639,7 +4639,7 @@
 1446155148 f:\git\openxcom\src\savegame\savedbattlegame.h
 	"BattleUnit.h"
 
-1446233147 f:\git\openxcom\src\savegame\battleunit.h
+1446794802 f:\git\openxcom\src\savegame\battleunit.h
 	"SavedGame.h"
 	"Soldier.h"
 	"../Battlescape/BattlescapeGame.h"
@@ -5406,7 +5406,7 @@
 	"../Ruleset/MapData.h"
 	"../Ruleset/RuleItem.h"
 
-1443146585 f:\git\openxcom\src\savegame\battleitem.h
+1447108341 f:\git\openxcom\src\savegame\battleitem.h
 
 1446154384 f:\git\openxcom\src\savegame\tile.h
 	"BattleUnit.h"
@@ -5556,7 +5556,7 @@
 
 1440159850 f:\git\openxcom\src\ruleset\ruleinventory.h
 
-1446153606 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
+1447111354 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
 	"BattlescapeGenerator.h"
 	"AlienBAIState.h"
 	"CivilianBAIState.h"
@@ -6000,7 +6000,7 @@
 	"../Ruleset/RuleItem.h"
 	"../Ruleset/Ruleset.h"
 
-1445041245 f:\git\openxcom\src\battlescape\projectile.h
+1447115201 f:\git\openxcom\src\battlescape\projectile.h
 	"BattlescapeGame.h"
 	"Position.h"
 	"../Ruleset/MapData.h"
@@ -6213,7 +6213,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1446154880 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1446794837 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	"AlienBAIState.h"
 	"BattlescapeState.h"
@@ -8288,7 +8288,7 @@
 1444556365 source:f:\git\openxcom\src\ruleset\rulemanufacture.cpp
 	"RuleManufacture.h"
 
-1445314220 source:f:\git\openxcom\src\ruleset\ruleregion.cpp
+1446796370 source:f:\git\openxcom\src\ruleset\ruleregion.cpp
 	"RuleRegion.h"
 	"RuleCity.h"
 
@@ -8372,7 +8372,7 @@
 	"../Engine/Language.h"
 	"../Geoscape/Globe.h"
 
-1445468662 source:f:\git\openxcom\src\savegame\alienmission.cpp
+1446796759 source:f:\git\openxcom\src\savegame\alienmission.cpp
 	"AlienMission.h"
 	"AlienBase.h"
 	"Base.h"
@@ -8435,7 +8435,7 @@
 	"Base.h"
 	"../Ruleset/RuleBaseFacility.h"
 
-1445524642 source:f:\git\openxcom\src\savegame\battleitem.cpp
+1447108351 source:f:\git\openxcom\src\savegame\battleitem.cpp
 	"BattleItem.h"
 	"BattleUnit.h"
 	"Tile.h"
@@ -8443,7 +8443,7 @@
 	"../Ruleset/RuleItem.h"
 	"../Savegame/SavedBattleGame.h"
 
-1446233153 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1446794802 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	"BattleItem.h"
 	"SavedGame.h"

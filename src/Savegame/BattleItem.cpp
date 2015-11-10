@@ -199,18 +199,9 @@ void BattleItem::setAmmoQuantity(int qty)
  * Gets if the item is loaded in a weapon.
  * @return, true if loaded
  */
-bool BattleItem::getIsLoadedAmmo() const
+bool BattleItem::isLoadedAmmo() const
 {
 	return _isLoad;
-}
-
-/**
- * Sets if the item is loaded in a weapon.
- * @param - true if loaded (default true)
- */
-void BattleItem::setIsLoadedAmmo(bool loaded)
-{
-	_isLoad = loaded;
 }
 
 /**
@@ -238,7 +229,7 @@ int BattleItem::setAmmoItem(BattleItem* const item)
 		if (item == NULL) // unload weapon
 		{
 			if (_ammoItem != NULL)
-				_ammoItem->setIsLoadedAmmo(false);
+				_ammoItem->_isLoad = false;
 
 			_ammoItem = NULL;
 			return 0;
@@ -254,9 +245,8 @@ int BattleItem::setAmmoItem(BattleItem* const item)
 		{
 			if (*i == item->getRules()->getType())
 			{
-				item->setIsLoadedAmmo();
 				_ammoItem = item;
-
+				_ammoItem->_isLoad = true;
 				return 0;
 			}
 		}

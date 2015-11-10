@@ -83,7 +83,9 @@ private:
 			int elevation,
 			const Tile* tileTarget) const;
 	///
-	bool verifyTarget(const Position& originVoxel);
+	bool verifyTarget(
+			const Position& originVoxel,
+			bool useExclude = true);
 
 
 	public:
@@ -101,7 +103,8 @@ private:
 		VoxelType calculateShot(double accuracy);
 		VoxelType calculateShot(
 				double accuracy,
-				const Position& originVoxel);
+				const Position& originVoxel,
+				bool useExclude = true);
 		/// Calculates the trajectory for a curved path.
 		VoxelType calculateThrow(double accuracy);
 

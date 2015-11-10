@@ -155,7 +155,7 @@ private:
 				size_t zone,
 				const Target* const target) const;
 		/// Gets a random MissionArea in the Region.
-		MissionArea getRandomMissionPoint(size_t zone) const;
+//		MissionArea getRandomMissionPoint(size_t zone) const;
 
 		/// Gets the Region's borders.
 		const std::vector<double>& getLonMax() const {return _lonMax;}

@@ -5801,7 +5801,7 @@ bool TileEngine::psiAttack(BattleAction* const action)
 		if (victim->getFaction() == FACTION_HOSTILE
 			&& victim->getOriginalFaction() != FACTION_HOSTILE)
 		{
-			victim->hostileMcParameters(psiStrength, psiSkill);
+			victim->hostileMcValues(psiStrength, psiSkill);
 		}
 		else
 		{
@@ -5916,19 +5916,17 @@ bool TileEngine::psiAttack(BattleAction* const action)
 					int
 						strength = statsActor->psiStrength,
 						skill = statsActor->psiSkill;
-					victim->hostileMcParameters(
-											strength,
-											skill);
+					victim->hostileMcValues(
+										strength,
+										skill);
 
-					courage = std::min( // xCom Morale loss for getting Mc'd.
-									0,
+					courage = std::min(0, // xCom Morale loss for getting Mc'd.
 									(_battleSave->getMoraleModifier() / 10) + (courage / 2) - 110);
 				}
 				else //if (action->actor->getFaction() == FACTION_PLAYER)
 				{
 					if (victim->getOriginalFaction() == FACTION_HOSTILE)
-						courage = std::min( // aLien Morale loss for getting Mc'd.
-										0,
+						courage = std::min(0, // aLien Morale loss for getting Mc'd.
 										(_battleSave->getMoraleModifier(NULL, false) / 10) + (courage * 3 / 4) - 110);
 					else
 					{

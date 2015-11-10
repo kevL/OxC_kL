@@ -4684,7 +4684,7 @@ std::list<BattleUnit*>* BattleUnit::getRfSpotters()
  * @param strength	- psi strength
  * @param skill		- psi skill
  */
-void BattleUnit::hostileMcParameters(
+void BattleUnit::hostileMcValues(
 		int& strength,
 		int& skill)
 {
@@ -4709,7 +4709,6 @@ void BattleUnit::hostileMcParameters(
 void BattleUnit::playDeathSound() const
 {
 	int sound = -1;
-
 	if (_type == "SOLDIER")
 	{
 		if (_gender == GENDER_MALE)
@@ -4727,14 +4726,9 @@ void BattleUnit::playDeathSound() const
 	else
 		sound = _deathSound;
 
-
 	if (sound != -1)
-		_battleGame->getResourcePack()->getSound(
-										"BATTLE.CAT",
-										sound)
-									->play(
-										-1,
-										_battleGame->getMap()->getSoundAngle(_pos));
+		_battleGame->getResourcePack()->getSound("BATTLE.CAT", sound)
+										->play(-1, _battleGame->getMap()->getSoundAngle(_pos));
 }
 
 /**

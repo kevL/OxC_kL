@@ -311,10 +311,10 @@ MissionArea RuleRegion::getMissionPoint(
 	return MissionArea();
 }
 
-/**
+/*
  * Gets the area data for the random mission point in this Region.
  * @return, a MissionArea from which to extract coordinates, textures, or any other pertinent information
- */
+ *
 MissionArea RuleRegion::getRandomMissionPoint(size_t zone) const
 {
 	if (zone < _missionZones.size())
@@ -339,6 +339,6 @@ MissionArea RuleRegion::getRandomMissionPoint(size_t zone) const
 
 //	assert(0 && "Invalid zone number");
 	return MissionArea();
-}
+} */
 
 }

@@ -1164,7 +1164,7 @@ private:
 		std::list<BattleUnit*>* getRfSpotters();
 
 		/// Sets the parameters of a successful mind-control psi attack.
-		void hostileMcParameters(
+		void hostileMcValues(
 				int& strength,
 				int& skill);
 

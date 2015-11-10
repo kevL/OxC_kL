@@ -562,7 +562,8 @@ bool ProjectileFlyBState::createNewProjectile() // private.
 		{
 			_prjImpact = prj->calculateShot( // this should probly be TE:plotLine() - cf. else(error) below_
 										_unit->getAccuracy(_action),
-										_originVoxel);
+										_originVoxel,
+										false); // <- don't consider excludeUnit if a BL-waypoint
 			//Log(LOG_INFO) << ". shoot weapon[0], voxelType = " << (int)_prjImpact;
 		}
 		else // non-BL weapon

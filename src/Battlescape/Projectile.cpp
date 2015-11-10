@@ -173,6 +173,7 @@ VoxelType Projectile::calculateShot(double accuracy)
  * trajectory that is actually pathed.
  * @param accuracy		- accuracy of the projectile's trajectory (a BattleUnit's accuracy)
  * @param originVoxel	- for Blaster launch; ie trajectories that start at a position other than unit's
+ * @param useExclude	- true for normal shots; false for BL-waypoints (default true)
  * @return, VoxelType (MapData.h)
  *			 -1 nothing to hit / no line of fire
  *			0-3 tile-part (floor / westwall / northwall / object)
@@ -188,7 +189,8 @@ VoxelType Projectile::calculateShot(double accuracy)
  */
 VoxelType Projectile::calculateShot(
 		double accuracy,
-		const Position& originVoxel)
+		const Position& originVoxel,
+		bool useExclude)
 {
 	//Log(LOG_INFO) << "Projectile::calculateShot() accuracy = " << accuracy;
 	// test for LoF
@@ -201,7 +203,7 @@ VoxelType Projectile::calculateShot(
 			&& (SDL_GetModState() & KMOD_SHIFT) == 0)
 				|| Options::battleForceFire == false))
 	{
-		if (verifyTarget(originVoxel) == false)
+		if (verifyTarget(originVoxel, useExclude) == false)
 			return VOXEL_EMPTY;
 	}
 
@@ -218,7 +220,7 @@ VoxelType Projectile::calculateShot(
 /*	if (targetUnit != NULL && targetUnit->isDashing() == true)
 		accuracy -= 0.16; */
 
-	//Log(LOG_INFO) << "\n";
+	//Log(LOG_INFO) << "";
 	//Log(LOG_INFO) << ". preAcu target = " << _targetVoxel << " tSpace " << (_targetVoxel / Position(16,16,24));
 	if (_action.type != BA_LAUNCH // Could base BL.. on psiSkill, or sumthin'
 		&& Position::toTileSpace(originVoxel) != Position::toTileSpace(_targetVoxel))
@@ -661,17 +663,26 @@ double Projectile::targetAccuracy( // private.
  * @note Go figure. Checks if the voxel with a/the previously determined
  * VoxelType is really a voxel in the target tile and if not then if it's an
  * acceptable substitute in an adjacent tile.
- * @param originVoxel - origin in voxel-space
+ * @param originVoxel	- origin in voxel-space
+ * @param useExclude	- true for normal shots; false for BL-waypoints (default true)
  * @return, true if LoF
  */
-bool Projectile::verifyTarget(const Position& originVoxel) // private.
+bool Projectile::verifyTarget(
+		const Position& originVoxel,
+		bool useExclude) // private.
 {
+	const BattleUnit* excludeUnit;
+	if (useExclude == true)
+		excludeUnit = _action.actor;
+	else
+		excludeUnit = NULL;
+
 	const VoxelType voxelType = _battleSave->getTileEngine()->plotLine(
 																	originVoxel,
 																	_targetVoxel,
 																	false,
 																	&_trj,
-																	_action.actor);
+																	excludeUnit);
 	if (voxelType != VOXEL_EMPTY && _trj.empty() == false)
 	{
 		Position posTest = Position::toTileSpace(_trj.at(0));

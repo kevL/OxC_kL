@@ -660,10 +660,10 @@ void AlienMission::ufoReachedWaypoint(
 		const Ruleset& rules,
 		const Globe& globe)
 {
+	const UfoTrajectory& trajectory = ufo.getTrajectory();
 	const size_t
 		pt = ufo.getTrajectoryPoint(),
 		ptNext = pt + 1;
-	const UfoTrajectory& trajectory = ufo.getTrajectory();
 
 	if (ptNext < trajectory.getWaypointTotal())
 	{
@@ -707,14 +707,15 @@ void AlienMission::ufoReachedWaypoint(
 
 				ufo.setUfoStatus(Ufo::DESTROYED);
 
+				// note: Looks like they're having probls with getting a mission pt:
+//				MissionArea area = regionRule.getMissionZones().at(trajectory.getZone(pt)).areas.at(_siteZone);
 				const MissionArea area = regionRule.getMissionPoint(
-															trajectory.getZone(pt),
-															&ufo);
+																trajectory.getZone(pt),
+																dynamic_cast<Target*>(&ufo));
+
 				const RuleTexture* const texture = rules.getGlobe()->getTextureRule(area.texture);
 				const AlienDeployment* const deployRule = rules.getDeployment(texture->getTextureDeployment());
-				MissionSite* const site = spawnMissionSite(
-														deployRule,
-														area);
+				MissionSite* const site = spawnMissionSite(deployRule, area);
 				if (site != NULL)
 				{
 					_gameSave.getMissionSites()->push_back(site);
@@ -730,28 +731,25 @@ void AlienMission::ufoReachedWaypoint(
 							craft->setDestination(site);
 							i = ufo.getFollowers()->begin();
 						}
-						else
-							++i;
+						else ++i;
 					}
 				}
 			}
 			else if (trajectory.getId() == UfoTrajectory::RETALIATION_ASSAULT_RUN)	// remove UFO, replace with Base defense.
 			{																		// Ignore what the trajectory might say, this is a base defense.
 				ufo.setDetected(false);
-
-				const std::vector<Base*>::const_iterator xcomBase = std::find_if(
-																			_gameSave.getBases()->begin(),
-																			_gameSave.getBases()->end(),
-																			MatchBaseCoordinates(
-																							ufo.getLongitude(),
-																							ufo.getLatitude()));
-				if (xcomBase == _gameSave.getBases()->end())
+				const std::vector<Base*>::const_iterator i = std::find_if(			// Only spawn mission if the base is still there.
+																	_gameSave.getBases()->begin(),
+																	_gameSave.getBases()->end(),
+																	MatchBaseCoordinates(
+																					ufo.getLongitude(),
+																					ufo.getLatitude()));
+				if (i == _gameSave.getBases()->end())
 				{
 					ufo.setUfoStatus(Ufo::DESTROYED);
-					return; // Only spawn mission if the base is still there.
+					return;
 				}
-
-				ufo.setDestination(*xcomBase);
+				ufo.setDestination(*i);
 			}
 			else // Set timer for UFO on the ground.
 			{
@@ -761,11 +759,8 @@ void AlienMission::ufoReachedWaypoint(
 				{
 					ufo.setSecondsLeft(trajectory.groundTimer() * 5);
 
-					if (ufo.getDetected() == true
-						&& ufo.getLandId() == 0)
-					{
+					if (ufo.getDetected() == true && ufo.getLandId() == 0)
 						ufo.setLandId(_gameSave.getCanonicalId("STR_LANDING_SITE"));
-					}
 				}
 				else // there's nothing to land on
 					ufo.setSecondsLeft(5);
@@ -1002,15 +997,6 @@ std::pair<double, double> AlienMission::getWaypoint(
 		const Globe& globe,
 		const RuleRegion& region)
 {
-	if (trajectory.getWaypointTotal() > nextWaypoint + 1
-		&& trajectory.getAltitude(nextWaypoint + 1) == "STR_GROUND")
- 	{
- 		return getLandPoint(
-						globe,
-						region,
-						trajectory.getZone(nextWaypoint));
- 	}
-
 	size_t wave = _waveCount - 1;
 	if (wave == std::numeric_limits<size_t>::max())
 		wave = _missionRule.getWaveTotal() - 1;
@@ -1024,6 +1010,14 @@ std::pair<double, double> AlienMission::getWaypoint(
 							area->lonMin,
 							area->latMin);
 	}
+
+	if (trajectory.getWaypointTotal() > nextWaypoint + 1
+		&& trajectory.getAltitude(nextWaypoint + 1) == "STR_GROUND")
+ 	{
+ 		return getLandPoint(
+						globe, region,
+						trajectory.getZone(nextWaypoint));
+ 	}
 
 	return region.getRandomPoint(trajectory.getZone(nextWaypoint));
 }
@@ -1042,12 +1036,11 @@ std::pair<double, double> AlienMission::getLandPoint(
 		const size_t zone)
 {
 	int tries = 0;
-
 	std::pair<double, double> coord;
 	do
 	{
-		coord = region.getRandomPoint(zone);
 		++tries;
+		coord = region.getRandomPoint(zone);
 	}
 	while (tries < 100
 		&& (globe.insideLand(
@@ -1058,13 +1051,10 @@ std::pair<double, double> AlienMission::getLandPoint(
 						coord.second) == false));
 
 	if (tries == 100)
-	{
-//		Log(LOG_DEBUG) << "Region: " << region.getType()
 		Log(LOG_INFO) << "Region: " << region.getType()
 			<< " lon " << coord.first
 			<< " lat " << coord.second
 			<< " invalid zone: " << zone << " - ufo was forced to land on water.";
-	}
 
 	return coord;
 }

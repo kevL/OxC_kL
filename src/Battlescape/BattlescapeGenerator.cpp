@@ -477,8 +477,8 @@ void BattlescapeGenerator::nextStage()
 	// - and those that are scattered about on the ground that will be recovered ONLY on success.
 	// This does not include items in soldiers' hands.
 	std::vector<BattleItem*>
-		* takeHomeGuaranteed = _battleSave->getGuaranteedRecoveredItems(),
-		* takeHomeConditional = _battleSave->getConditionalRecoveredItems(),
+		* takeHomeGuaranteed (_battleSave->getGuaranteedRecoveredItems()),
+		* takeHomeConditional (_battleSave->getConditionalRecoveredItems()),
 		takeToNextStage,
 		carryToNextStage,
 		removeFromGame;
@@ -488,20 +488,20 @@ void BattlescapeGenerator::nextStage()
 			i != _battleSave->getItems()->end();
 			++i)
 	{
-		if ((*i)->getOwner() == NULL)
-			(*i)->setFuse(-1);
-
-		if ((*i)->getIsLoadedAmmo() == false)
+		if ((*i)->isLoadedAmmo() == false)
 		{
-			std::vector<BattleItem*>* toContainer = &removeFromGame;
+			std::vector<BattleItem*>* toContainer;
 
-			if ((*i)->getRules()->isRecoverable() == true
-				&& (*i)->getOwner() == NULL)
+			// assign the item a destination container ->
+			if ((*i)->getOwner() == NULL
+				&& (*i)->getRules()->isRecoverable() == true)
 			{
+				(*i)->setFuse(-1);
+
 				if (aliensAlive == 0)
 				{
 					if ((*i)->getUnit() != NULL
-						|| _game->getSavedGame()->isResearched((*i)->getRules()->getRequirements()) == false)
+						|| _gameSave->isResearched((*i)->getRules()->getRequirements()) == false)
 					{
 						toContainer = takeHomeGuaranteed;
 					}
@@ -510,33 +510,40 @@ void BattlescapeGenerator::nextStage()
 				}
 				else
 				{
-					const Tile* const tile = (*i)->getTile();
+					const Tile* const tile ((*i)->getTile());
 					if (tile != NULL)
 					{
-						toContainer = takeHomeConditional;
-						if (tile->getMapData(O_FLOOR) != NULL)
+						if (tile->getMapData(O_FLOOR) != NULL
+							&& tile->getMapData(O_FLOOR)->getSpecialType() == START_POINT)
 						{
-							if (tile->getMapData(O_FLOOR)->getSpecialType() == START_POINT)
-								toContainer = takeHomeGuaranteed;
-							else if (tile->getMapData(O_FLOOR)->getSpecialType() == END_POINT)
-								toContainer = &takeToNextStage;
+							toContainer = takeHomeGuaranteed;
 						}
+						else if (tile->getMapData(O_FLOOR) != NULL
+							&& tile->getMapData(O_FLOOR)->getSpecialType() == END_POINT)
+						{
+							toContainer = &takeToNextStage;
+						}
+						else
+							toContainer = takeHomeConditional;
 					}
+					else
+						toContainer = &removeFromGame;
 				}
 			}
-
-			if ((*i)->getOwner() != NULL
+			else if ((*i)->getOwner() != NULL
 				&& (*i)->getOwner()->getFaction() == FACTION_PLAYER)
 			{
 				toContainer = &carryToNextStage;
 			}
+			else
+				toContainer = &removeFromGame;
 
-			BattleItem* const ammo = (*i)->getAmmoItem();
-			if (ammo != NULL
-				&& *i != ammo)
+			// move the item to its destination container ->
+			BattleItem* const load = (*i)->getAmmoItem();
+			if (load != NULL && *i != load)
 			{
-				ammo->setTile(NULL);
-				toContainer->push_back(ammo);
+				load->setTile(NULL);
+				toContainer->push_back(load);
 			}
 
 			(*i)->setTile(NULL);
@@ -679,7 +686,7 @@ void BattlescapeGenerator::nextStage()
 	}
 
 	RuleInventory* const grndRule = _game->getRuleset()->getInventory("STR_GROUND");
-	for (std::vector<BattleItem*>::iterator
+	for (std::vector<BattleItem*>::const_iterator
 		i = takeToNextStage.begin();
 		i != takeToNextStage.end();
 		++i)
