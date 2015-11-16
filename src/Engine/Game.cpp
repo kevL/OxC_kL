@@ -775,7 +775,7 @@ void Game::loadRuleset()
 		Log(LOG_INFO) << *i;
 	} */
 
-	_rules->validateMissionScripts();
+	_rules->validateMissions();
 	_rules->sortLists();
 
 	// Prints listOrder to LOG.

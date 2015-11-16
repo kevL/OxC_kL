@@ -208,7 +208,7 @@ protected:
 		void reloadCountryLines() const;
 
 		/// Checks to ensure Mission scripts are okay.
-		void validateMissionScripts() const;
+		void validateMissions() const;
 
 		/// Loads a ruleset from the given source.
 		void load(const std::string& src);
