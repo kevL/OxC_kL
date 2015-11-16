@@ -593,14 +593,24 @@ void CraftEquipmentState::moveRightByValue(int qtyDelta)
 					if (itRule->getCompatibleAmmo()->empty() == false)
 					{
 						const RuleItem* const aRule = _game->getRuleset()->getItem(itRule->getCompatibleAmmo()->front());
-						int clipSize = aRule->getClipSize();
-						if (clipSize > 0 && itRule->getClipSize() > 0)
-							clipSize = itRule->getClipSize() / clipSize;
+						int
+							tankClipSize,
+							requiredRounds;
+						if (aRule->getClipSize() > 0 && itRule->getClipSize() > 0)
+						{
+							requiredRounds = itRule->getClipSize();
+							tankClipSize = requiredRounds / aRule->getClipSize();
+						}
+						else
+						{
+							requiredRounds = aRule->getClipSize();
+							tankClipSize = requiredRounds;
+						}
 
 						if (_game->getSavedGame()->getMonthsPassed() == -1)
 							baseQty = 1;
 						else
-							baseQty = _base->getStorageItems()->getItemQty(aRule->getType()) / clipSize;
+							baseQty = _base->getStorageItems()->getItemQty(aRule->getType()) / tankClipSize;
 
 						qtyDelta = std::min(qtyDelta, baseQty); // maximum number of Vehicles w/ full Ammo.
 
@@ -613,11 +623,11 @@ void CraftEquipmentState::moveRightByValue(int qtyDelta)
 							{
 								if (_game->getSavedGame()->getMonthsPassed() != -1)
 								{
-									_base->getStorageItems()->removeItem(aRule->getType(), clipSize);
+									_base->getStorageItems()->removeItem(aRule->getType(), tankClipSize);
 									_base->getStorageItems()->removeItem(_items[_sel]);
 								}
 
-								_craft->getVehicles()->push_back(new Vehicle(itRule, clipSize, tankSize));
+								_craft->getVehicles()->push_back(new Vehicle(itRule, requiredRounds, tankSize));
 							}
 						}
 						else // not enough Ammo

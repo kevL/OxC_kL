@@ -4596,7 +4596,7 @@
 1445896286 f:\git\openxcom\src\ruleset\ruleitem.h
 	"../Battlescape/BattlescapeGame.h"
 
-1446240506 source:f:\git\openxcom\src\basescape\craftequipmentstate.cpp
+1447683327 source:f:\git\openxcom\src\basescape\craftequipmentstate.cpp
 	"CraftEquipmentState.h"
 	"../Battlescape/BattlescapeGenerator.h"
 	"../Battlescape/InventoryState.h"
@@ -5806,7 +5806,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1445881572 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
+1447684804 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
 	"DebriefingState.h"
 	"CannotReequipState.h"
 	"CeremonyDeadState.h"
@@ -6422,7 +6422,7 @@
 	"DosFont.h"
 	"Surface.h"
 
-1445794551 source:f:\git\openxcom\src\engine\game.cpp
+1447639890 source:f:\git\openxcom\src\engine\game.cpp
 	"Game.h"
 	<windows.h>
 	<SDL_syswm.h>

@@ -2302,10 +2302,22 @@ void Base::setupDefenses()
 			}
 			else // this vehicle needs ammo
 			{
-				const RuleItem* const ammoRule (_rules->getItem(itRule->getCompatibleAmmo()->front()));
-				const int perVehicle (ammoRule->getClipSize());
+				const RuleItem* const aRule (_rules->getItem(itRule->getCompatibleAmmo()->front()));
+				int
+					tankClipSize,
+					requiredRounds;
+				if (aRule->getClipSize() > 0 && itRule->getClipSize() > 0)
+				{
+					requiredRounds = itRule->getClipSize();
+					tankClipSize = requiredRounds / aRule->getClipSize();
+				}
+				else
+				{
+					requiredRounds = aRule->getClipSize();
+					tankClipSize = requiredRounds;
+				}
 
-				const int baseQty (_items->getItemQty(ammoRule->getType()) / perVehicle);
+				const int baseQty (_items->getItemQty(aRule->getType()) / tankClipSize);
 				if (baseQty != 0)
 				{
 					const int qty (std::min(itemQty, baseQty));
@@ -2316,11 +2328,11 @@ void Base::setupDefenses()
 					{
 						_vehicles.push_back(new Vehicle(
 													itRule,
-													perVehicle,
+													requiredRounds,
 													tankSize));
 						_items->removeItem(
-										ammoRule->getType(),
-										perVehicle);
+										aRule->getType(),
+										tankClipSize);
 					}
 					_items->removeItem(itemId, qty);
 				}
@@ -2831,17 +2843,23 @@ void Base::cleanupDefenses(bool hwpToStores)
 			i != _vehicles.end();
 			)
 	{
-		if (hwpToStores == true)
+		if (hwpToStores == true) // TODO: stop replenishing stores w/ full tank rounds
 		{
 			const RuleItem* const itRule ((*i)->getRules());
 			_items->addItem(itRule->getType());
 
 			if (itRule->getCompatibleAmmo()->empty() == false)
 			{
-				const RuleItem* const ammoRule (_rules->getItem(itRule->getCompatibleAmmo()->front()));
+				const RuleItem* const aRule (_rules->getItem(itRule->getCompatibleAmmo()->front()));
+				int requiredRounds;
+				if (aRule->getClipSize() > 0 && itRule->getClipSize() > 0)
+					requiredRounds = itRule->getClipSize() / aRule->getClipSize();
+				else
+					requiredRounds = aRule->getClipSize();
+
 				_items->addItem(
-							ammoRule->getType(),
-							ammoRule->getClipSize());
+							aRule->getType(),
+							requiredRounds);
 			}
 		}
 

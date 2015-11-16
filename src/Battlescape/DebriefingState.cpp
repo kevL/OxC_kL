@@ -1761,8 +1761,8 @@ void DebriefingState::reequipCraft(Craft* craft) // private.
 
 
 		const RuleItem* const tankRule = _rules->getItem(i->first);
-		const RuleUnit* const tankUnit = _rules->getUnit(tankRule->getType());
 
+		const RuleUnit* const tankUnit = _rules->getUnit(tankRule->getType());
 		int tankSize;
 		if (tankUnit != NULL)
 		{
@@ -1789,23 +1789,29 @@ void DebriefingState::reequipCraft(Craft* craft) // private.
 		}
 		else // so this tank requires ammo
 		{
-			const RuleItem* const ammoRule = _rules->getItem(tankRule->getCompatibleAmmo()->front());
-
-			int ammoPerVehicle = ammoRule->getClipSize();
-			if (ammoPerVehicle > 0
-				&& tankRule->getClipSize() > 0)
+			const RuleItem* const aRule = _rules->getItem(tankRule->getCompatibleAmmo()->front());
+			int
+				tankClipSize,
+				requiredRounds;
+			if (aRule->getClipSize() > 0 && tankRule->getClipSize() > 0)
 			{
-				ammoPerVehicle = tankRule->getClipSize() / ammoRule->getClipSize();
+				requiredRounds = tankRule->getClipSize();
+				tankClipSize = requiredRounds / aRule->getClipSize();
+			}
+			else
+			{
+				requiredRounds = aRule->getClipSize();
+				tankClipSize = requiredRounds;
 			}
 
-			const int baseQty = _base->getStorageItems()->getItemQty(ammoRule->getType()); // Ammo Quantity for this vehicle-type on the base
+			const int baseQty = _base->getStorageItems()->getItemQty(aRule->getType()); // Ammo Quantity for this vehicle-type on the base
 
-			if (baseQty < i->second * ammoPerVehicle)
+			if (baseQty < i->second * tankClipSize)
 			{
-				qtyLost = (i->second * ammoPerVehicle) - baseQty; // missing ammo
+				qtyLost = (i->second * tankClipSize) - baseQty; // missing ammo
 				const ReequipStat stat =
 				{
-					ammoRule->getType(),
+					aRule->getType(),
 					qtyLost,
 					craft->getName(_game->getLanguage())
 				};
@@ -1815,7 +1821,7 @@ void DebriefingState::reequipCraft(Craft* craft) // private.
 
 			addTanks = std::min(
 							addTanks,
-							baseQty / ammoPerVehicle);
+							baseQty / tankClipSize);
 
 			if (addTanks != 0)
 			{
@@ -1826,12 +1832,12 @@ void DebriefingState::reequipCraft(Craft* craft) // private.
 				{
 					craft->getVehicles()->push_back(new Vehicle(
 															tankRule,
-															ammoPerVehicle,
+															requiredRounds,
 															tankSize));
 
 					_base->getStorageItems()->removeItem(
-													ammoRule->getType(),
-													ammoPerVehicle);
+													aRule->getType(),
+													tankClipSize);
 				}
 
 				_base->getStorageItems()->removeItem(
