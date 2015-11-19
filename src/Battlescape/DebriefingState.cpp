@@ -919,7 +919,7 @@ void DebriefingState::prepareDebriefing() // private.
 			else
 			{
 				_base->setInBattlescape(false);
-				_base->cleanupDefenses();
+				_base->cleanupDefenses(); // so ... does this mean that each tank's entire 'clip' gets wasted
 
 				bool facDestroyed = false; // not in stockcode
 				for (std::vector<BaseFacility*>::const_iterator
@@ -933,7 +933,8 @@ void DebriefingState::prepareDebriefing() // private.
 						facDestroyed = true; // not in stockcode
 						_base->destroyFacility(j);
 					}
-					else ++j;
+					else
+						++j;
 				}
 
 				if (facDestroyed == true) // kL_add <-

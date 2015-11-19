@@ -2225,29 +2225,37 @@ void Base::setupDefenses()
 			i = _facilities.begin();
 			i != _facilities.end();
 			++i)
+	{
 		if ((*i)->buildFinished() == true
 			&& (*i)->getRules()->getDefenseValue() != 0)
 		{
 			_defenses.push_back(*i);
 		}
+	}
 
 	for (std::vector<Craft*>::const_iterator
 			i = getCrafts()->begin();
 			i != getCrafts()->end();
 			++i)
+	{
 		for (std::vector<Vehicle*>::const_iterator
 				j = (*i)->getVehicles()->begin();
 				j != (*i)->getVehicles()->end();
 				++j)
+		{
 			for (std::vector<Vehicle*>::const_iterator
 					k = _vehicles.begin();
 					k != _vehicles.end();
 					++k)
+			{
 				if (*k == *j) // to avoid calling a Vehicle's destructor for tanks on crafts
 				{
 					_vehicles.erase(k);
 					break;
 				}
+			}
+		}
+	}
 
 	for (std::vector<Vehicle*>::const_iterator
 			i = _vehicles.begin();
@@ -2262,12 +2270,18 @@ void Base::setupDefenses()
 			i = getCrafts()->begin();
 			i != getCrafts()->end();
 			++i)
+	{
 		if ((*i)->getCraftStatus() != "STR_OUT")
+		{
 			for (std::vector<Vehicle*>::const_iterator
 					j = (*i)->getVehicles()->begin();
 					j != (*i)->getVehicles()->end();
 					++j)
+			{
 				_vehicles.push_back(*j);
+			}
+		}
+	}
 
 	for (std::map<std::string, int>::const_iterator // add vehicles left on the base
 			i = _items->getContents()->begin();
@@ -2347,6 +2361,87 @@ void Base::setupDefenses()
 		}
 		else ++i;
 	}
+}
+
+/**
+ * Cleans up base defenses vector after a Ufo attack and optionally reclaims
+ * the tanks and their ammo.
+ * @param hwpToStores - true to return the HWPs to storage (default false)
+ */
+void Base::cleanupDefenses(bool hwpToStores)
+{
+	_defenses.clear();
+
+	for (std::vector<Craft*>::const_iterator
+			i = getCrafts()->begin();
+			i != getCrafts()->end();
+			++i)
+	{
+		for (std::vector<Vehicle*>::const_iterator
+				j = (*i)->getVehicles()->begin();
+				j != (*i)->getVehicles()->end();
+				++j)
+		{
+			for (std::vector<Vehicle*>::const_iterator
+					k = _vehicles.begin();
+					k != _vehicles.end();
+					++k)
+			{
+				if (*k == *j) // to avoid calling a vehicle's destructor for tanks on crafts
+				{
+					_vehicles.erase(k);
+					break;
+				}
+			}
+		}
+	}
+
+	for (std::vector<Vehicle*>::const_iterator
+			i = _vehicles.begin();
+			i != _vehicles.end();
+			)
+	{
+		if (hwpToStores == true) // incoming UFO was destroyed (ie, no tank ammo was used so put it all back in stores).
+		{
+			const RuleItem* const itRule ((*i)->getRules());
+			_items->addItem(itRule->getType());
+
+			if (itRule->getCompatibleAmmo()->empty() == false)
+			{
+				const RuleItem* const aRule (_rules->getItem(itRule->getCompatibleAmmo()->front()));
+				int requiredRounds;
+				if (aRule->getClipSize() > 0 && itRule->getClipSize() > 0)
+					requiredRounds = itRule->getClipSize() / aRule->getClipSize();
+				else
+					requiredRounds = aRule->getClipSize();
+
+				_items->addItem(
+							aRule->getType(),
+							requiredRounds);
+			}
+		}
+
+		delete *i;
+		i = _vehicles.erase(i);
+	}
+}
+
+/**
+ * Sets the effect of this Base's defense facilities before BaseDefense starts.
+ * @param result - the defense result
+ */
+void Base::setDefenseResult(int result)
+{
+	_defenseResult = result;
+}
+
+/**
+ * Gets the effect of this Base's defense facilities before BaseDefense starts.
+ * @return, the defense result
+ */
+int Base::getDefenseResult() const
+{
+	return _defenseResult;
 }
 
 /**
@@ -2810,65 +2905,6 @@ void Base::destroyFacility(std::vector<BaseFacility*>::const_iterator pFac)
 }
 
 /**
- * Cleans up base defenses vector after a Ufo attack and optionally reclaims
- * the tanks and their ammo.
- * @param hwpToStores - true to return the HWPs to storage (default false)
- */
-void Base::cleanupDefenses(bool hwpToStores)
-{
-	_defenses.clear();
-
-	for (std::vector<Craft*>::const_iterator
-			i = getCrafts()->begin();
-			i != getCrafts()->end();
-			++i)
-		for (std::vector<Vehicle*>::const_iterator
-				j = (*i)->getVehicles()->begin();
-				j != (*i)->getVehicles()->end();
-				++j)
-			for (std::vector<Vehicle*>::const_iterator
-					k = _vehicles.begin();
-					k != _vehicles.end();
-					++k)
-			{
-				if (*k == *j) // to avoid calling a vehicle's destructor for tanks on crafts
-				{
-					_vehicles.erase(k);
-					break;
-				}
-			}
-
-	for (std::vector<Vehicle*>::const_iterator
-			i = _vehicles.begin();
-			i != _vehicles.end();
-			)
-	{
-		if (hwpToStores == true) // TODO: stop replenishing stores w/ full tank rounds
-		{
-			const RuleItem* const itRule ((*i)->getRules());
-			_items->addItem(itRule->getType());
-
-			if (itRule->getCompatibleAmmo()->empty() == false)
-			{
-				const RuleItem* const aRule (_rules->getItem(itRule->getCompatibleAmmo()->front()));
-				int requiredRounds;
-				if (aRule->getClipSize() > 0 && itRule->getClipSize() > 0)
-					requiredRounds = itRule->getClipSize() / aRule->getClipSize();
-				else
-					requiredRounds = aRule->getClipSize();
-
-				_items->addItem(
-							aRule->getType(),
-							requiredRounds);
-			}
-		}
-
-		delete *i;
-		i = _vehicles.erase(i);
-	}
-}
-
-/**
  * Increases this Base's cash income amount by @a cash.
  * @param cash - amount of income
  */
@@ -2902,24 +2938,6 @@ void Base::setCashSpent(int cash)
 int Base::getCashSpent() const
 {
 	return _cashSpent;
-}
-
-/**
- * Sets the effect of this Base's defense facilities before BaseDefense starts.
- * @param result - the defense result
- */
-void Base::setDefenseResult(int result)
-{
-	_defenseResult = result;
-}
-
-/**
- * Gets the effect of this Base's defense facilities before BaseDefense starts.
- * @return, the defense result
- */
-int Base::getDefenseResult() const
-{
-	return _defenseResult;
 }
 
 /**

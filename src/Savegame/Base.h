@@ -297,17 +297,17 @@ private:
 		/// Gets if the Base is in the battlescape.
 		bool isInBattlescape() const;
 
-		/// Sets this base as eligible for alien retaliation.
+		/// Sets this Base as eligible for alien retaliation.
 		void setBaseExposed(bool exposed = true);
 		/// Gets if this Base is eligible for alien retaliation.
 		bool getBaseExposed() const;
 
-		/// Sets this base as placed and in operation.
+		/// Sets this Base as placed and in operation.
 		void setBasePlaced();
-		/// Gets if this base has been placed on the Globe.
+		/// Gets if this Base has been placed on the Globe.
 		bool getBasePlaced() const;
 
-		/// Gets the detection chance for this base.
+		/// Gets the detection chance for this Base.
 		int getDetectionChance(
 				int diff,
 				int* facQty = NULL,
@@ -315,8 +315,17 @@ private:
 
 		/// Gets how many Grav Shields this Base has.
 		size_t getGravShields() const;
+
 		/// Sets up this Base defenses.
 		void setupDefenses();
+		/// Cleans up this Base's defenses vector after a Ufo attack and optionally reclaims the tanks and their ammo.
+		void cleanupDefenses(bool hwpToStores = false);
+
+		/// Sets the result of this Base's defense against aLien attacks.
+		void setDefenseResult(int result);
+		/// Gets the result of this Base's defense against aLien attacks.
+		int getDefenseResult() const;
+
 		/// Gets a list of defensive Facilities.
 		std::vector<BaseFacility*>* getDefenses();
 
@@ -330,9 +339,6 @@ private:
 		/// Destroys a facility and deals with the side effects.
 		void destroyFacility(std::vector<BaseFacility*>::const_iterator fac);
 
-		/// Cleans up this Base's defenses vector after a Ufo attack and optionally reclaims the tanks and their ammo.
-		void cleanupDefenses(bool hwpToStores = false);
-
 		/// Increases (or decreases) this Base's total income amount.
 		void setCashIncome(int cash);
 		/// Gets this Base's total income amount.
@@ -341,11 +347,6 @@ private:
 		void setCashSpent(int cash);
 		/// Gets this Base's total spent amount.
 		int getCashSpent() const;
-
-		/// Sets the result of this Base's defense against aLien attacks.
-		void setDefenseResult(int result);
-		/// Gets the result of this Base's defense against aLien attacks.
-		int getDefenseResult() const;
 
 		/// Sets various recalls for this Base.
 		void setRecallRow(

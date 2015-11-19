@@ -789,16 +789,12 @@ void BattlescapeGenerator::deployXCOM() // private.
 			{
 				//Log(LOG_INFO) << ". . isCraft: addXCOMVehicle " << (int)*i;
 				BattleUnit* const unit = addXCOMVehicle(*i);
-				if (unit != NULL
-					&& _battleSave->getSelectedUnit() == NULL)
-				{
+				if (unit != NULL && _battleSave->getSelectedUnit() == NULL)
 					_battleSave->setSelectedUnit(unit);
-				}
 			}
 		}
 	}
-	else if (_base != NULL
-		&& _baseEquipScreen == false)
+	else if (_base != NULL && _baseEquipScreen == false)
 	{
 		// add vehicles that are in Base inventory.
 		for (std::vector<Vehicle*>::const_iterator
@@ -808,11 +804,8 @@ void BattlescapeGenerator::deployXCOM() // private.
 		{
 			//Log(LOG_INFO) << ". . isBase: addXCOMVehicle " << (int)*i;
 			BattleUnit* const unit = addXCOMVehicle(*i);
-			if (unit != NULL
-				&& _battleSave->getSelectedUnit() == NULL)
-			{
+			if (unit != NULL && _battleSave->getSelectedUnit() == NULL)
 				_battleSave->setSelectedUnit(unit);
-			}
 		}
 
 		// Only add vehicles from the craft in new battle mode
@@ -833,9 +826,7 @@ void BattlescapeGenerator::deployXCOM() // private.
 				{
 					BattleUnit* const unit = addXCOMVehicle(*j);
 					if (unit != NULL && _battleSave->getSelectedUnit() == NULL)
-					{
 						_battleSave->setSelectedUnit(unit);
-					}
 				}
 			}
 		}
