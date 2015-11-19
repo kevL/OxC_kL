@@ -67,26 +67,26 @@ SelectDestinationState::SelectDestinationState(
 {
 	_screen = false;
 
-	const int dx = _game->getScreen()->getDX();
+	const int dX = _game->getScreen()->getDX();
 //		dy = _game->getScreen()->getDY();
 
-/*	_btnRotateLeft	= new InteractiveSurface(12, 10, 259 + dx * 2, 176 + dy);
-	_btnRotateRight	= new InteractiveSurface(12, 10, 283 + dx * 2, 176 + dy);
-	_btnRotateUp	= new InteractiveSurface(13, 12, 271 + dx * 2, 162 + dy);
-	_btnRotateDown	= new InteractiveSurface(13, 12, 271 + dx * 2, 187 + dy);
-	_btnZoomIn		= new InteractiveSurface(23, 23, 295 + dx * 2, 156 + dy);
-	_btnZoomOut		= new InteractiveSurface(13, 17, 300 + dx * 2, 182 + dy); */
+/*	_btnRotateLeft	= new InteractiveSurface(12, 10, 259 + dX * 2, 176 + dy);
+	_btnRotateRight	= new InteractiveSurface(12, 10, 283 + dX * 2, 176 + dy);
+	_btnRotateUp	= new InteractiveSurface(13, 12, 271 + dX * 2, 162 + dy);
+	_btnRotateDown	= new InteractiveSurface(13, 12, 271 + dX * 2, 187 + dy);
+	_btnZoomIn		= new InteractiveSurface(23, 23, 295 + dX * 2, 156 + dy);
+	_btnZoomOut		= new InteractiveSurface(13, 17, 300 + dX * 2, 182 + dy); */
 
 	_window = new Window(this, 256, 30);
-	_window->setX(dx);
+	_window->setX(dX);
 	_window->setDY(0);
 
-//	_txtTitle	= new Text(100, 9, 16 + dx, 10);
+//	_txtTitle	= new Text(100, 9, 16 + dX, 10);
 
-	_btnCancel	= new TextButton(60, 14, 120 + dx, 8);
-	_btnCydonia	= new TextButton(60, 14, 180 + dx, 8);
+	_btnCancel	= new TextButton(60, 14, 120 + dX, 8);
+	_btnCydonia	= new TextButton(60, 14, 180 + dX, 8);
 
-	_txtError	= new Text(100, 9, 12 + dx, 11);
+	_txtError	= new Text(100, 9, 12 + dX, 11);
 
 	setInterface("geoscape");
 
@@ -239,7 +239,7 @@ void SelectDestinationState::globeClick(Action* action)
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) // set Waypoint
 	{
 		const int mY = static_cast<int>(std::floor(action->getAbsoluteYMouse()));
-		if (mY < _window->getX() + _window->getHeight()) // ignore window clicks
+		if (mY < _window->getY() + _window->getHeight()) // ignore window clicks
 			return;
 
 		const int mX = static_cast<int>(std::floor(action->getAbsoluteXMouse()));
@@ -262,7 +262,7 @@ void SelectDestinationState::globeClick(Action* action)
 		range /= 6; // six doses per hour on Geoscape.
 
 		if (range < static_cast<int>(std::floor(
-					(_craft->getDistance(wp) + _craft->getBase()->getDistance(wp)) * earthRadius)))
+				  (_craft->getDistance(wp) + _craft->getBase()->getDistance(wp)) * earthRadius)))
 		{
 			_txtError->setVisible();
 			delete wp;

@@ -89,7 +89,7 @@ en-US:
     other: "{N} hrs"
   STR_MAINTENANCE_UC: "MAINTENANCE> "
   STR_OK: "yP"
-  STR_MORE: "< next >"
+  STR_MORE: "next >"
   STR_INSTALLATION: "Installation"
   STR_CURRENT_RESEARCH: "RESEARCH"
   STR_SCIENTISTS_AVAILABLE_: "at Lunch> {ALT}{0}"

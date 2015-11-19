@@ -65,8 +65,8 @@ Window::Window(
 		_popType(popType),
 		_toggle(toggle),
 		_bg(NULL),
-		_dx(-x),
-		_dy(-y),
+		_dX(-x),
+		_dY(-y),
 		_color(0),
 		_popStep(0.f),
 		_contrast(false),
@@ -280,8 +280,8 @@ void Window::draw()
 	{
 		if (_bg != NULL)
 		{
-			_bg->getCrop()->x = static_cast<Sint16>(static_cast<int>(rect.x) - _dx - _bgX);
-			_bg->getCrop()->y = static_cast<Sint16>(static_cast<int>(rect.y) - _dy - _bgY);
+			_bg->getCrop()->x = static_cast<Sint16>(static_cast<int>(rect.x) - _dX - _bgX);
+			_bg->getCrop()->y = static_cast<Sint16>(static_cast<int>(rect.y) - _dY - _bgY);
 			_bg->getCrop()->w = rect.w;
 			_bg->getCrop()->h = rect.h;
 
@@ -328,18 +328,18 @@ void Window::setHighContrast(bool contrast)
 /**
  * Sets the surface used to draw the background of the window.
  * @param bg - background
- * @param dx - x offset (default 0)
- * @param dy - y offset (default 0)
+ * @param dX - x offset (default 0)
+ * @param dY - y offset (default 0)
  */
 void Window::setBackground(
 		Surface* const bg,
-		int dx,
-		int dy)
+		int dX,
+		int dY)
 {
 	_bg = bg;
 
-	_bgX = dx;
-	_bgY = dy;
+	_bgX = dX;
+	_bgY = dY;
 
 	_redraw = true;
 }
@@ -356,20 +356,20 @@ void Window::setBackgroundFill(Uint8 color)
 
 /**
  * Changes the horizontal offset of the surface in the X axis.
- * @param dx - X position in pixels
+ * @param dX - X position in pixels
  */
-void Window::setDX(int dx)
+void Window::setDX(int dX)
 {
-	_dx = dx;
+	_dX = dX;
 }
 
 /**
  * Changes the vertical offset of the surface in the Y axis.
- * @param dy - Y position in pixels
+ * @param dY - Y position in pixels
  */
-void Window::setDY(int dy)
+void Window::setDY(int dY)
 {
-	_dy = dy;
+	_dY = dY;
 }
 
 /**

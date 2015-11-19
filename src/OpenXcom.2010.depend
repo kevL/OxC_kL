@@ -4550,7 +4550,7 @@
 	"Text.h"
 	"../Engine/InteractiveSurface.h"
 
-1444573937 f:\git\openxcom\src\interface\window.h
+1447895462 f:\git\openxcom\src\interface\window.h
 	"../Engine/Surface.h"
 
 1447639890 f:\git\openxcom\src\ruleset\ruleset.h
@@ -7337,7 +7337,7 @@
 	"../Resource/ResourcePack.h"
 	"../Ruleset/RuleItem.h"
 
-1446278478 source:f:\git\openxcom\src\geoscape\selectdestinationstate.cpp
+1447894701 source:f:\git\openxcom\src\geoscape\selectdestinationstate.cpp
 	"SelectDestinationState.h"
 	"ConfirmCydoniaState.h"
 	"CraftErrorState.h"
@@ -7487,7 +7487,7 @@
 	"NumberText.h"
 	"../Engine/Palette.h"
 
-1444894902 source:f:\git\openxcom\src\interface\window.cpp
+1447893987 source:f:\git\openxcom\src\interface\window.cpp
 	"Window.h"
 	"../Engine/Sound.h"
 	"../Engine/Timer.h"
@@ -8402,7 +8402,7 @@
 	"../Ruleset/RuleRegion.h"
 	"../Ruleset/Ruleset.h"
 
-1445895542 source:f:\git\openxcom\src\savegame\base.cpp
+1447686052 source:f:\git\openxcom\src\savegame\base.cpp
 	"Base.h"
 	"BaseFacility.h"
 	"Craft.h"
@@ -8829,9 +8829,9 @@
 	"../Interface/Window.h"
 	"../Resource/XcomResourcePack.h"
 
-1418958360 f:\git\openxcom\deps\include\boost\exception
+1447753395 f:\git\openxcom\deps\include\boost\exception
 
-1418958354 f:\git\openxcom\deps\include\boost\utility
+1447753384 f:\git\openxcom\deps\include\boost\utility
 
 1418961960 f:\git\openxcom\deps\include\boost\iterator
 
@@ -9054,7 +9054,7 @@
 	<xfwrap>
 	<xfwrap>
 
-1418958355 f:\git\openxcom\deps\include\boost\type_traits
+1447753385 f:\git\openxcom\deps\include\boost\type_traits
 
 1295409728 c:\program files\microsoft visual studio 10.0\vc\include\intrin.h
 	<crtdefs.h>

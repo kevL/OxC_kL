@@ -68,7 +68,7 @@ private:
 		_thinBorder,
 		_toggle;
 	int
-		_dx,_dy,
+		_dX,_dY,
 		_bgX,_bgY,
 		_popProgress;
 	float _popStep;
@@ -120,15 +120,15 @@ private:
 		/// Sets the background surface.
 		void setBackground(
 				Surface* const bg,
-				int dx = 0,
-				int dy = 0);
+				int dX = 0,
+				int dY = 0);
 		/// Sets the background to a solid color instead of transparent.
 		void setBackgroundFill(Uint8 color);
 
-		/// sets the X delta.
-		void setDX(int dx);
-		/// sets the Y delta.
-		void setDY(int dy);
+		/// Sets the X delta.
+		void setDX(int dX);
+		/// Sets the Y delta.
+		void setDY(int dY);
 
 		/// Give this window a thin border.
 		void setThinBorder();
