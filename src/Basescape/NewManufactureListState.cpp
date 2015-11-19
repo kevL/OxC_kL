@@ -67,7 +67,7 @@ NewManufactureListState::NewManufactureListState(
 	_txtItem		= new Text(80, 9,  16, 46);
 	_txtCategory	= new Text(80, 9, 156, 46);
 
-	_cbxCategory	= new ComboBox(this, 134, 16, 179, 30);
+	_cbxCategory	= new ComboBox(this, 140, 16, 173, 30);
 
 	_lstManufacture	= new TextList(285, 105, 16, 55);
 

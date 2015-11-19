@@ -366,11 +366,11 @@ void TextButton::mousePress(Action* action, State* state)
 			soundPress->play(Mix_GroupAvailable(0));
 		}
 
-		if (_comboBox != NULL
+/*		if (_comboBox != NULL // moved to mouseRelease()
 			&& _comboBox->getVisible() == true)
 		{
 			_comboBox->toggle();
-		}
+		} */
 
 		draw();
 	}
@@ -386,7 +386,15 @@ void TextButton::mousePress(Action* action, State* state)
 void TextButton::mouseRelease(Action* action, State* state)
 {
 	if (isButtonHandled(action->getDetails()->button.button) == true)
+	{
+		if (_comboBox != NULL // was in mousePress()
+			&& _comboBox->getVisible() == true)
+		{
+			_comboBox->toggle();
+		}
+
 		draw();
+	}
 
 	InteractiveSurface::mouseRelease(action, state);
 }

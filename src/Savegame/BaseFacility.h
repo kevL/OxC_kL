@@ -46,7 +46,7 @@ private:
 		_x,
 		_y;
 
-	const Base* _base;
+	Base* _base;
 	const Craft* _craft;
 	const RuleBaseFacility* _facRule;
 
@@ -55,7 +55,7 @@ private:
 		/// Creates a base facility of the specified type.
 		BaseFacility(
 				const RuleBaseFacility* const facRule,
-				const Base* const base);
+				Base* const base);
 		/// Cleans up the base facility.
 		~BaseFacility();
 

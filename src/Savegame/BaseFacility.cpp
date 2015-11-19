@@ -30,11 +30,11 @@ namespace OpenXcom
 /**
  * Initializes a base facility of the specified type.
  * @param facRule	- pointer to RuleBaseFacility
- * @param base	- pointer to the Base of this facility
+ * @param base		- pointer to the Base of this facility
  */
 BaseFacility::BaseFacility(
 		const RuleBaseFacility* const facRule,
-		const Base* const base)
+		Base* const base)
 	:
 		_facRule(facRule),
 		_base(base),
@@ -149,7 +149,15 @@ void BaseFacility::setBuildTime(int buildTime)
  */
 bool BaseFacility::buildFacility()
 {
-	return (--_buildTime == 0);
+	if (--_buildTime == 0)
+	{
+		if (_facRule->getType() == "STR_MIND_SHIELD") // reset Base exposed bool.
+			_base->setBaseExposed(false);
+
+		return true;
+	}
+
+	return false;
 }
 
 /**

@@ -84,7 +84,7 @@ ComboBox::ComboBox(
 	_list->setColumns(1, _list->getWidth());
 	_list->setBackground(_window);
 	_list->setSelectable();
-	_list->setAlign(ALIGN_CENTER);
+//	_list->setAlign(ALIGN_CENTER);
 	_list->setScrollable();
 
 	toggle(true);
@@ -304,9 +304,9 @@ void ComboBox::setDropdown(int rows) // private.
 	int
 //		rows = std::min(rows, ROWS_DEFAULT),
 		h = _button->getFont()->getHeight() + _button->getFont()->getSpacing(),
-		dy = (Options::baseYResolution - 200) / 2;
+		dY = (Options::baseYResolution - 200) / 2;
 
-	while (_window->getY() + rows * h + MARGIN_VERTICAL * 2 > 200 + dy)
+	while (_window->getY() + rows * h + MARGIN_VERTICAL * 2 > 200 + dY)
 		--rows;
 
 	_window->setHeight((rows * h + MARGIN_VERTICAL * 2) + 1);
@@ -373,6 +373,19 @@ void ComboBox::blit(Surface* surface)
 }
 
 /**
+ * Passes ticks to arrow buttons.
+ */
+void ComboBox::think()
+{
+	_button->think();
+	_arrow->think();
+	_window->think();
+	_list->think();
+
+	InteractiveSurface::think();
+}
+
+/**
  * Passes events to internal components.
  * @param action	- pointer to an Action
  * @param state		- State that the action handlers belong to
@@ -395,24 +408,11 @@ void ComboBox::handle(Action* action, State* state)
 
 	if (_toggled == true)
 	{
-		if (_change)
+		if (_change != NULL)
 			(state->*_change)(action);
 
 		_toggled = false;
 	}
-}
-
-/**
- * Passes ticks to arrow buttons.
- */
-void ComboBox::think()
-{
-	_button->think();
-	_arrow->think();
-	_window->think();
-	_list->think();
-
-	InteractiveSurface::think();
 }
 
 /**
